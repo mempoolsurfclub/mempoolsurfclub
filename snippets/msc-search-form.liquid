@@ -1,0 +1,41 @@
+{% comment %}
+  Renders a Mempool Surf Club search form.
+
+  Accepts:
+  - input_id: {String} Unique input id for label association
+  - placeholder: {String} Search placeholder text
+  - button_label: {String} Submit button text
+  - search_types: {String} Shopify search type filter, e.g. "article,page,product"
+  - modifier: {String} Optional modifier class suffix
+  - label: {String} Accessible label
+
+  Usage:
+  {% render 'msc-search-form', input_id: 'HeroSearch', placeholder: 'Search...', button_label: 'Search' %}
+{% endcomment %}
+
+{%- liquid
+  assign form_id = input_id | default: 'MscSearchForm'
+  assign form_placeholder = placeholder | default: 'Search Mempool Surf Club'
+  assign form_button_label = button_label | default: 'Search'
+  assign form_label = label | default: form_placeholder
+  assign form_search_types = search_types | default: 'article,page,product'
+  assign form_modifier = modifier | default: 'hero'
+-%}
+
+<form class="msc-search-form msc-search-form--{{ form_modifier }} msc-glass-card" action="{{ routes.search_url }}" method="get" role="search">
+  <label class="visually-hidden" for="{{ form_id }}">{{ form_label | escape }}</label>
+  <input
+    id="{{ form_id }}"
+    class="msc-search-form__input"
+    type="search"
+    name="q"
+    value="{{ search.terms | escape }}"
+    placeholder="{{ form_placeholder | escape }}"
+    autocomplete="off"
+  >
+  <input type="hidden" name="type" value="{{ form_search_types | escape }}">
+  <button class="msc-search-form__button" type="submit">
+    <span>{{ form_button_label | escape }}</span>
+    <span class="msc-search-form__arrow" aria-hidden="true">→</span>
+  </button>
+</form>
