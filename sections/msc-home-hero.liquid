@@ -8,9 +8,14 @@
   <div class="msc-container">
     <div class="msc-home-hero__grid">
       <div class="msc-home-hero__content">
-        {%- if section.settings.eyebrow != blank -%}
-          <p class="msc-eyebrow">{{ section.settings.eyebrow | escape }}</p>
-        {%- endif -%}
+        <div class="msc-eyebrow msc-rotating-signal" aria-label="{{ section.settings.signal_phrase_1 | escape }}">
+          <span class="msc-rotating-signal__indicator" aria-hidden="true"></span>
+          <span class="msc-rotating-signal__phrases">
+            <span>{{ section.settings.signal_phrase_1 | escape }}</span>
+            <span>{{ section.settings.signal_phrase_2 | escape }}</span>
+            <span>{{ section.settings.signal_phrase_3 | escape }}</span>
+          </span>
+        </div>
 
         {%- if heading_line_1 != blank or heading_line_2 != blank -%}
           <h1 class="msc-title msc-home-hero__title">
@@ -36,33 +41,25 @@
           modifier: 'home'
         %}
 
-        <div class="msc-home-hero__actions" aria-label="Primary homepage actions">
-          {%- if section.settings.primary_button_label != blank and section.settings.primary_button_link != blank -%}
-            <a class="msc-button" href="{{ section.settings.primary_button_link }}">
-              {{ section.settings.primary_button_label | escape }}
-            </a>
-          {%- endif -%}
-          {%- if section.settings.secondary_button_label != blank and section.settings.secondary_button_link != blank -%}
-            <a class="msc-button msc-button--secondary" href="{{ section.settings.secondary_button_link }}">
-              {{ section.settings.secondary_button_label | escape }}
-            </a>
-          {%- endif -%}
-        </div>
       </div>
 
-      <div class="msc-signal-card msc-glass-card" role="img" aria-label="Mempool Surf Club ecosystem map showing Explore, Learn, Tools, and Shop destinations.">
+      <div class="msc-signal-card msc-glass-card" aria-label="Mempool Surf Club ecosystem radar linking to Explore, Learn, Tools, and Shop destinations.">
         <div class="msc-signal-card__header">
-          <span>MSC ECOSYSTEM MAP</span>
-          <span>OBSERVING</span>
+          <span>MSC ECOSYSTEM RADAR</span>
+          <span class="msc-signal-card__status">SCANNING</span>
         </div>
-        <div class="msc-signal-field" aria-hidden="true">
-          <span class="msc-signal-field__line msc-signal-field__line--one"></span>
-          <span class="msc-signal-field__line msc-signal-field__line--two"></span>
-          <span class="msc-signal-field__line msc-signal-field__line--three"></span>
-          <span class="msc-signal-field__node msc-signal-field__node--one"><i></i><strong>EXPLORE</strong><small>CULTURE</small></span>
-          <span class="msc-signal-field__node msc-signal-field__node--two"><i></i><strong>LEARN</strong><small>EDUCATION</small></span>
-          <span class="msc-signal-field__node msc-signal-field__node--three"><i></i><strong>TOOLS</strong><small>NETWORK</small></span>
-          <span class="msc-signal-field__node msc-signal-field__node--four"><i></i><strong>SHOP</strong><small>OBJECTS</small></span>
+        <div class="msc-signal-field">
+          <svg class="msc-signal-field__connections" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            <path d="M 24 31 L 76 27" />
+            <path d="M 24 31 L 31 73" />
+            <path d="M 31 73 L 73 68" />
+            <path d="M 76 27 L 73 68" />
+            <path d="M 76 27 L 31 73" class="msc-signal-field__connection--soft" />
+          </svg>
+          <a class="msc-signal-field__node msc-signal-field__node--one" href="shopify://pages/explore"><i aria-hidden="true"></i><strong>Explore</strong></a>
+          <a class="msc-signal-field__node msc-signal-field__node--two" href="shopify://pages/learn"><i aria-hidden="true"></i><strong>Learn</strong></a>
+          <a class="msc-signal-field__node msc-signal-field__node--three" href="shopify://pages/tools"><i aria-hidden="true"></i><strong>Tools</strong></a>
+          <a class="msc-signal-field__node msc-signal-field__node--four" href="shopify://pages/shop"><i aria-hidden="true"></i><strong>Shop</strong></a>
         </div>
       </div>
     </div>
@@ -75,20 +72,18 @@
   "tag": "section",
   "class": "section",
   "settings": [
-    { "type": "text", "id": "eyebrow", "label": "Hero eyebrow", "default": "BITCOIN CULTURE + NETWORK" },
+    { "type": "text", "id": "signal_phrase_1", "label": "Signal phrase 1", "default": "SCANNING THE BITCOIN ECOSYSTEM" },
+    { "type": "text", "id": "signal_phrase_2", "label": "Signal phrase 2", "default": "READING NETWORK + CULTURE SIGNALS" },
+    { "type": "text", "id": "signal_phrase_3", "label": "Signal phrase 3", "default": "WATCHING THE MEMPOOL" },
     { "type": "text", "id": "heading_line_1", "label": "Heading line 1", "default": "READ THE NETWORK." },
-    { "type": "text", "id": "heading_line_2", "label": "Heading line 2", "default": "EXPLORE THE CULTURE." },
-    { "type": "text", "id": "heading", "label": "Legacy heading fallback", "default": "READ THE NETWORK. EXPLORE THE CULTURE." },
-    { "type": "richtext", "id": "subheading", "label": "Supporting copy", "default": "<p>Mempool Surf Club is a place to explore Bitcoin culture, understand how the network works, read the conditions shaping it, and discover objects that carry the culture forward.</p>" },
+    { "type": "text", "id": "heading_line_2", "label": "Heading line 2", "default": "RIDE THE WAVE." },
+    { "type": "text", "id": "heading", "label": "Legacy heading fallback", "default": "READ THE NETWORK. RIDE THE WAVE." },
+    { "type": "richtext", "id": "subheading", "label": "Supporting copy", "default": "<p>Mempool Surf Club is a place to explore Bitcoin culture, understand how the network works, read the conditions shaping it, and discover the people who carry the culture forward.</p>" },
     { "type": "text", "id": "search_label", "label": "Search accessible label", "default": "Search people, projects, ideas, tools, and topics" },
     { "type": "text", "id": "search_placeholder", "label": "Search placeholder", "default": "Search people, projects, ideas, tools, and topics..." },
     { "type": "text", "id": "search_button", "label": "Search button", "default": "Search" },
-    { "type": "text", "id": "search_types", "label": "Shopify search types", "default": "article,page,product" },
-    { "type": "text", "id": "primary_button_label", "label": "Primary button label", "default": "Explore the ecosystem" },
-    { "type": "url", "id": "primary_button_link", "label": "Primary button link" },
-    { "type": "text", "id": "secondary_button_label", "label": "Secondary button label", "default": "Start learning" },
-    { "type": "url", "id": "secondary_button_link", "label": "Secondary button link" }
+    { "type": "text", "id": "search_types", "label": "Shopify search types", "default": "article,page,product" }
   ],
-  "presets": [{ "name": "MSC home hero", "settings": { "primary_button_link": "shopify://pages/explore", "secondary_button_link": "shopify://pages/learn" } }]
+  "presets": [{ "name": "MSC home hero" }]
 }
 {% endschema %}
