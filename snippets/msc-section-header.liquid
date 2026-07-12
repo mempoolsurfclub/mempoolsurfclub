@@ -1,0 +1,19 @@
+{% comment %}
+  Renders a reusable MSC section header.
+  Accepts: kicker, heading, copy, align, heading_id
+{% endcomment %}
+{%- liquid
+  assign header_align = align | default: 'left'
+  assign header_id = heading_id | default: nil
+-%}
+<header class="msc-section-header msc-section-header--{{ header_align }}">
+  {%- if kicker != blank -%}
+    <p class="msc-section-kicker">{{ kicker | escape }}</p>
+  {%- endif -%}
+  {%- if heading != blank -%}
+    <h2 class="msc-section-title"{% if header_id %} id="{{ header_id }}"{% endif %}>{{ heading | escape }}</h2>
+  {%- endif -%}
+  {%- if copy != blank -%}
+    <div class="msc-section-header__copy rte">{{ copy }}</div>
+  {%- endif -%}
+</header>

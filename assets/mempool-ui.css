@@ -664,3 +664,69 @@
     transition: none;
   }
 }
+
+/* Sprint 1B: MSC Explore experience */
+.msc-explore { padding: clamp(5.6rem, 8vw, 9rem) 0 4rem; }
+.msc-explore-hero { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(32rem, .7fr); gap: clamp(2.4rem, 5vw, 6rem); align-items: center; }
+.msc-explore-hero__title { max-width: 10ch; }
+.msc-explore-hero__copy { max-width: 76rem; margin: 0; }
+.msc-explore-hero__copy p, .msc-section-header__copy p { margin: 0; }
+.msc-search-form--explore { max-width: 82rem; margin-top: 3rem; }
+.msc-discovery-map { position: relative; min-height: 46rem; padding: 1.8rem; overflow: hidden; }
+.msc-discovery-map__header { display: flex; justify-content: space-between; gap: 1rem; color: rgba(251,248,239,.66); font-size: 1.05rem; letter-spacing: .14em; text-transform: uppercase; }
+.msc-discovery-map__header span:last-child { color: var(--msc-sand); }
+.msc-discovery-map__field { position: absolute; inset: 5.8rem 1.8rem 7.2rem; border: 1px solid rgba(212,190,153,.2); border-radius: 24px; background: linear-gradient(rgba(251,248,239,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(251,248,239,.035) 1px, transparent 1px), radial-gradient(circle at 38% 44%, rgba(212,190,153,.2), transparent 30%); background-size: 32px 32px, 32px 32px, auto; }
+.msc-discovery-map__field::before, .msc-discovery-map__field::after { content: ""; position: absolute; inset: 18% 14%; border: 1px solid rgba(212,190,153,.18); border-radius: 999px; transform: rotate(-18deg); }
+.msc-discovery-map__field::after { inset: 28% 8%; transform: rotate(24deg); border-color: rgba(251,248,239,.12); }
+.msc-discovery-map__node { position: absolute; display: inline-flex; align-items: center; justify-content: center; width: 8.8rem; height: 8.8rem; border-radius: 999px; border: 1px solid rgba(212,190,153,.52); background: rgba(16,40,45,.72); color: var(--msc-paper-soft); font-size: 1.05rem; letter-spacing: .08em; text-transform: uppercase; box-shadow: 0 0 28px rgba(212,190,153,.16); }
+.msc-discovery-map__node--a { left: 12%; top: 18%; }
+.msc-discovery-map__node--b { right: 10%; top: 28%; }
+.msc-discovery-map__node--c { left: 36%; bottom: 10%; }
+.msc-discovery-map__node--d { right: 24%; bottom: 30%; }
+.msc-discovery-map p { position: absolute; left: 1.8rem; right: 1.8rem; bottom: 1.8rem; margin: 0; color: rgba(251,248,239,.68); }
+.msc-explore-categories { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 1rem; margin-top: 4rem; }
+.msc-category-card, .msc-editorial-card__link, .msc-profile-card__link { color: inherit; text-decoration: none; }
+.msc-category-card { display: flex; flex-direction: column; min-height: 17rem; padding: 1.6rem; transition: transform .2s ease, border-color .2s ease, background .2s ease; }
+.msc-category-card:hover, .msc-category-card:focus-visible, .msc-editorial-card:focus-within, .msc-profile-card:focus-within { transform: translateY(-3px); border-color: rgba(212,190,153,.56); }
+.msc-category-card__meta, .msc-editorial-card__label, .msc-editorial-card__meta, .msc-profile-card__tag, .msc-report-row span, .msc-report-row em { color: var(--msc-sand); font-size: 1.05rem; letter-spacing: .13em; text-transform: uppercase; font-style: normal; }
+.msc-category-card__title { margin-top: 1rem; color: var(--msc-paper-soft); font-size: 2rem; font-weight: 750; letter-spacing: -.04em; }
+.msc-category-card__description { margin-top: .8rem; color: rgba(251,248,239,.68); line-height: 1.4; }
+.msc-category-card .msc-card-arrow { margin-top: auto; }
+.msc-section-header { max-width: 82rem; margin-bottom: 2.4rem; }
+.msc-section-header--center { margin-inline: auto; text-align: center; }
+.msc-section-header__copy { color: rgba(251,248,239,.72); font-size: 1.55rem; line-height: 1.5; }
+.msc-editorial-layout { display: grid; grid-template-columns: 1.15fr .85fr; gap: 1.2rem; }
+.msc-editorial-card { min-height: 22rem; transition: transform .2s ease, border-color .2s ease; }
+.msc-editorial-card--lead { grid-row: span 2; min-height: 45.2rem; }
+.msc-editorial-card__link { display: flex; flex-direction: column; height: 100%; padding: 2rem; }
+.msc-editorial-card h3, .msc-profile-card h3 { margin: 1.1rem 0 .9rem; color: var(--msc-paper-soft); font-size: clamp(2.2rem, 3vw, 3.8rem); line-height: 1; letter-spacing: -.05em; }
+.msc-editorial-card:not(.msc-editorial-card--lead) h3 { font-size: clamp(2rem, 2vw, 2.6rem); }
+.msc-editorial-card p, .msc-profile-card__description { margin: 0; color: rgba(251,248,239,.7); line-height: 1.48; }
+.msc-editorial-card__meta { margin-top: auto; padding-top: 2rem; }
+.msc-profile-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.2rem; }
+.msc-profile-card { min-height: 28rem; transition: transform .2s ease, border-color .2s ease; }
+.msc-profile-card__link { display: flex; flex-direction: column; height: 100%; padding: 1.8rem; }
+.msc-profile-card__orb { width: 6rem; height: 6rem; border-radius: 999px; border: 1px solid rgba(212,190,153,.52); background: radial-gradient(circle at 35% 30%, rgba(251,248,239,.42), rgba(212,190,153,.14) 36%, rgba(16,40,45,.78) 70%); }
+.msc-profile-card__tag { margin-top: 1.4rem; }
+.msc-profile-card__role { margin: 0 0 1rem; color: var(--msc-sand); }
+.msc-report-panel { display: grid; grid-template-columns: .85fr 1.15fr; gap: 2rem; padding: 2.4rem; }
+.msc-report-panel .msc-section-header { margin-bottom: 0; }
+.msc-report-panel__list { display: grid; gap: 1rem; }
+.msc-report-row { display: grid; grid-template-columns: 11rem 1fr auto; gap: 1rem; align-items: center; padding: 1.4rem; border: 1px solid rgba(212,190,153,.18); border-radius: 16px; color: inherit; text-decoration: none; background: rgba(255,255,255,.045); }
+.msc-report-row strong { color: var(--msc-paper-soft); }
+.msc-explore a:focus-visible, .msc-explore button:focus-visible, .msc-explore input:focus-visible { outline: 2px solid var(--msc-sand); outline-offset: 3px; }
+
+@media screen and (max-width: 990px) {
+  .msc-explore-hero, .msc-editorial-layout, .msc-report-panel { grid-template-columns: 1fr; }
+  .msc-explore-categories, .msc-profile-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .msc-editorial-card--lead { min-height: 34rem; }
+}
+@media screen and (max-width: 640px) {
+  .msc-explore { padding-top: 4.4rem; }
+  .msc-discovery-map { min-height: 34rem; }
+  .msc-explore-categories, .msc-profile-grid { grid-template-columns: 1fr; }
+  .msc-report-row { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .msc-category-card, .msc-editorial-card, .msc-profile-card { transition: none; }
+}
