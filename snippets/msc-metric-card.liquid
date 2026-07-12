@@ -1,0 +1,27 @@
+{% comment %}
+  Renders a reusable Mempool Surf Club metric card.
+
+  Accepts:
+  - label: {String} Metric label
+  - value: {String} Metric fallback/current value
+  - note: {String} Supporting note
+  - status: {String} Optional status text
+{% endcomment %}
+
+{%- liquid
+  assign metric_label = label | default: 'Network Metric'
+  assign metric_value = value | default: '—'
+  assign metric_note = note | default: 'Connecting'
+  assign metric_status = status | default: ''
+-%}
+
+<article class="msc-metric msc-glass-card" aria-label="{{ metric_label | escape }}">
+  <div class="msc-metric__header">
+    <p class="msc-metric-label">{{ metric_label | escape }}</p>
+    {%- if metric_status != blank -%}
+      <span class="msc-metric-status">{{ metric_status | escape }}</span>
+    {%- endif -%}
+  </div>
+  <p class="msc-metric-value">{{ metric_value | escape }}</p>
+  <p class="msc-metric-note">{{ metric_note | escape }}</p>
+</article>
