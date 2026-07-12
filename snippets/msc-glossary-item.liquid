@@ -1,0 +1,7 @@
+{% comment %}
+  Renders a compact MSC glossary item. Accepts: term, definition
+{% endcomment %}
+<article class="msc-glossary-item msc-glass-card">
+  <h3>{{ term | escape }}</h3>
+  <p>{{ definition | escape }}</p>
+</article>
