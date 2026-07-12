@@ -1,0 +1,144 @@
+{{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
+
+{%- assign search_input_id = 'MscLearnSearchInput-' | append: section.id -%}
+
+<section class="msc-shell msc-learn" id="MscLearn-{{ section.id }}">
+  <div class="msc-container">
+    <div class="msc-learn-hero">
+      <div class="msc-learn-hero__content">
+        <p class="msc-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        <h1 class="msc-title msc-learn-hero__title">{{ section.settings.heading | escape }}</h1>
+        <div class="msc-subtitle msc-learn-hero__copy rte">{{ section.settings.supporting_copy }}</div>
+        {% render 'msc-search-form', input_id: search_input_id, placeholder: section.settings.search_placeholder, button_label: section.settings.search_button, search_types: section.settings.search_types, label: section.settings.search_label, modifier: 'learn' %}
+      </div>
+
+      <aside class="msc-depth-chart msc-glass-card" aria-labelledby="MscDepthChartTitle-{{ section.id }}">
+        <div class="msc-depth-chart__header">
+          <span id="MscDepthChartTitle-{{ section.id }}">Knowledge Depth Chart</span>
+          <span>{{ section.settings.chart_label | escape }}</span>
+        </div>
+        <div class="msc-depth-chart__field" aria-hidden="true">
+          <svg class="msc-depth-chart__contours" viewBox="0 0 720 440" preserveAspectRatio="none" focusable="false">
+            <path d="M18 86 C120 56 190 116 288 82 S468 48 700 92" />
+            <path d="M22 184 C126 146 210 222 326 180 S520 136 698 190" />
+            <path d="M18 292 C132 248 222 338 362 286 S560 238 704 300" />
+            <path d="M24 382 C150 340 252 420 398 374 S586 330 700 390" />
+          </svg>
+          <div class="msc-depth-chart__band"><span>SURFACE</span><strong>Foundations</strong><i>00m</i></div>
+          <div class="msc-depth-chart__band"><span>CURRENT</span><strong>Using Bitcoin</strong><i>25m</i></div>
+          <div class="msc-depth-chart__band"><span>DEEP WATER</span><strong>Network &amp; Protocols</strong><i>50m</i></div>
+          <div class="msc-depth-chart__band"><span>OPEN OCEAN</span><strong>Development &amp; Ecosystem</strong><i>100m</i></div>
+          <div class="msc-depth-chart__guide msc-depth-chart__guide--one"></div>
+          <div class="msc-depth-chart__guide msc-depth-chart__guide--two"></div>
+          <div class="msc-depth-chart__guide msc-depth-chart__guide--three"></div>
+          <div class="msc-depth-chart__point msc-depth-chart__point--one"></div>
+          <div class="msc-depth-chart__point msc-depth-chart__point--two"></div>
+          <div class="msc-depth-chart__point msc-depth-chart__point--three"></div>
+          <div class="msc-depth-chart__point msc-depth-chart__point--four"></div>
+        </div>
+        <p>{{ section.settings.chart_caption | escape }}</p>
+      </aside>
+    </div>
+
+    <div class="msc-block" aria-labelledby="MscLearnPaths-{{ section.id }}">
+      {% render 'msc-section-header', kicker: section.settings.paths_kicker, heading: section.settings.paths_heading, copy: section.settings.paths_copy, heading_id: 'MscLearnPaths-' | append: section.id %}
+      <div class="msc-learn-path-grid">
+        {%- assign path_index = 0 -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'learning_path' -%}
+            {%- assign path_index = path_index | plus: 1 -%}
+            {%- assign padded_index = path_index | prepend: '0' | slice: -2, 2 -%}
+            {% render 'msc-learning-path-card', index: padded_index, title: block.settings.title, description: block.settings.description, link: block.settings.link, marker: block.settings.marker %}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <div class="msc-block msc-learn-index-block" aria-labelledby="MscLearnIndex-{{ section.id }}">
+      {% render 'msc-section-header', kicker: section.settings.index_kicker, heading: section.settings.index_heading, copy: section.settings.index_copy, heading_id: 'MscLearnIndex-' | append: section.id %}
+      <div class="msc-learn-index">
+        {%- assign group_index = 0 -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'topic_group' -%}
+            {%- assign group_index = group_index | plus: 1 -%}
+            <details class="msc-learn-topic msc-glass-card"{% if group_index == 1 and section.settings.open_first_group %} open{% endif %}>
+              <summary><span>{{ block.settings.title | escape }}</span><small>{{ block.settings.guide_note | escape }}</small></summary>
+              <div class="msc-learn-topic__grid">
+                {%- assign subcategories = block.settings.subcategories | newline_to_br | split: '<br />' -%}
+                {%- assign topics = block.settings.topics | newline_to_br | split: '<br />' -%}
+                {%- for subcategory in subcategories -%}
+                  <div class="msc-learn-topic__column">
+                    <h3>{{ subcategory | strip | escape }}</h3>
+                    <ul>
+                      {%- assign topic_line = topics[forloop.index0] | default: '' -%}
+                      {%- assign topic_items = topic_line | split: ',' -%}
+                      {%- for item in topic_items -%}<li>{{ item | strip | escape }}</li>{%- endfor -%}
+                    </ul>
+                  </div>
+                {%- endfor -%}
+              </div>
+            </details>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <div class="msc-block" aria-labelledby="MscLearnRoute-{{ section.id }}">
+      <article class="msc-learn-route msc-glass-card">
+        <div>
+          <p class="msc-section-kicker">{{ section.settings.route_kicker | escape }}</p>
+          <h2 id="MscLearnRoute-{{ section.id }}" class="msc-section-title">{{ section.settings.route_heading | escape }}</h2>
+          <div class="msc-section-header__copy rte">{{ section.settings.route_copy }}</div>
+        </div>
+        <ol class="msc-learn-route__steps" aria-label="Bitcoin transaction learning route preview">
+          <li><span>1</span><strong>Create</strong></li><li><span>2</span><strong>Sign</strong></li><li><span>3</span><strong>Broadcast</strong></li><li><span>4</span><strong>Mempool</strong></li><li><span>5</span><strong>Confirm</strong></li>
+        </ol>
+      </article>
+    </div>
+
+    <div class="msc-block" aria-labelledby="MscLearnGlossary-{{ section.id }}">
+      {% render 'msc-section-header', kicker: section.settings.glossary_kicker, heading: section.settings.glossary_heading, copy: section.settings.glossary_copy, heading_id: 'MscLearnGlossary-' | append: section.id %}
+      <div class="msc-glossary-grid">
+        {%- for block in section.blocks -%}{%- if block.type == 'glossary_term' -%}{% render 'msc-glossary-item', term: block.settings.term, definition: block.settings.definition %}{%- endif -%}{%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "MSC Learn",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {"type":"text","id":"eyebrow","label":"Eyebrow","default":"BITCOIN FIELD GUIDE"},
+    {"type":"text","id":"heading","label":"Heading","default":"LEARN HOW THE OCEAN MOVES."},
+    {"type":"richtext","id":"supporting_copy","label":"Supporting copy","default":"<p>Start at the surface or go deeper. Follow clear learning paths through Bitcoin fundamentals, the network, protocols, development, and the wider ecosystem.</p>"},
+    {"type":"text","id":"search_label","label":"Search accessible label","default":"Search the Bitcoin field guide"},
+    {"type":"text","id":"search_placeholder","label":"Search placeholder","default":"Search wallets, mining, mempool, nodes, protocols..."},
+    {"type":"text","id":"search_button","label":"Search button","default":"Search"},
+    {"type":"text","id":"search_types","label":"Shopify search types","default":"article,page,product"},
+    {"type":"text","id":"chart_label","label":"Chart label","default":"Four depths"},
+    {"type":"text","id":"chart_caption","label":"Chart caption","default":"A quiet map for choosing how deep to go before following a learning route."},
+    {"type":"text","id":"paths_kicker","label":"Paths kicker","default":"Choose Your Path"},
+    {"type":"text","id":"paths_heading","label":"Paths heading","default":"Start with the route that matches your depth."},
+    {"type":"richtext","id":"paths_copy","label":"Paths copy","default":"<p>Each path points into the index without pretending the route is finished. Guides are being added to this route.</p>"},
+    {"type":"text","id":"index_kicker","label":"Index kicker","default":"Knowledge Index"},
+    {"type":"text","id":"index_heading","label":"Index heading","default":"A structured archive for the Bitcoin ocean."},
+    {"type":"richtext","id":"index_copy","label":"Index copy","default":"<p>Open a section, scan the markers, and choose where to continue deeper.</p>"},
+    {"type":"checkbox","id":"open_first_group","label":"Open first topic group by default","default":true},
+    {"type":"text","id":"route_kicker","label":"Route kicker","default":"Featured Learning Route"},
+    {"type":"text","id":"route_heading","label":"Route heading","default":"START HERE: HOW A BITCOIN TRANSACTION MOVES"},
+    {"type":"richtext","id":"route_copy","label":"Route copy","default":"<p>Follow the path from wallet creation and signing through the mempool, miner selection, block inclusion, and confirmation.</p>"},
+    {"type":"text","id":"glossary_kicker","label":"Glossary kicker","default":"Glossary Preview"},
+    {"type":"text","id":"glossary_heading","label":"Glossary heading","default":"Terms for reading the chart."},
+    {"type":"richtext","id":"glossary_copy","label":"Glossary copy","default":"<p>Compact definitions for the language that appears throughout Bitcoin guides.</p>"}
+  ],
+  "blocks": [
+    {"type":"learning_path","name":"Learning path","settings":[{"type":"text","id":"title","label":"Title","default":"Start With Bitcoin"},{"type":"textarea","id":"description","label":"Description","default":"Begin with the core concepts before moving into wallets, keys, and transactions."},{"type":"text","id":"marker","label":"Route marker","default":"Surface route"},{"type":"url","id":"link","label":"Optional link"}]},
+    {"type":"topic_group","name":"Topic group","settings":[{"type":"text","id":"title","label":"Title","default":"Bitcoin Basics"},{"type":"text","id":"guide_note","label":"Guide note","default":"Begin with the core concepts."},{"type":"textarea","id":"subcategories","label":"Subcategories","default":"Foundations\nUsing Bitcoin\nSecurity\nEssentials"},{"type":"textarea","id":"topics","label":"Topics, one comma-separated row per subcategory","default":"What is Bitcoin?, Why Bitcoin?, Bitcoin History, Satoshi Nakamoto\nWallets, Self-Custody, Sending & Receiving, Transactions & Fees\nSeed Phrases, Public & Private Keys, Bitcoin Security, Bitcoin Privacy\nUTXOs, Confirmations, Halving, Best Practices"}]},
+    {"type":"glossary_term","name":"Glossary term","settings":[{"type":"text","id":"term","label":"Term","default":"Mempool"},{"type":"textarea","id":"definition","label":"Definition","default":"The waiting area where valid unconfirmed Bitcoin transactions are held by nodes before they are included in blocks."}]}
+  ],
+  "presets": [{"name":"MSC Learn"}]
+}
+{% endschema %}
