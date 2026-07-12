@@ -3,23 +3,85 @@
     "msc_home_hero": {
       "type": "msc-home-hero",
       "settings": {
-        "eyebrow": "LIVE FROM THE BITCOIN NETWORK",
+        "eyebrow": "BITCOIN CULTURE + NETWORK",
+        "heading_line_1": "READ THE NETWORK.",
+        "heading_line_2": "EXPLORE THE CULTURE.",
         "heading": "READ THE NETWORK. EXPLORE THE CULTURE.",
-        "subheading": "<p>Mempool Surf Club is a place to explore Bitcoin culture, learn how Bitcoin and its ecosystem work, and view current network conditions.</p>",
-        "search_label": "Search editorials, people, companies, artists, tools, and educational topics",
-        "search_placeholder": "Search editorials, people, companies, artists, tools, and topics...",
+        "subheading": "<p>Mempool Surf Club is a place to explore Bitcoin culture, understand how the network works, read the conditions shaping it, and discover objects that carry the culture forward.</p>",
+        "search_label": "Search people, projects, ideas, tools, and topics",
+        "search_placeholder": "Search people, projects, ideas, tools, and topics...",
         "search_button": "Search",
         "search_types": "article,page,product",
         "primary_button_label": "Explore the ecosystem",
         "primary_button_link": "shopify://pages/explore",
-        "secondary_button_label": "Open network tools",
-        "secondary_button_link": "shopify://pages/tools",
-        "pulse_kicker": "Network Pulse",
-        "pulse_heading": "Current conditions, ready for live data."
+        "secondary_button_label": "Start learning",
+        "secondary_button_link": "shopify://pages/learn"
+      }
+    },
+    "msc_home_gateway": {
+      "type": "msc-home-gateway",
+      "blocks": {
+        "explore": {
+          "type": "destination",
+          "settings": {
+            "route_label": "01 — Explore",
+            "title": "Explore",
+            "description": "Profiles, projects, editorials, art, companies, and cultural signals shaping Bitcoin.",
+            "action_label": "Explore the culture",
+            "link": "shopify://pages/explore"
+          }
+        },
+        "learn": {
+          "type": "destination",
+          "settings": {
+            "route_label": "02 — Learn",
+            "title": "Learn",
+            "description": "Clear routes through Bitcoin fundamentals, the network, development, and the wider ecosystem.",
+            "action_label": "Open the field guide",
+            "link": "shopify://pages/learn"
+          }
+        },
+        "tools": {
+          "type": "destination",
+          "settings": {
+            "route_label": "03 — Tools",
+            "title": "Tools",
+            "description": "Interfaces designed to help read fees, blockspace, mempool pressure, mining conditions, and network movement.",
+            "action_label": "Read the network",
+            "link": "shopify://pages/tools"
+          }
+        },
+        "shop": {
+          "type": "destination",
+          "settings": {
+            "route_label": "04 — Shop",
+            "title": "Shop",
+            "description": "MSC releases and independent collections from artists, builders, projects, and collaborators.",
+            "action_label": "View the collections",
+            "link": "shopify://pages/shop"
+          }
+        }
+      },
+      "block_order": [
+        "explore",
+        "learn",
+        "tools",
+        "shop"
+      ],
+      "settings": {
+        "kicker": "ENTER THE ECOSYSTEM",
+        "heading": "Four ways to move through the same ocean.",
+        "copy": "<p>Explore the culture, learn how Bitcoin works, read network conditions, and discover physical collections built around the ideas moving through it.</p>",
+        "tools_kicker": "READ THE NETWORK",
+        "tools_heading": "Know what conditions matter before you move.",
+        "tools_copy": "<p>Fees, transaction demand, mining conditions, and blockspace all reveal a different part of the network.</p>",
+        "tools_button_label": "Open network tools",
+        "tools_button_link": "shopify://pages/tools"
       }
     }
   },
   "order": [
-    "msc_home_hero"
+    "msc_home_hero",
+    "msc_home_gateway"
   ]
 }

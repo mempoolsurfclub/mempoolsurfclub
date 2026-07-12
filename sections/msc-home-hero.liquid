@@ -1,6 +1,8 @@
 {{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
 
 {%- assign search_input_id = 'MscHomeSearchInput-' | append: section.id -%}
+{%- assign heading_line_1 = section.settings.heading_line_1 | default: blank -%}
+{%- assign heading_line_2 = section.settings.heading_line_2 | default: blank -%}
 
 <section class="msc-shell msc-home-hero" id="MscHomeHero-{{ section.id }}">
   <div class="msc-container">
@@ -10,7 +12,12 @@
           <p class="msc-eyebrow">{{ section.settings.eyebrow | escape }}</p>
         {%- endif -%}
 
-        {%- if section.settings.heading != blank -%}
+        {%- if heading_line_1 != blank or heading_line_2 != blank -%}
+          <h1 class="msc-title msc-home-hero__title">
+            {%- if heading_line_1 != blank -%}<span>{{ heading_line_1 | escape }}</span>{%- endif -%}
+            {%- if heading_line_2 != blank -%}<span>{{ heading_line_2 | escape }}</span>{%- endif -%}
+          </h1>
+        {%- elsif section.settings.heading != blank -%}
           <h1 class="msc-title msc-home-hero__title">{{ section.settings.heading | escape }}</h1>
         {%- endif -%}
 
@@ -30,54 +37,33 @@
         %}
 
         <div class="msc-home-hero__actions" aria-label="Primary homepage actions">
-          {%- if section.settings.primary_button_label != blank -%}
-            <a class="msc-button" href="{{ section.settings.primary_button_link | default: routes.root_url }}">
+          {%- if section.settings.primary_button_label != blank and section.settings.primary_button_link != blank -%}
+            <a class="msc-button" href="{{ section.settings.primary_button_link }}">
               {{ section.settings.primary_button_label | escape }}
             </a>
           {%- endif -%}
-          {%- if section.settings.secondary_button_label != blank -%}
-            <a class="msc-button msc-button--secondary" href="{{ section.settings.secondary_button_link | default: routes.root_url }}">
+          {%- if section.settings.secondary_button_label != blank and section.settings.secondary_button_link != blank -%}
+            <a class="msc-button msc-button--secondary" href="{{ section.settings.secondary_button_link }}">
               {{ section.settings.secondary_button_label | escape }}
             </a>
           {%- endif -%}
         </div>
       </div>
 
-      <div class="msc-signal-card msc-glass-card" aria-label="Bitcoin network signal visualization">
+      <div class="msc-signal-card msc-glass-card" role="img" aria-label="Mempool Surf Club ecosystem map showing Explore, Learn, Tools, and Shop destinations.">
         <div class="msc-signal-card__header">
-          <span>MSC SIGNAL FIELD</span>
-          <span>Listening</span>
+          <span>MSC ECOSYSTEM MAP</span>
+          <span>OBSERVING</span>
         </div>
         <div class="msc-signal-field" aria-hidden="true">
-          <span class="msc-signal-field__node msc-signal-field__node--one"></span>
-          <span class="msc-signal-field__node msc-signal-field__node--two"></span>
-          <span class="msc-signal-field__node msc-signal-field__node--three"></span>
-          <span class="msc-signal-field__node msc-signal-field__node--four"></span>
           <span class="msc-signal-field__line msc-signal-field__line--one"></span>
           <span class="msc-signal-field__line msc-signal-field__line--two"></span>
           <span class="msc-signal-field__line msc-signal-field__line--three"></span>
+          <span class="msc-signal-field__node msc-signal-field__node--one"><i></i><strong>EXPLORE</strong><small>CULTURE</small></span>
+          <span class="msc-signal-field__node msc-signal-field__node--two"><i></i><strong>LEARN</strong><small>EDUCATION</small></span>
+          <span class="msc-signal-field__node msc-signal-field__node--three"><i></i><strong>TOOLS</strong><small>NETWORK</small></span>
+          <span class="msc-signal-field__node msc-signal-field__node--four"><i></i><strong>SHOP</strong><small>OBJECTS</small></span>
         </div>
-        <div class="msc-signal-card__footer">
-          <span>Education</span>
-          <span>Culture</span>
-          <span>Tools</span>
-          <span>Research</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="msc-network-pulse" aria-labelledby="MscNetworkPulseTitle-{{ section.id }}">
-      <div class="msc-network-pulse__heading">
-        <p class="msc-section-kicker">{{ section.settings.pulse_kicker | escape }}</p>
-        <h2 class="msc-section-title" id="MscNetworkPulseTitle-{{ section.id }}">{{ section.settings.pulse_heading | escape }}</h2>
-      </div>
-      <div class="msc-status-grid msc-status-grid--pulse">
-        {% render 'msc-metric-card', label: 'Next Block', value: 'Connecting', note: 'Awaiting live block feed', status: 'Fallback' %}
-        {% render 'msc-metric-card', label: 'Priority Fee', value: '—', note: 'sat/vB pending', status: 'Fallback' %}
-        {% render 'msc-metric-card', label: 'Mempool', value: '—', note: 'Virtual bytes pending', status: 'Fallback' %}
-        {% render 'msc-metric-card', label: 'Hashrate', value: '—', note: 'EH/s feed pending', status: 'Fallback' %}
-        {% render 'msc-metric-card', label: 'Difficulty Adjustment', value: '—', note: 'Epoch estimate pending', status: 'Fallback' %}
-        {% render 'msc-metric-card', label: 'BTC Price', value: '—', note: 'Market feed pending', status: 'Fallback' %}
       </div>
     </div>
   </div>
@@ -89,87 +75,20 @@
   "tag": "section",
   "class": "section",
   "settings": [
-    {
-      "type": "text",
-      "id": "eyebrow",
-      "label": "Live-status eyebrow",
-      "default": "LIVE FROM THE BITCOIN NETWORK"
-    },
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "READ THE NETWORK. EXPLORE THE CULTURE."
-    },
-    {
-      "type": "richtext",
-      "id": "subheading",
-      "label": "Supporting copy",
-      "default": "<p>Mempool Surf Club is a place to explore Bitcoin culture, learn how Bitcoin and its ecosystem work, and view current network conditions.</p>"
-    },
-    {
-      "type": "text",
-      "id": "search_label",
-      "label": "Search accessible label",
-      "default": "Search editorials, people, companies, artists, tools, and educational topics"
-    },
-    {
-      "type": "text",
-      "id": "search_placeholder",
-      "label": "Search placeholder",
-      "default": "Search editorials, people, companies, artists, tools, and topics..."
-    },
-    {
-      "type": "text",
-      "id": "search_button",
-      "label": "Search button",
-      "default": "Search"
-    },
-    {
-      "type": "text",
-      "id": "search_types",
-      "label": "Shopify search types",
-      "default": "article,page,product"
-    },
-    {
-      "type": "text",
-      "id": "primary_button_label",
-      "label": "Primary button label",
-      "default": "Explore the ecosystem"
-    },
-    {
-      "type": "url",
-      "id": "primary_button_link",
-      "label": "Primary button link"
-    },
-    {
-      "type": "text",
-      "id": "secondary_button_label",
-      "label": "Secondary button label",
-      "default": "Open network tools"
-    },
-    {
-      "type": "url",
-      "id": "secondary_button_link",
-      "label": "Secondary button link"
-    },
-    {
-      "type": "text",
-      "id": "pulse_kicker",
-      "label": "Network pulse kicker",
-      "default": "Network Pulse"
-    },
-    {
-      "type": "text",
-      "id": "pulse_heading",
-      "label": "Network pulse heading",
-      "default": "Current conditions, ready for live data."
-    }
+    { "type": "text", "id": "eyebrow", "label": "Hero eyebrow", "default": "BITCOIN CULTURE + NETWORK" },
+    { "type": "text", "id": "heading_line_1", "label": "Heading line 1", "default": "READ THE NETWORK." },
+    { "type": "text", "id": "heading_line_2", "label": "Heading line 2", "default": "EXPLORE THE CULTURE." },
+    { "type": "text", "id": "heading", "label": "Legacy heading fallback", "default": "READ THE NETWORK. EXPLORE THE CULTURE." },
+    { "type": "richtext", "id": "subheading", "label": "Supporting copy", "default": "<p>Mempool Surf Club is a place to explore Bitcoin culture, understand how the network works, read the conditions shaping it, and discover objects that carry the culture forward.</p>" },
+    { "type": "text", "id": "search_label", "label": "Search accessible label", "default": "Search people, projects, ideas, tools, and topics" },
+    { "type": "text", "id": "search_placeholder", "label": "Search placeholder", "default": "Search people, projects, ideas, tools, and topics..." },
+    { "type": "text", "id": "search_button", "label": "Search button", "default": "Search" },
+    { "type": "text", "id": "search_types", "label": "Shopify search types", "default": "article,page,product" },
+    { "type": "text", "id": "primary_button_label", "label": "Primary button label", "default": "Explore the ecosystem" },
+    { "type": "url", "id": "primary_button_link", "label": "Primary button link" },
+    { "type": "text", "id": "secondary_button_label", "label": "Secondary button label", "default": "Start learning" },
+    { "type": "url", "id": "secondary_button_link", "label": "Secondary button link" }
   ],
-  "presets": [
-    {
-      "name": "MSC home hero"
-    }
-  ]
+  "presets": [{ "name": "MSC home hero", "settings": { "primary_button_link": "shopify://pages/explore", "secondary_button_link": "shopify://pages/learn" } }]
 }
 {% endschema %}
