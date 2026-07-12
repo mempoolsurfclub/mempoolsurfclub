@@ -1,0 +1,143 @@
+{{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
+
+<section class="msc-shell msc-about" id="MscAbout-{{ section.id }}">
+  <div class="msc-container">
+    <div class="msc-about-hero">
+      <div class="msc-about-hero__content">
+        <p class="msc-eyebrow">{{ section.settings.hero_eyebrow | escape }}</p>
+        <h1 class="msc-title msc-about-hero__title">{{ section.settings.hero_heading | escape }}</h1>
+        <div class="msc-subtitle msc-about-hero__copy rte">{{ section.settings.hero_copy }}</div>
+        <div class="msc-about-actions">
+          {%- if section.settings.hero_primary_label != blank -%}<a class="msc-button" href="{{ section.settings.hero_primary_link | default: '#MainContent' }}">{{ section.settings.hero_primary_label | escape }}</a>{%- endif -%}
+          {%- if section.settings.hero_secondary_label != blank -%}<a class="msc-button msc-button--secondary" href="{{ section.settings.hero_secondary_link | default: '#MainContent' }}">{{ section.settings.hero_secondary_label | escape }}</a>{%- endif -%}
+        </div>
+      </div>
+      <aside class="msc-club-log msc-glass-card" aria-label="Mempool Surf Club observation log visual">
+        <div class="msc-club-log__top"><span>CLUB LOG</span><span>OBSERVATION 001</span></div>
+        <div class="msc-club-log__stamp"><span>MEMPOOL SURF CLUB</span><strong>BITCOIN / CULTURE / NETWORK</strong></div>
+        <div class="msc-club-log__wave" aria-hidden="true"><svg viewBox="0 0 720 160" preserveAspectRatio="none" focusable="false"><path d="M12 84 C88 34 142 34 218 84 S348 134 424 84 S554 34 708 84"/><path d="M12 118 C92 92 158 92 238 118 S372 144 452 118 S590 92 708 118"/></svg></div>
+        <p class="msc-club-log__status">STATUS: WATCHING THE WAVES</p>
+        <ul class="msc-club-log__lines" aria-label="Observation areas">
+          <li><span>Network</span><i></i></li><li><span>Culture</span><i></i></li><li><span>Art</span><i></i></li><li><span>Code</span><i></i></li><li><span>People</span><i></i></li>
+        </ul>
+      </aside>
+    </div>
+
+    <div class="msc-block">
+      <article class="msc-about-manifesto msc-glass-card">
+        <div class="msc-about-manifesto__mark" aria-hidden="true"></div>
+        <div class="rte">{{ section.settings.manifesto_copy }}</div>
+      </article>
+    </div>
+
+    <div class="msc-block" aria-labelledby="MscAboutWhy-{{ section.id }}">
+      {% render 'msc-section-header', kicker: section.settings.why_kicker, heading: section.settings.why_heading, copy: section.settings.why_copy, heading_id: 'MscAboutWhy-' | append: section.id %}
+      <div class="msc-principle-grid msc-principle-grid--why">
+        {%- for block in section.blocks -%}{%- if block.type == 'why_principle' -%}{% render 'msc-principle-card', title: block.settings.title, description: block.settings.description, marker: block.settings.marker %}{%- endif -%}{%- endfor -%}
+      </div>
+    </div>
+
+    <div class="msc-block" aria-labelledby="MscAboutInside-{{ section.id }}">
+      {% render 'msc-section-header', kicker: section.settings.platform_kicker, heading: section.settings.platform_heading, copy: section.settings.platform_copy, heading_id: 'MscAboutInside-' | append: section.id %}
+      <div class="msc-platform-grid">
+        {%- for block in section.blocks -%}{%- if block.type == 'platform_item' -%}{% render 'msc-platform-card', title: block.settings.title, description: block.settings.description, link: block.settings.link, entry: block.settings.entry, marker: block.settings.marker %}{%- endif -%}{%- endfor -%}
+      </div>
+    </div>
+
+    <div class="msc-block msc-about-principles" aria-labelledby="MscAboutPrinciples-{{ section.id }}">
+      {% render 'msc-section-header', kicker: section.settings.principles_kicker, heading: section.settings.principles_heading, heading_id: 'MscAboutPrinciples-' | append: section.id %}
+      <div class="msc-principle-grid">
+        {%- for block in section.blocks -%}{%- if block.type == 'club_principle' -%}{% render 'msc-principle-card', title: block.settings.title, description: block.settings.description, marker: block.settings.marker %}{%- endif -%}{%- endfor -%}
+      </div>
+    </div>
+
+    <div class="msc-block" aria-labelledby="MscAboutCommunity-{{ section.id }}">
+      <article class="msc-community-panel msc-glass-card">
+        <div class="msc-community-panel__content">
+          <p class="msc-section-kicker">{{ section.settings.community_kicker | escape }}</p>
+          <h2 id="MscAboutCommunity-{{ section.id }}" class="msc-section-title">{{ section.settings.community_heading | escape }}</h2>
+          <div class="msc-section-header__copy rte">{{ section.settings.community_copy }}</div>
+          <div class="msc-about-actions msc-about-actions--compact">
+            {%- for block in section.blocks -%}{%- if block.type == 'community_action' -%}<a class="msc-button msc-button--secondary" href="{{ block.settings.link | default: '#MainContent' }}">{{ block.settings.label | escape }}</a>{%- endif -%}{%- endfor -%}
+          </div>
+        </div>
+        <div class="msc-community-panel__media">
+          {%- if section.settings.community_image != blank -%}{{ section.settings.community_image | image_url: width: 900 | image_tag: loading: 'lazy', alt: section.settings.community_image_alt }}{%- else -%}<div class="msc-club-map-fallback" aria-label="Clubhouse map-line illustration"><span></span><span></span><span></span><strong>CLUBHOUSE LOG</strong></div>{%- endif -%}
+        </div>
+      </article>
+    </div>
+
+    <div class="msc-block" aria-labelledby="MscAboutSupport-{{ section.id }}">
+      <article class="msc-support-panel msc-glass-card">
+        <div>
+          <p class="msc-section-kicker">{{ section.settings.support_kicker | escape }}</p>
+          <h2 id="MscAboutSupport-{{ section.id }}" class="msc-section-title">{{ section.settings.support_heading | escape }}</h2>
+          <div class="msc-section-header__copy rte">{{ section.settings.support_copy }}</div>
+          {%- if section.settings.support_explanation != blank -%}<p class="msc-support-panel__note">{{ section.settings.support_explanation | escape }}</p>{%- endif -%}
+        </div>
+        <div class="msc-support-panel__details">
+          {%- if section.settings.bitcoin_address != blank -%}<div class="msc-address-box"><span>Bitcoin address</span><code>{{ section.settings.bitcoin_address | escape }}</code></div>{%- endif -%}
+          {%- if section.settings.lightning_address != blank -%}<div class="msc-address-box"><span>Lightning address</span><code>{{ section.settings.lightning_address | escape }}</code></div>{%- endif -%}
+          {%- if section.settings.bitcoin_address == blank and section.settings.lightning_address == blank -%}<p class="msc-support-panel__empty">A public support address will be added here.</p>{%- endif -%}
+          {%- if section.settings.qr_image != blank -%}<div class="msc-support-panel__qr">{{ section.settings.qr_image | image_url: width: 360 | image_tag: loading: 'lazy', alt: section.settings.qr_image_alt }}</div>{%- endif -%}
+          {%- if section.settings.support_button_label != blank and section.settings.support_button_link != blank -%}<a class="msc-button" href="{{ section.settings.support_button_link }}">{{ section.settings.support_button_label | escape }}</a>{%- endif -%}
+        </div>
+      </article>
+    </div>
+
+    {%- if section.settings.show_log -%}
+      <div class="msc-block" aria-labelledby="MscAboutLog-{{ section.id }}">
+        {% render 'msc-section-header', kicker: section.settings.log_kicker, heading: section.settings.log_heading, heading_id: 'MscAboutLog-' | append: section.id %}
+        <div class="msc-archive-log">
+          {%- for block in section.blocks -%}{%- if block.type == 'log_entry' -%}
+            <article class="msc-archive-entry msc-glass-card"><span>{{ block.settings.entry | escape }}</span><div><h3>{{ block.settings.title | escape }}</h3>{%- if block.settings.note != blank -%}<p>{{ block.settings.note | escape }}</p>{%- endif -%}{%- if block.settings.date != blank -%}<small>{{ block.settings.date | escape }}</small>{%- endif -%}{%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}">Read entry →</a>{%- endif -%}</div></article>
+          {%- endif -%}{%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    <div class="msc-block msc-about-final" aria-labelledby="MscAboutFinal-{{ section.id }}">
+      <article class="msc-about-final__panel msc-glass-card">
+        <h2 id="MscAboutFinal-{{ section.id }}" class="msc-section-title">{{ section.settings.final_heading | escape }}</h2>
+        <div class="msc-section-header__copy rte">{{ section.settings.final_copy }}</div>
+        <div class="msc-about-actions">
+          {%- if section.settings.final_primary_label != blank -%}<a class="msc-button" href="{{ section.settings.final_primary_link | default: '#MainContent' }}">{{ section.settings.final_primary_label | escape }}</a>{%- endif -%}
+          {%- if section.settings.final_secondary_label != blank -%}<a class="msc-button msc-button--secondary" href="{{ section.settings.final_secondary_link | default: '#MainContent' }}">{{ section.settings.final_secondary_label | escape }}</a>{%- endif -%}
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "MSC About",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {"type":"text","id":"hero_eyebrow","label":"Hero eyebrow","default":"THE CLUBHOUSE"},{"type":"text","id":"hero_heading","label":"Hero heading","default":"WE WATCH THE WAVES OF BITCOIN."},{"type":"richtext","id":"hero_copy","label":"Hero copy","default":"<p>Mempool Surf Club is an independent Bitcoin culture platform built to observe the network, document the people and ideas moving through it, and create objects that carry the culture forward.</p>"},{"type":"text","id":"hero_primary_label","label":"Primary button label","default":"Explore the ecosystem"},{"type":"url","id":"hero_primary_link","label":"Primary button link"},{"type":"text","id":"hero_secondary_label","label":"Secondary button label","default":"Read the field guide"},{"type":"url","id":"hero_secondary_link","label":"Secondary button link"},
+    {"type":"richtext","id":"manifesto_copy","label":"Manifesto copy","default":"<p>People watch the mempool. Surfers watch the waves. We watch the waves of Bitcoin.</p><p>Some arrive as macro shifts. Others begin as technical ripples, cultural movements, art, code, businesses, or ideas.</p><p>They may move at different speeds and different scales, but they belong to the same ocean.</p>"},
+    {"type":"text","id":"why_kicker","label":"Why kicker","default":"WHY THE CLUB EXISTS"},{"type":"text","id":"why_heading","label":"Why heading","default":"Built to see the whole ocean."},{"type":"richtext","id":"why_copy","label":"Why copy","default":"<p>MSC connects network observation, cultural documentation, education, tools, and physical goods without drifting away from Bitcoin.</p>"},
+    {"type":"text","id":"platform_kicker","label":"Platform kicker","default":"INSIDE MSC"},{"type":"text","id":"platform_heading","label":"Platform heading","default":"What lives inside the clubhouse."},{"type":"richtext","id":"platform_copy","label":"Platform copy","default":"<p>Each room has a different job, but every room looks back toward the same Bitcoin ocean.</p>"},
+    {"type":"text","id":"principles_kicker","label":"Principles kicker","default":"CLUB PRINCIPLES"},{"type":"text","id":"principles_heading","label":"Principles heading","default":"How we move through the network."},
+    {"type":"text","id":"community_kicker","label":"Community kicker","default":"THE WIDER CLUB"},{"type":"text","id":"community_heading","label":"Community heading","default":"Built online. Made real through people."},{"type":"richtext","id":"community_copy","label":"Community copy","default":"<p>MSC is intended to grow through conversations, meetups, collaborations, field reports, and shared curiosity about Bitcoin and the culture around it.</p>"},{"type":"image_picker","id":"community_image","label":"Community image"},{"type":"text","id":"community_image_alt","label":"Community image alt text","default":"Mempool Surf Club community image"},
+    {"type":"text","id":"support_kicker","label":"Support kicker","default":"SUPPORT THE CLUB"},{"type":"text","id":"support_heading","label":"Support heading","default":"Help keep the signal independent."},{"type":"richtext","id":"support_copy","label":"Support copy","default":"<p>Support can help fund independent editorials, educational resources, tools, gatherings, and future cultural projects.</p>"},{"type":"textarea","id":"bitcoin_address","label":"Bitcoin wallet address"},{"type":"text","id":"lightning_address","label":"Lightning address"},{"type":"textarea","id":"support_explanation","label":"Support explanation"},{"type":"image_picker","id":"qr_image","label":"QR-code image"},{"type":"text","id":"qr_image_alt","label":"QR-code image alt text","default":"Support QR code"},{"type":"text","id":"support_button_label","label":"Support button label","default":"Support MSC"},{"type":"url","id":"support_button_link","label":"Support button link"},
+    {"type":"checkbox","id":"show_log","label":"Show club log","default":true},{"type":"text","id":"log_kicker","label":"Log kicker","default":"CLUB LOG"},{"type":"text","id":"log_heading","label":"Log heading","default":"Notes from the archive."},
+    {"type":"text","id":"final_heading","label":"Final heading","default":"THE OCEAN IS ALWAYS MOVING."},{"type":"richtext","id":"final_copy","label":"Final copy","default":"<p>Keep watching the network, the culture, and the ideas forming beneath the surface.</p>"},{"type":"text","id":"final_primary_label","label":"Final primary label","default":"Explore MSC"},{"type":"url","id":"final_primary_link","label":"Final primary link"},{"type":"text","id":"final_secondary_label","label":"Final secondary label","default":"Open Network Tools"},{"type":"url","id":"final_secondary_link","label":"Final secondary link"}
+  ],
+  "blocks": [
+    {"type":"why_principle","name":"Why principle","settings":[{"type":"text","id":"marker","label":"Marker","default":"01"},{"type":"text","id":"title","label":"Title","default":"Bitcoin First"},{"type":"textarea","id":"description","label":"Description","default":"Every part of MSC begins with Bitcoin—not a broader crypto category."}]},
+    {"type":"platform_item","name":"Platform item","settings":[{"type":"text","id":"entry","label":"Log number","default":"LOG 01"},{"type":"text","id":"marker","label":"Marker","default":"◌"},{"type":"text","id":"title","label":"Title","default":"Explore"},{"type":"textarea","id":"description","label":"Description","default":"Profiles, editorials, projects, reports, and cultural signals."},{"type":"url","id":"link","label":"Link"}]},
+    {"type":"club_principle","name":"Club principle","settings":[{"type":"text","id":"marker","label":"Marker","default":"•"},{"type":"text","id":"title","label":"Title","default":"Stay Curious"},{"type":"textarea","id":"description","label":"Description","default":"Keep asking better questions before declaring the wave understood."}]},
+    {"type":"community_action","name":"Community action","settings":[{"type":"text","id":"label","label":"Label","default":"Meetups"},{"type":"url","id":"link","label":"Link"}]},
+    {"type":"log_entry","name":"Log entry","settings":[{"type":"text","id":"entry","label":"Entry number","default":"ENTRY 001"},{"type":"text","id":"title","label":"Title","default":"Brand system established"},{"type":"textarea","id":"note","label":"Note","default":"The shared MSC visual language is in place for the first clubhouse foundation."},{"type":"text","id":"date","label":"Optional date"},{"type":"url","id":"link","label":"Optional link"}]}
+  ],
+  "presets": [{"name":"MSC About","blocks":[
+    {"type":"why_principle","settings":{"marker":"01","title":"Bitcoin First","description":"Every part of MSC begins with Bitcoin—not a broader crypto category."}},{"type":"why_principle","settings":{"marker":"02","title":"Watch the Network","description":"The mempool, miners, nodes, builders, and protocols reveal how the system is moving."}},{"type":"why_principle","settings":{"marker":"03","title":"Document the Culture","description":"Artists, founders, companies, communities, and ideas shape the world growing around the protocol."}},{"type":"why_principle","settings":{"marker":"04","title":"Carry It Forward","description":"Editorials, education, tools, gatherings, and physical objects help the culture move beyond the screen."}},
+    {"type":"platform_item","settings":{"entry":"LOG 01","title":"Explore","description":"Profiles, editorials, projects, reports, and cultural signals.","link":"shopify://pages/explore"}},{"type":"platform_item","settings":{"entry":"LOG 02","title":"Learn","description":"Clear routes through Bitcoin fundamentals and the wider ecosystem.","link":"shopify://pages/learn"}},{"type":"platform_item","settings":{"entry":"LOG 03","title":"Tools","description":"Interfaces for reading network conditions and making informed decisions.","link":"shopify://pages/tools"}},{"type":"platform_item","settings":{"entry":"LOG 04","title":"Shop","description":"MSC releases and independent collections from artists and projects.","link":"shopify://pages/shop"}},{"type":"platform_item","settings":{"entry":"LOG 05","title":"Community","description":"Meetups, conversations, collaborations, and shared observation."}},
+    {"type":"club_principle","settings":{"title":"Stay Curious","description":"Keep asking better questions before declaring the wave understood."}},{"type":"club_principle","settings":{"title":"Think Long Term","description":"Favor durable signal over short-lived noise."}},{"type":"club_principle","settings":{"title":"Respect Natural Systems","description":"Observe incentives, cycles, limits, and emergent order with patience."}},{"type":"club_principle","settings":{"title":"Choose Independence","description":"Keep editorial judgment and cultural direction clear."}},{"type":"club_principle","settings":{"title":"Make With Purpose","description":"Build objects, guides, and tools that earn their place."}},{"type":"club_principle","settings":{"title":"Keep Watching","description":"Return to the network and the people moving through it."}},
+    {"type":"community_action","settings":{"label":"Meetups"}},{"type":"community_action","settings":{"label":"Collaborate"}},{"type":"community_action","settings":{"label":"Submit a project"}},{"type":"community_action","settings":{"label":"Follow MSC"}},
+    {"type":"log_entry","settings":{"entry":"ENTRY 001","title":"Brand system established","note":"The shared MSC visual language is in place for the first clubhouse foundation."}},{"type":"log_entry","settings":{"entry":"ENTRY 002","title":"Platform structure mapped","note":"Explore, Learn, Tools, Shop, and Community now sit inside one About framework."}},{"type":"log_entry","settings":{"entry":"ENTRY 003","title":"First field reports in development","note":"Space is reserved for future verified reports and observations."}},{"type":"log_entry","settings":{"entry":"ENTRY 004","title":"Core collection being assembled","note":"The archive can grow as real projects and releases are ready."}}
+  ]}]
+}
+{% endschema %}

@@ -1008,3 +1008,73 @@ body:has(.msc-collection-hero) .product-grid-container .card-wrapper { border-co
 @media (max-width: 989px) { .msc-shop-hero, .msc-collection-hero__layout, .msc-collab-panel { grid-template-columns: 1fr; } .msc-collection-grid, .msc-product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .msc-collection-grid--current, .msc-note-grid { grid-template-columns: 1fr; } .msc-manifest { min-height: 420px; } }
 @media (max-width: 640px) { .msc-collection-grid, .msc-product-grid { grid-template-columns: 1fr; } .msc-shop-actions { flex-direction: column; } .msc-shop-actions .msc-button { text-align: center; } .msc-manifest__grid { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .msc-manifest__ticks { animation: none; } .msc-collection-card, .msc-shop-products .card-wrapper, .msc-collection-card__media img { transition: none; } .msc-collection-card:hover, .msc-shop-products .card-wrapper:hover { transform: none; } }
+
+/* Sprint 1E: MSC About clubhouse foundation */
+.msc-about { padding: clamp(5rem, 8vw, 9rem) 0 4rem; }
+.msc-about-hero { display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(32rem, .78fr); gap: clamp(2.4rem, 5vw, 6rem); align-items: center; }
+.msc-about-hero__title { max-width: 11ch; }
+.msc-about-hero__copy { max-width: 76rem; margin: 0; }
+.msc-about-hero__copy p { margin: 0; }
+.msc-about-actions { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2.4rem; }
+.msc-about-actions--compact { margin-top: 2rem; }
+.msc-club-log { display: grid; gap: 1.5rem; min-height: 50rem; padding: clamp(1.6rem, 3vw, 2.4rem); overflow: hidden; background-image: repeating-linear-gradient(0deg, rgba(251,248,239,.055) 0 1px, transparent 1px 32px), linear-gradient(180deg, rgba(255,255,255,.13), rgba(255,255,255,.045)); }
+.msc-club-log__top, .msc-club-log__status, .msc-platform-card__entry, .msc-principle-card__marker, .msc-archive-entry > span { color: var(--msc-sand); font-size: 1.05rem; letter-spacing: .14em; text-transform: uppercase; }
+.msc-club-log__top { display: flex; justify-content: space-between; gap: 1rem; }
+.msc-club-log__stamp { border: 1px dashed rgba(212,190,153,.46); border-radius: 18px; padding: 1.6rem; transform: rotate(-1deg); }
+.msc-club-log__stamp span { display: block; margin-bottom: .8rem; color: rgba(251,248,239,.66); letter-spacing: .16em; }
+.msc-club-log__stamp strong { color: var(--msc-paper-soft); font-size: clamp(2.1rem, 3vw, 3.4rem); line-height: 1; letter-spacing: -.045em; }
+.msc-club-log__wave { min-height: 12rem; border: 1px solid rgba(212,190,153,.2); border-radius: 18px; overflow: hidden; background: rgba(16,40,45,.24); }
+.msc-club-log__wave svg { width: 100%; height: 100%; min-height: 12rem; }
+.msc-club-log__wave path { fill: none; stroke: rgba(212,190,153,.7); stroke-width: 2; stroke-dasharray: 9 10; vector-effect: non-scaling-stroke; animation: mscAboutLine 14s linear infinite; }
+.msc-club-log__wave path + path { opacity: .46; animation-duration: 18s; animation-direction: reverse; }
+.msc-club-log__status { margin: 0; }
+.msc-club-log__lines { display: grid; gap: .85rem; margin: 0; padding: 0; list-style: none; }
+.msc-club-log__lines li { display: grid; grid-template-columns: 9rem 1fr; gap: 1rem; align-items: center; color: rgba(251,248,239,.76); }
+.msc-club-log__lines i { height: 1px; background: linear-gradient(90deg, rgba(212,190,153,.72), transparent); }
+.msc-about-manifesto { position: relative; padding: clamp(2.4rem, 6vw, 6rem); overflow: hidden; }
+.msc-about-manifesto .rte { position: relative; z-index: 1; max-width: 94rem; color: var(--msc-paper-soft); font-size: clamp(2.4rem, 4.2vw, 5rem); line-height: 1.08; letter-spacing: -.055em; }
+.msc-about-manifesto .rte p { margin: 0; }
+.msc-about-manifesto .rte p + p { margin-top: 2.2rem; color: rgba(251,248,239,.82); }
+.msc-about-manifesto__mark { position: absolute; right: -8rem; bottom: -7rem; width: min(46rem, 72vw); height: 26rem; opacity: .28; background: repeating-radial-gradient(ellipse at center, transparent 0 18px, rgba(212,190,153,.36) 19px 20px, transparent 21px 38px); transform: rotate(-8deg); }
+.msc-principle-grid, .msc-platform-grid { display: grid; gap: 1.2rem; }
+.msc-principle-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.msc-principle-grid--why { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.msc-platform-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.msc-principle-card, .msc-platform-card { position: relative; min-height: 18rem; padding: 1.7rem; overflow: hidden; }
+.msc-platform-card { display: flex; flex-direction: column; color: inherit; text-decoration: none; transition: transform .2s ease, border-color .2s ease; }
+.msc-platform-card:hover, .msc-platform-card:focus-visible { transform: translateY(-3px); border-color: rgba(212,190,153,.56); }
+.msc-principle-card__marker, .msc-platform-card__marker { display: inline-flex; align-items: center; justify-content: center; width: 4rem; height: 4rem; margin-bottom: 2rem; border: 1px solid rgba(212,190,153,.3); border-radius: 999px; background: rgba(255,255,255,.045); }
+.msc-platform-card__entry { display: block; margin-bottom: 1rem; }
+.msc-platform-card__marker { position: absolute; top: 1.4rem; right: 1.4rem; color: var(--msc-sand); }
+.msc-principle-card h3, .msc-platform-card h3, .msc-archive-entry h3 { margin: 0 0 .8rem; color: var(--msc-paper-soft); font-size: 2rem; line-height: 1.05; letter-spacing: -.035em; }
+.msc-principle-card p, .msc-platform-card p, .msc-archive-entry p, .msc-support-panel__note { margin: 0; color: rgba(251,248,239,.72); line-height: 1.5; }
+.msc-platform-card .msc-card-arrow { margin-top: auto; }
+.msc-about-principles { position: relative; }
+.msc-community-panel, .msc-support-panel { display: grid; grid-template-columns: minmax(0, .95fr) minmax(30rem, 1.05fr); gap: clamp(2rem, 4vw, 4rem); align-items: center; padding: clamp(1.8rem, 4vw, 3rem); overflow: hidden; }
+.msc-community-panel__media { min-height: 34rem; border: 1px solid rgba(212,190,153,.2); border-radius: 22px; overflow: hidden; background: rgba(16,40,45,.26); }
+.msc-community-panel__media img { display: block; width: 100%; height: 100%; min-height: 34rem; object-fit: cover; }
+.msc-club-map-fallback { position: relative; min-height: 34rem; height: 100%; background: linear-gradient(135deg, rgba(212,190,153,.14), rgba(255,255,255,.035)); }
+.msc-club-map-fallback::before { content: ""; position: absolute; inset: 2rem; border: 1px dashed rgba(212,190,153,.42); border-radius: 18px; }
+.msc-club-map-fallback span { position: absolute; left: 12%; right: 12%; height: 1px; background: rgba(212,190,153,.54); }
+.msc-club-map-fallback span:nth-child(1){ top: 32%; transform: rotate(-7deg); }.msc-club-map-fallback span:nth-child(2){ top: 52%; }.msc-club-map-fallback span:nth-child(3){ top: 70%; transform: rotate(8deg); }
+.msc-club-map-fallback strong { position: absolute; left: 2.4rem; bottom: 2.4rem; color: var(--msc-sand); letter-spacing: .16em; }
+.msc-support-panel { align-items: start; }
+.msc-support-panel__details { display: grid; gap: 1rem; }
+.msc-address-box, .msc-support-panel__empty { padding: 1.4rem; border: 1px solid rgba(212,190,153,.22); border-radius: 16px; background: rgba(255,255,255,.05); }
+.msc-address-box span { display: block; margin-bottom: .75rem; color: var(--msc-sand); letter-spacing: .14em; text-transform: uppercase; font-size: 1.05rem; }
+.msc-address-box code { display: block; color: var(--msc-paper-soft); white-space: pre-wrap; overflow-wrap: anywhere; user-select: all; }
+.msc-support-panel__empty { margin: 0; color: rgba(251,248,239,.72); }
+.msc-support-panel__qr img { display: block; width: min(18rem, 100%); height: auto; border-radius: 16px; }
+.msc-archive-log { display: grid; gap: 1rem; }
+.msc-archive-entry { display: grid; grid-template-columns: 14rem 1fr; gap: 1.4rem; padding: 1.5rem; }
+.msc-archive-entry small { display: block; margin-top: .8rem; color: rgba(251,248,239,.58); }
+.msc-archive-entry a { display: inline-flex; margin-top: 1rem; color: var(--msc-sand); }
+.msc-about-final__panel { position: relative; padding: clamp(2.4rem, 5vw, 4.6rem); text-align: center; overflow: hidden; }
+.msc-about-final__panel .msc-section-header__copy { max-width: 68rem; margin: 0 auto; }
+.msc-about-final__panel .msc-about-actions { justify-content: center; }
+.msc-about a:focus-visible, .msc-about button:focus-visible { outline: 2px solid var(--msc-sand); outline-offset: 3px; }
+@keyframes mscAboutLine { to { stroke-dashoffset: -120; } }
+@media screen and (max-width: 1100px) { .msc-platform-grid, .msc-principle-grid--why { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media screen and (max-width: 990px) { .msc-about-hero, .msc-community-panel, .msc-support-panel { grid-template-columns: 1fr; } .msc-principle-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media screen and (max-width: 640px) { .msc-about { padding-top: 4.2rem; } .msc-about-actions { flex-direction: column; } .msc-about-actions .msc-button { text-align: center; } .msc-club-log { min-height: auto; } .msc-club-log__top { flex-direction: column; } .msc-club-log__lines li, .msc-archive-entry { grid-template-columns: 1fr; } .msc-principle-grid, .msc-principle-grid--why, .msc-platform-grid { grid-template-columns: 1fr; } .msc-about-manifesto .rte { font-size: clamp(2.2rem, 10vw, 3.6rem); } }
+@media (prefers-reduced-motion: reduce) { .msc-club-log__wave path, .msc-platform-card { animation: none; transition: none; } .msc-platform-card:hover { transform: none; } }

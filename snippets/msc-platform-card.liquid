@@ -1,0 +1,14 @@
+{% comment %}Accepts: title, description, link, entry, marker{% endcomment %}
+{%- liquid
+  assign card_tag = 'article'
+  if link != blank
+    assign card_tag = 'a'
+  endif
+-%}
+<{{ card_tag }} class="msc-platform-card msc-glass-card"{% if link != blank %} href="{{ link }}"{% endif %}>
+  <span class="msc-platform-card__entry">{{ entry | default: 'LOG' | escape }}</span>
+  <span class="msc-platform-card__marker" aria-hidden="true">{{ marker | default: '◌' | escape }}</span>
+  <h3>{{ title | escape }}</h3>
+  {%- if description != blank -%}<p>{{ description | escape }}</p>{%- endif -%}
+  {%- if link != blank -%}<span class="msc-card-arrow" aria-hidden="true">Open →</span>{%- endif -%}
+</{{ card_tag }}>
