@@ -1,5 +1,6 @@
 {% comment %}Accepts: title, description, link, meta{% endcomment %}
-<a class="msc-category-card msc-glass-card" href="{{ link | default: '#MainContent' }}">
+<a class="msc-category-card msc-glass-card" href="{{ link | default: '#MainContent' }}" data-current="{{ meta | default: 'Index' | handleize }}">
+  <span class="msc-category-card__marker" aria-hidden="true"></span>
   <span class="msc-category-card__meta">{{ meta | default: 'Index' | escape }}</span>
   <span class="msc-category-card__title">{{ title | escape }}</span>
   {%- if description != blank -%}<span class="msc-category-card__description">{{ description | escape }}</span>{%- endif -%}

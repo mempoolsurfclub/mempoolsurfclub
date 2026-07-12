@@ -11,29 +11,222 @@
     "msc_explore": {
       "type": "msc-explore",
       "blocks": {
-        "category_artists": {"type": "category", "settings": {"meta": "Culture", "title": "Artists", "description": "Creative work, visual language, and cultural signals shaping Bitcoin.", "link": ""}},
-        "category_founders": {"type": "category", "settings": {"meta": "People", "title": "Founders", "description": "Builders and operators to profile as the index grows.", "link": ""}},
-        "category_companies": {"type": "category", "settings": {"meta": "Market", "title": "Companies", "description": "Organizations building infrastructure, products, and media.", "link": ""}},
-        "category_projects": {"type": "category", "settings": {"meta": "Labs", "title": "Projects", "description": "Protocols, apps, collectives, and experiments to map.", "link": ""}},
-        "category_editorials": {"type": "category", "settings": {"meta": "Reading", "title": "Editorials", "description": "Essays, interviews, guides, and field notes from MSC.", "link": ""}},
-        "category_reports": {"type": "category", "settings": {"meta": "Research", "title": "On-Chain Reports", "description": "Monthly analysis previews prepared for verified data.", "link": ""}},
-        "editorial_lead": {"type": "editorial", "settings": {"size": "lead", "label": "Lead Story", "title": "Mapping the next layer of Bitcoin culture", "dek": "A placeholder MSC editorial slot for a future feature on artists, founders, companies, projects, and ecosystem subjects.", "meta": "Editorial placeholder", "link": ""}},
-        "editorial_support_1": {"type": "editorial", "settings": {"size": "standard", "label": "Guide", "title": "How to read the culture index", "dek": "A configurable explainer slot for introducing directory structure and curation principles.", "meta": "Draft placeholder", "link": ""}},
-        "editorial_support_2": {"type": "editorial", "settings": {"size": "standard", "label": "Field Note", "title": "Signals to watch across the ecosystem", "dek": "Reserved for a future MSC note on verified cultural and on-chain observations.", "meta": "Source pending", "link": ""}},
-        "profile_artist": {"type": "profile", "settings": {"tag": "Artist", "title": "Artist profile slot", "role": "Verified entry pending", "description": "Use this card for a real artist profile, collection, or studio note.", "link": ""}},
-        "profile_founder": {"type": "profile", "settings": {"tag": "Founder", "title": "Founder profile slot", "role": "Interview pending", "description": "A future home for founder context, company links, and editorial coverage.", "link": ""}},
-        "profile_company": {"type": "profile", "settings": {"tag": "Company", "title": "Company profile slot", "role": "Directory entry pending", "description": "Designed for a verified company overview without invented claims.", "link": ""}},
-        "profile_project": {"type": "profile", "settings": {"tag": "Project", "title": "Project profile slot", "role": "Research pending", "description": "A reusable card for protocols, tools, collectives, and ecosystem experiments.", "link": ""}},
-        "report_1": {"type": "report", "settings": {"month": "Upcoming", "title": "Monthly culture and on-chain report", "status": "Template ready", "link": ""}},
-        "report_2": {"type": "report", "settings": {"month": "Future", "title": "Fees, inscriptions, and activity review", "status": "Data pending", "link": ""}},
-        "report_3": {"type": "report", "settings": {"month": "Future", "title": "Ecosystem subject watchlist", "status": "Editorial pending", "link": ""}},
-        "recent_1": {"type": "recent", "settings": {"title": "First-party Explore section installed", "note": "Replaces generic AI-generated presentation"}},
-        "recent_2": {"type": "recent", "settings": {"title": "Reusable card snippets added", "note": "Ready for editorials, categories, reports, and profiles"}},
-        "recent_3": {"type": "recent", "settings": {"title": "Search connected to Shopify search", "note": "Uses the shared MSC search form"}}
+        "category_artists": {
+          "type": "category",
+          "settings": {
+            "meta": "Culture",
+            "title": "Artists",
+            "description": "Creative work, visual language, and cultural signals shaping Bitcoin.",
+            "link": ""
+          }
+        },
+        "category_founders": {
+          "type": "category",
+          "settings": {
+            "meta": "People",
+            "title": "Founders",
+            "description": "Builders and operators to profile as the index grows.",
+            "link": ""
+          }
+        },
+        "category_companies": {
+          "type": "category",
+          "settings": {
+            "meta": "Market",
+            "title": "Companies",
+            "description": "Organizations building infrastructure, products, and media.",
+            "link": ""
+          }
+        },
+        "category_projects": {
+          "type": "category",
+          "settings": {
+            "meta": "Labs",
+            "title": "Projects",
+            "description": "Protocols, apps, collectives, and experiments to map.",
+            "link": ""
+          }
+        },
+        "category_editorials": {
+          "type": "category",
+          "settings": {
+            "meta": "Reading",
+            "title": "Editorials",
+            "description": "Essays, interviews, guides, and field notes from MSC.",
+            "link": ""
+          }
+        },
+        "category_reports": {
+          "type": "category",
+          "settings": {
+            "meta": "Research",
+            "title": "On-Chain Reports",
+            "description": "Monthly analysis previews prepared for verified data.",
+            "link": ""
+          }
+        },
+        "editorial_lead": {
+          "type": "editorial",
+          "settings": {
+            "size": "lead",
+            "label": "Lead Story",
+            "title": "Mapping the next layer of Bitcoin culture",
+            "dek": "Reserved for upcoming MSC coverage of artists, founders, companies, projects, and ecosystem ideas.",
+            "meta": "Upcoming coverage",
+            "link": ""
+          }
+        },
+        "editorial_support_1": {
+          "type": "editorial",
+          "settings": {
+            "size": "standard",
+            "label": "Guide",
+            "title": "How to read the culture index",
+            "dek": "A configurable explainer slot for introducing directory structure and curation principles.",
+            "meta": "Upcoming coverage",
+            "link": ""
+          }
+        },
+        "editorial_support_2": {
+          "type": "editorial",
+          "settings": {
+            "size": "standard",
+            "label": "Field Note",
+            "title": "Signals to watch across the ecosystem",
+            "dek": "Reserved for a future MSC note on verified cultural and on-chain observations.",
+            "meta": "Source review",
+            "link": ""
+          }
+        },
+        "profile_artist": {
+          "type": "profile",
+          "settings": {
+            "tag": "Artist",
+            "title": "Artist profile slot",
+            "role": "Verified coverage queued",
+            "description": "Use this card for a real artist profile, collection, or studio note.",
+            "link": ""
+          }
+        },
+        "profile_founder": {
+          "type": "profile",
+          "settings": {
+            "tag": "Founder",
+            "title": "Founder profile slot",
+            "role": "Interview coverage queued",
+            "description": "A future home for founder context, company links, and editorial coverage.",
+            "link": ""
+          }
+        },
+        "profile_company": {
+          "type": "profile",
+          "settings": {
+            "tag": "Company",
+            "title": "Company profile slot",
+            "role": "Profile coverage queued",
+            "description": "Designed for a verified company overview without invented claims.",
+            "link": ""
+          }
+        },
+        "profile_project": {
+          "type": "profile",
+          "settings": {
+            "tag": "Project",
+            "title": "Project profile slot",
+            "role": "Research coverage queued",
+            "description": "A reusable card for protocols, tools, collectives, and ecosystem experiments.",
+            "link": ""
+          }
+        },
+        "report_1": {
+          "type": "report",
+          "settings": {
+            "month": "Upcoming",
+            "title": "Monthly culture and on-chain report",
+            "status": "Template ready",
+            "link": ""
+          }
+        },
+        "report_2": {
+          "type": "report",
+          "settings": {
+            "month": "Future",
+            "title": "Fees, inscriptions, and activity review",
+            "status": "Verified sources queued",
+            "link": ""
+          }
+        },
+        "report_3": {
+          "type": "report",
+          "settings": {
+            "month": "Future",
+            "title": "Ecosystem subject watchlist",
+            "status": "Editorial coverage queued",
+            "link": ""
+          }
+        },
+        "recent_1": {
+          "type": "recent",
+          "settings": {
+            "title": "Cultural wave identity added",
+            "note": "Explore now frames Bitcoin culture as wave signals"
+          }
+        },
+        "recent_2": {
+          "type": "recent",
+          "settings": {
+            "title": "Category currents refined",
+            "note": "Cards now carry quiet wave markers"
+          }
+        },
+        "recent_3": {
+          "type": "recent",
+          "settings": {
+            "title": "Search connected to Shopify search",
+            "note": "Uses the shared MSC search form"
+          }
+        }
       },
-      "block_order": ["category_artists", "category_founders", "category_companies", "category_projects", "category_editorials", "category_reports", "editorial_lead", "editorial_support_1", "editorial_support_2", "profile_artist", "profile_founder", "profile_company", "profile_project", "report_1", "report_2", "report_3", "recent_1", "recent_2", "recent_3"],
-      "settings": {}
+      "block_order": [
+        "category_artists",
+        "category_founders",
+        "category_companies",
+        "category_projects",
+        "category_editorials",
+        "category_reports",
+        "editorial_lead",
+        "editorial_support_1",
+        "editorial_support_2",
+        "profile_artist",
+        "profile_founder",
+        "profile_company",
+        "profile_project",
+        "report_1",
+        "report_2",
+        "report_3",
+        "recent_1",
+        "recent_2",
+        "recent_3"
+      ],
+      "settings": {
+        "supporting_copy": "<p>Bitcoin moves in waves—through art, code, people, projects, and ideas. Explore the cultural signals shaping the same ocean.</p>",
+        "visual_caption": "An abstract atlas of macro swell, technical ripples, and cultural currents moving through Bitcoin.",
+        "editorial_kicker": "Signals From the Culture",
+        "editorial_heading": "Stories moving through the Bitcoin ocean.",
+        "editorial_copy": "<p>Upcoming MSC essays, interviews, explainers, and field notes will chart the ideas gathering momentum across Bitcoin culture.</p>",
+        "discovery_kicker": "People Behind the Current",
+        "discovery_heading": "Artists, builders, companies, and projects shaping the next wave.",
+        "discovery_copy": "<p>Upcoming MSC profiles will collect verified context on the people, companies, and projects shaping Bitcoin culture.</p>",
+        "reports_kicker": "On-Chain Swell Report",
+        "reports_heading": "Monthly readings from the network.",
+        "reports_copy": "<p>Upcoming MSC reports will turn verified network observations into clear monthly context without inventing live data.</p>",
+        "recent_kicker": "New Signals",
+        "recent_heading": "Recently added to the index."
+      }
     }
   },
-  "order": ["main", "msc_explore"]
+  "order": [
+    "main",
+    "msc_explore"
+  ]
 }

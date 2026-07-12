@@ -11,13 +11,26 @@
         <div class="msc-subtitle msc-explore-hero__copy rte">{{ section.settings.supporting_copy }}</div>
         {% render 'msc-search-form', input_id: search_input_id, placeholder: section.settings.search_placeholder, button_label: section.settings.search_button, search_types: section.settings.search_types, label: section.settings.search_label, modifier: 'explore' %}
       </div>
-      <div class="msc-discovery-map msc-glass-card" aria-label="Cultural discovery network visual">
-        <div class="msc-discovery-map__header"><span>Discovery Graph</span><span>Curated Index</span></div>
+      <div class="msc-discovery-map msc-glass-card" aria-label="Cultural wave map visual">
+        <div class="msc-discovery-map__header"><span>Cultural Wave Map</span><span>Current Index</span></div>
         <div class="msc-discovery-map__field" aria-hidden="true">
+          <span class="msc-discovery-map__flow msc-discovery-map__flow--one"></span>
+          <span class="msc-discovery-map__flow msc-discovery-map__flow--two"></span>
+          <span class="msc-discovery-map__path msc-discovery-map__path--one"></span>
+          <span class="msc-discovery-map__path msc-discovery-map__path--two"></span>
+          <span class="msc-discovery-map__path msc-discovery-map__path--three"></span>
+          <span class="msc-discovery-map__buoy msc-discovery-map__buoy--one"></span>
+          <span class="msc-discovery-map__buoy msc-discovery-map__buoy--two"></span>
+          <span class="msc-discovery-map__buoy msc-discovery-map__buoy--three"></span>
           <span class="msc-discovery-map__node msc-discovery-map__node--a">Art</span>
           <span class="msc-discovery-map__node msc-discovery-map__node--b">Builders</span>
           <span class="msc-discovery-map__node msc-discovery-map__node--c">Research</span>
           <span class="msc-discovery-map__node msc-discovery-map__node--d">Projects</span>
+        </div>
+        <div class="msc-discovery-map__legend" aria-hidden="true">
+          <span><i></i>Macro Swell</span>
+          <span><i></i>Technical Ripple</span>
+          <span><i></i>Cultural Current</span>
         </div>
         <p>{{ section.settings.visual_caption | escape }}</p>
       </div>
@@ -87,30 +100,30 @@
   "settings": [
     {"type":"text","id":"eyebrow","label":"Eyebrow","default":"BITCOIN CULTURE INDEX"},
     {"type":"text","id":"heading","label":"Heading","default":"EXPLORE THE ECOSYSTEM."},
-    {"type":"richtext","id":"supporting_copy","label":"Supporting copy","default":"<p>Browse a curated cultural map of artists, founders, companies, projects, editorials, monthly on-chain reports, and Bitcoin ecosystem subjects. Placeholder entries mark the shape of the future index.</p>"},
+    {"type":"richtext","id":"supporting_copy","label":"Supporting copy","default":"<p>Bitcoin moves in waves—through art, code, people, projects, and ideas. Explore the cultural signals shaping the same ocean.</p>"},
     {"type":"text","id":"search_label","label":"Search accessible label","default":"Search the Bitcoin culture index"},
     {"type":"text","id":"search_placeholder","label":"Search placeholder","default":"Search artists, founders, companies, projects, reports..."},
     {"type":"text","id":"search_button","label":"Search button","default":"Search"},
     {"type":"text","id":"search_types","label":"Shopify search types","default":"article,page,product"},
-    {"type":"text","id":"visual_caption","label":"Visual caption","default":"A first-party MSC discovery layer for culture, research, and ecosystem profiles."},
-    {"type":"text","id":"editorial_kicker","label":"Editorial kicker","default":"Featured Editorials"},
-    {"type":"text","id":"editorial_heading","label":"Editorial heading","default":"Stories for navigating Bitcoin culture."},
-    {"type":"richtext","id":"editorial_copy","label":"Editorial copy","default":"<p>Use these configurable cards for future essays, interviews, explainers, and field notes.</p>"},
-    {"type":"text","id":"discovery_kicker","label":"Discovery kicker","default":"Discovery Grid"},
-    {"type":"text","id":"discovery_heading","label":"Discovery heading","default":"People, companies, and projects to index next."},
-    {"type":"richtext","id":"discovery_copy","label":"Discovery copy","default":"<p>Profiles are placeholders until real first-party directory content is published.</p>"},
-    {"type":"text","id":"reports_kicker","label":"Reports kicker","default":"Monthly On-Chain Reports"},
-    {"type":"text","id":"reports_heading","label":"Reports heading","default":"Research previews without invented live data."},
-    {"type":"richtext","id":"reports_copy","label":"Reports copy","default":"<p>Future reports can summarize fees, inscriptions, miner behavior, liquidity, and ecosystem activity once verified sources are connected.</p>"},
-    {"type":"text","id":"recent_kicker","label":"Recent kicker","default":"Recently Added"},
-    {"type":"text","id":"recent_heading","label":"Recent heading","default":"Latest index activity."}
+    {"type":"text","id":"visual_caption","label":"Visual caption","default":"An abstract atlas of macro swell, technical ripples, and cultural currents moving through Bitcoin."},
+    {"type":"text","id":"editorial_kicker","label":"Editorial kicker","default":"Signals From the Culture"},
+    {"type":"text","id":"editorial_heading","label":"Editorial heading","default":"Stories moving through the Bitcoin ocean."},
+    {"type":"richtext","id":"editorial_copy","label":"Editorial copy","default":"<p>Upcoming MSC essays, interviews, explainers, and field notes will chart the ideas gathering momentum across Bitcoin culture.</p>"},
+    {"type":"text","id":"discovery_kicker","label":"Discovery kicker","default":"People Behind the Current"},
+    {"type":"text","id":"discovery_heading","label":"Discovery heading","default":"Artists, builders, companies, and projects shaping the next wave."},
+    {"type":"richtext","id":"discovery_copy","label":"Discovery copy","default":"<p>Upcoming MSC profiles will collect verified context on the people, companies, and projects shaping Bitcoin culture.</p>"},
+    {"type":"text","id":"reports_kicker","label":"Reports kicker","default":"On-Chain Swell Report"},
+    {"type":"text","id":"reports_heading","label":"Reports heading","default":"Monthly readings from the network."},
+    {"type":"richtext","id":"reports_copy","label":"Reports copy","default":"<p>Upcoming MSC reports will turn verified network observations into clear monthly context without inventing live data.</p>"},
+    {"type":"text","id":"recent_kicker","label":"Recent kicker","default":"New Signals"},
+    {"type":"text","id":"recent_heading","label":"Recent heading","default":"Recently added to the index."}
   ],
   "blocks": [
     {"type":"category","name":"Category","settings":[{"type":"text","id":"meta","label":"Meta","default":"Index"},{"type":"text","id":"title","label":"Title","default":"Artists"},{"type":"textarea","id":"description","label":"Description","default":"Browse creative work and cultural signals."},{"type":"url","id":"link","label":"Link"}]},
-    {"type":"editorial","name":"Editorial card","settings":[{"type":"select","id":"size","label":"Card size","options":[{"value":"lead","label":"Lead"},{"value":"standard","label":"Standard"}],"default":"standard"},{"type":"text","id":"label","label":"Label","default":"Field Note"},{"type":"text","id":"title","label":"Title","default":"A placeholder guide to Bitcoin culture"},{"type":"textarea","id":"dek","label":"Description","default":"Replace this with a real MSC editorial summary when published."},{"type":"text","id":"meta","label":"Meta","default":"Draft placeholder"},{"type":"url","id":"link","label":"Link"}]},
-    {"type":"profile","name":"Profile card","settings":[{"type":"text","id":"tag","label":"Tag","default":"Artist"},{"type":"text","id":"title","label":"Title","default":"Profile placeholder"},{"type":"text","id":"role","label":"Role","default":"Directory entry pending"},{"type":"textarea","id":"description","label":"Description","default":"A configurable card reserved for a verified future profile."},{"type":"url","id":"link","label":"Link"}]},
-    {"type":"report","name":"Report preview","settings":[{"type":"text","id":"month","label":"Month","default":"Upcoming"},{"type":"text","id":"title","label":"Title","default":"Monthly on-chain report template"},{"type":"text","id":"status","label":"Status","default":"Data source pending"},{"type":"url","id":"link","label":"Link"}]},
-    {"type":"recent","name":"Recent activity","settings":[{"type":"text","id":"title","label":"Title","default":"Explore redesign installed"},{"type":"text","id":"note","label":"Note","default":"First-party MSC section ready for content"}]}
+    {"type":"editorial","name":"Editorial card","settings":[{"type":"select","id":"size","label":"Card size","options":[{"value":"lead","label":"Lead"},{"value":"standard","label":"Standard"}],"default":"standard"},{"type":"text","id":"label","label":"Label","default":"Field Note"},{"type":"text","id":"title","label":"Title","default":"A field guide to Bitcoin culture"},{"type":"textarea","id":"dek","label":"Description","default":"Reserved for upcoming MSC coverage of the people, projects, and ideas moving through Bitcoin."},{"type":"text","id":"meta","label":"Meta","default":"Upcoming coverage"},{"type":"url","id":"link","label":"Link"}]},
+    {"type":"profile","name":"Profile card","settings":[{"type":"text","id":"tag","label":"Tag","default":"Artist"},{"type":"text","id":"title","label":"Title","default":"Profile signal"},{"type":"text","id":"role","label":"Role","default":"Coverage queued"},{"type":"textarea","id":"description","label":"Description","default":"Reserved for verified MSC context on a future culture index subject."},{"type":"url","id":"link","label":"Link"}]},
+    {"type":"report","name":"Report preview","settings":[{"type":"text","id":"month","label":"Month","default":"Upcoming"},{"type":"text","id":"title","label":"Title","default":"Monthly on-chain swell report"},{"type":"text","id":"status","label":"Status","default":"Verified sources queued"},{"type":"url","id":"link","label":"Link"}]},
+    {"type":"recent","name":"Recent activity","settings":[{"type":"text","id":"title","label":"Title","default":"Cultural wave map added"},{"type":"text","id":"note","label":"Note","default":"Explore now frames culture as signals moving through Bitcoin."}]}
   ],
   "presets": [{"name":"MSC Explore"}]
 }
