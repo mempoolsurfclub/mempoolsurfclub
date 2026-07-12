@@ -1,0 +1,71 @@
+{{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
+
+<section class="msc-shell msc-shop" id="MscShop-{{ section.id }}">
+  <div class="msc-container">
+    <div class="msc-shop-hero">
+      <div class="msc-shop-hero__content">
+        <p class="msc-eyebrow">{{ section.settings.hero_eyebrow | escape }}</p>
+        <h1 class="msc-title">{{ section.settings.hero_heading | escape }}</h1>
+        <div class="msc-subtitle rte">{{ section.settings.hero_copy }}</div>
+        <div class="msc-shop-actions">
+          {%- if section.settings.primary_label != blank -%}<a class="msc-button" href="{{ section.settings.primary_link | default: routes.collections_url }}">{{ section.settings.primary_label | escape }}</a>{%- endif -%}
+          {%- if section.settings.secondary_label != blank -%}<a class="msc-button msc-button--ghost" href="{{ section.settings.secondary_link | default: routes.collections_url }}">{{ section.settings.secondary_label | escape }}</a>{%- endif -%}
+        </div>
+      </div>
+      <div class="msc-manifest msc-glass-card" aria-label="Collection manifest">
+        <div class="msc-manifest__top"><span>CORE COLLECTION</span><span>MSC / 001</span></div>
+        <div class="msc-manifest__label"><span>FIELD ISSUE</span><strong>BUILT FOR THE LONG WAVE</strong></div>
+        <div class="msc-manifest__grid" aria-hidden="true"><span>HEADWEAR</span><span>TEES</span><span>FLEECE</span><span>OBJECTS</span></div>
+        <div class="msc-manifest__ticks" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <div class="msc-block">
+      {% render 'msc-section-header', kicker: section.settings.category_kicker, heading: section.settings.category_heading, copy: section.settings.category_copy, heading_id: 'MscShopCategories-' | append: section.id %}
+      <div class="msc-collection-grid" aria-labelledby="MscShopCategories-{{ section.id }}">
+        {%- for block in section.blocks -%}{%- if block.type == 'category' -%}
+          {% render 'msc-collection-card', collection: block.settings.collection, title: block.settings.title, description: block.settings.description, image: block.settings.image, issue: block.settings.issue, link: block.settings.link %}
+        {%- endif -%}{%- endfor -%}
+      </div>
+    </div>
+
+    <div class="msc-block">
+      {% render 'msc-section-header', kicker: section.settings.current_kicker, heading: section.settings.current_heading, copy: section.settings.current_copy, heading_id: 'MscShopCurrent-' | append: section.id %}
+      <div class="msc-collection-grid msc-collection-grid--current" aria-labelledby="MscShopCurrent-{{ section.id }}">
+        {%- for block in section.blocks -%}{%- if block.type == 'current_collection' -%}
+          {% render 'msc-collection-card', collection: block.settings.collection, title: block.settings.title, collection_type: block.settings.collection_type, credit: block.settings.credit, description: block.settings.description, image: block.settings.image, issue: block.settings.issue, editorial_link: block.settings.editorial_link %}
+        {%- endif -%}{%- endfor -%}
+      </div>
+    </div>
+
+    <div class="msc-block msc-shop-products">
+      {% render 'msc-section-header', kicker: section.settings.featured_kicker, heading: section.settings.featured_heading, heading_id: 'MscShopFeatured-' | append: section.id %}
+      {%- if section.settings.featured_collection != blank and section.settings.featured_collection.products_count > 0 -%}
+        <div class="msc-product-grid" aria-labelledby="MscShopFeatured-{{ section.id }}">
+          {%- for product in section.settings.featured_collection.products limit: 4 -%}
+            {% render 'card-product', card_product: product, media_aspect_ratio: 'adapt', show_secondary_image: false, show_vendor: section.settings.show_vendor, show_rating: false, lazy_load: true, section_id: section.id, quick_add: 'none' %}
+          {%- endfor -%}
+        </div>
+      {%- else -%}
+        <div class="msc-empty-state msc-glass-card">Core collection being assembled.</div>
+      {%- endif -%}
+    </div>
+
+    <div class="msc-block msc-notes">
+      {% render 'msc-section-header', kicker: section.settings.notes_kicker, heading: section.settings.notes_heading, heading_id: 'MscShopNotes-' | append: section.id %}
+      <div class="msc-note-grid">
+        {%- for block in section.blocks -%}{%- if block.type == 'note' -%}<article class="msc-note msc-glass-card"><span>{{ block.settings.index | escape }}</span><h3>{{ block.settings.title | escape }}</h3><p>{{ block.settings.description | escape }}</p></article>{%- endif -%}{%- endfor -%}
+      </div>
+    </div>
+
+    <div class="msc-block msc-collab-panel msc-glass-card">
+      <div class="msc-collab-panel__media">{%- if section.settings.collab_image != blank -%}{{ section.settings.collab_image | image_url: width: 1000 | image_tag: loading: 'lazy', widths: '400, 700, 1000', sizes: '(min-width: 990px) 42vw, 92vw', alt: section.settings.collab_heading }}{%- else -%}<div class="msc-pattern-fallback" aria-hidden="true"><span></span><span></span><span></span></div>{%- endif -%}</div>
+      <div><p class="msc-section-kicker">{{ section.settings.collab_kicker | escape }}</p><h2 class="msc-section-title">{{ section.settings.collab_heading | escape }}</h2><div class="rte">{{ section.settings.collab_copy }}</div>{%- if section.settings.collab_button_label != blank -%}<a class="msc-button" href="{{ section.settings.collab_link | default: routes.collections_url }}">{{ section.settings.collab_button_label | escape }}</a>{%- endif -%}</div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{"name":"MSC Shop","tag":"section","class":"section","settings":[
+{"type":"text","id":"hero_eyebrow","label":"Hero eyebrow","default":"MSC FIELD SUPPLY"},{"type":"text","id":"hero_heading","label":"Hero heading","default":"BUILT FOR THE LONG WAVE."},{"type":"richtext","id":"hero_copy","label":"Hero copy","default":"<p>Apparel and objects shaped by Bitcoin culture, independent thinking, and time in the network.</p>"},{"type":"text","id":"primary_label","label":"Primary button label","default":"Shop the collection"},{"type":"url","id":"primary_link","label":"Primary button link"},{"type":"text","id":"secondary_label","label":"Secondary button label","default":"View collaborations"},{"type":"url","id":"secondary_link","label":"Secondary button link"},{"type":"text","id":"category_kicker","label":"Category kicker","default":"FIELD CATALOG"},{"type":"text","id":"category_heading","label":"Category heading","default":"Shop by category."},{"type":"richtext","id":"category_copy","label":"Category copy","default":"<p>Core objects and release families organized like a field-supply catalog.</p>"},{"type":"text","id":"current_kicker","label":"Current kicker","default":"COLLECTIONS IN THE CURRENT"},{"type":"text","id":"current_heading","label":"Current heading","default":"Independent collections moving through Bitcoin culture."},{"type":"richtext","id":"current_copy","label":"Current copy","default":"<p>MSC can host core releases, artist editions, project collections, collaborations, and future guest collections inside one curated storefront.</p>"},{"type":"text","id":"featured_kicker","label":"Featured kicker","default":"CORE COLLECTION"},{"type":"text","id":"featured_heading","label":"Featured heading","default":"Latest objects from the archive."},{"type":"collection","id":"featured_collection","label":"Featured collection"},{"type":"checkbox","id":"show_vendor","label":"Show product vendor","default":false},{"type":"text","id":"notes_kicker","label":"Notes kicker","default":"FIELD NOTES"},{"type":"text","id":"notes_heading","label":"Notes heading","default":"Designed for the long horizon."},{"type":"text","id":"collab_kicker","label":"Collaboration kicker","default":"COLLABORATION CURRENT"},{"type":"text","id":"collab_heading","label":"Collaboration heading","default":"Built with people shaping Bitcoin culture."},{"type":"richtext","id":"collab_copy","label":"Collaboration copy","default":"<p>Future MSC collaborations will connect physical products with artists, builders, companies, and ideas moving through the ecosystem.</p>"},{"type":"image_picker","id":"collab_image","label":"Collaboration image"},{"type":"url","id":"collab_link","label":"Collaboration link"},{"type":"text","id":"collab_button_label","label":"Collaboration button label","default":"View collaborations"}],"blocks":[{"type":"category","name":"Category","settings":[{"type":"collection","id":"collection","label":"Collection"},{"type":"text","id":"title","label":"Title","default":"Headwear"},{"type":"textarea","id":"description","label":"Description","default":"Catalog-ready pieces for daily signal."},{"type":"image_picker","id":"image","label":"Optional image"},{"type":"text","id":"issue","label":"Issue number","default":"ISSUE 01"},{"type":"url","id":"link","label":"Link override"}]},{"type":"current_collection","name":"Current collection","settings":[{"type":"collection","id":"collection","label":"Collection"},{"type":"text","id":"title","label":"Title","default":"MSC Core"},{"type":"select","id":"collection_type","label":"Collection type","options":[{"value":"MSC","label":"MSC"},{"value":"Artist","label":"Artist"},{"value":"Project","label":"Project"},{"value":"Collaboration","label":"Collaboration"}],"default":"MSC"},{"type":"text","id":"credit","label":"Creator, artist, project, or company credit"},{"type":"textarea","id":"description","label":"Description","default":"A release moving through the wider Mempool Surf Club catalog."},{"type":"image_picker","id":"image","label":"Optional image"},{"type":"url","id":"editorial_link","label":"Optional profile or editorial link"},{"type":"text","id":"issue","label":"Collection number","default":"COLL / 001"}]},{"type":"note","name":"Field note","settings":[{"type":"text","id":"index","label":"Index","default":"01"},{"type":"text","id":"title","label":"Title","default":"Core Pieces"},{"type":"textarea","id":"description","label":"Description","default":"Foundational objects intended to remain part of the MSC system."}]}],"presets":[{"name":"MSC Shop","blocks":[{"type":"category","settings":{"title":"Headwear","issue":"ISSUE 01"}},{"type":"category","settings":{"title":"Tees","issue":"ISSUE 02"}},{"type":"category","settings":{"title":"Fleece","issue":"ISSUE 03"}},{"type":"category","settings":{"title":"Accessories","issue":"ISSUE 04"}},{"type":"category","settings":{"title":"Collaborations","issue":"ISSUE 05"}},{"type":"current_collection"},{"type":"note","settings":{"index":"01","title":"Core Pieces","description":"Foundational objects intended to remain part of the MSC system."}},{"type":"note","settings":{"index":"02","title":"Limited Collaborations","description":"Selected projects created with artists, builders, and independent Bitcoin companies."}},{"type":"note","settings":{"index":"03","title":"Considered Details","description":"Every release begins with purpose, restraint, and a clear connection to the wider culture."}}]}]}
+{% endschema %}
