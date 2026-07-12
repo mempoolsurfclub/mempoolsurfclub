@@ -36,11 +36,11 @@
           <a class="msc-button msc-button--secondary" href="{{ section.settings.tools_button_link }}">{{ section.settings.tools_button_label | escape }}</a>
         {%- endif -%}
       </div>
-      <div class="msc-network-preview__signals" aria-label="Network concepts preview">
-        <div><strong>Fees</strong><p>Understand fee conditions and how urgently transactions are competing for confirmation.</p></div>
-        <div><strong>Mempool</strong><p>See how much transaction demand is waiting for limited blockspace.</p></div>
-        <div><strong>Mining</strong><p>Follow hashrate and difficulty conditions without turning the network into market hype.</p></div>
-      </div>
+      <ul class="msc-network-preview__signals" aria-label="Bitcoin culture concepts preview">
+        <li><span class="msc-network-preview__marker" aria-hidden="true"></span><div><strong>{{ section.settings.feature_1_label | escape }}</strong><p>{{ section.settings.feature_1_description | escape }}</p></div></li>
+        <li><span class="msc-network-preview__marker" aria-hidden="true"></span><div><strong>{{ section.settings.feature_2_label | escape }}</strong><p>{{ section.settings.feature_2_description | escape }}</p></div></li>
+        <li><span class="msc-network-preview__marker" aria-hidden="true"></span><div><strong>{{ section.settings.feature_3_label | escape }}</strong><p>{{ section.settings.feature_3_description | escape }}</p></div></li>
+      </ul>
     </div>
   </div>
 </section>
@@ -52,13 +52,19 @@
   "class": "section",
   "settings": [
     { "type": "text", "id": "kicker", "label": "Kicker", "default": "ENTER THE ECOSYSTEM" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Four ways to move through the same ocean." },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Four ways to move through the Bitcoin ocean." },
     { "type": "richtext", "id": "copy", "label": "Supporting copy", "default": "<p>Explore the culture, learn how Bitcoin works, read network conditions, and discover physical collections built around the ideas moving through it.</p>" },
-    { "type": "text", "id": "tools_kicker", "label": "Tools preview kicker", "default": "READ THE NETWORK" },
-    { "type": "text", "id": "tools_heading", "label": "Tools preview heading", "default": "Know what conditions matter before you move." },
-    { "type": "richtext", "id": "tools_copy", "label": "Tools preview copy", "default": "<p>Fees, transaction demand, mining conditions, and blockspace all reveal a different part of the network.</p>" },
-    { "type": "text", "id": "tools_button_label", "label": "Tools button label", "default": "Open network tools" },
-    { "type": "url", "id": "tools_button_link", "label": "Tools button link" }
+    { "type": "text", "id": "tools_kicker", "label": "Tools preview kicker", "default": "CULTURE ON BITCOIN" },
+    { "type": "text", "id": "tools_heading", "label": "Tools preview heading", "default": "Discover the people and projects shaping Bitcoin’s creative layer." },
+    { "type": "richtext", "id": "tools_copy", "label": "Tools preview copy", "default": "<p>Artists, Ordinals projects, and Runes communities are building new forms of ownership, provenance, identity, and expression directly on Bitcoin.</p>" },
+    { "type": "text", "id": "tools_button_label", "label": "Tools button label", "default": "Explore the culture" },
+    { "type": "url", "id": "tools_button_link", "label": "Culture button link" },
+    { "type": "text", "id": "feature_1_label", "label": "Feature 1 label", "default": "Artist" },
+    { "type": "textarea", "id": "feature_1_description", "label": "Feature 1 description", "default": "Meet artists using Bitcoin as a medium for digital artifacts, provenance, and long-term cultural work." },
+    { "type": "text", "id": "feature_2_label", "label": "Feature 2 label", "default": "Ordinals Projects" },
+    { "type": "textarea", "id": "feature_2_description", "label": "Feature 2 description", "default": "Explore collections and communities creating inscribed digital artifacts directly on Bitcoin." },
+    { "type": "text", "id": "feature_3_label", "label": "Feature 3 label", "default": "Runes" },
+    { "type": "textarea", "id": "feature_3_description", "label": "Feature 3 description", "default": "Follow fungible-token projects and communities emerging through the Runes protocol." }
   ],
   "blocks": [
     {
@@ -67,7 +73,7 @@
       "settings": [
         { "type": "text", "id": "route_label", "label": "Route label", "default": "01 — Route" },
         { "type": "text", "id": "title", "label": "Title", "default": "Explore" },
-        { "type": "textarea", "id": "description", "label": "Description", "default": "Profiles, projects, editorials, art, companies, and cultural signals shaping Bitcoin." },
+        { "type": "textarea", "id": "description", "label": "Description", "default": "Artists, founders, projects, art, companies, and cultural signals shaping Bitcoin." },
         { "type": "url", "id": "link", "label": "Link" },
         { "type": "text", "id": "action_label", "label": "Action label", "default": "Explore the culture" },
         { "type": "image_picker", "id": "image", "label": "Optional image" }
@@ -77,12 +83,12 @@
   "presets": [
     {
       "name": "MSC home gateway",
-      "settings": { "tools_button_link": "shopify://pages/tools" },
+      "settings": { "tools_button_link": "shopify://pages/explore" },
       "blocks": [
-        { "type": "destination", "settings": { "route_label": "01 — Explore", "title": "Explore", "description": "Profiles, projects, editorials, art, companies, and cultural signals shaping Bitcoin.", "action_label": "Explore the culture", "link": "shopify://pages/explore" } },
+        { "type": "destination", "settings": { "route_label": "01 — Explore", "title": "Explore", "description": "Artists, founders, projects, art, companies, and cultural signals shaping Bitcoin.", "action_label": "Explore the culture", "link": "shopify://pages/explore" } },
         { "type": "destination", "settings": { "route_label": "02 — Learn", "title": "Learn", "description": "Clear routes through Bitcoin fundamentals, the network, development, and the wider ecosystem.", "action_label": "Open the field guide", "link": "shopify://pages/learn" } },
-        { "type": "destination", "settings": { "route_label": "03 — Tools", "title": "Tools", "description": "Interfaces designed to help read fees, blockspace, mempool pressure, mining conditions, and network movement.", "action_label": "Read the network", "link": "shopify://pages/tools" } },
-        { "type": "destination", "settings": { "route_label": "04 — Shop", "title": "Shop", "description": "MSC releases and independent collections from artists, builders, projects, and collaborators.", "action_label": "View the collections", "link": "shopify://pages/shop" } }
+        { "type": "destination", "settings": { "route_label": "03 — Tools", "title": "Tools", "description": "An interface designed to help read fees, blockspace, mempool pressure, mining conditions, and network movement.", "action_label": "Read the network", "link": "shopify://pages/tools" } },
+        { "type": "destination", "settings": { "route_label": "04 — Shop", "title": "Shop", "description": "MSC releases and independent collections from artists, Ordinals and Runes projects, and collaborators.", "action_label": "View the collections", "link": "shopify://pages/shop" } }
       ]
     }
   ]
