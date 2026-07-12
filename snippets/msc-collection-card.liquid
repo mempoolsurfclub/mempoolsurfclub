@@ -1,0 +1,43 @@
+{% comment %}
+  MSC collection card for shop category and current collection blocks.
+{% endcomment %}
+{%- liquid
+  assign card_collection = collection
+  assign card_title = title
+  if card_title == blank and card_collection != blank
+    assign card_title = card_collection.title
+  endif
+  assign card_description = description
+  if card_description == blank and card_collection != blank
+    assign card_description = card_collection.description | strip_html | truncate: 140
+  endif
+  assign card_link = link
+  if card_link == blank and card_collection != blank
+    assign card_link = card_collection.url
+  endif
+  assign card_image = image
+  if card_image == blank and card_collection != blank
+    assign card_image = card_collection.featured_image
+  endif
+-%}
+<article class="msc-collection-card msc-glass-card">
+  <a class="msc-collection-card__link" href="{{ card_link | default: routes.collections_url }}" aria-label="{{ card_title | default: 'View collection' | escape }}">
+    <div class="msc-collection-card__media">
+      {%- if card_image != blank -%}
+        {{ card_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360, 540, 720, 900', sizes: '(min-width: 990px) 28vw, (min-width: 750px) 45vw, 92vw', alt: card_title }}
+      {%- else -%}
+        <div class="msc-pattern-fallback" aria-hidden="true"><span></span><span></span><span></span></div>
+      {%- endif -%}
+    </div>
+    <div class="msc-collection-card__body">
+      <div class="msc-collection-card__meta">
+        {%- if issue != blank -%}<span>{{ issue | escape }}</span>{%- endif -%}
+        {%- if collection_type != blank -%}<span>{{ collection_type | escape }}</span>{%- endif -%}
+      </div>
+      <h3>{{ card_title | escape }}</h3>
+      {%- if credit != blank -%}<p class="msc-collection-card__credit">{{ credit | escape }}</p>{%- endif -%}
+      {%- if card_description != blank -%}<p>{{ card_description }}</p>{%- endif -%}
+      {%- if editorial_link != blank -%}<span class="msc-collection-card__note">Profile / editorial available</span>{%- endif -%}
+    </div>
+  </a>
+</article>
