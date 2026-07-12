@@ -1,0 +1,6 @@
+{% comment %}Accepts: title, description, marker{% endcomment %}
+<article class="msc-principle-card msc-glass-card">
+  <span class="msc-principle-card__marker" aria-hidden="true">{{ marker | default: '•' | escape }}</span>
+  <h3>{{ title | escape }}</h3>
+  {%- if description != blank -%}<p>{{ description | escape }}</p>{%- endif -%}
+</article>
