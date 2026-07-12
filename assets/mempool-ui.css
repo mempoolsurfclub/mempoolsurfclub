@@ -1132,95 +1132,6 @@ body { background: var(--msc-paper-soft); }
   min-height: var(--msc-control-height);
 }
 
-.msc-site-header {
-  background: rgba(251, 248, 239, .96);
-  color: var(--msc-ink);
-  border-bottom: 1px solid rgba(16, 40, 45, .12);
-  box-shadow: none;
-}
-
-.msc-site-header::after {
-  content: "";
-  display: block;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(212,190,153,.7), transparent);
-}
-
-.shopify-section-header-sticky .msc-site-header,
-.scrolled-past-header .msc-site-header {
-  background: rgba(251, 248, 239, .98);
-  box-shadow: 0 10px 28px rgba(16, 40, 45, .08);
-}
-
-.msc-site-header .header { gap: clamp(1rem, 2vw, 2.4rem); min-height: 6.4rem; }
-.msc-site-header .header__heading { display: inline-flex; align-items: center; gap: 1rem; min-width: 0; }
-.msc-site-header .header__heading-logo-wrapper { display: flex; align-items: center; }
-.msc-site-header .header__heading-logo { max-height: 4.8rem; width: auto; }
-.header__msc-descriptor {
-  display: none;
-  max-width: 18rem;
-  color: rgba(16, 40, 45, .62);
-  font-size: 1rem;
-  line-height: 1.25;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-}
-
-@media screen and (min-width: 1200px) { .header__msc-descriptor { display: inline-block; } }
-
-.msc-site-header .header__menu-item,
-.msc-site-header .list-menu__item--link {
-  color: rgba(16, 40, 45, .78);
-  font-size: 1.28rem;
-  font-weight: 700;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  text-decoration: none;
-}
-
-.msc-site-header .header__active-menu-item,
-.msc-site-header .list-menu__item--active { position: relative; color: var(--msc-ink); text-decoration: none; }
-.msc-site-header .header__menu-item span { position: relative; }
-.msc-site-header .header__active-menu-item::after,
-.msc-site-header .list-menu__item--active::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -.55rem;
-  height: 1px;
-  background: var(--msc-sand);
-}
-
-.msc-site-header .header__icon {
-  width: 4.2rem;
-  height: 4.2rem;
-  border-radius: 999px;
-  color: var(--msc-ink);
-  transition: background-color .18s ease, color .18s ease;
-}
-.msc-site-header .header__icon:hover { background: rgba(16, 40, 45, .06); }
-.msc-site-header .cart-count-bubble { background: var(--msc-deep); color: var(--msc-paper-soft); }
-
-.msc-site-header .menu-drawer {
-  background: var(--msc-paper-soft);
-  border-right: 1px solid rgba(16, 40, 45, .12);
-}
-.msc-site-header .menu-drawer__navigation { padding: 2rem 0; }
-.msc-site-header .menu-drawer__menu-item {
-  min-height: 5.2rem;
-  color: var(--msc-ink);
-  font-size: 1.8rem;
-  letter-spacing: -.01em;
-  border-bottom: 1px solid rgba(16, 40, 45, .08);
-}
-.msc-site-header .menu-drawer__menu-item--active,
-.msc-site-header .menu-drawer__menu-item:focus,
-.msc-site-header .menu-drawer__menu-item:hover { background: rgba(212,190,153,.16); color: var(--msc-ink); }
-.msc-site-header .menu-drawer__utility-links { background: rgba(16, 40, 45, .04); border-top: 1px solid rgba(16, 40, 45, .1); }
-
-.msc-site-header a:focus-visible,
-.msc-site-header button:focus-visible,
 .msc-site-footer a:focus-visible,
 .msc-site-footer button:focus-visible,
 .msc-site-footer input:focus-visible { outline: 2px solid var(--msc-sand); outline-offset: 3px; box-shadow: var(--msc-focus-ring); }
@@ -1267,8 +1178,6 @@ body { background: var(--msc-paper-soft); }
 .footer__msc-utility-labels span { border: 1px solid rgba(212,190,153,.24); border-radius: 999px; padding: .35rem .65rem; color: var(--msc-sand); font-size: .95rem; letter-spacing: .12em; text-transform: uppercase; }
 
 @media screen and (max-width: 989px) {
-  .msc-site-header .header { min-height: 5.8rem; }
-  .msc-site-header .header__heading-logo { max-height: 4.2rem; }
   .msc-site-footer .footer__content-top { grid-template-columns: 1fr; }
 }
 
@@ -1285,5 +1194,5 @@ body { background: var(--msc-paper-soft); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .msc-site-header *, .msc-site-footer *, .msc-button, .msc-search-form__button { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+  .msc-site-footer *, .msc-button, .msc-search-form__button { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
 }
