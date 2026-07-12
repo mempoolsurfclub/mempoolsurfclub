@@ -1,0 +1,149 @@
+{{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
+
+<section class="msc-shell" id="SurfReport-{{ section.id }}">
+  <div class="msc-block">
+    <div class="msc-container msc-center">
+      <div class="msc-eyebrow">{{ section.settings.kicker }}</div>
+      <h1 class="msc-title">{{ section.settings.heading }}</h1>
+      <p class="msc-subtitle">{{ section.settings.subheading }}</p>
+
+      <form class="msc-search msc-glass-card" action="{{ routes.search_url }}" method="get" role="search">
+        <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ section.settings.search_placeholder }}" aria-label="Search tools">
+        <input type="hidden" name="type" value="article,page,product">
+        <button type="submit">{{ section.settings.search_button }}</button>
+      </form>
+    </div>
+
+    <div class="msc-container">
+      <div class="msc-status-grid" aria-label="Live Bitcoin dashboard placeholders">
+        <article class="msc-metric msc-glass-card">
+          <p class="msc-metric-label">BTC Price</p>
+          <p class="msc-metric-value">$--,---</p>
+          <p class="msc-metric-note">API ready</p>
+        </article>
+        <article class="msc-metric msc-glass-card">
+          <p class="msc-metric-label">Fees</p>
+          <p class="msc-metric-value">-- sat/vB</p>
+          <p class="msc-metric-note">Fastest fee</p>
+        </article>
+        <article class="msc-metric msc-glass-card">
+          <p class="msc-metric-label">Mempool</p>
+          <p class="msc-metric-value">-- MB</p>
+          <p class="msc-metric-note">Pending flow</p>
+        </article>
+        <article class="msc-metric msc-glass-card">
+          <p class="msc-metric-label">Difficulty</p>
+          <p class="msc-metric-value">-- T</p>
+          <p class="msc-metric-note">Next adjustment</p>
+        </article>
+        <article class="msc-metric msc-glass-card">
+          <p class="msc-metric-label">Hashrate</p>
+          <p class="msc-metric-value">-- EH/s</p>
+          <p class="msc-metric-note">Network power</p>
+        </article>
+        <article class="msc-metric msc-glass-card">
+          <p class="msc-metric-label">Halving</p>
+          <p class="msc-metric-value">-- days</p>
+          <p class="msc-metric-note">Forecast</p>
+        </article>
+      </div>
+
+      <div class="msc-dashboard-panel msc-glass-card">
+        <div class="msc-radar" aria-hidden="true"></div>
+        <div class="msc-panel-list">
+          <div class="msc-panel-row"><span>Conditions</span><span>Monitoring</span></div>
+          <div class="msc-panel-row"><span>Swell</span><span>Mempool flow</span></div>
+          <div class="msc-panel-row"><span>Tide</span><span>Market movement</span></div>
+          <div class="msc-panel-row"><span>Forecast</span><span>Halving / difficulty</span></div>
+          <div class="msc-panel-row"><span>Signal</span><span>Live APIs pending</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="msc-block">
+    <div class="msc-container">
+      <p class="msc-section-kicker">Tool Library</p>
+      <h2 class="msc-section-title">Browse Tools</h2>
+      <div class="msc-tool-grid">
+        <a class="msc-tool-card msc-glass-card" href="#"><div><h3>Wallets</h3><p>Discover trusted Bitcoin wallets for securely storing, sending, and receiving bitcoin.</p></div><span class="msc-card-arrow">Enter →</span></a>
+        <a class="msc-tool-card msc-glass-card" href="#"><div><h3>Explorers</h3><p>Inspect blocks, transactions, addresses, inscriptions, and live network activity.</p></div><span class="msc-card-arrow">Enter →</span></a>
+        <a class="msc-tool-card msc-glass-card" href="#"><div><h3>Transactions</h3><p>Broadcast, decode, verify, and estimate Bitcoin transactions with confidence.</p></div><span class="msc-card-arrow">Enter →</span></a>
+        <a class="msc-tool-card msc-glass-card" href="#"><div><h3>Mining</h3><p>Explore mining pools, ASIC hardware, profitability, firmware, and network statistics.</p></div><span class="msc-card-arrow">Enter →</span></a>
+        <a class="msc-tool-card msc-glass-card" href="#"><div><h3>Lightning</h3><p>Discover Lightning wallets, nodes, routing tools, and instant payment applications.</p></div><span class="msc-card-arrow">Enter →</span></a>
+        <a class="msc-tool-card msc-glass-card" href="#"><div><h3>Markets</h3><p>Track Bitcoin price, ETFs, on-chain metrics, market data, and trading activity.</p></div><span class="msc-card-arrow">Enter →</span></a>
+        <a class="msc-tool-card msc-glass-card" href="#"><div><h3>Calculators</h3><p>Calculate DCA performance, mining profitability, fees, retirement growth, and more.</p></div><span class="msc-card-arrow">Enter →</span></a>
+        <a class="msc-tool-card msc-glass-card" href="#"><div><h3>Developers</h3><p>Access APIs, documentation, SDKs, libraries, RPC tools, and developer resources.</p></div><span class="msc-card-arrow">Enter →</span></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="msc-block">
+    <div class="msc-container">
+      <p class="msc-section-kicker">Curated Resources</p>
+      <h2 class="msc-section-title">Featured Tools</h2>
+      <div class="msc-feature-grid">
+        <article class="msc-feature-card msc-glass-card"><h3>Mempool.space</h3><p>Blocks, fees, mempool data, and live Bitcoin network observation.</p></article>
+        <article class="msc-feature-card msc-glass-card"><h3>Sparrow Wallet</h3><p>A power-user desktop wallet for self-custody and transaction control.</p></article>
+        <article class="msc-feature-card msc-glass-card"><h3>Coldcard</h3><p>Air-gapped Bitcoin hardware wallet built for security-focused custody.</p></article>
+      </div>
+    </div>
+  </div>
+
+  <div class="msc-block">
+    <div class="msc-container">
+      <p class="msc-section-kicker">Library Changelog</p>
+      <h2 class="msc-section-title">Recently Added</h2>
+      <div class="msc-update-list">
+        <div class="msc-update-row msc-glass-card"><strong>Tool profiles coming soon</strong><span>Database setup pending</span></div>
+        <div class="msc-update-row msc-glass-card"><strong>Live Bitcoin APIs</strong><span>Next development phase</span></div>
+        <div class="msc-update-row msc-glass-card"><strong>Surf Report v0.1</strong><span>Dashboard shell installed</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "MSC Surf Report",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker",
+      "default": "The Surf Report"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Bitcoin Tools"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Live dashboards, trusted tools, and resources for watching the conditions across Bitcoin."
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Search placeholder",
+      "default": "Search wallets, explorers, APIs, calculators..."
+    },
+    {
+      "type": "text",
+      "id": "search_button",
+      "label": "Search button",
+      "default": "Search"
+    }
+  ],
+  "presets": [
+    {
+      "name": "MSC Surf Report"
+    }
+  ]
+}
+{% endschema %}
