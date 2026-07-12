@@ -1,4 +1,5 @@
 {% comment %}theme-check-disable UndefinedObject{% endcomment %}
+{{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
 {{ 'section-footer.css' | asset_url | stylesheet_tag }}
 {{ 'component-newsletter.css' | asset_url | stylesheet_tag }}
 {{ 'component-list-menu.css' | asset_url | stylesheet_tag }}
@@ -27,7 +28,7 @@
   }
 {%- endstyle -%}
 
-<footer class="footer color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+<footer class="footer msc-site-footer color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
   {%- liquid
     assign has_social_icons = true
     if settings.social_facebook_link == blank and settings.social_instagram_link == blank and settings.social_youtube_link == blank and settings.social_tiktok_link == blank and settings.social_twitter_link == blank and settings.social_pinterest_link == blank and settings.social_snapchat_link == blank and settings.social_tumblr_link == blank and settings.social_vimeo_link == blank
@@ -42,6 +43,26 @@
       assign only_empty_brand = true
     endif
   -%}
+
+  <div class="footer__msc-closing page-width">
+    <div class="footer__msc-closing-copy">
+      {%- if section.settings.brand_eyebrow != blank -%}
+        <p class="footer__msc-eyebrow">{{ section.settings.brand_eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.closing_heading != blank -%}
+        <h2 class="footer__msc-heading">{{ section.settings.closing_heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.closing_copy != blank -%}
+        <div class="footer__msc-copy rte">{{ section.settings.closing_copy }}</div>
+      {%- endif -%}
+    </div>
+    {%- if section.settings.closing_button_label != blank and section.settings.closing_button_link != blank -%}
+      <a class="footer__msc-cta" href="{{ section.settings.closing_button_link }}">{{ section.settings.closing_button_label | escape }}</a>
+    {%- elsif section.settings.closing_button_label != blank -%}
+      <span class="footer__msc-cta footer__msc-cta--disabled" aria-disabled="true">{{ section.settings.closing_button_label | escape }}</span>
+    {%- endif -%}
+  </div>
+
   {%- if section.blocks.size > 0
     or section.settings.newsletter_enable
     or section.settings.show_social
@@ -167,8 +188,14 @@
         >
           {%- if section.settings.newsletter_enable -%}
             <div class="footer-block__newsletter">
+              {%- if section.settings.newsletter_eyebrow != blank -%}
+                <p class="footer__msc-eyebrow footer__msc-eyebrow--newsletter">{{ section.settings.newsletter_eyebrow | escape }}</p>
+              {%- endif -%}
               {%- if section.settings.newsletter_heading != blank -%}
                 <h2 class="footer-block__heading inline-richtext">{{ section.settings.newsletter_heading }}</h2>
+              {%- endif -%}
+              {%- if section.settings.newsletter_copy != blank -%}
+                <div class="footer__newsletter-copy rte">{{ section.settings.newsletter_copy }}</div>
               {%- endif -%}
               {%- form 'customer', id: 'ContactFooter', class: 'footer__newsletter newsletter-form' -%}
                 <input type="hidden" name="contact[tags]" value="newsletter">
@@ -302,7 +329,11 @@
         <small class="copyright__content"
           >&copy; {{ 'now' | date: '%Y' }}, {{ shop.name | link_to: routes.root_url -}}
         </small>
-        <small class="copyright__content">{{ powered_by_link }}</small>
+        <div class="footer__msc-utility-labels" aria-label="Footer labels">
+          {%- if section.settings.utility_label_1 != blank -%}<span>{{ section.settings.utility_label_1 | escape }}</span>{%- endif -%}
+          {%- if section.settings.utility_label_2 != blank -%}<span>{{ section.settings.utility_label_2 | escape }}</span>{%- endif -%}
+          {%- if section.settings.utility_label_3 != blank -%}<span>{{ section.settings.utility_label_3 | escape }}</span>{%- endif -%}
+        </div>
         {%- if section.settings.show_policy -%}
           <ul class="policies list-unstyled">
             {%- for policy in shop.policies -%}
@@ -430,6 +461,39 @@
   ],
   "settings": [
     {
+      "type": "header",
+      "content": "MSC closing statement"
+    },
+    {
+      "type": "text",
+      "id": "brand_eyebrow",
+      "default": "MEMPOOL SURF CLUB",
+      "label": "Brand eyebrow"
+    },
+    {
+      "type": "text",
+      "id": "closing_heading",
+      "default": "KEEP WATCHING THE WAVES.",
+      "label": "Closing heading"
+    },
+    {
+      "type": "richtext",
+      "id": "closing_copy",
+      "default": "<p>Bitcoin culture, network conditions, independent ideas, and objects built for the long horizon.</p>",
+      "label": "Closing copy"
+    },
+    {
+      "type": "text",
+      "id": "closing_button_label",
+      "default": "Explore the ecosystem",
+      "label": "Closing button label"
+    },
+    {
+      "type": "url",
+      "id": "closing_button_link",
+      "label": "Closing button link"
+    },
+    {
       "type": "color_scheme",
       "id": "color_scheme",
       "label": "t:sections.all.colors.label",
@@ -447,10 +511,22 @@
       "label": "t:sections.footer.settings.newsletter_enable.label"
     },
     {
+      "type": "text",
+      "id": "newsletter_eyebrow",
+      "default": "FIELD REPORTS",
+      "label": "Newsletter eyebrow"
+    },
+    {
       "type": "inline_richtext",
       "id": "newsletter_heading",
-      "default": "t:sections.footer.settings.newsletter_heading.default",
+      "default": "Notes from the network and the culture around it.",
       "label": "t:sections.footer.settings.newsletter_heading.label"
+    },
+    {
+      "type": "richtext",
+      "id": "newsletter_copy",
+      "default": "<p>Occasional editorials, project signals, collection releases, and updates from Mempool Surf Club.</p>",
+      "label": "Newsletter supporting copy"
     },
     {
       "type": "header",
@@ -517,6 +593,13 @@
       "default": true,
       "label": "t:sections.footer.settings.show_policy.label"
     },
+    {
+      "type": "header",
+      "content": "MSC utility labels"
+    },
+    { "type": "text", "id": "utility_label_1", "default": "BITCOIN FIRST", "label": "Utility label 1" },
+    { "type": "text", "id": "utility_label_2", "default": "INDEPENDENTLY BUILT", "label": "Utility label 2" },
+    { "type": "text", "id": "utility_label_3", "default": "WATCH THE NETWORK", "label": "Utility label 3" },
     {
       "type": "header",
       "content": "t:sections.all.spacing"

@@ -2,6 +2,7 @@
 <link rel="stylesheet" href="{{ 'component-search.css' | asset_url }}" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="{{ 'component-cart-notification.css' | asset_url }}" media="print" onload="this.media='all'">
+{{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
 
 {%- if settings.predictive_search_enabled -%}
   <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
@@ -106,7 +107,7 @@
   endfor
 -%}
 
-<{% if section.settings.sticky_header_type != 'none' %}sticky-header data-sticky-type="{{ section.settings.sticky_header_type }}"{% else %}div{% endif %} class="header-wrapper color-{{ section.settings.color_scheme }} gradient{% if section.settings.show_line_separator %} header-wrapper--border-bottom{% endif %}">
+<{% if section.settings.sticky_header_type != 'none' %}sticky-header data-sticky-type="{{ section.settings.sticky_header_type }}"{% else %}div{% endif %} class="header-wrapper msc-site-header color-{{ section.settings.color_scheme }} gradient{% if section.settings.show_line_separator %} header-wrapper--border-bottom{% endif %}">
   {%- liquid
     assign social_links = false
     assign localization_forms = false
@@ -155,6 +156,9 @@
               <span class="h2">{{ shop.name }}</span>
             {%- endif -%}
           </a>
+          {%- if section.settings.show_msc_descriptor and section.settings.msc_descriptor != blank -%}
+            <span class="header__msc-descriptor">{{ section.settings.msc_descriptor | escape }}</span>
+          {%- endif -%}
       {%- if request.page_type == 'index' -%}
         </h1>
       {%- endif -%}
@@ -195,6 +199,9 @@
               <span class="h2">{{ shop.name }}</span>
             {%- endif -%}
           </a>
+          {%- if section.settings.show_msc_descriptor and section.settings.msc_descriptor != blank -%}
+            <span class="header__msc-descriptor">{{ section.settings.msc_descriptor | escape }}</span>
+          {%- endif -%}
       {%- if request.page_type == 'index' -%}
         </h1>
       {%- endif -%}
@@ -525,6 +532,23 @@
       "id": "show_line_separator",
       "default": true,
       "label": "t:sections.header.settings.show_line_separator.label"
+    },
+
+    {
+      "type": "header",
+      "content": "Mempool Surf Club"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_msc_descriptor",
+      "default": true,
+      "label": "Show compact MSC descriptor"
+    },
+    {
+      "type": "text",
+      "id": "msc_descriptor",
+      "default": "Bitcoin culture and network conditions",
+      "label": "Compact descriptor"
     },
     {
       "type": "header",
