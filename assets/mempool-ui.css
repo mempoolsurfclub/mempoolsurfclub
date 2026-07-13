@@ -2117,3 +2117,101 @@ body { background: var(--msc-paper-soft); }
     padding: 2rem;
   }
 }
+
+/* Explore final refinement: rotating signal, wave-map nodes, and card actions */
+.msc-explore .msc-rotating-signal {
+  color: var(--msc-paper-soft);
+}
+
+.msc-discovery-map__header {
+  align-items: center;
+  flex-wrap: wrap;
+  row-gap: .45rem;
+}
+
+.msc-discovery-map__header span:first-child {
+  min-width: 0;
+}
+
+.msc-discovery-map__node {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: .72rem;
+  max-width: none;
+  margin: 0;
+  padding: .82rem 1.12rem;
+  font-size: clamp(1.3rem, 1.25vw, 1.45rem);
+  font-weight: 800;
+  letter-spacing: .015em;
+  line-height: 1;
+  text-transform: none;
+}
+
+.msc-discovery-map__node i {
+  flex: 0 0 auto;
+  width: .72rem;
+  height: .72rem;
+  margin: 0;
+  border-radius: 999px;
+  background: var(--msc-sand);
+  box-shadow: 0 0 0 .36rem rgba(212,190,153,.1), 0 0 16px rgba(212,190,153,.42);
+}
+
+.msc-discovery-map__node--a { left: 9%; top: 25%; }
+.msc-discovery-map__node--b { left: 72%; top: 34%; }
+.msc-discovery-map__node--c { left: 24%; top: 55%; }
+.msc-discovery-map__node--d { left: 75%; top: 54%; }
+
+.msc-category-card {
+  height: 100%;
+}
+
+.msc-category-card__description {
+  margin-bottom: 1.6rem;
+}
+
+.msc-category-card .msc-card-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: .42rem;
+  margin-top: auto;
+  color: var(--msc-sand);
+  font-size: 1.18rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.msc-category-card--link .msc-card-arrow span {
+  transition: transform .2s ease, opacity .2s ease;
+}
+
+.msc-category-card--link:hover .msc-card-arrow span,
+.msc-category-card--link:focus-visible .msc-card-arrow span {
+  transform: translateX(2px);
+  opacity: .9;
+}
+
+.msc-category-card--static .msc-card-arrow span {
+  transform: none;
+}
+
+@media screen and (max-width: 990px) {
+  .msc-discovery-map__node { font-size: clamp(1.08rem, 1.7vw, 1.24rem); padding: .72rem .9rem; gap: .62rem; }
+  .msc-discovery-map__node--a { left: 7%; top: 25%; }
+  .msc-discovery-map__node--b { left: 68%; top: 34%; }
+  .msc-discovery-map__node--c { left: 20%; top: 56%; }
+  .msc-discovery-map__node--d { left: 68%; top: 57%; }
+}
+
+@media screen and (max-width: 640px) {
+  .msc-discovery-map__header { font-size: .84rem; gap: .45rem .8rem; }
+  .msc-discovery-map__node { font-size: .92rem; padding: .58rem .68rem; gap: .48rem; }
+  .msc-discovery-map__node i { width: .5rem; height: .5rem; }
+  .msc-discovery-map__node--a { left: 4%; top: 23%; }
+  .msc-discovery-map__node--b { left: 56%; top: 33%; }
+  .msc-discovery-map__node--c { left: 7%; top: 59%; }
+  .msc-discovery-map__node--d { left: 58%; top: 58%; }
+  .msc-category-card .msc-card-arrow { font-size: 1.08rem; }
+}
