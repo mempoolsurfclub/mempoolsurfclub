@@ -1,0 +1,8 @@
+{% comment %}Accepts: article, primary_tag{% endcomment %}
+{%- assign summary = article.excerpt | default: article.excerpt_or_content | strip_html | truncatewords: 18 -%}
+<a class="msc-report-row" href="{{ article.url }}" aria-label="Read {{ article.title | escape }}">
+  <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%b %-d, %Y' }}</time>
+  <strong>{{ article.title | escape }}</strong>
+  {%- if summary != blank -%}<em>{{ summary | escape }}</em>{%- else -%}<em>{{ primary_tag | escape }}</em>{%- endif -%}
+  <b>Read recap →</b>
+</a>
