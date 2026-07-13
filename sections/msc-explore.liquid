@@ -32,16 +32,33 @@
       </div>
       <div class="msc-discovery-map msc-glass-card" aria-label="Bitcoin Culture Wave Map visual">
         <div class="msc-discovery-map__header"><span>Bitcoin Culture Wave Map</span><span>Current Index</span></div>
-        <div class="msc-discovery-map__field" aria-hidden="true">
+        <div class="msc-discovery-map__field">
           <svg class="msc-discovery-map__chart" viewBox="0 0 720 420" preserveAspectRatio="none" focusable="false" aria-hidden="true">
             <path class="msc-discovery-map__wave msc-discovery-map__wave--macro" d="M 24 244 C 110 118 208 118 294 244 S 478 370 568 244 S 662 145 696 176" />
             <path class="msc-discovery-map__wave msc-discovery-map__wave--ripple" d="M 20 166 C 52 126 84 126 116 166 S 180 206 212 166 S 276 126 308 166 S 372 206 404 166 S 468 126 500 166 S 564 206 596 166 S 660 126 700 166" />
             <path class="msc-discovery-map__wave msc-discovery-map__wave--current" d="M 28 306 C 116 274 154 214 224 226 C 316 242 332 326 424 300 C 504 278 532 202 610 214 C 648 220 674 244 700 268" />
           </svg>
-          <span class="msc-discovery-map__node msc-discovery-map__node--a"><i></i>Art</span>
-          <span class="msc-discovery-map__node msc-discovery-map__node--b"><i></i>Builders</span>
-          <span class="msc-discovery-map__node msc-discovery-map__node--c"><i></i>Research</span>
-          <span class="msc-discovery-map__node msc-discovery-map__node--d"><i></i>Projects</span>
+          {%- if section.settings.map_companies_link != blank -%}
+            <a class="msc-discovery-map__node msc-discovery-map__node--companies" href="{{ section.settings.map_companies_link }}">
+          {%- else -%}
+            <span class="msc-discovery-map__node msc-discovery-map__node--companies">
+          {%- endif -%}
+            <i aria-hidden="true"></i><strong>Companies</strong>
+          {%- if section.settings.map_companies_link != blank -%}</a>{%- else -%}</span>{%- endif -%}
+          {%- if section.settings.map_art_link != blank -%}
+            <a class="msc-discovery-map__node msc-discovery-map__node--art" href="{{ section.settings.map_art_link }}">
+          {%- else -%}
+            <span class="msc-discovery-map__node msc-discovery-map__node--art">
+          {%- endif -%}
+            <i aria-hidden="true"></i><strong>Art</strong>
+          {%- if section.settings.map_art_link != blank -%}</a>{%- else -%}</span>{%- endif -%}
+          {%- if section.settings.map_builders_link != blank -%}
+            <a class="msc-discovery-map__node msc-discovery-map__node--builders" href="{{ section.settings.map_builders_link }}">
+          {%- else -%}
+            <span class="msc-discovery-map__node msc-discovery-map__node--builders">
+          {%- endif -%}
+            <i aria-hidden="true"></i><strong>Builders</strong>
+          {%- if section.settings.map_builders_link != blank -%}</a>{%- else -%}</span>{%- endif -%}
         </div>
       </div>
     </div>
@@ -156,6 +173,9 @@
     {"type":"text","id":"search_placeholder","label":"Search placeholder","default":"Search artists, founders, companies, projects, reports..."},
     {"type":"text","id":"search_button","label":"Search button","default":"Search"},
     {"type":"text","id":"search_types","label":"Shopify search types","default":"article,page,product"},
+    {"type":"url","id":"map_companies_link","label":"Companies page"},
+    {"type":"url","id":"map_art_link","label":"Art page"},
+    {"type":"url","id":"map_builders_link","label":"Builders page"},
     {"type":"text","id":"editorial_kicker","label":"Editorial kicker","default":"Signals From the Culture"},
     {"type":"text","id":"editorial_heading","label":"Editorial heading","default":"Stories moving through the Bitcoin ocean."},
     {"type":"richtext","id":"editorial_copy","label":"Editorial copy","default":"<p>Essays, interviews, explainers, and field notes mapping the ideas gathering momentum across Bitcoin culture.</p>"},
