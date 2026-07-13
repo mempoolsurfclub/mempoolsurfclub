@@ -1492,7 +1492,6 @@ body { background: var(--msc-paper-soft); }
   align-items: center;
   gap: .9rem;
   min-width: min(100%, 34ch);
-  color: var(--msc-sand);
 }
 
 .msc-rotating-signal__indicator {
@@ -1511,12 +1510,15 @@ body { background: var(--msc-paper-soft); }
   display: grid;
   align-items: center;
   min-width: 31ch;
-  min-height: 1.2em;
-  line-height: 1.2;
+  min-height: 1em;
+  color: var(--msc-paper-soft);
+  line-height: 1;
 }
 
 .msc-rotating-signal__phrases span {
   grid-area: 1 / 1;
+  display: inline-flex;
+  align-items: center;
   align-self: center;
   opacity: 0;
   line-height: inherit;
@@ -1542,6 +1544,7 @@ body { background: var(--msc-paper-soft); }
   max-width: 12.8ch;
   margin-top: 1.5rem;
   margin-bottom: 2rem;
+  color: var(--msc-sand);
   font-size: clamp(3.2rem, 5.8vw, 6.35rem);
   line-height: .96;
 }
@@ -1741,10 +1744,10 @@ body { background: var(--msc-paper-soft); }
 }
 
 .msc-signal-field__node strong {
-  font-size: clamp(1.05rem, 1.15vw, 1.24rem);
-  font-weight: 780;
+  font-size: clamp(1.3rem, 1.22vw, 1.42rem);
+  font-weight: 800;
   line-height: 1;
-  letter-spacing: .045em;
+  letter-spacing: .025em;
   text-transform: none;
 }
 
@@ -1810,7 +1813,8 @@ body { background: var(--msc-paper-soft); }
   }
 
   .msc-signal-field__node strong {
-    font-size: clamp(.92rem, 4vw, 1.05rem);
+    font-size: clamp(1.05rem, 4vw, 1.15rem);
+    font-weight: 800;
   }
 }
 
