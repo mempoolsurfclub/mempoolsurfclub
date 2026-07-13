@@ -37,44 +37,85 @@
     </nav>
 
     <div class="msc-block" aria-labelledby="MscExploreEditorials-{{ section.id }}">
-      {% render 'msc-section-header', kicker: section.settings.editorial_kicker, heading: section.settings.editorial_heading, copy: section.settings.editorial_copy, heading_id: 'MscExploreEditorials-' | append: section.id %}
       {%- assign stories_rendered = 0 -%}
-      {%- if content_blog != blank and content_blog.articles_count > 0 -%}<div class="msc-editorial-layout">
-        {%- for article in content_blog.articles -%}
-          {%- if stories_rendered >= section.settings.stories_limit -%}{%- break -%}{%- endif -%}
-          {%- assign article_tag_handles = '|' -%}{%- for tag in article.tags -%}{%- assign article_tag_handles = article_tag_handles | append: tag | handleize | append: '|' -%}{%- endfor -%}
-          {%- assign primary_label = '' -%}{%- assign breaking_handle = section.settings.breaking_news_tag | handleize | prepend: '|' | append: '|' -%}{%- assign weekly_handle = section.settings.weekly_recaps_tag | handleize | prepend: '|' | append: '|' -%}{%- assign interviews_handle = section.settings.interviews_tag | handleize | prepend: '|' | append: '|' -%}{%- assign highlights_handle = section.settings.highlights_tag | handleize | prepend: '|' | append: '|' -%}{%- assign community_handle = section.settings.community_tag | handleize | prepend: '|' | append: '|' -%}
-          {%- if article_tag_handles contains breaking_handle -%}{%- assign primary_label = section.settings.breaking_news_tag -%}{%- elsif article_tag_handles contains weekly_handle -%}{%- assign primary_label = section.settings.weekly_recaps_tag -%}{%- elsif article_tag_handles contains interviews_handle -%}{%- assign primary_label = section.settings.interviews_tag -%}{%- elsif article_tag_handles contains highlights_handle -%}{%- assign primary_label = section.settings.highlights_tag -%}{%- elsif article_tag_handles contains community_handle -%}{%- assign primary_label = section.settings.community_tag -%}{%- endif -%}
-          {%- if primary_label != blank -%}{%- assign is_visible_breaking = true -%}{%- if primary_label == section.settings.breaking_news_tag -%}{%- assign article_timestamp = article.published_at | date: '%s' | plus: 0 -%}{%- assign article_age = current_timestamp | minus: article_timestamp -%}{%- if article_age > breaking_window_seconds -%}{%- assign is_visible_breaking = false -%}{%- endif -%}{%- endif -%}{%- if is_visible_breaking -%}{%- assign stories_rendered = stories_rendered | plus: 1 -%}{%- assign story_card_size = 'standard' -%}{%- if stories_rendered == 1 -%}{%- assign story_card_size = 'lead' -%}{%- endif -%}{% render 'msc-editorial-card', article: article, label: primary_label, size: story_card_size %}{%- endif -%}{%- endif -%}
-        {%- endfor -%}</div>{%- endif -%}
-      {%- if stories_rendered == 0 -%}{% render 'msc-explore-empty-state', label: section.settings.editorial_empty_label, heading: section.settings.editorial_empty_heading, copy: section.settings.editorial_empty_copy %}{%- endif -%}
+      {%- capture stories_cards -%}
+        {%- if content_blog != blank and content_blog.articles_count > 0 -%}
+          {%- for article in content_blog.articles -%}
+            {%- if stories_rendered >= section.settings.stories_limit -%}{%- break -%}{%- endif -%}
+            {%- assign article_tag_handles = '|' -%}{%- for tag in article.tags -%}{%- assign article_tag_handles = article_tag_handles | append: tag | handleize | append: '|' -%}{%- endfor -%}
+            {%- assign primary_label = '' -%}{%- assign breaking_handle = section.settings.breaking_news_tag | handleize | prepend: '|' | append: '|' -%}{%- assign weekly_handle = section.settings.weekly_recaps_tag | handleize | prepend: '|' | append: '|' -%}{%- assign interviews_handle = section.settings.interviews_tag | handleize | prepend: '|' | append: '|' -%}{%- assign highlights_handle = section.settings.highlights_tag | handleize | prepend: '|' | append: '|' -%}{%- assign community_handle = section.settings.community_tag | handleize | prepend: '|' | append: '|' -%}
+            {%- if article_tag_handles contains breaking_handle -%}{%- assign primary_label = section.settings.breaking_news_tag -%}{%- elsif article_tag_handles contains weekly_handle -%}{%- assign primary_label = section.settings.weekly_recaps_tag -%}{%- elsif article_tag_handles contains interviews_handle -%}{%- assign primary_label = section.settings.interviews_tag -%}{%- elsif article_tag_handles contains highlights_handle -%}{%- assign primary_label = section.settings.highlights_tag -%}{%- elsif article_tag_handles contains community_handle -%}{%- assign primary_label = section.settings.community_tag -%}{%- endif -%}
+            {%- if primary_label != blank -%}{%- assign is_visible_breaking = true -%}{%- if primary_label == section.settings.breaking_news_tag -%}{%- assign article_timestamp = article.published_at | date: '%s' | plus: 0 -%}{%- assign article_age = current_timestamp | minus: article_timestamp -%}{%- if article_age > breaking_window_seconds -%}{%- assign is_visible_breaking = false -%}{%- endif -%}{%- endif -%}{%- if is_visible_breaking -%}{%- assign stories_rendered = stories_rendered | plus: 1 -%}{%- assign story_card_size = 'standard' -%}{%- if stories_rendered == 1 -%}{%- assign story_card_size = 'lead' -%}{%- endif -%}{% render 'msc-editorial-card', article: article, label: primary_label, size: story_card_size %}{%- endif -%}{%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      {%- endcapture -%}
+      {%- if stories_rendered > 0 -%}
+        {% render 'msc-section-header', kicker: section.settings.editorial_kicker, heading: section.settings.editorial_heading, copy: section.settings.editorial_copy, heading_id: 'MscExploreEditorials-' | append: section.id %}
+        <div class="msc-editorial-layout">{{ stories_cards }}</div>
+      {%- else -%}
+        <div class="msc-explore-chapter">
+          <div class="msc-explore-chapter__intro">
+            {% render 'msc-section-header', kicker: section.settings.editorial_kicker, heading: section.settings.editorial_heading, copy: section.settings.editorial_copy, heading_id: 'MscExploreEditorials-' | append: section.id %}
+          </div>
+          <div class="msc-explore-chapter__content">
+            {% render 'msc-explore-empty-state', label: section.settings.editorial_empty_label, heading: section.settings.editorial_empty_heading, copy: section.settings.editorial_empty_copy %}
+          </div>
+        </div>
+      {%- endif -%}
     </div>
 
     <div class="msc-block" aria-labelledby="MscExploreDiscovery-{{ section.id }}">
-      {% render 'msc-section-header', kicker: section.settings.discovery_kicker, heading: section.settings.discovery_heading, copy: section.settings.discovery_copy, heading_id: 'MscExploreDiscovery-' | append: section.id %}
       {%- assign culture_rendered = 0 -%}
-      {%- if content_blog != blank and content_blog.articles_count > 0 -%}<div class="msc-profile-grid">
-        {%- for article in content_blog.articles -%}
-          {%- if culture_rendered >= section.settings.culture_index_limit -%}{%- break -%}{%- endif -%}
-          {%- assign article_tag_handles = '|' -%}{%- for tag in article.tags -%}{%- assign article_tag_handles = article_tag_handles | append: tag | handleize | append: '|' -%}{%- endfor -%}
-          {%- assign primary_label = '' -%}{%- assign breaking_handle = section.settings.breaking_news_tag | handleize | prepend: '|' | append: '|' -%}{%- assign weekly_handle = section.settings.weekly_recaps_tag | handleize | prepend: '|' | append: '|' -%}{%- assign interviews_handle = section.settings.interviews_tag | handleize | prepend: '|' | append: '|' -%}{%- assign highlights_handle = section.settings.highlights_tag | handleize | prepend: '|' | append: '|' -%}{%- assign community_handle = section.settings.community_tag | handleize | prepend: '|' | append: '|' -%}
-          {%- if article_tag_handles contains breaking_handle -%}{%- assign primary_label = section.settings.breaking_news_tag -%}{%- elsif article_tag_handles contains weekly_handle -%}{%- assign primary_label = section.settings.weekly_recaps_tag -%}{%- elsif article_tag_handles contains interviews_handle -%}{%- assign primary_label = section.settings.interviews_tag -%}{%- elsif article_tag_handles contains highlights_handle -%}{%- assign primary_label = section.settings.highlights_tag -%}{%- elsif article_tag_handles contains community_handle -%}{%- assign primary_label = section.settings.community_tag -%}{%- endif -%}
-          {%- assign culture_label = '' -%}{%- assign culture_routing_tags = section.settings.culture_index_tags | split: ',' -%}{%- if primary_label != blank -%}{%- for routing_tag in culture_routing_tags -%}{%- assign routing_tag_clean = routing_tag | strip -%}{%- if routing_tag_clean != blank -%}{%- assign routing_handle = routing_tag_clean | handleize | prepend: '|' | append: '|' -%}{%- if article_tag_handles contains routing_handle and culture_label == blank -%}{%- assign culture_label = routing_tag_clean -%}{%- endif -%}{%- endif -%}{%- endfor -%}{%- endif -%}
-          {%- if culture_label != blank -%}{%- assign is_visible_breaking = true -%}{%- if primary_label == section.settings.breaking_news_tag -%}{%- assign article_timestamp = article.published_at | date: '%s' | plus: 0 -%}{%- assign article_age = current_timestamp | minus: article_timestamp -%}{%- if article_age > breaking_window_seconds -%}{%- assign is_visible_breaking = false -%}{%- endif -%}{%- endif -%}{%- if is_visible_breaking -%}{%- assign culture_rendered = culture_rendered | plus: 1 -%}{% render 'msc-profile-card', article: article, tag: culture_label %}{%- endif -%}{%- endif -%}
-        {%- endfor -%}</div>{%- endif -%}
-      {%- if culture_rendered == 0 -%}{% render 'msc-explore-empty-state', label: section.settings.discovery_empty_label, heading: section.settings.discovery_empty_heading, copy: section.settings.discovery_empty_copy %}{%- endif -%}
+      {%- capture culture_cards -%}
+        {%- if content_blog != blank and content_blog.articles_count > 0 -%}
+          {%- for article in content_blog.articles -%}
+            {%- if culture_rendered >= section.settings.culture_index_limit -%}{%- break -%}{%- endif -%}
+            {%- assign article_tag_handles = '|' -%}{%- for tag in article.tags -%}{%- assign article_tag_handles = article_tag_handles | append: tag | handleize | append: '|' -%}{%- endfor -%}
+            {%- assign primary_label = '' -%}{%- assign breaking_handle = section.settings.breaking_news_tag | handleize | prepend: '|' | append: '|' -%}{%- assign weekly_handle = section.settings.weekly_recaps_tag | handleize | prepend: '|' | append: '|' -%}{%- assign interviews_handle = section.settings.interviews_tag | handleize | prepend: '|' | append: '|' -%}{%- assign highlights_handle = section.settings.highlights_tag | handleize | prepend: '|' | append: '|' -%}{%- assign community_handle = section.settings.community_tag | handleize | prepend: '|' | append: '|' -%}
+            {%- if article_tag_handles contains breaking_handle -%}{%- assign primary_label = section.settings.breaking_news_tag -%}{%- elsif article_tag_handles contains weekly_handle -%}{%- assign primary_label = section.settings.weekly_recaps_tag -%}{%- elsif article_tag_handles contains interviews_handle -%}{%- assign primary_label = section.settings.interviews_tag -%}{%- elsif article_tag_handles contains highlights_handle -%}{%- assign primary_label = section.settings.highlights_tag -%}{%- elsif article_tag_handles contains community_handle -%}{%- assign primary_label = section.settings.community_tag -%}{%- endif -%}
+            {%- assign culture_label = '' -%}{%- assign culture_routing_tags = section.settings.culture_index_tags | split: ',' -%}{%- if primary_label != blank -%}{%- for routing_tag in culture_routing_tags -%}{%- assign routing_tag_clean = routing_tag | strip -%}{%- if routing_tag_clean != blank -%}{%- assign routing_handle = routing_tag_clean | handleize | prepend: '|' | append: '|' -%}{%- if article_tag_handles contains routing_handle and culture_label == blank -%}{%- assign culture_label = routing_tag_clean -%}{%- endif -%}{%- endif -%}{%- endfor -%}{%- endif -%}
+            {%- if culture_label != blank -%}{%- assign is_visible_breaking = true -%}{%- if primary_label == section.settings.breaking_news_tag -%}{%- assign article_timestamp = article.published_at | date: '%s' | plus: 0 -%}{%- assign article_age = current_timestamp | minus: article_timestamp -%}{%- if article_age > breaking_window_seconds -%}{%- assign is_visible_breaking = false -%}{%- endif -%}{%- endif -%}{%- if is_visible_breaking -%}{%- assign culture_rendered = culture_rendered | plus: 1 -%}{% render 'msc-profile-card', article: article, tag: culture_label %}{%- endif -%}{%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      {%- endcapture -%}
+      {%- if culture_rendered > 0 -%}
+        {% render 'msc-section-header', kicker: section.settings.discovery_kicker, heading: section.settings.discovery_heading, copy: section.settings.discovery_copy, heading_id: 'MscExploreDiscovery-' | append: section.id %}
+        <div class="msc-profile-grid">{{ culture_cards }}</div>
+      {%- else -%}
+        <div class="msc-explore-chapter">
+          <div class="msc-explore-chapter__intro">
+            {% render 'msc-section-header', kicker: section.settings.discovery_kicker, heading: section.settings.discovery_heading, copy: section.settings.discovery_copy, heading_id: 'MscExploreDiscovery-' | append: section.id %}
+          </div>
+          <div class="msc-explore-chapter__content">
+            {% render 'msc-explore-empty-state', label: section.settings.discovery_empty_label, heading: section.settings.discovery_empty_heading, copy: section.settings.discovery_empty_copy %}
+          </div>
+        </div>
+      {%- endif -%}
     </div>
 
     <div class="msc-block" aria-labelledby="MscExploreReports-{{ section.id }}">
-      <div class="msc-report-panel msc-glass-card">
-        {% render 'msc-section-header', kicker: section.settings.reports_kicker, heading: section.settings.reports_heading, copy: section.settings.reports_copy, heading_id: 'MscExploreReports-' | append: section.id %}
-        {%- assign recaps_rendered = 0 -%}
-        {%- if content_blog != blank and content_blog.articles_count > 0 -%}<div class="msc-report-panel__list">
+      {%- assign recaps_rendered = 0 -%}
+      {%- capture recap_rows -%}
+        {%- if content_blog != blank and content_blog.articles_count > 0 -%}
           {%- assign weekly_handle = section.settings.weekly_recaps_tag | handleize | prepend: '|' | append: '|' -%}
           {%- for article in content_blog.articles -%}{%- if recaps_rendered >= section.settings.weekly_recaps_limit -%}{%- break -%}{%- endif -%}{%- assign article_tag_handles = '|' -%}{%- for tag in article.tags -%}{%- assign article_tag_handles = article_tag_handles | append: tag | handleize | append: '|' -%}{%- endfor -%}{%- if article_tag_handles contains weekly_handle -%}{%- assign recaps_rendered = recaps_rendered | plus: 1 -%}{% render 'msc-explore-recap-row', article: article, primary_tag: section.settings.weekly_recaps_tag %}{%- endif -%}{%- endfor -%}
-        </div>{%- endif -%}
-        {%- if recaps_rendered == 0 -%}{% render 'msc-explore-empty-state', label: section.settings.reports_empty_label, heading: section.settings.reports_empty_heading, copy: section.settings.reports_empty_copy, modifier: 'report' %}{%- endif -%}
-      </div>
+        {%- endif -%}
+      {%- endcapture -%}
+      {%- if recaps_rendered > 0 -%}
+        <div class="msc-report-panel msc-glass-card">
+          {% render 'msc-section-header', kicker: section.settings.reports_kicker, heading: section.settings.reports_heading, copy: section.settings.reports_copy, heading_id: 'MscExploreReports-' | append: section.id %}
+          <div class="msc-report-panel__list">{{ recap_rows }}</div>
+        </div>
+      {%- else -%}
+        <div class="msc-explore-chapter msc-explore-chapter--reports">
+          <div class="msc-explore-chapter__intro">
+            {% render 'msc-section-header', kicker: section.settings.reports_kicker, heading: section.settings.reports_heading, copy: section.settings.reports_copy, heading_id: 'MscExploreReports-' | append: section.id %}
+          </div>
+          <div class="msc-explore-chapter__content">
+            {% render 'msc-explore-empty-state', label: section.settings.reports_empty_label, heading: section.settings.reports_empty_heading, copy: section.settings.reports_empty_copy, modifier: 'report' %}
+          </div>
+        </div>
+      {%- endif -%}
     </div>
 
     {%- if section.settings.show_recent and recent_count > 0 -%}<div class="msc-block" aria-labelledby="MscExploreRecent-{{ section.id }}">{% render 'msc-section-header', kicker: section.settings.recent_kicker, heading: section.settings.recent_heading, heading_id: 'MscExploreRecent-' | append: section.id %}<div class="msc-update-list">{%- for block in section.blocks -%}{%- if block.type == 'recent' -%}<div class="msc-update-row msc-glass-card"><strong>{{ block.settings.title | escape }}</strong><span>{{ block.settings.note | escape }}</span></div>{%- endif -%}{%- endfor -%}</div></div>{%- endif -%}
