@@ -1,8 +1,18 @@
 {% comment %}Accepts: title, description, link, meta{% endcomment %}
-<a class="msc-category-card msc-glass-card" href="{{ link | default: '#MainContent' }}" data-current="{{ meta | default: 'Index' | handleize }}">
+{%- assign has_link = false -%}
+{%- if link != blank -%}{%- assign has_link = true -%}{%- endif -%}
+{%- if has_link -%}
+  <a class="msc-category-card msc-category-card--link msc-glass-card" href="{{ link }}" data-current="{{ meta | default: 'Index' | handleize }}">
+{%- else -%}
+  <article class="msc-category-card msc-category-card--static msc-glass-card" data-current="{{ meta | default: 'Index' | handleize }}">
+{%- endif -%}
   <span class="msc-category-card__marker" aria-hidden="true"></span>
   <span class="msc-category-card__meta">{{ meta | default: 'Index' | escape }}</span>
   <span class="msc-category-card__title">{{ title | escape }}</span>
   {%- if description != blank -%}<span class="msc-category-card__description">{{ description | escape }}</span>{%- endif -%}
-  <span class="msc-card-arrow" aria-hidden="true">Browse →</span>
-</a>
+  {%- if has_link -%}<span class="msc-card-arrow" aria-hidden="true">Browse →</span>{%- endif -%}
+{%- if has_link -%}
+  </a>
+{%- else -%}
+  </article>
+{%- endif -%}

@@ -1,0 +1,7 @@
+{% comment %}Accepts: label, heading, copy, modifier{% endcomment %}
+<div class="msc-explore-empty-state{% if modifier != blank %} msc-explore-empty-state--{{ modifier }}{% endif %} msc-glass-card">
+  <div class="msc-explore-empty-state__mark" aria-hidden="true"></div>
+  {%- if label != blank -%}<p class="msc-explore-empty-state__label">{{ label | escape }}</p>{%- endif -%}
+  {%- if heading != blank -%}<h3>{{ heading | escape }}</h3>{%- endif -%}
+  {%- if copy != blank -%}<p class="msc-explore-empty-state__copy">{{ copy | escape }}</p>{%- endif -%}
+</div>
