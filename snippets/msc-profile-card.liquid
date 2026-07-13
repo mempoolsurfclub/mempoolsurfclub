@@ -1,10 +1,12 @@
-{% comment %}Accepts: title, role, description, link, tag{% endcomment %}
+{% comment %}Accepts: title, role, description, link, tag, image{% endcomment %}
 <article class="msc-profile-card msc-glass-card">
-  <a class="msc-profile-card__link" href="{{ link | default: '#MainContent' }}">
-    <span class="msc-profile-card__orb" aria-hidden="true"></span>
+  {%- if link != blank -%}<a class="msc-profile-card__link" href="{{ link }}">{%- else -%}<div class="msc-profile-card__link msc-profile-card__link--static">{%- endif -%}
+    {%- if image != blank -%}
+      <div class="msc-profile-card__media">{{ image | image_url: width: 720 | image_tag: loading: 'lazy', alt: title }}</div>
+    {%- endif -%}
     <span class="msc-profile-card__tag">{{ tag | default: 'Profile' | escape }}</span>
     <h3>{{ title | escape }}</h3>
     {%- if role != blank -%}<p class="msc-profile-card__role">{{ role | escape }}</p>{%- endif -%}
     {%- if description != blank -%}<p class="msc-profile-card__description">{{ description | escape }}</p>{%- endif -%}
-  </a>
+  {%- if link != blank -%}</a>{%- else -%}</div>{%- endif -%}
 </article>

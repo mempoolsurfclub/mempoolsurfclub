@@ -1,9 +1,15 @@
-{% comment %}Accepts: title, dek, label, link, size, meta{% endcomment %}
-<article class="msc-editorial-card msc-editorial-card--{{ size | default: 'standard' }} msc-glass-card">
-  <a class="msc-editorial-card__link" href="{{ link | default: '#MainContent' }}">
+{% comment %}Accepts: title, dek, label, link, size, meta, image{% endcomment %}
+{%- assign card_size = size | default: 'standard' -%}
+<article class="msc-editorial-card msc-editorial-card--{{ card_size }} msc-glass-card">
+  {%- if link != blank -%}<a class="msc-editorial-card__link" href="{{ link }}">{%- else -%}<div class="msc-editorial-card__link msc-editorial-card__link--static">{%- endif -%}
+    {%- if image != blank -%}
+      <div class="msc-editorial-card__media">{{ image | image_url: width: 1200 | image_tag: loading: 'lazy', alt: title }}</div>
+    {%- else -%}
+      <div class="msc-editorial-card__archive" aria-hidden="true"><span>MSC</span><i></i><i></i><i></i></div>
+    {%- endif -%}
     <span class="msc-editorial-card__label">{{ label | default: 'Editorial' | escape }}</span>
     <h3>{{ title | escape }}</h3>
     {%- if dek != blank -%}<p>{{ dek | escape }}</p>{%- endif -%}
     {%- if meta != blank -%}<span class="msc-editorial-card__meta">{{ meta | escape }}</span>{%- endif -%}
-  </a>
+  {%- if link != blank -%}</a>{%- else -%}</div>{%- endif -%}
 </article>
