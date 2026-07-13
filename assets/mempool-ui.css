@@ -1496,8 +1496,10 @@ body { background: var(--msc-paper-soft); }
 }
 
 .msc-rotating-signal__indicator {
+  flex: 0 0 auto;
   width: .82rem;
   height: .82rem;
+  margin: 0;
   border-radius: 999px;
   background: var(--msc-sand);
   box-shadow: 0 0 0 .42rem rgba(212, 190, 153, .1), 0 0 1.6rem rgba(212, 190, 153, .36);
@@ -1507,13 +1509,17 @@ body { background: var(--msc-paper-soft); }
 .msc-rotating-signal__phrases {
   position: relative;
   display: grid;
+  align-items: center;
   min-width: 31ch;
   min-height: 1.2em;
+  line-height: 1.2;
 }
 
 .msc-rotating-signal__phrases span {
   grid-area: 1 / 1;
+  align-self: center;
   opacity: 0;
+  line-height: inherit;
   white-space: nowrap;
   animation: mscSignalPhrase 15s ease-in-out infinite;
 }
@@ -1554,24 +1560,6 @@ body { background: var(--msc-paper-soft); }
   background: conic-gradient(from 20deg, transparent 0deg, rgba(212, 190, 153, .16) 14deg, rgba(212, 190, 153, .38) 28deg, transparent 58deg);
   opacity: .62;
 }
-
-.msc-signal-field__connections {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.msc-signal-field__connections path {
-  fill: none;
-  stroke: rgba(212, 190, 153, .42);
-  stroke-width: .42;
-  vector-effect: non-scaling-stroke;
-}
-
-.msc-signal-field__connections .msc-signal-field__connection--soft { opacity: .45; }
 
 .msc-signal-field__node {
   z-index: 3;
@@ -1718,11 +1706,22 @@ body { background: var(--msc-paper-soft); }
   border-radius: inherit;
   background: conic-gradient(from 20deg, transparent 0deg, rgba(212, 190, 153, .14) 14deg, rgba(212, 190, 153, .32) 28deg, transparent 58deg);
   opacity: .58;
+  transform-origin: 50% 50%;
   animation: mscSweep 10s linear infinite;
 }
 
-.msc-signal-field__connections {
+.msc-signal-field__bitcoin-mark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
   z-index: 2;
+  transform: translate(-50%, -50%);
+  color: var(--msc-sand);
+  font-size: clamp(1.8rem, 2.4vw, 2.4rem);
+  font-weight: 780;
+  line-height: 1;
+  text-shadow: 0 0 1.2rem rgba(212, 190, 153, .38);
+  pointer-events: none;
 }
 
 .msc-signal-field__node {
