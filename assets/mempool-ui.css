@@ -1380,7 +1380,7 @@ body { background: var(--msc-paper-soft); }
 
 .msc-gateway-card h3 {
   margin: 3.4rem 0 1rem;
-  color: var(--msc-paper-soft);
+  color: var(--msc-sand);
   font-size: clamp(2.4rem, 2.5vw, 3.4rem);
   letter-spacing: -.05em;
 }
@@ -1753,6 +1753,7 @@ body { background: var(--msc-paper-soft); }
 
 .msc-home-gateway .msc-section-title {
   max-width: 20ch;
+  color: var(--msc-sand);
   text-wrap: balance;
 }
 
@@ -1764,6 +1765,10 @@ body { background: var(--msc-paper-soft); }
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+}
+
+.msc-network-preview__copy .msc-section-title {
+  color: var(--msc-sand);
 }
 
 .msc-network-preview__copy .rte {
@@ -1778,6 +1783,7 @@ body { background: var(--msc-paper-soft); }
   display: inline-flex;
   width: fit-content;
   margin-top: 2.1rem;
+  color: var(--msc-sand);
 }
 
 .msc-network-preview__signals li {
