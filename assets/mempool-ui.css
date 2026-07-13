@@ -729,9 +729,9 @@
 .msc-discovery-map__node[href] { cursor: pointer; transition: border-color .2s ease, background .2s ease; }
 .msc-discovery-map__node[href]:hover { border-color: rgba(212,190,153,.66); background: rgba(16,40,45,.9); }
 .msc-discovery-map__node[href]:focus-visible { outline: 2px solid var(--msc-sand); outline-offset: 4px; }
-.msc-discovery-map__node--companies { left: 20%; top: 64%; }
-.msc-discovery-map__node--art { left: 44%; top: 52%; }
-.msc-discovery-map__node--builders { left: 66%; top: 30%; }
+.msc-discovery-map__node--companies { left: 17%; top: 64%; }
+.msc-discovery-map__node--art { left: 41%; top: 52%; }
+.msc-discovery-map__node--builders { left: 63%; top: 30%; }
 .msc-explore-categories { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 1rem; margin-top: 4rem; }
 .msc-category-card, .msc-editorial-card__link, .msc-profile-card__link { color: inherit; text-decoration: none; }
 .msc-category-card { display: flex; flex-direction: column; min-height: 17rem; padding: 1.6rem; transition: transform .2s ease, border-color .2s ease, background .2s ease; }
@@ -821,9 +821,9 @@
   .msc-discovery-map__field { min-height: 24rem; border-radius: 18px; }
   .msc-discovery-map__header { font-size: .92rem; }
   .msc-discovery-map__chart { inset: 10% 2% 9%; width: 96%; height: 81%; }
-  .msc-discovery-map__node--companies { left: 18%; top: 64%; }
-  .msc-discovery-map__node--art { left: 42%; top: 52%; }
-  .msc-discovery-map__node--builders { left: 64%; top: 30%; }
+  .msc-discovery-map__node--companies { left: 15%; top: 64%; }
+  .msc-discovery-map__node--art { left: 39%; top: 52%; }
+  .msc-discovery-map__node--builders { left: 61%; top: 30%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2095,9 +2095,9 @@ body { background: var(--msc-paper-soft); }
   min-width: 0;
 }
 
-.msc-discovery-map__node--companies { left: 20%; top: 64%; }
-.msc-discovery-map__node--art { left: 44%; top: 52%; }
-.msc-discovery-map__node--builders { left: 66%; top: 30%; }
+.msc-discovery-map__node--companies { left: 17%; top: 64%; }
+.msc-discovery-map__node--art { left: 41%; top: 52%; }
+.msc-discovery-map__node--builders { left: 63%; top: 30%; }
 
 .msc-category-card {
   height: 100%;
@@ -2134,17 +2134,17 @@ body { background: var(--msc-paper-soft); }
 }
 
 @media screen and (max-width: 990px) {
-  .msc-discovery-map__node--companies { left: 18%; top: 64%; }
-  .msc-discovery-map__node--art { left: 42%; top: 52%; }
-  .msc-discovery-map__node--builders { left: 64%; top: 30%; }
+  .msc-discovery-map__node--companies { left: 15%; top: 64%; }
+  .msc-discovery-map__node--art { left: 39%; top: 52%; }
+  .msc-discovery-map__node--builders { left: 61%; top: 30%; }
 }
 
 @media screen and (max-width: 640px) {
   .msc-discovery-map__header { font-size: .84rem; gap: .45rem .8rem; }
   .msc-discovery-map__node { padding: .5rem .68rem; font-size: .82rem; }
   .msc-discovery-map__node i { width: .52rem; height: .52rem; }
-  .msc-discovery-map__node--companies { left: 8%; top: 65%; }
-  .msc-discovery-map__node--art { left: 39%; top: 51%; }
-  .msc-discovery-map__node--builders { left: 55%; top: 31%; }
+  .msc-discovery-map__node--companies { left: 5%; top: 65%; }
+  .msc-discovery-map__node--art { left: 36%; top: 51%; }
+  .msc-discovery-map__node--builders { left: 52%; top: 31%; }
   .msc-category-card .msc-card-arrow { font-size: 1.08rem; }
 }
