@@ -6,7 +6,6 @@
 {%- else -%}
   <article class="msc-category-card msc-category-card--static msc-glass-card" data-current="{{ meta | default: 'Index' | handleize }}">
 {%- endif -%}
-  <span class="msc-category-card__marker" aria-hidden="true"></span>
   <span class="msc-category-card__meta">{{ meta | default: 'Index' | escape }}</span>
   <span class="msc-category-card__title">{{ title | escape }}</span>
   {%- if description != blank -%}<span class="msc-category-card__description">{{ description | escape }}</span>{%- endif -%}
