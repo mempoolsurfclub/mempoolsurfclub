@@ -1,12 +1,16 @@
-{% comment %}Accepts: title, role, description, link, tag, image{% endcomment %}
+{% comment %}Accepts: article, tag{% endcomment %}
+{%- assign summary = article.excerpt | default: article.excerpt_or_content | strip_html | truncatewords: 22 -%}
+{%- assign image_alt = article.image.alt | default: article.title -%}
 <article class="msc-profile-card msc-glass-card">
-  {%- if link != blank -%}<a class="msc-profile-card__link" href="{{ link }}">{%- else -%}<div class="msc-profile-card__link msc-profile-card__link--static">{%- endif -%}
-    {%- if image != blank -%}
-      <div class="msc-profile-card__media">{{ image | image_url: width: 720 | image_tag: loading: 'lazy', alt: title }}</div>
+  <a class="msc-profile-card__link" href="{{ article.url }}" aria-label="Read {{ article.title | escape }}">
+    {%- if article.image != blank -%}
+      <div class="msc-profile-card__media">{{ article.image | image_url: width: 720 | image_tag: loading: 'lazy', alt: image_alt }}</div>
+    {%- else -%}
+      <div class="msc-profile-card__orb" aria-hidden="true"></div>
     {%- endif -%}
     <span class="msc-profile-card__tag">{{ tag | default: 'Profile' | escape }}</span>
-    <h3>{{ title | escape }}</h3>
-    {%- if role != blank -%}<p class="msc-profile-card__role">{{ role | escape }}</p>{%- endif -%}
-    {%- if description != blank -%}<p class="msc-profile-card__description">{{ description | escape }}</p>{%- endif -%}
-  {%- if link != blank -%}</a>{%- else -%}</div>{%- endif -%}
+    <h3>{{ article.title | escape }}</h3>
+    <time class="msc-profile-card__role" datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%b %-d, %Y' }}</time>
+    {%- if summary != blank -%}<p class="msc-profile-card__description">{{ summary | escape }}</p>{%- endif -%}
+  </a>
 </article>

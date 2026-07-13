@@ -1,18 +1,13 @@
 {{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
 
 {%- assign search_input_id = 'MscExploreSearchInput-' | append: section.id -%}
-{%- assign editorial_count = 0 -%}
-{%- assign profile_count = 0 -%}
-{%- assign report_count = 0 -%}
 {%- assign recent_count = 0 -%}
 {%- for block in section.blocks -%}
-  {%- case block.type -%}
-    {%- when 'editorial' -%}{%- assign editorial_count = editorial_count | plus: 1 -%}
-    {%- when 'profile' -%}{%- assign profile_count = profile_count | plus: 1 -%}
-    {%- when 'report' -%}{%- assign report_count = report_count | plus: 1 -%}
-    {%- when 'recent' -%}{%- assign recent_count = recent_count | plus: 1 -%}
-  {%- endcase -%}
+  {%- if block.type == 'recent' -%}{%- assign recent_count = recent_count | plus: 1 -%}{%- endif -%}
 {%- endfor -%}
+{%- assign content_blog = section.settings.content_blog -%}
+{%- assign breaking_window_seconds = section.settings.breaking_news_hours | times: 3600 -%}
+{%- assign current_timestamp = 'now' | date: '%s' | plus: 0 -%}
 
 <section class="msc-shell msc-explore" id="MscExplore-{{ section.id }}">
   <div class="msc-container">
@@ -20,11 +15,7 @@
       <div class="msc-explore-hero__content">
         <div class="msc-eyebrow msc-rotating-signal" aria-label="{{ section.settings.signal_phrase_1 | escape }}">
           <span class="msc-rotating-signal__indicator" aria-hidden="true"></span>
-          <span class="msc-rotating-signal__phrases">
-            <span>{{ section.settings.signal_phrase_1 | escape }}</span>
-            <span>{{ section.settings.signal_phrase_2 | escape }}</span>
-            <span>{{ section.settings.signal_phrase_3 | escape }}</span>
-          </span>
+          <span class="msc-rotating-signal__phrases"><span>{{ section.settings.signal_phrase_1 | escape }}</span><span>{{ section.settings.signal_phrase_2 | escape }}</span><span>{{ section.settings.signal_phrase_3 | escape }}</span></span>
         </div>
         <h1 class="msc-title msc-explore-hero__title">{{ section.settings.heading | escape }}</h1>
         <div class="msc-subtitle msc-explore-hero__copy rte">{{ section.settings.supporting_copy }}</div>
@@ -33,54 +24,34 @@
       <div class="msc-discovery-map msc-glass-card" aria-label="Bitcoin Culture Wave Map visual">
         <div class="msc-discovery-map__header"><span>Bitcoin Culture Wave Map</span><span>Current Index</span></div>
         <div class="msc-discovery-map__field">
-          <svg class="msc-discovery-map__chart" viewBox="0 0 720 420" preserveAspectRatio="none" focusable="false" aria-hidden="true">
-            <path class="msc-discovery-map__wave msc-discovery-map__wave--macro" d="M 24 244 C 110 118 208 118 294 244 S 478 370 568 244 S 662 145 696 176" />
-            <path class="msc-discovery-map__wave msc-discovery-map__wave--ripple" d="M 20 166 C 52 126 84 126 116 166 S 180 206 212 166 S 276 126 308 166 S 372 206 404 166 S 468 126 500 166 S 564 206 596 166 S 660 126 700 166" />
-            <path class="msc-discovery-map__wave msc-discovery-map__wave--current" d="M 28 306 C 116 274 154 214 224 226 C 316 242 332 326 424 300 C 504 278 532 202 610 214 C 648 220 674 244 700 268" />
-          </svg>
-          {%- if section.settings.map_companies_link != blank -%}
-            <a class="msc-discovery-map__node msc-discovery-map__node--companies" href="{{ section.settings.map_companies_link }}">
-          {%- else -%}
-            <span class="msc-discovery-map__node msc-discovery-map__node--companies">
-          {%- endif -%}
-            <i aria-hidden="true"></i><strong>Companies</strong>
-          {%- if section.settings.map_companies_link != blank -%}</a>{%- else -%}</span>{%- endif -%}
-          {%- if section.settings.map_art_link != blank -%}
-            <a class="msc-discovery-map__node msc-discovery-map__node--art" href="{{ section.settings.map_art_link }}">
-          {%- else -%}
-            <span class="msc-discovery-map__node msc-discovery-map__node--art">
-          {%- endif -%}
-            <i aria-hidden="true"></i><strong>Art</strong>
-          {%- if section.settings.map_art_link != blank -%}</a>{%- else -%}</span>{%- endif -%}
-          {%- if section.settings.map_builders_link != blank -%}
-            <a class="msc-discovery-map__node msc-discovery-map__node--builders" href="{{ section.settings.map_builders_link }}">
-          {%- else -%}
-            <span class="msc-discovery-map__node msc-discovery-map__node--builders">
-          {%- endif -%}
-            <i aria-hidden="true"></i><strong>Builders</strong>
-          {%- if section.settings.map_builders_link != blank -%}</a>{%- else -%}</span>{%- endif -%}
+          <svg class="msc-discovery-map__chart" viewBox="0 0 720 420" preserveAspectRatio="none" focusable="false" aria-hidden="true"><path class="msc-discovery-map__wave msc-discovery-map__wave--macro" d="M 24 244 C 110 118 208 118 294 244 S 478 370 568 244 S 662 145 696 176" /><path class="msc-discovery-map__wave msc-discovery-map__wave--ripple" d="M 20 166 C 52 126 84 126 116 166 S 180 206 212 166 S 276 126 308 166 S 372 206 404 166 S 468 126 500 166 S 564 206 596 166 S 660 126 700 166" /><path class="msc-discovery-map__wave msc-discovery-map__wave--current" d="M 28 306 C 116 274 154 214 224 226 C 316 242 332 326 424 300 C 504 278 532 202 610 214 C 648 220 674 244 700 268" /></svg>
+          {%- if section.settings.map_companies_link != blank -%}<a class="msc-discovery-map__node msc-discovery-map__node--companies" href="{{ section.settings.map_companies_link }}">{%- else -%}<span class="msc-discovery-map__node msc-discovery-map__node--companies">{%- endif -%}<i aria-hidden="true"></i><strong>Companies</strong>{%- if section.settings.map_companies_link != blank -%}</a>{%- else -%}</span>{%- endif -%}
+          {%- if section.settings.map_art_link != blank -%}<a class="msc-discovery-map__node msc-discovery-map__node--art" href="{{ section.settings.map_art_link }}">{%- else -%}<span class="msc-discovery-map__node msc-discovery-map__node--art">{%- endif -%}<i aria-hidden="true"></i><strong>Art</strong>{%- if section.settings.map_art_link != blank -%}</a>{%- else -%}</span>{%- endif -%}
+          {%- if section.settings.map_builders_link != blank -%}<a class="msc-discovery-map__node msc-discovery-map__node--builders" href="{{ section.settings.map_builders_link }}">{%- else -%}<span class="msc-discovery-map__node msc-discovery-map__node--builders">{%- endif -%}<i aria-hidden="true"></i><strong>Builders</strong>{%- if section.settings.map_builders_link != blank -%}</a>{%- else -%}</span>{%- endif -%}
         </div>
       </div>
     </div>
 
     <nav class="msc-explore-categories" aria-label="Explore categories">
-      {%- for block in section.blocks -%}
-        {%- if block.type == 'category' -%}
-          {% render 'msc-category-card', title: block.settings.title, description: block.settings.description, link: block.settings.link, meta: block.settings.meta, action_label: block.settings.action_label %}
-        {%- endif -%}
-      {%- endfor -%}
+      {%- for block in section.blocks -%}{%- if block.type == 'category' -%}{% render 'msc-category-card', title: block.settings.title, description: block.settings.description, link: block.settings.link, meta: block.settings.meta, action_label: block.settings.action_label %}{%- endif -%}{%- endfor -%}
     </nav>
 
     <div class="msc-block" aria-labelledby="MscExploreEditorials-{{ section.id }}">
-      {%- if editorial_count > 0 -%}
-        {% render 'msc-section-header', kicker: section.settings.editorial_kicker, heading: section.settings.editorial_heading, copy: section.settings.editorial_copy, heading_id: 'MscExploreEditorials-' | append: section.id %}
-        <div class="msc-editorial-layout">
-          {%- for block in section.blocks -%}
-            {%- if block.type == 'editorial' -%}
-              {% render 'msc-editorial-card', title: block.settings.title, dek: block.settings.dek, label: block.settings.label, link: block.settings.link, meta: block.settings.meta, size: block.settings.size, image: block.settings.image %}
-            {%- endif -%}
+      {%- assign stories_rendered = 0 -%}
+      {%- capture stories_cards -%}
+        {%- if content_blog != blank and content_blog.articles_count > 0 -%}
+          {%- for article in content_blog.articles -%}
+            {%- if stories_rendered >= section.settings.stories_limit -%}{%- break -%}{%- endif -%}
+            {%- assign article_tag_handles = '|' -%}{%- for tag in article.tags -%}{%- assign article_tag_handles = article_tag_handles | append: tag | handleize | append: '|' -%}{%- endfor -%}
+            {%- assign primary_label = '' -%}{%- assign breaking_handle = section.settings.breaking_news_tag | handleize | prepend: '|' | append: '|' -%}{%- assign weekly_handle = section.settings.weekly_recaps_tag | handleize | prepend: '|' | append: '|' -%}{%- assign interviews_handle = section.settings.interviews_tag | handleize | prepend: '|' | append: '|' -%}{%- assign highlights_handle = section.settings.highlights_tag | handleize | prepend: '|' | append: '|' -%}{%- assign community_handle = section.settings.community_tag | handleize | prepend: '|' | append: '|' -%}
+            {%- if article_tag_handles contains breaking_handle -%}{%- assign primary_label = section.settings.breaking_news_tag -%}{%- elsif article_tag_handles contains weekly_handle -%}{%- assign primary_label = section.settings.weekly_recaps_tag -%}{%- elsif article_tag_handles contains interviews_handle -%}{%- assign primary_label = section.settings.interviews_tag -%}{%- elsif article_tag_handles contains highlights_handle -%}{%- assign primary_label = section.settings.highlights_tag -%}{%- elsif article_tag_handles contains community_handle -%}{%- assign primary_label = section.settings.community_tag -%}{%- endif -%}
+            {%- if primary_label != blank -%}{%- assign is_visible_breaking = true -%}{%- if primary_label == section.settings.breaking_news_tag -%}{%- assign article_timestamp = article.published_at | date: '%s' | plus: 0 -%}{%- assign article_age = current_timestamp | minus: article_timestamp -%}{%- if article_age > breaking_window_seconds -%}{%- assign is_visible_breaking = false -%}{%- endif -%}{%- endif -%}{%- if is_visible_breaking -%}{%- assign stories_rendered = stories_rendered | plus: 1 -%}{%- assign story_card_size = 'standard' -%}{%- if stories_rendered == 1 -%}{%- assign story_card_size = 'lead' -%}{%- endif -%}{% render 'msc-editorial-card', article: article, label: primary_label, size: story_card_size %}{%- endif -%}{%- endif -%}
           {%- endfor -%}
-        </div>
+        {%- endif -%}
+      {%- endcapture -%}
+      {%- if stories_rendered > 0 -%}
+        {% render 'msc-section-header', kicker: section.settings.editorial_kicker, heading: section.settings.editorial_heading, copy: section.settings.editorial_copy, heading_id: 'MscExploreEditorials-' | append: section.id %}
+        <div class="msc-editorial-layout">{{ stories_cards }}</div>
       {%- else -%}
         <div class="msc-explore-chapter">
           <div class="msc-explore-chapter__intro">
@@ -94,15 +65,22 @@
     </div>
 
     <div class="msc-block" aria-labelledby="MscExploreDiscovery-{{ section.id }}">
-      {%- if profile_count > 0 -%}
-        {% render 'msc-section-header', kicker: section.settings.discovery_kicker, heading: section.settings.discovery_heading, copy: section.settings.discovery_copy, heading_id: 'MscExploreDiscovery-' | append: section.id %}
-        <div class="msc-profile-grid">
-          {%- for block in section.blocks -%}
-            {%- if block.type == 'profile' -%}
-              {% render 'msc-profile-card', title: block.settings.title, role: block.settings.role, description: block.settings.description, link: block.settings.link, tag: block.settings.tag, image: block.settings.image %}
-            {%- endif -%}
+      {%- assign culture_rendered = 0 -%}
+      {%- capture culture_cards -%}
+        {%- if content_blog != blank and content_blog.articles_count > 0 -%}
+          {%- for article in content_blog.articles -%}
+            {%- if culture_rendered >= section.settings.culture_index_limit -%}{%- break -%}{%- endif -%}
+            {%- assign article_tag_handles = '|' -%}{%- for tag in article.tags -%}{%- assign article_tag_handles = article_tag_handles | append: tag | handleize | append: '|' -%}{%- endfor -%}
+            {%- assign primary_label = '' -%}{%- assign breaking_handle = section.settings.breaking_news_tag | handleize | prepend: '|' | append: '|' -%}{%- assign weekly_handle = section.settings.weekly_recaps_tag | handleize | prepend: '|' | append: '|' -%}{%- assign interviews_handle = section.settings.interviews_tag | handleize | prepend: '|' | append: '|' -%}{%- assign highlights_handle = section.settings.highlights_tag | handleize | prepend: '|' | append: '|' -%}{%- assign community_handle = section.settings.community_tag | handleize | prepend: '|' | append: '|' -%}
+            {%- if article_tag_handles contains breaking_handle -%}{%- assign primary_label = section.settings.breaking_news_tag -%}{%- elsif article_tag_handles contains weekly_handle -%}{%- assign primary_label = section.settings.weekly_recaps_tag -%}{%- elsif article_tag_handles contains interviews_handle -%}{%- assign primary_label = section.settings.interviews_tag -%}{%- elsif article_tag_handles contains highlights_handle -%}{%- assign primary_label = section.settings.highlights_tag -%}{%- elsif article_tag_handles contains community_handle -%}{%- assign primary_label = section.settings.community_tag -%}{%- endif -%}
+            {%- assign culture_label = '' -%}{%- assign culture_routing_tags = section.settings.culture_index_tags | split: ',' -%}{%- if primary_label != blank -%}{%- for routing_tag in culture_routing_tags -%}{%- assign routing_tag_clean = routing_tag | strip -%}{%- if routing_tag_clean != blank -%}{%- assign routing_handle = routing_tag_clean | handleize | prepend: '|' | append: '|' -%}{%- if article_tag_handles contains routing_handle and culture_label == blank -%}{%- assign culture_label = routing_tag_clean -%}{%- endif -%}{%- endif -%}{%- endfor -%}{%- endif -%}
+            {%- if culture_label != blank -%}{%- assign is_visible_breaking = true -%}{%- if primary_label == section.settings.breaking_news_tag -%}{%- assign article_timestamp = article.published_at | date: '%s' | plus: 0 -%}{%- assign article_age = current_timestamp | minus: article_timestamp -%}{%- if article_age > breaking_window_seconds -%}{%- assign is_visible_breaking = false -%}{%- endif -%}{%- endif -%}{%- if is_visible_breaking -%}{%- assign culture_rendered = culture_rendered | plus: 1 -%}{% render 'msc-profile-card', article: article, tag: culture_label %}{%- endif -%}{%- endif -%}
           {%- endfor -%}
-        </div>
+        {%- endif -%}
+      {%- endcapture -%}
+      {%- if culture_rendered > 0 -%}
+        {% render 'msc-section-header', kicker: section.settings.discovery_kicker, heading: section.settings.discovery_heading, copy: section.settings.discovery_copy, heading_id: 'MscExploreDiscovery-' | append: section.id %}
+        <div class="msc-profile-grid">{{ culture_cards }}</div>
       {%- else -%}
         <div class="msc-explore-chapter">
           <div class="msc-explore-chapter__intro">
@@ -116,20 +94,17 @@
     </div>
 
     <div class="msc-block" aria-labelledby="MscExploreReports-{{ section.id }}">
-      {%- if report_count > 0 -%}
+      {%- assign recaps_rendered = 0 -%}
+      {%- capture recap_rows -%}
+        {%- if content_blog != blank and content_blog.articles_count > 0 -%}
+          {%- assign weekly_handle = section.settings.weekly_recaps_tag | handleize | prepend: '|' | append: '|' -%}
+          {%- for article in content_blog.articles -%}{%- if recaps_rendered >= section.settings.weekly_recaps_limit -%}{%- break -%}{%- endif -%}{%- assign article_tag_handles = '|' -%}{%- for tag in article.tags -%}{%- assign article_tag_handles = article_tag_handles | append: tag | handleize | append: '|' -%}{%- endfor -%}{%- if article_tag_handles contains weekly_handle -%}{%- assign recaps_rendered = recaps_rendered | plus: 1 -%}{% render 'msc-explore-recap-row', article: article, primary_tag: section.settings.weekly_recaps_tag %}{%- endif -%}{%- endfor -%}
+        {%- endif -%}
+      {%- endcapture -%}
+      {%- if recaps_rendered > 0 -%}
         <div class="msc-report-panel msc-glass-card">
           {% render 'msc-section-header', kicker: section.settings.reports_kicker, heading: section.settings.reports_heading, copy: section.settings.reports_copy, heading_id: 'MscExploreReports-' | append: section.id %}
-          <div class="msc-report-panel__list">
-            {%- for block in section.blocks -%}
-              {%- if block.type == 'report' -%}
-                {%- if block.settings.link != blank -%}
-                  <a class="msc-report-row" href="{{ block.settings.link }}"><span>{{ block.settings.month | escape }}</span><strong>{{ block.settings.title | escape }}</strong><em>{{ block.settings.status | escape }}</em><b>Read report →</b></a>
-                {%- else -%}
-                  <article class="msc-report-row"><span>{{ block.settings.month | escape }}</span><strong>{{ block.settings.title | escape }}</strong><em>{{ block.settings.status | escape }}</em></article>
-                {%- endif -%}
-              {%- endif -%}
-            {%- endfor -%}
-          </div>
+          <div class="msc-report-panel__list">{{ recap_rows }}</div>
         </div>
       {%- else -%}
         <div class="msc-explore-chapter msc-explore-chapter--reports">
@@ -143,18 +118,7 @@
       {%- endif -%}
     </div>
 
-    {%- if section.settings.show_recent and recent_count > 0 -%}
-      <div class="msc-block" aria-labelledby="MscExploreRecent-{{ section.id }}">
-        {% render 'msc-section-header', kicker: section.settings.recent_kicker, heading: section.settings.recent_heading, heading_id: 'MscExploreRecent-' | append: section.id %}
-        <div class="msc-update-list">
-          {%- for block in section.blocks -%}
-            {%- if block.type == 'recent' -%}
-              <div class="msc-update-row msc-glass-card"><strong>{{ block.settings.title | escape }}</strong><span>{{ block.settings.note | escape }}</span></div>
-            {%- endif -%}
-          {%- endfor -%}
-        </div>
-      </div>
-    {%- endif -%}
+    {%- if section.settings.show_recent and recent_count > 0 -%}<div class="msc-block" aria-labelledby="MscExploreRecent-{{ section.id }}">{% render 'msc-section-header', kicker: section.settings.recent_kicker, heading: section.settings.recent_heading, heading_id: 'MscExploreRecent-' | append: section.id %}<div class="msc-update-list">{%- for block in section.blocks -%}{%- if block.type == 'recent' -%}<div class="msc-update-row msc-glass-card"><strong>{{ block.settings.title | escape }}</strong><span>{{ block.settings.note | escape }}</span></div>{%- endif -%}{%- endfor -%}</div></div>{%- endif -%}
   </div>
 </section>
 
@@ -164,47 +128,342 @@
   "tag": "section",
   "class": "section",
   "settings": [
-    {"type":"text","id":"signal_phrase_1","label":"Signal phrase 1","default":"SCANNING THE BITCOIN ECOSYSTEM"},
-    {"type":"text","id":"signal_phrase_2","label":"Signal phrase 2","default":"READING NETWORK + CULTURE SIGNALS"},
-    {"type":"text","id":"signal_phrase_3","label":"Signal phrase 3","default":"WATCHING THE MEMPOOL"},
-    {"type":"text","id":"heading","label":"Heading","default":"EXPLORE THE ECOSYSTEM."},
-    {"type":"richtext","id":"supporting_copy","label":"Supporting copy","default":"<p>Bitcoin moves in waves through art, code, people, projects, and ideas. Explore the cultural signals shaping the same ocean.</p>"},
-    {"type":"text","id":"search_label","label":"Search accessible label","default":"Search the Bitcoin culture index"},
-    {"type":"text","id":"search_placeholder","label":"Search placeholder","default":"Search artists, founders, companies, projects, reports..."},
-    {"type":"text","id":"search_button","label":"Search button","default":"Search"},
-    {"type":"text","id":"search_types","label":"Shopify search types","default":"article,page,product"},
-    {"type":"url","id":"map_companies_link","label":"Companies page"},
-    {"type":"url","id":"map_art_link","label":"Art page"},
-    {"type":"url","id":"map_builders_link","label":"Builders page"},
-    {"type":"text","id":"editorial_kicker","label":"Editorial kicker","default":"Signals From the Culture"},
-    {"type":"text","id":"editorial_heading","label":"Editorial heading","default":"Stories moving through the Bitcoin ocean."},
-    {"type":"richtext","id":"editorial_copy","label":"Editorial copy","default":"<p>Essays, interviews, explainers, and field notes mapping the ideas gathering momentum across Bitcoin culture.</p>"},
-    {"type":"text","id":"discovery_kicker","label":"Discovery kicker","default":"People Behind the Current"},
-    {"type":"text","id":"discovery_heading","label":"Discovery heading","default":"Artists, founders, companies, and projects shaping the next wave."},
-    {"type":"richtext","id":"discovery_copy","label":"Discovery copy","default":"<p>Profiles of the artists, founders, companies, and projects shaping Bitcoin culture.</p>"},
-    {"type":"text","id":"reports_kicker","label":"Reports kicker","default":"On-Chain Swell Report"},
-    {"type":"text","id":"reports_heading","label":"Reports heading","default":"Monthly readings from the network."},
-    {"type":"richtext","id":"reports_copy","label":"Reports copy","default":"<p>Clear monthly context drawn from verified network observations and cultural signals.</p>"},
-    {"type":"checkbox","id":"show_recent","label":"Show Recently Added section","default":false},
-    {"type":"text","id":"editorial_empty_label","label":"Stories empty-state label","default":"FIELD REPORTS"},
-    {"type":"text","id":"editorial_empty_heading","label":"Stories empty-state heading","default":"The first stories are taking shape."},
-    {"type":"textarea","id":"editorial_empty_copy","label":"Stories empty-state copy","default":"MSC is assembling essays, interviews, explainers, and field notes that map the ideas moving through Bitcoin culture."},
-    {"type":"text","id":"discovery_empty_label","label":"People empty-state label","default":"CULTURE INDEX"},
-    {"type":"text","id":"discovery_empty_heading","label":"People empty-state heading","default":"The people behind the current are being mapped."},
-    {"type":"textarea","id":"discovery_empty_copy","label":"People empty-state copy","default":"Future profiles will introduce real artists, founders, companies, and projects with verified context and useful links."},
-    {"type":"text","id":"reports_empty_label","label":"Reports empty-state label","default":"NETWORK READINGS"},
-    {"type":"text","id":"reports_empty_heading","label":"Reports empty-state heading","default":"Monthly readings will begin with verified sources."},
-    {"type":"textarea","id":"reports_empty_copy","label":"Reports empty-state copy","default":"Network and culture reports will appear here once the research and source work are complete."},
-    {"type":"text","id":"recent_kicker","label":"Recent kicker","default":"New Signals"},
-    {"type":"text","id":"recent_heading","label":"Recent heading","default":"Recently added to the index."}
+    {
+      "type": "text",
+      "id": "signal_phrase_1",
+      "label": "Signal phrase 1",
+      "default": "SCANNING THE BITCOIN ECOSYSTEM"
+    },
+    {
+      "type": "text",
+      "id": "signal_phrase_2",
+      "label": "Signal phrase 2",
+      "default": "READING NETWORK + CULTURE SIGNALS"
+    },
+    {
+      "type": "text",
+      "id": "signal_phrase_3",
+      "label": "Signal phrase 3",
+      "default": "WATCHING THE MEMPOOL"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "EXPLORE THE ECOSYSTEM."
+    },
+    {
+      "type": "richtext",
+      "id": "supporting_copy",
+      "label": "Supporting copy",
+      "default": "<p>Bitcoin moves in waves through art, code, people, projects, and ideas. Explore the cultural signals shaping the same ocean.</p>"
+    },
+    {
+      "type": "text",
+      "id": "search_label",
+      "label": "Search accessible label",
+      "default": "Search the Bitcoin culture index"
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Search placeholder",
+      "default": "Search artists, founders, companies, projects, reports..."
+    },
+    {
+      "type": "text",
+      "id": "search_button",
+      "label": "Search button",
+      "default": "Search"
+    },
+    {
+      "type": "text",
+      "id": "search_types",
+      "label": "Shopify search types",
+      "default": "article,page,product"
+    },
+    {
+      "type": "url",
+      "id": "map_companies_link",
+      "label": "Companies page"
+    },
+    {
+      "type": "url",
+      "id": "map_art_link",
+      "label": "Art page"
+    },
+    {
+      "type": "url",
+      "id": "map_builders_link",
+      "label": "Builders page"
+    },
+    {
+      "type": "blog",
+      "id": "content_blog",
+      "label": "Explore content blog"
+    },
+    {
+      "type": "paragraph",
+      "content": "Select one editorial blog. Give every article one primary category tag, then add secondary routing tags. Newest qualifying articles appear first. Breaking News leaves front-facing feeds after the configured window but remains published."
+    },
+    {
+      "type": "text",
+      "id": "interviews_tag",
+      "label": "Interviews tag",
+      "default": "Interviews"
+    },
+    {
+      "type": "text",
+      "id": "highlights_tag",
+      "label": "Highlights tag",
+      "default": "Highlights"
+    },
+    {
+      "type": "text",
+      "id": "weekly_recaps_tag",
+      "label": "Weekly Recaps tag",
+      "default": "Weekly Recaps"
+    },
+    {
+      "type": "text",
+      "id": "community_tag",
+      "label": "Community tag",
+      "default": "Community"
+    },
+    {
+      "type": "text",
+      "id": "breaking_news_tag",
+      "label": "Breaking News tag",
+      "default": "Breaking News"
+    },
+    {
+      "type": "textarea",
+      "id": "culture_index_tags",
+      "label": "Culture Index routing tags",
+      "default": "Artist, Founder, Builder, Miner, Content Creator, Company, Project"
+    },
+    {
+      "type": "range",
+      "id": "stories_limit",
+      "label": "Stories limit",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "culture_index_limit",
+      "label": "Culture Index limit",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "weekly_recaps_limit",
+      "label": "Weekly Recaps limit",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "breaking_news_hours",
+      "label": "Breaking News front-page hours",
+      "min": 12,
+      "max": 96,
+      "step": 12,
+      "default": 48
+    },
+    {
+      "type": "text",
+      "id": "editorial_kicker",
+      "label": "Editorial kicker",
+      "default": "Signals From the Culture"
+    },
+    {
+      "type": "text",
+      "id": "editorial_heading",
+      "label": "Editorial heading",
+      "default": "Stories moving through the Bitcoin ocean."
+    },
+    {
+      "type": "richtext",
+      "id": "editorial_copy",
+      "label": "Editorial copy",
+      "default": "<p>Interviews, highlights, weekly recaps, community stories, and breaking news tracking the signals moving through Bitcoin culture.</p>"
+    },
+    {
+      "type": "text",
+      "id": "discovery_kicker",
+      "label": "Discovery kicker",
+      "default": "People Behind the Current"
+    },
+    {
+      "type": "text",
+      "id": "discovery_heading",
+      "label": "Discovery heading",
+      "default": "Artists, founders, companies, and projects shaping the next wave."
+    },
+    {
+      "type": "richtext",
+      "id": "discovery_copy",
+      "label": "Discovery copy",
+      "default": "<p>Coverage of the artists, founders, builders, miners, companies, projects, and creators shaping Bitcoin culture.</p>"
+    },
+    {
+      "type": "text",
+      "id": "reports_kicker",
+      "label": "Reports kicker",
+      "default": "WEEKLY SWELL REPORT"
+    },
+    {
+      "type": "text",
+      "id": "reports_heading",
+      "label": "Reports heading",
+      "default": "Weekly recaps from the network."
+    },
+    {
+      "type": "richtext",
+      "id": "reports_copy",
+      "label": "Reports copy",
+      "default": "<p>Every Friday, review volume, new releases, ecosystem updates, and the week’s most important cultural signals.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_recent",
+      "label": "Show Recently Added section",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "editorial_empty_label",
+      "label": "Stories empty-state label",
+      "default": "EDITORIAL SIGNALS"
+    },
+    {
+      "type": "text",
+      "id": "editorial_empty_heading",
+      "label": "Stories empty-state heading",
+      "default": "The first stories are taking shape."
+    },
+    {
+      "type": "textarea",
+      "id": "editorial_empty_copy",
+      "label": "Stories empty-state copy",
+      "default": "Interviews, highlights, weekly recaps, community coverage, and breaking news will appear here as they are published."
+    },
+    {
+      "type": "text",
+      "id": "discovery_empty_label",
+      "label": "People empty-state label",
+      "default": "CULTURE INDEX"
+    },
+    {
+      "type": "text",
+      "id": "discovery_empty_heading",
+      "label": "People empty-state heading",
+      "default": "The people behind the current are being mapped."
+    },
+    {
+      "type": "textarea",
+      "id": "discovery_empty_copy",
+      "label": "People empty-state copy",
+      "default": "Profiles and coverage of artists, founders, builders, miners, companies, projects, and content creators will appear here as they are published."
+    },
+    {
+      "type": "text",
+      "id": "reports_empty_label",
+      "label": "Reports empty-state label",
+      "default": "WEEKLY RECAPS"
+    },
+    {
+      "type": "text",
+      "id": "reports_empty_heading",
+      "label": "Reports empty-state heading",
+      "default": "The first weekly recap is coming Friday."
+    },
+    {
+      "type": "textarea",
+      "id": "reports_empty_copy",
+      "label": "Reports empty-state copy",
+      "default": "Friday coverage of volume, new releases, ecosystem updates, and cultural signals will appear here."
+    },
+    {
+      "type": "text",
+      "id": "recent_kicker",
+      "label": "Recent kicker",
+      "default": "New Signals"
+    },
+    {
+      "type": "text",
+      "id": "recent_heading",
+      "label": "Recent heading",
+      "default": "Recently added to the index."
+    }
   ],
   "blocks": [
-    {"type":"category","name":"Category","settings":[{"type":"text","id":"meta","label":"Meta","default":"Index"},{"type":"text","id":"title","label":"Title","default":"Artists"},{"type":"textarea","id":"description","label":"Description","default":"Browse creative work and cultural signals."},{"type":"url","id":"link","label":"Link"},{"type":"text","id":"action_label","label":"Action label","default":"Explore category"}]},
-    {"type":"editorial","name":"Editorial card","settings":[{"type":"select","id":"size","label":"Card size","options":[{"value":"lead","label":"Lead"},{"value":"standard","label":"Standard"}],"default":"standard"},{"type":"text","id":"label","label":"Label","default":"Field Note"},{"type":"text","id":"title","label":"Title","default":"A field guide to Bitcoin culture"},{"type":"image_picker","id":"image","label":"Image"},{"type":"textarea","id":"dek","label":"Description","default":"Add a concise description for a published MSC story."},{"type":"text","id":"meta","label":"Meta","default":"Editorial"},{"type":"url","id":"link","label":"Link"}]},
-    {"type":"profile","name":"Profile card","settings":[{"type":"text","id":"tag","label":"Tag","default":"Artist"},{"type":"text","id":"title","label":"Title","default":"Profile signal"},{"type":"image_picker","id":"image","label":"Image"},{"type":"text","id":"role","label":"Role","default":"Role or context"},{"type":"textarea","id":"description","label":"Description","default":"Add verified context for this culture index profile."},{"type":"url","id":"link","label":"Link"}]},
-    {"type":"report","name":"Report preview","settings":[{"type":"text","id":"month","label":"Issue / period","default":"Issue 01"},{"type":"text","id":"title","label":"Title","default":"Monthly on-chain swell report"},{"type":"text","id":"status","label":"Category / note","default":"Network context"},{"type":"url","id":"link","label":"Link"}]},
-    {"type":"recent","name":"Recent activity","settings":[{"type":"text","id":"title","label":"Title","default":"Cultural wave map added"},{"type":"text","id":"note","label":"Note","default":"Explore now frames culture as signals moving through Bitcoin."}]}
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        {
+          "type": "text",
+          "id": "meta",
+          "label": "Meta",
+          "default": "Index"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Artists"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Browse creative work and cultural signals."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "text",
+          "id": "action_label",
+          "label": "Action label",
+          "default": "Explore category"
+        }
+      ]
+    },
+    {
+      "type": "recent",
+      "name": "Recent activity",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Cultural wave map added"
+        },
+        {
+          "type": "text",
+          "id": "note",
+          "label": "Note",
+          "default": "Explore now frames culture as signals moving through Bitcoin."
+        }
+      ]
+    }
   ],
-  "presets": [{"name":"MSC Explore"}]
+  "presets": [
+    {
+      "name": "MSC Explore"
+    }
+  ]
 }
 {% endschema %}
