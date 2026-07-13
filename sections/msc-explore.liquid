@@ -54,8 +54,8 @@
     </nav>
 
     <div class="msc-block" aria-labelledby="MscExploreEditorials-{{ section.id }}">
-      {% render 'msc-section-header', kicker: section.settings.editorial_kicker, heading: section.settings.editorial_heading, copy: section.settings.editorial_copy, heading_id: 'MscExploreEditorials-' | append: section.id %}
       {%- if editorial_count > 0 -%}
+        {% render 'msc-section-header', kicker: section.settings.editorial_kicker, heading: section.settings.editorial_heading, copy: section.settings.editorial_copy, heading_id: 'MscExploreEditorials-' | append: section.id %}
         <div class="msc-editorial-layout">
           {%- for block in section.blocks -%}
             {%- if block.type == 'editorial' -%}
@@ -64,13 +64,20 @@
           {%- endfor -%}
         </div>
       {%- else -%}
-        {% render 'msc-explore-empty-state', label: section.settings.editorial_empty_label, heading: section.settings.editorial_empty_heading, copy: section.settings.editorial_empty_copy %}
+        <div class="msc-explore-chapter">
+          <div class="msc-explore-chapter__intro">
+            {% render 'msc-section-header', kicker: section.settings.editorial_kicker, heading: section.settings.editorial_heading, copy: section.settings.editorial_copy, heading_id: 'MscExploreEditorials-' | append: section.id %}
+          </div>
+          <div class="msc-explore-chapter__content">
+            {% render 'msc-explore-empty-state', label: section.settings.editorial_empty_label, heading: section.settings.editorial_empty_heading, copy: section.settings.editorial_empty_copy %}
+          </div>
+        </div>
       {%- endif -%}
     </div>
 
     <div class="msc-block" aria-labelledby="MscExploreDiscovery-{{ section.id }}">
-      {% render 'msc-section-header', kicker: section.settings.discovery_kicker, heading: section.settings.discovery_heading, copy: section.settings.discovery_copy, heading_id: 'MscExploreDiscovery-' | append: section.id %}
       {%- if profile_count > 0 -%}
+        {% render 'msc-section-header', kicker: section.settings.discovery_kicker, heading: section.settings.discovery_heading, copy: section.settings.discovery_copy, heading_id: 'MscExploreDiscovery-' | append: section.id %}
         <div class="msc-profile-grid">
           {%- for block in section.blocks -%}
             {%- if block.type == 'profile' -%}
@@ -79,15 +86,22 @@
           {%- endfor -%}
         </div>
       {%- else -%}
-        {% render 'msc-explore-empty-state', label: section.settings.discovery_empty_label, heading: section.settings.discovery_empty_heading, copy: section.settings.discovery_empty_copy %}
+        <div class="msc-explore-chapter">
+          <div class="msc-explore-chapter__intro">
+            {% render 'msc-section-header', kicker: section.settings.discovery_kicker, heading: section.settings.discovery_heading, copy: section.settings.discovery_copy, heading_id: 'MscExploreDiscovery-' | append: section.id %}
+          </div>
+          <div class="msc-explore-chapter__content">
+            {% render 'msc-explore-empty-state', label: section.settings.discovery_empty_label, heading: section.settings.discovery_empty_heading, copy: section.settings.discovery_empty_copy %}
+          </div>
+        </div>
       {%- endif -%}
     </div>
 
     <div class="msc-block" aria-labelledby="MscExploreReports-{{ section.id }}">
-      <div class="msc-report-panel msc-glass-card">
-        {% render 'msc-section-header', kicker: section.settings.reports_kicker, heading: section.settings.reports_heading, copy: section.settings.reports_copy, heading_id: 'MscExploreReports-' | append: section.id %}
-        <div class="msc-report-panel__list">
-          {%- if report_count > 0 -%}
+      {%- if report_count > 0 -%}
+        <div class="msc-report-panel msc-glass-card">
+          {% render 'msc-section-header', kicker: section.settings.reports_kicker, heading: section.settings.reports_heading, copy: section.settings.reports_copy, heading_id: 'MscExploreReports-' | append: section.id %}
+          <div class="msc-report-panel__list">
             {%- for block in section.blocks -%}
               {%- if block.type == 'report' -%}
                 {%- if block.settings.link != blank -%}
@@ -97,11 +111,18 @@
                 {%- endif -%}
               {%- endif -%}
             {%- endfor -%}
-          {%- else -%}
-            {% render 'msc-explore-empty-state', label: section.settings.reports_empty_label, heading: section.settings.reports_empty_heading, copy: section.settings.reports_empty_copy, modifier: 'compact' %}
-          {%- endif -%}
+          </div>
         </div>
-      </div>
+      {%- else -%}
+        <div class="msc-explore-chapter msc-explore-chapter--reports">
+          <div class="msc-explore-chapter__intro">
+            {% render 'msc-section-header', kicker: section.settings.reports_kicker, heading: section.settings.reports_heading, copy: section.settings.reports_copy, heading_id: 'MscExploreReports-' | append: section.id %}
+          </div>
+          <div class="msc-explore-chapter__content">
+            {% render 'msc-explore-empty-state', label: section.settings.reports_empty_label, heading: section.settings.reports_empty_heading, copy: section.settings.reports_empty_copy, modifier: 'report' %}
+          </div>
+        </div>
+      {%- endif -%}
     </div>
 
     {%- if section.settings.show_recent and recent_count > 0 -%}
@@ -137,19 +158,19 @@
     {"type":"text","id":"editorial_heading","label":"Editorial heading","default":"Stories moving through the Bitcoin ocean."},
     {"type":"richtext","id":"editorial_copy","label":"Editorial copy","default":"<p>Essays, interviews, explainers, and field notes mapping the ideas gathering momentum across Bitcoin culture.</p>"},
     {"type":"text","id":"discovery_kicker","label":"Discovery kicker","default":"People Behind the Current"},
-    {"type":"text","id":"discovery_heading","label":"Discovery heading","default":"Artists, builders, companies, and projects shaping the next wave."},
+    {"type":"text","id":"discovery_heading","label":"Discovery heading","default":"Artists, founders, companies, and projects shaping the next wave."},
     {"type":"richtext","id":"discovery_copy","label":"Discovery copy","default":"<p>Profiles of the artists, founders, companies, and projects shaping Bitcoin culture.</p>"},
     {"type":"text","id":"reports_kicker","label":"Reports kicker","default":"On-Chain Swell Report"},
     {"type":"text","id":"reports_heading","label":"Reports heading","default":"Monthly readings from the network."},
     {"type":"richtext","id":"reports_copy","label":"Reports copy","default":"<p>Clear monthly context drawn from verified network observations and cultural signals.</p>"},
     {"type":"checkbox","id":"show_recent","label":"Show Recently Added section","default":false},
-    {"type":"text","id":"editorial_empty_label","label":"Stories empty-state label","default":"FIELD REPORTS IN DEVELOPMENT"},
+    {"type":"text","id":"editorial_empty_label","label":"Stories empty-state label","default":"FIELD REPORTS"},
     {"type":"text","id":"editorial_empty_heading","label":"Stories empty-state heading","default":"The first stories are taking shape."},
     {"type":"textarea","id":"editorial_empty_copy","label":"Stories empty-state copy","default":"MSC is assembling essays, interviews, explainers, and field notes that map the ideas moving through Bitcoin culture."},
-    {"type":"text","id":"discovery_empty_label","label":"People empty-state label","default":"CULTURE INDEX IN DEVELOPMENT"},
+    {"type":"text","id":"discovery_empty_label","label":"People empty-state label","default":"CULTURE INDEX"},
     {"type":"text","id":"discovery_empty_heading","label":"People empty-state heading","default":"The people behind the current are being mapped."},
     {"type":"textarea","id":"discovery_empty_copy","label":"People empty-state copy","default":"Future profiles will introduce real artists, founders, companies, and projects with verified context and useful links."},
-    {"type":"text","id":"reports_empty_label","label":"Reports empty-state label","default":"REPORTING IN DEVELOPMENT"},
+    {"type":"text","id":"reports_empty_label","label":"Reports empty-state label","default":"NETWORK READINGS"},
     {"type":"text","id":"reports_empty_heading","label":"Reports empty-state heading","default":"Monthly readings will begin with verified sources."},
     {"type":"textarea","id":"reports_empty_copy","label":"Reports empty-state copy","default":"Network and culture reports will appear here once the research and source work are complete."},
     {"type":"text","id":"recent_kicker","label":"Recent kicker","default":"New Signals"},
