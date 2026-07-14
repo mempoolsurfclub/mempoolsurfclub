@@ -1,16 +1,42 @@
 {% comment %}
   Renders an MSC learning path card.
-  Accepts: index, title, description, link, marker
+  Accepts: index, title, description, link, marker, recommended, recommended_label, action_label
 {% endcomment %}
 {%- assign card_index = index | default: '01' -%}
 {%- assign card_marker = marker | default: 'Surface route' -%}
-{%- if link != blank -%}<a class="msc-learn-path-card msc-glass-card" href="{{ link }}">{%- else -%}<article class="msc-learn-path-card msc-glass-card">{%- endif -%}
+{%- assign normalized_marker = card_marker | handleize -%}
+{%- assign depth_class = 'surface' -%}
+{%- if normalized_marker contains 'harbor' -%}
+  {%- assign depth_class = 'harbor' -%}
+{%- elsif normalized_marker contains 'current' -%}
+  {%- assign depth_class = 'current' -%}
+{%- elsif normalized_marker contains 'deep' -%}
+  {%- assign depth_class = 'deep' -%}
+{%- elsif normalized_marker contains 'open-ocean' -%}
+  {%- assign depth_class = 'open-ocean' -%}
+{%- endif -%}
+{%- assign card_classes = 'msc-learn-path-card msc-glass-card msc-learn-path-card--' | append: depth_class -%}
+{%- if recommended -%}{%- assign card_classes = card_classes | append: ' msc-learn-path-card--recommended' -%}{%- endif -%}
+{%- if link != blank -%}
+  <a class="{{ card_classes }} msc-learn-path-card--linked" href="{{ link }}">
+{%- else -%}
+  <article class="{{ card_classes }} msc-learn-path-card--static">
+{%- endif -%}
   <span class="msc-learn-path-card__index">{{ card_index | escape }}</span>
+  {%- if recommended -%}
+    <span class="msc-learn-path-card__badge">{{ recommended_label | default: 'Recommended start' | escape }}</span>
+  {%- endif -%}
   <span class="msc-learn-path-card__marker" aria-hidden="true"></span>
-  <div>
+  <div class="msc-learn-path-card__body">
     <p class="msc-learn-path-card__route">{{ card_marker | escape }}</p>
     <h3>{{ title | escape }}</h3>
     <p>{{ description | escape }}</p>
   </div>
-  <span class="msc-card-arrow">Enter →</span>
-{%- if link != blank -%}</a>{%- else -%}</article>{%- endif -%}
+  {%- if link != blank -%}
+    <span class="msc-card-arrow">{{ action_label | default: 'Enter route' | escape }} <span aria-hidden="true">→</span></span>
+  {%- endif -%}
+{%- if link != blank -%}
+  </a>
+{%- else -%}
+  </article>
+{%- endif -%}
