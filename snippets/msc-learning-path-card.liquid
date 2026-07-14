@@ -1,8 +1,7 @@
 {% comment %}
   Renders an MSC learning path card.
-  Accepts: index, title, description, link, marker, recommended, recommended_label, action_label
+  Accepts: title, description, link, marker, recommended, recommended_label, action_label
 {% endcomment %}
-{%- assign card_index = index | default: '01' -%}
 {%- assign card_marker = marker | default: 'Surface route' -%}
 {%- assign normalized_marker = card_marker | handleize -%}
 {%- assign depth_class = 'surface' -%}
@@ -22,19 +21,17 @@
 {%- else -%}
   <article class="{{ card_classes }} msc-learn-path-card--static">
 {%- endif -%}
-  <span class="msc-learn-path-card__index">{{ card_index | escape }}</span>
-  {%- if recommended -%}
-    <span class="msc-learn-path-card__badge">{{ recommended_label | default: 'Recommended start' | escape }}</span>
-  {%- endif -%}
-  <span class="msc-learn-path-card__marker" aria-hidden="true"></span>
+  <div class="msc-learn-path-card__badge-row">
+    {%- if recommended -%}
+      <span class="msc-learn-path-card__badge">{{ recommended_label | default: 'Recommended start' | escape }}</span>
+    {%- endif -%}
+  </div>
   <div class="msc-learn-path-card__body">
     <p class="msc-learn-path-card__route">{{ card_marker | escape }}</p>
     <h3>{{ title | escape }}</h3>
     <p>{{ description | escape }}</p>
   </div>
-  {%- if link != blank -%}
-    <span class="msc-card-arrow">{{ action_label | default: 'Enter route' | escape }} <span aria-hidden="true">→</span></span>
-  {%- endif -%}
+  <span class="msc-card-arrow">{{ action_label | default: 'Enter route' | escape }} <span aria-hidden="true">→</span></span>
 {%- if link != blank -%}
   </a>
 {%- else -%}
