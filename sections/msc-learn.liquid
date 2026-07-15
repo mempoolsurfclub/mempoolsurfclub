@@ -47,7 +47,7 @@
       <div class="msc-learn-path-grid">
         {%- for block in section.blocks -%}
           {%- if block.type == 'learning_path' -%}
-            {% render 'msc-learning-path-card', title: block.settings.title, description: block.settings.description, link: block.settings.link, marker: block.settings.marker, recommended: block.settings.recommended, recommended_label: block.settings.recommended_label, action_label: block.settings.action_label %}
+            {% render 'msc-learning-path-card', title: block.settings.title, description: block.settings.description, link: block.settings.link, marker: block.settings.marker, recommended: block.settings.recommended, recommended_label: block.settings.recommended_label, action_label: block.settings.action_label, planned_handle: block.settings.planned_handle %}
           {%- endif -%}
         {%- endfor -%}
       </div>
@@ -84,8 +84,13 @@
                     </div>
                   {%- endfor -%}
                 </div>
-                {%- if block.settings.guide_link != blank -%}
-                  <a class="msc-learn-topic__guide-link" href="{{ block.settings.guide_link }}">{{ block.settings.guide_action_label | default: 'Explore the full guide' | escape }} <span aria-hidden="true">→</span></a>
+                {%- assign category_link = block.settings.guide_link -%}
+                {%- if category_link == blank and block.settings.planned_handle != blank -%}
+                  {%- assign category_page = pages[block.settings.planned_handle] -%}
+                  {%- if category_page -%}{%- assign category_link = category_page.url -%}{%- endif -%}
+                {%- endif -%}
+                {%- if category_link != blank -%}
+                  <a class="msc-learn-topic__guide-link" href="{{ category_link }}">{{ block.settings.guide_action_label | default: 'Explore the full guide' | escape }} <span aria-hidden="true">→</span></a>
                 {%- endif -%}
               </div>
             </details>
@@ -100,8 +105,13 @@
           <p class="msc-section-kicker">{{ section.settings.route_kicker | escape }}</p>
           <h2 id="MscLearnRoute-{{ section.id }}" class="msc-section-title">{{ section.settings.route_heading | escape }}</h2>
           <div class="msc-section-header__copy rte">{{ section.settings.route_copy }}</div>
-          {%- if section.settings.route_link != blank -%}
-            <a class="msc-button msc-learn-route__cta" href="{{ section.settings.route_link }}">{{ section.settings.route_action_label | escape }}</a>
+          {%- assign route_link = section.settings.route_link -%}
+          {%- if route_link == blank -%}
+            {%- assign route_page = pages['how-a-bitcoin-transaction-moves'] -%}
+            {%- if route_page -%}{%- assign route_link = route_page.url -%}{%- endif -%}
+          {%- endif -%}
+          {%- if route_link != blank -%}
+            <a class="msc-button msc-learn-route__cta" href="{{ route_link }}">{{ section.settings.route_action_label | escape }}</a>
           {%- endif -%}
         </div>
         <ol class="msc-learn-route__steps" aria-label="Bitcoin transaction learning route preview">
@@ -152,8 +162,8 @@
     {"type":"richtext","id":"glossary_copy","label":"Glossary copy","default":"<p>Compact definitions for the language that appears throughout Bitcoin guides.</p>"}
   ],
   "blocks": [
-    {"type":"learning_path","name":"Learning path","settings":[{"type":"text","id":"title","label":"Title","default":"Start With Bitcoin"},{"type":"textarea","id":"description","label":"Description","default":"Begin with the core concepts before moving into wallets, keys, and transactions."},{"type":"text","id":"marker","label":"Route marker","default":"Surface route"},{"type":"url","id":"link","label":"Optional link"},{"type":"checkbox","id":"recommended","label":"Recommended starting route","default":false},{"type":"text","id":"recommended_label","label":"Recommended label","default":"Recommended start"},{"type":"text","id":"action_label","label":"Action label","default":"Enter route"}]},
-    {"type":"topic_group","name":"Topic group","settings":[{"type":"text","id":"title","label":"Title","default":"Bitcoin Basics"},{"type":"text","id":"guide_note","label":"Guide note","default":"Begin with the core concepts."},{"type":"textarea","id":"subcategories","label":"Subcategories","default":"Foundations\nUsing Bitcoin\nSecurity\nEssentials"},{"type":"textarea","id":"topics","label":"Topics, one comma-separated row per subcategory","default":"What is Bitcoin?, Why Bitcoin?, Bitcoin History, Satoshi Nakamoto\nWallets, Self-Custody, Sending & Receiving, Transactions & Fees\nSeed Phrases, Public & Private Keys, Bitcoin Security, Bitcoin Privacy\nUTXOs, Confirmations, Halving, Best Practices"},{"type":"url","id":"guide_link","label":"Full guide link"},{"type":"text","id":"guide_action_label","label":"Full guide action label","default":"Explore the full guide"}]},
+    {"type":"learning_path","name":"Learning path","settings":[{"type":"text","id":"title","label":"Title","default":"Start With Bitcoin"},{"type":"textarea","id":"description","label":"Description","default":"Begin with the core concepts before moving into wallets, keys, and transactions."},{"type":"text","id":"marker","label":"Route marker","default":"Surface route"},{"type":"url","id":"link","label":"Optional link"},{"type":"text","id":"planned_handle","label":"Planned page handle"},{"type":"checkbox","id":"recommended","label":"Recommended starting route","default":false},{"type":"text","id":"recommended_label","label":"Recommended label","default":"Recommended start"},{"type":"text","id":"action_label","label":"Action label","default":"Enter route"}]},
+    {"type":"topic_group","name":"Topic group","settings":[{"type":"text","id":"title","label":"Title","default":"Bitcoin Basics"},{"type":"text","id":"guide_note","label":"Guide note","default":"Begin with the core concepts."},{"type":"textarea","id":"subcategories","label":"Subcategories","default":"Foundations\nUsing Bitcoin\nSecurity\nEssentials"},{"type":"textarea","id":"topics","label":"Topics, one comma-separated row per subcategory","default":"What is Bitcoin?, Why Bitcoin?, Bitcoin History, Satoshi Nakamoto\nWallets, Self-Custody, Sending & Receiving, Transactions & Fees\nSeed Phrases, Public & Private Keys, Bitcoin Security, Bitcoin Privacy\nUTXOs, Confirmations, Halving, Best Practices"},{"type":"url","id":"guide_link","label":"Full guide link"},{"type":"text","id":"planned_handle","label":"Planned category handle"},{"type":"text","id":"guide_action_label","label":"Full guide action label","default":"Explore the full guide"}]},
     {"type":"glossary_term","name":"Glossary term","settings":[{"type":"text","id":"term","label":"Term","default":"Mempool"},{"type":"textarea","id":"definition","label":"Definition","default":"The waiting area where valid unconfirmed Bitcoin transactions are held by nodes before they are included in blocks."}]}
   ],
   "presets": [{"name":"MSC Learn"}]

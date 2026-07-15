@@ -1,0 +1,8 @@
+{{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
+{%- assign rows = render 'msc-learn-glossary-data' | strip | split: '\n' -%}{%- assign learn_page = pages['learn'] -%}{%- assign letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' | split: '' -%}
+<section class="msc-shell msc-learn-page"><div class="msc-container msc-learn-page__container">
+{% render 'msc-learn-breadcrumbs', learn_page: learn_page, current_label: page.title %}<header class="msc-learn-page__header"><p class="msc-section-kicker">Glossary</p><h1>{{ page.title | escape }}</h1><div class="msc-learn-article rte">{{ page.content }}</div></header>
+<input class="msc-learn-glossary-search" type="search" aria-label="Filter glossary terms" placeholder="Filter glossary terms">
+{%- for letter in letters -%}{%- capture group -%}{%- for row in rows -%}{%- assign t = row | split: '|' -%}{%- assign first = t[0] | slice: 0 | upcase -%}{%- if first == letter -%}{%- assign guide_page = pages[t[3]] -%}<article class="msc-learn-glossary-term"><h3>{{ t[0] | escape }}</h3><p>{{ t[1] | escape }}</p>{%- if guide_page -%}<a href="{{ guide_page.url }}">Read the related guide</a>{%- endif -%}</article>{%- endif -%}{%- endfor -%}{%- endcapture -%}{%- if group contains 'msc-learn-glossary-term' -%}<section class="msc-learn-glossary-group" id="glossary-{{ letter }}"><h2>{{ letter }}</h2>{{ group }}</section>{%- endif -%}{%- endfor -%}
+</div></section>
+{% schema %}{"name":"MSC Learn glossary","settings":[]}{% endschema %}

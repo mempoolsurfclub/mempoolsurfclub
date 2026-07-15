@@ -1,0 +1,11 @@
+{%- assign card_page = pages[handle] -%}
+{%- if card_page -%}
+  {%- assign card_description = card_page.metafields.custom.msc_card_description.value | default: card_page.metafields.custom.msc_card_description -%}
+  {%- assign card_action = card_page.metafields.custom.msc_card_action_label.value | default: card_page.metafields.custom.msc_card_action_label | default: 'Read guide' -%}
+  <a class="msc-learn-guide-card msc-glass-card" href="{{ card_page.url }}">
+    <span class="msc-learn-guide-card__meta">{{ depth | escape }}{% if format != blank %} / {{ format | escape }}{% endif %}</span>
+    <strong>{{ card_page.title | escape }}</strong>
+    {% if card_description != blank %}<span>{{ card_description | escape }}</span>{% endif %}
+    <em>{{ card_action | escape }}</em>
+  </a>
+{%- endif -%}
