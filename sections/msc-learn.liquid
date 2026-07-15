@@ -123,7 +123,7 @@
     <div class="msc-block msc-learn-glossary-block" aria-labelledby="MscLearnGlossary-{{ section.id }}">
       {% render 'msc-section-header', kicker: section.settings.glossary_kicker, heading: section.settings.glossary_heading, copy: section.settings.glossary_copy, heading_id: 'MscLearnGlossary-' | append: section.id %}
       <div class="msc-glossary-grid">
-        {%- for block in section.blocks -%}{%- if block.type == 'glossary_term' -%}{% render 'msc-glossary-item', term: block.settings.term, definition: block.settings.definition %}{%- endif -%}{%- endfor -%}
+        {%- for block in section.blocks -%}{%- if block.type == 'glossary_term' -%}{% render 'msc-glossary-item', term: block.settings.term, definition: block.settings.definition, link: block.settings.link, planned_handle: block.settings.planned_handle %}{%- endif -%}{%- endfor -%}
       </div>
     </div>
   </div>
@@ -164,7 +164,7 @@
   "blocks": [
     {"type":"learning_path","name":"Learning path","settings":[{"type":"text","id":"title","label":"Title","default":"Start With Bitcoin"},{"type":"textarea","id":"description","label":"Description","default":"Begin with the core concepts before moving into wallets, keys, and transactions."},{"type":"text","id":"marker","label":"Route marker","default":"Surface route"},{"type":"url","id":"link","label":"Optional link"},{"type":"text","id":"planned_handle","label":"Planned page handle"},{"type":"checkbox","id":"recommended","label":"Recommended starting route","default":false},{"type":"text","id":"recommended_label","label":"Recommended label","default":"Recommended start"},{"type":"text","id":"action_label","label":"Action label","default":"Enter route"}]},
     {"type":"topic_group","name":"Topic group","settings":[{"type":"text","id":"title","label":"Title","default":"Bitcoin Basics"},{"type":"text","id":"guide_note","label":"Guide note","default":"Begin with the core concepts."},{"type":"textarea","id":"subcategories","label":"Subcategories","default":"Foundations\nUsing Bitcoin\nSecurity\nEssentials"},{"type":"textarea","id":"topics","label":"Topics, one comma-separated row per subcategory","default":"What is Bitcoin?, Why Bitcoin?, Bitcoin History, Satoshi Nakamoto\nWallets, Self-Custody, Sending & Receiving, Transactions & Fees\nSeed Phrases, Public & Private Keys, Bitcoin Security, Bitcoin Privacy\nUTXOs, Confirmations, Halving, Best Practices"},{"type":"url","id":"guide_link","label":"Full guide link"},{"type":"text","id":"planned_handle","label":"Planned category handle"},{"type":"text","id":"guide_action_label","label":"Full guide action label","default":"Explore the full guide"}]},
-    {"type":"glossary_term","name":"Glossary term","settings":[{"type":"text","id":"term","label":"Term","default":"Mempool"},{"type":"textarea","id":"definition","label":"Definition","default":"The waiting area where valid unconfirmed Bitcoin transactions are held by nodes before they are included in blocks."}]}
+    {"type":"glossary_term","name":"Glossary term","settings":[{"type":"text","id":"term","label":"Term","default":"Mempool"},{"type":"textarea","id":"definition","label":"Definition","default":"The waiting area where valid unconfirmed Bitcoin transactions are held by nodes before they are included in blocks."},{"type":"url","id":"link","label":"Optional link"},{"type":"text","id":"planned_handle","label":"Planned canonical page handle"}]}
   ],
   "presets": [{"name":"MSC Learn"}]
 }

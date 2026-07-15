@@ -1,7 +1,12 @@
 {% comment %}
-  Renders a compact MSC glossary item. Accepts: term, definition
+  Renders a compact MSC glossary item. Accepts: term, definition, link, planned_handle
 {% endcomment %}
+{%- assign resolved_link = link -%}
+{%- if resolved_link == blank and planned_handle != blank -%}
+  {%- assign planned_page = pages[planned_handle] -%}
+  {%- if planned_page -%}{%- assign resolved_link = planned_page.url -%}{%- endif -%}
+{%- endif -%}
 <article class="msc-glossary-item msc-glass-card">
-  <h3>{{ term | escape }}</h3>
+  <h3>{%- if resolved_link != blank -%}<a href="{{ resolved_link }}">{{ term | escape }}</a>{%- else -%}{{ term | escape }}{%- endif -%}</h3>
   <p>{{ definition | escape }}</p>
 </article>
