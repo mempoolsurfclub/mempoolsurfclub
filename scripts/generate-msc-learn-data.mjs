@@ -52,6 +52,7 @@ const branchIdForGuide = (g) => {
   const id = refId(raw);
   return byId.has(id) ? id : '';
 };
+const branchHandleForGuide = (g) => handle(byId.get(branchIdForGuide(g))) || '';
 const categoryHandleFromRef = (v) => handle(byId.get(refId(v))) || '';
 const categoryHandlesFromRefs = (refs) => asArray(refs).map(categoryHandleFromRef).filter(Boolean);
 const branchPathHandles = (p) => asArray(valueOf(p, ['Branching paths', 'Branching opportunities', 'branching_path_handles'], [])).flatMap((item) => {
@@ -155,7 +156,7 @@ writeRows('snippets/msc-learn-guide-data.liquid', guides.map((g) => {
   const id = recordId(g); const idx = canonIndex.get(id);
   const prev = idx > 0 ? canonicalTopicOrder[idx - 1] : '';
   const next = idx < canonicalTopicOrder.length - 1 ? canonicalTopicOrder[idx + 1] : '';
-  return [id, handle(g), title(g), categoryHandleForGuide(g), categoryLabelForGuide(g), subcatForGuide(g), subcatAnchorForGuide(g), depth(g), format(g), prev, next, branchIdForGuide(g), pathHandleFromLabel(valueOf(g, ['Primary learning path'])), pathHandlesFromLabels(valueOf(g, ['Secondary learning paths'], []))];
+  return [id, handle(g), title(g), categoryHandleForGuide(g), categoryLabelForGuide(g), subcatForGuide(g), subcatAnchorForGuide(g), depth(g), format(g), prev, next, branchIdForGuide(g), branchHandleForGuide(g), pathHandleFromLabel(valueOf(g, ['Primary learning path'])), pathHandlesFromLabels(valueOf(g, ['Secondary learning paths'], []))];
 }));
 writeRows('snippets/msc-learn-category-data.liquid', cats.map((c) => {
   const sections = valueOf(c, ['Subcategory sections'], null);
@@ -181,9 +182,15 @@ for (const [file, expected] of Object.entries({
 }
 for (const row of generatedRows('snippets/msc-learn-guide-data.liquid')) {
   if (row[5].includes('on planned hub slug')) throw new Error(`Generated guide subcategory contains planning text ${row[0]}`);
-  if (row[12] && !pathHandles.has(row[12])) throw new Error(`Generated primary path handle does not resolve ${row[0]}: ${row[12]}`);
-  for (const pathHandle of asArray(row[13] ? row[13].split(LIST) : [])) if (pathHandle && !pathHandles.has(pathHandle)) throw new Error(`Generated secondary path handle does not resolve ${row[0]}: ${pathHandle}`);
   if (row[11] && !byId.has(row[11])) throw new Error(`Generated branch ID does not resolve ${row[0]}: ${row[11]}`);
+  if (!row[11] && row[12]) throw new Error(`Generated blank branch ID has nonblank handle ${row[0]}: ${row[12]}`);
+  if (row[11] && row[12] !== handle(byId.get(row[11]))) throw new Error(`Generated branch handle mismatch ${row[0]}: ${row[12]}`);
+  if (row[13] && !pathHandles.has(row[13])) throw new Error(`Generated primary path handle does not resolve ${row[0]}: ${row[13]}`);
+  for (const pathHandle of asArray(row[14] ? row[14].split(LIST) : [])) if (pathHandle && !pathHandles.has(pathHandle)) throw new Error(`Generated secondary path handle does not resolve ${row[0]}: ${pathHandle}`);
+}
+for (const [guideId, expectedHandle] of [['MSC-GUIDE-007', 'how-a-bitcoin-transaction-moves'], ['MSC-GUIDE-013', 'how-a-bitcoin-transaction-moves']]) {
+  const row = generatedRows('snippets/msc-learn-guide-data.liquid').find((candidate) => candidate[0] === guideId);
+  if (!row || row[11] !== 'MSC-ROUTE-001' || row[12] !== expectedHandle) throw new Error(`${guideId} branch route handle mismatch`);
 }
 for (const row of generatedRows('snippets/msc-learn-category-data.liquid')) {
   if (row[6] && !categoryHandles.has(row[6])) throw new Error(`Generated previous category handle does not resolve ${row[0]}: ${row[6]}`);
