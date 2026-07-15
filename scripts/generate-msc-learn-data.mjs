@@ -34,6 +34,31 @@ const byId = new Map(records.map((r) => [recordId(r), r]));
 const guideById = new Map(guides.map((r) => [recordId(r), r]));
 const byHandle = new Map(records.map((r) => [handle(r), r]));
 
+const pathByTitle = new Map(paths.map((r) => [title(r), r]));
+const pathHandles = new Set(paths.map(handle));
+const categoryHandles = new Set(cats.map(handle));
+const categorySectionForGuide = (g) => {
+  const category = categoryRecordForGuide(g);
+  const guideId = recordId(g);
+  const sections = valueOf(category, ['Subcategory sections'], []);
+  if (!Array.isArray(sections)) return null;
+  return sections.find((section) => asArray(section.guide_ids).map(refId).includes(guideId)) || null;
+};
+const subcatAnchorForGuide = (g) => String(categorySectionForGuide(g)?.anchor || '').replace(/^#/, '');
+const pathHandleFromLabel = (label) => handle(pathByTitle.get(String(label || '').trim()));
+const pathHandlesFromLabels = (labels) => asArray(labels).map(pathHandleFromLabel).filter(Boolean);
+const branchIdForGuide = (g) => {
+  const raw = valueOf(g, ['Recommended branch guide', 'Branch guide ID', 'branch_guide_id']);
+  const id = refId(raw);
+  return byId.has(id) ? id : '';
+};
+const categoryHandleFromRef = (v) => handle(byId.get(refId(v))) || '';
+const categoryHandlesFromRefs = (refs) => asArray(refs).map(categoryHandleFromRef).filter(Boolean);
+const branchPathHandles = (p) => asArray(valueOf(p, ['Branching paths', 'Branching opportunities', 'branching_path_handles'], [])).flatMap((item) => {
+  const text = String(item || '');
+  return paths.filter((candidate) => text.includes(title(candidate))).map(handle);
+});
+
 const categoryOrder = asArray(valueOf(registry.navigation || {}, ['category_order'], cats.map(recordId)));
 const canonicalTopicOrder = asArray(valueOf(registry.navigation || {}, ['canonical_topic_order'], guides.map(recordId)));
 const learningPathSequences = valueOf(registry.navigation || {}, ['learning_path_sequences'], {});
@@ -68,20 +93,25 @@ for (const id of canonicalTopicOrder) if (!guideById.has(id)) fail.push(`Canonic
 const categoryRecordForGuide = (g) => byId.get(refId(valueOf(g, ['Parent destination', 'Canonical category', 'Parent category ID', 'parent_category_id'])));
 const categoryHandleForGuide = (g) => valueOf(g, ['Parent category handle', 'parent_category_handle'], handle(categoryRecordForGuide(g)));
 const categoryLabelForGuide = (g) => valueOf(g, ['Parent category label', 'Parent category name', 'parent_category_name'], title(categoryRecordForGuide(g)) || valueOf(g, ['Primary Learn category']));
-const subcatForGuide = (g) => {
-  const explicit = valueOf(g, ['Canonical subcategory', 'Subcategory', 'subcategory_name']);
-  if (explicit && explicit !== 'Not applicable') return explicit;
-  const anchor = valueOf(g, ['Subcategory anchor']);
-  if (anchor && anchor !== 'Not applicable') return String(anchor).replace(/^#/, '').split('-').map((part) => part ? part[0].toUpperCase() + part.slice(1) : part).join(' ');
-  return '';
-};
+const subcatForGuide = (g) => categorySectionForGuide(g)?.display || valueOf(g, ['Learn subcategory', 'Canonical subcategory', 'Subcategory', 'subcategory_name']);
 const depth = (r) => valueOf(r, ['Depth level', 'Approved depth range', 'depth_level', 'depth_range']);
 const format = (r) => valueOf(r, ['Format', 'Content format', 'content_format']);
 
 const canonIndex = new Map(canonicalTopicOrder.map((id, idx) => [id, idx]));
 for (const g of guides) {
-  if (!categoryHandleForGuide(g)) fail.push(`Topic guide missing canonical category ${recordId(g)}`);
-  if (!subcatForGuide(g)) fail.push(`Topic guide missing canonical subcategory ${recordId(g)}`);
+  const guideId = recordId(g);
+  const section = categorySectionForGuide(g);
+  if (!categoryHandleForGuide(g)) fail.push(`Topic guide missing canonical category ${guideId}`);
+  if (!subcatForGuide(g)) fail.push(`Topic guide missing canonical subcategory ${guideId}`);
+  if (!section) fail.push(`Topic guide subcategory section does not resolve ${guideId}`);
+  if (section && subcatForGuide(g) !== section.display) fail.push(`Topic guide subcategory label mismatch ${guideId}`);
+  if (section && subcatAnchorForGuide(g) !== String(section.anchor || '').replace(/^#/, '')) fail.push(`Topic guide subcategory anchor mismatch ${guideId}`);
+  if (String(subcatForGuide(g)).includes('on planned hub slug')) fail.push(`Topic guide subcategory contains planning text ${guideId}`);
+  const primaryPath = pathHandleFromLabel(valueOf(g, ['Primary learning path']));
+  if (valueOf(g, ['Primary learning path']) && !primaryPath) fail.push(`Primary learning path does not resolve ${guideId}`);
+  for (const secondary of asArray(valueOf(g, ['Secondary learning paths'], []))) if (!pathHandleFromLabel(secondary)) fail.push(`Secondary learning path does not resolve ${guideId}: ${secondary}`);
+  const branchId = branchIdForGuide(g);
+  if (branchId && !byId.has(branchId)) fail.push(`Branch guide ID does not resolve ${guideId}: ${branchId}`);
 }
 for (const c of cats) {
   const sections = valueOf(c, ['Subcategory sections'], null);
@@ -89,13 +119,20 @@ for (const c of cats) {
     ? sections.flatMap((section) => asArray(section.guide_ids).map(refId))
     : sections ? Object.values(sections).flatMap(asArray).map(refId) : asArray(valueOf(c, ['guide_ids', 'Canonical guide sequence'], [])).map(refId);
   for (const id of idsInCat) if (!guideById.has(id)) fail.push(`Category guide ID does not resolve ${id}`);
+  for (const ref of [valueOf(c, ['Previous category', 'previous_category_id']), valueOf(c, ['Next category', 'next_category_id'])]) {
+    const normalized = categoryHandleFromRef(ref);
+    if (refId(ref).startsWith('MSC-') && !normalized) fail.push(`Category navigation reference does not resolve ${recordId(c)}: ${ref}`);
+  }
 }
 for (const p of paths) {
   const id = recordId(p);
   const sequence = asArray(learningPathSequences[title(p)] || learningPathSequences[id] || learningPathSequences[handle(p)] || valueOf(p, ['Recommended sequence', 'guide_ids'], [])).map(refId);
   for (const destId of sequence) if (!byId.has(destId)) fail.push(`Learning path destination does not resolve ${id}: ${destId}`);
   if (!depth(p)) fail.push(`Learning path depth range missing ${id}`);
-  if (!valueOf(p, ['Category relationships', 'category_relationships', 'related_category_handles'], null)) fail.push(`Learning path category relationships missing ${id}`);
+  const categoryRelationshipHandles = categoryHandlesFromRefs(valueOf(p, ['Category relationships', 'category_relationships', 'related_category_handles'], []));
+  if (!categoryRelationshipHandles.length) fail.push(`Learning path category relationships missing ${id}`);
+  for (const categoryHandle of categoryRelationshipHandles) if (!categoryHandles.has(categoryHandle)) fail.push(`Learning path category relationship does not resolve ${id}: ${categoryHandle}`);
+  for (const pathHandle of branchPathHandles(p)) if (!pathHandles.has(pathHandle)) fail.push(`Learning path branch does not resolve ${id}: ${pathHandle}`);
 }
 for (const t of glossary) {
   const destId = refId(valueOf(t, ['canonical guide', 'canonical_guide_id', 'Canonical guide', 'canonical destination', 'canonical_destination_id']));
@@ -105,7 +142,7 @@ const text = JSON.stringify(registry);
 if (text.includes('\u2014')) fail.push('Em dash found');
 if (text.includes('\u2013')) fail.push('En dash found');
 if (fail.length) { console.error(fail.join('\n')); process.exit(1); }
-if (validateOnly) { console.log('MSC Learn approved registry validation passed: 93 records, 80 topic guides, 5 category hubs, 5 learning paths, 141 glossary terms.'); process.exit(0); }
+if (validateOnly) { console.log('MSC Learn approved registry validation passed: 93 records, 80 topic guides, 5 category hubs, 5 learning paths, 13 route steps, 141 glossary terms.'); process.exit(0); }
 
 function clean(v) {
   const s = Array.isArray(v) ? v.join(LIST) : String(v ?? '');
@@ -118,16 +155,41 @@ writeRows('snippets/msc-learn-guide-data.liquid', guides.map((g) => {
   const id = recordId(g); const idx = canonIndex.get(id);
   const prev = idx > 0 ? canonicalTopicOrder[idx - 1] : '';
   const next = idx < canonicalTopicOrder.length - 1 ? canonicalTopicOrder[idx + 1] : '';
-  return [id, handle(g), title(g), categoryHandleForGuide(g), categoryLabelForGuide(g), subcatForGuide(g), slugify(subcatForGuide(g)), depth(g), format(g), prev, next, valueOf(g, ['Branch guide ID', 'branch_guide_id']), valueOf(g, ['Primary learning path', 'primary_learning_path']), asArray(valueOf(g, ['Secondary learning paths', 'secondary_learning_paths'], []))];
+  return [id, handle(g), title(g), categoryHandleForGuide(g), categoryLabelForGuide(g), subcatForGuide(g), subcatAnchorForGuide(g), depth(g), format(g), prev, next, branchIdForGuide(g), pathHandleFromLabel(valueOf(g, ['Primary learning path'])), pathHandlesFromLabels(valueOf(g, ['Secondary learning paths'], []))];
 }));
 writeRows('snippets/msc-learn-category-data.liquid', cats.map((c) => {
   const sections = valueOf(c, ['Subcategory sections'], null);
   const subNames = Array.isArray(sections) ? sections.map((section) => section.display) : sections ? Object.keys(sections) : asArray(valueOf(c, ['subcategory_names'], []));
   const anchors = Array.isArray(sections) ? sections.map((section) => String(section.anchor || slugify(section.display)).replace(/^#/, '')) : subNames.map(slugify);
   const idsInCat = Array.isArray(sections) ? sections.map((section) => asArray(section.guide_ids).map(refId).join(',')).join(LIST) : sections ? Object.values(sections).map((v) => asArray(v).map(refId).join(',')).join(LIST) : asArray(valueOf(c, ['guide_ids', 'Canonical guide sequence'], [])).map(refId).join(',');
-  return [recordId(c), handle(c), title(c), subNames, anchors, idsInCat, valueOf(c, ['Previous category', 'previous_category_id']), valueOf(c, ['Next category', 'next_category_id']), asArray(valueOf(c, ['Related learning paths', 'related_learning_paths'], [])), depth(c)];
+  const canonicalSequence = asArray(valueOf(c, ['Canonical guide sequence'], [])).map(refId);
+  return [recordId(c), handle(c), title(c), subNames, anchors, idsInCat, categoryHandleFromRef(valueOf(c, ['Previous category', 'previous_category_id'])), categoryHandleFromRef(valueOf(c, ['Next category', 'next_category_id'])), pathHandlesFromLabels([valueOf(c, ['Primary learning path']), ...asArray(valueOf(c, ['Secondary learning paths'], []))]), depth(c), canonicalSequence];
 }));
-writeRows('snippets/msc-learn-path-data.liquid', paths.map((p) => [recordId(p), handle(p), title(p), asArray(learningPathSequences[title(p)] || learningPathSequences[recordId(p)] || learningPathSequences[handle(p)] || valueOf(p, ['Recommended sequence', 'guide_ids'], [])).map(refId), asArray(valueOf(p, ['Category relationships', 'category_relationships', 'related_category_handles'], [])), depth(p), asArray(valueOf(p, ['Branching paths', 'branching_path_handles'], []))]));
+writeRows('snippets/msc-learn-path-data.liquid', paths.map((p) => [recordId(p), handle(p), title(p), asArray(learningPathSequences[title(p)] || learningPathSequences[recordId(p)] || learningPathSequences[handle(p)] || valueOf(p, ['Recommended sequence', 'guide_ids'], [])).map(refId), categoryHandlesFromRefs(valueOf(p, ['Category relationships', 'category_relationships', 'related_category_handles'], [])), depth(p), branchPathHandles(p)]));
 writeRows('snippets/msc-learn-route-data.liquid', featuredRouteSteps.map((s, i) => { const destId = refId(valueOf(s, ['destination_id', 'guide_id'], '')); return [i + 1, valueOf(s, ['label'], s), destId, handle(byId.get(destId))]; }));
 writeRows('snippets/msc-learn-glossary-data.liquid', glossary.map((t) => { const destId = refId(valueOf(t, ['canonical guide', 'canonical_guide_id', 'Canonical guide', 'canonical destination', 'canonical_destination_id'])); return [valueOf(t, ['term']), valueOf(t, ['concise definition', 'definition']), destId, handle(byId.get(destId))]; }));
+const generatedRows = (file) => fs.readFileSync(file, 'utf8').split('\n').filter((line) => line.includes(FIELD)).map((line) => line.split(FIELD));
+for (const [file, expected] of Object.entries({
+  'snippets/msc-learn-guide-data.liquid': 80,
+  'snippets/msc-learn-category-data.liquid': 5,
+  'snippets/msc-learn-path-data.liquid': 5,
+  'snippets/msc-learn-route-data.liquid': 13,
+  'snippets/msc-learn-glossary-data.liquid': 141,
+})) {
+  const rowCount = generatedRows(file).length;
+  if (rowCount !== expected) throw new Error(`Generated row count mismatch for ${file}: expected ${expected}, got ${rowCount}`);
+}
+for (const row of generatedRows('snippets/msc-learn-guide-data.liquid')) {
+  if (row[5].includes('on planned hub slug')) throw new Error(`Generated guide subcategory contains planning text ${row[0]}`);
+  if (row[12] && !pathHandles.has(row[12])) throw new Error(`Generated primary path handle does not resolve ${row[0]}: ${row[12]}`);
+  for (const pathHandle of asArray(row[13] ? row[13].split(LIST) : [])) if (pathHandle && !pathHandles.has(pathHandle)) throw new Error(`Generated secondary path handle does not resolve ${row[0]}: ${pathHandle}`);
+  if (row[11] && !byId.has(row[11])) throw new Error(`Generated branch ID does not resolve ${row[0]}: ${row[11]}`);
+}
+for (const row of generatedRows('snippets/msc-learn-category-data.liquid')) {
+  if (row[6] && !categoryHandles.has(row[6])) throw new Error(`Generated previous category handle does not resolve ${row[0]}: ${row[6]}`);
+  if (row[7] && !categoryHandles.has(row[7])) throw new Error(`Generated next category handle does not resolve ${row[0]}: ${row[7]}`);
+}
+for (const row of generatedRows('snippets/msc-learn-path-data.liquid')) {
+  for (const categoryHandle of asArray(row[4] ? row[4].split(LIST) : [])) if (categoryHandle && !categoryHandles.has(categoryHandle)) throw new Error(`Generated path category handle does not resolve ${row[0]}: ${categoryHandle}`);
+}
 console.log('MSC Learn data generated and validated: 80 guides, 5 categories, 5 paths, 13 route steps, 141 glossary terms.');
