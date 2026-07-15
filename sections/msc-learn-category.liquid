@@ -1,11 +1,12 @@
 {{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
-{%- assign category_rows = render 'msc-learn-category-data' | strip | split: '\n' -%}{%- assign guide_rows = render 'msc-learn-guide-data' | strip | split: '\n' -%}{%- assign current = '' -%}{%- for row in category_rows -%}{%- assign item = row | split: '|' -%}{%- if item[1] == page.handle -%}{%- assign current = item -%}{%- endif -%}{%- endfor -%}{%- assign learn_page = pages['learn'] -%}
+{%- capture learn_category_data -%}{%- render 'msc-learn-category-data' -%}{%- endcapture -%}{%- capture learn_guide_data -%}{%- render 'msc-learn-guide-data' -%}{%- endcapture -%}{%- assign newline_delimiter = '
+' -%}{%- assign category_rows = learn_category_data | strip | split: newline_delimiter -%}{%- assign guide_rows = learn_guide_data | strip | split: newline_delimiter -%}{%- assign current = '' -%}{%- for row in category_rows -%}{%- assign item = row | split: '[[MSC_FIELD]]' -%}{%- if item[1] == page.handle -%}{%- assign current = item -%}{%- endif -%}{%- endfor -%}{%- assign learn_page = pages['learn'] -%}
 <section class="msc-shell msc-learn-page"><div class="msc-container msc-learn-page__container">
 {% render 'msc-learn-breadcrumbs', learn_page: learn_page, current_label: page.title %}
 <header class="msc-learn-page__header"><p class="msc-section-kicker">Category Hub</p><h1>{{ page.title | escape }}</h1>{% render 'msc-learn-page-meta', page: page, depth: current[9] %}<div class="msc-learn-article rte">{{ page.content }}</div></header>
 {% render 'msc-learn-category-nav', current_handle: page.handle %}
-{%- assign subs = current[3] | split: '~' -%}{%- assign anchors = current[4] | split: '~' -%}
-{%- for sub in subs -%}{%- assign printed = false -%}{%- capture cards -%}{%- for row in guide_rows -%}{%- assign g = row | split: '|' -%}{%- if g[3] == page.handle and g[5] == sub -%}{% render 'msc-learn-guide-card', handle: g[1], depth: g[7], format: g[8] %}{%- endif -%}{%- endfor -%}{%- endcapture -%}{%- if cards contains 'msc-learn-guide-card' -%}<section class="msc-learn-subcategory" id="{{ anchors[forloop.index0] }}"><h2>{{ sub | escape }}</h2><div class="msc-learn-card-grid">{{ cards }}</div></section>{%- endif -%}{%- endfor -%}
+{%- assign subs = current[3] | split: '[[MSC_LIST]]' -%}{%- assign anchors = current[4] | split: '[[MSC_LIST]]' -%}
+{%- for sub in subs -%}{%- assign printed = false -%}{%- capture cards -%}{%- for row in guide_rows -%}{%- assign g = row | split: '[[MSC_FIELD]]' -%}{%- if g[3] == page.handle and g[5] == sub -%}{% render 'msc-learn-guide-card', handle: g[1], depth: g[7], format: g[8] %}{%- endif -%}{%- endfor -%}{%- endcapture -%}{%- if cards contains 'msc-learn-guide-card' -%}<section class="msc-learn-subcategory" id="{{ anchors[forloop.index0] }}"><h2>{{ sub | escape }}</h2><div class="msc-learn-card-grid">{{ cards }}</div></section>{%- endif -%}{%- endfor -%}
 {% render 'msc-learn-prev-next', parent_handle: 'learn', parent_label: 'Learn', learn_page: learn_page %}
 </div></section>
 {% schema %}{"name":"MSC Learn category","settings":[]}{% endschema %}

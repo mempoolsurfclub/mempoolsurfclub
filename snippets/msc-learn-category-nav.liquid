@@ -1,4 +1,5 @@
-{%- assign rows = render 'msc-learn-category-data' | strip | split: '\n' -%}
+{%- capture learn_category_data -%}{%- render 'msc-learn-category-data' -%}{%- endcapture -%}{%- assign newline_delimiter = '
+' -%}{%- assign rows = learn_category_data | strip | split: newline_delimiter -%}
 <nav class="msc-learn-category-nav" aria-label="Learn categories">
-  {%- for row in rows -%}{%- assign item = row | split: '|' -%}{%- assign cat_page = pages[item[1]] -%}{%- if cat_page -%}<a href="{{ cat_page.url }}"{% if item[1] == current_handle %} aria-current="page"{% endif %}>{{ item[2] | escape }}</a>{%- endif -%}{%- endfor -%}
+  {%- for row in rows -%}{%- assign item = row | split: '[[MSC_FIELD]]' -%}{%- assign cat_page = pages[item[1]] -%}{%- if cat_page -%}<a href="{{ cat_page.url }}"{% if item[1] == current_handle %} aria-current="page"{% endif %}>{{ item[2] | escape }}</a>{%- endif -%}{%- endfor -%}
 </nav>
