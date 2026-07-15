@@ -29,6 +29,7 @@ const paths = records.filter((r) => isRole(r, 'learning-path') || role(r) === 'l
 const home = records.find((r) => isRole(r, 'learn-home')) || registry.homepage;
 const route = records.find((r) => isRole(r, 'featured-route') || role(r) === 'featured_route') || registry.featured_route;
 const glossaryRecord = records.find((r) => isRole(r, 'glossary-index') || role(r) === 'glossary_index') || registry.glossary_index;
+const refId = (v) => String(v || '').split('|')[0].trim();
 const byId = new Map(records.map((r) => [recordId(r), r]));
 const guideById = new Map(guides.map((r) => [recordId(r), r]));
 const byHandle = new Map(records.map((r) => [handle(r), r]));
@@ -64,9 +65,16 @@ for (let i = 1; i <= 80; i += 1) if (!byId.has(`MSC-GUIDE-${String(i).padStart(3
 if (new Set(canonicalTopicOrder).size !== 80 || canonicalTopicOrder.length !== 80) fail.push('Canonical topic order must contain 80 unique guides');
 for (const id of canonicalTopicOrder) if (!guideById.has(id)) fail.push(`Canonical topic order ID does not resolve ${id}`);
 
-const categoryHandleForGuide = (g) => valueOf(g, ['Parent category handle', 'parent_category_handle'], handle(byId.get(valueOf(g, ['Canonical category', 'Parent category ID', 'parent_category_id']))));
-const categoryLabelForGuide = (g) => valueOf(g, ['Parent category label', 'Parent category name', 'parent_category_name'], title(byHandle.get(categoryHandleForGuide(g))));
-const subcatForGuide = (g) => valueOf(g, ['Canonical subcategory', 'Subcategory', 'subcategory_name']);
+const categoryRecordForGuide = (g) => byId.get(refId(valueOf(g, ['Parent destination', 'Canonical category', 'Parent category ID', 'parent_category_id'])));
+const categoryHandleForGuide = (g) => valueOf(g, ['Parent category handle', 'parent_category_handle'], handle(categoryRecordForGuide(g)));
+const categoryLabelForGuide = (g) => valueOf(g, ['Parent category label', 'Parent category name', 'parent_category_name'], title(categoryRecordForGuide(g)) || valueOf(g, ['Primary Learn category']));
+const subcatForGuide = (g) => {
+  const explicit = valueOf(g, ['Canonical subcategory', 'Subcategory', 'subcategory_name']);
+  if (explicit && explicit !== 'Not applicable') return explicit;
+  const anchor = valueOf(g, ['Subcategory anchor']);
+  if (anchor && anchor !== 'Not applicable') return String(anchor).replace(/^#/, '').split('-').map((part) => part ? part[0].toUpperCase() + part.slice(1) : part).join(' ');
+  return '';
+};
 const depth = (r) => valueOf(r, ['Depth level', 'Approved depth range', 'depth_level', 'depth_range']);
 const format = (r) => valueOf(r, ['Format', 'Content format', 'content_format']);
 
@@ -77,18 +85,20 @@ for (const g of guides) {
 }
 for (const c of cats) {
   const sections = valueOf(c, ['Subcategory sections'], null);
-  const idsInCat = sections ? Object.values(sections).flatMap(asArray) : asArray(valueOf(c, ['guide_ids', 'Canonical guide sequence'], []));
+  const idsInCat = Array.isArray(sections)
+    ? sections.flatMap((section) => asArray(section.guide_ids).map(refId))
+    : sections ? Object.values(sections).flatMap(asArray).map(refId) : asArray(valueOf(c, ['guide_ids', 'Canonical guide sequence'], [])).map(refId);
   for (const id of idsInCat) if (!guideById.has(id)) fail.push(`Category guide ID does not resolve ${id}`);
 }
 for (const p of paths) {
   const id = recordId(p);
-  const sequence = asArray(learningPathSequences[id] || learningPathSequences[handle(p)] || valueOf(p, ['guide_ids'], []));
+  const sequence = asArray(learningPathSequences[title(p)] || learningPathSequences[id] || learningPathSequences[handle(p)] || valueOf(p, ['Recommended sequence', 'guide_ids'], [])).map(refId);
   for (const destId of sequence) if (!byId.has(destId)) fail.push(`Learning path destination does not resolve ${id}: ${destId}`);
   if (!depth(p)) fail.push(`Learning path depth range missing ${id}`);
   if (!valueOf(p, ['Category relationships', 'category_relationships', 'related_category_handles'], null)) fail.push(`Learning path category relationships missing ${id}`);
 }
 for (const t of glossary) {
-  const destId = valueOf(t, ['canonical guide', 'canonical_guide_id', 'Canonical guide', 'canonical destination', 'canonical_destination_id']);
+  const destId = refId(valueOf(t, ['canonical guide', 'canonical_guide_id', 'Canonical guide', 'canonical destination', 'canonical_destination_id']));
   if (destId && !byId.has(destId)) fail.push(`Glossary canonical destination does not resolve ${valueOf(t, ['term'])}`);
 }
 const text = JSON.stringify(registry);
@@ -112,12 +122,12 @@ writeRows('snippets/msc-learn-guide-data.liquid', guides.map((g) => {
 }));
 writeRows('snippets/msc-learn-category-data.liquid', cats.map((c) => {
   const sections = valueOf(c, ['Subcategory sections'], null);
-  const subNames = sections ? Object.keys(sections) : asArray(valueOf(c, ['subcategory_names'], []));
-  const anchors = subNames.map(slugify);
-  const idsInCat = sections ? Object.values(sections).map((v) => asArray(v).join(',')).join(LIST) : asArray(valueOf(c, ['guide_ids'], [])).join(',');
+  const subNames = Array.isArray(sections) ? sections.map((section) => section.display) : sections ? Object.keys(sections) : asArray(valueOf(c, ['subcategory_names'], []));
+  const anchors = Array.isArray(sections) ? sections.map((section) => String(section.anchor || slugify(section.display)).replace(/^#/, '')) : subNames.map(slugify);
+  const idsInCat = Array.isArray(sections) ? sections.map((section) => asArray(section.guide_ids).map(refId).join(',')).join(LIST) : sections ? Object.values(sections).map((v) => asArray(v).map(refId).join(',')).join(LIST) : asArray(valueOf(c, ['guide_ids', 'Canonical guide sequence'], [])).map(refId).join(',');
   return [recordId(c), handle(c), title(c), subNames, anchors, idsInCat, valueOf(c, ['Previous category', 'previous_category_id']), valueOf(c, ['Next category', 'next_category_id']), asArray(valueOf(c, ['Related learning paths', 'related_learning_paths'], [])), depth(c)];
 }));
-writeRows('snippets/msc-learn-path-data.liquid', paths.map((p) => [recordId(p), handle(p), title(p), asArray(learningPathSequences[recordId(p)] || learningPathSequences[handle(p)] || valueOf(p, ['guide_ids'], [])), asArray(valueOf(p, ['Category relationships', 'category_relationships', 'related_category_handles'], [])), depth(p), asArray(valueOf(p, ['Branching paths', 'branching_path_handles'], []))]));
-writeRows('snippets/msc-learn-route-data.liquid', featuredRouteSteps.map((s, i) => [i + 1, valueOf(s, ['label'], s), valueOf(s, ['destination_id', 'guide_id'], ''), handle(byId.get(valueOf(s, ['destination_id', 'guide_id'], '')))]));
-writeRows('snippets/msc-learn-glossary-data.liquid', glossary.map((t) => { const destId = valueOf(t, ['canonical guide', 'canonical_guide_id', 'Canonical guide', 'canonical destination', 'canonical_destination_id']); return [valueOf(t, ['term']), valueOf(t, ['concise definition', 'definition']), destId, handle(byId.get(destId))]; }));
+writeRows('snippets/msc-learn-path-data.liquid', paths.map((p) => [recordId(p), handle(p), title(p), asArray(learningPathSequences[title(p)] || learningPathSequences[recordId(p)] || learningPathSequences[handle(p)] || valueOf(p, ['Recommended sequence', 'guide_ids'], [])).map(refId), asArray(valueOf(p, ['Category relationships', 'category_relationships', 'related_category_handles'], [])), depth(p), asArray(valueOf(p, ['Branching paths', 'branching_path_handles'], []))]));
+writeRows('snippets/msc-learn-route-data.liquid', featuredRouteSteps.map((s, i) => { const destId = refId(valueOf(s, ['destination_id', 'guide_id'], '')); return [i + 1, valueOf(s, ['label'], s), destId, handle(byId.get(destId))]; }));
+writeRows('snippets/msc-learn-glossary-data.liquid', glossary.map((t) => { const destId = refId(valueOf(t, ['canonical guide', 'canonical_guide_id', 'Canonical guide', 'canonical destination', 'canonical_destination_id'])); return [valueOf(t, ['term']), valueOf(t, ['concise definition', 'definition']), destId, handle(byId.get(destId))]; }));
 console.log('MSC Learn data generated and validated: 80 guides, 5 categories, 5 paths, 13 route steps, 141 glossary terms.');
