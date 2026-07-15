@@ -1,0 +1,1 @@
+Temporary verified payload used only to materialize the approved MSC Learn registry. The correction task must run the materializer with --clean so this directory is removed before the final correction pull request.
