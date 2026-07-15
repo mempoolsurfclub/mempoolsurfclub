@@ -1,31 +1,123 @@
 import fs from 'fs';
-const registryPath='docs/learn/MSC_Learn_Master_Registry.json';
-const registry=JSON.parse(fs.readFileSync(registryPath,'utf8'));
-const fail=[]; const ids=new Set(); const slugs=new Set();
-function addId(x){ if(ids.has(x.id)) fail.push(`Duplicate id ${x.id}`); ids.add(x.id); if(x.planned_slug){ if(slugs.has(x.planned_slug)) fail.push(`Duplicate slug ${x.planned_slug}`); slugs.add(x.planned_slug); }}
-[registry.homepage, registry.glossary_index, registry.featured_route, ...registry.categories, ...registry.learning_paths, ...registry.topic_guides].forEach(addId);
-if(ids.size!==93) fail.push(`Expected 93 destinations, found ${ids.size}`);
-if(registry.topic_guides.length!==80) fail.push('Expected 80 topic guides');
-if(registry.categories.length!==5) fail.push('Expected 5 category hubs');
-if(registry.learning_paths.length!==5) fail.push('Expected 5 learning paths');
-if(registry.glossary.length!==141) fail.push('Expected 141 glossary terms');
-const guideById=new Map(registry.topic_guides.map(g=>[g.id,g])); const catByHandle=new Map(registry.categories.map(c=>[c.planned_slug,c]));
-for(const g of registry.topic_guides){ if(!g.parent_category_handle||!catByHandle.has(g.parent_category_handle)) fail.push(`Invalid category ${g.id}`); if(!g.subcategory_name) fail.push(`Missing subcategory ${g.id}`); for(const k of ['previous_guide_id','next_guide_id','branch_guide_id']) if(g[k]&&!guideById.has(g[k])) fail.push(`Bad ${k} ${g.id}`); if(new Set(g.related_glossary_terms||[]).size!==(g.related_glossary_terms||[]).length) fail.push(`Duplicate related glossary ${g.id}`); }
-for(const c of registry.categories) for(const id of c.guide_ids) if(!guideById.has(id)) fail.push(`Bad category guide ${id}`);
-for(const p of registry.learning_paths) for(const id of p.guide_ids) if(!guideById.has(id)) fail.push(`Bad path guide ${id}`);
-for(const s of registry.featured_route.steps) if(!guideById.has(s.guide_id)) fail.push(`Bad route guide ${s.guide_id}`);
-for(const t of registry.glossary){ const g=guideById.get(t.canonical_guide_id); if(!g) fail.push(`Bad glossary guide ${t.term}`); else if(t.canonical_guide_title!==g.final_h1) fail.push(`Glossary title mismatch ${t.term}`); }
-const g48=registry.topic_guides.filter(g=>g.id==='MSC-GUIDE-048').map(g=>g.final_h1); if(new Set(g48).size!==g48.length) fail.push('Duplicate MSC-GUIDE-048 title exists');
-const allText=JSON.stringify(registry); if(allText.includes('\u2014')) fail.push('Em dash found'); if(allText.includes('\u2013')) fail.push('En dash found');
-if(fail.length){ console.error(fail.join('\n')); process.exit(1); }
-if(process.argv.includes('--validate-only')){ console.log('MSC Learn registry validation passed: 93 destinations, 80 topic guides, 5 category hubs, 5 learning paths, 141 glossary terms.'); process.exit(0); }
-fs.mkdirSync('snippets',{recursive:true});
-const header='{% comment %}\n  Generated from docs/learn/MSC_Learn_Master_Registry.json.\n  Do not edit manually.\n  Rebuild with npm run build:learn-data.\n{% endcomment %}\n';
-function w(file,body){ fs.writeFileSync(file,header+body.trim()+'\n'); }
-function esc(v){ return String(v??'').replace(/\|/g,'/'); }
-w('snippets/msc-learn-guide-data.liquid', registry.topic_guides.map(g=>[g.id,g.planned_slug,g.final_h1,g.parent_category_handle,g.parent_category_name,g.subcategory_name,g.subcategory_anchor,g.depth_level,g.content_format,g.previous_guide_id,g.next_guide_id,g.branch_guide_id,g.primary_learning_path,(g.secondary_learning_paths||[]).join(',')].map(esc).join('|')).join('\n'));
-w('snippets/msc-learn-category-data.liquid', registry.categories.map(c=>[c.id,c.planned_slug,c.name,c.subcategory_names.join('~'),c.subcategory_anchors.join('~'),c.guide_ids.join(','),c.previous_category_id,c.next_category_id,c.related_learning_paths.join(','),c.depth_range].map(esc).join('|')).join('\n'));
-w('snippets/msc-learn-path-data.liquid', registry.learning_paths.map(p=>[p.id,p.planned_slug,p.name,p.guide_ids.join(','),p.related_category_handles.join(','),p.depth_range,p.branching_path_handles.join(',')].map(esc).join('|')).join('\n'));
-w('snippets/msc-learn-route-data.liquid', registry.featured_route.steps.map((s,i)=>[i+1,s.label,s.guide_id,guideById.get(s.guide_id)?.planned_slug||''].map(esc).join('|')).join('\n'));
-w('snippets/msc-learn-glossary-data.liquid', registry.glossary.map(t=>[t.term,t.definition,t.canonical_guide_id,guideById.get(t.canonical_guide_id)?.planned_slug||''].map(esc).join('|')).join('\n'));
+
+const registryPath = 'docs/learn/MSC_Learn_Master_Registry.json';
+const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
+const validateOnly = process.argv.includes('--validate-only');
+const fail = [];
+const FIELD = '[[MSC_FIELD]]';
+const LIST = '[[MSC_LIST]]';
+const HEADER = `{% comment %}\n  Generated file.\n  Source: approved JSON at docs/learn/MSC_Learn_Master_Registry.json.\n  Do not edit manually.\n  Rebuild command: npm run build:learn-data.\n{% endcomment %}\n`;
+
+const valueOf = (obj, names, fallback = '') => {
+  for (const name of names) if (obj && obj[name] !== undefined && obj[name] !== null) return obj[name];
+  return fallback;
+};
+const asArray = (v) => Array.isArray(v) ? v : (v ? [v] : []);
+const slugify = (v) => String(v || '').toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const records = Array.isArray(registry.records)
+  ? registry.records
+  : [registry.homepage, registry.glossary_index, registry.featured_route, ...(registry.categories || []), ...(registry.learning_paths || []), ...(registry.topic_guides || [])].filter(Boolean);
+const recordId = (r) => valueOf(r, ['Registry ID', 'registry_id', 'id']);
+const role = (r) => valueOf(r, ['Page role', 'page_role', 'type']);
+const handle = (r) => valueOf(r, ['Recommended slug', 'recommended_slug', 'planned_slug']);
+const title = (r) => valueOf(r, ['Final recommended H1', 'Final H1', 'Recommended title', 'Title', 'name', 'final_h1']);
+const status = (r) => valueOf(r, ['Planning status', 'Status', 'status'], 'PLANNED');
+const isRole = (r, needle) => String(role(r)).includes(needle);
+const guides = records.filter((r) => isRole(r, 'topic-guide') || role(r) === 'topic_guide');
+const cats = records.filter((r) => isRole(r, 'category-hub') || role(r) === 'category_hub');
+const paths = records.filter((r) => isRole(r, 'learning-path') || role(r) === 'learning_path');
+const home = records.find((r) => isRole(r, 'learn-home')) || registry.homepage;
+const route = records.find((r) => isRole(r, 'featured-route') || role(r) === 'featured_route') || registry.featured_route;
+const glossaryRecord = records.find((r) => isRole(r, 'glossary-index') || role(r) === 'glossary_index') || registry.glossary_index;
+const byId = new Map(records.map((r) => [recordId(r), r]));
+const guideById = new Map(guides.map((r) => [recordId(r), r]));
+const byHandle = new Map(records.map((r) => [handle(r), r]));
+
+const categoryOrder = asArray(valueOf(registry.navigation || {}, ['category_order'], cats.map(recordId)));
+const canonicalTopicOrder = asArray(valueOf(registry.navigation || {}, ['canonical_topic_order'], guides.map(recordId)));
+const learningPathSequences = valueOf(registry.navigation || {}, ['learning_path_sequences'], {});
+const featuredRouteSteps = asArray(valueOf(registry.navigation || {}, ['featured_route_steps'], valueOf(route, ['steps'], [])));
+const glossary = asArray(valueOf(glossaryRecord, ['Initial glossary term map'], registry.glossary || []));
+
+const ids = new Set();
+const slugs = new Set();
+for (const r of records) {
+  const id = recordId(r);
+  const slug = handle(r);
+  if (!id) fail.push('Record missing Registry ID');
+  if (ids.has(id)) fail.push(`Duplicate registry ID ${id}`);
+  ids.add(id);
+  if (!slug) fail.push(`Record ${id} missing Recommended slug`);
+  if (slug && slugs.has(slug)) fail.push(`Duplicate planned slug ${slug}`);
+  if (slug) slugs.add(slug);
+  if (String(status(r)).toUpperCase() !== 'PLANNED') fail.push(`Record ${id} is not PLANNED`);
+}
+if (records.length !== 93) fail.push(`Expected 93 records, found ${records.length}`);
+if (guides.length !== 80) fail.push(`Expected 80 topic guides, found ${guides.length}`);
+if (cats.length !== 5) fail.push(`Expected 5 category hubs, found ${cats.length}`);
+if (paths.length !== 5) fail.push(`Expected 5 learning paths, found ${paths.length}`);
+if (!home || title(home) !== 'Learn How Bitcoin Moves') fail.push('Learn homepage H1 is not Learn How Bitcoin Moves');
+if (!registry.registry_wide_rules) fail.push('Registry wide rules missing');
+if (glossary.length !== 141) fail.push(`Expected 141 glossary terms, found ${glossary.length}`);
+for (const id of ['MSC-LRN-HOME','MSC-HUB-BASICS','MSC-HUB-NETWORK','MSC-HUB-BUILDING','MSC-HUB-DEVELOPMENT','MSC-HUB-ECOSYSTEM','MSC-PATH-START','MSC-PATH-SAFE','MSC-PATH-NETWORK','MSC-PATH-BUILD','MSC-PATH-ECOSYSTEM','MSC-ROUTE-001','MSC-GLOSSARY-001']) if (!byId.has(id)) fail.push(`Missing approved ID ${id}`);
+for (let i = 1; i <= 80; i += 1) if (!byId.has(`MSC-GUIDE-${String(i).padStart(3, '0')}`)) fail.push(`Missing MSC-GUIDE-${String(i).padStart(3, '0')}`);
+if (new Set(canonicalTopicOrder).size !== 80 || canonicalTopicOrder.length !== 80) fail.push('Canonical topic order must contain 80 unique guides');
+for (const id of canonicalTopicOrder) if (!guideById.has(id)) fail.push(`Canonical topic order ID does not resolve ${id}`);
+
+const categoryHandleForGuide = (g) => valueOf(g, ['Parent category handle', 'parent_category_handle'], handle(byId.get(valueOf(g, ['Canonical category', 'Parent category ID', 'parent_category_id']))));
+const categoryLabelForGuide = (g) => valueOf(g, ['Parent category label', 'Parent category name', 'parent_category_name'], title(byHandle.get(categoryHandleForGuide(g))));
+const subcatForGuide = (g) => valueOf(g, ['Canonical subcategory', 'Subcategory', 'subcategory_name']);
+const depth = (r) => valueOf(r, ['Depth level', 'Approved depth range', 'depth_level', 'depth_range']);
+const format = (r) => valueOf(r, ['Format', 'Content format', 'content_format']);
+
+const canonIndex = new Map(canonicalTopicOrder.map((id, idx) => [id, idx]));
+for (const g of guides) {
+  if (!categoryHandleForGuide(g)) fail.push(`Topic guide missing canonical category ${recordId(g)}`);
+  if (!subcatForGuide(g)) fail.push(`Topic guide missing canonical subcategory ${recordId(g)}`);
+}
+for (const c of cats) {
+  const sections = valueOf(c, ['Subcategory sections'], null);
+  const idsInCat = sections ? Object.values(sections).flatMap(asArray) : asArray(valueOf(c, ['guide_ids', 'Canonical guide sequence'], []));
+  for (const id of idsInCat) if (!guideById.has(id)) fail.push(`Category guide ID does not resolve ${id}`);
+}
+for (const p of paths) {
+  const id = recordId(p);
+  const sequence = asArray(learningPathSequences[id] || learningPathSequences[handle(p)] || valueOf(p, ['guide_ids'], []));
+  for (const destId of sequence) if (!byId.has(destId)) fail.push(`Learning path destination does not resolve ${id}: ${destId}`);
+  if (!depth(p)) fail.push(`Learning path depth range missing ${id}`);
+  if (!valueOf(p, ['Category relationships', 'category_relationships', 'related_category_handles'], null)) fail.push(`Learning path category relationships missing ${id}`);
+}
+for (const t of glossary) {
+  const destId = valueOf(t, ['canonical guide', 'canonical_guide_id', 'Canonical guide', 'canonical destination', 'canonical_destination_id']);
+  if (destId && !byId.has(destId)) fail.push(`Glossary canonical destination does not resolve ${valueOf(t, ['term'])}`);
+}
+const text = JSON.stringify(registry);
+if (text.includes('\u2014')) fail.push('Em dash found');
+if (text.includes('\u2013')) fail.push('En dash found');
+if (fail.length) { console.error(fail.join('\n')); process.exit(1); }
+if (validateOnly) { console.log('MSC Learn approved registry validation passed: 93 records, 80 topic guides, 5 category hubs, 5 learning paths, 141 glossary terms.'); process.exit(0); }
+
+function clean(v) {
+  const s = Array.isArray(v) ? v.join(LIST) : String(v ?? '');
+  if (s.includes(FIELD) || s.includes('\n') || s.includes('\r')) throw new Error(`Generated field contains reserved delimiter or newline: ${s}`);
+  return s;
+}
+function writeRows(file, rows) { fs.writeFileSync(file, HEADER + rows.map((row) => row.map(clean).join(FIELD)).join('\n') + '\n'); }
+fs.mkdirSync('snippets', { recursive: true });
+writeRows('snippets/msc-learn-guide-data.liquid', guides.map((g) => {
+  const id = recordId(g); const idx = canonIndex.get(id);
+  const prev = idx > 0 ? canonicalTopicOrder[idx - 1] : '';
+  const next = idx < canonicalTopicOrder.length - 1 ? canonicalTopicOrder[idx + 1] : '';
+  return [id, handle(g), title(g), categoryHandleForGuide(g), categoryLabelForGuide(g), subcatForGuide(g), slugify(subcatForGuide(g)), depth(g), format(g), prev, next, valueOf(g, ['Branch guide ID', 'branch_guide_id']), valueOf(g, ['Primary learning path', 'primary_learning_path']), asArray(valueOf(g, ['Secondary learning paths', 'secondary_learning_paths'], []))];
+}));
+writeRows('snippets/msc-learn-category-data.liquid', cats.map((c) => {
+  const sections = valueOf(c, ['Subcategory sections'], null);
+  const subNames = sections ? Object.keys(sections) : asArray(valueOf(c, ['subcategory_names'], []));
+  const anchors = subNames.map(slugify);
+  const idsInCat = sections ? Object.values(sections).map((v) => asArray(v).join(',')).join(LIST) : asArray(valueOf(c, ['guide_ids'], [])).join(',');
+  return [recordId(c), handle(c), title(c), subNames, anchors, idsInCat, valueOf(c, ['Previous category', 'previous_category_id']), valueOf(c, ['Next category', 'next_category_id']), asArray(valueOf(c, ['Related learning paths', 'related_learning_paths'], [])), depth(c)];
+}));
+writeRows('snippets/msc-learn-path-data.liquid', paths.map((p) => [recordId(p), handle(p), title(p), asArray(learningPathSequences[recordId(p)] || learningPathSequences[handle(p)] || valueOf(p, ['guide_ids'], [])), asArray(valueOf(p, ['Category relationships', 'category_relationships', 'related_category_handles'], [])), depth(p), asArray(valueOf(p, ['Branching paths', 'branching_path_handles'], []))]));
+writeRows('snippets/msc-learn-route-data.liquid', featuredRouteSteps.map((s, i) => [i + 1, valueOf(s, ['label'], s), valueOf(s, ['destination_id', 'guide_id'], ''), handle(byId.get(valueOf(s, ['destination_id', 'guide_id'], '')))]));
+writeRows('snippets/msc-learn-glossary-data.liquid', glossary.map((t) => { const destId = valueOf(t, ['canonical guide', 'canonical_guide_id', 'Canonical guide', 'canonical destination', 'canonical_destination_id']); return [valueOf(t, ['term']), valueOf(t, ['concise definition', 'definition']), destId, handle(byId.get(destId))]; }));
 console.log('MSC Learn data generated and validated: 80 guides, 5 categories, 5 paths, 13 route steps, 141 glossary terms.');

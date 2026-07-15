@@ -1,14 +1,15 @@
 {{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
-{%- assign rows = render 'msc-learn-guide-data' | strip | split: '\n' -%}{%- assign current = '' -%}
-{%- for row in rows -%}{%- assign item = row | split: '|' -%}{%- if item[1] == page.handle -%}{%- assign current = item -%}{%- endif -%}{%- endfor -%}
+{%- capture learn_guide_data -%}{%- render 'msc-learn-guide-data' -%}{%- endcapture -%}{%- assign newline_delimiter = '
+' -%}{%- assign rows = learn_guide_data | strip | split: newline_delimiter -%}{%- assign current = '' -%}
+{%- for row in rows -%}{%- assign item = row | split: '[[MSC_FIELD]]' -%}{%- if item[1] == page.handle -%}{%- assign current = item -%}{%- endif -%}{%- endfor -%}
 {%- assign learn_page = pages['learn'] -%}{%- assign category_page = pages[current[3]] -%}
 <section class="msc-shell msc-learn-page"><div class="msc-container msc-learn-page__container">
 {% render 'msc-learn-breadcrumbs', learn_page: learn_page, category_page: category_page, category_label: current[4], subcategory_label: current[5], current_label: page.title %}
 <header class="msc-learn-page__header"><p class="msc-section-kicker">{{ current[4] | escape }}</p><h1>{{ page.title | escape }}</h1>{% render 'msc-learn-page-meta', page: page, category: current[4], subcategory: current[5], depth: current[7], format: current[8] %}</header>
 <article class="msc-learn-article rte">{{ page.content }}</article>
-{%- assign prev_handle = '' -%}{%- assign next_handle = '' -%}{%- for row in rows -%}{%- assign item = row | split: '|' -%}{%- if item[0] == current[9] -%}{%- assign prev_handle = item[1] -%}{%- endif -%}{%- if item[0] == current[10] -%}{%- assign next_handle = item[1] -%}{%- endif -%}{%- endfor -%}
+{%- assign prev_handle = '' -%}{%- assign next_handle = '' -%}{%- for row in rows -%}{%- assign item = row | split: '[[MSC_FIELD]]' -%}{%- if item[0] == current[9] -%}{%- assign prev_handle = item[1] -%}{%- endif -%}{%- if item[0] == current[10] -%}{%- assign next_handle = item[1] -%}{%- endif -%}{%- endfor -%}
 {% render 'msc-learn-prev-next', previous_handle: prev_handle, next_handle: next_handle, parent_handle: current[3], parent_label: current[4], learn_page: learn_page %}
-{%- assign branch_handle = '' -%}{%- for row in rows -%}{%- assign item = row | split: '|' -%}{%- if item[0] == current[11] -%}{%- assign branch_handle = item[1] -%}{%- endif -%}{%- endfor -%}
+{%- assign branch_handle = '' -%}{%- for row in rows -%}{%- assign item = row | split: '[[MSC_FIELD]]' -%}{%- if item[0] == current[11] -%}{%- assign branch_handle = item[1] -%}{%- endif -%}{%- endfor -%}
 {% render 'msc-learn-continue', page: page, path_handle: current[12], branch_handle: branch_handle %}
 </div></section>
 {% schema %}{"name":"MSC Learn guide","settings":[]}{% endschema %}
