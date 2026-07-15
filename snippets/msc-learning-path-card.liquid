@@ -16,8 +16,13 @@
 {%- endif -%}
 {%- assign card_classes = 'msc-learn-path-card msc-glass-card msc-learn-path-card--' | append: depth_class -%}
 {%- if recommended -%}{%- assign card_classes = card_classes | append: ' msc-learn-path-card--recommended' -%}{%- endif -%}
-{%- if link != blank -%}
-  <a class="{{ card_classes }} msc-learn-path-card--linked" href="{{ link }}">
+{%- assign resolved_link = link -%}
+{%- if resolved_link == blank and planned_handle != blank -%}
+  {%- assign planned_page = pages[planned_handle] -%}
+  {%- if planned_page -%}{%- assign resolved_link = planned_page.url -%}{%- endif -%}
+{%- endif -%}
+{%- if resolved_link != blank -%}
+  <a class="{{ card_classes }} msc-learn-path-card--linked" href="{{ resolved_link }}">
 {%- else -%}
   <article class="{{ card_classes }} msc-learn-path-card--static">
 {%- endif -%}
@@ -32,7 +37,7 @@
     <p>{{ description | escape }}</p>
   </div>
   <span class="msc-card-arrow">{{ action_label | default: 'Enter route' | escape }} <span aria-hidden="true">→</span></span>
-{%- if link != blank -%}
+{%- if resolved_link != blank -%}
   </a>
 {%- else -%}
   </article>

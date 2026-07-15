@@ -1,0 +1,6 @@
+{%- assign previous_page = pages[previous_handle] -%}{%- assign next_page = pages[next_handle] -%}{%- assign parent_page = pages[parent_handle] -%}
+<nav class="msc-learn-prev-next" aria-label="Guide navigation">
+  {%- if previous_page -%}<a href="{{ previous_page.url }}"><span>Previous</span><strong>{{ previous_page.title | escape }}</strong></a>{%- endif -%}
+  {%- if parent_page -%}<a href="{{ parent_page.url }}"><span>Return</span><strong>{{ parent_label | default: parent_page.title | escape }}</strong></a>{%- elsif learn_page -%}<a href="{{ learn_page.url }}"><span>Return</span><strong>Learn</strong></a>{%- endif -%}
+  {%- if next_page -%}<a href="{{ next_page.url }}"><span>Next</span><strong>{{ next_page.title | escape }}</strong></a>{%- endif -%}
+</nav>

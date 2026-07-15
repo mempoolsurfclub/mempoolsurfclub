@@ -1,0 +1,8 @@
+{{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
+{%- assign route_rows = render 'msc-learn-route-data' | strip | split: '\n' -%}{%- assign learn_page = pages['learn'] -%}
+<section class="msc-shell msc-learn-page"><div class="msc-container msc-learn-page__container">
+{% render 'msc-learn-breadcrumbs', learn_page: learn_page, current_label: page.title %}<header class="msc-learn-page__header"><p class="msc-section-kicker">Featured Route</p><h1>{{ page.title | escape }}</h1><div class="msc-learn-article rte">{{ page.content }}</div></header>
+<ol class="msc-learn-route-list">{%- for row in route_rows -%}{%- assign step = row | split: '|' -%}{%- assign step_page = pages[step[3]] -%}<li>{%- if step_page -%}<a class="msc-learn-guide-card msc-glass-card" href="{{ step_page.url }}"><strong>{{ step[1] | escape }}</strong><span>{{ step_page.title | escape }}</span></a>{%- else -%}<div class="msc-learn-route-step msc-glass-card"><strong>{{ step[1] | escape }}</strong></div>{%- endif -%}</li>{%- endfor -%}</ol>
+{% render 'msc-learn-prev-next', parent_handle: 'learn', parent_label: 'Learn', learn_page: learn_page %}
+</div></section>
+{% schema %}{"name":"MSC Learn route","settings":[]}{% endschema %}

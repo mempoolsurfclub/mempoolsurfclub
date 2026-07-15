@@ -2180,3 +2180,158 @@ body { background: var(--msc-paper-soft); }
 .msc-learn .msc-learn-paths-block, .msc-learn .msc-learn-index-block { margin-top: clamp(2rem, 3vw, 3.2rem); }
 .msc-learn .msc-learn-route-block { margin-top: clamp(2.2rem, 3.2vw, 3.4rem); }
 .msc-learn-path-card--static .msc-card-arrow { pointer-events: none; }
+
+.msc-learn-page {
+  background: #f6f0e4;
+  color: #10282d;
+}
+
+.msc-learn-page__container {
+  display: grid;
+  gap: clamp(2rem, 4vw, 4rem);
+}
+
+.msc-learn-page__header {
+  max-width: 860px;
+}
+
+.msc-learn-page__header h1 {
+  margin: 0;
+  font-size: clamp(3.2rem, 7vw, 7.2rem);
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+}
+
+.msc-learn-breadcrumbs ol,
+.msc-learn-page-meta,
+.msc-learn-prev-next,
+.msc-learn-category-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.msc-learn-breadcrumbs a,
+.msc-learn-category-nav a,
+.msc-learn-prev-next a,
+.msc-learn-glossary-term a {
+  color: #173c43;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.22em;
+}
+
+.msc-learn-breadcrumbs li:not(:last-child)::after {
+  content: "/";
+  margin-left: 0.8rem;
+  color: #4e6b71;
+}
+
+.msc-learn-page-meta li,
+.msc-learn-category-nav a {
+  border: 0.1rem solid rgba(16, 40, 45, 0.16);
+  border-radius: 999px;
+  padding: 0.45rem 0.85rem;
+  color: #4e6b71;
+}
+
+.msc-learn-category-nav a[aria-current="page"] {
+  background: #173c43;
+  color: #fbf8ef;
+}
+
+.msc-learn-article {
+  max-width: 760px;
+  font-size: 1.8rem;
+  line-height: 1.75;
+}
+
+.msc-learn-article table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.msc-learn-card-grid,
+.msc-learn-continue__grid,
+.msc-learn-route-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.6rem;
+  margin: 0;
+  padding: 0;
+}
+
+.msc-learn-route-list {
+  list-style-position: inside;
+}
+
+.msc-learn-guide-card,
+.msc-learn-route-step {
+  display: grid;
+  gap: 0.8rem;
+  min-height: 100%;
+  padding: 2rem;
+  color: #10282d;
+  text-decoration: none;
+}
+
+.msc-learn-guide-card strong,
+.msc-learn-route-step strong {
+  font-size: 2rem;
+}
+
+.msc-learn-guide-card__meta,
+.msc-learn-guide-card span,
+.msc-learn-guide-card em {
+  color: #4e6b71;
+  font-style: normal;
+}
+
+.msc-learn-prev-next {
+  justify-content: space-between;
+}
+
+.msc-learn-prev-next a {
+  display: grid;
+  gap: 0.4rem;
+  min-width: min(100%, 22rem);
+  padding: 1.4rem;
+  border: 0.1rem solid rgba(16, 40, 45, 0.16);
+  border-radius: 1.6rem;
+  text-decoration: none;
+}
+
+.msc-learn-subcategory,
+.msc-learn-glossary-group {
+  scroll-margin-top: 8rem;
+}
+
+.msc-learn-glossary-search {
+  width: min(100%, 44rem);
+  min-height: 4.8rem;
+  border: 0.1rem solid rgba(16, 40, 45, 0.2);
+  border-radius: 999px;
+  padding: 0 1.6rem;
+  background: #fbf8ef;
+  color: #10282d;
+}
+
+.msc-learn-glossary-term {
+  border-top: 0.1rem solid rgba(16, 40, 45, 0.12);
+  padding: 1.6rem 0;
+}
+
+.msc-learn-page a:focus-visible,
+.msc-learn-glossary-search:focus-visible {
+  outline: 0.2rem solid #173c43;
+  outline-offset: 0.3rem;
+}
+
+@media screen and (max-width: 749px) {
+  .msc-learn-prev-next {
+    display: grid;
+  }
+}

@@ -1,0 +1,14 @@
+{%- assign author = page.metafields.custom.msc_author_name.value | default: page.metafields.custom.msc_author_name -%}
+{%- assign reading_time = page.metafields.custom.msc_reading_time.value | default: page.metafields.custom.msc_reading_time -%}
+{%- assign last_reviewed = page.metafields.custom.msc_last_reviewed.value | default: page.metafields.custom.msc_last_reviewed -%}
+{%- if category != blank or subcategory != blank or depth != blank or format != blank or author != blank or reading_time != blank or last_reviewed != blank -%}
+<ul class="msc-learn-page-meta" aria-label="Page metadata">
+  {%- if category != blank -%}<li>{{ category | escape }}</li>{%- endif -%}
+  {%- if subcategory != blank -%}<li>{{ subcategory | escape }}</li>{%- endif -%}
+  {%- if depth != blank -%}<li>{{ depth | escape }}</li>{%- endif -%}
+  {%- if format != blank -%}<li>{{ format | escape }}</li>{%- endif -%}
+  {%- if author != blank -%}<li>By {{ author | escape }}</li>{%- endif -%}
+  {%- if reading_time != blank -%}<li>{{ reading_time | escape }}</li>{%- endif -%}
+  {%- if last_reviewed != blank -%}<li>Reviewed {{ last_reviewed | date: '%B %d, %Y' }}</li>{%- endif -%}
+</ul>
+{%- endif -%}

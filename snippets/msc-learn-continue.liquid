@@ -1,0 +1,13 @@
+{%- assign path_page = pages[path_handle] -%}{%- assign branch_page = pages[branch_handle] -%}
+{%- assign related_guides = page.metafields.custom.msc_related_guides.value -%}{%- assign related_editorials = page.metafields.custom.msc_related_editorials.value -%}
+{%- if path_page or branch_page or related_guides != blank or related_editorials != blank -%}
+<section class="msc-learn-continue" aria-labelledby="MscLearnContinue">
+  <h2 id="MscLearnContinue">Continue Learning</h2>
+  <div class="msc-learn-continue__grid">
+    {%- if path_page -%}<a class="msc-learn-guide-card msc-glass-card" href="{{ path_page.url }}"><strong>{{ path_page.title | escape }}</strong><em>Open learning path</em></a>{%- endif -%}
+    {%- if branch_page -%}<a class="msc-learn-guide-card msc-glass-card" href="{{ branch_page.url }}"><strong>{{ branch_page.title | escape }}</strong><em>Explore branch guide</em></a>{%- endif -%}
+    {%- for item in related_guides -%}<a class="msc-learn-guide-card msc-glass-card" href="{{ item.url }}"><strong>{{ item.title | escape }}</strong><em>Related guide</em></a>{%- endfor -%}
+    {%- for item in related_editorials -%}<a class="msc-learn-guide-card msc-glass-card" href="{{ item.url }}"><strong>{{ item.title | escape }}</strong><em>Related editorial</em></a>{%- endfor -%}
+  </div>
+</section>
+{%- endif -%}
