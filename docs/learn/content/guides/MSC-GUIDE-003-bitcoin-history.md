@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-003
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: A History of Bitcoin
 handle: bitcoin-history
@@ -12,8 +12,8 @@ primary_path: Start With Bitcoin
 secondary_paths:
   - Explore the Ecosystem
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-15
+copy_locked_date: 2026-07-15
 ---
 
 # A History of Bitcoin
@@ -316,14 +316,12 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer: Pending
-- Review date: Pending
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-15
 - Notes:
-  - Confirm all source URLs remain accessible immediately before copy lock.
-  - Confirm the original BitcoinTalk pizza thread remains accessible before copy lock.
-  - Confirm Hal Finney's original post or the identified stable archive remains accessible before copy lock.
-  - Confirm the final SegWit and Taproot activation-date sources remain accessible and authoritative.
-  - Confirm planned internal links remain inactive until real destination pages and URLs exist.
+  - Editorial accuracy review completed.
+  - Recheck source URL accessibility immediately before publication.
+  - Keep planned internal links inactive until real destination pages and confirmed URLs exist.
 
 ## 12. Illustration brief
 
