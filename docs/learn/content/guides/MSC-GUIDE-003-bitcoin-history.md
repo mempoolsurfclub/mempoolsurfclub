@@ -181,11 +181,11 @@ The next guide narrows the focus to Satoshi Nakamoto. It examines the documented
 - Direct URL: https://link.springer.com/chapter/10.1007/978-1-4757-0602-4_18
 - Supports: Chaum's blind-signature design for private electronic payments and the issuing-institution model described in the Before Bitcoin section.
 
-### Hashcash - Bitcoin Wiki
+### Hashcash - A Denial of Service Counter-Measure
 
-- Author or publisher: Bitcoin Wiki
-- Direct URL: https://en.bitcoin.it/wiki/Hashcash
-- Supports: Adam Back's creation of Hashcash as a proof-of-work system proposed for limiting email spam, denial-of-service attacks, and other network abuse.
+- Author or publisher: Adam Back, Satoshi Nakamoto Institute archive
+- Direct URL: https://nakamotoinstitute.org/library/hashcash/
+- Supports: Back's Hashcash proof-of-work system and its purpose of limiting email spam, denial-of-service attacks, and other network abuse.
 
 ### b-money
 
