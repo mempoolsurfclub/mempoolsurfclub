@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-002
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: Why Does Bitcoin Matter?
 handle: why-bitcoin
@@ -12,8 +12,8 @@ primary_path: Start With Bitcoin
 secondary_paths:
   - Explore the Ecosystem
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-15
+copy_locked_date: 2026-07-15
 ---
 
 # Why Does Bitcoin Matter?
@@ -267,11 +267,12 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer: Pending
-- Review date: Pending
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-15
 - Notes:
-  - Confirm all source URLs immediately before copy lock.
-  - Confirm planned internal links remain inactive until real destination pages and URLs exist.
+  - Editorial accuracy review completed.
+  - Recheck source URL accessibility immediately before publication.
+  - Keep planned internal links inactive until real destination pages and confirmed URLs exist.
 
 ## 12. Illustration brief
 
