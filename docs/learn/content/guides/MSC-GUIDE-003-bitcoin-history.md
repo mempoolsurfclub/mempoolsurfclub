@@ -54,7 +54,7 @@ The announcement did not immediately create broad public interest. Early replies
 
 Bitcoin's first block, now called the genesis block, is dated January 3, 2009. Its coinbase data includes the text "The Times 03/Jan/2009 Chancellor on brink of second bailout for banks."
 
-The text proves that the block could not have been created before that newspaper headline appeared. Many readers interpret it as commentary on banking and monetary policy during the financial crisis. Satoshi did not leave a definitive explanation of the message's intended meaning, so the broader political interpretation should remain identified as interpretation.
+The embedded headline provides a contemporaneous timestamp reference associated with January 3, 2009. Many readers interpret it as commentary on banking and monetary policy during the financial crisis. Satoshi did not leave a definitive explanation of the message's intended meaning, so the broader political interpretation should remain identified as interpretation.
 
 On January 8, 2009, Satoshi announced the release of Bitcoin version 0.1. The release included source code and Windows software that allowed early users to connect, generate blocks, and send transactions.
 
@@ -175,6 +175,30 @@ The next guide narrows the focus to Satoshi Nakamoto. It examines the documented
 - Direct URL: https://bitcoin.org/bitcoin.pdf
 - Supports: Bitcoin's technical foundations and its direct references to earlier work on b-money, Hashcash, and timestamping.
 
+### Blind Signatures for Untraceable Payments
+
+- Author or publisher: David Chaum, Springer
+- Direct URL: https://link.springer.com/chapter/10.1007/978-1-4757-0602-4_18
+- Supports: Chaum's blind-signature design for private electronic payments and the issuing-institution model described in the Before Bitcoin section.
+
+### Hashcash - Bitcoin Wiki
+
+- Author or publisher: Bitcoin Wiki
+- Direct URL: https://en.bitcoin.it/wiki/Hashcash
+- Supports: Adam Back's creation of Hashcash as a proof-of-work system proposed for limiting email spam, denial-of-service attacks, and other network abuse.
+
+### b-money
+
+- Author or publisher: Wei Dai, Satoshi Nakamoto Institute archive
+- Direct URL: https://nakamotoinstitute.org/library/b-money/
+- Supports: Dai's proposal for distributed electronic money using pseudonymous participants, signed transfers, distributed account records, and computational money creation.
+
+### Bit gold
+
+- Author or publisher: Nick Szabo
+- Direct URL: https://unenumerated.blogspot.com/2005/12/bit-gold.html
+- Supports: Szabo's proposal for scarce digital value using proof of work, timestamping, and a distributed title registry.
+
 ### Bitcoin P2P e-cash paper
 
 - Author or publisher: Satoshi Nakamoto, Cryptography Mailing List archive
@@ -193,11 +217,11 @@ The next guide narrows the focus to Satoshi Nakamoto. It examines the documented
 - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp
 - Supports: The genesis block construction, timestamp, embedded newspaper text, and mainnet consensus parameters.
 
-### Hal Finney received the first Bitcoin transaction. Here's how he describes it.
+### Bitcoin and me
 
-- Author or publisher: Andrea Peterson, The Washington Post
-- Direct URL: https://www.washingtonpost.com/news/the-switch/wp/2014/01/03/hal-finney-received-the-first-bitcoin-transaction-heres-how-he-describes-it/
-- Supports: Hal Finney's account of running the early software, receiving a ten-bitcoin test transaction, and reporting bugs to Satoshi.
+- Author or publisher: Hal Finney, Satoshi Nakamoto Institute archive of the original BitcoinTalk post
+- Direct URL: https://nakamotoinstitute.org/library/bitcoin-and-me/
+- Supports: Finney's account of running the early Bitcoin software, receiving a ten-bitcoin test transaction from Satoshi, and reporting bugs.
 
 ### Pizza for bitcoins?
 
@@ -217,11 +241,23 @@ The next guide narrows the focus to Satoshi Nakamoto. It examines the documented
 - Direct URL: https://bips.dev/141/
 - Supports: SegWit's consensus design, witness structure, transaction malleability changes, and block weight.
 
+### Segregated witness
+
+- Author or publisher: Bitcoin Optech
+- Direct URL: https://bitcoinops.org/en/topics/segregated-witness/
+- Supports: SegWit's activation in 2017 and its technical deployment history.
+
 ### BIP 341: Taproot
 
 - Author or publisher: Pieter Wuille, Jonas Nick, and Anthony Towns, Bitcoin Improvement Proposals
 - Direct URL: https://bips.dev/341/
 - Supports: Taproot's consensus design, Schnorr-based key-path spending, and script-path structure.
+
+### Bitcoin Optech Newsletter #175
+
+- Author or publisher: Bitcoin Optech
+- Direct URL: https://bitcoinops.org/en/newsletters/2021/11/17/
+- Supports: Taproot's activation at block height 709,632 in November 2021.
 
 ### Bitcoin Core source repository
 
@@ -283,12 +319,10 @@ Do not activate planned links until the destination exists as a real published p
 - Reviewer: Pending
 - Review date: Pending
 - Notes:
-  - Confirm the October 31, 2008 white paper announcement date against the mailing-list archive.
-  - Confirm the genesis block date and embedded text against Bitcoin Core mainnet parameters.
-  - Confirm the January 2009 software-release date and the early Hal Finney transaction details.
+  - Confirm all source URLs remain accessible immediately before copy lock.
   - Confirm the original BitcoinTalk pizza thread remains accessible before copy lock.
-  - Confirm the historical descriptions of P2SH, SegWit, and Taproot remain accurate at Surface depth.
-  - Confirm exact glossary-definition synchronization.
+  - Confirm Hal Finney's original post or the identified stable archive remains accessible before copy lock.
+  - Confirm the final SegWit and Taproot activation-date sources remain accessible and authoritative.
   - Confirm planned internal links remain inactive until real destination pages and URLs exist.
 
 ## 12. Illustration brief
