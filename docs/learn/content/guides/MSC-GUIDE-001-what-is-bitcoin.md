@@ -20,7 +20,7 @@ copy_locked_date: 2026-07-14
 
 ## 1. Introductory deck
 
-Bitcoin is a peer-to-peer network and a digitally scarce asset. It allows people to verify and transfer value without relying on a central issuer, while placing more responsibility on users to understand keys, custody, transactions, and risk.
+Bitcoin is a peer-to-peer network with a digitally scarce native asset, bitcoin. It allows people to verify and transfer value without relying on a central issuer, while placing more responsibility on users to understand keys, custody, transactions, and risk.
 
 ## 2. Full article
 
@@ -105,7 +105,7 @@ Many modern wallets derive multiple keys from one underlying backup. Some presen
 
 Control of the necessary keys usually provides the ability to authorize spending. Losing or exposing them can mean losing access or control. Self-custody shifts more responsibility to the user.
 
-### Why bitcoin Is Scarce
+### Why Bitcoin Is Scarce
 
 Bitcoin's issuance rules are part of the consensus rules that validating nodes independently enforce. New bitcoin enters circulation through the block subsidy, which began at 50 BTC per block and is reduced by half every 210,000 blocks. Under the current rules, total issuance remains below the commonly cited limit of 21 million BTC. Scarcity here describes an issuance constraint, not a promise about market price, future demand, or purchasing power.
 
@@ -260,7 +260,7 @@ Learn what Bitcoin is and how nodes, miners, wallets, proof of work, UTXOs, and 
 
 ## 7. Page excerpt
 
-Bitcoin is both a peer-to-peer network and a digitally scarce asset. This introductory guide explains how nodes, miners, wallets, transactions, proof of work, and Bitcoin's issuance rules fit together.
+Bitcoin is a peer-to-peer network with a digitally scarce native asset, bitcoin. This introductory guide explains how nodes, miners, wallets, transactions, proof of work, and Bitcoin's issuance rules fit together.
 
 ## 8. Estimated reading time
 
