@@ -281,7 +281,6 @@ Do not activate planned links until the destination exists as a real published p
   - Confirm the description of Satoshi's public withdrawal against the archived message timeline.
   - Confirm that no sentence implies a verified legal identity, nationality, location, gender, or group structure.
   - Confirm the distinction between key control and proof of authorship remains technically and historically careful.
-  - Confirm exact glossary-definition synchronization.
   - Confirm the final source notes do not rely on speculative Satoshi identity material.
   - Confirm planned internal links remain inactive until real destination pages and URLs exist.
 
