@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-004
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: Who Was Satoshi Nakamoto?
 handle: satoshi-nakamoto
@@ -12,8 +12,8 @@ primary_path: Start With Bitcoin
 secondary_paths:
   - Explore the Ecosystem
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-15
+copy_locked_date: 2026-07-15
 ---
 
 # Who Was Satoshi Nakamoto?
@@ -274,15 +274,12 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer: Pending
-- Review date: Pending
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-15
 - Notes:
-  - Confirm all mailing-list and archive URLs immediately before copy lock.
-  - Confirm the description of Satoshi's public withdrawal against the archived message timeline.
-  - Confirm that no sentence implies a verified legal identity, nationality, location, gender, or group structure.
-  - Confirm the distinction between key control and proof of authorship remains technically and historically careful.
-  - Confirm the final source notes do not rely on speculative Satoshi identity material.
-  - Confirm planned internal links remain inactive until real destination pages and URLs exist.
+  - Editorial accuracy review completed.
+  - Recheck source URL accessibility immediately before publication.
+  - Keep planned internal links inactive until real destination pages and confirmed URLs exist.
 
 ## 12. Illustration brief
 
