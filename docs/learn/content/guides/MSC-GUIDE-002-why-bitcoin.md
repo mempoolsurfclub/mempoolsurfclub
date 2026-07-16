@@ -208,6 +208,12 @@ The next step is to understand how that alternative developed. Bitcoin's history
 - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp
 - Supports: Bitcoin mainnet's 210,000-block subsidy-halving interval and other network consensus parameters.
 
+### Bitcoin Core Block Subsidy Function
+
+- Author or publisher: Bitcoin Core developers
+- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp
+- Supports: The initial 50 BTC block subsidy and the subsidy-halving calculation applied at each configured halving interval.
+
 ### Bitcoin Core Consensus Amount Definitions
 
 - Author or publisher: Bitcoin Core developers
@@ -264,10 +270,7 @@ Do not activate planned links until the destination exists as a real published p
 - Reviewer: Pending
 - Review date: Pending
 - Notes:
-  - Confirm the final issuance wording and source support.
   - Confirm all source URLs immediately before copy lock.
-  - Confirm exact glossary-definition synchronization.
-  - Confirm the treatment of censorship resistance and regulatory limits remains balanced.
   - Confirm planned internal links remain inactive until real destination pages and URLs exist.
 
 ## 12. Illustration brief
