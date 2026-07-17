@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-011
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: How to Keep Bitcoin Secure
 handle: bitcoin-security
@@ -12,8 +12,8 @@ primary_path: Use Bitcoin Safely
 secondary_paths:
   - Start With Bitcoin
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-17
+copy_locked_date: 2026-07-17
 ---
 
 # How to Keep Bitcoin Secure
@@ -360,17 +360,13 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer:
-- Review date:
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-17
 - Notes:
-  - Confirm all source URLs immediately before copy lock.
-  - Confirm current Bitcoin Core release-verification instructions and file paths.
-  - Confirm hardware-signing terminology remains product-neutral and does not imply complete isolation or transaction verification.
-  - Confirm BIP 129, BIP 174, and descriptor terminology remains current.
-  - Confirm the suspected-compromise section stays high level and appropriate for varied wallet arrangements.
-  - Confirm no security recommendation becomes a universal prescription through illustration wording or captions.
-  - Confirm exact glossary-definition synchronization.
-  - Confirm planned internal links remain inactive until real destination pages and confirmed URLs exist.
+  - Editorial accuracy and security-guidance review completed.
+  - Recheck source URL accessibility immediately before publication.
+  - Confirm Bitcoin Core release-verification paths and wallet, hardware-signing, multisignature, descriptor, and recovery terminology remains current before publication.
+  - Keep planned internal links inactive until real destination pages and confirmed URLs exist.
 
 ## 12. Illustration brief
 

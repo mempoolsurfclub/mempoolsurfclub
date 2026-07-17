@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-012
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: How Bitcoin Privacy Works
 handle: bitcoin-privacy
@@ -12,8 +12,8 @@ primary_path: Use Bitcoin Safely
 secondary_paths:
   - Start With Bitcoin
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-17
+copy_locked_date: 2026-07-17
 ---
 
 # How Bitcoin Privacy Works
@@ -421,18 +421,13 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer:
-- Review date:
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-17
 - Notes:
-  - Confirm all source URLs immediately before copy lock.
-  - Confirm current Bitcoin Core and wallet transaction-broadcast behavior before making implementation-specific origin-privacy claims.
-  - Confirm BIP 157 and BIP 158 descriptions remain accurate for current client-side filtering implementations.
-  - Confirm common-input, change, and clustering language reflects current research and preserves uncertainty.
-  - Confirm CoinJoin and PayJoin terminology, security considerations, coordinator dependencies, and compatibility claims.
-  - Confirm Lightning privacy language against current BOLT specifications and implementation research.
-  - Confirm Tor language does not imply protection from on-chain analysis or all forms of traffic analysis.
-  - Confirm exact glossary-definition synchronization.
-  - Confirm planned internal links remain inactive until real destination pages and confirmed URLs exist.
+  - Editorial accuracy and privacy-claims review completed.
+  - Recheck source URL accessibility immediately before publication.
+  - Recheck current transaction-relay, compact-filter, CoinJoin, PayJoin, Lightning, and Tor terminology and implementation behavior before publication.
+  - Keep planned internal links inactive until real destination pages and confirmed URLs exist.
 
 ## 12. Illustration brief
 

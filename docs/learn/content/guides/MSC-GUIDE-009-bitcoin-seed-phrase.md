@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-009
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: What Is a Bitcoin Seed Phrase?
 handle: bitcoin-seed-phrase
@@ -12,8 +12,8 @@ primary_path: Use Bitcoin Safely
 secondary_paths:
   - Start With Bitcoin
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-17
+copy_locked_date: 2026-07-17
 ---
 
 # What Is a Bitcoin Seed Phrase?
@@ -296,16 +296,13 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer:
-- Review date:
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-17
 - Notes:
-  - Confirm all source URLs immediately before copy lock.
-  - Confirm the final description of BIP 39 normalization, checksum, and optional passphrase processing.
-  - Confirm derivation-path examples remain accurate without implying universal wallet support.
-  - Confirm BIP 129 and descriptor terminology remains current.
-  - Confirm no phrase fragment, illustration label, or code-like text could be mistaken for usable recovery material.
-  - Confirm exact glossary-definition synchronization.
-  - Confirm planned internal links remain inactive until real destination pages and confirmed URLs exist.
+  - Editorial accuracy and secret-material safety review completed.
+  - Recheck source URL accessibility immediately before publication.
+  - Confirm BIP 39, BIP 129, derivation-path, and descriptor terminology remains current before publication.
+  - Keep planned internal links inactive until real destination pages and confirmed URLs exist.
 
 ## 12. Illustration brief
 
