@@ -65,9 +65,9 @@ A balanced plan treats theft and loss as separate problems rather than assuming 
 
 In a custodial arrangement, a service controls the keys or withdrawal authority. The user depends on the service's security, solvency, policy, legal environment, identity controls, and availability.
 
-In Self-Custody, the user or a user-defined group controls the keys needed to spend. This can reduce dependence on a custodian, but it moves backup, transaction verification, device, and recovery responsibilities into the user's arrangement.
+In self-custody, the user or a user-defined group controls the keys needed to spend. This can reduce dependence on a custodian, but it moves backup, transaction verification, device, and recovery responsibilities into the user's arrangement.
 
-Neither model removes trust. Custody moves trust toward an institution. Self-Custody distributes trust across software, devices, backups, people, and procedures chosen by the user.
+Neither model removes trust. Custody moves trust toward an institution. Self-custody distributes trust across software, devices, backups, people, and procedures chosen by the user.
 
 The important security question is not which label sounds stronger. It is where failure can occur and how recovery works.
 
@@ -309,7 +309,7 @@ The next guide looks at privacy as another form of information security, with it
 
 - Author or publisher: Nils Schneider and Matt Corallo
 - Direct URL: https://bips.dev/21/
-- Supports: Structured Bitcoin payment requests and the need to verify network, amount, and destination information.
+- Supports: The Bitcoin payment URI structure for an address, optional amount, label, message, and extensible parameters.
 
 ## 5. SEO title
 
@@ -360,14 +360,17 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Confirm all source URLs immediately before copy lock.
-- Confirm current Bitcoin Core release-verification instructions and file paths.
-- Confirm hardware-signing terminology remains product-neutral and does not imply complete isolation or transaction verification.
-- Confirm BIP 129, BIP 174, and descriptor terminology remains current.
-- Confirm the suspected-compromise section stays high level and appropriate for varied wallet arrangements.
-- Confirm no security recommendation becomes a universal prescription through illustration wording or captions.
-- Confirm exact glossary-definition synchronization.
-- Confirm planned internal links remain inactive until real destination pages and confirmed URLs exist.
+- Reviewer:
+- Review date:
+- Notes:
+  - Confirm all source URLs immediately before copy lock.
+  - Confirm current Bitcoin Core release-verification instructions and file paths.
+  - Confirm hardware-signing terminology remains product-neutral and does not imply complete isolation or transaction verification.
+  - Confirm BIP 129, BIP 174, and descriptor terminology remains current.
+  - Confirm the suspected-compromise section stays high level and appropriate for varied wallet arrangements.
+  - Confirm no security recommendation becomes a universal prescription through illustration wording or captions.
+  - Confirm exact glossary-definition synchronization.
+  - Confirm planned internal links remain inactive until real destination pages and confirmed URLs exist.
 
 ## 12. Illustration brief
 

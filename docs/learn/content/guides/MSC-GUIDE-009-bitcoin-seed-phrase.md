@@ -62,7 +62,7 @@ BIP 39 has two main stages.
 
 First, entropy and checksum information are represented as mnemonic words.
 
-Second, the mnemonic and an optional passphrase are processed through a defined key-stretching function to produce seed material. That seed can then be used by a hierarchical deterministic wallet standard such as BIP 32.
+Second, BIP 39 normalizes both the mnemonic and optional passphrase using UTF-8 NFKD, then processes them through PBKDF2 with HMAC-SHA512 to produce 512 bits of seed material. That seed can then be used by a hierarchical deterministic wallet standard such as BIP 32.
 
 The mnemonic is therefore not the same object as the resulting seed. Wallet interfaces may use the word seed loosely, but the distinction matters when comparing standards or troubleshooting recovery.
 
@@ -200,7 +200,7 @@ The next guide explains the public and private keys that the wallet ultimately d
 
 - Author or publisher: Marek Palatinus, Pavol Rusnak, Aaron Voisine, and Sean Bowe
 - Direct URL: https://bips.dev/39/
-- Supports: BIP 39 entropy and checksum encoding, standard mnemonic lengths, defined word lists, optional passphrase processing, and conversion of the mnemonic into seed material.
+- Supports: BIP 39 entropy and checksum encoding, standard mnemonic lengths, UTF-8 NFKD normalization, optional-passphrase processing through PBKDF2 with HMAC-SHA512, and conversion into 512 bits of seed material.
 
 ### BIP 32: Hierarchical Deterministic Wallets
 
@@ -296,13 +296,16 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Confirm all source URLs immediately before copy lock.
-- Confirm the final description of BIP 39 normalization, checksum, and optional passphrase processing.
-- Confirm derivation-path examples remain accurate without implying universal wallet support.
-- Confirm BIP 129 and descriptor terminology remains current.
-- Confirm no phrase fragment, illustration label, or code-like text could be mistaken for usable recovery material.
-- Confirm exact glossary-definition synchronization.
-- Confirm planned internal links remain inactive until real destination pages and confirmed URLs exist.
+- Reviewer:
+- Review date:
+- Notes:
+  - Confirm all source URLs immediately before copy lock.
+  - Confirm the final description of BIP 39 normalization, checksum, and optional passphrase processing.
+  - Confirm derivation-path examples remain accurate without implying universal wallet support.
+  - Confirm BIP 129 and descriptor terminology remains current.
+  - Confirm no phrase fragment, illustration label, or code-like text could be mistaken for usable recovery material.
+  - Confirm exact glossary-definition synchronization.
+  - Confirm planned internal links remain inactive until real destination pages and confirmed URLs exist.
 
 ## 12. Illustration brief
 

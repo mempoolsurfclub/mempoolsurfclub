@@ -201,11 +201,11 @@ It is a privacy technique with specific security and compatibility requirements,
 
 ### Lightning privacy is different
 
-The Lightning Network routes off-chain payments through payment channels and settles channel transactions on Bitcoin.
+The Lightning Network routes off-chain payments through payment channels and records channel funding and closing transactions on Bitcoin. Identifying every funding or closing transaction as a Lightning channel may require additional information.
 
-Intermediate routing nodes may know adjacent hops and payment-related data. The sender and receiver have different information. Channel openings and closures can be visible on-chain, while individual successful routed payments are not written as ordinary on-chain transactions.
+Intermediate routing nodes learn information needed for their adjacent forwarding step, while the sender and receiver have different views of the route and payment. Successful routed payments update channel state and are not individually written to the blockchain as ordinary on-chain payments.
 
-Privacy depends on route selection, network topology, invoices, timing, node logs, channel relationships, and implementation behavior.
+Privacy depends on route selection, network topology, invoices, timing, node observations, channel relationships, and implementation behavior. Research has shown that public network information and routing behavior can sometimes be used to narrow possible payment endpoints or infer channel information.
 
 Lightning can reduce some public on-chain payment detail. It should not be described as perfectly anonymous.
 
@@ -309,11 +309,11 @@ The next canonical guide explains UTXOs in more detail. That model is essential 
 - Direct URL: https://bips.dev/78/
 - Supports: Receiver input contribution, PayJoin negotiation, common-input-ownership heuristic disruption, and sender validation requirements.
 
-### CoinJoin
+### CoinJoin: Bitcoin Privacy for the Real World
 
-- Author or publisher: Bitcoin Wiki, based on Gregory Maxwell's original proposal
-- Direct URL: https://en.bitcoin.it/wiki/CoinJoin
-- Supports: CoinJoin's shared-transaction structure, independent input signatures, limits of common-input ownership assumptions, and coordination and denial-of-service tradeoffs.
+- Author or publisher: Gregory Maxwell
+- Direct URL: https://bitcointalk.org/index.php?topic=279249.0
+- Supports: The original CoinJoin proposal, multi-participant transaction construction, independent input signatures, and why shared-input transactions weaken the common-input-ownership assumption.
 
 ### A Fistful of Bitcoins: Characterizing Payments Among Men with No Names
 
@@ -356,6 +356,18 @@ The next canonical guide explains UTXOs in more detail. That model is essential 
 - Author or publisher: Lightning specification contributors
 - Direct URL: https://github.com/lightning/bolts/blob/master/04-onion-routing.md
 - Supports: Lightning onion routing, per-hop information boundaries, and the distinction between routed payment privacy and on-chain privacy.
+
+### BOLT 3: Bitcoin Transaction and Script Formats
+
+- Author or publisher: Lightning specification contributors
+- Direct URL: https://github.com/lightning/bolts/blob/master/03-transactions.md
+- Supports: The Bitcoin funding, commitment, and closing transaction structures used by Lightning channels.
+
+### An Empirical Analysis of Privacy in the Lightning Network
+
+- Author or publisher: George Kappos, Haaroon Yousaf, Ania Piotrowska, Sanket Kanjalkar, Sergi Delgado-Segura, Andrew Miller, and Sarah Meiklejohn
+- Direct URL: https://arxiv.org/abs/2003.12470
+- Supports: Empirical Lightning privacy limitations, including attacks using public network information to infer channel balances and possible payment endpoints.
 
 ## 5. SEO title
 
@@ -409,15 +421,18 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Confirm all source URLs immediately before copy lock.
-- Confirm current Bitcoin Core and wallet transaction-broadcast behavior before making implementation-specific origin-privacy claims.
-- Confirm BIP 157 and BIP 158 descriptions remain accurate for current client-side filtering implementations.
-- Confirm common-input, change, and clustering language reflects current research and preserves uncertainty.
-- Confirm CoinJoin and PayJoin terminology, security considerations, coordinator dependencies, and compatibility claims.
-- Confirm Lightning privacy language against current BOLT specifications and implementation research.
-- Confirm Tor language does not imply protection from on-chain analysis or all forms of traffic analysis.
-- Confirm exact glossary-definition synchronization.
-- Confirm planned internal links remain inactive until real destination pages and confirmed URLs exist.
+- Reviewer:
+- Review date:
+- Notes:
+  - Confirm all source URLs immediately before copy lock.
+  - Confirm current Bitcoin Core and wallet transaction-broadcast behavior before making implementation-specific origin-privacy claims.
+  - Confirm BIP 157 and BIP 158 descriptions remain accurate for current client-side filtering implementations.
+  - Confirm common-input, change, and clustering language reflects current research and preserves uncertainty.
+  - Confirm CoinJoin and PayJoin terminology, security considerations, coordinator dependencies, and compatibility claims.
+  - Confirm Lightning privacy language against current BOLT specifications and implementation research.
+  - Confirm Tor language does not imply protection from on-chain analysis or all forms of traffic analysis.
+  - Confirm exact glossary-definition synchronization.
+  - Confirm planned internal links remain inactive until real destination pages and confirmed URLs exist.
 
 ## 12. Illustration brief
 

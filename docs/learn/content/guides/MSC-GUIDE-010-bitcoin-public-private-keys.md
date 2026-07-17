@@ -342,14 +342,17 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Confirm all source URLs immediately before copy lock.
-- Confirm the secp256k1 description against the current SEC 2 specification.
-- Confirm ECDSA and Schnorr wording remains accurate across legacy, SegWit, Taproot key-path, and Tapscript contexts.
-- Confirm BIP 32 extended-key and non-hardened child-key security wording.
-- Confirm address and public-key revelation wording for the output types described.
-- Confirm no example resembles a usable private key, WIF string, extended key, or recovery phrase.
-- Confirm exact glossary-definition synchronization.
-- Confirm planned internal links remain inactive until real destination pages and confirmed URLs exist.
+- Reviewer:
+- Review date:
+- Notes:
+  - Confirm all source URLs immediately before copy lock.
+  - Confirm the secp256k1 description against the current SEC 2 specification.
+  - Confirm ECDSA and Schnorr wording remains accurate across legacy, SegWit, Taproot key-path, and Tapscript contexts.
+  - Confirm BIP 32 extended-key and non-hardened child-key security wording.
+  - Confirm address and public-key revelation wording for the output types described.
+  - Confirm no example resembles a usable private key, WIF string, extended key, or recovery phrase.
+  - Confirm exact glossary-definition synchronization.
+  - Confirm planned internal links remain inactive until real destination pages and confirmed URLs exist.
 
 ## 12. Illustration brief
 
