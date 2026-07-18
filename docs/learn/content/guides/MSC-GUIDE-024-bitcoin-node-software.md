@@ -91,9 +91,11 @@ Its codebase is derived from Bitcoin Core and remains closely related, but it is
 
 Knots may include additional configuration options, backported changes, different defaults, or policy choices that are not identical to the corresponding Bitcoin Core release.
 
+Current releases also show why consensus and policy must not be collapsed. Bitcoin Knots v29.3.knots20260508 includes an RDTS or BIP110 soft fork deployment and asks the operator for explicit confirmation. The project also provides a build of that release without RDTS support. This is a release-specific and configuration-sensitive consensus difference, not merely a mempool-policy preference. Operators must verify the exact release, enabled consensus rules, activation assumptions, and compatibility with the chain they intend to follow.
+
 That relationship requires precise wording. Bitcoin Knots is not an unrelated clean-room implementation, and it should not be described as merely a theme or interface for Bitcoin Core. It is a separate maintained software distribution built from a closely related codebase.
 
-An operator comparing the two should read the current Knots release notes and documentation rather than relying on a timeless list of differences. Features, defaults, backports, and release relationships can change.
+An operator comparing the two should read the current Knots release notes and documentation rather than relying on a timeless list of differences. Features, defaults, backports, consensus settings, and release relationships can change.
 
 ### Related codebases do not eliminate comparison work
 
@@ -105,6 +107,7 @@ The meaningful comparison is release-specific:
 
 - Which upstream changes are included?
 - Which additional patches are included?
+- Which consensus deployments or settings are included?
 - Which defaults differ?
 - Which policy controls are exposed?
 - How are releases signed and distributed?
@@ -190,8 +193,9 @@ Defaults may affect:
 - Logging.
 - Resource allocation.
 - Mining-template construction.
+- Consensus deployments that require operator selection or confirmation.
 
-A default is not a consensus rule. It is still consequential because many operators never change it.
+A default is not automatically a consensus rule. It is still consequential because many operators never change it. Where a release exposes a consensus-rule selection, that setting must be evaluated separately from ordinary policy defaults.
 
 When comparing software, document the installed release's defaults instead of repeating a historical blog post. Also distinguish defaults from available options. An implementation may support a behavior without enabling it automatically.
 
@@ -352,7 +356,7 @@ The best choice is the maintained software whose documented behavior, release pr
 
 Use the same questions for every candidate:
 
-1. **Validation:** Does it fully validate the current Bitcoin consensus rules?
+1. **Validation:** Does it fully validate the current Bitcoin consensus rules, and does the release expose any additional consensus deployments or settings?
 2. **Maintenance:** Is it actively maintained with a visible security and release process?
 3. **Release trust:** Can binaries be verified against documented signed release materials?
 4. **Policy:** Which relay and mempool defaults differ, and why do those differences matter?
@@ -430,12 +434,12 @@ Bitcoin node software should be chosen the same way other security-critical infr
 10. **Bitcoin Knots official website**  
     Author or publisher: Bitcoin Knots project  
     URL: https://bitcoinknots.org/  
-    Supports: Official Bitcoin Knots releases, project documentation, and the project's current distribution channel.
+    Supports: Official Bitcoin Knots releases, project documentation, current distribution channel, and availability of release variants.
 
-11. **Bitcoin Knots release history**  
+11. **Bitcoin Knots v29.3.knots20260508 release notes**  
     Author or publisher: Bitcoin Knots contributors  
-    URL: https://github.com/bitcoinknots/bitcoin/releases  
-    Supports: Release-specific versioning, published changes, downloadable artifacts, and the need to compare current releases rather than a timeless feature list.
+    URL: https://github.com/bitcoinknots/bitcoin/releases/tag/v29.3.knots20260508  
+    Supports: The current release's RDTS or BIP110 soft fork deployment, explicit operator confirmation, availability of a build without RDTS support, and the need to compare consensus settings as well as policy and feature differences.
 
 12. **Bitcoin Developer Guide: P2P Network**  
     Author or publisher: Bitcoin.org contributors  
@@ -466,7 +470,7 @@ Bitcoin node implementations can share consensus compatibility while differing i
 
 ## 8. Estimated reading time
 
-18 minutes
+19 minutes
 
 ## 9. Planned internal links
 
@@ -495,8 +499,10 @@ Do not activate planned links until the destination exists as a real published p
 - [x] Registry metadata and navigation relationships match the approved registry.
 - [x] Consensus behavior, local policy, defaults, interfaces, and storage are separated.
 - [x] Policy differences are not described as automatic consensus differences.
+- [x] Release-specific consensus deployments are not described as policy-only differences.
 - [x] Bitcoin Core is described with the approved glossary wording.
 - [x] Bitcoin Knots is described as a separate maintained project with a closely related codebase.
+- [x] The current Knots RDTS or BIP110 release behavior is precisely dated and sourced.
 - [x] No timeless feature list is presented for a changing software release.
 - [x] Software diversity benefits and consensus-divergence risks are both acknowledged.
 - [x] Libraries, indexers, wallet servers, and mining tools are not automatically labeled full nodes.
@@ -517,6 +523,7 @@ Do not activate planned links until the destination exists as a real published p
 - Notes:
   - Verified Bitcoin Core v31.0 project, release, policy, RPC, storage, testing, and development-process claims against official source and documentation.
   - Verified current Bitcoin Knots project identity, full-validation description, release channel, and related-codebase wording against official project materials.
+  - Verified Bitcoin Knots v29.3.knots20260508 includes an RDTS or BIP110 consensus deployment requiring explicit confirmation and that the project offers a build without RDTS support. The article does not describe this as a policy-only difference.
   - Verified no current policy, feature, version, or release difference is generalized beyond the cited project documentation.
   - Verified consensus rules, standardness, mempool policy, relay defaults, wallet features, and application interfaces remain distinct.
   - Verified source review, release signatures, package provenance, and reproducible-build considerations are not treated as interchangeable guarantees.
@@ -531,14 +538,14 @@ Do not activate planned links until the destination exists as a real published p
 ### Illustration 1
 
 - Concept title: Consensus and Policy Layers
-- Educational purpose: Show how two node implementations can agree on block validity while applying different local transaction policies.
+- Educational purpose: Show how two node implementations can agree on block validity while applying different local transaction policies, while also flagging that a release may expose separate consensus-rule choices.
 - Recommended placement: After the section titled Policy is not consensus.
-- Visual description: Oceanographic cross-section with a shared deep foundation labeled Consensus validation. Above it, two separate surface stations labeled Implementation A policy and Implementation B policy filter different unconfirmed transactions. Both accept the same valid block at the foundation layer.
-- Required labels: Shared consensus rules, Valid block, Local policy A, Local policy B, Mempool, Relay, Consensus valid
-- Caption: Compatible node software can enforce the same block rules while using different local mempool and relay policies.
-- Alt text: Layered diagram showing two Bitcoin node implementations sharing consensus validation while applying different local transaction policies above it.
+- Visual description: Oceanographic cross-section with a shared deep foundation labeled Consensus validation. Above it, two separate surface stations labeled Implementation A policy and Implementation B policy filter different unconfirmed transactions. A separate switch beside the foundation is labeled Release-specific consensus setting. Both stations accept the same valid block only when the selected consensus rules remain compatible.
+- Required labels: Consensus rules, Release-specific consensus setting, Valid block, Local policy A, Local policy B, Mempool, Relay, Compatibility check
+- Caption: Node software can differ in local policy, while release-specific consensus settings require a separate compatibility review.
+- Alt text: Layered diagram showing two Bitcoin node implementations with different local policies above a consensus layer and a separate release-specific consensus compatibility switch.
 - Image orientation: Landscape
-- Mobile crop notes: Keep the shared consensus foundation across the full width and stack the two policy stations above it.
+- Mobile crop notes: Keep the consensus foundation and compatibility switch centered, with the two policy stations stacked above it.
 - Status: PLANNED
 
 ### Illustration 2
