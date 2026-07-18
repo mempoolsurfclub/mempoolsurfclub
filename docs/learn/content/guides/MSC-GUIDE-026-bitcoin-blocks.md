@@ -150,7 +150,7 @@ Weight is a consensus limit. Local mining policy may use additional limits, but 
 
 The block header contains a miner-selected timestamp measured in seconds.
 
-Consensus applies contextual time rules. A block's timestamp must be greater than the median time of a defined set of previous blocks. Nodes also reject headers too far into the future relative to their adjusted view of current time.
+Consensus applies contextual time rules. A block's timestamp must be greater than the median time of a defined set of previous blocks. Bitcoin Core also does not accept a header while its timestamp is more than two hours ahead of the node's current clock.
 
 A block timestamp is not a trusted record of the exact moment the block was found. Miners have limited freedom within the valid range, and network arrival times differ.
 
