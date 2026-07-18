@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-018
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: How Bitcoin Mining Pools Work
 handle: bitcoin-mining-pools
@@ -12,8 +12,8 @@ primary_path: Understand the Network
 secondary_paths:
   - Explore the Ecosystem
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-18
+copy_locked_date: 2026-07-18
 ---
 
 # How Bitcoin Mining Pools Work
@@ -416,18 +416,19 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer:
-- Review date:
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-18
 - Notes:
-  - Confirm current BIP 22 and BIP 23 wording, support levels, and optional-extension language.
-  - Recheck current Stratum V2 Mining, Template Distribution, and Job Declaration specification behavior.
-  - Verify every Stratum V1 claim against the exact implementation or authoritative documentation retained for publication.
-  - Confirm pool-share, accepted-share, rejected-share, stale-share, and network-target terminology.
-  - Recheck payout-method definitions and preserve operator-specific scope for every formula or service term.
-  - Confirm template-control wording does not imply pool authority over consensus.
-  - Confirm exact glossary-definition synchronization.
-  - Recheck every source URL, especially moving Bitcoin Core and Stratum specification paths, immediately before publication.
-  - Keep planned internal links inactive until real destination pages and confirmed URLs exist.
+  - Verified BIP 22 and BIP 23 claims are limited to their documented interfaces and optional pooled-mining extensions.
+  - Verified Stratum V2 Mining, Template Distribution, and Job Declaration concepts without generalizing optional custom-template behavior to every deployment.
+  - Verified implementation-sensitive Stratum V1 claims remain appropriately qualified.
+  - Verified accepted shares, submitted shares, rejected shares, stale shares, pool targets, and the Bitcoin network target remain distinct.
+  - Verified PPS, FPPS, PPLNS, and score-based payout descriptions remain general and operator-specific formulas are not presented as universal.
+  - Verified template control influences attempted transaction selection without granting consensus authority.
+  - Verified the coinbase transaction pays the destinations encoded by the template and that internal pool accounting remains separate from Bitcoin consensus.
+  - Confirmed exact approved glossary-definition synchronization.
+  - Confirmed source entries contain precise Supports notes. Moving Bitcoin Core and Stratum specification paths remain flagged for publication-time accessibility review.
+  - Confirmed planned internal links remain inactive until real destination pages and URLs exist.
 
 ## 12. Illustration brief
 
