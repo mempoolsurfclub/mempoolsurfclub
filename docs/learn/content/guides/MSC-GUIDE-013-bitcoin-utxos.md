@@ -46,7 +46,7 @@ Every ordinary Bitcoin transaction creates one or more outputs.
 
 An output includes an amount and a script that locks that value under defined conditions. A common output may require a valid signature from a key associated with a destination. Other scripts can require multiple signatures, timelocks, hashes, or Taproot spending conditions.
 
-An output can remain unspent for a short time or many years. Its status changes only when a valid transaction spending that exact output becomes part of the selected chain state.
+An output can remain unspent for a short time or many years. While the transaction that created it remains in the active chain, the output stays unspent until a valid transaction spending it enters that chain. A chain reorganization can also remove the creating transaction or undo a later spend, changing the output's active-chain status.
 
 This is why a UTXO is better understood as a spendable transaction result than as a balance entry.
 
@@ -58,7 +58,7 @@ The reference uses the previous transaction identifier and the output index with
 
 The spending transaction also provides the unlocking data required by that output's script. Depending on the spending condition, that data may include script elements, signatures, public keys, or witness information.
 
-Nodes use the reference to find the previous output in the UTXO set, examine its value and locking condition, and verify that the new transaction satisfies the applicable rules.
+During block validation, a node uses the reference to find the previous output in the applicable coins view. During mempool validation, that view can also account for accepted unconfirmed ancestors. The node examines the output's value and locking condition and verifies that the new transaction satisfies the applicable rules.
 
 ### An output is spent as a complete unit
 
