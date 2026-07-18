@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-014
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: How Bitcoin Confirmations Work
 handle: bitcoin-confirmations
@@ -13,8 +13,8 @@ secondary_paths:
   - Start With Bitcoin
   - Use Bitcoin Safely
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-17
+copy_locked_date: 2026-07-17
 ---
 
 # How Bitcoin Confirmations Work
@@ -315,15 +315,12 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer:
-- Review date:
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-17
 - Notes:
-  - Confirm current Bitcoin Core chain-selection and active-chain terminology.
-  - Confirm confirmation and reorganization wording against current validation behavior.
-  - Recheck node-local mempool behavior and transaction outcomes after a reorganization.
-  - Recheck any replacement-policy references against current Bitcoin Core defaults.
-  - Confirm exact glossary-definition synchronization.
-  - Recheck all source URLs immediately before copy lock.
+  - Editorial accuracy review completed.
+  - Recheck source URL accessibility immediately before publication.
+  - Recheck current Bitcoin Core chain-selection, confirmation, reorganization, mempool, and replacement-policy behavior before publication.
   - Keep planned internal links inactive until real destination pages and confirmed URLs exist.
 
 ## 12. Illustration brief

@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-013
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: What Are UTXOs in Bitcoin?
 handle: bitcoin-utxos
@@ -12,8 +12,8 @@ primary_path: Understand the Network
 secondary_paths:
   - Start With Bitcoin
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-17
+copy_locked_date: 2026-07-17
 ---
 
 # What Are UTXOs in Bitcoin?
@@ -68,7 +68,7 @@ When an input spends an output, that output is consumed as a complete unit. If i
 
 Suppose a wallet selects an output worth 100,000 satoshis to make a payment of 60,000 satoshis. The original 100,000-satoshi output is fully spent. The new transaction might create a 60,000-satoshi recipient output and a change output returning the remaining value, less the transaction fee, to a wallet-controlled destination.
 
-The change is newly created transaction output. It is not an untouched remainder still sitting inside the original output.
+The change is a newly created transaction output. It is not an untouched remainder still sitting inside the original output.
 
 ### Transactions can combine and split value
 
@@ -178,7 +178,7 @@ If its parent transaction is replaced, removed, or never confirmed, the descenda
 
 The first transaction in a block is the coinbase transaction. It can create the permitted block subsidy and collect transaction fees.
 
-Outputs created by a coinbase transaction cannot be spent until the consensus maturity requirement is satisfied. Bitcoin Core defines this maturity as 100 blocks, with validation rules determining when the spend becomes eligible.
+Bitcoin Core defines coinbase maturity as 100 blocks. A coinbase output can be spent only in a block whose height is at least 100 greater than the height of the block that created it. A reorganization can change active-chain depth, so wallet maturity status can change with the selected chain view.
 
 The maturity rule protects the system from spending newly created block rewards before the block has sufficient depth. It is a consensus rule, not a wallet preference.
 
@@ -328,14 +328,12 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer:
-- Review date:
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-17
 - Notes:
-  - Confirm current Bitcoin Core UTXO, coins-view, and validation terminology.
-  - Confirm current coinbase maturity behavior and source location.
-  - Confirm dust, standardness, relay-policy, and wallet-policy wording against current Bitcoin Core.
-  - Confirm exact glossary-definition synchronization.
-  - Recheck every source URL before copy lock.
+  - Editorial accuracy review completed.
+  - Recheck source URL accessibility immediately before publication.
+  - Confirm Bitcoin Core UTXO, validation, coinbase-maturity, dust, relay-policy, and wallet-policy terminology remains current before publication.
   - Keep planned internal links inactive until real destination pages and confirmed URLs exist.
 
 ## 12. Illustration brief

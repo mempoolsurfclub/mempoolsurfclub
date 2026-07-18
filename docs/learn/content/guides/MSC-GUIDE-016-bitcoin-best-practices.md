@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-016
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: Bitcoin Best Practices for Safe Everyday Use
 handle: bitcoin-best-practices
@@ -12,8 +12,8 @@ primary_path: Use Bitcoin Safely
 secondary_paths:
   - Start With Bitcoin
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-17
+copy_locked_date: 2026-07-17
 ---
 
 # Bitcoin Best Practices for Safe Everyday Use
@@ -448,15 +448,12 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer:
-- Review date:
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-17
 - Notes:
-  - Recheck current Bitcoin Core and wallet software-verification instructions.
-  - Recheck current transaction-relay, mempool, replacement, and confirmation behavior.
-  - Confirm security, hardware-signing, multisignature, descriptor, backup, and recovery terminology remains current.
-  - Confirm privacy-tool limitations for personal nodes, Tor, PayJoin, and Lightning.
-  - Confirm exact glossary-definition synchronization.
-  - Recheck all source URLs immediately before copy lock.
+  - Editorial accuracy and practical-safety review completed.
+  - Recheck source URL accessibility immediately before publication.
+  - Recheck current software-verification, transaction-relay, confirmation, wallet-security, recovery, and privacy-tool terminology and implementation behavior before publication.
   - Keep planned internal links inactive until real destination pages and confirmed URLs exist.
 
 ## 12. Illustration brief

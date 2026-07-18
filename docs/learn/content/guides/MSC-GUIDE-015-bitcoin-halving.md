@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-015
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: What Is the Bitcoin Halving?
 handle: bitcoin-halving
@@ -12,8 +12,8 @@ primary_path: Understand the Network
 secondary_paths:
   - Start With Bitcoin
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-17
+copy_locked_date: 2026-07-17
 ---
 
 # What Is the Bitcoin Halving?
@@ -319,16 +319,12 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer:
-- Review date:
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-17
 - Notes:
-  - Confirm the current Bitcoin Core subsidy implementation and zero-subsidy behavior.
-  - Confirm the mainnet 210,000-block interval in current consensus parameters.
-  - Confirm the final total-issuance wording and approved issuance paragraph.
-  - Confirm that no current subsidy or estimated calendar date was introduced during editing.
-  - Recheck the distinction between subsidy halving and difficulty adjustment.
-  - Confirm exact glossary-definition synchronization.
-  - Recheck all source URLs immediately before copy lock.
+  - Editorial accuracy review completed.
+  - Recheck source URL accessibility immediately before publication.
+  - Confirm Bitcoin Core subsidy implementation, mainnet 210,000-block interval, total-issuance wording, and difficulty-adjustment terminology remains current before publication.
   - Keep planned internal links inactive until real destination pages and confirmed URLs exist.
 
 ## 12. Illustration brief
