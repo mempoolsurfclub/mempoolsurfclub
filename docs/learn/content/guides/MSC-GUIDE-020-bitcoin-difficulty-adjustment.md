@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-020
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: How Bitcoin's Difficulty Adjustment Works
 handle: bitcoin-difficulty-adjustment
@@ -12,8 +12,8 @@ primary_path: Understand the Network
 secondary_paths:
   - Build on Bitcoin
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-18
+copy_locked_date: 2026-07-18
 ---
 
 # How Bitcoin's Difficulty Adjustment Works
@@ -471,19 +471,20 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer:
-- Review date:
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-18
 - Notes:
-  - Recheck current Bitcoin mainnet consensus parameters for target spacing, target timespan, proof-of-work limit, and disabled minimum-difficulty exception.
-  - Confirm current `src/pow.cpp` boundary detection, first-block lookup, timespan calculation, target arithmetic, proof-of-work limit, and validation behavior.
-  - Verify first and later retarget boundary heights, including the first retargeted target at height 2,016.
-  - Confirm the historical 2,015-interblock-gap timestamp measurement detail against current code and tests.
-  - Recheck the one-quarter and four-times clamp values and their order of application.
-  - Confirm compact-target encoding, integer rounding, and `SetCompact` or `GetCompact` wording.
-  - Recheck mainnet, testnet, testnet4, signet, and regtest differences without applying testing exceptions to mainnet.
-  - Confirm exact glossary-definition synchronization and review whether target or chainwork should receive future canonical glossary entries.
-  - Recheck every source URL, especially moving Bitcoin Core master-branch paths, immediately before publication.
-  - Keep planned internal links inactive until real destination pages and confirmed URLs exist.
+  - Verified current Bitcoin mainnet target spacing, target timespan, proof-of-work limit, and disabled minimum-difficulty exception.
+  - Verified current Bitcoin Core retarget-boundary detection, first-block lookup, actual-timespan calculation, target arithmetic, proof-of-work limit, and target validation behavior.
+  - Verified the first retargeted target applies at height 2,016 and later boundaries occur at multiples of 2,016.
+  - Verified the historical calculation spans 2,015 interblock timestamp gaps while comparing against a target timespan based on 2,016 target spacings.
+  - Verified the one-quarter and four-times timespan clamps and their order before target multiplication and division.
+  - Verified compact-target encoding, integer arithmetic, rounding, and SetCompact or GetCompact wording.
+  - Verified mainnet rules remain separate from testnet, testnet4, signet, and regtest behavior.
+  - Verified difficulty adjustment remains separate from subsidy halving and accumulated chainwork.
+  - Confirmed exact approved glossary-definition synchronization. Target and chainwork remain article-defined concepts rather than newly invented canonical glossary entries.
+  - Confirmed source entries contain precise Supports notes. Moving Bitcoin Core master-branch paths remain flagged for publication-time accessibility review.
+  - Confirmed planned internal links remain inactive until real destination pages and URLs exist.
 
 ## 12. Illustration brief
 
