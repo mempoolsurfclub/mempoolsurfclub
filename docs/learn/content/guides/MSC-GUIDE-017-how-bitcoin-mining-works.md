@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-017
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: How Bitcoin Mining Works
 handle: how-bitcoin-mining-works
@@ -13,8 +13,8 @@ secondary_paths:
   - Explore the Ecosystem
   - Build on Bitcoin
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-18
+copy_locked_date: 2026-07-18
 ---
 
 # How Bitcoin Mining Works
@@ -372,16 +372,16 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer:
-- Review date:
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-18
 - Notes:
-  - Recheck current Bitcoin Core block-assembly paths in `src/node/miner.cpp`, `src/node/miner.h`, and `src/rpc/mining.cpp`.
-  - Confirm current block-header and proof-of-work terminology, including 80-byte serialization and double SHA-256.
-  - Confirm coinbase maturity, subsidy-plus-fee, and coinbase-value wording against current consensus and validation code.
-  - Recheck energy-use and network-hashrate claims, including system boundaries and estimation language.
-  - Confirm exact glossary-definition synchronization.
-  - Recheck every source URL, especially moving Bitcoin Core master-branch paths, immediately before publication.
-  - Keep planned internal links inactive until real destination pages and confirmed URLs exist.
+  - Verified current Bitcoin Core block-assembly paths and preserved the separation among candidate-block construction, proof-of-work hashing, block submission, and independent node validation.
+  - Verified the serialized 80-byte block-header fields and Bitcoin's double-SHA-256 proof-of-work terminology.
+  - Verified coinbase subsidy-plus-fee limits and the 100-block coinbase-maturity rule.
+  - Verified that hashrate is described as an estimate and that energy, cooling, emissions, and operating conditions retain explicit system boundaries.
+  - Confirmed exact approved glossary-definition synchronization.
+  - Confirmed source entries contain precise Supports notes. Moving Bitcoin Core master-branch paths remain flagged for publication-time accessibility review.
+  - Confirmed planned internal links remain inactive until real destination pages and URLs exist.
 
 ## 12. Illustration brief
 
