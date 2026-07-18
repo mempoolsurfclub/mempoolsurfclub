@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-019
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: What Is an ASIC Miner?
 handle: bitcoin-asic-miners
@@ -12,8 +12,8 @@ primary_path: Understand the Network
 secondary_paths:
   - Explore the Ecosystem
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-18
+copy_locked_date: 2026-07-18
 ---
 
 # What Is an ASIC Miner?
@@ -416,17 +416,18 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer:
-- Review date:
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-18
 - Notes:
-  - Confirm SHA-256 and Bitcoin double-SHA-256 block-header wording against current standards and implementation.
-  - Recheck hashrate, watts, joules per second, terahashes per second, and joules-per-terahash calculations.
-  - Confirm every chip, board, complete-machine, wall-level, and facility-level distinction remains explicit.
-  - Verify that any manufacturer documentation retained for publication supports only its named equipment and is not generalized.
-  - Recheck safety-sensitive electrical, thermal, acoustic, liquid-cooling, and immersion wording for non-prescriptive scope.
-  - Confirm exact glossary-definition synchronization.
-  - Recheck every source URL, especially moving Bitcoin Core and Stratum specification paths, immediately before publication.
-  - Keep planned internal links inactive until real destination pages and confirmed URLs exist.
+  - Verified SHA-256 and Bitcoin double-SHA-256 block-header hashing terminology.
+  - Verified hashrate, watts, joules per second, terahashes per second, and joules-per-terahash calculations.
+  - Verified ASIC chip, hashboard, complete-machine, wall-level, and facility-level measurement boundaries remain distinct.
+  - Verified ASIC hashing hardware is not described as a Bitcoin full node or complete mining system.
+  - Verified no manufacturer documentation, product recommendation, current model ranking, or retail source is generalized beyond its proper scope.
+  - Verified electrical, thermal, acoustic, liquid-cooling, and immersion references remain non-prescriptive and site-specific.
+  - Confirmed exact approved glossary-definition synchronization.
+  - Confirmed source entries contain precise Supports notes. Moving Bitcoin Core and Stratum specification paths remain flagged for publication-time accessibility review.
+  - Confirmed planned internal links remain inactive until real destination pages and URLs exist.
 
 ## 12. Illustration brief
 
