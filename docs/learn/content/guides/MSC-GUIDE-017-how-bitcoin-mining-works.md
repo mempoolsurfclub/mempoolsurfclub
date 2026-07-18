@@ -161,7 +161,7 @@ Peers do not accept it automatically. A validating node checks matters such as:
 
 If any required rule fails, the node rejects the block. More proof of work cannot make an invalid block valid to that node.
 
-Validity is checked before chain-selection work is compared. When nodes know about more than one valid candidate chain, they compare accumulated proof of work under their rules. Mining contributes to chain ordering, but it does not give miners unilateral authority to redefine validity.
+A node only activates a candidate chain after validating the required blocks. Among valid candidate chains, accumulated proof of work guides chain selection under that node's rules. Mining contributes to chain ordering, but it does not give miners unilateral authority to redefine validity.
 
 ### Mining is not transaction approval
 

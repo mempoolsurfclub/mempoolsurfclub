@@ -34,7 +34,7 @@ The pool does not fuse every machine into one physical computer. It operates a c
 
 A solo miner receives network block revenue only when its own mining system finds and successfully submits a valid block.
 
-A pool gathers work from many participants. When the pool's coordinated work finds a valid block, the pool receives the block's coinbase outputs according to the template and later distributes internal payouts under its service rules.
+A pool gathers work from many participants. When the coordinated work finds a valid block, its coinbase transaction pays the destinations encoded by the template. Under a typical pool arrangement, the pool accounts for that revenue and later distributes internal payouts under its service rules.
 
 Because the participants submit measurable work more frequently than the pool finds network blocks, the pool can estimate each participant's contribution over time. The payout method then determines how block-discovery variance, transaction fees, fees charged by the pool, and counterparty exposure are distributed.
 
@@ -72,7 +72,7 @@ Most shares are never broadcast to the Bitcoin peer-to-peer network. They are me
 
 ### A share can also be a block solution
 
-Every submitted share represents a hash result that met the pool threshold.
+Every accepted share represents a submitted hash result that met the pool threshold.
 
 Occasionally, the same result also satisfies the harder Bitcoin network target. In that case, the corresponding candidate block can be submitted as a possible network block.
 

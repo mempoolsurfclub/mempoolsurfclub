@@ -54,7 +54,7 @@ A complete mining machine can include:
 - Firmware and monitoring software.
 - A chassis, connectors, and protective components.
 
-Performance claims need a clear boundary. A chip-level figure may exclude board losses, power conversion, fans, pumps, controllers, or facility cooling. A machine-level figure may include some of those loads but not upstream electrical or cooling infrastructure. A wall-level measurement can include more of the operating system.
+Performance claims need a clear boundary. A chip-level figure may exclude board losses, power conversion, fans, pumps, controllers, or facility cooling. A machine-level figure may include some of those loads but not upstream electrical or cooling infrastructure. A wall-level measurement can include more of the complete machine's operating load.
 
 Without that boundary, two efficiency figures may look comparable while measuring different things.
 
