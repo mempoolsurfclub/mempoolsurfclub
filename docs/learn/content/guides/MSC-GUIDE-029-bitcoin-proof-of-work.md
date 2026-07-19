@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-029
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: How Bitcoin Proof of Work Secures the Network
 handle: bitcoin-proof-of-work
@@ -12,8 +12,8 @@ primary_path: Understand the Network
 secondary_paths:
   - Start With Bitcoin
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-19
+copy_locked_date: 2026-07-19
 ---
 
 # How Bitcoin Proof of Work Secures the Network
@@ -310,16 +310,21 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer:
-- Review date:
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-19
 - Notes:
-  - Recheck Bitcoin Core v31.0 proof-of-work, target, chainwork, and validation paths immediately before copy lock.
-  - Confirm the exact mainnet target-spacing and retarget references remain current.
-  - Recheck attack-capability language so transaction ordering, censorship, reorganization, and invalid-block limits remain distinct.
-  - Recheck energy and security claims for clear system boundaries and no universal environmental conclusion.
-  - Confirm exact glossary-definition synchronization.
-  - Recheck every source URL immediately before publication.
-  - Keep planned internal links inactive until real destination pages and confirmed URLs exist.
+  - Verified Bitcoin Core v31.0 proof-of-work target calculation, header-hash checking, chainwork calculation, and valid-chain activation behavior.
+  - Verified proof of work is separated from complete transaction and block validation.
+  - Confirmed target, difficulty, hashrate, per-block proof, accumulated chainwork, and confirmation depth remain distinct.
+  - Confirmed failed hashes are not described as partial progress and a valid proof-of-work hash is not presented as proof that the complete block is valid.
+  - Verified chain selection is limited to valid candidate chains and accumulated work cannot make an invalid block acceptable.
+  - Verified majority-hashpower capabilities are limited to valid-history ordering, censorship, reorganization, delay, and double-spend attempts rather than private-key or consensus-rule control.
+  - Confirmed confirmation depth is described as probabilistic rather than absolute finality.
+  - Verified the 100-block coinbase maturity rule and stale-block qualification.
+  - Confirmed energy use is described as a physical mining input rather than a consensus field or universal environmental conclusion.
+  - Confirmed mining-pool coordination is not conflated with ownership of all connected mining hardware.
+  - Confirmed exact approved glossary-definition synchronization and precise source Supports notes.
+  - Confirmed planned internal links remain inactive until real destination pages and URLs exist.
 
 ## 12. Illustration brief
 
