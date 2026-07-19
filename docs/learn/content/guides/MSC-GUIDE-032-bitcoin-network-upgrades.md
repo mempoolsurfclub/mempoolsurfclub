@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-032
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: How Bitcoin Network Upgrades Happen
 handle: bitcoin-network-upgrades
@@ -12,8 +12,8 @@ primary_path: Understand the Network
 secondary_paths:
   - Build on Bitcoin
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-19
+copy_locked_date: 2026-07-19
 ---
 
 # How Bitcoin Network Upgrades Happen
@@ -493,17 +493,28 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer:
-- Review date:
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-19
 - Notes:
-  - Recheck the current BIP process and BIPs repository language immediately before accuracy review.
-  - Verify P2SH, BIP 34, BIP 66, BIP 65, CSV, SegWit, and Taproot implementation and activation history against primary records.
-  - Confirm mainnet buried activation heights against the current Bitcoin Core release used for review.
-  - Recheck the distinction between BIP publication, implementation, release, adoption, signaling, lock-in, activation, and enforcement.
-  - Confirm that no constituency is portrayed as a formal Bitcoin legislature or unilateral upgrade authority.
-  - Confirm exact glossary-definition synchronization.
-  - Recheck every source URL immediately before publication.
-  - Keep planned internal links inactive until real destination pages and confirmed URLs exist.
+  - Verified the current BIP process distinguishes publication and documentation from implementation, adoption, deployment, and activation.
+  - Confirmed code merge, software release, operator adoption, signaling, lock-in, activation, enforcement, and feature use remain separate events.
+  - Verified consensus upgrades are distinguished from policy, relay, networking, wallet, interface, performance, storage, privacy, and security changes.
+  - Verified P2SH implementation and its scheduled April 1, 2012 transition.
+  - Confirmed current Bitcoin Core v31.0 buried mainnet heights for BIP 34, BIP 66, BIP 65, CSV, and SegWit.
+  - Verified the coordinated BIP 68, BIP 112, and BIP 113 relative-locktime deployment.
+  - Verified the August 2010 block 74,638 output-value overflow incident, version 0.3.10 correction, and patched-chain response.
+  - Verified the March 2013 Berkeley DB chain split, incompatible block-processing behavior, major-pool downgrades, and Bitcoin-Qt 0.8.1 compatibility response.
+  - Confirmed proof of work is not presented as automatically resolving incompatible validity decisions.
+  - Verified the original SegWit BIP 9 deployment used bit 1 and a 1,916-of-2,016 threshold.
+  - Verified BIP 91 used bit 4, a 269-of-336 threshold, and enforcement of SegWit bit 1 signaling after activation.
+  - Verified BIP 148's defined August 1, 2017 enforcement period and its relationship to the existing SegWit deployment.
+  - Verified the New York Agreement is described as an industry commitment rather than a Bitcoin consensus mechanism.
+  - Confirmed SegWit ultimately locked in under its original BIP 9 deployment and activated at mainnet height 481,824.
+  - Verified Taproot's 1,815-of-2,016 threshold, limited signaling window, minimum activation height 709,632, and activation at that height.
+  - Confirmed developers, maintainers, node operators, miners, wallets, exchanges, services, businesses, infrastructure providers, and users are not collapsed into one formal governing body.
+  - Confirmed no proposal, BIP document, repository merge, release, company agreement, miner signal, or constituency is described as independently changing every participant's Bitcoin rules.
+  - Confirmed exact approved glossary-definition synchronization and precise source Supports notes.
+  - Confirmed planned internal links remain inactive until real destination pages and URLs exist.
 
 ## 12. Illustration brief
 
