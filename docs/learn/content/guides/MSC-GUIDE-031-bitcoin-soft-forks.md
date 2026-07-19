@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-031
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: How Bitcoin Soft Forks Work
 handle: bitcoin-soft-forks
@@ -12,8 +12,8 @@ primary_path: Understand the Network
 secondary_paths:
   - Build on Bitcoin
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-19
+copy_locked_date: 2026-07-19
 ---
 
 # How Bitcoin Soft Forks Work
@@ -485,16 +485,24 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer:
-- Review date:
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-19
 - Notes:
-  - Recheck BIP 9, BIP 8, historical version-threshold, SegWit, and Taproot deployment descriptions immediately before copy lock.
-  - Confirm current Bitcoin Core v31.0 buried deployment heights and versionbits implementation paths.
-  - Recheck old-node compatibility wording so acceptance, understanding, and enforcement remain distinct.
-  - Confirm all activation examples separate signaling, lock-in, activation, and actual block validation.
-  - Confirm exact glossary-definition synchronization.
-  - Recheck every source URL and BIP status immediately before publication.
-  - Keep planned internal links inactive until real destination pages and confirmed URLs exist.
+  - Verified the soft-fork model is defined through the narrower-validity-set relationship.
+  - Confirmed older-node block acceptance is not described as older-node enforcement or understanding of the new restrictions.
+  - Verified consensus compatibility is separated from wallet, address, hardware, service, relay, and operational compatibility.
+  - Confirmed proposal, BIP publication, implementation, review, testing, release, adoption, signaling, lock-in, activation, and enforcement remain separate stages.
+  - Verified P2SH used a scheduled April 1, 2012 transition with coinbase readiness signaling before versionbits.
+  - Verified the CSV deployment coordinated BIP 68, BIP 112, and BIP 113 through BIP 9 and is preserved at mainnet activation height 419,328.
+  - Verified the historical BIP 34, BIP 65, and BIP 66 block-version deployment descriptions and current buried-height treatment.
+  - Verified BIP 9 states, period-boundary behavior, signaling thresholds, activation delay, and timeout behavior.
+  - Verified BIP 8 is described as a height-based framework with optional lock-in-on-timeout behavior rather than one mandatory activation formula.
+  - Confirmed miner signaling is described as deployment metadata rather than a universal governance vote or proof of enforcement.
+  - Verified SegWit old-node acceptance is distinguished from witness-rule enforcement by upgraded nodes.
+  - Verified Taproot's 2,016-block signaling period, 1,815-block threshold, limited signaling window, minimum activation height 709,632, and old-node validation limits.
+  - Confirmed the soft-fork and hard-fork comparison follows validity-set direction rather than political or social labels.
+  - Confirmed exact approved glossary-definition synchronization and precise source Supports notes.
+  - Confirmed planned internal links remain inactive until real destination pages and URLs exist.
 
 ## 12. Illustration brief
 
