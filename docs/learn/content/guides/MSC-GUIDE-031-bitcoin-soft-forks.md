@@ -136,6 +136,20 @@ Deployment mechanisms therefore try to coordinate three things:
 
 No mechanism eliminates social judgment. Parameters such as signaling thresholds, timeouts, activation heights, and mandatory enforcement rules express choices about risk and coordination.
 
+### P2SH used a scheduled transition
+
+Pay to Script Hash, specified in BIP 16, was deployed before versionbits. The new evaluation rules were implemented in Bitcoin Core 0.6.0 and took effect on April 1, 2012. Miners used coinbase signaling to show readiness before the scheduled enforcement time.
+
+P2SH demonstrates that a soft fork does not require the later BIP 9 state machine. It also separated the consensus rule from the BIP 13 address format and wallet support needed to use P2SH safely.
+
+### CSV deployed as a coordinated BIP 9 package
+
+The relative locktime upgrade combined BIP 68, BIP 112, and BIP 113. BIP 68 gave transaction sequence fields consensus-enforced relative locktime meaning. BIP 112 introduced `CHECKSEQUENCEVERIFY`. BIP 113 changed locktime evaluation to use median time past.
+
+The package deployed together through BIP 9. Current Bitcoin Core mainnet parameters preserve the result at CSV activation height 419,328.
+
+CSV shows that one soft-fork deployment can coordinate several interdependent consensus rules under one activation state.
+
 ### Early deployments used block-version thresholds
 
 Several early Bitcoin soft forks used block-version signaling and threshold logic.
@@ -336,62 +350,82 @@ That is the central tradeoff: soft forks can preserve chain compatibility for no
    URL: https://github.com/bitcoin/bips/blob/master/bip-0008.mediawiki  
    Supports: Height-based versionbits parameters, lock-in-on-timeout behavior, and alternative soft-fork activation tradeoffs.
 
-3. **BIP 34: Block v2, height in coinbase**  
+3. **BIP 16: Pay to Script Hash**  
+   Author or publisher: Gavin Andresen  
+   URL: https://github.com/bitcoin/bips/blob/master/bip-0016.mediawiki  
+   Supports: P2SH validation rules, miner readiness signaling, and the scheduled April 1, 2012 enforcement transition.
+
+4. **BIP 68: Relative lock-time using consensus-enforced sequence numbers**  
+   Author or publisher: Mark Friedenbach, BtcDrak, Nicolas Dorier, and kinoshitajona  
+   URL: https://github.com/bitcoin/bips/blob/master/bip-0068.mediawiki  
+   Supports: Consensus-enforced relative locktime semantics for transaction sequence fields and coordinated deployment with BIPs 112 and 113.
+
+5. **BIP 112: CHECKSEQUENCEVERIFY**  
+   Author or publisher: BtcDrak, Mark Friedenbach, and Eric Lombrozo  
+   URL: https://github.com/bitcoin/bips/blob/master/bip-0112.mediawiki  
+   Supports: CHECKSEQUENCEVERIFY semantics and simultaneous deployment with BIPs 68 and 113.
+
+6. **BIP 113: Median time-past as endpoint for lock-time calculations**  
+   Author or publisher: Thomas Kerin and Mark Friedenbach  
+   URL: https://github.com/bitcoin/bips/blob/master/bip-0113.mediawiki  
+   Supports: Median-time-past locktime evaluation and simultaneous deployment with BIPs 68 and 112.
+
+7. **BIP 34: Block v2, height in coinbase**  
    Author or publisher: Gavin Andresen  
    URL: https://github.com/bitcoin/bips/blob/master/bip-0034.mediawiki  
    Supports: Coinbase-height enforcement, block-version signaling, threshold-based activation, and rejection of older-version blocks.
 
-4. **BIP 65: OP_CHECKLOCKTIMEVERIFY**  
+8. **BIP 65: OP_CHECKLOCKTIMEVERIFY**  
    Author or publisher: Peter Todd  
    URL: https://github.com/bitcoin/bips/blob/master/bip-0065.mediawiki  
    Supports: A deployed script-rule soft fork and its historical version-based activation method.
 
-5. **BIP 66: Strict DER signatures**  
+9. **BIP 66: Strict DER signatures**  
    Author or publisher: Pieter Wuille  
    URL: https://github.com/bitcoin/bips/blob/master/bip-0066.mediawiki  
    Supports: Stricter signature encoding as a soft fork and its version-based deployment.
 
-6. **BIP 141: Segregated Witness**  
-   Author or publisher: Eric Lombrozo, Johnson Lau, and Pieter Wuille  
-   URL: https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki  
-   Supports: Witness programs, witness commitments, block weight, backward-compatibility limits, and BIP 9 deployment parameters.
+10. **BIP 141: Segregated Witness**  
+    Author or publisher: Eric Lombrozo, Johnson Lau, and Pieter Wuille  
+    URL: https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki  
+    Supports: Witness programs, witness commitments, block weight, backward-compatibility limits, and BIP 9 deployment parameters.
 
-7. **BIP 143: Transaction signature verification for version 0 witness program**  
-   Author or publisher: Johnson Lau and Pieter Wuille  
-   URL: https://github.com/bitcoin/bips/blob/master/bip-0143.mediawiki  
-   Supports: The SegWit version 0 signature-hash rules deployed with the witness consensus changes.
+11. **BIP 143: Transaction signature verification for version 0 witness program**  
+    Author or publisher: Johnson Lau and Pieter Wuille  
+    URL: https://github.com/bitcoin/bips/blob/master/bip-0143.mediawiki  
+    Supports: The SegWit version 0 signature-hash rules deployed with the witness consensus changes.
 
-8. **BIP 147: Dealing with dummy stack element malleability**  
-   Author or publisher: Johnson Lau  
-   URL: https://github.com/bitcoin/bips/blob/master/bip-0147.mediawiki  
-   Supports: The NULLDUMMY consensus rule deployed with SegWit.
+12. **BIP 147: Dealing with dummy stack element malleability**  
+    Author or publisher: Johnson Lau  
+    URL: https://github.com/bitcoin/bips/blob/master/bip-0147.mediawiki  
+    Supports: The NULLDUMMY consensus rule deployed with SegWit.
 
-9. **BIP 341: Taproot**  
-   Author or publisher: Pieter Wuille, Jonas Nick, and Anthony Towns  
-   URL: https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki  
-   Supports: Taproot consensus rules, modified versionbits deployment, 90 percent threshold, minimum activation height, activation at block 709,632, and old-node validation limits.
+13. **BIP 341: Taproot**  
+    Author or publisher: Pieter Wuille, Jonas Nick, and Anthony Towns  
+    URL: https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki  
+    Supports: Taproot consensus rules, modified versionbits deployment, 90 percent threshold, minimum activation height, activation at block 709,632, and old-node validation limits.
 
-10. **BIP 342: Tapscript**  
+14. **BIP 342: Tapscript**  
     Author or publisher: Pieter Wuille, Jonas Nick, and Anthony Towns  
     URL: https://github.com/bitcoin/bips/blob/master/bip-0342.mediawiki  
     Supports: Tapscript validation rules deployed with Taproot.
 
-11. **Bitcoin Core script verification interface**  
+15. **Bitcoin Core script verification interface**  
     Author or publisher: Bitcoin Core contributors  
     URL: https://github.com/bitcoin/bitcoin/blob/v31.0/src/script/interpreter.h  
     Supports: Script-verification flags and the explicit subset relationship intended for soft-fork restrictions.
 
-12. **Bitcoin Core mainnet consensus parameters**  
+16. **Bitcoin Core mainnet consensus parameters**  
     Author or publisher: Bitcoin Core contributors  
     URL: https://github.com/bitcoin/bitcoin/blob/v31.0/src/kernel/chainparams.cpp  
     Supports: Buried mainnet activation heights for BIP 34, BIP 65, BIP 66, CSV, and SegWit, plus deployment parameters used by current code.
 
-13. **Bitcoin Core implemented BIPs documentation**  
+17. **Bitcoin Core implemented BIPs documentation**  
     Author or publisher: Bitcoin Core contributors  
     URL: https://github.com/bitcoin/bitcoin/blob/v31.0/doc/bips.md  
     Supports: Bitcoin Core implementation history for BIP 9, BIP 16, BIP 34, BIP 65, BIP 66, SegWit, Taproot, and buried deployments.
 
-14. **Bitcoin Core versionbits implementation**  
+18. **Bitcoin Core versionbits implementation**  
     Author or publisher: Bitcoin Core contributors  
     URL: https://github.com/bitcoin/bitcoin/blob/v31.0/src/versionbits.cpp  
     Supports: Current threshold-state calculations and deployment-state transitions.
