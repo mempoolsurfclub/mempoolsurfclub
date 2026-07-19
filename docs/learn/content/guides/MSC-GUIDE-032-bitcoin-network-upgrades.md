@@ -172,17 +172,19 @@ The package deployed through BIP 9 and is represented in current mainnet paramet
 
 This history shows why one named upgrade may contain several interdependent BIPs. A complete account must identify which documents specify transaction semantics, script behavior, time calculation, activation, and implementation.
 
-### SegWit combined consensus, networking, and wallet changes
+### SegWit combined consensus, networking, wallet, and activation coordination
 
 Segregated Witness was not one isolated code switch.
 
 BIP 141 defined the consensus-layer witness structure, witness commitment, block weight, and witness programs. BIP 143 defined signature hashing for version 0 witness programs. BIP 144 covered peer services. BIP 145 updated mining interfaces. BIP 147 added another consensus restriction.
 
-Bitcoin Core implemented major SegWit support in the 0.13 series. Mainnet activation is represented at height 481,824 in current chain parameters.
+Bitcoin Core implemented major SegWit support in the 0.13 series. The original BIP 9 deployment used bit 1 and required 1,916 signaling blocks in a 2,016-block period, a 95 percent threshold.
 
-The activation history also involved disagreement over deployment timing and the role of miner signaling. Additional proposals, including BIP 148, attempted to change the coordination pressure around activation.
+During 2017, several overlapping coordination efforts attempted to move that deployment toward lock-in. The New York Agreement was an industry commitment to support SegWit through an 80 percent bit 4 signal and later attempt a 2 MB base-block-size hard fork. The agreement was not itself a Bitcoin consensus mechanism and could not update running nodes.
 
-The lasting lesson is not that one constituency won a vote. It is that users, node operators, miners, developers, wallets, exchanges, and services faced different choices and risks. The chain continued under rules enforced by the software participants actually ran.
+BIP 148 proposed that participating nodes reject blocks that did not signal the existing SegWit bit during a defined period beginning August 1, 2017, unless SegWit had already locked in. BIP 91 defined a separate bit 4 deployment with a threshold of 269 blocks in a 336-block window. Once active, BIP 91 enforcing nodes rejected blocks that did not signal the existing SegWit bit 1 deployment, creating a path for the original BIP 9 threshold to be reached.
+
+SegWit ultimately locked in under its original BIP 9 deployment and activated at mainnet height 481,824. The outcome cannot be reduced to a vote by miners, companies, developers, or users. BIP 9 supplied the activation state enforced by compatible node software, while BIP 91, BIP 148, the New York Agreement, miner behavior, operator choices, and service preparation shaped the coordination environment around it.
 
 ### Taproot used a bounded signaling window and activation floor
 
@@ -251,15 +253,17 @@ Service readiness does not decide consensus validity, but failures can harm user
 
 This is why deployment planning includes more than node and miner percentages.
 
-### Consensus changes differ from emergency fixes
+### Emergency fixes reveal consensus risk
 
 Not every urgent release is a planned network upgrade.
 
-A software vulnerability can require a patch that preserves existing intended consensus behavior. A database bug, wallet flaw, denial-of-service weakness, or privacy leak may demand rapid updates without changing the valid-block set.
+In August 2010, block 74,638 included a transaction that exploited an output-value overflow bug and created amounts far beyond Bitcoin's intended monetary rules. Version 0.3.10 added stricter transaction-value checks, and miners and node operators coordinated around a patched chain that excluded the bad block. The event was an emergency correction to unintended validation behavior, not a normal BIP deployment.
 
-Some bugs can create consensus risk if different software versions disagree on validation. In those cases, response may include coordinated releases, disclosure controls, miner communication, or temporary operational guidance.
+In March 2013, Bitcoin 0.8 accepted a block that some pre-0.8 nodes rejected because older Berkeley DB configurations could exhaust their available locks while processing a large but otherwise valid block. The incompatible behavior produced two chains with substantial proof of work. Major pools temporarily downgraded so mining concentrated on the chain older nodes could process, and Bitcoin 0.8.1 added temporary compatibility limits.
 
-Historical incident response should be described by the actual failure and fix. It should not automatically be framed as a normal BIP activation.
+The 2013 split showed that implementation and resource behavior can become de facto consensus boundaries even when no protocol designer intended them to be rules. It also showed that proof of work cannot automatically resolve a split when participants disagree about validity and both branches retain meaningful mining support.
+
+Emergency response can involve patches, release coordination, miner communication, service pauses, and temporary operating guidance. Those actions should be described by the actual bug and compatibility decision rather than presented as a normal proposal or activation ceremony.
 
 ### Compatibility is tested at boundaries
 
@@ -385,27 +389,52 @@ Bitcoin can upgrade because people can coordinate around better rules and softwa
     URL: https://github.com/bitcoin/bips/blob/master/bip-0148.mediawiki  
     Supports: The user-activated soft-fork proposal that formed part of SegWit's deployment history and coordination debate.
 
-12. **BIP 340: Schnorr Signatures for secp256k1**  
+12. **BIP 91: Reduced threshold SegWit MASF**  
+    Author or publisher: James Hilliard  
+    URL: https://github.com/bitcoin/bips/blob/master/bip-0091.mediawiki  
+    Supports: The bit 4 deployment, 269-of-336 threshold, mandatory bit 1 signaling after activation, and its relationship to the existing SegWit BIP 9 deployment.
+
+13. **Bitcoin Scaling Agreement at Consensus 2017**  
+    Author or publisher: Digital Currency Group  
+    URL: https://dcgco.medium.com/bitcoin-scaling-agreement-at-consensus-2017-133521fe9a77  
+    Supports: The original New York Agreement commitment to 80 percent bit 4 SegWit signaling and a later 2 MB hard-fork proposal.
+
+14. **BIP 340: Schnorr Signatures for secp256k1**  
     Author or publisher: Pieter Wuille, Jonas Nick, and Tim Ruffing  
     URL: https://github.com/bitcoin/bips/blob/master/bip-0340.mediawiki  
     Supports: The Schnorr signature specification deployed as part of Taproot.
 
-13. **BIP 341: Taproot**  
+15. **BIP 341: Taproot**  
     Author or publisher: Pieter Wuille, Jonas Nick, and Anthony Towns  
     URL: https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki  
     Supports: Taproot consensus rules, mainnet signaling parameters, 90 percent threshold, minimum activation height, and activation at block 709,632.
 
-14. **BIP 342: Validation of Taproot Scripts**  
+16. **BIP 342: Validation of Taproot Scripts**  
     Author or publisher: Pieter Wuille, Jonas Nick, and Anthony Towns  
     URL: https://github.com/bitcoin/bips/blob/master/bip-0342.mediawiki  
     Supports: Tapscript validation rules and its concurrent deployment with Taproot.
 
-15. **Bitcoin Core mainnet consensus parameters**  
+17. **Version 0.3.10 overflow patch announcement**  
+    Author or publisher: Satoshi Nakamoto  
+    URL: https://bitcointalk.org/index.php?topic=827.0  
+    Supports: The emergency release of version 0.3.10 to patch the block 74,638 output-value overflow bug.
+
+18. **BIP 50: March 2013 Chain Fork Post-Mortem**  
+    Author or publisher: Gavin Andresen  
+    URL: https://github.com/bitcoin/bips/blob/master/bip-0050.mediawiki  
+    Supports: The March 2013 split, Berkeley DB lock exhaustion, incompatible validation behavior, pool downgrades, and the operational response.
+
+19. **Bitcoin-Qt version 0.8.1 release notes**  
+    Author or publisher: Bitcoin Core contributors  
+    URL: https://bitcoin.org/en/release/v0.8.1  
+    Supports: The 0.8.1 compatibility rules and checkpoint added after the March 2013 chain fork.
+
+20. **Bitcoin Core mainnet consensus parameters**  
     Author or publisher: Bitcoin Core contributors  
     URL: https://github.com/bitcoin/bitcoin/blob/v31.0/src/kernel/chainparams.cpp  
     Supports: Buried mainnet activation heights for BIP 34, BIP 65, BIP 66, CSV, and SegWit.
 
-16. **Bitcoin Core validation implementation**  
+21. **Bitcoin Core validation implementation**  
     Author or publisher: Bitcoin Core contributors  
     URL: https://github.com/bitcoin/bitcoin/blob/v31.0/src/validation.cpp  
     Supports: Independent block validation, activation of valid candidate chains, and enforcement of consensus rules by local nodes.
