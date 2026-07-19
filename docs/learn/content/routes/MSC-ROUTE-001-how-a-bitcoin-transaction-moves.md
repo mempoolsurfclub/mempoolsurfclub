@@ -146,7 +146,7 @@ Wallets, merchants, exchanges, and services choose their own confirmation requir
 
 ### 12. The transaction updates the UTXO set
 
-When the block connects to selected chainstate, the transaction's inputs become spent in that state. The transaction's new outputs become available under their spending conditions, subject to any applicable maturity or later chain changes.
+When the block connects to selected chainstate, the transaction's inputs become spent in that state. The transaction's new outputs become available under their spending conditions, subject to later chain changes.
 
 The recipient wallet can identify an output it controls and include that output in its displayed balance. The sender wallet can identify the change output it controls. Those balances are calculated views over separate outputs. They are not account balances stored in one central Bitcoin database.
 

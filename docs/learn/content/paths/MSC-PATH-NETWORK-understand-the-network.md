@@ -80,9 +80,7 @@ A reader finishing this Phase 9 sequence should be able to trace an ordinary tra
 
 The path is educational sequencing. It does not own the guides or replace their permanent previous and next relationships. Every step remains a separate canonical destination. Planned actions must stay inactive until those destinations are published and their URLs are confirmed.
 
-Readers missing the basic wallet, transaction, and confirmation model can branch to MSC-PATH-START | Start With Bitcoin. Readers focused on custody, recovery, and operational risk can branch to MSC-PATH-SAFE | Use Bitcoin Safely. After node software, consensus, or upgrades, readers preparing to work with higher-layer protocols and developer systems can branch to MSC-PATH-BUILD | Build on Bitcoin. After Phase 16, cryptography guides may be added as optional branches rather than current required steps.
-
-After Phase 16, cryptography guides can become optional branches for readers who want to study signatures, hash functions, and Merkle trees in greater depth. They are not current required steps in this Phase 9 path.
+Readers missing the basic wallet, transaction, and confirmation model can branch to MSC-PATH-START | Start With Bitcoin. Readers focused on custody, recovery, and operational risk can branch to MSC-PATH-SAFE | Use Bitcoin Safely. After node software, consensus, or upgrades, readers preparing to work with higher-layer protocols and developer systems can branch to MSC-PATH-BUILD | Build on Bitcoin. After Phase 16, cryptography guides may become optional branches for readers who want to study signatures, hash functions, and Merkle trees in greater depth. They are not current required steps in this Phase 9 path.
 
 ## 3. Destination structure or sequence
 
