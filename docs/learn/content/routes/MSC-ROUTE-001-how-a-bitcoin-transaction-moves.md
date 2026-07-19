@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-ROUTE-001
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: featured-route
 h1: How a Bitcoin Transaction Moves
 handle: how-a-bitcoin-transaction-moves
@@ -8,8 +8,8 @@ category: The Bitcoin Network
 subcategory: Network
 production_batch: "Phase 1.12: route architecture; write after Phase 9 and finalize before network path launch"
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-19
+copy_locked_date: 2026-07-19
 ---
 
 # How a Bitcoin Transaction Moves
@@ -439,15 +439,12 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 13. Human verification
 
-- Reviewer:
-- Review date:
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-19
 - Notes:
-  - Recheck the complete lifecycle against Bitcoin Core v31.0 transaction, wallet, mempool, peer-processing, mining, validation, chainwork, and coins-view behavior before copy lock.
-  - Verify every companion-guide relationship against the current copy-locked source package.
-  - Recheck transaction-signing and script-language boundaries for each supported transaction form.
-  - Confirm exact glossary-definition synchronization.
-  - Recheck every external source URL immediately before publication.
-  - Keep all companion actions and planned internal links inactive until publication and URL confirmation.
+  - Verified the complete 12-stage transaction lifecycle against the listed Bitcoin Core v31.0 sources, BIP 141, the Bitcoin white paper, and developer documentation.
+  - Confirmed consensus validity remains separate from local policy; broadcast does not guarantee relay or confirmation; proof of work does not replace block validation; and chainwork comparison applies only among valid candidates.
+  - Confirmed the maturity wording correction, probabilistic confirmation language, all 16 source entries, companion relationships, inactive links, synchronized glossary definitions, and exactly three illustrations remaining `PLANNED`.
 
 ## 14. Illustration brief
 

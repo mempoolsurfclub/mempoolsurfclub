@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-PATH-START
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: learning-path
 h1: Start With Bitcoin
 handle: start-with-bitcoin
@@ -8,8 +8,8 @@ category: Not applicable. This is a cross-category learning route.
 subcategory: Multiple canonical subcategories. The path does not own topic pages.
 production_batch: "Phase 1.07: path skeleton; Finalize after Phase 5, then refresh route links after Phase 9."
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-19
+copy_locked_date: 2026-07-19
 ---
 
 # Start With Bitcoin
@@ -364,14 +364,12 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 13. Human verification
 
-- Reviewer:
-- Review date:
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-19
 - Notes:
-  - Recheck the exact 13-step sequence and branch positions against the current JSON registry before copy lock.
-  - Verify every step's title, depth, reading time, learning outcome, and status against its permanent editorial package.
-  - Recheck beginner tone so it remains calm, non-promotional, and free of safety or outcome guarantees.
-  - Confirm exact glossary-definition synchronization.
-  - Keep all path actions and planned internal links inactive until publication and URL confirmation.
+  - Verified the exact 13-step sequence, four-stage structure, step metadata, learning outcomes, and MSC-ROUTE-001 as the final Step 13 synthesis destination.
+  - Confirmed Safety, Network, and Ecosystem branches remain optional and inactive, and the copy makes no financial, technical, or operational safety promise.
+  - Confirmed the tone remains calm and non-promotional, glossary definitions are synchronized, and exactly three illustrations remain `PLANNED`.
 
 ## 14. Illustration brief
 

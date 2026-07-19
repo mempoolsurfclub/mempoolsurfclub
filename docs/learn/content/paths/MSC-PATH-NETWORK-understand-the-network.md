@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-PATH-NETWORK
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: learning-path
 h1: Understand the Network
 handle: understand-the-network
@@ -8,8 +8,8 @@ category: Not applicable. This is a cross-category learning route.
 subcategory: Multiple canonical subcategories. The path does not own topic pages.
 production_batch: "Phase 1.09: path skeleton; Finalize after Phase 9, then add cryptography branches after Phase 16."
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-19
+copy_locked_date: 2026-07-19
 ---
 
 # Understand the Network
@@ -454,14 +454,12 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 13. Human verification
 
-- Reviewer:
-- Review date:
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-19
 - Notes:
-  - Recheck the complete 20-step sequence against the current JSON registry before copy lock.
-  - Verify every step's title, depth, reading time, learning outcome, and status against its permanent editorial package.
-  - Recheck the future Phase 16 branch treatment so it remains optional and inactive.
-  - Confirm exact glossary-definition synchronization.
-  - Keep all path actions and planned internal links inactive until publication and URL confirmation.
+  - Verified the exact 20-step Phase 9 sequence, five-stage structure, step metadata, learning outcomes, and MSC-ROUTE-001 as Step 3.
+  - Confirmed Guides MSC-GUIDE-057 through MSC-GUIDE-060 remain future optional branches and that the duplicate Phase 16 wording is removed.
+  - Confirmed policy, consensus, relay, local mempools, mining, validation, chainwork, and confirmations remain distinct; planned links remain inactive; and exactly three illustrations remain `PLANNED`.
 
 ## 14. Illustration brief
 

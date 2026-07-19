@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-HUB-NETWORK
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: category-hub
 h1: The Bitcoin Network
 handle: learn-bitcoin-network
@@ -8,8 +8,8 @@ category: The Bitcoin Network
 subcategory: All four approved subcategories
 production_batch: "Phase 1.03: hub skeleton; finalize after Phase 9"
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-19
+copy_locked_date: 2026-07-19
 ---
 
 # The Bitcoin Network
@@ -437,13 +437,12 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 13. Human verification
 
-- Reviewer:
-- Review date:
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-19
 - Notes:
-  - Recheck all 16 card metadata fields against the current copy-locked guide files before copy lock.
-  - Confirm all destination IDs, subcategory anchors, and planned branch relationships remain synchronized with the current registry.
-  - Recheck exact glossary-definition synchronization.
-  - Keep every card and planned internal link inactive until publication and URL confirmation.
+  - Verified all 16 cards against copy-locked Guides MSC-GUIDE-017 through MSC-GUIDE-032, including IDs, H1s, sequence, depth, format, reading times, and distinct descriptions.
+  - Confirmed Mining, Nodes, Network, and Consensus remain technically distinct and correctly ordered, with no active destination URLs.
+  - Confirmed synchronized glossary definitions and exactly three complete illustration briefs with `Status: PLANNED`.
 
 ## 14. Illustration brief
 
