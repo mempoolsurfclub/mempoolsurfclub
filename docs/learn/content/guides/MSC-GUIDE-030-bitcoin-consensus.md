@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-030
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: How Bitcoin Reaches Consensus
 handle: bitcoin-consensus
@@ -12,8 +12,8 @@ primary_path: Understand the Network
 secondary_paths:
   - Build on Bitcoin
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-19
+copy_locked_date: 2026-07-19
 ---
 
 # How Bitcoin Reaches Consensus
@@ -437,16 +437,24 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer:
-- Review date:
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-19
 - Notes:
-  - Recheck Bitcoin Core v31.0 validation, chainstate, chainwork, policy, and peer-processing paths immediately before copy lock.
-  - Confirm that validity, active-chain selection, reorganizations, and consensus splits remain technically distinct.
-  - Recheck language about miners, users, businesses, developers, and node operators for influence-versus-control precision.
-  - Confirm policy examples remain non-consensus and implementation-specific defaults are not presented as universal rules.
-  - Confirm exact glossary-definition synchronization.
-  - Recheck every source URL immediately before publication.
-  - Keep planned internal links inactive until real destination pages and confirmed URLs exist.
+  - Verified Bitcoin Core v31.0 validation, chainstate, chainwork, candidate-chain activation, block connection, block disconnection, and reorganization behavior.
+  - Confirmed transaction and block validity remain separate from valid-chain selection.
+  - Confirmed proof of work orders valid candidate chains but does not replace consensus validation.
+  - Verified consensus rules remain separate from mempool acceptance, transaction relay, template policy, and other local software policy.
+  - Confirmed compatible nodes are not required to have identical mempools, peers, clocks, indexes, wallets, storage modes, or arrival order.
+  - Verified temporary competing valid branches are distinguished from incompatible-rule consensus splits.
+  - Confirmed peer counts, relay volume, node counts, and miner signaling are not described as protocol votes.
+  - Confirmed miners, developers, maintainers, services, businesses, wallets, and users are not assigned unilateral authority over another operator's validation rules.
+  - Verified Bitcoin Core is described as an implementation rather than the owner of Bitcoin consensus.
+  - Confirmed implementation diversity is qualified by the requirement for compatible consensus results.
+  - Verified chainstate is distinguished from raw block files, wallet data, mempools, and optional indexes.
+  - Confirmed wallet users directly enforce the rules only when software under their control performs the relevant validation.
+  - Verified technical consensus is distinguished from human and social coordination.
+  - Confirmed exact approved glossary-definition synchronization and precise source Supports notes.
+  - Confirmed planned internal links remain inactive until real destination pages and URLs exist.
 
 ## 12. Illustration brief
 
