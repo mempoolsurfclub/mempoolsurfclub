@@ -202,7 +202,7 @@ The `rgb-core` consensus crate is version 0.12.0. Its maintainers describe conse
 
 The current default branches of the RGB wallet runtime and RGB standard library identify themselves as 0.12.0-rc.3. The latest published GitHub release for the runtime and command-line tool remains v0.12.0-rc.2, released June 3, 2025.
 
-The separate `rgb-lib` wallet SDK identifies itself as 0.3.0-beta.7 and currently depends on v0.11.1-rc.11 RGB application libraries. It belongs to a different compatibility line from the v0.12 default branches.
+The separate `rgb-lib` wallet SDK identifies itself as 0.3.0-beta.6 and currently pins its RGB application dependencies, including `rgb-invoicing`, `rgb-psbt-utils`, `rgb-schemas`, and `rgb-ops`, to the 0.11.1-rc.10 line. It belongs to a different compatibility line from the v0.12 default branches.
 
 Official documentation also contains pages written around v0.11 schemas and interfaces alongside newer v0.12 material. Readers and implementers must verify a page's architecture rather than assuming that an unversioned documentation page describes the final v0.12 model.
 
