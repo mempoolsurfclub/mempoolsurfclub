@@ -50,7 +50,7 @@ A VTXO is not a global account balance. It is a specific transaction output with
 
 ### Commitment transactions create batch outputs
 
-In the current Arkade design, a commitment transaction is an on-chain Bitcoin transaction that creates a batch output and associated connector outputs.
+In the current Arkade design, a commitment transaction is an on-chain Bitcoin transaction that creates one batch output and one connector output, with the connector output committed to a tree of connector leaves used for atomic coordination.
 
 The batch output consolidates many user claims into one Bitcoin output. A presigned virtual transaction tree can unroll that shared output into branches whose leaves are user VTXOs. Users participating in the batch verify the proposed structure and contribute signatures required by the construction.
 
@@ -64,7 +64,7 @@ A current Arkade batch swap begins when users register intents describing the VT
 
 Users must verify the transaction data before signing. For VTXOs being replaced, users create forfeit transactions tied to connector outputs. This design makes surrender of an old claim conditional on confirmation of the commitment transaction that creates the replacement claim.
 
-The operator broadcasts the completed commitment transaction. If it confirms, the new batch becomes anchored on Bitcoin. If the required construction or signatures are incomplete, the batch should not be treated as successfully settled.
+The operator broadcasts the completed commitment transaction. If it confirms, the new batch becomes anchored on Bitcoin. If a user is not selected, does not confirm participation, or does not complete the required signing steps, that user's intended replacement is not settled in that batch. The user must try a later batch or use another valid path, and an expiring VTXO still must be renewed or exited before its deadline.
 
 This coordinated process is sometimes described historically as a round. Current Arkade documentation more often uses batch, batch swap, commitment transaction, and intent terminology. Older terms such as Ark service provider, ASP, round, Ark transaction, and out-of-round payment should be tied to the proposal or implementation that uses them rather than assumed to describe every current Ark system.
 
@@ -116,7 +116,7 @@ The operator cannot alter a user's already valid presigned exit transaction at w
 
 ### Batch expiry creates user liveness requirements
 
-Batch outputs expire under defined timelocks. Before expiry, VTXO holders must renew, settle, spend, or begin an enforceable exit if they want to preserve unilateral control.
+Batch outputs expire under defined timelocks. Before expiry, VTXO holders must renew through a batch swap or begin an enforceable exit if they want to preserve unilateral control. An ordinary off-chain transfer does not by itself guarantee a fresh expiry window; the resulting VTXO's settlement and expiry context must still be checked.
 
 In the current Arkade terminology, renewal is performed through a batch swap. The old VTXOs are exchanged for fresh VTXOs in a new batch, resetting the expiry window and, when confirmed, refreshing their Bitcoin settlement anchor.
 
@@ -144,7 +144,7 @@ Insufficient liquidity can delay settlement, reduce accepted amounts, increase f
 
 Operator dependence is not automatically operator custody. It means ordinary usability, settlement coordination, and capital-efficient operation rely on infrastructure the user does not fully control.
 
-### Data availability and backups are part of custody
+### Data availability and backups affect enforceable recovery
 
 A seed phrase may recover keys, but keys alone may not reconstruct every VTXO transaction chain.
 
@@ -170,7 +170,7 @@ Bitcoin consensus protects only the on-chain transactions that nodes validate. A
 
 For a settled, unexpired VTXO, the user relies on correct presigned transactions, enforceable scripts, sufficient data, timely action, and Bitcoin block space. For a preconfirmed VTXO, the user also relies on the operator or signer not authorizing conflicting ownership chains before settlement.
 
-Current Arkade documentation describes a separated signer, trusted execution environments, remote attestation, encrypted communication, and possible slashing mechanisms. These features aim to constrain and expose double-signing or censorship. They introduce hardware, software, deployment, and attestation assumptions and should not be presented as universal properties of every Ark protocol or operator.
+Current Arkade documentation describes a separated signer, trusted execution environments, remote attestation, encrypted communication, and detection of conflicting signatures. These features aim to constrain or expose double-signing and transaction-level censorship. They introduce hardware, software, deployment, and attestation assumptions and should not be presented as universal properties of every Ark protocol or operator.
 
 No design eliminates availability risk, signer compromise, software bugs, malicious policy, or mass-exit pressure.
 
@@ -243,7 +243,7 @@ The appropriate maturity label for this guide is alpha and experimental, not uni
    - URL: https://docs.arkadeos.com/learn/core-concepts/settlement-and-finality
    - Supports: The distinction between preconfirmation and Bitcoin settlement, batch swaps, renewal, exit-cost management, and commitment-transaction finality.
 6. **VTXO Lifecycle and Liveness** | Arkade OS contributors
-   - URL: https://docs.arkadeos.com/learn/pillars/batch-expiry
+   - URL: https://docs.arkadeos.com/learn/core-concepts/vtxo-lifecycle-and-liveness#batch-expiry
    - Supports: Batch expiry, operator sweep authority, user and operator liveness, renewal timing, delegation, and loss of unilateral rights after expiry.
 7. **VTXO Management** | Arkade OS contributors
    - URL: https://docs.arkadeos.com/wallets/advanced/vtxo-management
@@ -252,11 +252,11 @@ The appropriate maturity label for this guide is alpha and experimental, not uni
    - URL: https://docs.arkadeos.com/arkd/transactions/exiting-arkade
    - Supports: Collaborative exits, force redemption, operator parameters, unilateral unrolling, exit delays, and the distinction between Arkade VTXOs and ordinary Bitcoin UTXOs.
 9. **Security and Trust Model** | Arkade OS contributors
-   - URL: https://docs.arkadeos.com/learn/concepts/security
+   - URL: https://docs.arkadeos.com/learn/core-concepts/security-and-trust-model
    - Supports: Presigned exit paths, mass-exit costs, signer separation, trusted execution environments, attestation, compromise risks, and implementation-specific security claims.
-10. **Transaction Finality** | Arkade OS contributors
-    - URL: https://docs.arkadeos.com/learn/security/transaction-finality
-    - Supports: Preconfirmation integrity assumptions, conflicting signatures, cryptographic evidence, batch settlement, and the boundary between off-chain state and Bitcoin finality.
+10. **Boarding Arkade** | Arkade OS contributors
+    - URL: https://docs.arkadeos.com/arkd/transactions/boarding-arkade
+    - Supports: Current boarding-address script paths, on-chain funding, intent registration, MuSig2 participation, forfeit-transaction submission, and conversion of boarding inputs into VTXOs through a commitment transaction.
 11. **arkd Repository and Release History** | Arkade OS contributors
     - URL: https://github.com/arkade-os/arkd
     - Supports: The maintained Arkade server implementation, operator responsibilities, mainnet support, latest listed v0.9.6 release dated May 26, 2026, and the explicit alpha and experimental maturity warning.
@@ -269,7 +269,7 @@ The appropriate maturity label for this guide is alpha and experimental, not uni
 14. **Original Ark Proposal** | Burak
     - URL: https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-May/021694.html
     - Supports: Historical Ark motivation, early ASP, round, VTXO, and out-of-round terminology, used only to distinguish the original proposal from the current maintained Arkade design.
-15. **Ark: Offchain Transaction Batching in Bitcoin** | Pim Keer, Matteo Maffei, Marco Argentieri, Andrew Camilleri, and Zeta Avarikioti
+15. **Ark: Offchain Transaction Batching in Bitcoin** | Pim Keer, Ioannis Alexopoulos, Matteo Maffei, Marco Argentieri, Andrew Camilleri, and Zeta Avarikioti
     - URL: https://arxiv.org/abs/2605.20952
     - Supports: Independent May 2026 formal protocol analysis, operator model, VTXO security, disclosed implementation attacks, fixes, batch footprint, and cooperative and unilateral exit cost findings.
 16. **BIP 68: Relative Lock-Time Using Consensus-Enforced Sequence Numbers** | Mark Friedenbach, BtcDrak, Nicolas Dorier, and kinoshitajona
