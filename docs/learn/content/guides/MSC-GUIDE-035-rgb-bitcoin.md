@@ -46,7 +46,7 @@ Client-side validation asks a different question. Given an RGB contract and a pr
 
 The recipient's RGB software performs that work. It checks the contract origin, relevant operations, state rules, seals, commitments, and Bitcoin witness history. Bitcoin nodes do not return an answer such as "this RGB transfer is valid."
 
-A confirmed Bitcoin commitment therefore proves that particular commitment data was anchored in an ordered Bitcoin transaction. It does not prove by itself that the external contract data is complete, non-conflicting, or valid under the relevant RGB contract rules.
+A confirmed Bitcoin witness transaction provides chain-ordering and spend evidence. A separately verified anchor proves that the RGB operation commitment is included in that transaction. Neither fact by itself proves that the external contract data is complete, non-conflicting, or valid under the relevant RGB contract rules.
 
 ### Single-use seals connect rights to one-time events
 
@@ -162,15 +162,19 @@ A chain resolver, Electrum server, Esplora service, or local Bitcoin node can su
 
 A confirmed anchor can coexist with missing transfer data. Confirmation cannot deliver a consignment to a wallet that never received it.
 
-### Data availability and backups are part of ownership
+An invalid RGB consignment is not necessarily an invalid Bitcoin transaction. Counterfeit issuance, excess supply, reused state, or unauthorized transitions are rejected by RGB client-side validation, even when the witness transaction itself is valid under Bitcoin's rules. If conflicting histories claim the same owned state, the client must compare their seal-closing evidence with Bitcoin's selected chain and reject any history that lacks the authoritative spend or fails RGB rules.
 
-RGB ownership depends on more than private keys.
+### Data availability and backups affect enforceable use
+
+Exercising RGB rights depends on more than private keys.
 
 A seed phrase may restore Bitcoin keys, but it may not restore the RGB contract history, consignments, seal metadata, contract APIs, media, or transfer records needed to prove and spend client-side state.
 
 Wallet software therefore has responsibilities for import, export, persistence, backup, and recovery. The v0.12 RC2 runtime and command-line release added contract import and export, contract backups, and removal of unused contracts. Those capabilities still need correct integration and user-facing recovery testing.
 
 Losing required data can make valid rights difficult or impossible to demonstrate to a later recipient. A third-party proxy or indexer may retain copies, but relying on it creates availability and privacy dependencies. A backup claim should state whether it preserves keys only, complete consignments, contract state, attachments, or all data needed for future validation.
+
+Using a proxy, indexer, or storage provider creates availability and privacy dependencies, not automatic custody. Custody depends on who controls the keys and any additional authorization required to move the state. A self-custodial label does not restore missing consignments or fix incompatible software.
 
 Secure transport matters too. Private transfer packages must reach the intended recipient without substitution, corruption, or accidental disclosure.
 
@@ -181,6 +185,8 @@ RGB relies on Bitcoin's selected chain for the witness transactions that close s
 Before confirmation, a transaction can be replaced, conflict, or disappear from a node's mempool. After confirmation, a reorganization can remove the transaction from the active chain or change its depth and ordering context.
 
 RGB v0.12 introduced a revised model intended to handle reorganization risks more explicitly. Wallets still need current chain data and clear policies for when a transfer is considered sufficiently settled.
+
+If a reorganization removes the witness transaction, the wallet must reconsider the affected seal closing and downstream state, then revalidate against the selected chain.
 
 One confirmation is not absolute finality. A recipient should distinguish successful client-side validation from the separate question of how much Bitcoin confirmation depth is required for the witness transaction.
 
@@ -214,7 +220,7 @@ RGB is designed to support client-side state associated with Lightning channels,
 
 That design claim is not universal Lightning deployment.
 
-The maintained RGB Lightning Node identifies itself as version 0.1.0 and depends on the beta rgb-lib line. Its documentation labels the software early alpha and limits ordinary testing to regtest and testnet environments.
+The maintained RGB Lightning Node identifies itself as version 0.1.0 and currently pins `rgb-lib` 0.3.0-beta.6, distinct from the separate `rgb-lib` default branch's 0.3.0-beta.7 line. Its documentation labels the software early alpha and limits ordinary testing to regtest and testnet environments. It also requires a Bitcoin node, an Electrum or Esplora indexer, and an RGB proxy server. These are implementation dependencies, not universal protocol requirements.
 
 It should therefore be described as an experimental integration, not proof that arbitrary RGB contracts can move across the public Lightning Network through ordinary wallets and nodes. Compatibility depends on modified channel software, shared RGB versions, liquidity, transfer-data delivery, backup, and close handling.
 
@@ -300,7 +306,7 @@ The durable mental model is narrow: Bitcoin orders and validates the UTXO spends
     - Supports: Anchor structure, transaction association, and proofs connecting contract operations to Bitcoin commitments.
 14. **RGB Transfer and Consignment Documentation** | RGB protocol contributors
     - URL: https://docs.rgb.info/annexes/contract-transfers
-    - Supports: Sender-to-recipient transfer data, consignments, beneficiary information, and client-side transfer validation workflow.
+    - Supports: Pre-v0.12 schema-era sender-to-recipient transfer data, consignments, beneficiary information, and client-side transfer validation workflow; used for conceptual transfer behavior rather than as evidence for the final v0.12 data model.
 15. **RGB Invoice Documentation** | RGB protocol contributors
     - URL: https://docs.rgb.info/annexes/invoices
     - Supports: RGB invoice purpose, beneficiary seals, requested contract state, and distinction from ordinary Bitcoin transaction data.
@@ -315,7 +321,7 @@ The durable mental model is narrow: Bitcoin orders and validates the UTXO spends
 18. **RGB Lightning Node Manifest** | RGB-Tools contributors
     - Repository path: RGB-Tools/rgb-lightning-node/Cargo.toml
     - URL: https://github.com/RGB-Tools/rgb-lightning-node/blob/master/Cargo.toml
-    - Supports: Version 0.1.0 and dependency on the beta rgb-lib compatibility line.
+    - Supports: Version 0.1.0 and the exact `rgb-lib` 0.3.0-beta.6 dependency used by the current RGB Lightning Node implementation.
 19. **Bitcoin Core Validation Implementation, v31.0** | Bitcoin Core contributors
     - Repository path: bitcoin/bitcoin/src/validation.cpp at v31.0
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.0/src/validation.cpp
@@ -367,7 +373,7 @@ Do not activate planned links until the destination exists as a real published p
 
 - Reviewer:
 - Review date:
-- Notes: Pending review should verify the final v0.12 consensus terminology, current RC3 branch manifests, rgb-lib v0.11 compatibility boundary, RGB-20 and RGB-21 release labeling, consignment and backup behavior, and early-alpha Lightning integration status.
+* Notes: Pending review should verify current RGB versions and repository or release status, final v0.12 consensus terminology, v0.11 versus v0.12 documentation boundaries, the rgb-lib compatibility line, RGB-20 and RGB-21 release labeling, consignment delivery and backup assumptions, privacy boundaries, Bitcoin confirmation and reorganization behavior, and RGB Lightning Node maturity, required infrastructure, and test-network limitations.
 
 ## 12. Illustration brief
 
