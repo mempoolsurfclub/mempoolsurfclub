@@ -72,7 +72,7 @@ Sidechains can increase transaction capacity by processing activity outside Bitc
 
 Capacity is not free. Sidechain nodes store and validate sidechain data. Block producers need infrastructure. Bridges need monitoring, signing, liquidity, and recovery procedures. High demand can still raise fees or create congestion under the sidechain's own limits.
 
-Features such as Confidential Transactions, issued assets, or EVM-compatible contracts are sidechain capabilities. They do not alter Bitcoin consensus. Confidential amounts can hide values from public observers while still exposing transaction timing, participant metadata, asset issuance details, or information to counterparties. Confidentiality is not complete anonymity.
+Features such as Confidential Transactions, issued assets, or EVM-compatible contracts are sidechain capabilities. They do not alter Bitcoin consensus. On Liquid, Confidential Transactions hide output amounts and asset types, but the transaction graph, input and output counts, and fee remain visible. Counterparties and anyone given the relevant blinding keys can learn protected details. Confidentiality is not complete anonymity.
 
 ### Federated sidechain model: Liquid and Elements
 
@@ -90,13 +90,13 @@ This is deterministic signer finality, not Bitcoin proof of work. If too many fu
 
 #### Liquid peg-ins and peg-outs
 
-A Liquid peg-in sends bitcoin to a federation-controlled address derived for the user's claim. Current Liquid documentation requires 102 Bitcoin confirmations before the L-BTC claim is accepted. The long delay protects the pooled peg from a deep Bitcoin reorganization.
+A Liquid peg-in sends bitcoin to a federation-controlled address derived for the user's claim. The wallet must retain the associated claim script and later provide the Bitcoin transaction and Merkle proof, although supported wallet software can automate that process. Current Liquid documentation requires 102 Bitcoin confirmations before the L-BTC claim is accepted. The long delay protects the pooled peg from a deep Bitcoin reorganization.
 
-Peg-outs retire L-BTC and ask the watchmen to release bitcoin. The peg currently uses an 11-of-15 Bitcoin multisignature arrangement and Peg-out Authorization Keys, or PAKs. Direct public peg-out access is restricted. Federation members or authorized participants can perform direct peg-outs, while general users usually rely on a member or service.
+Peg-outs retire L-BTC and ask the watchmen to release bitcoin. The peg currently uses an 11-of-15 Bitcoin multisignature arrangement and Peg-out Authorization Keys, or PAKs. Direct public peg-out access is restricted. Federation members or authorized participants can perform direct peg-outs, while general users usually rely on a member or service. Current documentation estimates the watchman processing phase at 11 to 35 minutes, depending on network conditions; Bitcoin confirmation follows under Bitcoin's own timing. A member, exchange, or swap service can add separate custody, liquidity, fee, and availability assumptions.
 
 One-to-one backing can be audited by a Liquid node, but it does not guarantee immediate redemption. Redemption still depends on authorization rules, functionary availability, transaction construction, Bitcoin fees, and Bitcoin confirmation.
 
-Liquid also includes an emergency recovery design using timelocks and a separate set of emergency keys after an extended federation failure. That mechanism reduces permanent lockup risk while adding another recovery-key and procedure assumption.
+Liquid also includes an emergency recovery design using a timelock and a separate set of three emergency keys after extended federation nonfunctionality. Recovery is not an automatic user withdrawal path; it still depends on those keys and an operational process. The mechanism reduces lockup risk but adds separate key, governance, and execution assumptions.
 
 #### Federated security boundaries
 
@@ -120,15 +120,15 @@ Bitcoin nodes treat the Rootstock commitment as data in a valid Bitcoin transact
 
 Rootstock's documentation reported participation exceeding 85 percent of Bitcoin hashpower when accessed on July 19, 2026. That figure is time-sensitive and project-reported. It describes observed mining participation, not independent proof that the PowPeg has the same security as Bitcoin or that Bitcoin nodes validate Rootstock.
 
-Any user can run the RSKj node software to validate Rootstock. Miners may contribute work while mining Bitcoin, but Rootstock retains its own block timing, difficulty, transaction rules, contracts, and chain-selection behavior.
+Any user can run the RSKj node software to validate Rootstock. Mining pools need Rootstock-aware pool or delegated merged-mining infrastructure to obtain Rootstock work and submit proofs, but Bitcoin nodes require no changes and individual miners do not necessarily run Rootstock nodes. This is operational delegation, not BIP 301 blind merged mining. Rootstock retains its own block timing, difficulty, transaction rules, contracts, and chain-selection behavior.
 
 #### rBTC and the PowPeg
 
-In a peg-in, bitcoin is sent to the PowPeg address. The Rootstock Bridge, a precompiled contract in Rootstock consensus, tracks relevant Bitcoin evidence and recognizes rBTC after the required process. Current Rootstock documentation updated June 22, 2026 states that peg-ins require 100 Bitcoin blocks.
+In a peg-in, bitcoin is sent to the PowPeg address. The Rootstock Bridge, a precompiled contract in Rootstock consensus, tracks relevant Bitcoin evidence and recognizes rBTC after the required process. Current Rootstock documentation updated June 22, 2026 states that peg-ins require 100 Bitcoin blocks. The current native peg-in minimum is 0.005 BTC.
 
-For a peg-out, the Bridge accepts the request, waits for Rootstock confirmation conditions, builds the Bitcoin transaction, and coordinates signing. The same documentation states that peg-outs require 4,000 Rootstock blocks, described as approximately 200 Bitcoin blocks under its timing assumptions.
+For a peg-out, the Bridge accepts the request, waits for Rootstock confirmation conditions, builds the Bitcoin transaction, and coordinates signing. The same documentation states that peg-outs require 4,000 Rootstock blocks, described as approximately 200 Bitcoin blocks under its timing assumptions. Current documentation lists a 0.004 rBTC minimum, and the Bridge can reject and refund requests when estimated Bitcoin fees leave an uneconomic output.
 
-Pegnatories operate PowPeg nodes and PowHSM devices. The hardware protects one key in the multisignature set and is designed to sign only when a requested peg-out is backed by sufficient cumulative Rootstock proof of work. The Bridge selects transaction inputs and outputs under Rootstock consensus rules.
+Pegnatories operate PowPeg nodes and PowHSM devices. The hardware protects one key in the multisignature set and is designed to sign only when a requested peg-out is backed by sufficient cumulative Rootstock proof of work. The Bridge selects transaction inputs and outputs under Rootstock consensus rules. PowPeg membership and the Bitcoin signing threshold are active Bridge state rather than permanent protocol constants. They can change through federation updates, so current values must be read from the live Bridge rather than inferred from a genesis key list or an older documentation count.
 
 This arrangement limits direct human discretion, but it does not eliminate operational assumptions. Peg-outs require enough PowHSMs and PowPeg infrastructure to remain online, follow the expected chain, and sign. Hardware, firmware, node software, attestation, membership changes, and deep-chain assumptions all matter.
 
@@ -146,7 +146,7 @@ Drivechains are proposals, not deployed Bitcoin mainnet functionality. BIP 300 a
 
 #### BIP 300 hashrate escrows
 
-BIP 300 proposes hashrate escrows that hold sidechain funds in designated Bitcoin UTXOs. Sidechain users would form withdrawal bundles. Bitcoin miners would slowly signal approval or rejection over many blocks before a bundle could spend the escrow.
+BIP 300 proposes hashrate escrows that hold sidechain funds in designated Bitcoin UTXOs. Sidechain users would form withdrawal bundles. Under the current Draft specification, a bundle starts with 26,300 blocks remaining, succeeds after reaching at least 13,150 net ACKs, and is removed when its lifetime expires or it can no longer reach that threshold. These are proposed consensus rules, not deployed Bitcoin behavior.
 
 The design moves withdrawal authorization away from a fixed federation and toward miner signaling. It deliberately uses long, visible withdrawal periods. Its security depends on assumptions about miner incentives, user monitoring, censorship, and whether miners approve only valid sidechain withdrawals.
 
@@ -168,9 +168,9 @@ Those disagreements are not resolved merely because BIPs have assigned numbers. 
 
 ### Sidechains compared with Lightning and Ark
 
-Lightning is a network of bilateral Bitcoin payment channels. Channel participants update enforceable Bitcoin settlement states, and routed payments use directional channel liquidity. Lightning does not create an independent global blockchain with its own block producers.
+Lightning is a network of bilateral Bitcoin payment channels. Channel participants update enforceable Bitcoin settlement states, and routed payments use directional channel liquidity. Channel opening and closing use Bitcoin transactions and fees, and a participant can enforce a valid channel close on Bitcoin without asking a sidechain peg authority. Lightning does not create an independent global blockchain with its own block producers.
 
-Ark uses operator-coordinated VTXOs and shared Bitcoin batch outputs. Its users depend on batch timing, operator service, expiry management, and exit data. Ark is not an independent sidechain blockchain in the same sense as Liquid or Rootstock.
+Ark uses operator-coordinated VTXOs and shared Bitcoin batch outputs. Its users depend on batch timing, operator service, expiry management, and the transaction data needed for unilateral exits. Ark does not create independent sidechain blocks or a separate peg whose key holders authorize withdrawals, so it is not a sidechain in the same sense as Liquid or Rootstock.
 
 A sidechain creates its own chain history and node validation environment. It may offer broader execution or asset features, but users accept separate consensus and peg assumptions. These systems can all be called Layer 2 in broad conversation because they move activity away from ordinary Bitcoin transactions, but the label does not describe one shared security model.
 
@@ -225,13 +225,13 @@ Sidechains can expand design space, but they do not erase tradeoffs. The securit
    - Supports: Elements as a separate sidechain, mainchain unawareness of sidechain state, federated peg configuration, and watchman-controlled peg-outs.
 3. **How Liquid Works** | Liquid Network documentation
    - URL: https://docs.liquid.net/docs/how-liquid-works
-   - Supports: Liquid's 15 functionaries, 11-of-15 quorum, one-minute signed blocks, Elements Core node implementation, and sidechain feature set as documented in July 2026.
+   - Supports: Current 15-functionary and 11-of-15 configuration, one-minute signed blocks, Elements Core node validation, 102-confirmation peg-ins, and Confidential Transaction visibility boundaries including the public transaction graph, input and output counts, and fee.
 4. **Technical Overview** | Liquid Network documentation
    - URL: https://docs.liquid.net/docs/technical-overview
-   - Supports: Strong Federation roles, block signers, watchmen, two-confirmation finality model, quorum liveness, emergency recovery, public full nodes, and direct peg-out restrictions.
+   - Supports: Strong Federation roles, round-robin block proposals, two-confirmation signer-finality model, quorum liveness and chain-freeze conditions, 11-to-35-minute peg-out processing range, PAK restrictions, public full-node validation, direct peg-out restrictions, and three-key timelocked emergency recovery.
 5. **Peg-in and Peg-out** | Liquid Network documentation
    - URL: https://docs.liquid.net/docs/advanced-pegin-pegout
-   - Supports: 102-confirmation peg-ins, L-BTC creation and retirement, PAK restrictions, indirect public peg-outs, timing variability, and operational peg risks.
+   - Supports: Peg-in address and claim-script generation, Bitcoin transaction and Merkle-proof claim data, 102-confirmation peg-ins, L-BTC creation and retirement, PAK restrictions, indirect public peg-outs, timing variability, and operational peg risks.
 6. **Liquid Network Federation** | Liquid Federation
    - URL: https://liquid.net/federation
    - Supports: Current 15 functionary operators, 11-of-15 block quorum, public validation, and separation between functionary and governance roles.
@@ -243,26 +243,26 @@ Sidechains can expand design space, but they do not erase tradeoffs. The securit
    - Supports: Confidential amounts and asset types as functionality while retaining node validation of supply constraints.
 9. **Building the Most Secure, Permissionless and Uncensorable Bitcoin Peg** | Rootstock Developers Portal
    - URL: https://dev.rootstock.io/concepts/powpeg/
-   - Supports: PowPeg architecture, Bridge contract, PowPeg nodes, PowHSMs, peg-in and peg-out flow, confirmation requirements, liveness, and separation of functionary and miner roles; page updated June 22, 2026.
-10. **Security Model** | Rootstock Developers Portal
-    - URL: https://dev.rootstock.io/concepts/powpeg/security-model/
-    - Supports: rBTC representation, two-transaction peg model, pegnatories, multisignature controls, 4,000-block peg-out backing, and distinction between locked BTC and Rootstock state; page updated May 29, 2026.
+   - Supports: Project-reported merged-mining participation above 85 percent; Bridge, PowPeg-node, and PowHSM roles; 100-Bitcoin-block peg-ins; 4,000-Rootstock-block peg-outs described as approximately 200 Bitcoin blocks; and current 0.005 BTC peg-in and 0.004 rBTC peg-out minimums.
+10. **PowPeg Details Runtime Library** | Rootstock contributors
+    - URL: https://github.com/rsksmart/powpeg-details
+    - Supports: Bridge methods used to query the active PowPeg federation size, signing threshold, address, pegnatory public keys, redeem script, and federation creation block from a live Rootstock node.
 11. **What Is Merged Mining?** | Rootstock Developers Portal
     - URL: https://dev.rootstock.io/concepts/merged-mining/
     - Supports: Reuse of double-SHA-256 mining work, separate Bitcoin and Rootstock difficulty outcomes, and Rootstock proof submission.
 12. **Merged Mining Implementation Guide** | Rootstock Developers Portal
     - URL: https://dev.rootstock.io/node-operators/merged-mining/getting-started/
-    - Supports: Rootstock commitment in the Bitcoin coinbase, Rootstock's separate 30-second work cycle, submission to Rootstock nodes, and absence of required Bitcoin-node changes.
+    - Supports: Rootstock commitment placement in Bitcoin coinbase transactions, Rootstock's separate 30-second work cycle, pool or plugin interaction with Rootstock nodes, merged-mining proof submission, and the absence of required Bitcoin-node changes.
 13. **RSKj Node Installation** | Rootstock Developers Portal
     - URL: https://dev.rootstock.io/node-operators/setup/installation/
     - Supports: Public installation and operation of Rootstock full-node software on mainnet.
 14. **rsk-powhsm Repository** | Rootstock
     - URL: https://github.com/rsksmart/rsk-powhsm
     - Supports: PowHSM key protection, SPV-mode Rootstock verification, cumulative-work signing requirements, supported hardware platforms, and current maintained implementation.
-15. **BIP 300: Hashrate Escrows** | Paul Sztorc and CryptAxe
+15. **BIP 300: Hashrate Escrows (Consensus layer)** | Paul Sztorc and CryptAxe
     - URL: https://github.com/bitcoin/bips/blob/master/bip-0300.mediawiki
     - Supports: Draft status, proposed consensus soft fork, escrow slots, miner-signaled withdrawal bundles, long withdrawal voting, and proposed deployment model.
-16. **BIP 301: Blind Merged Mining** | Paul Sztorc and CryptAxe
+16. **BIP 301: Blind Merged Mining (Consensus layer)** | Paul Sztorc and CryptAxe
     - URL: https://github.com/bitcoin/bips/blob/master/bip-0301.mediawiki
     - Supports: Draft status, proposed consensus soft fork, sidechain-user block construction, miner commitment and bidding, and distinction between blind mining and sidechain validation.
 17. **BIPs Implemented in Bitcoin Core** | Bitcoin Core contributors
@@ -322,9 +322,9 @@ Sidechains use separate blockchains and validation rules while connecting econom
 - Reviewer:
 - Review date:
 - Notes:
-  - Pending verification of current Liquid functionary count, signing and peg thresholds, confirmation requirements, PAK restrictions, and emergency recovery language against live official documentation.
-  - Pending verification of current Rootstock merged-mining, Bridge, PowPeg, PowHSM, pegnatory, confirmation, and hashpower statements against live repositories and dated technical documentation.
-  - Pending confirmation that BIP 300 and BIP 301 remain Draft and absent from Bitcoin Core's maintained implementation list.
+  - Pending verification of current Liquid functionary count, block-signing and Bitcoin peg thresholds, 102-confirmation peg-in configuration, claim-data requirements, PAK restrictions, peg-out processing ranges, and emergency-key recovery conditions against live official documentation.
+  - Pending live Bridge verification of the active Rootstock PowPeg federation size, Bitcoin signing threshold, federation address and creation block, plus current 100-block peg-in, 4,000-Rootstock-block peg-out, minimum amounts, merged-mining participation, PowHSM firmware, and pegnatory state. Reconcile the official documentation conflict between approximately 200 and 100 Bitcoin blocks for the 4,000-block peg-out delay.
+  - Pending confirmation that BIP 300 and BIP 301 remain Draft, absent from Bitcoin Core's maintained implementation list, and not deployed on Bitcoin mainnet; distinguish any reference implementation, fork, signet, or test network from Bitcoin Core.
 
 ## 12. Illustration brief
 
