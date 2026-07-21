@@ -373,7 +373,7 @@ Do not activate planned links until the destination exists as a real published p
 
 - Reviewer:
 - Review date:
-* Notes: Pending review should verify current RGB versions and repository or release status, final v0.12 consensus terminology, v0.11 versus v0.12 documentation boundaries, the rgb-lib compatibility line, RGB-20 and RGB-21 release labeling, consignment delivery and backup assumptions, privacy boundaries, Bitcoin confirmation and reorganization behavior, and RGB Lightning Node maturity, required infrastructure, and test-network limitations.
+- Notes: Pending review should verify current RGB versions and repository or release status, final v0.12 consensus terminology, v0.11 versus v0.12 documentation boundaries, the rgb-lib compatibility line, RGB-20 and RGB-21 release labeling, consignment delivery and backup assumptions, privacy boundaries, Bitcoin confirmation and reorganization behavior, and RGB Lightning Node maturity, required infrastructure, and test-network limitations.
 
 ## 12. Illustration brief
 
