@@ -76,17 +76,17 @@ A custodial provider may also know more about a payment because it controls the 
 
 ### HTLCs make forwarding atomic
 
-Hash Time Locked Contracts, or HTLCs, coordinate conditional payments across channels. The recipient can reveal a secret preimage that matches a payment hash. Each hop can claim its incoming conditional payment after learning that preimage and can use it to satisfy the outgoing condition.
+Hashed Time Locked Contracts, or HTLCs, coordinate conditional payments across channels. The recipient releases a preimage whose hash matches the payment hash. Each forwarding node receives that preimage from its outgoing peer, uses it to fulfill the corresponding incoming HTLC from its upstream peer, and relays the fulfillment upstream.
 
-Time locks decrease along the route. If the payment cannot complete, the conditions eventually expire and the offered balances return according to channel rules. The staggered timeouts give intermediaries time to react on-chain if necessary.
+If a route fails before fulfillment, nodes can return failure messages and remove the HTLCs through off-chain state updates. If an HTLC remains unresolved, staggered time locks provide timeout paths and enough margin for intermediaries to act on-chain when necessary.
 
-The goal is atomic behavior across the route: either the payment settles through the path or the conditional transfers fail back. This does not mean all failure modes are instant. Timeouts and on-chain enforcement can take time, especially when a channel closes.
+The intended result is atomic payment behavior across the route: the payment settles through the path, or the linked conditional transfers are removed or timed out. Failure handling is not always immediate, and on-chain resolution can take longer when a channel closes.
 
 Newer payment constructions may change some details, but an educational model should not assume they are universally supported.
 
 ### Invoices and payment requests
 
-A Lightning invoice is a payment request that can include a destination, payment hash, amount, expiry, description information, feature bits, and routing hints. BOLT 11 defines the widely used invoice format. Other offer and invoice negotiation mechanisms are under development or partial deployment.
+A Lightning invoice is a payment request that can include a destination, payment hash, amount, expiry, description information, feature bits, and routing hints. BOLT 11 defines the widely used invoice format. BOLT 12 defines a separate negotiation flow using offers, invoice requests, and invoices. Wallet and implementation support must be checked rather than assumed.
 
 An invoice is not proof that the recipient is trustworthy. It is structured payment data. Wallet software must validate the invoice, supported features, expiry, amount, and network before attempting payment.
 
@@ -126,7 +126,7 @@ This boundary matters. Lightning implementations can change routing, gossip, inv
 
 A custodial Lightning wallet records a provider-managed account. The provider controls the relevant keys or channels and decides how payments are executed. The user depends on the provider's solvency, availability, policy, and withdrawal process.
 
-A self-custodial Lightning wallet gives the user control of keys, but the operational arrangement can still vary. The wallet may run a full Lightning node, connect to a remote node, use hosted channel services, rely on a liquidity service provider, or use swaps.
+A self-custodial Lightning arrangement gives the user control of the signing authority needed to enforce or recover channel funds without a provider's permission. Operations can still vary. The wallet may run a node on the device, connect to a user-controlled remote node, or use third parties for liquidity, swaps, routing data, encrypted backups, or infrastructure that does not take control of the user's signing authority. Provider-controlled accounts and hosted balances belong in the custodial category because the provider can control payment execution or withdrawal.
 
 A Lightning node maintains channels and protocol state. A Lightning service provider may supply liquidity, routing, channel opening, node hosting, swaps, or payment processing. These roles should not be collapsed into one label.
 
@@ -191,21 +191,24 @@ The system can make frequent payments without publishing every state update. It 
 7. **BOLT #11: Invoice Protocol for Lightning Payments** | Lightning specification contributors
    - URL: https://github.com/lightning/bolts/blob/master/11-payment-encoding.md
    - Supports: Invoice fields, expiry, payment hashes, routing hints, and feature signaling.
-8. **The Bitcoin Lightning Network: Scalable Off-Chain Instant Payments** | Joseph Poon and Thaddeus Dryja
+8. **BOLT #12: Negotiation Protocol for Lightning Payments** | Lightning specification contributors
+   - URL: https://github.com/lightning/bolts/blob/master/12-offer-encoding.md
+   - Supports: The offer, invoice-request, and invoice negotiation flow without implying universal implementation or wallet support.
+9. **The Bitcoin Lightning Network: Scalable Off-Chain Instant Payments** | Joseph Poon and Thaddeus Dryja
    - URL: https://lightning.network/lightning-network-paper.pdf
    - Supports: Original payment-channel network design, hashed timelock contracts, routing, and Bitcoin enforcement.
-9. **Lightning Network Daemon Repository** | Lightning Labs
-   - URL: https://github.com/lightningnetwork/lnd
-   - Supports: A current major implementation and evidence that wallet, node, watchtower, routing, and channel features are implementation-specific.
-10. **Core Lightning Repository** | Blockstream and Core Lightning contributors
+10. **Lightning Network Daemon Repository** | Lightning Labs
+    - URL: https://github.com/lightningnetwork/lnd
+    - Supports: A current major implementation and evidence that wallet, node, watchtower, routing, and channel features are implementation-specific.
+11. **Core Lightning Repository** | Blockstream and Core Lightning contributors
     - URL: https://github.com/ElementsProject/lightning
     - Supports: A separate interoperable implementation and implementation-specific operational behavior.
-11. **LDK Documentation** | Spiral
+12. **LDK Documentation** | Spiral
     - URL: https://lightningdevkit.org/
     - Supports: Modular Lightning integration, custody boundaries, channel management, routing, and wallet responsibility.
-12. **Bitcoin Core v31.0 Source Tree** | Bitcoin Core contributors
+13. **Bitcoin Core v31.0 Source Tree** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/tree/v31.0/src
-    - Supports: Bitcoin consensus validation as the enforcement layer for funding and settlement transactions.
+    - Supports: One current Bitcoin Core implementation's validation of Bitcoin transactions and scripts that Lightning funding, closing, and enforcement transactions must satisfy. This is implementation evidence, not a definition of the Bitcoin protocol.
 
 ## 5. SEO title
 
@@ -238,11 +241,11 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 10. Accuracy review checklist
 
-- [ ] Registry metadata matches the approved registry.
-- [ ] Claims are sourced to primary or authoritative references.
-- [ ] Protocol design is separated from implementation behavior and proposed features.
-- [ ] No investment advice or universal wallet advice is included.
-- [ ] Internal links point only to real pages when activated.
+- [x] Registry metadata matches the approved registry.
+- [x] Claims are sourced to primary or authoritative references.
+- [x] Protocol design is separated from implementation behavior and proposed features.
+- [x] No investment advice or universal wallet advice is included.
+- [x] Internal links point only to real pages when activated.
 
 ## 11. Human verification
 
