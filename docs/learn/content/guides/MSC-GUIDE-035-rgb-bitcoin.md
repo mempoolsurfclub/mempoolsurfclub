@@ -220,7 +220,7 @@ RGB is designed to support client-side state associated with Lightning channels,
 
 That design claim is not universal Lightning deployment.
 
-The maintained RGB Lightning Node identifies itself as version 0.1.0 and currently pins `rgb-lib` 0.3.0-beta.7, matching the separate `rgb-lib` default branch's current 0.3.0-beta.7 version. Its documentation labels the software early alpha and limits ordinary testing to regtest and testnet environments. It also requires a Bitcoin node, an Electrum or Esplora indexer, and an RGB proxy server. These are implementation dependencies, not universal protocol requirements.
+The maintained RGB Lightning Node identifies itself as version 0.1.0 and currently pins `rgb-lib` 0.3.0-beta.7, matching the separate `rgb-lib` default branch's current 0.3.0-beta.7 version. Its documentation labels the software early alpha and limits ordinary testing to regtest and testnet environments. It requires a Bitcoin node and an Electrum or Esplora indexer; an RGB proxy server is required only when proxy-based consignment transport is used. These are implementation dependencies, not universal protocol requirements.
 
 It should therefore be described as an experimental integration, not proof that arbitrary RGB contracts can move across the public Lightning Network through ordinary wallets and nodes. Compatibility depends on modified channel software, shared RGB versions, liquidity, transfer-data delivery, backup, and close handling.
 
@@ -317,7 +317,7 @@ The durable mental model is narrow: Bitcoin orders and validates the UTXO spends
 17. **RGB Lightning Node README** | RGB-Tools contributors
     - Repository path: RGB-Tools/rgb-lightning-node/README.md
     - URL: https://github.com/RGB-Tools/rgb-lightning-node/blob/master/README.md
-    - Supports: Experimental RGB channel construction, test-network limitation, early-alpha warning, required proxy and indexer services, and non-universal Lightning compatibility.
+    - Supports: Experimental RGB channel construction, test-network limitation, early-alpha warning, required Bitcoin node and indexer services, optional proxy-based consignment transport, and non-universal Lightning compatibility.
 18. **RGB Lightning Node Manifest** | RGB-Tools contributors
     - Repository path: RGB-Tools/rgb-lightning-node/Cargo.toml
     - URL: https://github.com/RGB-Tools/rgb-lightning-node/blob/master/Cargo.toml
