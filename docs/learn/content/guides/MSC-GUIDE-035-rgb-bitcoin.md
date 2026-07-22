@@ -220,7 +220,7 @@ RGB is designed to support client-side state associated with Lightning channels,
 
 That design claim is not universal Lightning deployment.
 
-The maintained RGB Lightning Node identifies itself as version 0.1.0 and currently pins `rgb-lib` 0.3.0-beta.6, distinct from the separate `rgb-lib` default branch's 0.3.0-beta.7 line. Its documentation labels the software early alpha and limits ordinary testing to regtest and testnet environments. It also requires a Bitcoin node, an Electrum or Esplora indexer, and an RGB proxy server. These are implementation dependencies, not universal protocol requirements.
+The maintained RGB Lightning Node identifies itself as version 0.1.0 and currently pins `rgb-lib` 0.3.0-beta.7, matching the separate `rgb-lib` default branch's current 0.3.0-beta.7 version. Its documentation labels the software early alpha and limits ordinary testing to regtest and testnet environments. It also requires a Bitcoin node, an Electrum or Esplora indexer, and an RGB proxy server. These are implementation dependencies, not universal protocol requirements.
 
 It should therefore be described as an experimental integration, not proof that arbitrary RGB contracts can move across the public Lightning Network through ordinary wallets and nodes. Compatibility depends on modified channel software, shared RGB versions, liquidity, transfer-data delivery, backup, and close handling.
 
@@ -321,7 +321,7 @@ The durable mental model is narrow: Bitcoin orders and validates the UTXO spends
 18. **RGB Lightning Node Manifest** | RGB-Tools contributors
     - Repository path: RGB-Tools/rgb-lightning-node/Cargo.toml
     - URL: https://github.com/RGB-Tools/rgb-lightning-node/blob/master/Cargo.toml
-    - Supports: Version 0.1.0 and the exact `rgb-lib` 0.3.0-beta.6 dependency used by the current RGB Lightning Node implementation.
+    - Supports: Version 0.1.0 and the exact `rgb-lib` 0.3.0-beta.7 dependency used by the current RGB Lightning Node implementation.
 19. **Bitcoin Core Validation Implementation, v31.0** | Bitcoin Core contributors
     - Repository path: bitcoin/bitcoin/src/validation.cpp at v31.0
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.0/src/validation.cpp
