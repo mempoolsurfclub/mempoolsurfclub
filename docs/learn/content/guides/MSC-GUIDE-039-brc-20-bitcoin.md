@@ -115,7 +115,7 @@ A Bitcoin reorganization disconnects one or more blocks and replaces them with a
 
 This can change which ticker deployment was first, whether a mint fit under a cap, which owner received an inscription, and whether a transfer completed. An inscription identifier can remain tied to a transaction, while its confirmation position and surrounding application state change.
 
-Maintained Open Protocol Indexer implementations describe reorganization protection and calculate per-block and cumulative event hashes to compare indexed state. That is useful implementation evidence, not a guarantee that every service runs the same code, version, database, or chain tip.
+The current OPI implementation describes reorganization protection and per-block and cumulative event hashes for comparing indexed state. That is useful implementation evidence, not a guarantee that every service runs the same code, version, database, or chain tip.
 
 Applications should disclose confirmation requirements and avoid presenting unconfirmed or recently confirmed balances as irreversible.
 
@@ -244,9 +244,9 @@ BRC-20 should therefore be described as an experimental inscription and indexer 
 3. **Open Protocol Indexer** | Best in Slot contributors
    - URL: https://github.com/bestinslot-xyz/OPI
    - Supports: A maintained BRC-20 indexer implementation, historical event storage, reorganization protection, block and cumulative state hashes, activation details, and later extension boundaries.
-4. **BRC-20 Swap Indexer** | UniSat Wallet contributors
+4. **BRC-20 Swap Indexer Snapshot** | UniSat Wallet contributors
    - URL: https://github.com/brc20-devs/brc20-swap-indexer
-   - Supports: A separate maintained implementation derived from OPI, modular indexing, reorganization protection, and the need to verify implementation and extension compatibility.
+   - Supports: An OPI-derived BRC-20 swap implementation snapshot, last updated in the inspected branch on June 27, 2024, showing an older `ord` parser lineage, reorganization handling, event hashes, and optional swap behavior. Use as divergence evidence, not as universal current BRC-20 authority.
 5. **Ord Repository** | Ord project contributors
    - URL: https://github.com/ordinals/ord
    - Supports: Maintained inscription discovery, assignment, transfer, and indexing behavior on which BRC-20 implementations depend.

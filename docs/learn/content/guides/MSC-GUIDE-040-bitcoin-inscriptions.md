@@ -90,7 +90,7 @@ A commitment is not a confirmed inscription. The reveal must enter the accepted 
 
 An inscription ID combines the reveal transaction ID with the envelope's index, commonly written as the transaction ID followed by `i` and the index. It is an Ord identifier tied to specific transaction data.
 
-Inscription numbers are sequential indexer labels based on confirmation and envelope order. Historical edge cases produced negative “cursed” numbers. The Ord documentation places the jubilee at block 824,544; later cursed forms are “vindicated” with positive numbers while historical numbering remains.
+Inscription numbers normally follow reveal-transaction order within a block and envelope order within each transaction. For historical compatibility, inscriptions revealed and immediately spent to fees are numbered as if they appeared last in that block. Historical cursed inscriptions use negative numbers, while cursed forms at and after the jubilee at block 824,544 are vindicated and receive positive numbers.
 
 IDs and numbers are different. Neither proves identity, legal ownership, authenticity, or value. A reorganization can remove a reveal or change its ordering, while preconfirmation replacement can change the transaction ID. Interfaces should verify the full ID, accepted chain, and indexer version.
 
@@ -209,7 +209,7 @@ The content can be included in Bitcoin history without becoming a native Bitcoin
 
 1. **Ordinal Theory Handbook: Inscriptions** | Ord project contributors
    - URL: https://docs.ordinals.com/inscriptions.html
-   - Supports: Envelope structure, fields, body delimiter, content model, IDs, numbering, sandboxing, assignment, and historical cursed and vindicated behavior.
+   - Supports: Envelope structure, fields, body delimiter, content model, IDs, reveal and envelope ordering, the historical immediate-fee-spend numbering exception, jubilee handling, sandboxing, assignment, and cursed and vindicated behavior.
 2. **Ordinal Theory Handbook: Provenance** | Ord project contributors
    - URL: https://docs.ordinals.com/inscriptions/provenance.html
    - Supports: Parent-child construction and the requirement to involve the parent inscription in the child transaction.

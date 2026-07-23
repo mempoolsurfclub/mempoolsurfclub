@@ -44,7 +44,7 @@ Because `ord` is the normative implementation, alternative indexers must reprodu
 
 A runestone is encoded in a transaction output whose script begins with `OP_RETURN`, then `OP_13`, followed by zero or more data pushes. Compatible software concatenates the pushed bytes, decodes a sequence of 128-bit integers, and interprets fields and edicts.
 
-A transaction may contain at most one runestone under the current protocol. The runestone can etch a new Rune, request a mint of an existing Rune, and allocate available Rune units from the transaction's inputs and permitted creation operations to its outputs.
+Current `ord` interprets the first transaction output whose script begins with `OP_RETURN OP_13` as the runestone candidate. Later matching outputs are ignored, even if the first candidate is flawed. The runestone can etch a new Rune, request a mint of an existing Rune, and allocate available Rune units from the transaction's inputs and permitted creation operations to its outputs.
 
 The `OP_RETURN` output is provably unspendable under ordinary Bitcoin script behavior. Bitcoin nodes may recognize the transaction as a data-carrier transaction under implementation policy, but they do not know that the payload is a runestone. Relay and mining policy can change independently from consensus validity and independently across implementations.
 
@@ -148,7 +148,7 @@ An indexer must also reverse burns from disconnected blocks during a reorganizat
 
 A cenotaph is the Runes interpretation of a flawed runestone under the current protocol. Flaws can arise from malformed encoding, invalid fields, bad edicts, or other conditions defined by `ord`.
 
-Under the maintained prose guide, a cenotaph burns the Rune balances of the transaction's inputs. If it contains an etching, the etched Rune's supply is set to zero and it cannot be minted. If it contains a mint, that mint counts against the mint cap but the minted units are burned.
+A cenotaph burns all unallocated input balances and any amount created by an otherwise-valid mint; that mint still increments the Rune’s mint count. A cenotaph etching creates an unmintable zero-supply Rune only when it carries a valid explicit Rune name that passes the normal etching checks. An unnamed cenotaph etching does not receive a reserved name.
 
 These consequences are application state transitions. Bitcoin nodes do not reject the transaction because the runestone became a cenotaph. They may confirm it as an ordinary valid Bitcoin transaction.
 
@@ -231,9 +231,9 @@ Keeping those layers separate avoids the central error: a Rune balance can be an
 2. **Ordinal Theory Handbook: Runes Specification Guide** | Ord project contributors
    - URL: https://docs.ordinals.com/runes/specification.html
    - Supports: The statement that `ord` code is normative, activation at block 840,000, reserved-name allocation, the name-unlock schedule, non-reserved-name commitment requirements, integer decoding, fields, terms, pointers, edicts, burns, and cenotaph behavior.
-3. **Ord Repository** | Ord project contributors
-   - URL: https://github.com/ordinals/ord
-   - Supports: The normative maintained implementation of Runes parsing, indexing, state transitions, wallet construction, and reorganization handling.
+3. **Ord 0.27.1 Source** | Ord project contributors
+   - URL: https://github.com/ordinals/ord/tree/0.27.1
+   - Supports: The normative reviewed implementation of first-candidate runestone selection, parsing, cenotaph etching and mint processing, allocations, burns, indexing, wallet construction, and reorganization handling.
 4. **Ord Releases** | Ord project contributors
    - URL: https://github.com/ordinals/ord/releases
    - Supports: Current implementation versioning and maturity; latest release reviewed was 0.27.1 as of 2026-07-22.

@@ -42,7 +42,7 @@ This is why an ordinal number should not be described as a property enforced by 
 
 ### The numbering model begins with mining order
 
-Ordinal theory numbers sats in the order in which they enter circulation through coinbase transactions. Each ordinal number can also be represented in several notations, such as an integer, a block-height-and-offset pair, or a name generated from the number.
+Ordinal theory assigns sat numbers according to block order and the scheduled subsidy ranges. Transaction-fee sats are appended to the block’s coinbase ordering. If the coinbase claims less than the available subsidy and fees, the unclaimed ranges are tracked as lost sats; later ordinal numbers do not shift. Each ordinal number can also be represented in several notations, such as an integer, a block-height-and-offset pair, or a name generated from the number.
 
 Those representations do not create separate assets. They are alternate labels for the same interpreted sat position. A sat remains spendable as part of a Bitcoin UTXO under ordinary Bitcoin rules.
 
@@ -203,10 +203,10 @@ The practical responsibilities are therefore divided. Bitcoin supplies ordered, 
    - Supports: The input-to-output FIFO algorithm and practical explanation of how sats are assigned through transactions.
 4. **Ordinals BIP Draft** | Ord project contributors
    - URL: https://github.com/ordinals/ord/blob/master/bip.mediawiki
-   - Supports: The formal ordinal numbering and transfer model, including transaction fees and coinbase assignment.
+   - Supports: The formal ordinal numbering and transfer model, including scheduled subsidy ranges, transaction-fee ordering, coinbase assignment, and coinbase ranges left unassigned to outputs.
 5. **Ord Repository** | Ord project contributors
    - URL: https://github.com/ordinals/ord
-   - Supports: Current maintained reference software for indexing ordinal state, wallet operations, inscriptions, and Rune interpretation.
+   - Supports: Current maintained reference software for indexing ordinal state, including lost-sat tracking for subsidy or fee ranges left unassigned by coinbase outputs, plus wallet, inscription, and Rune behavior.
 6. **Ord Releases** | Ord project contributors
    - URL: https://github.com/ordinals/ord/releases
    - Supports: Current software release history and the need to date implementation-specific behavior; latest release reviewed was 0.27.1 as of 2026-07-22.
