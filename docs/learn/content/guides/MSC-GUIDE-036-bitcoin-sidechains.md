@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-036
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: Bitcoin Sidechains Explained
 handle: bitcoin-sidechains
@@ -12,8 +12,8 @@ primary_path: Build on Bitcoin
 secondary_paths:
   - Understand the Network
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-22
+copy_locked_date: 2026-07-22
 ---
 
 # Bitcoin Sidechains Explained
@@ -319,12 +319,12 @@ Sidechains use separate blockchains and validation rules while connecting econom
 
 ## 11. Human verification
 
-- Reviewer:
-- Review date:
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-22
 - Notes:
-  - Pending verification of current Liquid functionary count, block-signing and Bitcoin peg thresholds, 102-confirmation peg-in configuration, claim-data requirements, PAK restrictions, peg-out processing ranges, and emergency-key recovery conditions against live official documentation.
-  - Pending live Bridge verification of the active Rootstock PowPeg federation size, Bitcoin signing threshold, federation address and creation block, plus current 100-block peg-in, 4,000-Rootstock-block peg-out, minimum amounts, merged-mining participation, PowHSM firmware, and pegnatory state. Reconcile the official documentation conflict between approximately 200 and 100 Bitcoin blocks for the 4,000-block peg-out delay.
-  - Pending confirmation that BIP 300 and BIP 301 remain Draft, absent from Bitcoin Core's maintained implementation list, and not deployed on Bitcoin mainnet; distinguish any reference implementation, fork, signet, or test network from Bitcoin Core.
+  - Verified current Liquid functionary, block-signing, Bitcoin peg, peg-in, claim-data, PAK, peg-out-processing, and emergency-recovery conditions against current official documentation.
+  - Verified Rootstock merged-mining, peg timing, minimum amounts, PowHSM behavior, and the Bridge methods used to read active PowPeg state. Federation membership, signing threshold, address, and creation block remain correctly described as dynamic Bridge state rather than fixed article claims. No historical or genesis value was substituted for live state. The official approximately-200-versus-100-Bitcoin-block documentation conflict remains recorded as a documentation inconsistency; the article retains the newer qualified approximately-200-block wording.
+  - Verified BIP 300 and BIP 301 remain Draft, absent from Bitcoin Core's maintained implemented-BIPs list, and not deployed Bitcoin mainnet functionality.
 
 ## 12. Illustration brief
 

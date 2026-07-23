@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-035
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: How RGB Works on Bitcoin
 handle: rgb-bitcoin
@@ -12,8 +12,8 @@ primary_path: Build on Bitcoin
 secondary_paths:
   - Understand the Network
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-22
+copy_locked_date: 2026-07-22
 ---
 
 # How RGB Works on Bitcoin
@@ -371,9 +371,9 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer:
-- Review date:
-- Notes: Pending review should verify current RGB versions and repository or release status, final v0.12 consensus terminology, v0.11 versus v0.12 documentation boundaries, the rgb-lib compatibility line, RGB-20 and RGB-21 release labeling, consignment delivery and backup assumptions, privacy boundaries, Bitcoin confirmation and reorganization behavior, and RGB Lightning Node maturity, required infrastructure, and test-network limitations.
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-22
+- Notes: Verified current RGB consensus, runtime, standard-library, wallet-SDK, and Lightning-integration version boundaries against official repositories, manifests, releases, and project documentation. Final v0.12 terminology remains separated from v0.11 documentation, client-side validation remains distinct from Bitcoin consensus, and the RGB Lightning Node is correctly described as early alpha with regtest and testnet limitations. Its Bitcoin node and indexer requirements remain distinct from optional proxy-based consignment transport.
 
 ## 12. Illustration brief
 

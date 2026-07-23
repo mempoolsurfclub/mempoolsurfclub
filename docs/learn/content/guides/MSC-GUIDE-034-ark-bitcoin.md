@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-034
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: What Is Ark on Bitcoin?
 handle: ark-bitcoin
@@ -12,8 +12,8 @@ primary_path: Build on Bitcoin
 secondary_paths:
   - Understand the Network
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-22
+copy_locked_date: 2026-07-22
 ---
 
 # What Is Ark on Bitcoin?
@@ -326,9 +326,9 @@ All planned links remain inactive until each destination has a confirmed publish
 
 ## 11. Human verification
 
-- Reviewer:
-- Review date:
-- Notes: Pending review should verify current Arkade protocol terminology, `arkd` v0.9.6 alpha maturity, preconfirmation and settlement boundaries, expiry and recovery behavior, operator and signer assumptions, and the separation between current implementation features and older Ark proposals.
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-22
+- Notes: Verified current Arkade terminology, arkd v0.9.6 alpha and experimental maturity, batch and connector construction, preconfirmation and settlement boundaries, renewal, expiry, recovery, exit-data requirements, and operator and signer assumptions against current official sources. Current implementation behavior remains separated from older Ark proposals.
 
 ## 12. Illustration brief
 

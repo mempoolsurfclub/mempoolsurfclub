@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-033
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: How the Lightning Network Works
 handle: lightning-network
@@ -12,8 +12,8 @@ primary_path: Build on Bitcoin
 secondary_paths:
   - Understand the Network
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-22
+copy_locked_date: 2026-07-22
 ---
 
 # How the Lightning Network Works
@@ -249,9 +249,9 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer:
-- Review date:
-- Notes: Pending review should verify BOLT-aligned channel, routing, liquidity, custody, privacy, and settlement boundaries and confirm proposed features are not presented as universal.
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-22
+- Notes: Verified BOLT-aligned channel, HTLC, routing, liquidity, custody, privacy, and Bitcoin settlement boundaries against current primary and official sources. BOLT 11 and BOLT 12 remain distinct, implementation behavior is separated from protocol rules, and proposed features are not presented as universally deployed.
 
 ## 12. Illustration brief
 
