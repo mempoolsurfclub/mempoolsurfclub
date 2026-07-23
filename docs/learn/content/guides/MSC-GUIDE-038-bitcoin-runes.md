@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-038
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: How the Runes Protocol Works
 handle: bitcoin-runes
@@ -12,8 +12,8 @@ primary_path: Build on Bitcoin
 secondary_paths:
   - Understand the Network
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-23
+copy_locked_date: 2026-07-23
 ---
 
 # How the Runes Protocol Works
@@ -303,9 +303,9 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer:
-- Review date:
-- Notes: Pending. Verify activation at block 840,000; reserved-name allocation, the 17,500-block name-unlock schedule, and the six-confirmation non-reserved-name commitment rule; and all runestone field, edict, pointer, default-change, burn, and cenotaph descriptions directly against the current `ord` 0.27.1 code and test vectors. Confirm mint-term behavior and test that the Bitcoin consensus, Bitcoin Core policy, wallet, indexer, and reorganization boundaries remain precise.
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-23
+- Notes: Verified current ord 0.27.1 Runes activation at block 840,000; first `OP_RETURN OP_13` candidate selection; etching, reserved names, the name-unlock schedule, Taproot commitment and six-confirmation requirements; mint terms; UTXO-associated balances; edicts, pointers, default allocation, burns; and qualified cenotaph mint and etching consequences against the tagged implementation and tests. Runes state remains distinct from Bitcoin consensus and Bitcoin Core policy.
 
 ## 12. Illustration brief
 

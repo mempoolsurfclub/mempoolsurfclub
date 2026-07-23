@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-037
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: What Are Bitcoin Ordinals?
 handle: bitcoin-ordinals
@@ -12,8 +12,8 @@ primary_path: Build on Bitcoin
 secondary_paths:
   - Understand the Network
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-23
+copy_locked_date: 2026-07-23
 ---
 
 # What Are Bitcoin Ordinals?
@@ -277,9 +277,9 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer:
-- Review date:
-- Notes: Pending. Verify the FIFO fee and coinbase assignment explanation against the current Ord code and BIP draft; confirm current rarity terminology, reorganization handling, reindex requirements, sat-control guidance, and historical inscription-numbering references; and confirm that every permanence, custody, provenance, and indexer-compatibility boundary remains implementation-neutral.
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-23
+- Notes: Verified ordinal numbering, FIFO transfer interpretation, scheduled subsidy and transaction-fee ordering, lost-sat handling for unclaimed coinbase ranges, rarity terminology, indexer and reorganization behavior, sat-control, custody, provenance, and access boundaries against the current Ordinal Theory Handbook, formal ordinal-theory draft, ord 0.27.1, and maintained implementation sources. Bitcoin consensus remains distinct from ordinal identity and indexer state, and no permanence, ownership, scarcity, or value guarantee is made.
 
 ## 12. Illustration brief
 

@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-040
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: What Is a Bitcoin Inscription?
 handle: bitcoin-inscriptions
@@ -12,8 +12,8 @@ primary_path: Build on Bitcoin
 secondary_paths:
   - Understand the Network
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-23
+copy_locked_date: 2026-07-23
 ---
 
 # What Is a Bitcoin Inscription?
@@ -299,9 +299,9 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer:
-- Review date:
-- Notes: Pending. Verify the exact current envelope parser, field tags, body handling, inscription ID and numbering rules, jubilee height, parent validation, malformed and duplicate-envelope treatment, and assignment behavior against `ord` 0.27.1 code and tests; confirm Bitcoin Core v31.1 pruning, txindex, standardness, and relay boundaries; and security-review every rendering statement for untrusted HTML, SVG, script, media, recursion, and MIME handling.
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-23
+- Notes: Verified SegWit, Taproot, Tapscript, commit-and-reveal, envelope parsing, content fields, inscription IDs, reveal and envelope ordering, the immediate-fee-spend numbering exception, jubilee and cursed or vindicated behavior, parent validation, rendering and security boundaries, pruning and txindex behavior, reorganizations, and sat-control against ord 0.27.1, the current handbook, BIPs 141, 341, and 342, and Bitcoin Core 31.1 sources. Ord interpretation and renderer behavior remain separate from Bitcoin consensus, ownership, permanence, and availability claims.
 
 ## 12. Illustration brief
 

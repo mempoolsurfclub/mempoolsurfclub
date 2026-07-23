@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-039
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: What Is BRC-20 on Bitcoin?
 handle: brc-20-bitcoin
@@ -12,8 +12,8 @@ primary_path: Build on Bitcoin
 secondary_paths:
   - Understand the Network
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-23
+copy_locked_date: 2026-07-23
 ---
 
 # What Is BRC-20 on Bitcoin?
@@ -318,9 +318,9 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer:
-- Review date:
-- Notes: Pending. Verify the original deploy, mint, available-balance, partial-final-mint, ticker, decimal, fee-spend, and two-step transfer rules against Domo's immutable experiment; compare current behavior across the cited maintained indexers, including reorganization recovery and extensions; and identify any parser, activation, or transfer-validity divergence that requires narrower wording.
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-23
+- Notes: Verified the original BRC-20 experimental deploy, mint, transfer, ordering, balance, partial-mint, and fee-spend model against Domo's original material; compared current OPI behavior with the dated OPI-derived swap-indexer snapshot last updated June 27, 2024; and confirmed parser, activation, extension, event-hash, reorganization, wallet, and custody divergence is explicit. No implementation, marketplace, or wallet is presented as universal authority, and BRC-20 remains outside Bitcoin consensus.
 
 ## 12. Illustration brief
 
