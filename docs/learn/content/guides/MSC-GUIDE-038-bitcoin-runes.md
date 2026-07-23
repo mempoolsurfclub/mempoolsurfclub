@@ -243,14 +243,14 @@ Keeping those layers separate avoids the central error: a Rune balance can be an
 6. **Bitcoin Improvement Proposal 341: Taproot** | Pieter Wuille, Jonas Nick, and Anthony Towns
    - URL: https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki
    - Supports: Taproot's Bitcoin consensus context and the separation between Bitcoin script validation and application-level protocol interpretation.
-7. **Bitcoin Core v31.0 Source Tree** | Bitcoin Core contributors
-   - URL: https://github.com/bitcoin/bitcoin/tree/v31.0/src
+7. **Bitcoin Core v31.1 Source Tree** | Bitcoin Core contributors
+   - URL: https://github.com/bitcoin/bitcoin/tree/v31.1/src
    - Supports: One current implementation's transaction, script, UTXO, mempool, relay, wallet, and block-validation behavior; this is implementation evidence, not a definition of Runes.
-8. **Bitcoin Core v31.0 Release Notes** | Bitcoin Core contributors
-   - URL: https://github.com/bitcoin/bitcoin/blob/master/doc/release-notes/release-notes-31.0.md
-   - Supports: The current Bitcoin Core version used to date implementation and policy references.
+8. **Bitcoin Core v31.1 Release Notes** | Bitcoin Core contributors
+   - URL: https://github.com/bitcoin/bitcoin/blob/master/doc/release-notes/release-notes-31.1.md
+   - Supports: Bitcoin Core 31.1 as the current implementation release used to date Bitcoin Core behavior discussed in the guide.
 9. **Bitcoin Core Policy Source: Data Carrier and Relay Options** | Bitcoin Core contributors
-   - URL: https://github.com/bitcoin/bitcoin/blob/v31.0/src/init.cpp
+   - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/init.cpp
    - Supports: Current Bitcoin Core data-carrier, relay, mining, fee, and pruning configuration as implementation policy rather than Bitcoin consensus.
 10. **Ord Test Vectors and Source Tests** | Ord project contributors
     - URL: https://github.com/ordinals/ord/tree/master/tests

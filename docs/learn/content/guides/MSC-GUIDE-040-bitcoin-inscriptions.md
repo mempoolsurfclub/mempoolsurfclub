@@ -142,7 +142,7 @@ The Ord envelope lives in a Taproot witness script path rather than an `OP_RETUR
 
 ### Pruned nodes and indexed access
 
-A pruned Bitcoin node validates historical blocks and later deletes old block files. It can enforce consensus without retaining every old witness byte for serving. Bitcoin Core v31.0 pruning is incompatible with its full transaction index.
+A pruned Bitcoin node validates historical blocks and later deletes old block files. It can enforce consensus without retaining every old witness byte for serving. Bitcoin Core v31.1 pruning is incompatible with its full transaction index.
 
 An Ord explorer needs access to relevant blocks plus its own envelope and content index. Even an archival node does not automatically provide inscription pages. A hosted explorer adds uptime, moderation, version, and trust dependencies.
 
@@ -240,15 +240,15 @@ The content can be included in Bitcoin history without becoming a native Bitcoin
 11. **Bitcoin Improvement Proposal 342: Validation of Taproot Scripts** | Pieter Wuille, Jonas Nick, and Anthony Towns
     - URL: https://github.com/bitcoin/bips/blob/master/bip-0342.mediawiki
     - Supports: Tapscript validation and the Bitcoin consensus context for the reveal script.
-12. **Bitcoin Core v31.0 Source Tree** | Bitcoin Core contributors
-    - URL: https://github.com/bitcoin/bitcoin/tree/v31.0/src
+12. **Bitcoin Core v31.1 Source Tree** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/tree/v31.1/src
     - Supports: One current implementation's transaction, script, witness, mempool, relay, wallet, block-storage, transaction-index, and pruning behavior; this is not an Ord specification.
-13. **Bitcoin Core v31.0 Node Configuration Source** | Bitcoin Core contributors
-    - URL: https://github.com/bitcoin/bitcoin/blob/v31.0/src/init.cpp
+13. **Bitcoin Core v31.1 Node Configuration Source** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/init.cpp
     - Supports: Current pruning, transaction-index, data-carrier, relay, and fee-policy configuration as implementation behavior separate from consensus.
-14. **Bitcoin Core v31.0 Release Notes** | Bitcoin Core contributors
-    - URL: https://github.com/bitcoin/bitcoin/blob/master/doc/release-notes/release-notes-31.0.md
-    - Supports: The Bitcoin Core implementation version used to date current policy and node-behavior references.
+14. **Bitcoin Core v31.1 Release Notes** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/blob/master/doc/release-notes/release-notes-31.1.md
+    - Supports: Bitcoin Core 31.1 as the current implementation release used to date current policy and node-behavior references.
 
 ## 5. SEO title
 
@@ -301,7 +301,7 @@ Do not activate planned links until the destination exists as a real published p
 
 - Reviewer:
 - Review date:
-- Notes: Pending. Verify the exact current envelope parser, field tags, body handling, inscription ID and numbering rules, jubilee height, parent validation, malformed and duplicate-envelope treatment, and assignment behavior against `ord` 0.27.1 code and tests; confirm Bitcoin Core v31.0 pruning, txindex, standardness, and relay boundaries; and security-review every rendering statement for untrusted HTML, SVG, script, media, recursion, and MIME handling.
+- Notes: Pending. Verify the exact current envelope parser, field tags, body handling, inscription ID and numbering rules, jubilee height, parent validation, malformed and duplicate-envelope treatment, and assignment behavior against `ord` 0.27.1 code and tests; confirm Bitcoin Core v31.1 pruning, txindex, standardness, and relay boundaries; and security-review every rendering statement for untrusted HTML, SVG, script, media, recursion, and MIME handling.
 
 ## 12. Illustration brief
 

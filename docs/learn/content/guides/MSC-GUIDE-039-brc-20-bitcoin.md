@@ -265,12 +265,12 @@ BRC-20 should therefore be described as an experimental inscription and indexer 
 10. **Bitcoin Improvement Proposal 342: Validation of Taproot Scripts** | Pieter Wuille, Jonas Nick, and Anthony Towns
     - URL: https://github.com/bitcoin/bips/blob/master/bip-0342.mediawiki
     - Supports: Tapscript validation rules and the boundary between valid Bitcoin script execution and unexecuted inscription-envelope data.
-11. **Bitcoin Core v31.0 Source Tree** | Bitcoin Core contributors
-    - URL: https://github.com/bitcoin/bitcoin/tree/v31.0/src
+11. **Bitcoin Core v31.1 Source Tree** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/tree/v31.1/src
     - Supports: One current Bitcoin implementation's transaction, block, UTXO, mempool, relay, wallet, and pruning behavior; this is not a BRC-20 specification.
-12. **Bitcoin Core v31.0 Release Notes** | Bitcoin Core contributors
-    - URL: https://github.com/bitcoin/bitcoin/blob/master/doc/release-notes/release-notes-31.0.md
-    - Supports: The current implementation version used to date Bitcoin Core behavior discussed in the guide.
+12. **Bitcoin Core v31.1 Release Notes** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/blob/master/doc/release-notes/release-notes-31.1.md
+    - Supports: Bitcoin Core 31.1 as the current implementation release used to date Bitcoin Core behavior discussed in the guide.
 
 ## 5. SEO title
 

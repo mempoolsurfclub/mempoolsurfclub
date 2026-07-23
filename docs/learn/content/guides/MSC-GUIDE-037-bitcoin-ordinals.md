@@ -225,12 +225,12 @@ The practical responsibilities are therefore divided. Bitcoin supplies ordered, 
 11. **Bitcoin Improvement Proposal 141: Segregated Witness** | Eric Lombrozo, Johnson Lau, and Pieter Wuille
     - URL: https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki
     - Supports: Bitcoin witness structure, transaction weight, and the consensus context used by inscription transactions.
-12. **Bitcoin Core v31.0 Source Tree** | Bitcoin Core contributors
-    - URL: https://github.com/bitcoin/bitcoin/tree/v31.0/src
+12. **Bitcoin Core v31.1 Source Tree** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/tree/v31.1/src
     - Supports: One current implementation's validation, UTXO, transaction, mempool, relay, wallet, and pruning behavior; this is implementation evidence, not a definition of all Bitcoin protocol behavior.
-13. **Bitcoin Core v31.0 Release Notes** | Bitcoin Core contributors
-    - URL: https://github.com/bitcoin/bitcoin/blob/master/doc/release-notes/release-notes-31.0.md
-    - Supports: The Bitcoin Core implementation version used to date current implementation and policy references in this guide.
+13. **Bitcoin Core v31.1 Release Notes** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/blob/master/doc/release-notes/release-notes-31.1.md
+    - Supports: Bitcoin Core 31.1 as the current implementation release used to date implementation and policy references in this guide.
 
 ## 5. SEO title
 
