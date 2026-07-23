@@ -64,7 +64,9 @@ The transaction must also satisfy ordinary Bitcoin fees, output construction, an
 
 Every Rune is identified by a Rune ID consisting of the block height and transaction index of its etching, written as `BLOCK:TX`. The identifier anchors the application object to an ordered location in Bitcoin history.
 
-The Rune ID is usually the precise protocol reference. A displayed name is an application-facing label subject to the protocol's naming and reservation rules. Spacers can affect how a name is displayed without changing the underlying encoded Rune value. Reserved or minimum-name rules can change across the protocol's defined schedule or implementation behavior.
+The Rune ID is usually the precise protocol reference. A displayed name is an application-facing label subject to the protocol's naming, reservation, and unlock rules. Spacers can affect how a name is displayed without changing the underlying encoded Rune value.
+
+If an etching omits the `Rune` field, the current protocol assigns a reserved name derived from the etching's Rune ID. A non-reserved name must be unlocked at the etching block and must have a valid prior commitment. The commitment is a data push of the Rune name encoded as a little-endian integer with trailing zero bytes removed, revealed in an input witness tapscript whose spent output has at least six confirmations. Without that commitment, the etching is ignored. Name lengths unlock on the protocol's 17,500-block schedule, so availability depends on the etching height.
 
 A name therefore should not be treated as an independent proof of identity. Interfaces should verify the Rune ID, the accepted chain, and the same indexer rules used by the counterparty. A look-alike symbol, spaced rendering, or copied name in unrelated content can mislead users.
 
@@ -228,7 +230,7 @@ Keeping those layers separate avoids the central error: a Rune balance can be an
    - Supports: Runestones, `OP_RETURN OP_13` encoding, Rune IDs, etching, minting, edicts, UTXO-associated balances, and high-level transfer behavior.
 2. **Ordinal Theory Handbook: Runes Specification Guide** | Ord project contributors
    - URL: https://docs.ordinals.com/runes/specification.html
-   - Supports: The statement that `ord` code is normative, activation at block 840,000, integer decoding, fields, terms, pointers, edicts, burns, and cenotaph behavior.
+   - Supports: The statement that `ord` code is normative, activation at block 840,000, reserved-name allocation, the name-unlock schedule, non-reserved-name commitment requirements, integer decoding, fields, terms, pointers, edicts, burns, and cenotaph behavior.
 3. **Ord Repository** | Ord project contributors
    - URL: https://github.com/ordinals/ord
    - Supports: The normative maintained implementation of Runes parsing, indexing, state transitions, wallet construction, and reorganization handling.
@@ -303,7 +305,7 @@ Do not activate planned links until the destination exists as a real published p
 
 - Reviewer:
 - Review date:
-- Notes: Pending. Verify activation at block 840,000 and all runestone field, edict, pointer, default-change, burn, and cenotaph descriptions directly against the current `ord` 0.27.1 code and test vectors; confirm reserved-name and mint-term behavior; and test that the Bitcoin consensus, Bitcoin Core policy, wallet, indexer, and reorganization boundaries remain precise.
+- Notes: Pending. Verify activation at block 840,000; reserved-name allocation, the 17,500-block name-unlock schedule, and the six-confirmation non-reserved-name commitment rule; and all runestone field, edict, pointer, default-change, burn, and cenotaph descriptions directly against the current `ord` 0.27.1 code and test vectors. Confirm mint-term behavior and test that the Bitcoin consensus, Bitcoin Core policy, wallet, indexer, and reorganization boundaries remain precise.
 
 ## 12. Illustration brief
 
