@@ -1,0 +1,69 @@
+name: Apply Development guide copy lock
+
+on:
+  push:
+    branches:
+      - content/learn-development-041-044
+
+permissions:
+  contents: write
+
+jobs:
+  apply-copy-lock:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the pull-request branch
+        uses: actions/checkout@v4
+        with:
+          ref: content/learn-development-041-044
+          fetch-depth: 0
+
+      - name: Apply copy-lock metadata only
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          date = "2026-07-24"
+          guide_paths = [
+              Path("docs/learn/content/guides/MSC-GUIDE-041-bitcoin-developer-tools.md"),
+              Path("docs/learn/content/guides/MSC-GUIDE-042-bitcoin-wallet-integrations.md"),
+              Path("docs/learn/content/guides/MSC-GUIDE-043-bitcoin-apis.md"),
+              Path("docs/learn/content/guides/MSC-GUIDE-044-bitcoin-indexers.md"),
+          ]
+
+          for path in guide_paths:
+              text = path.read_text(encoding="utf-8")
+              if text.count("status: EDITORIAL_REVIEW") != 1:
+                  raise SystemExit(f"Unexpected status count in {path}")
+              if text.count("copy_locked_date: null") != 1:
+                  raise SystemExit(f"Unexpected copy_locked_date count in {path}")
+              text = text.replace("status: EDITORIAL_REVIEW", "status: COPY_LOCKED", 1)
+              text = text.replace("copy_locked_date: null", f"copy_locked_date: {date}", 1)
+              path.write_text(text, encoding="utf-8")
+
+          manifest_path = Path("docs/learn/content/content-manifest.json")
+          manifest = manifest_path.read_text(encoding="utf-8")
+          for registry_id in ("MSC-GUIDE-041", "MSC-GUIDE-042", "MSC-GUIDE-043", "MSC-GUIDE-044"):
+              pattern = rf'("registry_id": "{registry_id}"[\s\S]*?"status": )"EDITORIAL_REVIEW"'
+              manifest, count = re.subn(pattern, r'\1"COPY_LOCKED"', manifest, count=1)
+              if count != 1:
+                  raise SystemExit(f"Could not update exactly one manifest entry for {registry_id}")
+          manifest_path.write_text(manifest, encoding="utf-8")
+
+          workflow_path = Path(".github/workflows/copy-lock-development-guides.yml")
+          workflow_path.unlink()
+          PY
+
+      - name: Verify and commit
+        shell: bash
+        run: |
+          git diff --check
+          test "$(git diff --name-only | sort | tr '\n' ' ')" = "docs/learn/content/content-manifest.json docs/learn/content/guides/MSC-GUIDE-041-bitcoin-developer-tools.md docs/learn/content/guides/MSC-GUIDE-042-bitcoin-wallet-integrations.md docs/learn/content/guides/MSC-GUIDE-043-bitcoin-apis.md docs/learn/content/guides/MSC-GUIDE-044-bitcoin-indexers.md "
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Copy-lock Development guides 041 through 044"
+          git push origin HEAD:content/learn-development-041-044
