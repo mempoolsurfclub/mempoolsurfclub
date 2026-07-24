@@ -12,11 +12,11 @@ primary_path: Build on Bitcoin
 secondary_paths:
   - Understand the Network
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-author_display: Mempool Surf Club Editorial
 reviewed_date: 2026-07-24
 copy_locked_date: null
 ---
+
+# Bitcoin Developer Tools: A Practical Overview
 
 ## 1. Introductory deck
 
