@@ -339,9 +339,9 @@ An API response can be useful without being independent proof of Bitcoin validit
 2. **Bitcoin Core JSON-RPC Interface** | Bitcoin Core contributors
    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/doc/JSON-RPC-interface.md
    - Supports: RPC endpoints, JSON-RPC versions, major-version interface changes, cookie authentication, remote-access guidance, and public-internet warnings.
-3. **Bitcoin Core v31.1 RPC Reference** | Bitcoin Core contributors
+3. **Bitcoin Core 31.0 RPC Reference** | Bitcoin Core contributors
    - URL: https://bitcoincore.org/en/doc/31.0.0/rpc/
-   - Supports: Current RPC method families and response semantics, supplemented by v31.1 source for patch-release behavior.
+   - Supports: The officially exported Bitcoin Core 31.0 RPC method families and baseline response documentation. Bitcoin Core 31.1 remains the current binary and implementation reference; patch-release behavior is verified separately against tagged v31.1 source and tests.
 4. **Bitcoin Core REST Interface** | Bitcoin Core contributors
    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/doc/REST-interface.md
    - Supports: Current optional REST endpoints, encodings, and read-oriented scope.
@@ -429,10 +429,10 @@ Do not activate planned links until the destination exists as a real published p
 - Previous: MSC-GUIDE-042 | How Bitcoin Wallet Integrations Work
 - Next: MSC-GUIDE-044 | How Bitcoin Indexers Work
 - Prerequisite: MSC-GUIDE-008 | How Bitcoin Transactions and Fees Work
-- Prerequisite: MSC-GUIDE-019 | What Is a Bitcoin Node?
-- Prerequisite: MSC-GUIDE-022 | How the Bitcoin Mempool Works
-- Prerequisite: MSC-GUIDE-023 | How Bitcoin Transactions Are Broadcast
-- Branch: MSC-GUIDE-029 | What Is the Lightning Network?
+- Prerequisite: MSC-GUIDE-021 | What Is a Bitcoin Full Node?
+- Prerequisite: MSC-GUIDE-025 | What Happens Inside the Bitcoin Mempool?
+- Prerequisite: MSC-ROUTE-001 | How a Bitcoin Transaction Moves
+- Branch: MSC-GUIDE-033 | How the Lightning Network Works
 - Return: MSC-HUB-BUILDING | Building on Bitcoin
 - Primary path: MSC-PATH-BUILD | Build on Bitcoin
 - Secondary path: MSC-PATH-NETWORK | Understand the Network

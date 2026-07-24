@@ -53,7 +53,7 @@ A clear answer to those questions is more valuable than a long list of packages.
 
 Bitcoin consensus is the set of rules that participating nodes apply when deciding whether blocks and transactions belong to the accepted chain. Bitcoin Improvement Proposals document many deployed rules and application standards, but no single document is a complete executable definition of Bitcoin.
 
-Bitcoin Core is the most widely used implementation and an important reference for deployed behavior, tests, RPCs, wallet features, policy, and network operation. It is still an implementation, not a declaration that every Bitcoin implementation must expose the same interfaces, defaults, database layout, or mempool policy.
+Bitcoin Core is an implementation and an important reference for deployed behavior, tests, RPCs, wallet features, policy, and network operation. It is still an implementation, not a declaration that every Bitcoin implementation must expose the same interfaces, defaults, database layout, or mempool policy.
 
 Developers should distinguish at least four kinds of evidence:
 
@@ -377,8 +377,8 @@ Do not activate planned links until the destination exists as a real published p
 - Branch: MSC-GUIDE-043 | Bitcoin APIs Explained
 - Branch: MSC-GUIDE-044 | How Bitcoin Indexers Work
 - Prerequisite: MSC-GUIDE-013 | What Are UTXOs in Bitcoin?
-- Prerequisite: MSC-GUIDE-019 | What Is a Bitcoin Node?
-- Prerequisite: MSC-GUIDE-022 | How the Bitcoin Mempool Works
+- Prerequisite: MSC-GUIDE-021 | What Is a Bitcoin Full Node?
+- Prerequisite: MSC-GUIDE-025 | What Happens Inside the Bitcoin Mempool?
 - Return: MSC-HUB-BUILDING | Building on Bitcoin
 - Primary path: MSC-PATH-BUILD | Build on Bitcoin
 - Secondary path: MSC-PATH-NETWORK | Understand the Network

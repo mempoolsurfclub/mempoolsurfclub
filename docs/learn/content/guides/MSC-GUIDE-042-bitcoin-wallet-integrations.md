@@ -47,9 +47,11 @@ In a **self-custodial architecture**, the user or user-controlled device holds t
 
 A **watch-only architecture** contains scripts, descriptors, or extended public keys but no private signing material. It can derive addresses, identify relevant transactions, and construct unsigned transactions. Watch-only systems are useful for accounting, monitoring, and separation of duties, but they can still expose sensitive wallet activity.
 
-A **signing-service architecture** keeps keys in a separate service, hardware security module, hardware wallet, or offline system. An online coordinator prepares a transaction or PSBT, while the signer applies policy and authorizes signatures. This separation can reduce key exposure, but only if authentication, approval logic, transaction verification, are designed correctly.
+A **signing-service architecture** keeps keys in a separate service, hardware security module, hardware wallet, or offline system. An online coordinator prepares a transaction or PSBT, while the signer applies policy and authorizes signatures. This separation can reduce key exposure, but only if authentication, approval logic, and transaction verification are designed correctly.
 
-These models can be combined. A company may use a watch-only online wallet, a policy service, and multiple hardware signers. A mobile wallet may hold keys locally while using a hosted indexer. A custodial service may use external signing devices internally. ### Embedded libraries versus external wallet services
+These models can be combined. A company may use a watch-only online wallet, a policy service, and multiple hardware signers. A mobile wallet may hold keys locally while using a hosted indexer. A custodial service may use external signing devices internally.
+
+### Embedded libraries versus external wallet services
 
 An embedded wallet library runs wallet logic inside the application or a closely related process. It may manage descriptors, derivation, transaction graphs, persistence, coin selection, and PSBT construction. This can reduce network dependencies and allow application-specific control. It also places wallet-state migrations, dependency security, concurrency, and possibly secrets inside the application boundary.
 
@@ -321,9 +323,9 @@ A reliable integration keeps each statement precise, preserves the information n
 2. **Bitcoin Core v31.1 Wallet Documentation** | Bitcoin Core contributors
    - URL: https://github.com/bitcoin/bitcoin/tree/v31.1/doc
    - Supports: Current Bitcoin Core wallet, RPC, descriptor, PSBT, fee-bumping, and operational documentation.
-3. **Bitcoin Core v31.1 Wallet RPC Reference** | Bitcoin Core contributors
+3. **Bitcoin Core 31.0 Wallet RPC Reference** | Bitcoin Core contributors
    - URL: https://bitcoincore.org/en/doc/31.0.0/rpc/wallet/
-   - Supports: Wallet RPC categories for balances, transaction construction, signing, PSBT, locking, abandonment, and fee bumping; exact 31.1 behavior is additionally dated to source and release notes.
+   - Supports: The officially exported Bitcoin Core 31.0 wallet RPC method categories and baseline response documentation. Bitcoin Core 31.1 remains the current binary and implementation reference; patch-release behavior is verified separately against tagged v31.1 source and tests.
 4. **Bitcoin Core JSON-RPC Interface** | Bitcoin Core contributors
    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/doc/JSON-RPC-interface.md
    - Supports: Wallet-specific endpoints, RPC versioning, authentication context, and network-exposure boundaries.
@@ -390,6 +392,9 @@ A reliable integration keeps each statement precise, preserves the information n
 25. **Bitcoin Core ZMQ Documentation** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/doc/zmq.md
     - Supports: Notification loss, sequence tracking, mempool events, and reorganization reconciliation requirements.
+26. **BIP 373: MuSig2 PSBT Fields** | Ava Chow
+    - URL: https://github.com/bitcoin/bips/blob/master/bip-0373.mediawiki
+    - Supports: Standard MuSig2 PSBT input and output fields for PSBT versions 0 and 2, including participant keys, public nonces, and partial signatures.
 
 ## 5. SEO title
 
@@ -419,7 +424,7 @@ Do not activate planned links until the destination exists as a real published p
 - Prerequisite: MSC-GUIDE-009 | What Is a Bitcoin Seed Phrase?
 - Prerequisite: MSC-GUIDE-013 | What Are UTXOs in Bitcoin?
 - Prerequisite: MSC-GUIDE-014 | How Bitcoin Confirmations Work
-- Prerequisite: MSC-GUIDE-019 | What Is a Bitcoin Node?
+- Prerequisite: MSC-GUIDE-021 | What Is a Bitcoin Full Node?
 - Branch: MSC-GUIDE-044 | How Bitcoin Indexers Work
 - Return: MSC-HUB-BUILDING | Building on Bitcoin
 - Primary path: MSC-PATH-BUILD | Build on Bitcoin

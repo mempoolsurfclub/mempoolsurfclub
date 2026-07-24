@@ -469,9 +469,9 @@ Do not activate planned links until the destination exists as a real published p
 
 - Previous: MSC-GUIDE-043 | Bitcoin APIs Explained
 - Prerequisite: MSC-GUIDE-013 | What Are UTXOs in Bitcoin?
-- Prerequisite: MSC-GUIDE-019 | What Is a Bitcoin Node?
-- Prerequisite: MSC-GUIDE-022 | How the Bitcoin Mempool Works
-- Prerequisite: MSC-GUIDE-023 | How Bitcoin Transactions Are Broadcast
+- Prerequisite: MSC-GUIDE-021 | What Is a Bitcoin Full Node?
+- Prerequisite: MSC-GUIDE-025 | What Happens Inside the Bitcoin Mempool?
+- Prerequisite: MSC-ROUTE-001 | How a Bitcoin Transaction Moves
 - Branch: MSC-GUIDE-037 | What Are Bitcoin Ordinals?
 - Branch: MSC-GUIDE-038 | How the Runes Protocol Works
 - Branch: MSC-GUIDE-039 | What Is BRC-20 on Bitcoin?
