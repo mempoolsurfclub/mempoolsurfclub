@@ -17,6 +17,8 @@ reviewed_date: 2026-07-24
 copy_locked_date: 2026-07-24
 ---
 
+# How Bitcoin Wallet Integrations Work
+
 ## 1. Introductory deck
 
 A Bitcoin wallet integration is a coordinated system for discovering relevant chain activity, managing scripts and UTXOs, constructing transactions, enforcing approvals, signing, broadcasting, monitoring confirmations, and recovering state. This guide explains those responsibilities across custodial, self-custodial, watch-only, hardware-signing, and hosted architectures without treating address generation, transaction detection, or broadcast as proof of settlement.

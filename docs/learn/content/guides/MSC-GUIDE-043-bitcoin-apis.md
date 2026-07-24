@@ -16,6 +16,8 @@ reviewed_date: 2026-07-24
 copy_locked_date: 2026-07-24
 ---
 
+# Bitcoin APIs Explained
+
 ## 1. Introductory deck
 
 “Bitcoin API” can describe a node administration interface, a wallet RPC, a notification stream, a peer protocol, an indexed block-explorer service, or a hosted infrastructure product. This guide explains those boundaries, the data each interface can and cannot prove, and the operational rules applications need for authentication, units, retries, reorganizations, privacy, and version changes.

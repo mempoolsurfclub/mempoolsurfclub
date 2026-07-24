@@ -16,6 +16,8 @@ reviewed_date: 2026-07-24
 copy_locked_date: 2026-07-24
 ---
 
+# Bitcoin Developer Tools: A Practical Overview
+
 ## 1. Introductory deck
 
 Bitcoin development is not one toolkit or one API. It is a set of layers for validation, chain data, transaction construction, signing, testing, and application logic. This guide maps those layers, explains their trust boundaries, and provides a practical workflow for selecting maintained tools without treating any library, node, indexer, or hosted service as universally authoritative.

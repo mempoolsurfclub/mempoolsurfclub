@@ -16,6 +16,8 @@ reviewed_date: 2026-07-24
 copy_locked_date: 2026-07-24
 ---
 
+# How Bitcoin Indexers Work
+
 ## 1. Introductory deck
 
 A Bitcoin indexer reads ordered blockchain or mempool data and builds a database optimized for questions the validating node does not answer directly. This guide explains native Bitcoin Core data, optional indexes, external address and script indexes, application-protocol state, reorganizations, pruning, consistency, and the point where useful derived data stops being Bitcoin consensus.
