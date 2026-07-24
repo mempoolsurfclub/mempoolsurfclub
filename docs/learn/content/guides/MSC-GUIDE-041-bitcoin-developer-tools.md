@@ -13,10 +13,10 @@ secondary_paths:
   - Understand the Network
 author_display: Mempool Surf Club Editorial
 reviewed_date: null
-copy_locked_date: null
+author_display: Mempool Surf Club Editorial
 reviewed_date: 2026-07-24
-
-# Bitcoin Developer Tools: A Practical Overview
+copy_locked_date: null
+---
 
 ## 1. Introductory deck
 
