@@ -13,11 +13,11 @@ secondary_paths:
   - Use Bitcoin Safely
   - Understand the Network
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-author_display: Mempool Surf Club Editorial
 reviewed_date: 2026-07-24
 copy_locked_date: null
 ---
+
+# How Bitcoin Wallet Integrations Work
 
 ## 1. Introductory deck
 
