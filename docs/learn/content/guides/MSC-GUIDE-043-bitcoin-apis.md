@@ -24,11 +24,11 @@ copy_locked_date: null
 
 ## 2. Full article
 
-It communicates with a node, wallet, indexer, Lightning implementation, or provider through a particular interface. The response reflects that system’s chain tip, configuration, indexes, policy, cache, software version, and local observations.
+An application communicates with a node, wallet, indexer, Lightning implementation, or provider through an interface. The response reflects that system’s chain tip, configuration, indexes, policy, cache, software version, and local observations.
 
 That distinction matters because different interfaces can return values that look similar while carrying different evidence. A block hash from a validating node, an address balance from an indexer, a fee estimate from a hosted service, and a transaction status from an application database are not interchangeable claims.
 
-A API design begins by naming the producer of every response.
+An API design begins by naming the producer of every response.
 
 ### What “Bitcoin API” can mean
 
