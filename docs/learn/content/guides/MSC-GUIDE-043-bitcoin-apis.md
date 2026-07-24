@@ -60,11 +60,11 @@ Bitcoin Core’s RPC interface is implicitly versioned by the major release. Fie
 
 Bitcoin Core can authenticate local RPC clients with a temporary cookie file. The cookie contains generated credentials and is replaced when the node restarts. File permissions and local process boundaries are therefore part of the security model.
 
-Bitcoin Core can authenticate local RPC clients with a temporary cookie file. The cookie contains generated credentials and is replaced when the node restarts. File permissions and local process boundaries are therefore part of the security model.
-
 The `rpcauth` configuration option supports salted password authentication without storing the plaintext password in the configuration file. Bitcoin Core also provides `-rpcwhitelist` and `-rpcwhitelistdefault` to restrict which RPC methods a credential may call.
 
 Those method restrictions are useful operational controls, but they should not be treated as a robust security boundary for hostile multi-user or multi-wallet isolation. Public applications should still place Bitcoin Core behind a narrower service that performs application-specific authentication, authorization, validation, and rate limiting.
+
+### Network exposure and transport security
 
 Bitcoin Core documentation explicitly warns against exposing RPC directly to the public internet. RPC authentication does not encrypt traffic, and the interface is not designed as a hardened public application endpoint.
 
@@ -100,13 +100,13 @@ Current Bitcoin Core also supports BIP 324 version 2 transport, but transport en
 
 ### Electrum protocol servers
 
-The Electrum protocol uses JSON-RPC over stream transports such as TCP, TLS, or WebSockets. Clients negotiate a protocol version and can request headers, transactions, script-hash histories, balances, UTXOs, fee estimates, and subscriptions.
-
 The Electrum protocol uses JSON-RPC over stream transports such as TCP, TLS, or WebSockets. Clients negotiate a protocol version and can request headers, transactions, script or script-hash histories, balances, UTXOs, fee estimates, and subscriptions.
 
 The currently published protocol documentation is labeled 1.7.x. Protocol 1.7 replaces the older `blockchain.scripthash.*` method family with `blockchain.scriptpubkey.*` methods and changes some response and reorganization-notification behavior. Those methods still require an external index that maps scripts to transaction history; Bitcoin Core does not provide that universal index by default.
 
 Deployed support is uneven. Electrum 4.7.2 documents protocol 1.6 support, while clients and servers may advertise different version ranges. Integrations must negotiate and test the exact protocol version instead of assuming that the latest documented specification is already supported everywhere.
+
+Headers and Merkle proofs can support evidence that a transaction was included under a block header. They do not independently validate every Bitcoin consensus rule unless the client performs the additional validation required for that claim.
 
 ### Esplora-style HTTP APIs
 
