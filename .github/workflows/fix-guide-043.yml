@@ -1,0 +1,41 @@
+name: Correct Guide 043 Opening
+
+on:
+  push:
+    branches:
+      - content/learn-development-041-044
+
+permissions:
+  contents: write
+
+jobs:
+  correct:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Apply exact editorial correction
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path("docs/learn/content/guides/MSC-GUIDE-043-bitcoin-apis.md")
+          text = path.read_text()
+          old = "It communicates with a node, wallet, indexer, Lightning implementation, or provider through a particular interface."
+          new = "An application communicates with a node, wallet, indexer, Lightning implementation, or provider through an interface."
+          assert text.count(old) == 1
+          text = text.replace(old, new)
+          assert text.count("A API design begins by naming the producer of every response.") == 1
+          text = text.replace("A API design begins by naming the producer of every response.", "An API design begins by naming the producer of every response.")
+          section = text.split("## 2. Full article", 1)[1].split("## 3. Key Terms", 1)[0]
+          assert len(section.split()) == 3000
+          path.write_text(text)
+          PY
+          rm -f .github/workflows/fix-guide-043.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/learn/content/guides/MSC-GUIDE-043-bitcoin-apis.md .github/workflows/fix-guide-043.yml
+          test "$(git diff --cached --name-only | wc -l)" -eq 2
+          git commit -m "Correct Guide 043 API introduction"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
