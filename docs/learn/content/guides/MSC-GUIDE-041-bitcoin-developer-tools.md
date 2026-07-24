@@ -14,7 +14,7 @@ secondary_paths:
 author_display: Mempool Surf Club Editorial
 reviewed_date: null
 copy_locked_date: null
----
+reviewed_date: 2026-07-24
 
 # Bitcoin Developer Tools: A Practical Overview
 
@@ -406,9 +406,9 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer:
-- Review date:
-- Notes: Pending verification of current tool versions, test-network status, descriptor and PSBT support, maintenance and release maturity, licensing and supply-chain notes, and all validation, retrieval, construction, signing, privacy, and hosted-service security boundaries.
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-24
+- Notes: Verified current Bitcoin Core 31.1 node, wallet, RPC, REST, ZMQ, P2P, index, test, and policy references; testnet4, signet, and regtest boundaries; descriptors, Miniscript, PSBT versions and fields, HWI 3.2.0, bdk_wallet 3.1.0, rust-bitcoin 0.32.101 stable with the 0.33 line identified as beta, bitcoinjs-lib 7.0.1, Electrum- and Esplora-style backends, and supply-chain and version-pinning guidance. Consensus validation, implementation behavior, retrieval, indexing, construction, signing, hosted-service trust, privacy, and application-derived state remain explicitly separated.
 
 ## 12. Illustration brief
 

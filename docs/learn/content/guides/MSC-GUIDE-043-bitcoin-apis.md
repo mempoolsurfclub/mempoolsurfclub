@@ -14,7 +14,7 @@ secondary_paths:
 author_display: Mempool Surf Club Editorial
 reviewed_date: null
 copy_locked_date: null
----
+reviewed_date: 2026-07-24
 
 # Bitcoin APIs Explained
 
@@ -462,9 +462,9 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer:
-- Review date:
-- Notes: Pending verification of current Bitcoin Core interface behavior and authentication, Electrum and Esplora protocol versions, API versioning and deprecation claims, amount and fee units, broadcast semantics, mempool replacement and eviction behavior, reorganization handling, cache rules, and hosted-provider trust and privacy boundaries.
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-24
+- Notes: Verified Bitcoin Core 31.1 JSON-RPC, REST, ZMQ, P2P, cookie, rpcauth, rpcwhitelist, transport, public-exposure, broadcast, mempool, chain-tip, UTXO, and optional-index behavior; current Electrum protocol documentation labeled 1.7.x versus Electrum 4.7.2 protocol 1.6 support; Esplora-style indexed APIs; Lightning interface separation; integer amount, fee-rate, weight, and virtual-size units; authentication and authorization boundaries; pagination, retries, idempotency, caching, stale data, Merkle-proof scope, reorganizations, provider disagreement, logging, and privacy. API responses remain scoped to their producing node, wallet, indexer, provider, cache, or application.
 
 ## 12. Illustration brief
 

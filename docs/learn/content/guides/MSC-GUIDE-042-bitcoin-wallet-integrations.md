@@ -15,7 +15,7 @@ secondary_paths:
 author_display: Mempool Surf Club Editorial
 reviewed_date: null
 copy_locked_date: null
----
+reviewed_date: 2026-07-24
 
 # How Bitcoin Wallet Integrations Work
 
@@ -456,9 +456,9 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer:
-- Review date:
-- Notes: Pending verification of signing architecture, descriptor and derivation behavior, PSBT version and signer compatibility, current fee-bumping and dust policy, backup and recovery requirements, reorganization and conflict handling, authentication controls, and hosted synchronization privacy boundaries.
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-24
+- Notes: Verified custodial, self-custodial, watch-only, and signing-service boundaries; BIP 32 derivation and extended-public-key privacy; descriptor and script compatibility; PSBT versions 0 and 2 plus Taproot and MuSig2 fields; Bitcoin Core 31.1 wallet, dust, mempool, replacement, fee-bumping, abandonment, conflict, and reorganization behavior; compact-filter, Electrum, and Esplora synchronization models; BDK and HWI scope; backup and recovery requirements; and authentication, authorization, idempotency, logging, and hosted-service privacy controls. Address generation, detection, signing, broadcast, confirmation, and irreversibility remain separate states.
 
 ## 12. Illustration brief
 

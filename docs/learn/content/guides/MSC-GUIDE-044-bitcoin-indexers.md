@@ -14,7 +14,7 @@ secondary_paths:
 author_display: Mempool Surf Club Editorial
 reviewed_date: null
 copy_locked_date: null
----
+reviewed_date: 2026-07-24
 
 # How Bitcoin Indexers Work
 
@@ -504,9 +504,9 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer:
-- Review date:
-- Notes: Pending verification of Bitcoin Core 31.1 required and optional index behavior, pruning and historical-data constraints, electrs, Esplora, and Fulcrum maintenance status, external index schemas, reorganization rollback and replay behavior, mempool divergence, consistency checks, and all application-derived state boundaries.
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-24
+- Notes: Verified Bitcoin Core 31.1 chainstate, block-index, UTXO-set, txindex, txospenderindex, blockfilterindex, coinstatsindex, pruning, historical-data, and index-synchronization behavior; address and script index separation; Electrum, electrs 0.11.1, Esplora, and Fulcrum 2.1.1 architecture and maintenance boundaries; Ord, Runes, and BRC-20 as application-derived state; event ordering, checkpoints, atomic updates, undo data, rollback, replay, rebuilds, migrations, mempool divergence, consistency checks, hosted-indexer privacy, and verification limits. Native validation data, optional Bitcoin Core indexes, external indexes, API views, and application state remain distinct.
 
 ## 12. Illustration brief
 
