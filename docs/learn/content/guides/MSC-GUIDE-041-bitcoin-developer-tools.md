@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-041
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: Bitcoin Developer Tools: A Practical Overview
 handle: bitcoin-developer-tools
@@ -13,10 +13,8 @@ secondary_paths:
   - Understand the Network
 author_display: Mempool Surf Club Editorial
 reviewed_date: 2026-07-24
-copy_locked_date: null
+copy_locked_date: 2026-07-24
 ---
-
-# Bitcoin Developer Tools: A Practical Overview
 
 ## 1. Introductory deck
 

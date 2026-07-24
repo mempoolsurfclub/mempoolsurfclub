@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-042
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: How Bitcoin Wallet Integrations Work
 handle: bitcoin-wallet-integrations
@@ -14,10 +14,8 @@ secondary_paths:
   - Understand the Network
 author_display: Mempool Surf Club Editorial
 reviewed_date: 2026-07-24
-copy_locked_date: null
+copy_locked_date: 2026-07-24
 ---
-
-# How Bitcoin Wallet Integrations Work
 
 ## 1. Introductory deck
 
