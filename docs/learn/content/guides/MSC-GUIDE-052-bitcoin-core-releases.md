@@ -26,7 +26,7 @@ A Bitcoin Core release is the result of branch management, review, testing, rele
 
 Bitcoin Core releases turn a changing source repository into identifiable source and binary artifacts. The process reduces ambiguity: users can name a version, reviewers can inspect a fixed tree, builders can reproduce outputs, and maintainers can issue targeted updates for supported release lines.
 
-It does not eliminate trust or risk. A signed tag identifies source endorsed by a signing key. A checksum identifies bytes. A signature attests to a checksum file. Reproducible builds can show that multiple builders obtained matching output from specified source and build inputs. None of those alone proves the source is correct, the build environment is harmless, a signer is trustworthy, or a user’s machine is secure.
+It does not eliminate trust or risk. A signed Git tag attests that a particular key signed a tag object pointing to a source commit. A checksum commits to file bytes through a digest. A signature over a checksum file attests that a key signed that checksum statement. Reproducible builds can show that multiple builders obtained matching output from specified source and build inputs. None of those alone proves the source is correct, the build environment is harmless, a signer is trustworthy, or a user’s machine is secure.
 
 This guide was reviewed July 24, 2026 against the live lifecycle and download documentation, the `v31.1` release process, and Bitcoin Core 31.1 commit `9be056a8a72b624dae9623b2f7bded92c2a21c91`.
 
@@ -226,8 +226,8 @@ No single rung proves the whole system safe. Together they make the release more
     - URL: https://github.com/bitcoin-core/bitcoin-maintainer-tools
     - Supports: Release tagging and consistency tooling referenced by the release process.
 15. **Bitcoin Core 31.0 Release Schedule Issue** | Bitcoin Core contributors
-    - URL: https://github.com/bitcoin/bitcoin/issues/33385
-    - Supports: A concrete example of proposed branch-off, freeze, release-candidate, and final timing.
+    - URL: https://github.com/bitcoin/bitcoin/issues/33607
+    - Supports: A concrete example of proposed translation milestones, feature freeze, branch-off, release-candidate, and final timing.
 16. **Bitcoin Core Releases Index** | Bitcoin Core project
     - URL: https://bitcoincore.org/en/releases/
     - Supports: Major and maintenance release history.
@@ -291,7 +291,7 @@ Do not activate planned links until the destination exists as a real published p
 
 - Reviewer: Mempool Surf Club Editorial
 - Review date: 2026-07-24
-- Notes: Verified the live download, releases, lifecycle, and security pages; the `v31.1` tag and final commit; the tagged release process, release notes, Guix documentation, security policy, checksums, signature collection, and official versioned binary directory. Reviewed a live major-release schedule issue to confirm that freeze and release-candidate dates are proposed coordination targets. Confirmed that each artifact’s evidence and limitations are stated separately and that release publication is not equated with consensus activation.
+- Notes: Verified the live download, releases, lifecycle, and security pages; the `v31.1` tag and final commit; the tagged release process, release notes, Guix documentation, security policy, checksums, signature collection, and official versioned binary directory. Reviewed Bitcoin Core issue #33607 as the 31.0 release-schedule example and confirmed that its freeze, branch-off, release-candidate, and final dates are proposed coordination targets. Confirmed that each artifact’s evidence and limitations are stated separately and that release publication is not equated with consensus activation.
 
 ## 12. Illustration brief
 
