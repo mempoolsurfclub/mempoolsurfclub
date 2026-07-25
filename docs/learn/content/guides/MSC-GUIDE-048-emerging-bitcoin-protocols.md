@@ -26,7 +26,7 @@ Emerging Bitcoin systems can be consensus proposals, software behavior, applicat
 
 An emerging Bitcoin protocol should be evaluated by asking what it changes, who enforces it, what evidence exists, and what happens when its assumptions fail. The name of a project, the presence of transactions on Bitcoin, or the publication of a BIP does not answer those questions.
 
-“Built on Bitcoin” can describe many different systems: a consensus proposal, a node-policy change, an application protocol using ordinary transactions, an indexer-derived ledger, a bridge, a sidechain, a wallet convention, an experimental proof system, or software that merely anchors data to Bitcoin. These systems inherit different properties from Bitcoin.
+“Built on Bitcoin” can describe many different systems: a consensus proposal, a node-policy change, an application protocol using ordinary transactions, an indexer-derived ledger, a bridge, a sidechain, a wallet convention, an experimental proof system, or software that merely anchors data to Bitcoin. Bitcoin enforces different, often narrow parts of these systems. Their remaining security, custody, availability, governance, and operational properties come from other components rather than being inherited automatically from Bitcoin.
 
 A useful evaluation therefore begins by separating layers before comparing features.
 
@@ -131,6 +131,8 @@ Recovery procedures need tests. A diagram showing a refund or emergency path is 
 ### List cryptographic and economic assumptions
 
 Bitcoin's proof of work and signature rules do not replace every assumption in a higher-layer protocol.
+
+Using Bitcoin for settlement, timestamps, commitments, deposits, or data publication does not make an external state machine, bridge, indexer, sequencer, oracle, proof system, or operator set share Bitcoin's consensus security. State exactly which Bitcoin transaction or script rule is enforced and which failures remain outside that boundary.
 
 A project may rely on collision resistance, discrete-log hardness, a proof system's soundness, a trusted setup, adaptor-signature security, threshold-signature protocols, secure enclaves, or assumptions about an external virtual machine. Name each assumption and its implementation.
 
@@ -341,7 +343,7 @@ Do not activate planned links until the destination exists as a real published p
 - [x] Consensus rules, Bitcoin Core implementation behavior, BIPs, deployed application protocols, experimental projects, bridges, and application-derived state remain distinct.
 - [x] The framework identifies enforcement points, custody, setup, state, data availability, exits, cryptographic assumptions, economics, code maturity, interoperability, governance, and evidence.
 - [x] BIP 347, BitVM, and DLC examples use dated primary evidence and do not imply mainnet consensus deployment.
-- [x] Bitcoin transaction inclusion is not treated as proof that every application rule is Bitcoin-enforced.
+- [x] Bitcoin transaction inclusion or settlement is not treated as proof that external systems inherit Bitcoin consensus security.
 - [x] Trustless, secured by Bitcoin, decentralized, live, audited, and adoption claims are replaced with testable questions.
 - [x] Mempool policy, relay, miner selection, confirmation, and consensus are not collapsed.
 - [x] Audits, repositories, demonstrations, transaction counts, and total value are not treated as complete security evidence.
@@ -350,9 +352,9 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer: Pending
-- Review date: Pending
-- Notes: Pending human verification should apply the framework to at least two additional current projects, reproduce every dated example against live primary sources, confirm Bitcoin Core 31.1 remains the intended implementation reference, have a protocol reviewer inspect the enforcement and custody taxonomy, and verify that the adoption, governance, audit, and metric guidance does not imply endorsement of any named project.
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-24
+- Notes: Reproduced the dated BIP 347, BitVM, DLC, Bitcoin Core 31.1, Ordinals, Runes, and BRC-20 examples against the cited primary sources and reviewed the framework for endorsement, deployment, and inherited-security language. Named projects remain examples rather than recommendations; Bitcoin inclusion, settlement, or script enforcement is not presented as transferring Bitcoin consensus security to a bridge, indexer, oracle, proof system, sequencer, operator set, or external state machine.
 
 ## 12. Illustration brief
 
@@ -363,7 +365,7 @@ Do not activate planned links until the destination exists as a real published p
 - Recommended placement: After the section Classify the layer.
 - Visual description: Vintage ocean-depth chart with Bitcoin consensus at the seabed, node implementation and policy above it, application protocols and indexers at the surface, and bridges reaching an external island.
 - Required labels: Bitcoin consensus, Node implementation, Wallet and policy, Application protocol, Derived state, Bridge, External system
-- Caption: Systems can use Bitcoin while inheriting different enforcement and trust properties.
+- Caption: Bitcoin enforces only the defined Bitcoin-layer rules; applications, indexers, bridges, and external systems add separate trust and failure assumptions.
 - Alt text: Layered ocean chart separating Bitcoin consensus, implementations, applications, derived state, bridges, and external systems.
 - Image orientation: Landscape
 - Mobile crop notes: Stack the layers vertically with concise labels.

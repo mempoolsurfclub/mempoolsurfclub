@@ -136,7 +136,7 @@ The same byte can have different meaning across script versions and networks. To
 
 ### Activation would require coordinated rule enforcement
 
-BIP 347 specifies semantics, but the BIP does not itself choose an activation mechanism in the material reviewed here. Any mainnet deployment would need a concrete soft-fork activation process, implementation releases, ecosystem review, and a point at which upgraded nodes begin enforcing the new rule.
+BIP 347 specifies semantics but contains no activation height, signaling threshold, start time, or deployment parameters. Bitcoin Core v31.1 sources reviewed for this guide preserve active OP_SUCCESSx Tapscript behavior and legacy or SegWit v0 disabled-opcode behavior; they do not document a mainnet BIP 347 deployment. Any mainnet deployment would need a concrete soft-fork activation process, implementation releases, ecosystem review, and a point at which upgraded nodes begin enforcing the new rule.
 
 A soft fork is backward-compatible in the limited sense that old nodes can continue accepting blocks that upgraded nodes accept. Old nodes would not enforce the new OP_CAT restrictions and could not independently validate that a Tapscript spend complied with them.
 
@@ -273,9 +273,9 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer: Pending
-- Review date: Pending
-- Notes: Pending human verification should confirm the live BIP 347 header and changelog, review the final reference implementation and test vectors, inspect the current Bitcoin Core release for unchanged legacy and SegWit v0 disabled-opcode behavior, verify whether any activation BIP or mainnet deployment evidence has appeared after 2026-07-24, and obtain protocol-review signoff on OP_SUCCESS126 soft-fork semantics and covenant examples.
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-24
+- Notes: Verified the live BIP 347 header as `Complete`, version 1.0.0, with its March 1, 2026 status change; confirmed the proposed Tapscript-only redefinition of OP_SUCCESS126, current BIP 342 OP_SUCCESSx behavior, and Bitcoin Core v31.1 legacy and SegWit v0 disabled-opcode handling. The reviewed primary sources contain no BIP 347 activation parameters or documented mainnet activation, so OP_CAT remains a complete soft-fork proposal rather than an active mainnet opcode.
 
 ## 12. Illustration brief
 

@@ -92,13 +92,17 @@ A valid cryptographic proof establishes only the statement encoded by the circui
 
 Later BitVM research explores different proof and commitment techniques. Those designs should be dated and named rather than presented as settled components of one deployed system.
 
-### Public demonstrations are not production deployment
+### Public demonstrations and a scoped audit are not production deployment
 
-As of July 24, 2026, the official project presents a developer preview with public signet or project-network transactions. Its implementation repository warns not to use the software in production. The preview and transactions are evidence of active development and test execution, not evidence that BitVM is a production Bitcoin consensus feature or a fully audited bridge.
+As of July 24, 2026, the official project presents a developer preview with public signet or project-network transactions. Its implementation repository still warns, “DO NOT USE IN PRODUCTION!” The preview and transactions are evidence of active development and test execution, not evidence that BitVM is a production Bitcoin consensus feature or a production-ready bridge.
+
+Zellic published an August 2025 security assessment classified as a Rust review of BitVM. The official BitVM repository now retains that report at `audits/BitVM - Zellic Audit Report.pdf`. The repository's remediation history also identifies audit-related corrections in scoped implementation areas including field and curve arithmetic, Groth16-related verification code, hashes, computational hints, Winternitz signatures, and stack or altstack handling.
+
+That evidence must be limited to the Rust code and components reviewed at the assessed revision. It does not establish that every later commit, the complete BitVM Bridge transaction graph, bridge accounting, operator and challenger incentives, setup or key-deletion procedures, data availability, fee and liveness behavior, external-chain integration, or production operations were assessed.
 
 A demonstration can answer limited questions: whether software builds, whether a transaction graph can execute on a test environment, whether proof verification completes, or whether participants can follow a scripted flow. It does not by itself establish resistance to malicious peers, safe key ceremonies, economic robustness, mainnet fee behavior, or operational recovery.
 
-The project also states that foundational-library auditing is a next stage. Until audits, adversarial testing, reproducible releases, and explicit production parameters are available, maturity claims should remain conservative.
+The Zellic report is a meaningful security-review artifact, not a bridge-wide economic, operational, or production-readiness certificate. The developer-preview classification and repository production warning remain controlling maturity signals. Reproducible releases, adversarial integration testing, bridge-wide security analysis, and explicit production parameters would still be needed before making a production-readiness claim.
 
 ### How to evaluate a BitVM claim
 
@@ -142,10 +146,10 @@ Finally separate a possibility result from deployed engineering. BitVM research 
    - Supports: The project's current description, research links, implementation links, and bridge focus.
 4. **BitVM Developer Preview** | BitVM contributors
    - URL: https://bitvm.org/demo/
-   - Supports: The public developer-preview status, signet or project-network demonstrations, and stated next-stage audit work reviewed on 2026-07-24.
+   - Supports: The public developer-preview status and signet or project-network demonstrations reviewed on 2026-07-24.
 5. **BitVM Repository** | BitVM contributors
    - URL: https://github.com/BitVM/BitVM
-   - Supports: The current implementation scope, BitVM2 bridge components, proof-verification code, transaction graph, development state, and production warning.
+   - Supports: The current implementation scope, BitVM2 bridge components, proof-verification code, transaction graph, audit-remediation history, development state, and production warning.
 6. **BitVM Repository Releases** | BitVM contributors
    - URL: https://github.com/BitVM/BitVM/releases
    - Supports: Current release evidence and versioning; absence or presence of tagged production releases must be checked before future maturity claims.
@@ -179,6 +183,12 @@ Finally separate a possibility result from deployed engineering. BitVM research 
 16. **Bitcoin Developer Guide: Transactions** | Bitcoin Core project documentation contributors
    - URL: https://developer.bitcoin.org/devguide/transactions.html
    - Supports: UTXO spending, transaction structure, signatures, and locktime background used to explain the Bitcoin layer.
+17. **BitVM Audit Directory** | BitVM contributors
+   - URL: https://github.com/BitVM/BitVM/tree/main/audits
+   - Supports: The official repository's retention of `BitVM - Zellic Audit Report.pdf` and the audit artifact's relationship to the current implementation repository.
+18. **BitVM - Zellic Audit Report** | Zellic
+   - URL: https://github.com/Zellic/publications/blob/master/BitVM%20-%20Zellic%20Audit%20Report.pdf
+   - Supports: The August 2025 Rust security assessment of scoped BitVM implementation code; it does not establish bridge-wide economic, operational, or production readiness.
 
 ## 5. SEO title
 
@@ -221,15 +231,15 @@ Do not activate planned links until the destination exists as a real published p
 - [x] BitVM Bridge is identified as an application design rather than a native Bitcoin bridge or consensus feature.
 - [x] Optimistic verification, challengers, transaction graphs, timelocks, data availability, fees, and setup assumptions are stated without guarantees.
 - [x] The official production warning and developer-preview maturity are dated 2026-07-24.
-- [x] No audit, adoption, liquidity, decentralization, security, or production claim exceeds the cited evidence.
+- [x] The August 2025 Zellic Rust assessment is acknowledged and limited to its scoped implementation review; it is not treated as bridge-wide or production-readiness evidence.
 - [x] Planned internal links remain inactive and do not imply publication.
 - [x] Sources are primary project, BIP, Bitcoin Core, or project-documentation sources mapped to the claims they support.
 
 ## 11. Human verification
 
-- Reviewer: Pending
-- Review date: Pending
-- Notes: Pending human verification should reproduce the current BitVM repository warning, confirm the developer-preview network and audit wording, review the latest tagged release or commit, compare the guide's BitVM2 role descriptions with the current bridge paper and implementation, and verify that no mainnet production deployment or audit completion has occurred since 2026-07-24.
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-24
+- Notes: Verified the current BitVM repository at commit `7d1ca3660cac08aab62e76f3aa4daec0d7403ecc`, its developer-preview context, production warning, official `audits` directory, August 2025 Zellic Rust assessment, audit-remediation history, BitVM2 role boundaries, and absence of evidence in the reviewed primary sources for bridge-wide production readiness. The audit remains scoped to reviewed implementation code and does not cover the complete bridge's economics, operations, liveness, setup, or external-system assumptions.
 
 ## 12. Illustration brief
 

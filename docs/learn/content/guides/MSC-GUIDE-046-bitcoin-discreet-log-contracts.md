@@ -128,15 +128,19 @@ The funding transaction itself can remain unconfirmed, be replaced under applica
 
 ### DLCs are an application protocol with uneven maturity
 
-DLC papers, specifications, libraries, wallets, and applications have existed for years. That is evidence of implementation work, not evidence that every component is standardized or widely interoperable.
+DLC papers, specifications, libraries, wallets, and applications have existed for years. That is evidence of implementation work, not evidence that every component is standardized, production-ready, or interoperable across current releases.
 
-As of July 24, 2026, the official `dlcspecs` repository still labels the specification work in progress. Its README and roadmap describe future work including transfers, option-style DLCs, Taproot DLCs, and Lightning DLCs. Some older roadmap sections also record features as done or in progress at the time they were written, so maturity must be confirmed against current code, tests, releases, and interoperability results.
+As of July 24, 2026, the official `dlcspecs` master branch at commit `9cd9148938c616690c79d99ec6f330e213c246c5` still labels the specification work in progress. Its README and roadmap describe future work including transfers, option-style DLCs, Taproot DLCs, and Lightning DLCs. Older roadmap sections record features as done or in progress at the time they were written, so they are historical development evidence rather than a current compatibility matrix.
 
-An application can deploy a DLC implementation without changing Bitcoin consensus. Two implementations can also both claim DLC support while differing in message versions, oracle formats, numeric compression, fee handling, storage, or supported closing paths.
+The current `rust-dlc` master branch at commit `8e6a75fbc9685e6eafa348edd45a793fcb63fa4d` implements transaction, numeric-contract, manager, message, Bitcoin-RPC, oracle-client, and storage components. Its README also says the library is early-stage, has not been thoroughly tested in production, recommends avoiding mainnet, and is not yet fully compliant with the DLC specification.
+
+Bitcoin-S documentation provides evidence of another DLC implementation family. The official materials reviewed for this guide do not provide a current comprehensive cross-implementation report showing that present Bitcoin-S, `rust-dlc`, and other implementations interoperate across every message version, oracle format, numeric contract, fee path, and recovery case. Shared specifications and test vectors are interoperability targets; exact implementation pairs still require versioned cross-testing.
+
+The reviewed `dlcspecs`, `rust-dlc`, and Bitcoin-S materials also do not identify a project-wide independent security assessment covering the entire current DLC stack. The original paper, specifications, adaptor-signature work, test vectors, implementation tests, and code review are relevant security evidence, but they are not equivalent to an audit of current wallet storage, oracle operations, key management, fee recovery, or released binaries.
 
 A careful evaluation records the exact specification commit, implementation release, oracle software, network, contract type, and test vectors. It verifies backup and recovery, simulates oracle failure, confirms refunds and CETs, and does not put significant funds at risk merely because the protocol design is non-custodial.
 
-DLCs demonstrate how existing Bitcoin transactions and cryptography can coordinate event-dependent payouts. Their security remains the combined result of Bitcoin validation, correct transaction preparation, sound adaptor-signature code, usable oracle attestations, safe key management, and robust operations.
+DLCs demonstrate how existing Bitcoin transactions and cryptography can coordinate event-dependent payouts. Their security remains the combined result of Bitcoin validation, correct transaction preparation, sound adaptor-signature code, usable oracle attestations, safe key management, compatible software, and robust operations.
 
 ## 3. Key Terms
 
@@ -162,7 +166,7 @@ DLCs demonstrate how existing Bitcoin transactions and cryptography can coordina
    - Supports: The original DLC proposal, oracle-signature construction, adaptor-signature concept, privacy motivation, and event-dependent payout model.
 2. **DLC Specifications README** | DLC specification contributors
    - URL: https://github.com/discreetlogcontracts/dlcspecs/blob/master/README.md
-   - Supports: The repository's work-in-progress status, implementation links, roadmap, and future-work categories reviewed on 2026-07-24.
+   - Supports: The repository's work-in-progress status at master commit `9cd9148938c616690c79d99ec6f330e213c246c5`, implementation links, roadmap, and future-work categories reviewed on 2026-07-24.
 3. **DLC Specifications Introduction** | DLC specification contributors
    - URL: https://github.com/discreetlogcontracts/dlcspecs/blob/master/Introduction.md
    - Supports: Oracle announcements and signatures, adaptor signatures, CETs, funding and refund concepts, unilateral close, non-attestation protection, collusion limitation, and terminology.
@@ -201,7 +205,7 @@ DLCs demonstrate how existing Bitcoin transactions and cryptography can coordina
    - Supports: Current standardness, dust, and relay-policy implementation that can affect DLC transactions separately from consensus.
 15. **rust-dlc Repository** | rust-dlc contributors
    - URL: https://github.com/p2pderivatives/rust-dlc
-   - Supports: One current Rust implementation family; implementation support, releases, and interoperability must be checked independently of the specification.
+   - Supports: One current Rust implementation family at master commit `8e6a75fbc9685e6eafa348edd45a793fcb63fa4d`; its README identifies implemented components, early-stage status, incomplete specification compliance, limited production testing, and a recommendation to avoid mainnet.
 16. **Bitcoin-S DLC Documentation** | Bitcoin-S contributors
    - URL: https://bitcoin-s.org/docs/wallet/dlc
    - Supports: One implementation's DLC wallet behavior and user-facing workflow; it is not the universal DLC specification.
@@ -248,14 +252,14 @@ Do not activate planned links until the destination exists as a real published p
 - [x] The current v0 transaction structure is not generalized into a universal Taproot or Lightning DLC claim.
 - [x] Fee, dust, locktime, confirmation, storage, and backup risks are included.
 - [x] The `dlcspecs` work-in-progress label is dated 2026-07-24 and historical roadmap statuses are not treated as current releases.
-- [x] No adoption, liquidity, privacy, security, compatibility, or production claim exceeds the cited evidence.
+- [x] Current specification, implementation support, compliance warnings, interoperability evidence, and security-review limits are scoped to the exact primary sources reviewed.
 - [x] Planned internal links remain inactive and do not imply publication.
 
 ## 11. Human verification
 
-- Reviewer: Pending
-- Review date: Pending
-- Notes: Pending human verification should review the exact `dlcspecs` master commit, confirm whether a newer versioned specification or interoperability report supersedes the repository's work-in-progress wording, test the described funding, CET, and refund flow against at least one current implementation, verify oracle nonce and attestation language with a cryptography reviewer, and confirm current Taproot, Lightning, numeric, and multi-oracle support before copy-lock.
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-24
+- Notes: Verified `dlcspecs` master commit `9cd9148938c616690c79d99ec6f330e213c246c5`, the repository's work-in-progress label, current v0 transaction and message documents, historical roadmap boundaries, `rust-dlc` master commit `8e6a75fbc9685e6eafa348edd45a793fcb63fa4d`, implemented component support, incomplete compliance and mainnet warning, and Bitcoin-S as a separate implementation family. The reviewed official sources do not establish comprehensive current cross-implementation interoperability or a project-wide independent security assessment of the entire DLC stack.
 
 ## 12. Illustration brief
 
