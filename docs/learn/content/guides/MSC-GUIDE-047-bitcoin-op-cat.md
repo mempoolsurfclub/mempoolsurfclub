@@ -62,7 +62,7 @@ Bitcoin Core source is evidence of one current implementation's enforcement of a
 
 ### Current Tapscript treats byte 0x7e as OP_SUCCESS126
 
-Tapscript reserved a set of opcode values called OP_SUCCESSx. Under BIP 342, if a Tapscript contains an executed or parsed OP_SUCCESSx opcode under the defined rules, validation succeeds without continuing ordinary script execution.
+Tapscript reserves a set of opcode values called OP_SUCCESSx. Under BIP 342, validation succeeds immediately if decoding encounters any OP_SUCCESSx byte, even in an unexecuted branch, before ordinary execution or later resource checks.
 
 The historical OP_CAT byte value is decimal 126, or hexadecimal `0x7e`. In current Tapscript that value is OP_SUCCESS126, not an active concatenation instruction.
 
