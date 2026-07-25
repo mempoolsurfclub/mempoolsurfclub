@@ -28,7 +28,7 @@ A Bitcoin transaction does not send coins to an account. It creates transaction 
 
 The word “script” can suggest a general programming environment. Bitcoin Script is narrower. It has no persistent application state, no network access, no filesystem, and no open-ended loop construct. It runs during transaction validation with tightly limited data and operations. Its purpose is to evaluate authorization and spending conditions, not to host arbitrary applications.
 
-This guide was reviewed July 25, 2026 against Bitcoin Core 31.1, tag `v31.1`, commit `9be056a8a72b624dae9623b2f7bded92c2a21c91`, relevant deployed BIPs, and tagged source and tests. Exact behavior depends on the script context, active consensus rules, verification flags, policy, and software version.
+This guide was reviewed July 25, 2026 against Bitcoin Core 31.1, tag `v31.1`, commit `9be056a8a72b624dae9623b2f7bded92c2a21c91`, relevant deployed BIPs, and tagged source, unit vectors, functional tests, and fuzz targets. Exact behavior depends on the script context, active consensus rules, verification flags, policy, and software version.
 
 ### Outputs lock; inputs attempt to unlock
 
@@ -40,15 +40,15 @@ A spending input references the prior output. Depending on the output type, the 
 
 ### Stack execution
 
-Bitcoin Script is stack based. Data pushes place byte arrays on a stack. Opcodes consume items, transform or compare them, and push results. A simple pattern can duplicate a public key, hash it, compare the hash with a committed value, and check a signature.
+Bitcoin Script is stack based. Data pushes place byte arrays on a main stack. Opcodes consume items, transform or compare them, and push results. Some opcodes can move items to and from a separate alternate stack, but the alternate stack is local to one script evaluation and is cleared between separately evaluated scripts.
 
 Execution is deterministic for the transaction, spent output, script, flags, and chain context supplied to the interpreter. Conditional opcodes can skip branches, but there are no unbounded loops. A script succeeds only if it avoids a failure condition and ends with the required truth result for its context.
 
-Byte arrays can be interpreted as booleans, numbers, hashes, public keys, signatures, or opaque data. Those interpretations have encoding rules. “Negative zero,” non-minimal numbers, oversized elements, malformed signatures, or unexpected stack shapes can matter differently under consensus and policy.
+Byte arrays can be interpreted as booleans, numbers, hashes, public keys, signatures, or opaque data. Those interpretations have encoding rules. The empty vector and “negative zero” evaluate false. Non-minimal numbers, oversized elements, malformed signatures, or unexpected stack shapes can matter differently under consensus and policy.
 
 ### Legacy script evaluation
 
-In the base or legacy context, a node evaluates the input’s `scriptSig` and the spent output’s `scriptPubKey` under the applicable rules. For pay-to-script-hash, or P2SH, BIP 16 adds another stage: the `scriptSig` pushes a redeem script whose hash must match the `scriptPubKey`, and that redeem script is then evaluated with the supplied stack.
+In the base or legacy context, a node evaluates the input’s `scriptSig` and the spent output’s `scriptPubKey` sequentially on the same main stack. For pay-to-script-hash, or P2SH, BIP 16 adds another stage: a push-only `scriptSig` supplies a redeem script whose hash must match the `scriptPubKey`, and that redeem script is then evaluated using the restored stack.
 
 Legacy signatures use the original signature-hash behavior. Historical rules and bug compatibility are part of consensus. A developer cannot replace them with a cleaner interpretation without changing which historical or future transactions validate.
 
@@ -58,19 +58,19 @@ Legacy does not mean “anything before SegWit is the same.” Bare scripts, P2P
 
 BIP 141 introduced witness programs. A native witness output places a version and program directly in the `scriptPubKey`. A nested construction places a witness program inside a BIP 16 redeem script.
 
-For P2WPKH, the witness supplies a signature and public key corresponding to a 20-byte program. For P2WSH, the final witness element is a witness script whose SHA256 hash must match the 32-byte program; earlier witness elements become its initial stack.
+For P2WPKH, the witness must supply exactly a signature and public key corresponding to a 20-byte program. For P2WSH, the final witness element is a witness script whose SHA256 hash must match the 32-byte program; earlier witness elements become its initial stack.
 
-SegWit version 0 uses the BIP 143 signature digest and consensus rules specific to witness execution. Witness data is serialized separately from the legacy transaction identifier, but upgraded nodes still validate it. The script context is represented separately in Bitcoin Core rather than treated as an ordinary legacy execution with discounted bytes.
+SegWit version 0 uses the BIP 143 signature digest and consensus rules specific to witness execution. Witness data is serialized separately from the legacy transaction identifier, but upgraded nodes still validate it. Native witness spends require an empty `scriptSig`; nested witness spends require exactly one push of the witness-program redeem script.
 
 ### Taproot key path and tapscript
 
-A pay-to-Taproot output is a SegWit version 1 output with a 32-byte program. BIP 341 defines key-path and script-path spending.
+A pay-to-Taproot output is a native SegWit version 1 output with a 32-byte program. BIP 341 defines key-path and script-path spending. P2SH-wrapped version 1 outputs are not Taproot spends.
 
 A key-path spend validates a Schnorr signature against the output key. It does not execute a tapscript.
 
 A script-path spend reveals a tapscript, control block, and Merkle path that prove the script was committed into the output key. BIP 342 defines the tapscript language and its signature-opcode behavior. Bitcoin Core represents key-path and tapscript validation as distinct signature versions.
 
-Tapscript modifies several rules. It adds `OP_CHECKSIGADD`, disables `OP_CHECKMULTISIG` and `OP_CHECKMULTISIGVERIFY` in tapscript, uses a validation-weight budget for signature checks, and reserves designated `OP_SUCCESSx` values for future soft-fork upgrades. Encountering an `OP_SUCCESSx` under the defined conditions makes the script succeed at consensus, while relay policy can discourage spending unknown upgrade paths.
+Tapscript adds `OP_CHECKSIGADD`, disables `OP_CHECKMULTISIG` and `OP_CHECKMULTISIGVERIFY` when they execute, and reserves designated `OP_SUCCESSx` values for future soft-fork upgrades. During tapscript validation, the interpreter scans for `OP_SUCCESSx` before ordinary parsing and resource checks; finding one makes the script succeed at consensus, while standard policy discourages spending such paths before they are assigned meaning.
 
 ### Scripts, witnesses, and committed data
 
@@ -92,15 +92,17 @@ Signature opcodes do not merely ask whether a signature matches a key. They vali
 
 Legacy, SegWit version 0, and Taproot use different signature-message rules. Sighash modes can select which inputs and outputs are committed. `SIGHASH_ALL`, `NONE`, `SINGLE`, `ANYONECANPAY`, and Taproot’s `SIGHASH_DEFAULT` have precise version-specific semantics.
 
+`OP_CODESEPARATOR` also differs by context. In legacy and witness-v0 execution, signature checking uses script code beginning after the most recently executed separator. Legacy hashing additionally removes matching signatures and omits remaining `OP_CODESEPARATOR` opcodes from the serialized script code; BIP 143 does not perform the legacy signature deletion and retains later separators. Tapscript instead commits to the entire tapleaf hash plus the opcode position of the last executed separator through the BIP 342 signature-message extension.
+
 A valid cryptographic signature can still fail script validation because the public key encoding, signature encoding, sighash byte, stack position, or transaction context is wrong. Conversely, a script can fail before a signature operation runs.
 
-Multisignature is also construction-specific. Legacy and SegWit v0 can use `OP_CHECKMULTISIG`, including its historical extra stack-item behavior. Tapscript uses combinations such as `OP_CHECKSIG` and `OP_CHECKSIGADD`. Off-chain threshold or key-aggregation protocols are separate systems that may produce one on-chain signature.
+Multisignature is also construction-specific. Legacy and SegWit v0 can use `OP_CHECKMULTISIG`, whose historical bug consumes one extra stack item. BIP 147’s active `NULLDUMMY` consensus rule requires that item to be empty. Tapscript disables the old multisignature opcodes and uses combinations such as `OP_CHECKSIG` and `OP_CHECKSIGADD`. Off-chain threshold or key-aggregation protocols are separate systems that may produce one on-chain signature.
 
 ### Hashes, timelocks, and logical conditions
 
 Hash opcodes let scripts compare a revealed preimage with a committed digest. They support constructions such as hashlocks, but the security of a construction depends on preimage entropy, disclosure, transaction structure, and surrounding conditions.
 
-`OP_CHECKLOCKTIMEVERIFY` and `OP_CHECKSEQUENCEVERIFY` apply absolute and relative time constraints through transaction fields and chain context. They do not create a scheduler that broadcasts a transaction automatically. A transaction must still be constructed, relayed, mined, and valid under all other rules.
+`OP_CHECKLOCKTIMEVERIFY` applies an absolute block-height or timestamp constraint through `nLockTime` and requires the spending input not to be final. `OP_CHECKSEQUENCEVERIFY` applies a relative block or time constraint through the input sequence field and requires transaction version 2 or later. Neither opcode creates a scheduler that broadcasts a transaction automatically.
 
 Conditional and comparison opcodes allow multiple spending branches. A script can express “signature A now, or signature B after a delay,” but wallet coordination, key storage, fee management, and recovery remain outside Script itself.
 
@@ -114,17 +116,21 @@ A transaction can therefore be consensus-valid but nonstandard. It may be reject
 
 ### Disabled, reserved, and upgrade opcodes
 
-Some opcode byte values are disabled in legacy and SegWit v0. If an executed disabled opcode is encountered, script validation fails. Their names can remain in the opcode enumeration for historical reasons; presence in `script.h` does not mean they are usable.
+Some opcode byte values are globally disabled in base and witness-v0 script. Bitcoin Core rejects those bytes during decoding even when they appear in a conditional branch that would not execute. Their names can remain in the opcode enumeration for historical reasons; presence in `script.h` does not mean they are usable.
+
+That behavior is distinct from opcodes that fail only when executed. For example, tapscript’s `OP_CHECKMULTISIG` and `OP_CHECKMULTISIGVERIFY` fail when reached but are ignored in an unexecuted branch. Reserved and invalid opcodes have their own context-specific behavior.
 
 Some NOP opcodes were repurposed through soft forks, including the opcodes now used for absolute and relative timelocks. Policy can discourage remaining upgradeable NOPs so users do not rely on behavior that a future soft fork may narrow.
 
-Tapscript uses a different upgrade mechanism. `OP_SUCCESSx` values intentionally succeed today at consensus, allowing a future soft fork to assign stricter meaning. Unknown tapleaf versions and unknown key types have additional forward-compatibility and policy boundaries. A list of opcode names without the script version is therefore incomplete.
+Tapscript uses a different upgrade mechanism. `OP_SUCCESSx` values intentionally succeed today at consensus, allowing a future soft fork to assign stricter meaning. Unknown tapleaf versions, unknown tapscript public-key types, and unknown witness versions are separate upgrade boundaries with separate policy flags. They must not be conflated with one another.
 
 ### Resource and execution limits
 
-Bitcoin validation limits resource use to reduce denial-of-service risk and keep validation bounded. Bitcoin Core 31.1 source defines limits including a 10,000-byte script size, 520-byte stack-element size in applicable contexts, 201 non-push operations per legacy-style script, and 1,000 combined stack items. Context-specific exceptions and replacements matter.
+Bitcoin validation limits resource use to reduce denial-of-service risk and keep validation bounded. In base and witness-v0 script, Bitcoin Core 31.1 enforces a 10,000-byte script limit, a 520-byte pushed-element limit, no more than 201 non-push operations per script, and no more than 1,000 combined main-stack and alternate-stack elements. P2WSH separately limits its revealed witness script to 10,000 bytes.
 
-Tapscript removes the legacy 201-opcode limit but applies its own signature-validation weight budget. Witness programs and scripts also interact with transaction weight, sigop accounting, control-block limits, and policy limits.
+Tapscript deliberately does not use the 10,000-byte script limit or the 201 non-push-opcode limit; script size is instead bounded indirectly by transaction and block weight. If no `OP_SUCCESSx` is present, the 520-byte element limit remains, and the 1,000-item stack-plus-altstack limit also applies to the initial stack.
+
+Tapscript signature opcodes use a per-input validation budget rather than the legacy block sigop accounting. The budget begins at 50 plus the serialized byte size of that input’s full witness, including its compact-size prefix. Each executed `OP_CHECKSIG`, `OP_CHECKSIGVERIFY`, or `OP_CHECKSIGADD` with a non-empty signature consumes 50 units; crossing below zero fails the script.
 
 These numbers should not be copied as one universal “Script limit” table. A correct statement identifies the script version, whether the rule is consensus or policy, and the exact software or BIP source.
 
@@ -134,15 +140,15 @@ A spend can fail because:
 
 - the committed script or key does not match the revealed data;
 - stack underflow or overflow occurs;
-- an opcode is disabled or invalid for the script version;
-- a signature, public key, or number is malformed;
+- an opcode is disabled, reserved, or invalid for the script version;
+- a signature, public key, number, or sighash type is malformed;
 - a hash comparison or signature check returns false;
 - a timelock condition is not satisfied;
 - a branch is unbalanced or ends incorrectly;
-- an element, script, control block, or stack exceeds a limit;
+- an element, script, control block, stack, or signature budget exceeds its applicable limit;
 - the final stack result does not meet the context’s success rule;
 - witness or P2SH structure is malformed;
-- a mandatory consensus flag rejects the execution.
+- an active consensus rule rejects the execution.
 
 Bitcoin Core records script-error categories, but a user-facing RPC or wallet may present a higher-level message. Interface wording should not be mistaken for the complete consensus reason.
 
@@ -185,13 +191,13 @@ A precise description is: Bitcoin Script is a constrained, versioned validation 
 
 1. **Bitcoin Core 31.1 Script Interpreter** | Bitcoin Core contributors
    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/script/interpreter.cpp
-   - Supports: Stack execution, opcode behavior, signature checks, witness validation, tapscript execution, and failure paths.
+   - Supports: Stack execution, disabled-opcode parsing, signature checks, OP_CODESEPARATOR handling, witness validation, tapscript execution, and failure paths.
 2. **Bitcoin Core 31.1 Interpreter Interface** | Bitcoin Core contributors
    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/script/interpreter.h
    - Supports: Verification flags, signature versions, BIP 143 and BIP 341 precomputation, Taproot execution data, and consensus-versus-policy comments.
 3. **Bitcoin Core 31.1 Script Definitions** | Bitcoin Core contributors
    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/script/script.h
-   - Supports: Opcode enumeration, element, operation, script, and stack limits; annex tag; and tapscript signature budget constants.
+   - Supports: Opcode enumeration, element, operation, script, stack, annex, and tapscript validation-budget constants.
 4. **Bitcoin Core 31.1 Script Errors** | Bitcoin Core contributors
    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/script/script_error.h
    - Supports: Script failure categories used by the implementation.
@@ -203,7 +209,7 @@ A precise description is: Bitcoin Script is a constrained, versioned validation 
    - Supports: Standardness, transaction weight, sigop, witness, and relay-policy boundaries.
 7. **Bitcoin Core 31.1 Script Unit Tests** | Bitcoin Core contributors
    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/test/script_tests.cpp
-   - Supports: Unit-test coverage for script execution, flags, edge cases, and signature behavior.
+   - Supports: Unit-test coverage for script execution, flags, edge cases, signature behavior, and script-error classifications.
 8. **Bitcoin Core 31.1 Script Test Vectors** | Bitcoin Core contributors
    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/test/data/script_tests.json
    - Supports: Valid and invalid script examples across flags and historical behavior.
@@ -224,7 +230,7 @@ A precise description is: Bitcoin Script is a constrained, versioned validation 
     - Supports: Witness programs, P2WPKH, P2WSH, script-versioning, and witness consensus rules.
 14. **BIP 143 — Transaction Signature Verification for Version 0 Witness Program** | Johnson Lau, Pieter Wuille
     - URL: https://github.com/bitcoin/bips/blob/master/bip-0143.mediawiki
-    - Supports: SegWit v0 signature digest and committed data.
+    - Supports: SegWit v0 signature digest, scriptCode, OP_CODESEPARATOR, and committed data.
 15. **BIP 340 — Schnorr Signatures for secp256k1** | Pieter Wuille, Jonas Nick, Tim Ruffing
     - URL: https://github.com/bitcoin/bips/blob/master/bip-0340.mediawiki
     - Supports: Signature scheme used by Taproot.
@@ -233,11 +239,14 @@ A precise description is: Bitcoin Script is a constrained, versioned validation 
     - Supports: P2TR, key path, script path, control blocks, sighash, annex, and commitment rules.
 17. **BIP 342 — Validation of Taproot Scripts** | Pieter Wuille, Jonas Nick, Anthony Towns
     - URL: https://github.com/bitcoin/bips/blob/master/bip-0342.mediawiki
-    - Supports: Tapscript opcodes, OP_SUCCESSx, signature budget, disabled multisig opcodes, and upgrade behavior.
-18. **Bitcoin Core 31.1 BIP Support Document** | Bitcoin Core contributors
+    - Supports: Tapscript opcodes, OP_SUCCESSx ordering, OP_CODESEPARATOR commitments, signature budget, contextual limits, disabled multisig opcodes, and upgrade behavior.
+18. **BIP 147 — Dealing with Dummy Stack Element Malleability** | Johnson Lau
+    - URL: https://github.com/bitcoin/bips/blob/master/bip-0147.mediawiki
+    - Supports: The historical CHECKMULTISIG extra element and deployed NULLDUMMY consensus rule.
+19. **Bitcoin Core 31.1 BIP Support Document** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/doc/bips.md
     - Supports: Release-specific implementation and activation references for script-related BIPs.
-19. **Bitcoin Core 31.1 Tag Commit** | Bitcoin Core contributors
+20. **Bitcoin Core 31.1 Tag Commit** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/commit/9be056a8a72b624dae9623b2f7bded92c2a21c91
     - Supports: Exact source and test version reviewed.
 
@@ -278,19 +287,22 @@ Do not activate planned links until the destination exists as a real published p
 - [x] Bitcoin Script is described as a validation language rather than a general application runtime.
 - [x] `scriptPubKey`, `scriptSig`, witness, redeem script, witness script, tapscript, and control block are separated.
 - [x] Legacy, P2SH, SegWit v0, Taproot key path, and tapscript contexts are distinguished.
-- [x] Stack execution, signatures, hashes, timelocks, branches, multisignature constructions, and failure conditions are covered.
+- [x] Main-stack, alternate-stack, conditional, boolean, numeric, signature, timelock, and failure behavior is contextually bounded.
+- [x] Legacy, BIP 143, and tapscript OP_CODESEPARATOR and signature-message behavior are separated.
 - [x] Consensus rules, verification flags, standardness, mempool policy, and interface messages are not conflated.
-- [x] Disabled opcodes, upgradeable NOPs, OP_SUCCESSx, tapleaf versions, and future-upgrade boundaries are described by context.
-- [x] Resource limits are not presented as one universal table across all script versions.
+- [x] Globally disabled opcodes, executed-only failures, upgradeable NOPs, OP_SUCCESSx, unknown witness versions, and future tapleaf versions are distinguished.
+- [x] Resource limits are stated separately for base, witness v0, and tapscript.
 - [x] The article does not call Script Turing-complete or equivalent to a general-purpose smart-contract virtual machine.
 - [x] Source and test claims are pinned to Bitcoin Core 31.1 and dated July 25, 2026.
 - [x] Planned internal links remain inactive and do not imply publication.
 
 ## 11. Human verification
 
-- Reviewer: Pending — Bitcoin protocol and implementation specialist
-- Review date: Pending
-- Notes: Human Verification remains pending. The specialist pass must reproduce legacy, witness v0, and tapscript behavior against Bitcoin Core 31.1 tests; verify every resource-limit qualifier; review signature-hash and OP_SUCCESSx wording; and confirm all consensus-versus-policy classifications.
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-25
+- Evidence reviewed: Bitcoin Core `v31.1`, commit `9be056a8a72b624dae9623b2f7bded92c2a21c91`; tagged `src/script/interpreter.cpp`, `interpreter.h`, `script.h`, `script_error.h`, `solver.cpp`, `policy.h`, `src/test/script_tests.cpp`, JSON script vectors, and `src/test/fuzz/script.cpp`; release-specific `doc/bips.md`; and deployed BIPs 16, 65, 112, 141, 143, 147, 340, 341, and 342.
+- Material corrections: Corrected disabled-opcode behavior in unexecuted base and witness-v0 branches; separated tapscript’s executed-only disabled multisig behavior; added exact legacy, BIP 143, and BIP 342 OP_CODESEPARATOR boundaries; restored NULLDUMMY’s consensus status; corrected tapscript script-size, opcode-count, stack, element, and signature-budget rules; clarified native versus P2SH-wrapped witness-version behavior; and tightened CLTV and CSV prerequisites.
+- Remaining uncertainty: Policy flags, standard transaction forms, wallet construction, and interface errors remain implementation- and version-sensitive. Future witness versions, tapleaf versions, public-key types, and OP_SUCCESSx meanings are intentionally undefined until separately specified and deployed.
 
 ## 12. Illustration brief
 
