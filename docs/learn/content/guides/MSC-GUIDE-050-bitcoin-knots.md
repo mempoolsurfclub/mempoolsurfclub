@@ -40,7 +40,7 @@ Knots can backport upstream work, retain behavior changed elsewhere, or add feat
 
 ### Separate releases and maintenance
 
-Bitcoin Knots has its own version scheme and release process. The reviewed release is `29.3.knots20260508`, published through the official Knots site with release-specific checksums, signatures, source, binaries, and detailed contrast documentation.
+Bitcoin Knots has its own version scheme and release process. The reviewed release is `29.3.knots20260508`, published through the official Knots site with release-specific checksums, signatures, source, binaries, and detailed enhancement documentation.
 
 A Knots version number cannot be compared numerically with a Bitcoin Core version as if both projects shared one synchronized release train. The reviewed tag uses `29.3` plus a Knots release-date suffix, while the Core reference is `31.1`. Those labels identify different project release lines; they do not order every included change, because Knots can backport selected upstream work and carry separate changes absent from Core.
 
