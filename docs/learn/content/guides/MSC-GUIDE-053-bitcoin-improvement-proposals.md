@@ -28,7 +28,7 @@ Bitcoin Improvement Proposals, usually called BIPs, give the Bitcoin community a
 
 A BIP does not define Bitcoin by itself. It does not bind node operators, miners, wallet developers, exchanges, application builders, or users. Publication in the `bitcoin/bips` repository means the document met the repository’s topic, maturity, formatting, and editorial requirements. It does not mean the proposal won a vote, received protocol approval, entered Bitcoin Core, shipped in a release, activated on the network, or achieved broad adoption.
 
-This guide was reviewed July 25, 2026 against the live `bitcoin/bips` repository, BIP 3 version 1.4.0, and current Bitcoin Core 31.1 implementation documentation. Repository rules and individual BIP headers can change, so readers should verify the live document and its history.
+This guide was reviewed July 25, 2026 against the live `bitcoin/bips` repository, BIP 3 version 1.4.0 and its December 9, 2025 changelog entry, and Bitcoin Core 31.1 implementation documentation at commit `9be056a8a72b624dae9623b2f7bded92c2a21c91`. Repository rules and individual BIP headers can change, so readers should verify the live document and its history.
 
 ### The current process document
 
@@ -66,7 +66,7 @@ Once merged, the repository provides a canonical publication location and change
 
 ### The three current BIP types
 
-A **Specification BIP** defines implementable technical rules. Independent software can be evaluated for compliance with the specification. A Specification BIP should be precise enough to support interoperable implementations and, before reaching Complete, should include or reference a working implementation and comprehensive test vectors where applicable.
+A **Specification BIP** defines implementable technical rules. Independent software can be evaluated for compliance with the specification. A Specification BIP should be precise enough to support interoperable implementations and, before reaching Complete, must include or reference a working reference implementation and comprehensive test vectors.
 
 An **Informational BIP** documents a design issue, guideline, or other information. It can be influential without defining interoperable behavior. Complete is often the final successful status for an Informational BIP because there may be nothing to “deploy” as software.
 
@@ -78,9 +78,9 @@ Historical “Standards Track” language generally maps to the older process vo
 
 **Draft** means the proposal has been published but planned work remains. Draft does not mean implemented, safe, rejected, or close to activation.
 
-**Complete** means the authors consider the proposal clear, comprehensive, and ready for adoption, implementation, or deployment. For Specification BIPs, the process requires implementation and test-vector evidence. Complete is an author and document-maturity claim, not proof of ecosystem support.
+**Complete** means the authors consider the proposal clear, comprehensive, and ready for adoption, implementation, or deployment. For Specification BIPs, the process requires a working reference implementation and comprehensive test vectors. Complete is an author and document-maturity claim, not proof of ecosystem support.
 
-**Deployed** is used when the approach is settled and evidence shows active use, activation, or rough consensus appropriate to the BIP. The evidence differs by proposal. A mainnet software release, met activation conditions, or established active use may support the status. Deployed still does not mean every wallet, node, service, or user supports the feature.
+**Deployed** should be used only after a Complete BIP is settled and evidence shows active use. BIP 3 gives examples of convincing evidence: an established project deploying support in mainnet software releases, a soft-fork proposal meeting its network activation criteria, or demonstrated rough consensus. The applicable evidence depends on the proposal, and Deployed still does not mean every wallet, node, service, or user supports the feature.
 
 **Closed** marks a document that is primarily historical or no longer actively advanced or used. Closed BIPs remain in the archive. A closed proposal can still explain past decisions or influence later work.
 
@@ -88,7 +88,7 @@ Status should be read together with the type, layer, version, changelog, and dat
 
 ### Layers are not approval levels
 
-BIP headers may classify a proposal by layer, including Consensus, Peer Services, API/RPC, or Applications. The layer identifies the affected system boundary.
+BIP headers may classify a proposal by layer using BIP 123 vocabulary: Consensus (soft fork), Consensus (hard fork), Peer Services, API/RPC, or Applications. The layer identifies the affected system boundary.
 
 A consensus-layer BIP can propose new block or transaction validity rules, but the document alone does not activate them. A Peer Services BIP can standardize network messages without changing block validity. An Applications BIP can define wallet, address, signing, or interchange behavior that software may adopt independently. API/RPC proposals concern interfaces rather than network consensus.
 
@@ -101,7 +101,7 @@ When someone says “BIP X is supported,” ask which event they mean:
 1. **Idea discussed:** a concept exists in public discussion.
 2. **BIP drafted:** structured text exists.
 3. **Number assigned and document merged:** the repository published it.
-4. **Status changed:** authors or maintainers recorded document maturity or use.
+4. **Status changed:** a transition was recorded under the BIP workflow, with type- and status-specific evidence requirements.
 5. **Implementation written:** code exists somewhere.
 6. **Code merged:** a project accepted code into a branch.
 7. **Software released:** users can obtain a version containing the code.
@@ -149,7 +149,7 @@ The most reliable conclusion is often narrow: “BIP 341 is marked Deployed; Bit
 - **Complete:** A proposal its authors consider finished and ready for adoption or implementation.
 - **Deployed:** A proposal with evidence of settled active use, activation, or applicable rough consensus.
 - **Closed:** A proposal retained mainly for historical reference.
-- **Layer:** The system boundary a BIP affects, such as consensus, peer services, API/RPC, or applications.
+- **Layer:** The system boundary a BIP affects, using classifications such as Consensus (soft fork), Consensus (hard fork), Peer Services, API/RPC, or Applications.
 - **Reference implementation:** Code demonstrating one implementation of a specification.
 - **Test vector:** A defined input and expected output used to test conformance.
 - **Activation:** The point at which new consensus rules begin being enforced under a deployment mechanism.
@@ -162,10 +162,10 @@ The most reliable conclusion is often narrow: “BIP 341 is marked Deployed; Bit
    - Supports: Live BIP index, current types and statuses, repository publication, editors, and proposal inventory reviewed July 25, 2026.
 2. **BIP 3 — Updated BIP Process, version 1.4.0** | Murch
    - URL: https://github.com/bitcoin/bips/blob/master/bip-0003.md
-   - Supports: Current process, BIP purpose, ownership, editors, numbering, types, statuses, changelog, adoption, and replacement of BIP 2.
+   - Supports: Current process, BIP purpose, ownership, editors, numbering, types, statuses, changelog through version 1.4.0, adoption, and replacement of BIP 2.
 3. **BIP 123 — BIP Classification** | Eric Lombrozo
    - URL: https://github.com/bitcoin/bips/blob/master/bip-0123.mediawiki
-   - Supports: Consensus, Peer Services, API/RPC, and Applications layer classifications.
+   - Supports: Consensus (soft fork), Consensus (hard fork), Peer Services, API/RPC, and Applications layer classifications.
 4. **BIP 1 — BIP Purpose and Guidelines** | Amir Taaki
    - URL: https://github.com/bitcoin/bips/blob/master/bip-0001.mediawiki
    - Supports: Historical process vocabulary and the original Standards Track framework.
@@ -240,21 +240,23 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 10. Accuracy review checklist
 
-- [x] BIP 3 is identified as the live deployed process document and BIP 2 as replaced.
+- [x] BIP 3 is identified as the live deployed process document at version 1.4.0 and BIP 2 as replaced.
 - [x] Current Specification, Informational, and Process types are separated from historical Standards Track terminology.
 - [x] Draft, Complete, Deployed, and Closed statuses are explained without treating status as universal approval.
 - [x] Authorship, deputies, editors, reviewers, numbering, publication, and repository history are covered.
 - [x] Repository acceptance is separated from code implementation, merge, release, activation, and adoption.
-- [x] Consensus, peer-service, API/RPC, application, wallet, and informational boundaries are distinguished.
+- [x] Exact BIP 123 layer vocabulary is used without treating layers as approval levels.
 - [x] Bitcoin Core, alternative implementations, miners, node operators, wallets, services, and users are not assigned unilateral authority.
 - [x] Examples are dated to evidence reviewed July 25, 2026 and do not imply endorsement.
 - [x] Planned internal links remain inactive and do not imply publication.
 
 ## 11. Human verification
 
-- Reviewer: Pending — Bitcoin protocol and implementation specialist
-- Review date: Pending
-- Notes: Human Verification remains pending. The specialist pass must reconfirm the live BIP 3 version and changelog, current editor and repository conventions, status-transition evidence for examples, and the distinction between document state, implementation, release, activation, and observed adoption.
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-25
+- Evidence reviewed: Live `bitcoin/bips` repository; BIP 3 version 1.4.0, repository blob `1261500b92fa918e9a948d5884fdb186437768d5`, including its changelog through December 9, 2025; BIPs 1, 2, 123, 141, 324, 340, 341, 342, and 350; Bitcoin Core `v31.1` at commit `9be056a8a72b624dae9623b2f7bded92c2a21c91`; and that release’s `doc/bips.md`.
+- Material corrections: Restored BIP 3’s exact working-reference-implementation and comprehensive-test-vector requirement for Complete Specification BIPs; tightened Deployed evidence wording; replaced generic Consensus layer wording with the exact soft-fork and hard-fork classifications; and removed the implication that only authors or maintainers record every status transition.
+- Remaining uncertainty: BIP 3 is a deployed Process BIP that may continue to change. Editor membership, repository conventions, individual BIP headers, status evidence, and implementation or adoption evidence remain date- and version-sensitive.
 
 ## 12. Illustration brief
 
@@ -276,8 +278,8 @@ Do not activate planned links until the destination exists as a real published p
 - Concept title: BIP Type and Layer Compass
 - Educational purpose: Separate document type from the Bitcoin system layer affected.
 - Recommended placement: After Layers are not approval levels.
-- Visual description: Technical compass rose with three type rings—Specification, Informational, Process—and four layer bearings—Consensus, Peer Services, API/RPC, Applications.
-- Required labels: Specification, Informational, Process, Consensus, Peer Services, API/RPC, Applications
+- Visual description: Technical compass rose with three type rings—Specification, Informational, Process—and five layer bearings—Consensus (soft fork), Consensus (hard fork), Peer Services, API/RPC, Applications.
+- Required labels: Specification, Informational, Process, Consensus (soft fork), Consensus (hard fork), Peer Services, API/RPC, Applications
 - Caption: A BIP’s type describes the document; its layer describes the system boundary.
 - Alt text: Compass diagram separating BIP document types from Bitcoin protocol and application layers.
 - Image orientation: Square
