@@ -304,10 +304,10 @@ Do not activate planned links until the destination exists as a real published p
 - Previous: MSC-GUIDE-055 | How Taproot Changed Bitcoin
 - Next: MSC-GUIDE-057 | How Schnorr Signatures Work in Bitcoin
 - Prerequisite: MSC-GUIDE-008 | How Bitcoin Transactions and Fees Work
-- Prerequisite: MSC-GUIDE-024 | How Bitcoin Nodes Communicate
+- Prerequisite: MSC-GUIDE-024 | Bitcoin Node Software Explained
 - Prerequisite: MSC-GUIDE-054 | How Bitcoin Script Works
-- Branch: MSC-GUIDE-026 | How Bitcoin Transaction Replacement Works
-- Branch: MSC-GUIDE-031 | How the Lightning Network Works
+- Branch: MSC-GUIDE-026 | How Bitcoin Blocks Work
+- Branch: MSC-GUIDE-033 | How the Lightning Network Works
 - Branch: MSC-GUIDE-055 | How Taproot Changed Bitcoin
 - Return: MSC-HUB-DEVELOPMENT | Bitcoin Development
 - Primary path: MSC-PATH-BUILD | Build on Bitcoin
