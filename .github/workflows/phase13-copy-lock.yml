@@ -1,0 +1,85 @@
+name: Phase 13 Copy Lock
+
+on:
+  push:
+    branches:
+      - content/learn-innovation-045-048
+
+permissions:
+  contents: write
+
+jobs:
+  copy-lock:
+    if: github.event.head_commit.message == 'Run Phase 13 copy-lock automation'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply exact copy-lock metadata
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          guides = [
+              Path('docs/learn/content/guides/MSC-GUIDE-045-bitvm-bitcoin.md'),
+              Path('docs/learn/content/guides/MSC-GUIDE-046-bitcoin-discreet-log-contracts.md'),
+              Path('docs/learn/content/guides/MSC-GUIDE-047-bitcoin-op-cat.md'),
+              Path('docs/learn/content/guides/MSC-GUIDE-048-emerging-bitcoin-protocols.md'),
+          ]
+
+          for path in guides:
+              text = path.read_text(encoding='utf-8')
+              parts = text.split('---', 2)
+              if len(parts) != 3:
+                  raise SystemExit(f'Unexpected frontmatter structure: {path}')
+              frontmatter = parts[1]
+              if frontmatter.count('status: EDITORIAL_REVIEW') != 1:
+                  raise SystemExit(f'Unexpected status field: {path}')
+              if frontmatter.count('reviewed_date: null') != 1:
+                  raise SystemExit(f'Unexpected reviewed_date field: {path}')
+              if frontmatter.count('copy_locked_date: null') != 1:
+                  raise SystemExit(f'Unexpected copy_locked_date field: {path}')
+              frontmatter = frontmatter.replace('status: EDITORIAL_REVIEW', 'status: COPY_LOCKED', 1)
+              frontmatter = frontmatter.replace('copy_locked_date: null', 'copy_locked_date: 2026-07-24', 1)
+              path.write_text('---'.join([parts[0], frontmatter, parts[2]]), encoding='utf-8')
+
+          manifest_path = Path('docs/learn/content/content-manifest.json')
+          manifest = manifest_path.read_text(encoding='utf-8')
+          for guide_id in ('MSC-GUIDE-045', 'MSC-GUIDE-046', 'MSC-GUIDE-047', 'MSC-GUIDE-048'):
+              pattern = re.compile(
+                  rf'("registry_id": "{guide_id}".*?"status": )"EDITORIAL_REVIEW"',
+                  re.DOTALL,
+              )
+              manifest, count = pattern.subn(r'\1"COPY_LOCKED"', manifest, count=1)
+              if count != 1:
+                  raise SystemExit(f'Unexpected manifest status for {guide_id}')
+          manifest_path.write_text(manifest, encoding='utf-8')
+          PY
+
+          rm .github/workflows/phase13-copy-lock.yml
+
+          expected=$(cat <<'EOF'
+          .github/workflows/phase13-copy-lock.yml
+          docs/learn/content/content-manifest.json
+          docs/learn/content/guides/MSC-GUIDE-045-bitvm-bitcoin.md
+          docs/learn/content/guides/MSC-GUIDE-046-bitcoin-discreet-log-contracts.md
+          docs/learn/content/guides/MSC-GUIDE-047-bitcoin-op-cat.md
+          docs/learn/content/guides/MSC-GUIDE-048-emerging-bitcoin-protocols.md
+          EOF
+          )
+          actual=$(git diff --name-only | sort)
+          if [ "$actual" != "$(printf '%s\n' "$expected" | sort)" ]; then
+            printf 'Unexpected changed-file scope:\n%s\n' "$actual"
+            exit 1
+          fi
+
+          git diff --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .github/workflows/phase13-copy-lock.yml docs/learn/content/content-manifest.json docs/learn/content/guides/MSC-GUIDE-045-bitvm-bitcoin.md docs/learn/content/guides/MSC-GUIDE-046-bitcoin-discreet-log-contracts.md docs/learn/content/guides/MSC-GUIDE-047-bitcoin-op-cat.md docs/learn/content/guides/MSC-GUIDE-048-emerging-bitcoin-protocols.md
+          git commit -m 'Copy-lock Phase 13 innovation guides'
+          git push origin HEAD:content/learn-innovation-045-048
