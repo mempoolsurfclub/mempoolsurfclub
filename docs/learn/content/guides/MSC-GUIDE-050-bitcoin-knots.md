@@ -42,7 +42,7 @@ Knots can backport upstream work, retain behavior changed elsewhere, or add feat
 
 Bitcoin Knots has its own version scheme and release process. The reviewed release is `29.3.knots20260508`, published through the official Knots site with release-specific checksums, signatures, source, binaries, and detailed contrast documentation.
 
-A Knots version number cannot be compared numerically with a Bitcoin Core version as if both projects shared one synchronized release train. The `29.3` portion reflects an upstream lineage, while the Knots date suffix identifies a project release. Bitcoin Core 31.1 contains later upstream development than a Knots 29.3-based release, while Knots may carry separate changes absent from Core.
+A Knots version number cannot be compared numerically with a Bitcoin Core version as if both projects shared one synchronized release train. The reviewed tag uses `29.3` plus a Knots release-date suffix, while the Core reference is `31.1`. Those labels identify different project release lines; they do not order every included change, because Knots can backport selected upstream work and carry separate changes absent from Core.
 
 The correct question is therefore not “Which has the higher version?” It is “Which exact source trees, release notes, configurations, and tested behaviors are being compared?”
 
@@ -60,7 +60,7 @@ Consensus compatibility means two nodes enforce compatible block-validity rules 
 
 Many Knots differences concern mempool admission, relay, mining selection, data-carrier handling, fee treatment, or configurable filters. Such differences can change which unconfirmed transactions a node sees or forwards without making confirmed blocks invalid.
 
-However, it is unsafe to state that all Knots releases always enforce exactly the same consensus rules as all Bitcoin Core releases. The reviewed Knots release notes include an RDTS/BIP 110 feature and require an explicit `consensusrules=rdts` confirmation for that build. The same site also lists a closely dated variant without that support. Whatever view a reader takes of the proposal, this is direct evidence that version and configuration must be included in a compatibility claim.
+However, it is unsafe to state that all Knots releases always enforce exactly the same consensus rules as all Bitcoin Core releases. The reviewed Knots release notes describe RDTS/BIP 110 logic implemented as a modified BIP9 temporary deployment. They instruct `bitcoind` operators to add `consensusrules=rdts`, while the GUI asks for explicit confirmation; the same site also lists a closely dated build without RDTS support. Whatever view a reader takes of the proposal, this is direct evidence that version, executable, and configuration must be included in a compatibility claim.
 
 The neutral method is to ask:
 
@@ -74,7 +74,7 @@ A policy disagreement may fragment transaction relay while nodes still accept th
 
 ### Release-specific policy and configuration differences
 
-The official contrast document for `29.3.knots20260508` lists differences from the referenced Bitcoin Core base across configuration, policy, wallet, RPC, graphical, networking, build, and other components. The release notes also describe a RAM-aware `dbcache` default, sub-dust effective-fee policy, data-carrier policy changes, wallet and GUI additions, and networking changes.
+The official enhancement document for `29.3.knots20260508` inventories project-described backports, retained changes, fixes, and enhancements across configuration, policy, wallet, RPC, graphical, networking, build, and other components. It does not identify a complete one-to-one comparison against Bitcoin Core 31.1. The Knots release notes separately describe a RAM-aware `dbcache` default, sub-dust effective-fee policy, data-carrier policy changes, wallet and GUI additions, and networking changes.
 
 Those facts belong to that release. They should not be rewritten as permanent product identities such as “Knots blocks X” or “Core always allows Y.” Defaults can change. Options can be removed. Upstream can later adopt similar functionality. Knots can rebase or backport changes.
 
@@ -84,7 +84,7 @@ Policy also has multiple stages. Mempool admission, relay to peers, and block-te
 
 Knots may include features proposed for Bitcoin Core, maintained elsewhere, or retained after upstream changes. Examples in a particular release can include extra RPCs, graphical controls, policy settings, wallet tools, or build options.
 
-“Additional” does not mean “safer,” “more correct,” or “better.” It means the tagged release exposes behavior not present in the comparison release. Every feature adds a review surface, maintenance burden, compatibility question, and possible operator benefit.
+“Additional” does not mean “safer,” “more correct,” or “better.” It means the tagged Knots release includes behavior its project material identifies as Knots-specific, retained, or backported. Whether an exact Bitcoin Core release lacks the behavior must be checked directly against that Core tag. Every feature adds a review surface, maintenance burden, compatibility question, and possible operator benefit.
 
 Likewise, absence is not proof of a deficiency. Bitcoin Core may decline or defer a feature because of scope, maintenance, interface stability, review capacity, architecture, or a different risk tradeoff. Technical comparison should state behavior and evidence rather than infer motive.
 
@@ -150,7 +150,7 @@ A useful comparison is narrow and reproducible: exact versions, exact behavior, 
 - **Configuration-sensitive behavior:** Behavior that changes when an option or runtime setting changes.
 - **Migration:** Conversion or reuse of data across software versions or implementations.
 - **Release artifact:** A tagged source tree, binary, checksum, signature, or release note tied to a version.
-- **Contrast document:** Release-specific project documentation listing behavior that differs from a comparison base.
+- **Enhancement document:** Release-specific project documentation listing backports, retained changes, fixes, and features included in a Knots artifact; not by itself a complete diff against a named Core release.
 
 ## 4. Sources
 
@@ -165,13 +165,13 @@ A useful comparison is narrow and reproducible: exact versions, exact behavior, 
    - Supports: Current release listing, official distribution, project description, and maintainer information reviewed July 24, 2026.
 4. **Bitcoin Knots 29.3.knots20260508 Release Directory** | Bitcoin Knots project
    - URL: https://bitcoinknots.org/files/29.x/29.3.knots20260508/
-   - Supports: Release binaries, source archive, checksums, signatures, and dated contrast document.
+   - Supports: Release binaries, source archive, checksums, signatures, and dated enhancement document.
 5. **Bitcoin Knots 29.3.knots20260508 Release Notes** | Bitcoin Knots contributors
    - URL: https://github.com/bitcoinknots/bitcoin/blob/v29.3.knots20260508/doc/release-notes.md
-   - Supports: Exact release changes, upgrade wording, policy and configuration changes, RDTS configuration, upstream and Knots-specific change provenance, and known bugs.
-6. **Detailed Contrast with Bitcoin Core for 29.3.knots20260508** | Bitcoin Knots project
+   - Supports: Exact release changes, upgrade wording, policy and configuration changes, RDTS executable and confirmation behavior, upstream and Knots-specific change provenance, and known bugs.
+6. **Bitcoin Knots 29.3.knots20260508 Enhancement Document** | Bitcoin Knots project
    - URL: https://bitcoinknots.org/files/29.x/29.3.knots20260508/bitcoin-29.3.knots20260508.desc.html
-   - Supports: Release-bounded comparison of configuration, policy, wallet, RPC, GUI, networking, build, and retained features.
+   - Supports: Release-specific inventory of project-described backports, retained changes, fixes, configuration, policy, wallet, RPC, GUI, networking, build, and other enhancements; not a complete diff against Core 31.1.
 7. **Bitcoin Knots Source Tree at v29.3.knots20260508** | Bitcoin Knots contributors
    - URL: https://github.com/bitcoinknots/bitcoin/tree/v29.3.knots20260508
    - Supports: Shared repository structure and Knots-specific source at the reviewed tag.
@@ -234,6 +234,7 @@ Do not activate planned links until the destination exists as a real published p
 - [x] Source lineage is distinguished from chain or consensus behavior.
 - [x] Consensus compatibility is separated from mempool, relay, mining, wallet, interface, default, and configuration differences.
 - [x] The reviewed Knots release’s RDTS configuration is reported as release evidence without adopting its promotional or political claims.
+- [x] The release-specific enhancement document is not treated as a complete diff against Bitcoin Core 31.1.
 - [x] Data-directory, wallet, upgrade, downgrade, and migration statements remain limited to direct release evidence.
 - [x] No unsupported node-share, popularity, safety, purity, or political claims are used.
 - [x] Release verification explains what checksums and signatures do and do not prove.
@@ -243,7 +244,7 @@ Do not activate planned links until the destination exists as a real published p
 
 - Reviewer: Mempool Surf Club Editorial
 - Review date: 2026-07-24
-- Notes: Verified the official Knots site, release directory, `v29.3.knots20260508` tag and commit, tagged README, release notes, release-specific contrast document, checksums and signatures, and the corresponding Bitcoin Core `v31.1` reference. Confirmed that comparisons are version-bounded and that policy differences are not mislabeled as consensus differences. The RDTS material is presented only as configuration-sensitive behavior documented by the reviewed release.
+- Notes: Verified the official Knots site, release directory, `v29.3.knots20260508` tag and commit, tagged README, release notes, release-specific enhancement document, checksums and signatures, and the corresponding Bitcoin Core `v31.1` reference. Confirmed that the two artifacts are used as dated boundaries rather than treated as equivalent-base releases, and that the Knots enhancement document is not presented as a complete Core 31.1 diff. The RDTS material distinguishes the `bitcoind` configuration instruction from the GUI confirmation path and does not adopt the release’s promotional or political claims.
 
 ## 12. Illustration brief
 
