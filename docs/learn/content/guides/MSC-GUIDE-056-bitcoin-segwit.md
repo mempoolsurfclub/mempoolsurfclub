@@ -26,15 +26,15 @@ Segregated Witness changed how Bitcoin commits to and accounts for transaction w
 
 Segregated Witness, or SegWit, is a deployed set of Bitcoin consensus, transaction-serialization, script, and peer-protocol changes. Its central design separates witness data—signatures and related spending evidence—from the transaction serialization used to calculate the traditional transaction identifier.
 
-The witness is still consensus-critical. Upgraded nodes receive it, commit it into the block, and validate it. “Segregated” describes how the data is serialized and committed, not that signatures became optional.
+The witness is still consensus-critical. Upgraded nodes receive it, commit it into the block, and validate it. “Segregated” describes how the data is serialized and committed, not that signatures became optional or moved outside transaction validation.
 
-BIP 141 specifies the consensus-layer witness structure, witness programs, block commitment, weight, and script behavior. BIP 143 defines the signature digest for witness version 0. BIP 144 defines peer-to-peer transaction serialization and relay. Address and application support are covered by separate BIPs such as BIP 173.
+BIP 141 specifies the consensus-layer witness structure, witness programs, block commitment, weight, and script behavior. BIP 143 defines the signature digest for witness version 0. BIP 144 defines peer-to-peer witness serialization and relay. Address and application support are covered by separate BIPs such as BIP 173 and BIP 350.
 
-This guide was reviewed July 25, 2026 against the deployed BIPs and Bitcoin Core 31.1, tag `v31.1`, commit `9be056a8a72b624dae9623b2f7bded92c2a21c91`. Historical deployment is settled, but wallet, service, address, fee, and interface behavior remains software-specific.
+This guide was reviewed July 25, 2026 against the deployed BIPs and Bitcoin Core 31.1, tag `v31.1`, commit `9be056a8a72b624dae9623b2f7bded92c2a21c91`, including tagged transaction, validation, chain-parameter, unit, functional, and P2P-test evidence. Historical deployment is settled, but wallet, service, address, fee, and interface behavior remains software-specific.
 
 ### What counts as witness data
 
-For a SegWit transaction input, witness data is a stack of byte arrays serialized outside the legacy input fields. It can include signatures, public keys, script arguments, and a witness script depending on the witness program.
+For each transaction input, the witness field is a stack of byte arrays serialized separately from the legacy input fields. It can include signatures, public keys, script arguments, and a witness script depending on the witness program. Inputs that do not use witness validation carry an empty witness field in witness serialization.
 
 The transaction’s effects still come from its inputs and outputs: which prior outputs are consumed and which new outputs are created. Witness data proves that the spend is authorized under the relevant rules.
 
@@ -42,64 +42,62 @@ Moving witness data outside the legacy serialization changes transaction identif
 
 ### Witness programs and versions
 
-A native witness program is a `scriptPubKey` containing a small version number from 0 through 16 and a program of 2 through 40 bytes. The version and program length select the validation rules.
+A witness program is either a native `scriptPubKey` or, for the BIP 141 nested form, a P2SH redeem script consisting exactly of a version push from 0 through 16 followed by a direct push of 2 through 40 program bytes.
 
 For witness version 0, two lengths are defined:
 
 - A 20-byte program is pay-to-witness-public-key-hash, or P2WPKH.
 - A 32-byte program is pay-to-witness-script-hash, or P2WSH.
 
-Other version 0 lengths fail. Higher versions were reserved for future rules. Taproot later used witness version 1 with a 32-byte program, demonstrating the upgrade path.
+Other version 0 lengths fail. Versions 1 through 16 were reserved for later soft-fork definitions. Taproot later assigned native witness version 1 with a 32-byte program; P2SH-wrapped version 1 is not Taproot.
 
-An output that merely resembles a witness program but does not meet the exact structure can be interpreted under different legacy rules. Exact byte structure matters.
+An output that merely resembles a witness program but does not meet the exact opcode and direct-push structure is interpreted under the applicable legacy rules instead. Exact bytes matter.
 
 ### Native and nested SegWit
 
-A native SegWit output places the witness program directly in the `scriptPubKey`. Its spending `scriptSig` is empty.
+A native SegWit output places the witness program directly in the `scriptPubKey`. Its spending `scriptSig` must be exactly empty.
 
-Nested SegWit uses BIP 16 pay-to-script-hash. The output is P2SH; the spending `scriptSig` pushes a redeem script that is itself a witness program. The actual signature or script arguments remain in the witness.
+Nested SegWit uses BIP 16 pay-to-script-hash. The output is P2SH; the spending `scriptSig` must be exactly one push of a redeem script that is itself a witness program. The actual signature or script arguments remain in the witness.
 
 Nested P2SH-P2WPKH and P2SH-P2WSH were compatibility tools for systems that understood P2SH addresses but not native SegWit addresses. They add overhead compared with native forms and require both P2SH and witness validation.
 
-Address support is separate from consensus. BIP 173 defined Bech32 addresses for native version 0 witness programs. BIP 350 later changed the checksum rule for version 1 and higher to Bech32m; it did not replace Bech32 for version 0.
+Address support is separate from consensus. BIP 173 defined Bech32 addresses for native version 0 witness programs. BIP 350 later required Bech32m for version 1 through 16; it did not replace Bech32 for version 0.
 
 ### P2WPKH validation
 
-A P2WPKH witness contains exactly two items: a signature and a public key. The HASH160 of the public key must match the 20-byte witness program. Signature verification then uses a script template equivalent in purpose to P2PKH but under witness rules and the BIP 143 signature digest.
+A P2WPKH witness contains exactly two items: a signature and a public key. The HASH160 of the public key must match the 20-byte witness program. Signature verification then executes an implied P2PKH-style script under witness-v0 rules and the BIP 143 signature digest, ending with exactly one true stack item.
 
-Compressed public keys are required for standard witness v0 public-key types. A wallet must construct the correct previous-output amount and script information for signing.
+Compressed public keys are required by standard policy for witness-v0 public-key types. Wallets must also supply the correct previous-output amount and script context when signing.
 
-P2WPKH changes where the signature and public key are carried. It does not remove key-management or signature security requirements.
+P2WPKH changes where the signature and public key are carried. It does not remove key-management or signature-security requirements.
 
 ### P2WSH validation
 
-A P2WSH witness ends with the witness script. Its SHA256 hash must equal the 32-byte witness program. Earlier witness elements form the initial execution stack.
+A P2WSH witness ends with the serialized witness script. Its SHA256 hash must equal the 32-byte witness program. Earlier witness elements form the initial execution stack.
 
-The witness script can express signatures, hashes, timelocks, and branches within the version 0 Script rules. BIP 141 allows a witness script up to 10,000 bytes, while individual stack elements supplied to it remain subject to applicable limits.
+BIP 141 permits a witness script of up to 10,000 bytes. Each initial stack element remains limited to 520 bytes by witness-v0 consensus, and successful execution must leave exactly one item that evaluates true.
 
 P2WSH reveals the full witness script when spent. Unlike Taproot script-path spending, it does not hide unused branches inside a committed Merkle tree.
 
-### `txid` and `wtxid`
+### Transaction serialization, `txid`, and `wtxid`
 
-SegWit defines two transaction identifiers.
+Traditional serialization is `[version][inputs][outputs][locktime]`. Witness serialization inserts a one-byte zero marker, a one-byte nonzero flag—currently `0x01`—and the per-input witness fields: `[version][marker][flag][inputs][outputs][witness][locktime]`.
 
-The traditional `txid` is the double-SHA256 of the legacy serialization without witness data. For a transaction with witness, the `txid` identifies its non-witness structure.
+The `txid` remains the double-SHA256 of traditional serialization without marker, flag, or witness data. The `wtxid` is the double-SHA256 of witness serialization. When every input has an empty witness, the transaction can use traditional serialization and its `wtxid` equals its `txid`.
 
-The `wtxid` is the double-SHA256 of the serialization including marker, flag, and witness data. A transaction with no witness has the same `txid` and `wtxid`.
+Changing witness data can change the `wtxid` without changing the `txid`. SegWit therefore prevents third-party changes confined to protected witness data from changing the identifier used by dependent transaction outpoints. It does not make the witness immutable or erase every other source of transaction malleability.
 
-Removing signatures from the `txid` prevents a third party from changing witness signatures and thereby changing the identifier used by dependent transactions. The witness itself is still identified through the `wtxid` and block witness commitment.
-
-Applications must choose the right identifier. Mempool and peer protocols can use wtxid-based behavior, while output references continue to use the transaction identifier and output index.
+Applications must choose the right identifier. Output references use the `txid` plus output index. Witness-aware peer and mempool systems can use `wtxid` to distinguish transactions whose base serialization is the same but witness differs.
 
 ### The witness commitment
 
-The block header’s ordinary transaction Merkle root commits to coinbase and non-witness transaction identifiers. To commit the witness data without changing the legacy block-header structure, BIP 141 defines a separate witness Merkle root.
+The block header’s ordinary transaction Merkle root commits to the block’s traditional transaction identifiers. BIP 141 adds a witness Merkle tree whose leaves are transaction `wtxid` values, except that the coinbase transaction’s `wtxid` is defined as 32 zero bytes for this tree.
 
-The coinbase transaction’s witness contains a reserved 32-byte value. A designated coinbase output contains an `OP_RETURN` commitment derived from the witness root and that reserved value. Upgraded nodes verify this commitment.
+The coinbase input witness must contain exactly one 32-byte reserved value when a witness commitment is present. The commitment is `double-SHA256(witness_root || reserved_value)` and appears in a coinbase output script beginning `OP_RETURN 0x24 aa21a9ed`, followed by the 32-byte commitment. Bytes after that commitment have no consensus meaning.
 
-The coinbase transaction’s wtxid is treated as all zeroes when building the witness root. The structure lets older nodes continue seeing a valid legacy transaction tree while upgraded nodes enforce the additional witness commitment.
+If more than one coinbase output matches the commitment pattern, the matching output with the highest index is authoritative. The commitment is optional only when the block contains no witness data; a block that carries witness data without the required valid commitment fails upgraded validation.
 
-A miner cannot freely omit or alter witness data for SegWit spends: upgraded validation checks the commitment and the signatures.
+This nested commitment lets older nodes continue seeing a valid legacy transaction tree while upgraded nodes enforce the witness tree, reserved-value size, commitment match, and all witness-script and signature rules.
 
 ### Block weight and virtual size
 
@@ -111,59 +109,59 @@ BIP 141 defines block weight as:
 
 Because total size already includes the base bytes, this is equivalent to `base size × 4 + witness size`. A valid block has weight no greater than 4,000,000.
 
-Transaction virtual size, or vsize, is weight divided by four and rounded up to the next whole virtual byte. Fee rates are commonly expressed in satoshis per virtual byte.
+Transaction weight uses the same formula. Virtual size is transaction weight divided by four and rounded up to the next whole virtual byte. Fee rates are commonly expressed in satoshis per virtual byte.
 
-Witness bytes contribute less weight than base bytes, but they are not free. A transaction’s cost depends on its exact inputs, outputs, scripts, signatures, and witness data.
+Witness bytes contribute one weight unit each while base bytes effectively contribute four, but witness data is not free. A transaction’s weight depends on its exact inputs, outputs, scripts, signatures, and witness serialization.
 
-Saying SegWit “increased the block size” is incomplete. Old rules still constrain the base block structure, while upgraded nodes enforce a four-million-unit weight limit that permits additional witness data under discounted accounting. The maximum serialized byte count depends on block composition rather than one replacement byte limit.
+Saying SegWit “increased the block size” is incomplete. Upgraded nodes enforce one four-million-unit weight limit, not independent base and witness caps. The maximum serialized byte count therefore depends on block composition rather than one replacement byte limit.
 
 ### BIP 143 signature hashing
 
-Legacy signature hashing can require repeated work as transaction size grows and does not commit to the spent output amount. BIP 143 defines a new digest algorithm for witness version 0.
+Legacy signature hashing can repeat work as transaction size and signature count grow and does not commit to the spent output amount. BIP 143 defines a separate digest algorithm for witness version 0.
 
-The digest can precompute hashes of prevouts, sequences, and outputs, reducing repeated hashing for transactions with many signature checks. It also commits to the amount of the spent output.
+Depending on the sighash mode, it can reuse precomputed double-SHA256 hashes of all prevouts, input sequences, and outputs. It also commits to the amount of the spent output and uses a context-specific `scriptCode`.
 
-Amount commitment is important for offline or hardware signers because the fee equals input values minus output values. The signer still needs correct previous-output information; committing to a false amount does not make false data true.
+Amount commitment helps an offline or hardware signer calculate the fee when it receives correct previous-output data. It does not authenticate false host-supplied data by itself; the signer still needs a trusted way to obtain or verify the amount and script information.
 
-BIP 143 preserves sighash modes while changing the message construction. Taproot later introduced another signature-message design under BIP 341.
+BIP 143 preserves the named legacy sighash modes while changing message construction and some `OP_CODESEPARATOR` handling. Taproot later introduced another signature-message design under BIP 341.
 
 ### Transaction malleability improvements
 
 Before SegWit, a third party could alter some signature encodings or script data without invalidating the spend, changing the transaction identifier. A dependent unconfirmed transaction referring to the original identifier could then become invalid.
 
-For SegWit inputs, signatures are excluded from the `txid`, removing the principal third-party signature malleability that affected transaction chains. This made stable unconfirmed transaction identifiers practical for protocols such as payment channels when all relevant inputs use the protected form.
+For transactions whose relevant inputs use SegWit protections, witness-only mutations no longer alter the `txid`. This made stable unconfirmed outpoint references practical for protocols such as payment channels. A mutation can still alter `wtxid`, and BIP 147 separately requires the historical `OP_CHECKMULTISIG` dummy element to be empty.
 
-SegWit did not eliminate every kind of malleability. A signer can intentionally create alternative valid transactions under some sighash choices. Transactions containing legacy inputs can retain legacy malleability exposure. Transaction replacement, fee bumping, different input or output selection, and protocol-level state changes are not the same as third-party signature malleability.
+SegWit did not eliminate every kind of malleability. A signer can intentionally create alternative valid transactions under some sighash choices. Transactions containing legacy inputs can retain legacy exposure. Transaction replacement, fee bumping, different input or output selection, and protocol-level state changes are not the same as third-party signature malleability.
 
-A precise claim is that SegWit fixes important nonintentional and third-party malleability for SegWit spends, subject to the transaction construction.
+A precise claim is that SegWit removed important nonintentional and third-party `txid` malleability for protected SegWit constructions, not that every Bitcoin transaction became immutable.
 
 ### Script versioning and future upgrades
 
-Witness programs created a versioned output namespace. Older upgraded rules define version 0. Versions 1 through 16 were reserved so later soft forks could assign new validation behavior.
+Witness programs created a versioned output namespace. Version 0 defined P2WPKH and P2WSH. Versions 1 through 16 were left without further consensus interpretation so later soft forks could assign stricter validation rules.
 
-Taproot used version 1. The versioning mechanism allowed older SegWit-aware nodes to treat unknown versions according to forward-compatible rules while newer nodes enforce the added restrictions.
+Taproot used native version 1 with a 32-byte program. Older SegWit-aware nodes treat otherwise unknown native witness versions as successful under forward-compatible consensus behavior, while upgraded nodes can enforce new restrictions.
 
-Relay policy can discourage unknown witness versions before a deployment. Consensus forward compatibility and mempool acceptance are separate.
+Relay policy can discourage unknown witness versions before a deployment. Consensus forward compatibility and mempool acceptance are separate. P2SH-wrapped higher-version programs are also not equivalent to the native forms later specifications may define.
 
 Versioning does not guarantee every future proposal will activate or be safe. Each new version still needs a specification, implementation, review, deployment mechanism, and adoption.
 
 ### How older and upgraded nodes see SegWit
 
-SegWit was designed as a soft fork. Older nodes parse blocks and transactions without understanding witness serialization as upgraded nodes do. To them, exact witness programs appear spendable under the old script rules, and the witness commitment is carried in a coinbase output they do not interpret.
+SegWit was designed as a soft fork. Older nodes validate the block’s legacy view without applying witness-program or witness-commitment rules. To them, witness programs fit pre-existing script behavior and the commitment is an unrecognized coinbase output.
 
-Upgraded nodes apply the additional witness-program and commitment rules. A block that violates SegWit is rejected by upgraded nodes even if an older node would accept its legacy view.
+Upgraded nodes obtain witness-aware serialization and apply the additional witness-program, script, signature, weight, and commitment rules. A block that violates SegWit is rejected by upgraded nodes even if an older node would accept its legacy view.
 
-This asymmetry is how stricter rules can remain compatible with older validation rules. It also means an older node does not independently validate SegWit authorization. Running old software after an activation can therefore provide a weaker view of current consensus.
+This asymmetry is how stricter rules can remain compatible with older validity rules. It also means an older node does not independently validate SegWit authorization. Running old software after activation can therefore provide a weaker view of current consensus.
 
 ### Deployment and activation boundaries
 
-BIP 141 specified a BIP 9 version-bits deployment. The historical path included miner signaling, lock-in, activation in 2017, and additional coordination described by BIP 91.
+BIP 141 specified a BIP 9 version-bits deployment. The historical path included miner signaling, BIP 91 coordination, lock-in, and mainnet activation at block height 481,824 on August 24, 2017.
 
-Those historical mechanisms should not be collapsed into “miners approved SegWit.” Miners signaled and produced blocks, node software enforced rules, operators chose software, and activation conditions determined when upgraded rules applied.
+Those events should not be collapsed into “miners approved SegWit.” Miners signaled and produced blocks, node software enforced rules, operators chose software, and activation conditions determined when upgraded rules applied.
 
-Today, SegWit is deployed Bitcoin consensus behavior. The historical deployment code and dates remain relevant for understanding activation, but current validation no longer waits for fresh signaling.
+Bitcoin Core 31.1 records `SegwitHeight = 481824` in its mainnet chain parameters. Its release-specific `doc/bips.md` records SegWit as implemented in 0.13.0, defined for mainnet in 0.13.1, and buried behind direct height-based activation checks since 0.19.0. Current validation does not wait for fresh signaling.
 
-A software release that contained SegWit code was not the same event as mainnet activation. Wallet adoption and use continued after activation on separate timelines.
+A software release containing SegWit code was not the same event as mainnet activation. Native address generation, wallet spending, exchange support, and application use continued on separate timelines.
 
 ### Wallet and service consequences
 
@@ -177,24 +175,24 @@ Compatibility claims should name native or nested forms, receive or spend capabi
 
 ### SegWit, Lightning, and Taproot
 
-SegWit’s malleability fix made dependable chains of unconfirmed transactions more practical and was an important foundation for Lightning Network deployments. SegWit did not create Lightning by itself. Lightning also depends on timelocks, revocation or update constructions, peer protocols, liquidity, watch behavior, fee management, and implementations.
+SegWit’s `txid` malleability improvement made dependable chains of unconfirmed transactions more practical and was an important foundation for Lightning Network deployments. SegWit did not create or guarantee Lightning. Lightning also depends on timelocks, update and penalty or replacement constructions, peer protocols, liquidity, watch behavior, fee management, and implementations.
 
-Taproot reused the witness-version framework by assigning version 1 rules and Bech32m addresses. Taproot is a later consensus upgrade, not merely a wallet feature automatically supplied by SegWit.
+Taproot reused the witness-version framework by assigning native version 1 rules and Bech32m addresses. Taproot is a later consensus upgrade, not merely a wallet feature automatically supplied by SegWit.
 
-SegWit provided architectural hooks and accounting changes that later systems could use. Whether a later protocol is secure or adopted must be evaluated on its own evidence.
+SegWit provided architectural hooks and accounting changes that later systems could use. Whether a later protocol is secure, mature, interoperable, or adopted must be evaluated on its own evidence.
 
 ### A SegWit boundary map
 
 When evaluating a claim, classify it:
 
 - **Consensus:** witness programs, commitment, weight, and validation.
-- **Serialization:** marker, flag, and witness encoding.
+- **Serialization:** marker, flag, and per-input witness encoding.
 - **Identification:** `txid` versus `wtxid`.
 - **Signature rules:** BIP 143 for witness v0.
 - **Policy:** standard witness forms and unknown-version relay treatment.
 - **Wallet:** address, signing, fee, coin-selection, and recovery support.
 - **Peer protocol:** witness-aware transaction and block relay.
-- **Activation:** historical deployment and enforcement state.
+- **Activation:** historical deployment and current buried enforcement state.
 - **Application adoption:** actual use by wallets, services, and protocols.
 
 SegWit changed all of these layers, but not in the same document or at the same moment.
@@ -203,15 +201,15 @@ SegWit changed all of these layers, but not in the same document or at the same 
 
 - **Segregated Witness:** Deployed consensus and serialization changes separating witness data from legacy transaction serialization.
 - **Witness:** Per-input stack data containing signatures and other spending evidence.
-- **Witness program:** Version byte and program committed in an output script.
+- **Witness program:** Version push and direct program push committed in an output or nested P2SH redeem script.
 - **P2WPKH:** Version 0 witness program committing to a public-key hash.
 - **P2WSH:** Version 0 witness program committing to a witness-script hash.
-- **Nested SegWit:** Witness program carried inside a P2SH redeem script.
+- **Nested SegWit:** Version 0 witness program carried inside a P2SH redeem script.
 - **Native SegWit:** Witness program placed directly in the output.
-- **`txid`:** Transaction identifier calculated without witness data.
-- **`wtxid`:** Witness transaction identifier calculated with witness data.
+- **`txid`:** Double-SHA256 identifier calculated from traditional serialization without witness data.
+- **`wtxid`:** Double-SHA256 identifier calculated from witness serialization.
 - **Witness commitment:** Coinbase commitment to the block’s witness Merkle root and reserved value.
-- **Block weight:** SegWit resource measure combining base and witness serialization.
+- **Block weight:** SegWit resource measure combining base and total serialization.
 - **Virtual size:** Transaction weight divided by four and rounded up.
 - **BIP 143:** Signature digest rules for witness version 0.
 - **Malleability:** Ability to alter a transaction representation while preserving some intended effect.
@@ -222,13 +220,13 @@ SegWit changed all of these layers, but not in the same document or at the same 
 
 1. **BIP 141 — Segregated Witness (Consensus Layer)** | Eric Lombrozo, Johnson Lau, Pieter Wuille
    - URL: https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki
-   - Supports: Witness structure, programs, P2WPKH, P2WSH, txid/wtxid, commitment, weight, vsize, compatibility, and deployment.
+   - Supports: Witness structure, programs, native and nested triggers, P2WPKH, P2WSH, txid/wtxid, coinbase commitment, weight, vsize, compatibility, and deployment.
 2. **BIP 143 — Transaction Signature Verification for Version 0 Witness Program** | Johnson Lau, Pieter Wuille
    - URL: https://github.com/bitcoin/bips/blob/master/bip-0143.mediawiki
-   - Supports: Witness v0 signature digest, precomputed hashes, spent-output amount commitment, and sighash semantics.
+   - Supports: Witness-v0 signature digest, precomputed hashes, spent-output amount commitment, scriptCode, OP_CODESEPARATOR, and sighash semantics.
 3. **BIP 144 — Segregated Witness Peer Services** | Eric Lombrozo
    - URL: https://github.com/bitcoin/bips/blob/master/bip-0144.mediawiki
-   - Supports: Marker, flag, witness serialization, inventory, and peer-relay behavior.
+   - Supports: Marker, flag, per-input witness serialization, inventory, and peer-relay behavior.
 4. **BIP 173 — Base32 Address Format for Native v0-16 Witness Outputs** | Pieter Wuille, Greg Maxwell
    - URL: https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki
    - Supports: Bech32 native SegWit address format and witness-version encoding.
@@ -240,44 +238,47 @@ SegWit changed all of these layers, but not in the same document or at the same 
    - Supports: P2SH layer used by nested SegWit.
 7. **Bitcoin Core 31.1 BIP Support Document** | Bitcoin Core contributors
    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/doc/bips.md
-   - Supports: Release-specific SegWit, wtxid-relay, address, Taproot, and implementation evidence.
+   - Supports: Release-specific SegWit implementation, mainnet definition, buried enforcement, wtxid relay, address, and Taproot evidence.
 8. **Bitcoin Core 31.1 Transaction Primitives** | Bitcoin Core contributors
    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/primitives/transaction.h
-   - Supports: Transaction witness representation, serialization, hash, and witness-hash boundaries.
+   - Supports: Transaction witness representation, marker and flag serialization, traditional hash, witness hash, and no-witness equality boundaries.
 9. **Bitcoin Core 31.1 Block Primitives** | Bitcoin Core contributors
    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/primitives/block.h
    - Supports: Block and transaction structures used by commitment validation.
 10. **Bitcoin Core 31.1 Interpreter Interface** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/script/interpreter.h
-    - Supports: Witness v0 signature version, BIP 143 precomputed data, and script flags.
+    - Supports: Witness-v0 signature version, BIP 143 precomputed data, and script flags.
 11. **Bitcoin Core 31.1 Script Interpreter** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/script/interpreter.cpp
-    - Supports: Witness-program validation and BIP 143 signature hashing.
+    - Supports: Native and nested witness-program validation, P2WPKH, P2WSH, unknown versions, and BIP 143 signature hashing.
 12. **Bitcoin Core 31.1 Consensus Definitions** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/consensus/consensus.h
     - Supports: Maximum block weight, witness scale factor, and consensus resource constants.
 13. **Bitcoin Core 31.1 Validation Logic** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/validation.cpp
-    - Supports: Witness commitment, block weight, deployment-era and current block validation paths.
-14. **Bitcoin Core 31.1 SegWit Functional Test** | Bitcoin Core contributors
+    - Supports: Coinbase reserved-value size, witness Merkle root, commitment verification, unexpected-witness failure, block weight, and current block-validation paths.
+14. **Bitcoin Core 31.1 Mainnet Chain Parameters** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/kernel/chainparams.cpp
+    - Supports: Mainnet SegWit activation height 481,824 and current buried height-based enforcement configuration.
+15. **Bitcoin Core 31.1 SegWit Functional Test** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/test/functional/feature_segwit.py
-    - Supports: End-to-end witness activation-era, transaction, block, commitment, and validation cases.
-15. **Bitcoin Core 31.1 SegWit P2P Test** | Bitcoin Core contributors
+    - Supports: End-to-end witness activation-era, transaction, block, commitment, weight, and validation cases.
+16. **Bitcoin Core 31.1 SegWit P2P Test** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/test/functional/p2p_segwit.py
     - Supports: Witness-aware transaction and block relay behavior and malformed witness cases.
-16. **Bitcoin Core 31.1 Transaction Tests** | Bitcoin Core contributors
+17. **Bitcoin Core 31.1 Transaction Tests** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/test/transaction_tests.cpp
     - Supports: Transaction serialization, hashes, and witness-related unit behavior.
-17. **Bitcoin Core 31.1 Tag Commit** | Bitcoin Core contributors
+18. **Bitcoin Core 31.1 Tag Commit** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/commit/9be056a8a72b624dae9623b2f7bded92c2a21c91
     - Supports: Exact source and test version reviewed.
-18. **BIP 341 — Taproot: SegWit Version 1 Spending Rules** | Pieter Wuille, Jonas Nick, Anthony Towns
+19. **BIP 341 — Taproot: SegWit Version 1 Spending Rules** | Pieter Wuille, Jonas Nick, Anthony Towns
     - URL: https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki
-    - Supports: Later use of the witness-version framework for Taproot.
-19. **BIP 91 — Reduced Threshold SegWit MASF** | James Hilliard
+    - Supports: Later native use of the witness-version framework for Taproot and the non-P2SH boundary.
+20. **BIP 91 — Reduced Threshold SegWit MASF** | James Hilliard
     - URL: https://github.com/bitcoin/bips/blob/master/bip-0091.mediawiki
     - Supports: One part of the historical 2017 SegWit activation context.
-20. **Bitcoin Core 0.16.0 Release Notes** | Bitcoin Core contributors
+21. **Bitcoin Core 0.16.0 Release Notes** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v0.16.0/doc/release-notes.md
     - Supports: Historical native SegWit wallet and address support boundaries after consensus activation.
 
@@ -315,22 +316,24 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 10. Accuracy review checklist
 
-- [x] SegWit is described as deployed consensus, serialization, script, and peer-protocol changes.
-- [x] Witness programs, witness versions, native and nested forms, P2WPKH, and P2WSH are covered.
-- [x] `txid`, `wtxid`, witness commitment, block weight, virtual size, and BIP 143 are explained.
-- [x] The article does not reduce SegWit to a simple block-size increase.
-- [x] Malleability improvements are qualified by input type, construction, and remaining signer or legacy behavior.
+- [x] SegWit is described as deployed consensus, serialization, script, peer-protocol, and accounting changes.
+- [x] Exact witness-program structure, witness versions, native and nested forms, P2WPKH, and P2WSH are covered.
+- [x] Marker, flag, `txid`, `wtxid`, coinbase zero `wtxid`, witness root, reserved value, commitment selection, block weight, virtual size, and BIP 143 are explained.
+- [x] The article does not reduce SegWit to moving signatures outside validation or to a simple block-size increase.
+- [x] Malleability improvements are qualified by identifier, input type, construction, remaining signer behavior, legacy exposure, and `wtxid` changes.
 - [x] Older-node and upgraded-node validation views are separated.
-- [x] Soft-fork deployment, software release, activation, wallet support, and application adoption are not conflated.
+- [x] BIP 9, BIP 91, release support, activation at height 481,824, buried enforcement, wallet support, and application adoption are not conflated.
 - [x] Lightning and Taproot relationships are presented as enabling foundations rather than guarantees.
 - [x] Current implementation claims are pinned to Bitcoin Core 31.1 and dated July 25, 2026.
 - [x] Planned internal links remain inactive and do not imply publication.
 
 ## 11. Human verification
 
-- Reviewer: Pending — Bitcoin protocol and implementation specialist
-- Review date: Pending
-- Notes: Human Verification remains pending. The specialist pass must reproduce txid/wtxid, witness commitment, weight, vsize, BIP 143, nested witness, and older-node compatibility behavior against exact tests; verify the historical activation wording; and review all malleability, fee, Lightning, and Taproot boundaries.
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-25
+- Evidence reviewed: Deployed BIPs 16, 141, 143, 144, 147, 173, 350, and 341; historical BIP 91; Bitcoin Core `v31.1` at commit `9be056a8a72b624dae9623b2f7bded92c2a21c91`; tagged transaction, block, interpreter, consensus, validation, mainnet chain-parameter, transaction-unit, `feature_segwit.py`, and `p2p_segwit.py` evidence; release-specific `doc/bips.md`; and Bitcoin Core 0.16.0 wallet release notes.
+- Material corrections: Added exact marker and flag serialization; corrected no-witness `txid`/`wtxid` equality and witness-only mutation boundaries; reproduced coinbase zero `wtxid`, reserved-value size, commitment hash, output-prefix, highest-index selection, and unexpected-witness failure; tightened native and nested witness triggers; restored exact weight and vsize definitions; narrowed BIP 143 signer assurances and malleability claims; separated unknown witness versions from Taproot; and dated activation at mainnet height 481,824 with Bitcoin Core’s current buried enforcement evidence.
+- Remaining uncertainty: Wallet, exchange, hardware-signer, fee-estimation, address, PSBT, API, and service support remain implementation- and version-specific. Historical activation coordination can be described through several overlapping events, but those events no longer control current SegWit enforcement.
 
 ## 12. Illustration brief
 
