@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-048
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: Emerging Protocols on Bitcoin: How to Evaluate Them
 handle: emerging-bitcoin-protocols
@@ -13,7 +13,7 @@ secondary_paths:
   - Understand the Network
 author_display: Mempool Surf Club Editorial
 reviewed_date: null
-copy_locked_date: null
+copy_locked_date: 2026-07-24
 ---
 
 # Emerging Protocols on Bitcoin: How to Evaluate Them

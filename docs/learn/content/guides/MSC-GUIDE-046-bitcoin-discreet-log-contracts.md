@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-046
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: How Discreet Log Contracts Work
 handle: bitcoin-discreet-log-contracts
@@ -13,7 +13,7 @@ secondary_paths:
   - Understand the Network
 author_display: Mempool Surf Club Editorial
 reviewed_date: null
-copy_locked_date: null
+copy_locked_date: 2026-07-24
 ---
 
 # How Discreet Log Contracts Work
