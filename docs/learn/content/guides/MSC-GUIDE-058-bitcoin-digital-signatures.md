@@ -174,9 +174,9 @@ A valid message signature may prove control of a key or spending condition for t
 11. **Bitcoin Core 31.1 Policy Flags** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/policy/policy.h
     - Supports: Standard-policy inclusion of LOW_S and NULLFAIL.
-12. **Bitcoin Core 31.1 Signing Provider and PSBT Code** | Bitcoin Core contributors
-    - URL: https://github.com/bitcoin/bitcoin/tree/v31.1/src
-    - Supports: Implementation-specific signing, PSBT, and wallet boundaries.
+12. **Bitcoin Core 31.1 Transaction Signing Code** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/script/sign.cpp
+    - Supports: Exact ECDSA and Schnorr signing paths, sighash selection, amount requirements, and Taproot signing-data boundaries.
 13. **RFC 6979 — Deterministic Usage of DSA and ECDSA** | Thomas Pornin
     - URL: https://www.rfc-editor.org/rfc/rfc6979
     - Supports: Deterministic ECDSA nonce-generation construction.
