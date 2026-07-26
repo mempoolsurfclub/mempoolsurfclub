@@ -73,7 +73,7 @@ The signer then computes:
 
 `s = k + e · d mod n`
 
-The resulting signature is `r || s`. The public key is included in the challenge hash. This key prefixing protects the scheme against related-key problems that matter for additively tweaked keys and multiparty constructions.
+The resulting signature is `r || s`. The public key is included in the challenge hash. This key prefixing protects the scheme against related-key problems that matter for additively tweaked keys and multiparty constructions, including the unhardened additive-derivation context described by BIP 32.
 
 The equation is useful because a verifier can rearrange it without knowing `d` or `k`:
 
@@ -113,13 +113,19 @@ BIP 340 recommends fresh randomness when available. An all-zero auxiliary value 
 
 A signer must not confuse single-signer BIP 340 nonce derivation with multiparty nonce protocols. MuSig2, for example, has separate nonce-generation and state-handling requirements and warns against deterministic nonce derivation from session parameters.
 
+### Alternative nonce functions
+
+BIP 340 permits alternative signing algorithms to produce valid signatures, but that does not make arbitrary nonce functions safe. The specification requires the intermediate nonce material to be fresh, uniformly distributed, and not even partially predictable to an attacker. For deterministic alternatives, the same inputs must not be reused in another signing context; avoiding reuse of the same private key across different signing schemes is the most reliable boundary.
+
+The vendored `libsecp256k1` custom signing API exposes a hardened nonce callback that receives the message, secret key, x-only public key, algorithm identifier, and caller data. Replacing the default callback transfers responsibility for domain separation, unpredictability, cross-protocol safety, and state handling to the caller. Copying an ECDSA nonce procedure such as RFC 6979 under the same key can create nonce reuse across schemes rather than inheriting BIP 340’s guarantees.
+
 ### Why nonce reuse is catastrophic
 
 If the same secret nonce is reused to sign two different challenges with the same key, an observer can solve the two signing equations for the private scalar. Similar failures can result from biased, partially predictable, cross-protocol, or fault-manipulated nonces.
 
 Deterministic derivation reduces dependence on a signing-time random-number generator, but it does not eliminate nonce risk. Reusing a key across incompatible signing schemes, accepting attacker-controlled precomputed values, reusing multiparty secret nonces, or implementing the tagged hashes incorrectly can still expose the key.
 
-Implementations should also consider self-verifying a newly produced signature before releasing it. BIP 340 recommends this as protection against computation faults. The `libsecp256k1` signing API documents that its low-level signing function does not automatically perform that final BIP 340 self-verification, so callers that require it must do so explicitly.
+Implementations should also consider self-verifying a newly produced signature before releasing it. BIP 340 recommends this as protection against computation faults. The `libsecp256k1` signing API documents that its signing functions do not automatically perform that final BIP 340 self-verification, so callers that require it must do so explicitly.
 
 ### Batch verification
 
@@ -210,7 +216,7 @@ Schnorr signatures are a deployed part of Bitcoin’s Taproot validation system.
 
 1. **BIP 340 — Schnorr Signatures for secp256k1** | Pieter Wuille, Jonas Nick, Tim Ruffing
    - URL: https://github.com/bitcoin/bips/blob/master/bip-0340.mediawiki
-   - Supports: secp256k1 setting, x-only keys, even-y normalization, 32-byte key and 64-byte signature encodings, signing and verification equations, tagged hashes, nonce derivation, auxiliary randomness, batch verification, applications, and test vectors.
+   - Supports: secp256k1 setting, x-only keys, even-y normalization, 32-byte key and 64-byte signature encodings, signing and verification equations, tagged hashes, default and alternative nonce derivation, auxiliary randomness, batch verification, applications, and test vectors.
 2. **BIP 340 Test Vectors** | BIP 340 authors
    - URL: https://github.com/bitcoin/bips/blob/master/bip-0340/test-vectors.csv
    - Supports: Valid and invalid byte-level signing and verification cases.
@@ -226,43 +232,46 @@ Schnorr signatures are a deployed part of Bitcoin’s Taproot validation system.
 6. **BIP 327 — MuSig2 for BIP 340-Compatible Multisignatures** | Jonas Nick, Tim Ruffing, Elliott Jin
    - URL: https://github.com/bitcoin/bips/blob/master/bip-0327.mediawiki
    - Supports: Separate key aggregation, two-round signing, `n`-of-`n` boundary, nonce-state requirements, and BIP 340 compatibility.
-7. **SEC 2, Version 2.0** | Standards for Efficient Cryptography Group
+7. **BIP 32 — Hierarchical Deterministic Wallets** | Pieter Wuille
+   - URL: https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki
+   - Supports: Unhardened additive public-key derivation context relevant to BIP 340 key prefixing.
+8. **SEC 2, Version 2.0** | Standards for Efficient Cryptography Group
    - URL: https://www.secg.org/sec2-v2.pdf
    - Supports: secp256k1 domain parameters.
-8. **Bitcoin Core 31.1 Tag Commit** | Bitcoin Core contributors
+9. **Bitcoin Core 31.1 Tag Commit** | Bitcoin Core contributors
    - URL: https://github.com/bitcoin/bitcoin/commit/9be056a8a72b624dae9623b2f7bded92c2a21c91
    - Supports: Exact source and test version reviewed July 25, 2026.
-9. **Bitcoin Core 31.1 Script Interpreter Interface** | Bitcoin Core contributors
-   - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/script/interpreter.h
-   - Supports: Taproot and tapscript signature versions, SIGHASH_DEFAULT, and tagged-hash contexts.
-10. **Bitcoin Core 31.1 Script Interpreter** | Bitcoin Core contributors
+10. **Bitcoin Core 31.1 Script Interpreter Interface** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/script/interpreter.h
+    - Supports: Taproot and tapscript signature versions, SIGHASH_DEFAULT, and tagged-hash contexts.
+11. **Bitcoin Core 31.1 Script Interpreter** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/script/interpreter.cpp
     - Supports: 64- and 65-byte Schnorr witness handling, TapSighash construction, x-only key checks, and libsecp256k1 verification calls.
-11. **Bitcoin Core 31.1 X-Only Public-Key Interface** | Bitcoin Core contributors
+12. **Bitcoin Core 31.1 X-Only Public-Key Interface** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/pubkey.h
     - Supports: Bitcoin Core x-only public-key parsing, serialization, tweaking, and Schnorr verification interfaces.
-12. **Vendored libsecp256k1 Schnorr Signature API at Bitcoin Core 31.1** | libsecp256k1 contributors
+13. **Vendored libsecp256k1 Schnorr Signature API at Bitcoin Core 31.1** | libsecp256k1 contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/secp256k1/include/secp256k1_schnorrsig.h
-    - Supports: BIP 340 API, nonce function, auxiliary randomness, signing, self-verification boundary, and verification.
-13. **Vendored libsecp256k1 Schnorr Implementation at Bitcoin Core 31.1** | libsecp256k1 contributors
+    - Supports: BIP 340 API, default and custom nonce functions, auxiliary randomness, signing, self-verification boundary, and verification.
+14. **Vendored libsecp256k1 Schnorr Implementation at Bitcoin Core 31.1** | libsecp256k1 contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/secp256k1/src/modules/schnorrsig/main_impl.h
     - Supports: Exact signing, challenge, nonce, and verification implementation.
-14. **Vendored libsecp256k1 Schnorr Unit Tests at Bitcoin Core 31.1** | libsecp256k1 contributors
+15. **Vendored libsecp256k1 Schnorr Unit Tests at Bitcoin Core 31.1** | libsecp256k1 contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/secp256k1/src/modules/schnorrsig/tests_impl.h
     - Supports: BIP 340 vectors, tagged-hash midstates, nonce-input sensitivity, x-only key parsing, signing, verification, and invalid-input tests.
-15. **Vendored libsecp256k1 Schnorr Exhaustive Tests at Bitcoin Core 31.1** | libsecp256k1 contributors
+16. **Vendored libsecp256k1 Schnorr Exhaustive Tests at Bitcoin Core 31.1** | libsecp256k1 contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/secp256k1/src/modules/schnorrsig/tests_exhaustive_impl.h
     - Supports: Exhaustive-group test evidence for Schnorr operations in the library’s test configuration.
-16. **Vendored libsecp256k1 MuSig Documentation at Bitcoin Core 31.1** | libsecp256k1 contributors
+17. **Vendored libsecp256k1 MuSig Documentation at Bitcoin Core 31.1** | libsecp256k1 contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/secp256k1/doc/musig.md
     - Supports: Implementation-specific MuSig2 workflow, nonce, session, and API boundaries.
-17. **Bitcoin Core 31.1 Taproot Functional Test** | Bitcoin Core contributors
+18. **Bitcoin Core 31.1 Taproot Functional Test** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/test/functional/feature_taproot.py
     - Supports: End-to-end Taproot key-path, script-path, sighash, and signature validation cases.
-18. **Bitcoin Core 31.1 Script Unit Tests** | Bitcoin Core contributors
+19. **Bitcoin Core 31.1 Script Unit Tests** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/test/script_tests.cpp
     - Supports: Tagged consensus and policy signature validation cases.
-19. **NIST Post-Quantum Cryptography Project** | National Institute of Standards and Technology
+20. **NIST Post-Quantum Cryptography Project** | National Institute of Standards and Technology
     - URL: https://csrc.nist.gov/projects/post-quantum-cryptography
     - Supports: Narrow distinction between deployed classical public-key cryptography and separately standardized post-quantum systems.
 
@@ -302,7 +311,7 @@ Do not activate planned links until the destination exists as a real published p
 - [x] secp256k1 private scalars, public points, x-only encoding, even-y normalization, and public-key validation are separated.
 - [x] The 32-byte public-key and 64-byte BIP 340 signature formats are distinguished from Taproot’s optional sighash byte.
 - [x] The nonce point, challenge, signing equation, verification equation, tagged hashes, and domain separation are explained.
-- [x] Deterministic derivation, auxiliary randomness, nonce reuse, weak nonces, fault resistance, and cross-protocol risk are qualified.
+- [x] Default and alternative nonce functions, auxiliary randomness, nonce reuse, weak nonces, fault resistance, and cross-protocol risk are qualified.
 - [x] Batch verification is described as an optional performance technique that does not change consensus validity.
 - [x] Taproot key-path and tapscript usage are assigned to BIPs 341 and 342 rather than BIP 340 alone.
 - [x] Linearity is not presented as automatic signer aggregation.
@@ -313,9 +322,12 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer: Pending — Bitcoin cryptography and implementation specialist
-- Review date: Pending
-- Notes: Human Verification remains pending. The specialist pass must reconfirm the BIP 340 equation and parity rules, public-key lifting and range failures, default and alternative nonce guidance, libsecp256k1 self-verification and test-vector boundaries, Bitcoin Core 31.1 Taproot call paths, batch-verification wording, BIP 327 MuSig2 boundaries, signer-device claims, and the narrow quantum-computing caveat.
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-26
+- Primary evidence reviewed: BIP 340 Default Signing, Alternative Signing, Verification, Batch Verification, applications, test vectors, and reference code; BIPs 32, 327, 341, and 342; Bitcoin Core `v31.1` commit `9be056a8a72b624dae9623b2f7bded92c2a21c91`; `src/script/interpreter.cpp`, `src/script/interpreter.h`, `src/pubkey.cpp`, and `src/pubkey.h`; vendored `libsecp256k1` `include/secp256k1_schnorrsig.h`, `src/modules/schnorrsig/main_impl.h`, `tests_impl.h`, `tests_exhaustive_impl.h`, and `doc/musig.md`; `test/functional/feature_taproot.py`; and `src/test/script_tests.cpp`.
+- Material corrections made: Added the BIP 340 alternative-nonce-function and cross-scheme key-reuse boundary; tied key-prefixing context to BIP 32 additive derivation; confirmed 32-byte x-only key lifting, even-Y normalization, 64-byte core signatures and Taproot’s optional byte, exact signing and verification equations, and tagged domains; confirmed that the vendored signing API does not self-verify produced signatures; kept batch verification separate from Bitcoin Core’s individual verification path; and preserved the separation among BIP 340, MuSig2 `n`-of-`n`, and general threshold protocols.
+- Remaining sensitivities: Security still depends on the elliptic-curve discrete-log and hash assumptions, correct nonce and fault handling, safe custom nonce callbacks, exact Bitcoin Core and `libsecp256k1` versions, and product-specific wallet, firmware, PSBT, display, MuSig2, and threshold support.
+- Renewal requirement: Future Bitcoin Core or `libsecp256k1` releases, BIP revisions, wallet or signing-device changes, new multiparty specifications, or material cryptanalytic results require renewed verification. Human Verification does not authorize copy-lock.
 
 ## 12. Illustration brief
 
