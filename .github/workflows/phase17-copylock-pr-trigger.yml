@@ -1,0 +1,143 @@
+name: Phase 17 copy-lock PR trigger
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .github/workflows/phase17-copylock-pr-trigger.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: phase17-copylock-pr-trigger
+  cancel-in-progress: false
+
+jobs:
+  copy-lock:
+    if: github.repository == 'mempoolsurfclub/mempoolsurfclub'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out accepted Phase 17 branch
+        uses: actions/checkout@v4
+        with:
+          ref: content/learn-infrastructure-061-064
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Verify accepted head and create exact copy-lock commit
+        env:
+          EXPECTED_HEAD: 8c3ade5f025215fc870a39819b20e5f7e16bdcb4
+          SOURCE_BRANCH: content/learn-infrastructure-061-064
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          test "$(git ls-remote origin "refs/heads/$SOURCE_BRANCH" | cut -f1)" = "$EXPECTED_HEAD"
+
+          python3 <<'PY'
+          from pathlib import Path
+          import json
+          import re
+          import subprocess
+
+          accepted = "8c3ade5f025215fc870a39819b20e5f7e16bdcb4"
+          manifest_path = Path("docs/learn/content/content-manifest.json")
+          guide_paths = [
+              Path("docs/learn/content/guides/MSC-GUIDE-061-bitcoin-rpc.md"),
+              Path("docs/learn/content/guides/MSC-GUIDE-062-bitcoin-development-environment.md"),
+              Path("docs/learn/content/guides/MSC-GUIDE-063-bitcoin-software-testing.md"),
+              Path("docs/learn/content/guides/MSC-GUIDE-064-bitcoin-infrastructure.md"),
+          ]
+
+          def accepted_bytes(path: Path) -> bytes:
+              return subprocess.check_output(["git", "show", f"{accepted}:{path.as_posix()}"])
+
+          original_manifest = accepted_bytes(manifest_path)
+          manifest = original_manifest
+          for number in range(61, 65):
+              registry = f"MSC-GUIDE-{number:03d}".encode()
+              pattern = re.compile(
+                  rb'("registry_id": "' + re.escape(registry) + rb'".*?"status": )"EDITORIAL_REVIEW"',
+                  re.DOTALL,
+              )
+              manifest, count = pattern.subn(rb'\1"COPY_LOCKED"', manifest, count=1)
+              if count != 1:
+                  raise SystemExit(f"Manifest transition failed for {registry.decode()}: {count}")
+          json.loads(manifest.decode("utf-8"))
+          manifest_path.write_bytes(manifest)
+
+          old = b"status: EDITORIAL_REVIEW\nreviewed_date: null\ncopy_locked_date: null\n"
+          new = b"status: COPY_LOCKED\nreviewed_date: 2026-07-26\ncopy_locked_date: 2026-07-26\n"
+          expected_counts = {
+              "061": (2760, 21),
+              "062": (2517, 22),
+              "063": (2372, 24),
+              "064": (3167, 29),
+          }
+          words_re = re.compile(r"\b[\w’'-]+\b", re.UNICODE)
+
+          for path in guide_paths:
+              original = accepted_bytes(path)
+              if original.count(old) != 1:
+                  raise SystemExit(f"Unexpected starting frontmatter in {path}")
+              updated = original.replace(old, new, 1)
+              if updated.replace(new, old, 1) != original:
+                  raise SystemExit(f"Reverse byte verification failed for {path}")
+              path.write_bytes(updated)
+
+              text = updated.decode("utf-8")
+              article = text.split("## 2. Full article", 1)[1].split("## 3. Key Terms", 1)[0]
+              sources = text.split("## 4. Sources", 1)[1].split("## 5. SEO title", 1)[0]
+              actual = (
+                  len(words_re.findall(article)),
+                  len(re.findall(r"(?m)^\d+\. \*\*", sources)),
+              )
+              guide_number = path.name.split("-")[2]
+              if actual != expected_counts[guide_number]:
+                  raise SystemExit(f"Count mismatch for {path}: {actual}")
+              if text.count("- Status: PLANNED") != 3:
+                  raise SystemExit(f"Illustration count mismatch for {path}")
+              if "Reviewer: Mempool Surf Club Editorial" not in text:
+                  raise SystemExit(f"Reviewer mismatch for {path}")
+              if "Review date: 2026-07-26" not in text:
+                  raise SystemExit(f"Review date mismatch for {path}")
+
+          reversed_manifest = manifest
+          for number in range(61, 65):
+              registry = f"MSC-GUIDE-{number:03d}".encode()
+              pattern = re.compile(
+                  rb'("registry_id": "' + re.escape(registry) + rb'".*?"status": )"COPY_LOCKED"',
+                  re.DOTALL,
+              )
+              reversed_manifest, count = pattern.subn(rb'\1"EDITORIAL_REVIEW"', reversed_manifest, count=1)
+              if count != 1:
+                  raise SystemExit(f"Manifest reverse transition failed for {registry.decode()}")
+          if reversed_manifest != original_manifest:
+              raise SystemExit("Manifest reverse byte verification failed")
+          PY
+
+          cat > /tmp/expected-files <<'EOF'
+          docs/learn/content/content-manifest.json
+          docs/learn/content/guides/MSC-GUIDE-061-bitcoin-rpc.md
+          docs/learn/content/guides/MSC-GUIDE-062-bitcoin-development-environment.md
+          docs/learn/content/guides/MSC-GUIDE-063-bitcoin-software-testing.md
+          docs/learn/content/guides/MSC-GUIDE-064-bitcoin-infrastructure.md
+          EOF
+          git diff --name-only | sort > /tmp/actual-files
+          diff -u <(sort /tmp/expected-files) /tmp/actual-files
+          git diff --check
+
+          git config user.name "Mempool Surf Club Editorial"
+          git config user.email "mempoolsurfclub@users.noreply.github.com"
+          git add --pathspec-from-file=/tmp/expected-files
+          git diff --cached --check
+          git commit -m "Lock Phase 17 Bitcoin infrastructure guides"
+
+          test "$(git rev-parse HEAD^)" = "$EXPECTED_HEAD"
+          git diff --name-only "$EXPECTED_HEAD" HEAD | sort > /tmp/committed-files
+          diff -u <(sort /tmp/expected-files) /tmp/committed-files
+          test "$(git ls-remote origin "refs/heads/$SOURCE_BRANCH" | cut -f1)" = "$EXPECTED_HEAD"
+          git push origin "HEAD:refs/heads/$SOURCE_BRANCH"
+          test "$(git ls-remote origin "refs/heads/$SOURCE_BRANCH" | cut -f1)" = "$(git rev-parse HEAD)"
