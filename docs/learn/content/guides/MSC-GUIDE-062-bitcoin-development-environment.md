@@ -28,7 +28,7 @@ A development environment is not one universal installation recipe. It is a cont
 
 Start by defining the work. An application developer calling RPC needs a different environment from a Bitcoin Core contributor changing validation code. A protocol researcher may need custom test vectors and multiple node versions. An operator testing an upgrade may need production-like storage and monitoring without production keys.
 
-This guide was researched on July 26, 2026 against Bitcoin Core 31.1 at tag `v31.1`, commit `9be056a8a72b624dae9623b2f7bded92c2a21c91`. Bitcoin Core’s current build system, dependency requirements, commands, and directory layout are implementation- and release-specific.
+This guide was researched and technically reviewed on July 26, 2026 against Bitcoin Core 31.1 at tag `v31.1`, commit `9be056a8a72b624dae9623b2f7bded92c2a21c91`. Bitcoin Core’s current build system, dependency requirements, commands, and directory layout are implementation- and release-specific.
 
 ### Define the objective before choosing tools
 
@@ -45,28 +45,28 @@ The objective determines whether a released binary is enough, whether a source b
 
 ### Released binaries and source builds serve different purposes
 
-A released binary is appropriate when the application needs a known Bitcoin Core interface but does not need to modify Bitcoin Core. Official release archives are accompanied by checksums and signatures. Verify the downloaded file against the official `SHA256SUMS`, then verify signatures from maintainers whose keys you have independently authenticated.
+A released binary is appropriate when the application needs a known Bitcoin Core interface but does not need to modify Bitcoin Core. Official release archives are accompanied by SHA-256 checksum files and signatures. Verify the downloaded archive against the published checksum, then verify the checksum signatures from maintainers whose signing keys you have independently authenticated.
 
 A source checkout is appropriate when reading code, changing behavior, adding tests, building uncommon options, using sanitizers, or reproducing a commit. Cloning the official `bitcoin/bitcoin` repository gives access to branches, tags, history, tests, build files, and documentation. The `master` branch is development work and is not promised to be as stable as a release tag.
 
-Do not treat a directory named `bitcoin-31.1` as proof of what it contains. Record the repository URL, selected tag or branch, exact commit hash, and whether the worktree has local changes. For a team experiment, the commit hash is the durable identity; a moving branch name is not.
+Do not treat a directory named `bitcoin-31.1` as proof of what it contains. Record the repository URL, selected tag or branch, exact commit hash, and whether the worktree has local changes. For a team experiment, the commit hash is the durable source identity; a moving branch name is not.
 
 ### Verify tags, commits, and release artifacts
 
 A careful release workflow checks more than one layer:
 
 1. Obtain the source or binary from an official location.
-2. Record the exact version and commit.
-3. Verify the release archive’s SHA-256 checksum against the published checksum list.
-4. Verify signatures on the checksum list with trusted maintainer keys.
-5. When using Git, inspect and verify the release tag according to the project’s current release documentation.
-6. Preserve the verification output with the environment record.
+2. Record the exact release, tag, and commit.
+3. Verify the archive’s SHA-256 checksum against the official checksum list.
+4. Verify signatures on that checksum list with maintainer keys whose identities were established independently.
+5. When using Git, inspect the selected tag and confirm the commit it resolves to.
+6. Record local patches, build inputs, and the verification output with the environment.
 
-A valid signature proves that the holder of a particular key signed data. It does not prove that the key was correctly identified, that the signer reviewed every line, or that the software is defect-free. Key authentication and release diversity remain part of the trust model.
+A valid checksum proves that the file matches the referenced digest. A valid signature proves that a particular private key signed the checksum data. Neither result proves that the key was correctly attributed, that the signer reviewed every line, that the build is reproducible, or that the software is defect-free. Source identity, key distribution, build provenance, review, and release diversity remain distinct trust questions.
 
 ### Bitcoin Core 31.1 uses CMake
 
-Bitcoin Core’s current build documentation uses CMake. A typical out-of-source build on a Unix-like platform begins with:
+Bitcoin Core 31.1’s maintained build documentation uses CMake. A typical out-of-source build on a Unix-like platform begins with:
 
 ```sh
 cmake -B build
@@ -74,25 +74,35 @@ cmake --build build
 ctest --test-dir build
 ```
 
-The first command configures a build directory. The second compiles the configured targets. The third runs the CTest-registered tests, including unit tests when they were enabled and their dependencies were available.
+The first command configures a build directory. The second compiles the configured targets. The third runs tests registered with CTest, including unit tests when their dependencies were found and tests were not disabled.
 
-These commands are a structural example, not a cross-platform promise. Package names, compiler versions, generators, SDKs, paths, and optional features differ among Linux distributions, macOS, Windows, BSD systems, and cross-compilation targets. Use the build document for the exact platform and release.
+These commands are a structural example, not a cross-platform promise. Package names, compiler versions, generators, SDKs, paths, optional features, and supported targets differ among Linux distributions, macOS, Windows, BSD systems, and cross-compilation environments. Use the release-pinned build document for the actual platform.
+
+Do not retain older Autotools instructions such as `./autogen.sh` or `./configure` for a 31.1 environment. CMake options are passed during configuration, for example `-DENABLE_WALLET=OFF`, `-DBUILD_GUI=ON`, or `-DWITH_ZMQ=ON`, only when those choices match the experiment.
 
 ### Compiler and dependency expectations
 
-Bitcoin Core is primarily C++ software with Python-based functional tests and a growing set of auxiliary tools. Bitcoin Core 31.1’s dependency documentation defines supported compiler, language, Python, library, and platform requirements. The repository’s `depends` system can build and cache pinned dependencies and supports cross-compilation.
+Bitcoin Core is primarily C++ software with Python-based functional tests and auxiliary tools. For 31.1, the release-pinned dependency document requires at least Clang 17.0 or GCC 12.1, Boost 1.74.0, CMake 3.22, and libevent 2.1.8. Python 3.10 is the documented minimum for scripts and tests. Wallet builds use SQLite, with 3.7.17 listed as the minimum supported version.
 
-Build dependencies are tools and libraries needed to compile or test software. Runtime dependencies are what the built program needs when it executes. They are not necessarily the same. For example, a compiler and CMake are build requirements, while the resulting headless node may not need development headers at runtime.
+Those are upstream minimums, not a promise that every operating-system package combination is supported or advisable. The platform build documents can impose additional requirements, and release binaries have their own runtime compatibility boundaries.
 
-Optional features change dependencies. Wallet support requires SQLite in current Bitcoin Core. GUI, ZeroMQ, IPC, QR encoding, tracing, fuzzing, and test targets add their own requirements. Disable an optional component only when the experiment does not need it, and record the option because it changes what the binary can do.
+Build dependencies are tools and libraries needed to compile or test software. Runtime dependencies are what the built program needs when it executes. They are not necessarily the same. A compiler and CMake are build requirements, while a headless node does not need compiler development packages at runtime.
+
+Optional features change dependencies and capability. Wallet support requires SQLite. GUI, ZeroMQ, IPC, QR encoding, tracing, fuzzing, and test targets add their own requirements. Disable an optional component only when the experiment does not need it, and record the option because it changes which binaries, RPCs, tests, and interfaces are available.
 
 ### Native dependencies and the `depends` system
 
-A native build can use libraries supplied by the operating system. This is convenient for local development and often integrates well with package updates and debuggers. The exact package versions can vary between machines.
+A native build can use libraries supplied by the operating system. This is convenient for local development and often integrates well with package updates and debuggers. The exact versions can vary between machines.
 
-The repository’s `depends` directory builds a controlled dependency set and can target another operating system or architecture. In Bitcoin Core 31.1, CMake does not automatically consume the `depends` output. The generated toolchain file must be supplied during configuration, for example through `--toolchain depends/<host>/toolchain.cmake`.
+The repository’s `depends` directory builds and caches a controlled dependency set and supports cross-compilation. On supported Unix-like hosts, the dependency build is started inside `depends` with `make` or the platform’s GNU make command. Options such as `NO_QT=1`, `NO_WALLET=1`, or `HOST=<triplet>` change the dependency set or target.
 
-The `depends` system improves control over inputs, but it does not make every build bit-for-bit reproducible by itself. Reproducible binaries require controlled source, dependencies, toolchain, environment, timestamps, packaging, and comparison procedures.
+CMake does not automatically consume the `depends` output. The generated toolchain file must be supplied during configuration. A native Linux example is:
+
+```sh
+cmake -B build --toolchain depends/x86_64-pc-linux-gnu/toolchain.cmake
+```
+
+The exact host triplet must match the dependency build. The `depends` system improves control over inputs, but it does not make every build bit-for-bit reproducible by itself. Reproducible binaries require controlled source, dependencies, toolchain, environment, timestamps, packaging, and independent artifact comparison.
 
 ### Keep source, build, data, and test state separate
 
@@ -104,29 +114,40 @@ Use separate directories for separate roles:
 - **functional-test directories:** temporary node data created by the test framework;
 - **application state:** the application’s own database, caches, and secrets.
 
-An out-of-source CMake build keeps generated content out of the checkout. A dedicated `-datadir` keeps experiments away from a default mainnet directory. Functional tests create temporary regtest nodes and should not be pointed at a real node’s data.
+An out-of-source CMake build keeps generated content out of the checkout. A dedicated `-datadir` keeps experiments away from a default mainnet directory. Functional tests create temporary regtest nodes and must never be pointed at a real node’s data.
 
-Never run two node processes against the same data directory. Do not copy a live wallet database as though it were ordinary test data. Use supported backup and restore procedures for wallet material.
+Bitcoin Core locks its data and blocks directories to prevent ordinary concurrent use, but that is not permission to design shared-datadir operation. Never run two node processes against the same data directory. Do not copy a live wallet database as though it were ordinary test data. Use supported backup and restore procedures for wallet material.
 
 ### Choose the right Bitcoin network
 
-Bitcoin Core supports multiple chain environments with separate data directories and network identities.
+Bitcoin Core supports multiple chain environments with separate network identities and chain-specific data directories.
 
-**Regtest** creates a private local chain. Blocks are produced only when the developer requests them. Difficulty and network state are designed for rapid deterministic testing. Regtest has no public peers and no shared economic history.
+**Regtest** creates a private local chain. Blocks are produced only when the developer requests them. Difficulty and network state are designed for rapid controlled testing. Regtest has no public peers and no shared economic history.
 
-**Signet** is a public test network where blocks must satisfy a configured signing challenge in addition to proof-of-work rules. The default signet is useful when multiple developers or services need a shared public chain with more controlled block production.
+**Signet** is a public test network where blocks must satisfy a configured signing challenge in addition to proof-of-work rules. The default signet is useful when multiple developers or services need a shared public chain with more controlled block production than public testnets.
 
-**Testnet3 and testnet4** are public testing networks. They have public peers, public history, and unpredictable activity. Test coins have no intended monetary value, but network state can still be unstable or inconvenient for deterministic tests. Bitcoin Core 31.1 keeps testnet3 and testnet4 distinct.
+**Testnet3 and testnet4** are distinct public testing networks in Bitcoin Core 31.1. They have public peers, public histories, and unpredictable activity. Test coins have no intended monetary value, but network state can still be unstable or inconvenient for deterministic tests. A configuration for one testnet must not be assumed to select the other.
 
-**Mainnet** carries real economic activity and real funds. It should not be the default environment for experimentation. Reading mainnet data can be appropriate, but code that creates transactions, imports keys, changes policy settings, or exposes interfaces should be proven elsewhere first.
+**Mainnet** carries real economic activity and real funds. It should not be the default environment for experimentation. Reading mainnet data can be appropriate, but code that creates transactions, imports keys, changes policy settings, exposes interfaces, or mutates wallet state should be proven elsewhere first.
+
+Always make the chain selection explicit in scripts and verify the `chain` field returned by the node. A valid RPC response from regtest or signet is still wrong for an application expecting mainnet.
 
 ### A minimal regtest workflow
 
-A practical local workflow uses one dedicated data directory and explicit chain selection. After starting a regtest node, create or load a development wallet, request a new address, and generate blocks to that address with the current `generatetoaddress` RPC. Coinbase outputs require maturity before they can be spent, so a developer commonly generates enough blocks to mature test funds.
+A practical local workflow uses a dedicated data directory and explicit `-regtest` selection. After starting the node, create a development wallet, request an address, and generate blocks to it with the current `generatetoaddress` RPC. One example using `bitcoin-cli` is:
 
-The exact client syntax depends on whether the environment uses `bitcoin-cli`, `bitcoin rpc`, a custom client, or the functional-test framework. Confirm the deployed release’s built-in help for `createwallet`, `getnewaddress`, and `generatetoaddress` rather than copying an old command line.
+```sh
+bitcoind -regtest -datadir=/path/to/dev-data -daemon
+bitcoin-cli -regtest -datadir=/path/to/dev-data createwallet dev
+ADDR=$(bitcoin-cli -regtest -datadir=/path/to/dev-data -rpcwallet=dev getnewaddress)
+bitcoin-cli -regtest -datadir=/path/to/dev-data generatetoaddress 101 "$ADDR"
+```
 
-Regtest lets a developer control block timing, create competing branches with multiple nodes, invalidate or reconsider blocks, and test confirmation handling. Deterministic block production does not make application behavior automatically deterministic: clocks, threads, random values, database ordering, and external dependencies may still vary.
+Bitcoin Core’s consensus constant requires 100 new blocks before a coinbase output can be spent. Generating 101 blocks from a new chain leaves the first subsidy output mature while the newest 100 remain immature. The number is not a wallet preference.
+
+The exact client syntax can also use `bitcoin rpc` or a custom client, but command availability and argument names should be checked against the deployed release’s built-in help. Current wallets are descriptor wallets by default. No default wallet is automatically created, so scripts should create or load a named development wallet explicitly and select it in multi-wallet calls.
+
+Regtest lets a developer control block timing, create competing branches with multiple nodes, invalidate or reconsider blocks, and test confirmation handling. Controlled block production does not make application behavior automatically deterministic: clocks, threads, random values, database ordering, and external dependencies may still vary.
 
 ### RPC and wallet setup for development
 
@@ -134,7 +155,7 @@ Use development-only credentials and wallets. Cookie authentication is convenien
 
 Select a wallet explicitly in multi-wallet tests. Name wallets for their role, such as `sender`, `receiver`, or `watchonly`, and record whether private keys are enabled. A development wallet should never contain a real seed phrase, imported production descriptor, hardware-wallet backup, or mainnet signing key.
 
-RPC reachability should remain local or inside an isolated test network. Authentication does not encrypt Bitcoin Core’s native RPC transport. Containers and virtual machines can help create a private topology, but port publishing can expose an endpoint unexpectedly.
+RPC reachability should remain local or inside an isolated test network. Authentication does not encrypt Bitcoin Core’s native RPC transport. Containers and virtual machines can help create a private topology, but port publishing, host networking, broad mounts, or copied secrets can expose an endpoint unexpectedly.
 
 ### Logging and debugging
 
@@ -142,46 +163,52 @@ Bitcoin Core writes `debug.log` in the active chain-specific data directory unle
 
 Record the command line and effective configuration with the test result. Be careful when sharing logs: RPC parameters, wallet labels, addresses, file paths, peer addresses, and application data can reveal sensitive information. Redact deliberately rather than assuming a “test” log is harmless.
 
-Native debuggers such as GDB and LLDB can run or attach to test binaries and node processes. Debug builds, symbols, tracing, and sanitizers may change timing and resource use, so a bug observed only under one instrumented setup should be reproduced thoughtfully.
+Native debuggers such as GDB and LLDB can run or attach to test binaries and node processes. Debug builds, symbols, tracing, and sanitizers can change timing and resource use, so a bug observed only under one instrumented setup should be reproduced thoughtfully.
 
 ### Run the current tests
 
 Bitcoin Core 31.1 organizes major test layers in different locations:
 
-- unit tests in `src/test/` and wallet unit tests in `src/wallet/test/`;
+- unit tests in `src/test/`, wallet unit tests in `src/wallet/test/`, and GUI tests in `src/qt/test/`;
 - functional and integration tests in `test/functional/`;
 - fuzz harnesses in `src/test/fuzz/` with runner tooling under `test/fuzz/`;
 - lint checks in `test/lint/`;
-- test data and vectors in relevant `src/test/data/` and test-framework locations;
-- CI definitions and scripts under `.github/workflows/` and `ci/`.
+- test vectors and data in relevant `src/test/data/` and framework locations;
+- CI configuration and scripts under `.github/workflows/` and `ci/`.
 
-Run unit tests with `ctest --test-dir build` or the `test_bitcoin` executable for focused cases. Run functional tests through `build/test/functional/test_runner.py`. Use `--extended` only when the additional time and dependencies are appropriate.
+Run CTest-registered tests with:
 
-A successful build proves that the selected toolchain produced binaries. Passing tests adds evidence for the cases executed. Neither establishes that the software is correct in every environment.
+```sh
+ctest --test-dir build --output-on-failure
+```
+
+Run the main unit binary directly for focused suites with `build/bin/test_bitcoin`. Run functional tests through `build/test/functional/test_runner.py`; `--extended` adds tests outside the normal suite and can require more time or optional dependencies.
+
+A successful build proves that the selected toolchain produced binaries. Passing tests adds evidence for the cases actually executed. Neither establishes that the software is correct in every environment.
 
 ### Optional analysis tools
 
 Bitcoin Core provides or documents additional tools for deeper work:
 
-- AddressSanitizer and UndefinedBehaviorSanitizer for classes of runtime defects;
+- AddressSanitizer and UndefinedBehaviorSanitizer for selected runtime defects;
 - ThreadSanitizer for data races where supported;
 - MemorySanitizer with a fully instrumented toolchain;
 - libFuzzer targets and seed corpora;
 - Valgrind for selected memory and execution analysis;
 - clang-tidy and compiler warnings for static checks;
 - repository lint and formatting checks;
-- benchmarks for performance measurements;
+- `bench_bitcoin` for performance measurements;
 - GDB, LLDB, `perf`, and tracepoints for diagnosis.
 
-Each tool has blind spots and can introduce overhead. A sanitizer-clean run is evidence about one build and execution path, not a security certificate.
+Each tool has blind spots and can introduce overhead. A sanitizer-clean run is evidence about one build and execution path, not a security certificate. A benchmark measures a stated workload; it does not establish correctness.
 
 ### IDEs, editors, containers, and virtual machines
 
 Bitcoin Core development does not require one editor or IDE. Use tools that preserve repository formatting, expose compile errors, and make the exact build commands visible. Generated compile-command databases can improve editor integration without making the editor the build authority.
 
-Containers can pin packages, simplify CI parity, and isolate ports and filesystems. Virtual machines can provide a stronger operating-system boundary and support multi-platform tests. Neither automatically creates a secure environment. Mounted host directories, privileged modes, shared kernels, copied secrets, broad networking, stale images, and vulnerable dependencies can defeat the intended isolation.
+Containers can pin package selections, simplify CI parity, and isolate ports and filesystems. Virtual machines can provide a separate operating-system boundary and support multi-platform tests. Neither automatically creates a secure or reproducible environment. Mounted host directories, privileged modes, shared kernels, copied secrets, broad networking, stale images, mutable tags, and vulnerable dependencies can defeat the intended boundary.
 
-Treat the environment definition as code: keep container files or setup scripts reviewable, pin inputs where practical, and document which boundaries remain outside the container.
+Treat the environment definition as code: keep container files or setup scripts reviewable, pin inputs where practical, and document which dependencies and trust boundaries remain outside the container.
 
 ### Reproducibility and team handoffs
 
@@ -199,7 +226,7 @@ A useful environment record includes:
 - known nondeterministic inputs;
 - cleanup and reset procedure.
 
-Pinning versions helps two developers reproduce instructions. It does not mean they produced reproducible binaries. To make a binary-reproducibility claim, compare independently produced artifacts under the project’s release-build process.
+Pinning versions helps two developers reproduce instructions. It does not mean they produced reproducible binaries. To make a binary-reproducibility claim, independently build and compare artifacts under a controlled release-build process.
 
 ### Reset test state safely
 
@@ -224,6 +251,7 @@ A good Bitcoin development environment makes the experiment explicit, reversible
 - **Regtest:** Private local chain mode with developer-controlled block generation.
 - **Signet:** Public test network with a block-signing challenge.
 - **Testnet3 and testnet4:** Distinct public Bitcoin testing networks.
+- **Coinbase maturity:** Consensus delay of 100 new blocks before a coinbase output can be spent.
 - **Sanitizer:** Compiler-assisted runtime instrumentation for selected defect classes.
 - **Fuzzing:** Automated generation or mutation of inputs to explore program behavior.
 - **Reproducible instructions:** Steps another person can follow under stated assumptions.
@@ -233,64 +261,70 @@ A good Bitcoin development environment makes the experiment explicit, reversible
 
 1. **Bitcoin Core 31.1 Tag Commit** | Bitcoin Core contributors
    - URL: https://github.com/bitcoin/bitcoin/commit/9be056a8a72b624dae9623b2f7bded92c2a21c91
-   - Supports: Exact implementation version reviewed on July 26, 2026.
-2. **Bitcoin Core Download Verification Guide** | Bitcoin Core project
+   - Supports: Exact Bitcoin Core 31.1 final-release implementation reviewed on July 26, 2026.
+2. **Bitcoin Core Download and Verification Records** | Bitcoin Core project
    - URL: https://bitcoincore.org/en/download/
-   - Supports: Current release identity, checksums, signature verification, and release-artifact trust boundaries.
+   - Supports: Current official release, release archives, checksum files, signature records, and documented artifact-verification workflow.
 3. **Bitcoin Core 31.1 README** | Bitcoin Core contributors
    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/README.md
-   - Supports: Stable tags, development-branch caution, official repository, test commands, and code-review role.
+   - Supports: Official repository, stable-tag and development-branch distinction, build and test entry points, and review boundary.
 4. **Bitcoin Core 31.1 Unix Build Notes** | Bitcoin Core contributors
    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/doc/build-unix.md
-   - Supports: Current CMake commands, out-of-source build, platform dependency examples, optional components, and test invocation.
+   - Supports: CMake configure, build, install, and test commands; out-of-source layout; platform package examples; optional components; and disable-wallet mode.
 5. **Bitcoin Core 31.1 Build Documentation Index** | Bitcoin Core contributors
    - URL: https://github.com/bitcoin/bitcoin/tree/v31.1/doc#building
    - Supports: Platform-specific build-document boundary for Unix, macOS, Windows, and BSD systems.
 6. **Bitcoin Core 31.1 Dependencies** | Bitcoin Core contributors
    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/doc/dependencies.md
-   - Supports: Supported compilers, language versions, Python, libraries, optional features, and platform expectations.
+   - Supports: Minimum Clang, GCC, Boost, CMake, libevent, Python, SQLite, Qt, ZeroMQ, and other release-pinned dependency versions.
 7. **Bitcoin Core 31.1 Depends Build** | Bitcoin Core contributors
    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/depends/README.md
-   - Supports: Controlled dependency builds, CMake toolchain selection, options, architectures, and cross-compilation.
+   - Supports: Dependency build commands, options, host triplets, cross-compilation, and required CMake toolchain-file selection.
 8. **Bitcoin Core 31.1 Configuration File Documentation** | Bitcoin Core contributors
    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/doc/bitcoin-conf.md
    - Supports: Chain-specific sections, configuration precedence, restart behavior, and custom data-directory paths.
 9. **Bitcoin Core 31.1 File-System Documentation** | Bitcoin Core contributors
    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/doc/files.md
-   - Supports: Source-independent data layout, chain-specific directories, wallet files, logs, credentials, and backup boundaries.
+   - Supports: Chain-specific directories, wallet files, logs, credentials, blocks-directory boundary, and backup cautions.
 10. **Bitcoin Core 31.1 JSON-RPC Interface** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/doc/JSON-RPC-interface.md
-    - Supports: Development credential options, wallet endpoints, transport-security boundary, and version-sensitive RPC interface.
+    - Supports: Development credential options, wallet endpoints, no automatic default wallet, transport-security boundary, and release-sensitive RPC interface.
 11. **Bitcoin Core 31.1 Mining RPC Source** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/rpc/mining.cpp
-    - Supports: Current `generatetoaddress` registration, parameters, and regtest block-generation behavior.
-12. **Bitcoin Core 31.1 Unit Test Documentation** | Bitcoin Core contributors
-    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/test/README.md
-    - Supports: Unit-test locations, `ctest`, `test_bitcoin`, focused execution, temporary data directories, logs, and debuggers.
-13. **Bitcoin Core 31.1 Test Documentation** | Bitcoin Core contributors
-    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/test/README.md
-    - Supports: Functional, fuzz, and lint directories, current runner commands, caches, logs, tracing, and cleanup.
-14. **Bitcoin Core 31.1 Functional Test Documentation** | Bitcoin Core contributors
-    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/test/functional/README.md
-    - Supports: Regtest framework, RPC and P2P test interfaces, naming, cached chains, and test development workflow.
-15. **Bitcoin Core 31.1 Fuzzing Guide** | Bitcoin Core contributors
-    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/doc/fuzzing.md
-    - Supports: CMake fuzz presets, fuzz binary, target directory, seed corpora, sanitizers, and crash reproduction.
-16. **Bitcoin Core 31.1 Developer Notes** | Bitcoin Core contributors
-    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/doc/developer-notes.md
-    - Supports: Current coding tools, clang-tidy, compile-command configuration, debugger and review-oriented development practices.
-17. **Bitcoin Core 31.1 Lint Documentation** | Bitcoin Core contributors
-    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/test/lint/README.md
-    - Supports: Current CI-parity lint runner, individual checks, Rust test runner, and lint dependencies.
-18. **Bitcoin Core 31.1 Release Notes** | Bitcoin Core contributors
-    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/doc/release-notes.md
-    - Supports: Release compatibility, upgrade procedure, and release-specific implementation status.
-19. **Bitcoin Core 31.1 Chain Parameters** | Bitcoin Core contributors
+    - Supports: Current mining RPC registration, `generatetoaddress`, chain-specific mining behavior, and help definitions.
+12. **Bitcoin Core 31.1 Consensus Constants** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/consensus/consensus.h
+    - Supports: Consensus `COINBASE_MATURITY` value of 100 new blocks.
+13. **Bitcoin Core 31.1 Chain Parameters** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/kernel/chainparams.cpp
-    - Supports: Distinct mainnet, testnet3, testnet4, signet, and regtest implementation parameters.
-20. **Bitcoin Core 31.1 Functional Test Framework** | Bitcoin Core contributors
+    - Supports: Distinct mainnet, testnet3, testnet4, signet, and regtest parameters and network identities.
+14. **Bitcoin Core 31.1 Unit Test Documentation** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/test/README.md
+    - Supports: Unit-test locations, CTest, `build/bin/test_bitcoin`, focused execution, temporary data directories, logs, and debuggers.
+15. **Bitcoin Core 31.1 Test Documentation** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/test/README.md
+    - Supports: Functional, fuzz, and lint directories, exact functional-runner commands, cached regtest state, logs, tracing, and cleanup.
+16. **Bitcoin Core 31.1 Functional Test Documentation** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/test/functional/README.md
+    - Supports: Regtest framework, RPC and P2P test interfaces, naming, cached chains, node orchestration, and test development workflow.
+17. **Bitcoin Core 31.1 Fuzzing Guide** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/doc/fuzzing.md
+    - Supports: CMake fuzz presets, fuzz binary, target selection, seed corpora, sanitizers, and crash reproduction.
+18. **Bitcoin Core 31.1 Developer Notes** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/doc/developer-notes.md
+    - Supports: clang-tidy, compile-command configuration, debuggers, formatting, and review-oriented development practices.
+19. **Bitcoin Core 31.1 Lint Documentation** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/test/lint/README.md
+    - Supports: CI-parity lint runner, individual checks, dependencies, and repository consistency tooling.
+20. **Bitcoin Core 31.1 Release Notes** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/doc/release-notes.md
+    - Supports: Release identity, compatibility, upgrade procedure, fixes, and release-specific implementation status.
+21. **Bitcoin Core 31.1 Functional Test Framework** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/tree/v31.1/test/functional/test_framework
-    - Supports: Current local node orchestration, regtest data handling, wallet and P2P helpers, and reproducible functional experiments.
+    - Supports: Local node orchestration, regtest data handling, wallet and P2P helpers, temporary directories, and controlled functional experiments.
+22. **Bitcoin Core 31.1 Wallet RPC Utility** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/wallet/rpc/util.cpp
+    - Supports: Explicit wallet selection and the no-loaded-wallet and multiple-loaded-wallet error boundaries used by development scripts.
 
 ## 5. SEO title
 
@@ -306,7 +340,7 @@ Build a version-pinned Bitcoin development environment with separate source, bui
 
 ## 8. Estimated reading time
 
-19 to 22 minutes
+21 to 24 minutes
 
 ## 9. Planned internal links
 
@@ -331,26 +365,30 @@ Do not activate planned links until the destination exists as a real published p
 ## 10. Accuracy review checklist
 
 - [x] The environment objective is defined before tools, platforms, dependencies, or network choices.
-- [x] Released binaries, source checkouts, branches, tags, commits, checksums, and signatures remain distinct.
-- [x] Bitcoin Core 31.1’s CMake build system and current build and test commands are used without claiming one platform recipe works everywhere.
-- [x] Build dependencies, runtime dependencies, native packages, `depends`, source directories, build directories, data directories, and test directories remain distinct.
-- [x] Regtest, signet, testnet3, testnet4, and mainnet are explained as different environments.
-- [x] Development wallets, credentials, and data are separated from production wallets, secrets, and real funds.
-- [x] Current regtest funding and block-generation workflow is described conceptually and points to release help rather than relying on obsolete commands.
-- [x] Unit, functional, fuzz, lint, sanitizer, static-analysis, debugging, logging, and benchmark roles are introduced without treating them as proof of correctness.
-- [x] Containers and virtual machines are described as isolation tools rather than automatic security guarantees.
+- [x] Released binaries, source checkouts, branches, tags, commits, checksums, signatures, key identity, and build provenance remain distinct.
+- [x] Bitcoin Core 31.1’s CMake build system and current configure, build, CTest, install, and feature-option forms are used without claiming one platform recipe works everywhere.
+- [x] Obsolete Autotools instructions are excluded from the 31.1 workflow.
+- [x] Release-pinned minimum compiler, CMake, Boost, libevent, Python, SQLite, Qt, and ZeroMQ requirements are qualified as upstream minimums.
+- [x] Native packages, `depends`, generated toolchain files, source directories, build directories, data directories, runtime dependencies, and test directories remain distinct.
+- [x] Regtest, signet, testnet3, testnet4, and mainnet are explained as different environments and chain identity must be checked explicitly.
+- [x] Current `createwallet`, `getnewaddress`, `generatetoaddress`, descriptor-wallet default, named-wallet selection, and 100-block coinbase maturity are represented accurately.
+- [x] Development wallets, credentials, data directories, and private keys are separated from production wallets, secrets, and real funds.
+- [x] Unit, functional, fuzz, lint, sanitizer, static-analysis, debugging, logging, and benchmark roles are introduced with current locations and commands.
+- [x] Containers and virtual machines are described as isolation tools rather than automatic security or reproducibility guarantees.
 - [x] A successful build, passing tests, reproducible instructions, and reproducible binaries remain distinct.
 - [x] Current release claims are dated July 26, 2026 and pinned to Bitcoin Core `v31.1` commit `9be056a8a72b624dae9623b2f7bded92c2a21c91`.
 - [x] Planned internal links remain inactive, no publication is implied, and no security or correctness guarantee is made.
 
 ## 11. Human verification
 
-- Reviewer: Pending infrastructure specialist review
-- Review date: Pending
-- Primary evidence reviewed: Pending
-- Material corrections made: Pending
-- Remaining sensitivities: Pending
-- Renewal requirement: Pending
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-26
+- Bitcoin Core release reviewed: `31.1`; tag `v31.1`; commit `9be056a8a72b624dae9623b2f7bded92c2a21c91`
+- Primary evidence reviewed: Official Bitcoin Core release and download records; release commit and notes; release-pinned CMake build documents; `doc/dependencies.md`; `depends/README.md`; chain parameters; mining RPC source; consensus constants; JSON-RPC and filesystem documentation; unit, functional, fuzz, and lint documentation; developer notes; functional framework files; and wallet-routing implementation.
+- Material corrections made: Added exact compiler, CMake, Boost, libevent, Python, SQLite, Qt, and ZeroMQ minimums; excluded obsolete Autotools instructions; corrected the `depends` build and required toolchain-file workflow; added an executable regtest example with explicit data and wallet selection; made descriptor-wallet creation and lack of an automatic default wallet explicit; established 100-block coinbase maturity and why 101 generated blocks are commonly used; tightened chain-selection, container, release-signature, test-command, and reproducibility boundaries.
+- Remaining sensitivities: Platform support, package names, toolchain combinations, CMake options, optional components, release-signing procedures, test dependencies, wallet defaults, and network availability remain version- and host-specific. Commands must be checked against the selected release and platform before publication or team use.
+- Renewal requirement: Re-review the official release page, release notes, dependency minimums, platform build documents, CMake options, `depends` workflow, chain parameters, wallet and mining RPC help, and test documentation before changing versions or presenting platform-specific instructions.
+- Copy-lock authorization: Human Verification is complete for specialist review only and does not authorize Editorial Manager acceptance or copy-lock.
 
 ## 12. Illustration brief
 
