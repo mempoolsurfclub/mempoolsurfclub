@@ -441,9 +441,12 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer: Pending — Bitcoin cryptography and implementation specialist
-- Review date: Pending
-- Notes: Human Verification remains pending. The specialist pass must reproduce Bitcoin Core 31.1 SHA-256, double-SHA-256, and HASH160 call paths; confirm txid, wtxid, block-header, Merkle, witness-commitment, script-hash, and Taproot tagged-hash constructions; recheck Base58Check, Bech32, and Bech32m boundaries; validate mining target and byte-order wording; and review birthday-bound, length-extension, collision, current-confidence, and quantum-computing claims.
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-26
+- Primary evidence reviewed: FIPS 180-4 and the RIPEMD-160 specification; BIPs 16, 141, 143, 173, 340, 341, 342, and 350; Bitcoin Core `v31.1` commit `9be056a8a72b624dae9623b2f7bded92c2a21c91`; `src/hash.h`, `src/crypto/sha256.cpp`, `src/crypto/ripemd160.cpp`, `src/primitives/transaction.cpp`, `src/primitives/block.cpp`, `src/primitives/block.h`, `src/pow.cpp`, `src/consensus/merkle.cpp`, `src/base58.cpp`, `src/bech32.cpp`, and `src/script/interpreter.cpp`; `src/test/hash_tests.cpp`; and `src/test/data/bip341_wallet_vectors.json`.
+- Material corrections made: Reproduced and confirmed the SHA-256, double-SHA-256, HASH160, and tagged-hash constructions; checked txid, wtxid, block-header, proof-of-work, Merkle, witness-commitment, P2PKH, P2SH, P2WPKH, P2WSH, Taproot, Base58Check, Bech32, and Bech32m call paths; confirmed displayed-hash byte-order and target/difficulty/hash-rate boundaries; and retained qualified birthday-bound, length-extension, collision-consequence, current-confidence, and quantum-computing language. No material article rewrite was required beyond completing the evidence record.
+- Remaining sensitivities: Security statements depend on the exact construction and on preimage, second-preimage, collision, or pseudorandom-output assumptions; cryptanalysis and quantum-resource estimates may change; Bitcoin Core implementation paths and address encoders are version-specific; and wallet or application use of a digest or checksum may introduce separate serialization and interface risk.
+- Renewal requirement: Future hash-standard revisions, material cryptanalytic results, Bitcoin Core releases, consensus or address-format changes, or altered wallet and application constructions require renewed verification. Human Verification does not authorize copy-lock.
 
 ## 12. Illustration brief
 
