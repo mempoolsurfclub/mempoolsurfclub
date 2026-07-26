@@ -20,209 +20,448 @@ copy_locked_date: null
 
 ## 1. Introductory deck
 
-Bitcoin uses several tree and proof constructions that serve different purposes. A block header commits to ordered transaction IDs through a double-SHA-256 Merkle tree; SegWit adds a separate witness tree and commitment; BIP 37 defines partial Merkle proofs; and Taproot uses tagged TapLeaf and TapBranch hashes for hidden scripts. None of these proofs alone establishes transaction validity, irreversible finality, or the current UTXO set.
+Bitcoin uses several tree-shaped commitment systems with different rules. A block header commits to a transaction Merkle root built from txids; SegWit adds a witness Merkle root committed through the coinbase transaction; BIP 37 defines partial Merkle proofs; and Taproot commits to optional scripts with tagged leaf and branch hashes. A proof can establish inclusion in a committed tree, but it does not by itself prove transaction validity, an unspent output, confirmation finality, or the current UTXO set.
 
 ## 2. Full article
 
-A Merkle tree combines many leaf values into one root commitment. Someone who knows the root can verify a leaf’s inclusion using a branch of sibling hashes rather than receiving every leaf. The usefulness comes from the structure around the hash: leaf definition, ordering, parent construction, duplicate handling, and the meaning assigned to the root.
+A Merkle tree compresses commitments to many items into one root hash. Leaves represent items. Pairs of child hashes are combined into parent hashes until one root remains. A proof can then show that one leaf contributes to that root without transmitting every other leaf.
 
-Bitcoin does not use one universal tree format. This guide was researched on July 25, 2026 against BIPs 37, 141, and 341 and Bitcoin Core 31.1 at tag `v31.1`, commit `9be056a8a72b624dae9623b2f7bded92c2a21c91`.
+Bitcoin uses this pattern in more than one place, but the constructions are not interchangeable. The transaction Merkle tree, witness Merkle tree, BIP 37 partial Merkle tree, and Taproot script tree use different leaves, commitments, and validation rules.
+
+This guide was researched on July 25, 2026 against BIPs 37, 141, 341, and 342 and Bitcoin Core 31.1 at tag `v31.1`, commit `9be056a8a72b624dae9623b2f7bded92c2a21c91`. Historical mutation behavior is described from Bitcoin Core’s current consensus Merkle implementation and its tests.
 
 ### The transaction Merkle root
 
-Every Bitcoin block header contains a 32-byte Merkle-root field. That root commits to the block’s ordered list of transactions through their transaction identifiers, or txids.
+Every Bitcoin block header includes a 32-byte `hashMerkleRoot` field. That value commits to the ordered list of transaction identifiers in the block.
 
-The block header does not contain the full transactions. Nodes receive or reconstruct the block body, calculate the tree, and verify that its root matches the header. A mismatch means the body is not the transaction set committed by that header.
+Bitcoin Core constructs the root by:
 
-### Transaction leaves and pairwise hashing
+1. computing or taking each transaction’s `txid`;
+2. preserving block order, beginning with the coinbase transaction;
+3. pairing adjacent 32-byte hashes;
+4. concatenating each pair in the algorithm’s internal byte order;
+5. applying double SHA-256 to create the parent;
+6. repeating until one hash remains.
 
-The leaf values are the internal 32-byte txid hashes of transactions in block order. At each level, adjacent values are concatenated and double SHA-256 hashed:
+The leaf is the `txid` itself. The transaction is not hashed a third time as a special “leaf hash.” Its identifier is already the double SHA-256 of the non-witness serialization.
 
-`parent = SHA256(SHA256(left || right))`
+The resulting Merkle root is placed in the block header. Because the block identifier and proof of work hash the serialized header, proof of work indirectly commits to that transaction root.
 
-Parents are paired again until one root remains. Order matters: swapping leaves or children changes the resulting root.
+### Order matters
 
-Displayed txids are normally shown with reversed byte order relative to the internal byte sequence used in serialization and hashing. Implementations and diagrams must state which representation they use.
+The tree commits to an ordered transaction list. Swapping two leaves generally changes parent hashes and the root.
+
+A proof must therefore include not only sibling hashes but enough position information to determine whether each sibling belongs on the left or right. Hashing `left || right` is different from hashing `right || left`.
+
+Human-facing transaction and block identifiers are usually displayed with reversed byte order relative to their serialized internal bytes. Merkle documentation must be explicit about whether a diagram shows conventional display hex or bytes fed into the hashing routine.
 
 ### Odd-node duplication
 
-If a tree level contains an odd number of nodes, Bitcoin duplicates the final node and hashes it with itself. For five leaves, the fifth leaf is paired with another copy of itself at the first level. The same rule applies at any later odd level.
+When a level has an odd number of nodes, Bitcoin duplicates the final node and hashes the pair:
 
-This duplication rule is specific to the block transaction and witness tree construction. It should not be assumed for Taproot script trees.
+`parent = double_sha256(last || last)`
 
-### A compact example
+This is a historical Bitcoin rule. It is not a universal property of Merkle trees and should not be copied into a new design without understanding its consequences.
 
-Suppose a block contains txids `A`, `B`, `C`, `D`, and `E`. The first parent level is:
+The duplication repeats at any odd level, not only at the transaction-leaf level. Bitcoin Core’s `ComputeMerkleRoot` appends the final hash when the level size is odd and then performs pairwise double-SHA-256.
 
-- `H(A || B)`
-- `H(C || D)`
-- `H(E || E)`
+### A small example
 
-where `H` means double SHA-256. If the next level is odd, its final parent is duplicated again. The root commits to both the txids and their order.
+Suppose a block has transaction leaves `A`, `B`, and `C`, where each letter represents a 32-byte txid in internal byte order.
 
-### Merkle proofs
+The first level is:
 
-A Merkle inclusion proof contains the target leaf’s position and one sibling hash for each tree level. The verifier repeatedly combines the current value with the sibling on the correct left or right side until it computes a candidate root.
+- `P1 = H(A || B)`
+- `P2 = H(C || C)`
 
-If that candidate equals the block header’s root, the proof shows that the leaf is included in the committed ordered tree—assuming the header and proof data are interpreted under the same construction.
+The root is:
 
-A proof does not by itself show that the transaction’s scripts are valid, its inputs exist and are unspent, its values balance, or the block satisfies every consensus rule. Those claims require block and transaction validation.
+- `Root = H(P1 || P2)`
 
-### Efficient proof size
+where `H` means double SHA-256.
 
-A balanced binary tree with `N` leaves has a branch length that grows approximately with `log2(N)`. This makes inclusion proofs compact compared with sending all transactions.
+A proof for `B` needs:
 
-Compactness is not the same as trustlessness. A client still needs a trustworthy way to obtain and evaluate the block header chain, the proof, and the relevant consensus context.
+- `A`, because `B` is the right child paired with `A`;
+- `P2`, because the `A/B` parent is the left child at the root level;
+- the position information indicating these left/right relationships.
+
+The verifier computes `P1`, then the root, and compares it with the header’s Merkle root.
+
+### What an inclusion proof establishes
+
+If a verifier already trusts or has validated a block header, a correct Merkle branch can establish that a given txid is included in the transaction list committed by that header, assuming the hash construction’s relevant security properties.
+
+That statement has boundaries.
+
+A Merkle proof does not by itself prove:
+
+- the transaction is valid under Bitcoin consensus;
+- the block is valid under all consensus rules;
+- the block belongs to the best valid chain;
+- the transaction’s inputs were unspent;
+- the transaction has a particular number of confirmations;
+- the transaction cannot be reorganized out;
+- the recipient controls an output;
+- the transaction remains economically final.
+
+A fully validating node checks the transaction, scripts, amounts, lock rules, block structure, proof of work, chain history, and UTXO transitions. A Merkle branch is only one commitment proof inside that larger process.
+
+### Proof size
+
+For a balanced binary tree with `N` leaves, an inclusion branch needs roughly one sibling hash per tree level, so proof size grows logarithmically with `N`.
+
+For example, doubling the number of transactions generally adds only one additional 32-byte sibling to a simple branch. This is the efficiency benefit: a verifier can connect one transaction to a root without receiving the full block.
+
+The actual message also needs position data, the transaction or txid being proved, and the block header or another trusted root. BIP 37 partial Merkle trees may include more hashes than a single branch because they can prove multiple matched transactions together.
 
 ### Inclusion, confirmation, and finality
 
-An inclusion proof tied to a block header shows commitment to one block. A **confirmation** means that block is in the chain a node currently considers best under proof-of-work and consensus rules. Additional confirmations mean more work has accumulated on top.
+A transaction is **included** when it appears in a block’s committed transaction list.
 
-Bitcoin does not have an absolute cryptographic finality point in which reorganization becomes mathematically impossible. Reorganization risk generally decreases as more work accumulates, but an inclusion proof alone does not measure chain work, validate the chain, or guarantee economic finality.
+It has one **confirmation** when that valid block is part of the best chain as evaluated by a node. Each valid descendant block increases the confirmation count.
 
-### Historical mutation issue
+“Finality” in Bitcoin is economic and probabilistic rather than a Merkle-tree property. A chain reorganization can remove a previously included transaction from the best chain. The practical cost and likelihood of a reorganization generally change with accumulated proof of work and circumstances, but no Merkle branch turns a confirmation into an irreversible guarantee.
 
-Bitcoin’s odd-node duplication creates an ambiguity when a tree ends with two identical hashes. A list ending in `X` can produce the same Merkle root as a list ending in `X, X` at the affected level. Historically, this interacted with duplicate-transaction handling and block-processing caches in the issue commonly associated with CVE-2012-2459.
+A proof anchored to an orphaned or invalid block header can remain mathematically correct for that header while no longer demonstrating inclusion in the node’s active chain.
 
-The hash function was not broken. The problem arose from the tree construction allowing different leaf lists to map to the same root through duplicate handling, plus surrounding implementation behavior.
+### The historical mutation issue
 
-### Bitcoin Core mutated-tree detection
+Bitcoin’s odd-node duplication creates an ambiguity when duplicate transaction identifiers appear in specific positions. Bitcoin Core’s source documents the historical issue associated with CVE-2012-2459.
 
-Bitcoin Core’s `ComputeMerkleRoot` checks for equal adjacent hashes before applying the odd-node duplication step. If an equal pair is found in the original level data, the function can report the tree as mutated.
+Consider a level ending in two identical real child hashes. That pair can produce the same parent as a shorter level where the final child is duplicated by the odd-node rule. Under certain transaction-list patterns, distinct lists can therefore produce the same root without requiring a break of double SHA-256.
 
-The implementation deliberately checks before appending the duplicated odd node so normal odd-node handling is not itself flagged. Mutation detection is one validation defense; other consensus rules, including transaction uniqueness and block validity checks, remain separate.
+The practical historical danger involved invalid-block caching. A node could receive a mutated version with the same header hash and Merkle root, mark that block invalid, and then incorrectly reject the unmutated version.
 
-### Duplicate transactions and validity
+This is a structural ambiguity in the tree algorithm, not a discovered SHA-256 collision.
 
-A duplicated txid in a block can conflict with rules independently of the Merkle root. A full node validates the transaction list, coinbase placement, inputs, values, scripts, weight, and other block requirements.
+### Bitcoin Core mutation detection
 
-The correct conclusion is not that “Merkle roots are unsafe.” It is that tree encodings can have structural edge cases, and secure validation must combine commitment checks with all applicable consensus rules.
+Bitcoin Core 31.1 detects mutation while reducing each level. Before duplicating a final odd node, it checks whether any actual adjacent pair at that level contains identical hashes. If so, it marks the tree as mutated.
+
+Block validation checks the computed root and the mutation flag. A mutated transaction tree is rejected.
+
+The detection rule distinguishes:
+
+- an identical pair that actually appeared in the list before odd duplication;
+- the normal artificial duplicate added solely because a level had odd length.
+
+Bitcoin Core’s source notes that, assuming no double-SHA-256 collisions, this detects the known transaction-list changes that preserve the root through the duplicate-node ambiguity.
+
+The warning remains relevant to implementers. Reimplementing only the root calculation without mutation detection can reproduce the commitment but omit a consensus-critical validation boundary.
+
+### Duplicate transactions and other validity rules
+
+Mutation detection is not the only protection around duplicate data. Bitcoin consensus and transaction rules impose other constraints, and a block containing duplicate transactions or duplicate-spend behavior can fail for reasons independent of the Merkle tree.
+
+The Merkle root function should not be expected to enforce all transaction validity. It consumes identifiers and produces a commitment plus mutation information. Block validation applies the rest.
+
+This separation illustrates a recurring rule: a cryptographic commitment does not validate the semantics of what was committed.
 
 ### The witness Merkle tree
 
-SegWit introduced a second tree based on witness transaction identifiers, or wtxids. For non-coinbase transactions, leaves commit to witness serialization. The coinbase transaction’s witness leaf is defined as 32 zero bytes rather than its actual wtxid.
+SegWit introduced a separate commitment to witness data. The ordinary transaction Merkle root still uses `txid` leaves, which exclude witness data. A witness tree uses `wtxid` leaves, which commit to witness-inclusive transaction serialization when witness data exists.
 
-The witness tree uses the same pairwise double-SHA-256 and odd-node duplication method as the transaction tree. Its root is not placed directly in the block header.
+Bitcoin Core’s `BlockWitnessMerkleRoot` uses:
+
+- a 32-byte zero value for the coinbase transaction’s witness leaf;
+- each non-coinbase transaction’s `wtxid` for the remaining leaves;
+- the same pairwise double-SHA-256 and odd-duplication tree algorithm.
+
+The coinbase’s actual `wtxid` is not used as its leaf. BIP 141 explicitly defines the coinbase witness transaction identifier as all zeroes for this tree.
 
 ### The witness commitment
 
-BIP 141 commits to the witness root through an output in the coinbase transaction. The commitment is:
+The witness Merkle root is not placed directly in the block header. Instead, it is combined with a 32-byte witness reserved value from the coinbase input’s witness:
 
-`DoubleSHA256(witness_root || witness_reserved_value)`
+`commitment = double_sha256(witness_root || witness_reserved_value)`
 
-The witness reserved value is a 32-byte item in the coinbase input’s witness. The commitment output uses a specified marker beginning with `aa21a9ed` after an `OP_RETURN` push.
+The commitment is placed in a coinbase output script beginning with:
 
-This creates a chain of commitments: the block header commits to the coinbase txid through the ordinary transaction tree, and the coinbase transaction commits to the witness root through the commitment output.
+`OP_RETURN 0x24 aa21a9ed`
+
+followed by the 32-byte commitment. If multiple outputs match the pattern, the highest-index matching output is used. When a witness commitment is required, the coinbase input’s witness must contain exactly one 32-byte reserved value.
+
+Because the coinbase transaction’s `txid` is a leaf of the ordinary transaction Merkle tree, the block header commits to the coinbase transaction, which contains the witness commitment. This links witness data to the header without placing another root directly in the header.
+
+The reserved value provides an extension point in the commitment construction. In currently deployed BIP 141 validation, it is included exactly as specified; it should not be described as arbitrary unused padding.
 
 ### Why there are two roots
 
-The transaction Merkle root preserves the historical header format and commits to txids, which exclude witness data. The witness commitment separately binds witness data for SegWit-aware validation.
+The transaction Merkle root preserves the pre-SegWit block-header structure and commits to transaction identifiers that exclude witness data. The witness commitment separately binds the witness-inclusive identifiers.
 
-A transaction’s txid and wtxid can therefore differ. The existence of the witness root does not replace the transaction root or make them interchangeable.
+This separation supports SegWit’s compatibility design. It also means:
 
-### Partial Merkle trees and BIP 37
+- a transaction’s `txid` and `wtxid` may differ;
+- the transaction Merkle root and witness Merkle root are different;
+- witness-only changes affect the `wtxid` and witness commitment, not the legacy `txid`;
+- a transaction inclusion proof using the header Merkle root proves inclusion of the `txid`, not a standalone proof of its witness bytes.
 
-BIP 37 introduced `merkleblock` messages containing a block header, transaction count, selected hashes, and match bits. A client can reconstruct a partial Merkle tree and verify that matched txids are included under the header’s transaction root.
+A verifier that needs the witness must validate the witness commitment and relevant transaction data, not rely only on a txid Merkle branch.
 
-The server chooses which matching transactions and branches to send based on a Bloom filter supplied by the client. The proof can demonstrate inclusion of returned matches, but it cannot prove that a dishonest peer returned every relevant match. BIP 37 clients also rely on header-chain and proof-of-work assumptions rather than fully validating every transaction and script.
+### Partial Merkle trees under BIP 37
 
-### Bloom-filter privacy limits
+BIP 37 introduced Bloom-filtered block serving and the `merkleblock` message for simplified payment verification clients. A `merkleblock` includes:
 
-Bloom filters intentionally allow false positives to obscure the client’s exact interests, but repeated queries, filter updates, network metadata, and correlation can still reveal wallet activity. False positives trade bandwidth for some ambiguity; they do not provide strong anonymity.
+- a block header;
+- the total transaction count;
+- a depth-first list of selected hashes;
+- packed flag bits describing which branches are expanded.
 
-Bitcoin Core disabled serving BIP 37 Bloom-filter requests by default in earlier releases unless explicitly enabled. Current service behavior is implementation- and configuration-specific and should be checked at an exact version.
+The partial tree lets the receiver reconstruct the full transaction Merkle root while extracting txids that matched the peer’s Bloom filter. Branches unrelated to matches can be represented by a single interior hash.
 
-### SPV versus full validation
+BIP 37 parsing rejects a partial tree when two explicitly provided child hashes are identical in a position that would reproduce the mutation ambiguity. Bitcoin Core’s partial-tree implementation also checks structural limits and whether all supplied hashes and bits were consumed appropriately.
 
-The Bitcoin paper’s simplified payment verification model uses block headers and Merkle branches without running a full network node. This can provide useful evidence under assumptions about the most-work chain and honest mining behavior.
+### BIP 37 privacy limitations
 
-It does not provide the same guarantees as independently validating blocks, scripts, amounts, and spent-output state. A full node can reject a high-work chain containing invalid transactions; a header-and-proof client may not have the data needed to detect the same failure.
+BIP 37’s Bloom filters can have false positives, which were intended to trade bandwidth for some uncertainty. However, a serving peer observes the filter, matched transactions, filter updates, connection metadata, and repeated queries. Accurate filters can reveal wallet-related keys, scripts, and transactions; broader filters consume more bandwidth without guaranteeing privacy.
+
+BIP 37 also permits lying by omission. A peer can omit a relevant transaction even if it cannot fabricate a valid inclusion proof for a transaction absent from the block.
+
+An SPV client that checks header proof of work and Merkle inclusion still does not reproduce full validation. It relies on assumptions about chain selection, peers, and the validity of blocks and transactions it does not independently verify.
+
+Bitcoin Core’s current support and default service policy for BIP 37 are implementation- and configuration-specific. The deployed BIP remains useful for understanding partial Merkle trees, but current wallet protocols should not be assumed to use it.
+
+### The Bitcoin paper’s SPV model
+
+The Bitcoin paper describes a simplified verification model that keeps block headers, follows the chain with the most proof of work, and obtains a Merkle branch linking a transaction to a block.
+
+The model provides evidence that a transaction was accepted into a proof-of-work chain under the client’s assumptions. It does not give the same guarantees as validating every block and transaction. An attacker who can isolate the client, withhold information, or present an invalid high-work chain can exploit what the client does not check.
+
+Modern lightweight-client designs may use other filters and peer strategies, but a Merkle proof alone never fills the full-validation gap.
 
 ### Taproot script trees
 
-Taproot can commit to one or more scripts through a tree whose rules differ from the block transaction tree. Each leaf uses a tagged `TapLeaf` hash over the leaf version and compact-size-prefixed script.
+Taproot can commit to optional scripts in a tree often called a tap tree. The construction differs from the block transaction tree.
 
-Each internal branch uses the tagged `TapBranch` hash over the two child hashes in lexicographic byte order:
+A Taproot leaf commits to:
 
-`TapBranch(min(a, b) || max(a, b))`
+- a leaf version;
+- the compact-size length of the script;
+- the script bytes.
 
-There is no left/right positional meaning in the same sense as the ordered transaction tree, and there is no odd-node duplication rule. The optional script-tree root is combined with an internal public key through the tagged `TapTweak` construction to form the Taproot output key.
+The tapleaf hash is:
+
+`TapLeaf = tagged_hash("TapLeaf", leaf_version || compact_size(script_length) || script)`
+
+A branch parent is:
+
+`TapBranch = tagged_hash("TapBranch", min(a, b) || max(a, b))`
+
+where the two 32-byte child hashes are ordered lexicographically before concatenation. Because of this sorting, left-versus-right position is not carried in the same way as a transaction Merkle branch.
+
+The final script-tree root is included in the Taproot tweak applied to an internal x-only public key. The output key therefore commits to both the internal key and the optional script tree.
 
 ### Control blocks and revealed branches
 
-A Taproot script-path spend reveals the executed script, its leaf version through the control block, the internal key, parity information, and the sibling hashes needed to reconstruct the script-tree root. The verifier recomputes the TapLeaf and TapBranch path, derives the tweaked output key, and checks that it matches the committed witness program.
+A Taproot script-path spend reveals:
 
-Only the executed leaf and its path need to be revealed. Other leaves can remain hidden. This is a script-commitment proof, not proof that a transaction appears in a block.
+- the tapscript;
+- the control block;
+- the witness data needed by the script.
+
+The control block contains:
+
+- a leaf version combined with the output-key parity bit;
+- the 32-byte internal x-only public key;
+- zero or more 32-byte sibling hashes forming the Merkle path.
+
+The verifier recomputes the tapleaf hash, combines it with each branch sibling using lexicographic ordering and the `TapBranch` tag, computes the Taproot tweak, and confirms that the resulting output key matches the witness program and parity.
+
+Only the executed leaf and its branch need to be revealed. Unused leaves can remain hidden, subject to what can be inferred from the revealed path, tree shape, wallet behavior, and other transaction information.
+
+### Taproot trees are not block transaction trees
+
+The differences are structural:
+
+| Property | Block transaction tree | Taproot script tree |
+|---|---|---|
+| Leaves | txids | Tagged leaf-version-and-script hashes |
+| Parent hash | Double SHA-256 | Tagged single SHA-256 |
+| Child order | Positional left then right | Lexicographically sorted |
+| Odd rule | Duplicate final node | Tree is constructed from chosen binary branches; no block-style odd duplication rule |
+| Root commitment | Direct field in block header | Included in tweak of an x-only output key |
+| Proof purpose | Transaction inclusion in a block | Reveal one committed script path |
+| Mutation handling | Bitcoin-specific duplicate-pair detection | Different construction; block mutation rule does not apply |
+
+Calling both “Merkle trees” is useful at a high level, but implementations must use the exact construction for the exact context.
 
 ### Merkleized scripts versus transaction inclusion
 
-A Taproot branch proves that a revealed script was committed under an output key. A block Merkle branch proves that a txid was committed under a block header. A witness branch contributes to the coinbase witness commitment. A BIP 37 partial tree encodes selected transaction matches.
+A Taproot control block proves that a revealed script leaf was committed by the output key, assuming the tweak and hash construction. It does not prove that a transaction containing that output was confirmed.
 
-They use different leaves, hashes, ordering rules, roots, and verification goals. Treating all of them as interchangeable “Merkle proofs” hides the protocol rule that gives each proof meaning.
+Conversely, a block Merkle branch can prove that a transaction identifier was included under a block root. It does not reveal or prove an unused Taproot script path.
 
-### What the block root does not commit to
+A complete script-path spend validation may involve both layers:
 
-The block transaction Merkle root does not commit to the current UTXO set. It commits to the block’s ordered txids. The UTXO set is derived by validating the chain and applying transactions according to consensus rules.
+- the transaction must be valid and included in a block;
+- the input witness must reveal a valid Taproot path and satisfy the tapscript;
+- the block and chain must satisfy consensus and proof-of-work rules.
 
-Bitcoin Core may maintain databases, caches, or assumeutxo-related commitments for implementation purposes, but those do not change what the consensus block-header Merkle-root field means.
+### The transaction root does not commit to the UTXO set
+
+The block header’s transaction Merkle root commits to the ordered transactions in that block. It does not directly commit to:
+
+- the UTXO set before the block;
+- the UTXO set after the block;
+- account balances;
+- address balances;
+- wallet ownership labels;
+- spent-status proofs for arbitrary outputs.
+
+A fully validating node derives its UTXO state by processing valid blocks in order and applying spends and creations. Bitcoin Core maintains implementation-specific databases and caches for this state, but the current UTXO set is not the leaf set of the block transaction Merkle tree.
+
+Proposals and research have considered UTXO commitments and accumulators, but they should not be described as deployed merely because Bitcoin already uses Merkle trees elsewhere.
+
+### Confirmation proofs require chain context
+
+To claim that a transaction has a certain number of confirmations, a verifier needs more than one Merkle branch. It needs:
+
+- the block header containing the committed root;
+- evidence that the header is part of a valid chain;
+- descendant headers or validated blocks;
+- the node’s chain-selection result;
+- awareness of reorganizations and competing branches.
+
+Header proof of work is necessary but not sufficient for full validation. Invalid blocks can have valid proof of work. A fully validating node also checks version and target rules, timestamps, Merkle mutation, witness commitment, transaction validity, scripts, subsidy and fees, and all applicable consensus rules.
+
+### Endianness and proof serialization
+
+A Merkle proof implementation frequently fails not because of SHA-256 but because of byte-order assumptions.
+
+Common distinctions include:
+
+- displayed txid hex versus internal 32-byte hash order;
+- little-endian integer serialization inside transactions and headers;
+- direct byte concatenation of 32-byte hash objects;
+- reversal for human display;
+- left/right branch order for block trees;
+- lexicographic byte comparison for Taproot branches.
+
+Test vectors should be reproduced byte for byte. A diagram that reverses hashes for readability should say so.
+
+### Test and fuzz evidence
+
+Bitcoin Core’s Merkle unit tests cover roots, branches, odd leaf counts, duplicate-child mutation cases, and path reconstruction. Partial Merkle-tree tests cover serialization, extraction, malformed structures, and duplicate-branch rejection. Fuzz targets exercise Merkle-block parsing and branch behavior with generated inputs.
+
+Witness-commitment functional tests cover coinbase reserved values, matching output selection, malformed commitments, and witness data. Taproot functional and wallet vectors cover tapleaf, branch, tweak, control-block, and script-path validation.
+
+Tests provide reproducible evidence that an implementation follows specified cases. They do not prove the entire implementation or construction is free from defects.
+
+### A Merkle-proof checklist
+
+When evaluating a “Merkle proof,” ask:
+
+- Which tree is this: transaction, witness, partial transaction, or Taproot script?
+- What exactly are the leaves?
+- Which hash construction is used for leaves and parents?
+- Are child hashes positional or sorted?
+- Is there an odd-node duplication rule?
+- What root is trusted, and how is it committed?
+- Does the proof establish inclusion only, or is separate script and transaction validation performed?
+- Is the header in the active valid chain?
+- How many confirmations are established, and under which node’s chain view?
+- Does the claim incorrectly infer UTXO state, ownership, or irreversibility?
+- Which implementation version and tests reproduce the proof?
+
+Merkle trees make compact commitments possible. They do not collapse Bitcoin’s validation system into one root hash.
 
 ## 3. Key Terms
 
-- **Merkle tree:** Hash tree combining many leaves into one root commitment.
-- **Merkle root:** Final hash committing to the tree under defined construction rules.
-- **Merkle proof:** Leaf position plus sibling hashes used to reconstruct a root.
-- **txid leaf:** Internal transaction identifier used in the block transaction tree.
-- **Odd-node duplication:** Rule that duplicates the final node at an odd level.
-- **Mutation:** Structural ambiguity where distinct leaf lists can produce the same root under duplicate handling.
-- **wtxid:** Identifier committing to a transaction’s witness serialization.
-- **Witness commitment:** Coinbase commitment to the witness root and reserved value.
-- **Partial Merkle tree:** BIP 37 encoding of selected matches and necessary branches.
-- **TapLeaf:** Tagged hash committing to a Taproot leaf version and script.
-- **TapBranch:** Tagged hash combining lexicographically ordered Taproot child hashes.
-- **Control block:** Taproot script-path data revealing the internal key and Merkle branch.
-- **UTXO set:** Current set of unspent transaction outputs derived through full validation.
+- **Merkle tree:** Tree of hash commitments reducing many leaves to one root.
+- **Merkle root:** Top hash committing to the tree’s leaves under a defined construction.
+- **Leaf:** Base item or base hash included in the tree.
+- **Merkle branch:** Sibling hashes and position information used to connect one leaf to a root.
+- **Inclusion proof:** Proof that a leaf contributes to a committed root under the tree rules.
+- **Transaction Merkle root:** Block-header field committing to the ordered txids in a block.
+- **Odd-node duplication:** Bitcoin transaction-tree rule that duplicates the final node at an odd level.
+- **Mutation:** Bitcoin-specific ambiguity where certain duplicate transaction-list patterns can produce the same root.
+- **Witness Merkle root:** Root built from zero for the coinbase leaf and non-coinbase wtxids.
+- **Witness reserved value:** 32-byte coinbase witness value combined with the witness root.
+- **Witness commitment:** Double-SHA-256 commitment to witness root and reserved value in a coinbase output.
+- **Partial Merkle tree:** Compact BIP 37 representation proving one or more matched txids.
+- **SPV:** Simplified verification model using headers and inclusion proofs without full transaction validation.
+- **Tapleaf:** Tagged hash committing to a Taproot leaf version and script.
+- **TapBranch:** Tagged hash of two lexicographically ordered Taproot child hashes.
+- **Control block:** Taproot script-path data carrying internal key, parity, leaf version, and branch hashes.
+- **UTXO set:** Current set of unspent transaction outputs derived by full validation; not the block transaction tree’s leaves.
+- **Confirmation:** Inclusion in a block on the active chain plus descendant chain context.
+- **Economic finality:** Practical confidence against reversal; not a property established by a Merkle branch alone.
 
 ## 4. Sources
 
-1. **Bitcoin Whitepaper — Section 8** | Satoshi Nakamoto
+1. **Bitcoin: A Peer-to-Peer Electronic Cash System** | Satoshi Nakamoto
    - URL: https://bitcoin.org/bitcoin.pdf
-   - Supports: Historical SPV header-and-Merkle-branch model.
+   - Supports: Block transaction trees, simplified payment verification, headers, inclusion branches, and proof-of-work chain context.
 2. **BIP 37 — Connection Bloom Filtering** | Mike Hearn, Matt Corallo
    - URL: https://github.com/bitcoin/bips/blob/master/bip-0037.mediawiki
-   - Supports: Partial Merkle trees, match bits, proof construction, and omission boundary.
+   - Supports: Partial Merkle-tree format, matched transaction extraction, Bloom-filter privacy tradeoffs, omission boundary, and SPV use.
 3. **BIP 141 — Segregated Witness** | Eric Lombrozo, Johnson Lau, Pieter Wuille
    - URL: https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki
-   - Supports: Witness tree, zero coinbase wtxid leaf, reserved value, and coinbase commitment.
-4. **BIP 341 — Taproot** | Pieter Wuille, Jonas Nick, Anthony Towns
+   - Supports: wtxid leaves, zero coinbase leaf, witness root, reserved value, coinbase commitment format, and matching-output rule.
+4. **BIP 341 — Taproot: SegWit Version 1 Spending Rules** | Pieter Wuille, Jonas Nick, Anthony Towns
    - URL: https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki
-   - Supports: TapLeaf, lexicographic TapBranch, TapTweak, control blocks, and script-path verification.
-5. **Bitcoin Core 31.1 Tag Commit** | Bitcoin Core contributors
+   - Supports: TapLeaf, TapBranch, lexicographic branch ordering, TapTweak, control-block proof, and output-key commitment.
+5. **BIP 342 — Validation of Taproot Scripts** | Pieter Wuille, Jonas Nick, Anthony Towns
+   - URL: https://github.com/bitcoin/bips/blob/master/bip-0342.mediawiki
+   - Supports: Tapscript leaf-version and script-path execution boundaries.
+6. **CVE-2012-2459** | National Vulnerability Database
+   - URL: https://nvd.nist.gov/vuln/detail/CVE-2012-2459
+   - Supports: Historical duplicate-transaction Merkle-tree denial-of-service vulnerability record.
+7. **Bitcoin Core 31.1 Tag Commit** | Bitcoin Core contributors
    - URL: https://github.com/bitcoin/bitcoin/commit/9be056a8a72b624dae9623b2f7bded92c2a21c91
    - Supports: Exact implementation version reviewed July 25, 2026.
-6. **Bitcoin Core 31.1 Merkle Construction** | Bitcoin Core contributors
+8. **Bitcoin Core 31.1 Consensus Merkle Implementation** | Bitcoin Core contributors
    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/consensus/merkle.cpp
-   - Supports: txid and wtxid leaves, pairwise double SHA-256, odd duplication, and mutation detection.
-7. **Bitcoin Core 31.1 Merkle Interface** | Bitcoin Core contributors
+   - Supports: txid leaves, pairwise double-SHA-256, odd duplication, mutation detection, witness leaves, and path construction.
+9. **Bitcoin Core 31.1 Consensus Merkle Interface** | Bitcoin Core contributors
    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/consensus/merkle.h
-   - Supports: Root, witness root, and mutation-reporting interfaces.
-8. **Bitcoin Core 31.1 Block Validation** | Bitcoin Core contributors
-   - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/validation.cpp
-   - Supports: Block Merkle-root and witness-commitment validation context.
-9. **Bitcoin Core 31.1 Merkle Unit Tests** | Bitcoin Core contributors
-   - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/test/merkle_tests.cpp
-   - Supports: Merkle roots, branches, odd levels, and mutation cases.
-10. **Bitcoin Core 31.1 Partial Merkle Tree Code** | Bitcoin Core contributors
+   - Supports: Root, mutation, witness-root, and transaction-path interfaces.
+10. **Bitcoin Core 31.1 Block Primitives** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/primitives/block.h
+    - Supports: Block-header Merkle-root field and block data structure.
+11. **Bitcoin Core 31.1 Transaction Primitives** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/primitives/transaction.cpp
+    - Supports: txid and wtxid construction used as leaves.
+12. **Bitcoin Core 31.1 Block Validation** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/validation.cpp
+    - Supports: Merkle-root validation, mutation rejection, witness commitment validation, and chain-context boundaries.
+13. **Bitcoin Core 31.1 Partial Merkle Tree Interface** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/merkleblock.h
+    - Supports: Partial-tree structure, serialized fields, matched bits, and extraction interface.
+14. **Bitcoin Core 31.1 Partial Merkle Tree Implementation** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/merkleblock.cpp
-    - Supports: BIP 37 partial-tree extraction and validation.
-11. **Bitcoin Core 31.1 SegWit Functional Test** | Bitcoin Core contributors
+    - Supports: Depth-first construction, extraction, duplicate-child rejection, and malformed-tree checks.
+15. **Bitcoin Core 31.1 Merkle Unit Tests** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/test/merkle_tests.cpp
+    - Supports: Roots, paths, odd nodes, duplicate mutation cases, and branch reconstruction.
+16. **Bitcoin Core 31.1 Merkle Block Tests** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/test/merkleblock_tests.cpp
+    - Supports: Partial Merkle construction, extraction, serialization, and malformed cases.
+17. **Bitcoin Core 31.1 Merkle Block Fuzz Target** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/test/fuzz/merkleblock.cpp
+    - Supports: Generated-input parsing and structural test evidence.
+18. **Bitcoin Core 31.1 SegWit Functional Test** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/test/functional/p2p_segwit.py
-    - Supports: Witness commitment and SegWit block-validation cases.
-12. **CVE-2012-2459 Record** | NIST National Vulnerability Database
-    - URL: https://nvd.nist.gov/vuln/detail/CVE-2012-2459
-    - Supports: Historical duplicate-transaction and Merkle-root mutation context.
-13. **Bitcoin Core 31.1 Taproot Functional Test** | Bitcoin Core contributors
+    - Supports: Coinbase reserved value, witness root, commitment output, malformed cases, and validation behavior.
+19. **Bitcoin Core 31.1 Taproot Functional Test** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/test/functional/feature_taproot.py
-    - Supports: Taproot script-tree and control-block validation cases.
+    - Supports: Script trees, control blocks, branch paths, leaf versions, parity, and script-path validation.
+20. **Bitcoin Core 31.1 BIP 341 Wallet Vectors** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/test/data/bip341_wallet_vectors.json
+    - Supports: Tapleaf, branch, tweak, output-key, and control-block construction vectors.
+21. **Bitcoin Core 31.1 Script Interpreter** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/script/interpreter.cpp
+    - Supports: TapLeaf and TapBranch tagged-hash construction and control-block verification.
+22. **Bitcoin Core 31.1 Hash Primitives** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/hash.h
+    - Supports: Double-SHA-256 and tagged-hash helper constructions used by the trees.
+23. **Bitcoin Core 31.1 Chainstate Documentation** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/doc/design/assumeutxo.md
+    - Supports: Separation between block commitments, chainstate, and UTXO-set handling in Bitcoin Core.
+24. **BIP 158 — Compact Block Filters for Light Clients** | Olaoluwa Osuntokun, Alex Akselrod
+    - URL: https://github.com/bitcoin/bips/blob/master/bip-0158.mediawiki
+    - Supports: A separate modern compact-filter construction and the boundary from BIP 37 partial Merkle proofs.
 
 ## 5. SEO title
 
@@ -230,15 +469,15 @@ How Merkle Trees Work in Bitcoin | Mempool Surf Club
 
 ## 6. Meta description
 
-Learn how Bitcoin transaction, witness, partial, and Taproot trees differ—and what their roots and inclusion proofs do and do not establish.
+Learn how Bitcoin transaction, witness, partial, and Taproot trees work—and what inclusion proofs do not prove about validity, UTXOs, confirmations, or finality.
 
 ## 7. Page excerpt
 
-Bitcoin uses several distinct tree constructions. See how block roots, witness commitments, BIP 37 proofs, and Taproot script branches serve different validation goals.
+Trace Bitcoin’s transaction Merkle root, SegWit witness commitment, BIP 37 partial proofs, and Taproot script trees without confusing inclusion with validity.
 
 ## 8. Estimated reading time
 
-16 to 19 minutes
+20 to 23 minutes
 
 ## 9. Planned internal links
 
@@ -246,69 +485,75 @@ Do not activate planned links until the destination exists as a real published p
 
 - Previous: MSC-GUIDE-059 | How Hash Functions Work in Bitcoin
 - Next: MSC-GUIDE-061 | How Bitcoin RPC Works
-- Prerequisite: MSC-GUIDE-009 | How Bitcoin Transactions Work
-- Prerequisite: MSC-GUIDE-011 | How Bitcoin Blocks Work
-- Branch: MSC-GUIDE-055 | How Taproot Changed Bitcoin
-- Branch: MSC-GUIDE-056 | How SegWit Changed Bitcoin
+- Prerequisite: MSC-GUIDE-013 | What Are UTXOs in Bitcoin?
+- Prerequisite: MSC-GUIDE-014 | How Bitcoin Confirmations Work
+- Prerequisite: MSC-GUIDE-017 | How Bitcoin Mining Works
+- Prerequisite: MSC-GUIDE-055 | How Taproot Changed Bitcoin
+- Prerequisite: MSC-GUIDE-056 | How SegWit Changed Bitcoin
+- Branch: MSC-GUIDE-021 | What Is a Bitcoin Full Node?
+- Branch: MSC-GUIDE-059 | How Hash Functions Work in Bitcoin
 - Return: MSC-HUB-DEVELOPMENT | Bitcoin Development
 - Primary path: MSC-PATH-BUILD | Build on Bitcoin
 - Secondary path: MSC-PATH-NETWORK | Understand the Network
 
 ## 10. Accuracy review checklist
 
-- [x] Transaction leaves, pairwise double SHA-256, order, odd duplication, proofs, and header commitment are explained.
-- [x] Inclusion, validity, confirmation, reorganization risk, and economic finality remain distinct.
-- [x] Historical mutation, CVE-2012-2459 context, and Bitcoin Core detection are qualified.
-- [x] Transaction and witness trees remain distinct, including the zero coinbase wtxid and reserved value.
-- [x] BIP 37 partial trees, omission limits, privacy weaknesses, and SPV boundaries are stated.
-- [x] TapLeaf, lexicographic TapBranch, TapTweak, control blocks, and block-tree differences are explicit.
+- [x] Transaction leaves, pairwise double-SHA-256, order, odd-node duplication, and header commitment are explained.
+- [x] Inclusion, transaction validity, block validity, confirmation, active-chain membership, economic finality, ownership, and UTXO state remain distinct.
+- [x] CVE-2012-2459 is described as a structural duplicate-node ambiguity rather than a SHA-256 collision.
+- [x] Bitcoin Core’s mutation detection distinguishes actual duplicate siblings from artificial odd-node duplication.
+- [x] Witness tree leaves, zero coinbase wtxid, reserved value, commitment hash, and coinbase output format are correct.
+- [x] BIP 37 partial-tree format, omission boundary, privacy limitations, and SPV validation gap are qualified.
+- [x] TapLeaf, TapBranch, lexicographic ordering, TapTweak, control blocks, and script-tree privacy boundaries remain distinct from block trees.
 - [x] The block transaction root is not described as a UTXO-set commitment.
-- [x] Byte-order presentation and current implementation claims are bounded and dated.
-- [x] Planned internal links remain inactive.
+- [x] Endianness, proof serialization, and test-vector boundaries are identified.
+- [x] Bitcoin Core implementation and test claims are pinned to 31.1 and dated July 25, 2026.
+- [x] No Merkle proof is described as an irreversible or complete validation proof.
+- [x] Planned internal links remain inactive and do not imply publication.
 
 ## 11. Human verification
 
 - Reviewer: Pending — Bitcoin cryptography and implementation specialist
 - Review date: Pending
-- Notes: Human Verification remains pending. The specialist pass must reconfirm Core’s leaf byte order, odd duplication and mutation detection, CVE context, witness commitment validation, BIP 37 proof and privacy wording, TapLeaf and TapBranch serialization, control-block reconstruction, UTXO-set distinction, and all inclusion-versus-validity claims.
+- Notes: Human Verification remains pending. The specialist pass must reproduce Bitcoin Core 31.1 transaction and witness roots, branch paths, odd-node handling, mutation detection and tests; confirm the CVE-2012-2459 description; recheck witness reserved-value and commitment validation; parse BIP 37 partial-tree and privacy boundaries; reproduce TapLeaf, TapBranch, lexicographic ordering, tweak, parity, and control-block rules; and confirm the distinctions among inclusion, validity, active-chain confirmation, economic finality, and UTXO state.
 
 ## 12. Illustration brief
 
 ### Illustration 1
 
 - Concept title: The Block Transaction Tree Plate
-- Educational purpose: Show txid leaves, double-SHA-256 parents, odd duplication, a proof branch, and the header root.
-- Recommended placement: After A compact example.
-- Visual description: Vintage engineering plate with five ordered transaction leaves; the fifth is duplicated, one proof path is highlighted, and the root feeds a block-header field.
+- Educational purpose: Show txid leaves, pairwise double-SHA-256, odd-node duplication, branch proof, and header root.
+- Recommended placement: After A small example.
+- Visual description: Vintage engineering plate with five ordered transaction leaves; the fifth is duplicated at the first level, one transaction’s proof path is highlighted, and the root feeds into a labeled block-header field.
 - Required labels: Ordered txids, Double SHA-256, Odd-node duplicate, Sibling hash, Merkle branch, Merkle root, Block header
 - Caption: Bitcoin’s block tree commits to ordered txids and duplicates the final node at odd levels.
-- Alt text: Bitcoin transaction Merkle tree with five leaves, odd duplication, an inclusion branch, and header root.
+- Alt text: Technical diagram of a Bitcoin transaction Merkle tree with five txid leaves, odd-node duplication, an inclusion branch, and the block-header root.
 - Image orientation: Landscape
-- Mobile crop notes: Preserve one highlighted branch from leaf to header.
+- Mobile crop notes: Preserve one highlighted branch from leaf to header root.
 - Status: PLANNED
 
 ### Illustration 2
 
-- Concept title: The Witness Commitment Chain
-- Educational purpose: Explain how witness data reaches a commitment inside the coinbase transaction.
-- Recommended placement: After The witness commitment.
-- Visual description: Nautical chain diagram from wtxid leaves to witness root, reserved value, coinbase commitment output, coinbase txid, transaction root, and block header.
-- Required labels: wtxids, Zero coinbase leaf, Witness root, Reserved value, aa21a9ed, Coinbase txid, Transaction root, Block header
-- Caption: SegWit binds witness data through the coinbase transaction rather than a new header field.
-- Alt text: Witness commitment chain from wtxid tree through the coinbase transaction to the block header.
+- Concept title: SegWit’s Nested Witness Commitment
+- Educational purpose: Explain how the witness tree reaches the block header through the coinbase transaction.
+- Recommended placement: After Why there are two roots.
+- Visual description: Layered nautical cutaway: non-coinbase wtxids plus a zero coinbase leaf form the witness root; the root combines with the reserved value; the commitment enters a coinbase OP_RETURN output; the coinbase txid then enters the ordinary transaction tree and block header.
+- Required labels: Coinbase leaf = zero, wtxids, Witness Merkle root, Witness reserved value, Double SHA-256, Coinbase commitment output, Coinbase txid, Transaction Merkle root, Block header
+- Caption: SegWit binds witness data to the header through a commitment carried inside the coinbase transaction.
+- Alt text: Layered diagram showing the witness Merkle root and reserved value committed in the coinbase, then included through the transaction Merkle root.
 - Image orientation: Landscape
-- Mobile crop notes: Use a vertical chain with the coinbase commitment centered.
+- Mobile crop notes: Use a vertical nested-commitment flow with the block header at the top.
 - Status: PLANNED
 
 ### Illustration 3
 
 - Concept title: Four Trees, Four Proofs
-- Educational purpose: Separate block, witness, BIP 37 partial, and Taproot script constructions.
-- Recommended placement: After Merkleized scripts versus transaction inclusion.
-- Visual description: Cartographic comparison with four islands, each showing its own leaves, hash rule, root location, and proof goal; connecting waters are labeled “not interchangeable.”
-- Required labels: Transaction tree, Witness tree, Partial Merkle tree, Taproot script tree, txid, wtxid, Match bits, TapLeaf, TapBranch, Inclusion, Script commitment
-- Caption: Bitcoin’s tree constructions use different leaves and verification goals.
-- Alt text: Comparison of transaction, witness, BIP 37 partial, and Taproot script trees.
+- Educational purpose: Prevent confusion among block transaction, witness, BIP 37 partial, and Taproot script trees.
+- Recommended placement: After Taproot trees are not block transaction trees.
+- Visual description: Four-panel vintage cartographic comparison: ordered txid tree, zero-coinbase wtxid tree, pruned BIP 37 partial tree with flags, and lexicographically sorted tagged Taproot script tree with a control block.
+- Required labels: Transaction tree, Witness tree, Partial Merkle tree, Taproot script tree, txid, wtxid, Flags, TapLeaf, TapBranch, Control block, Inclusion, Script reveal
+- Caption: Bitcoin’s tree constructions share a compression idea but differ in leaves, hashing, ordering, commitment location, and proof meaning.
+- Alt text: Comparison of Bitcoin transaction, witness, partial, and Taproot script tree constructions.
 - Image orientation: Landscape
-- Mobile crop notes: Stack the four islands as labeled panels.
+- Mobile crop notes: Arrange as a two-by-two grid with one identifying rule under each panel.
 - Status: PLANNED
