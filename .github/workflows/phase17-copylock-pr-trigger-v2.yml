@@ -1,0 +1,128 @@
+name: Phase 17 copy-lock PR trigger v2
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/phase17-copylock-pr-trigger-v2.yml
+
+permissions:
+  contents: write
+
+jobs:
+  copy-lock:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: content/learn-infrastructure-061-064
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Create and push audited metadata-only commit
+        env:
+          EXPECTED_HEAD: 8c3ade5f025215fc870a39819b20e5f7e16bdcb4
+          SOURCE_BRANCH: content/learn-infrastructure-061-064
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          test "$(git ls-remote origin "refs/heads/$SOURCE_BRANCH" | cut -f1)" = "$EXPECTED_HEAD"
+
+          python3 <<'PY'
+          from pathlib import Path
+          import json, re, subprocess
+
+          accepted = "8c3ade5f025215fc870a39819b20e5f7e16bdcb4"
+          manifest_path = Path("docs/learn/content/content-manifest.json")
+          guides = [
+              Path("docs/learn/content/guides/MSC-GUIDE-061-bitcoin-rpc.md"),
+              Path("docs/learn/content/guides/MSC-GUIDE-062-bitcoin-development-environment.md"),
+              Path("docs/learn/content/guides/MSC-GUIDE-063-bitcoin-software-testing.md"),
+              Path("docs/learn/content/guides/MSC-GUIDE-064-bitcoin-infrastructure.md"),
+          ]
+          expected_counts = {
+              "061": (2760, 21), "062": (2517, 22),
+              "063": (2372, 24), "064": (3167, 29),
+          }
+          transitions = [
+              (b"status: EDITORIAL_REVIEW\n", b"status: COPY_LOCKED\n"),
+              (b"reviewed_date: null\n", b"reviewed_date: 2026-07-26\n"),
+              (b"copy_locked_date: null\n", b"copy_locked_date: 2026-07-26\n"),
+          ]
+          word_re = re.compile(r"\b[\w’'-]+\b", re.UNICODE)
+
+          def original(path):
+              return subprocess.check_output(["git", "show", f"{accepted}:{path.as_posix()}"])
+
+          old_manifest = original(manifest_path)
+          new_manifest = old_manifest
+          for number in range(61, 65):
+              rid = f"MSC-GUIDE-{number:03d}".encode()
+              pattern = re.compile(rb'("registry_id": "' + re.escape(rid) + rb'".*?"status": )"EDITORIAL_REVIEW"', re.DOTALL)
+              new_manifest, count = pattern.subn(rb'\1"COPY_LOCKED"', new_manifest, count=1)
+              if count != 1:
+                  raise SystemExit(f"Manifest transition failed for {rid.decode()}: {count}")
+          json.loads(new_manifest.decode())
+          manifest_path.write_bytes(new_manifest)
+
+          for path in guides:
+              before = original(path)
+              after = before
+              for old, new in transitions:
+                  if after.count(old) != 1:
+                      raise SystemExit(f"Unexpected {old!r} count in {path}")
+                  after = after.replace(old, new, 1)
+              reversed_bytes = after
+              for old, new in reversed(transitions):
+                  if reversed_bytes.count(new) != 1:
+                      raise SystemExit(f"Unexpected reverse {new!r} count in {path}")
+                  reversed_bytes = reversed_bytes.replace(new, old, 1)
+              if reversed_bytes != before:
+                  raise SystemExit(f"Reverse byte verification failed for {path}")
+              path.write_bytes(after)
+
+              text = after.decode()
+              article = text.split("## 2. Full article", 1)[1].split("## 3. Key Terms", 1)[0]
+              sources = text.split("## 4. Sources", 1)[1].split("## 5. SEO title", 1)[0]
+              actual = (len(word_re.findall(article)), len(re.findall(r"(?m)^\d+\. \*\*", sources)))
+              number = path.name.split("-")[2]
+              if actual != expected_counts[number]:
+                  raise SystemExit(f"Count mismatch for {path}: {actual}")
+              if text.count("- Status: PLANNED") != 3:
+                  raise SystemExit(f"Illustration mismatch for {path}")
+              if "Reviewer: Mempool Surf Club Editorial" not in text or "Review date: 2026-07-26" not in text:
+                  raise SystemExit(f"Human Verification mismatch for {path}")
+
+          reversed_manifest = new_manifest
+          for number in range(61, 65):
+              rid = f"MSC-GUIDE-{number:03d}".encode()
+              pattern = re.compile(rb'("registry_id": "' + re.escape(rid) + rb'".*?"status": )"COPY_LOCKED"', re.DOTALL)
+              reversed_manifest, count = pattern.subn(rb'\1"EDITORIAL_REVIEW"', reversed_manifest, count=1)
+              if count != 1:
+                  raise SystemExit(f"Manifest reverse failed for {rid.decode()}")
+          if reversed_manifest != old_manifest:
+              raise SystemExit("Manifest reverse byte verification failed")
+          PY
+
+          cat > /tmp/files <<'EOF'
+          docs/learn/content/content-manifest.json
+          docs/learn/content/guides/MSC-GUIDE-061-bitcoin-rpc.md
+          docs/learn/content/guides/MSC-GUIDE-062-bitcoin-development-environment.md
+          docs/learn/content/guides/MSC-GUIDE-063-bitcoin-software-testing.md
+          docs/learn/content/guides/MSC-GUIDE-064-bitcoin-infrastructure.md
+          EOF
+          git diff --name-only | sort > /tmp/actual
+          diff -u <(sort /tmp/files) /tmp/actual
+          git diff --check
+          git config user.name "Mempool Surf Club Editorial"
+          git config user.email "mempoolsurfclub@users.noreply.github.com"
+          git add --pathspec-from-file=/tmp/files
+          git diff --cached --check
+          git commit -m "Lock Phase 17 Bitcoin infrastructure guides"
+          test "$(git rev-parse HEAD^)" = "$EXPECTED_HEAD"
+          git diff --name-only "$EXPECTED_HEAD" HEAD | sort > /tmp/committed
+          diff -u <(sort /tmp/files) /tmp/committed
+          test "$(git ls-remote origin "refs/heads/$SOURCE_BRANCH" | cut -f1)" = "$EXPECTED_HEAD"
+          git push origin "HEAD:refs/heads/$SOURCE_BRANCH"
+          test "$(git ls-remote origin "refs/heads/$SOURCE_BRANCH" | cut -f1)" = "$(git rev-parse HEAD)"
