@@ -78,11 +78,13 @@ Bitcoin’s signature-hash flags let the signer choose which transaction compone
 
 `SIGHASH_NONE` commits to no outputs. The signer authorizes the selected input-side context while allowing outputs to be changed under the algorithm’s remaining rules.
 
-`SIGHASH_SINGLE` generally commits to the output with the same index as the signed input. Legacy handling includes a historical out-of-range behavior that produces the constant one hash. BIP 341 instead makes Taproot `SIGHASH_SINGLE` invalid when no corresponding output exists.
+`SIGHASH_SINGLE` generally commits to the output with the same index as the signed input. The out-of-range boundary differs by signature version. Legacy signature hashing returns the historical 256-bit value one when no corresponding output exists. BIP 143 SegWit version 0 does not take that legacy early-return path; it constructs the BIP 143 message with a zero `hashOutputs` value. BIP 341 instead makes Taproot `SIGHASH_SINGLE` invalid when no corresponding output exists.
 
 `SIGHASH_ANYONECANPAY` modifies the input commitment. It can be combined with `ALL`, `NONE`, or `SINGLE` to commit only to the current input rather than the normal set of inputs.
 
 `SIGHASH_DEFAULT` is Taproot-only value `0x00`. It has the output behavior of `SIGHASH_ALL` and is implied when the optional sighash byte is omitted from a 64-byte Taproot signature.
+
+Undefined sighash values also have version-specific treatment. BIP 341 permits only `0x00`, `0x01`, `0x02`, `0x03`, `0x81`, `0x82`, and `0x83`; any other Taproot hash type fails validation, and an explicit appended `0x00` is invalid. For legacy and SegWit version 0 ECDSA, Bitcoin Core’s `SCRIPT_VERIFY_STRICTENC` standardness rule rejects undefined hash-type bytes, but that flag is explicitly not intended as a consensus rule. Without that policy flag, consensus signature hashing masks the historical mode bits and includes the complete hash-type value in the digest. Software must reproduce the applicable behavior rather than assuming every unknown ECDSA byte is consensus-invalid.
 
 These modes are protocol tools, not automatically safe wallet choices. A signer and user interface must understand whether a mode permits another party to add inputs, replace outputs, reorder pairs, or otherwise complete a collaborative transaction.
 
@@ -94,7 +96,7 @@ The algorithm substitutes a `scriptCode` for the input being checked while blank
 
 Legacy signature hashing does not commit to the amount of the previous output being spent. A fully validating node can obtain that amount from its UTXO view, but an offline signer that receives only an unsigned legacy transaction cannot calculate the fee from that transaction alone. It may need the full previous transaction or other trusted context.
 
-The historical `SIGHASH_SINGLE` out-of-range behavior returns the 256-bit value one instead of a digest of a normal transaction serialization. This is deployed behavior and must be reproduced by compatible implementations; it should not be generalized to Taproot.
+The historical legacy `SIGHASH_SINGLE` out-of-range behavior returns the 256-bit value one instead of a digest of a normal transaction serialization. This is deployed behavior and must be reproduced by compatible implementations; it should not be generalized to SegWit version 0 or Taproot.
 
 ### BIP 143 and SegWit version 0
 
@@ -112,6 +114,8 @@ BIP 143 defines the signature-hash algorithm for ECDSA checks in version 0 witne
 - sighash type.
 
 The important amount boundary is explicit: BIP 143 commits to the amount of the output spent by the signed input. If an offline signer is given a false amount, the resulting signature will not verify against the real previous output. That protects the signature from authorizing a different amount, but the device still needs enough reliable information and interface logic to understand destinations, scripts, change, and fees.
+
+For out-of-range `SIGHASH_SINGLE`, Bitcoin Core 31.1’s witness-v0 path leaves `hashOutputs` as zero and continues constructing the BIP 143 digest. It does not return the legacy constant-one hash.
 
 Bitcoin Core 31.1 precomputes reusable double-SHA-256 values for BIP 143. This is an implementation optimization, not a different message or validity rule.
 
@@ -147,7 +151,9 @@ Strict encoding matters because consensus cannot safely depend on different vers
 
 For ECDSA, if `(r, s)` is a valid signature, `(r, n - s)` is also valid for the same key and message. This creates a signature-level malleability form unless one representative is required.
 
-Bitcoin Core’s signing code creates low-S signatures. In Bitcoin Core 31.1, `SCRIPT_VERIFY_LOW_S` is part of standard transaction policy rather than the mandatory consensus flag set. SegWit’s witness commitment removes third-party witness changes from the legacy `txid`, but changing witness data can still change the `wtxid`.
+Bitcoin Core’s signing code creates low-S signatures. In Bitcoin Core 31.1, `SCRIPT_VERIFY_LOW_S` is included in `STANDARD_SCRIPT_VERIFY_FLAGS` but not `MANDATORY_SCRIPT_VERIFY_FLAGS`. The latter constant is a validation and denial-of-service classification and explicitly does not itself define all consensus flags; Bitcoin Core derives actual block consensus flags through `GetBlockScriptFlags()`. Low-S remains an additional standard relay and mining policy rule rather than a deployed consensus requirement for ECDSA checks.
+
+SegWit’s witness commitment removes third-party witness changes from the legacy `txid`, but changing witness data can still change the `wtxid`.
 
 This boundary should be stated carefully:
 
@@ -157,11 +163,11 @@ This boundary should be stated carefully:
 - SegWit changes which identifier is affected by witness-only malleation.
 - Application protocols may face other forms of transaction mutability unrelated to the signature equation.
 
-BIP 340 Schnorr signatures are designed to avoid ECDSA’s `s` versus `n - s` ambiguity through exact point and parity rules. That does not make every Taproot transaction immutable: sighash choices, annex handling, script witnesses, collaborative construction, and protocol-level replacement remain separate.
+BIP 340 Schnorr signatures avoid ECDSA’s `s` versus `n - s` ambiguity through exact point and parity rules. That does not make every Taproot transaction immutable: sighash choices, annex handling, script witnesses, collaborative construction, and protocol-level replacement remain separate.
 
 ### NULLFAIL and contextual failure behavior
 
-`NULLFAIL` requires failed ECDSA signatures to be empty rather than arbitrary nonempty byte strings. In Bitcoin Core 31.1, `SCRIPT_VERIFY_NULLFAIL` is included in standard policy but not the mandatory consensus flag set for legacy and SegWit script contexts.
+`NULLFAIL` requires failed ECDSA signatures to be empty rather than arbitrary nonempty byte strings. In Bitcoin Core 31.1, `SCRIPT_VERIFY_NULLFAIL` is included in standard policy but not in `MANDATORY_SCRIPT_VERIFY_FLAGS`. As with low-S, this is a policy/validation classification, not a statement that the `MANDATORY` constant alone defines every consensus flag.
 
 Tapscript has separate consensus behavior. A nonempty signature for a known 32-byte public key that fails BIP 340 verification terminates script execution with failure. An empty signature is handled as a deliberately invalid result that can support `OP_CHECKSIGADD` threshold patterns.
 
@@ -179,15 +185,15 @@ A deterministic algorithm reduces dependence on fresh entropy for each signature
 
 A validating node does not need the private key. It receives a transaction, reconstructs the required signature message, evaluates the script, parses the public key and signature, and applies the relevant cryptographic verification.
 
-Wallets and signing devices perform a different job. They select or receive inputs, identify scripts and derivation paths, compute the correct signature message, decide whether policy and user intent allow signing, generate the nonce, construct the signature, and place it into the appropriate scriptSig or witness.
+Wallets and signing devices perform a different job. They select or receive inputs, identify scripts and derivation paths, compute the correct signature message, decide whether policy and user intent allow signing, generate the nonce, construct the signature, and place it into the appropriate `scriptSig` or witness.
 
-These roles can be implemented by the same software package, but they should not be conceptually merged. Consensus validation tells a node whether a signature satisfies the protocol. It does not tell a user whether the transaction was wise, whether the fee was expected, or whether the recipient display was trustworthy.
+These roles can be implemented by the same software package, but they should not be conceptually merged. Consensus validation tells a node whether a signature satisfies the protocol. It does not tell a user whether the transaction was wise, whether the fee was expected, or whether a recipient display was trustworthy.
 
 ### Offline signing and PSBT
 
-Offline signing separates transaction construction from private-key use. The online coordinator prepares data, an offline signer reviews and signs it, and another system finalizes and broadcasts the transaction.
+Offline signing separates transaction construction from private-key use. An online coordinator prepares data, an offline signer reviews and signs it, and another system finalizes and broadcasts the transaction.
 
-BIP 174 defines the Partially Signed Bitcoin Transaction format as structured key-value maps that carry an unsigned transaction, previous-output data, scripts, derivation information, sighash requirements, and partial signatures. Later BIPs add fields for Taproot.
+BIP 174 defines the Partially Signed Bitcoin Transaction format as structured key-value maps that carry an unsigned transaction, previous-output data, scripts, derivation information, sighash requirements, and partial signatures. BIP 371 adds fields for Taproot.
 
 PSBT is a transport and coordination format. It does not itself guarantee:
 
@@ -199,7 +205,7 @@ PSBT is a transport and coordination format. It does not itself guarantee:
 - that the signer supports the requested script and sighash mode;
 - that all participants interpret the packet identically.
 
-A robust signer verifies every field it can derive, refuses unsupported or ambiguous cases, and shows the user enough information to detect unintended authorization.
+BIP 32 derivation data can help a signer locate keys, but metadata supplied by a coordinator is not self-authenticating. A robust signer verifies every field it can derive, refuses unsupported or ambiguous cases, and shows the user enough information to detect unintended authorization.
 
 ### Hardware-wallet boundaries
 
@@ -258,7 +264,7 @@ Before evaluating a claim, classify the layer:
 - **SIGHASH_DEFAULT:** Taproot-only default mode, value `0x00`, with output behavior equivalent to `SIGHASH_ALL`.
 - **Strict DER:** Consensus encoding rules for applicable ECDSA signatures under BIP 66.
 - **Low-S:** Canonical ECDSA choice that uses the lower of two mathematically valid `S` representatives.
-- **NULLFAIL:** Rule requiring failed ECDSA signatures to be empty in contexts where the flag applies.
+- **NULLFAIL:** Policy rule requiring failed ECDSA signatures to be empty in contexts where the flag applies; tapscript has separate consensus behavior.
 - **scriptCode:** Script serialization included in legacy or BIP 143 signature-message construction.
 - **PSBT:** Structured format for coordinating unsigned and partially signed Bitcoin transactions.
 - **Offline signer:** Signer that receives transaction data without directly connecting to the Bitcoin network.
@@ -274,68 +280,74 @@ Before evaluating a claim, classify the layer:
    - Supports: Witness programs, P2WPKH and P2WSH signature contexts, txid/wtxid separation, and witness commitments.
 3. **BIP 143 — Transaction Signature Verification for Version 0 Witness Program** | Johnson Lau, Pieter Wuille
    - URL: https://github.com/bitcoin/bips/blob/master/bip-0143.mediawiki
-   - Supports: SegWit version 0 ECDSA signature messages, amount commitment, sighash modes, and reusable component hashes.
+   - Supports: SegWit version 0 ECDSA signature messages, amount commitment, sighash modes, zero-hash boundary for out-of-range SIGHASH_SINGLE, and reusable component hashes.
 4. **BIP 340 — Schnorr Signatures for secp256k1** | Pieter Wuille, Jonas Nick, Tim Ruffing
    - URL: https://github.com/bitcoin/bips/blob/master/bip-0340.mediawiki
    - Supports: BIP 340 encoding, nonce, verification, non-malleability, and domain-separation properties.
 5. **BIP 341 — Taproot: SegWit Version 1 Spending Rules** | Pieter Wuille, Jonas Nick, Anthony Towns
    - URL: https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki
-   - Supports: TapSighash construction, input and output commitments, SIGHASH_DEFAULT, annex commitment, and 64-/65-byte signatures.
+   - Supports: TapSighash construction, defined and undefined hash types, input and output commitments, SIGHASH_DEFAULT, annex commitment, and 64-/65-byte signatures.
 6. **BIP 342 — Validation of Taproot Scripts** | Pieter Wuille, Jonas Nick, Anthony Towns
    - URL: https://github.com/bitcoin/bips/blob/master/bip-0342.mediawiki
    - Supports: Tapscript message extensions, BIP 340 checks, OP_CHECKSIGADD, and empty versus nonempty signature behavior.
-7. **BIP 174 — Partially Signed Bitcoin Transaction Format** | Ava Chow
+7. **BIP 174 — Partially Signed Bitcoin Transaction Format** | Andrew Chow
    - URL: https://github.com/bitcoin/bips/blob/master/bip-0174.mediawiki
    - Supports: Offline-signing transport, UTXO data, scripts, sighash requirements, derivation data, and partial signatures.
-8. **BIP 371 — Taproot Fields for PSBT** | Ava Chow
+8. **BIP 371 — Taproot Fields for PSBT** | Andrew Chow
    - URL: https://github.com/bitcoin/bips/blob/master/bip-0371.mediawiki
    - Supports: Taproot-specific PSBT key-path and script-path signing data.
 9. **BIP 322 — Generic Signed Message Format** | Karl-Johan Alm, Oliver Gugger
    - URL: https://github.com/bitcoin/bips/blob/master/bip-0322.mediawiki
    - Supports: Transaction-like off-chain message proofs and their control, freshness, and identity limitations.
-10. **RFC 6979 — Deterministic Usage of DSA and ECDSA** | Thomas Pornin
+10. **BIP 32 — Hierarchical Deterministic Wallets** | Pieter Wuille
+    - URL: https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki
+    - Supports: Key-derivation paths and public/private child-key context used by wallets and PSBT metadata.
+11. **RFC 6979 — Deterministic Usage of DSA and ECDSA** | Thomas Pornin
     - URL: https://www.rfc-editor.org/rfc/rfc6979
     - Supports: Deterministic ECDSA nonce-generation construction and boundaries.
-11. **SEC 1, Version 2.0** | Standards for Efficient Cryptography Group
+12. **SEC 1, Version 2.0** | Standards for Efficient Cryptography Group
     - URL: https://www.secg.org/sec1-v2.pdf
     - Supports: Elliptic-curve key and ECDSA operation standards.
-12. **SEC 2, Version 2.0** | Standards for Efficient Cryptography Group
+13. **SEC 2, Version 2.0** | Standards for Efficient Cryptography Group
     - URL: https://www.secg.org/sec2-v2.pdf
     - Supports: secp256k1 parameters.
-13. **Bitcoin Core 31.1 Tag Commit** | Bitcoin Core contributors
+14. **Bitcoin Core 31.1 Tag Commit** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/commit/9be056a8a72b624dae9623b2f7bded92c2a21c91
     - Supports: Exact implementation version reviewed July 25, 2026.
-14. **Bitcoin Core 31.1 Script Interpreter Interface** | Bitcoin Core contributors
+15. **Bitcoin Core 31.1 Script Interpreter Interface** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/script/interpreter.h
     - Supports: Sighash constants, signature versions, strict-DER, low-S, NULLFAIL, and BIP 143/BIP 341 precomputed-data boundaries.
-15. **Bitcoin Core 31.1 Script Interpreter** | Bitcoin Core contributors
+16. **Bitcoin Core 31.1 Script Interpreter** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/script/interpreter.cpp
-    - Supports: Legacy, BIP 143, and Taproot signature-message construction, historical SINGLE behavior, and ECDSA/Schnorr verification.
-16. **Bitcoin Core 31.1 Standardness Policy** | Bitcoin Core contributors
+    - Supports: Legacy, BIP 143, and Taproot signature-message construction; legacy and witness-v0 SIGHASH_SINGLE boundaries; undefined ECDSA and Taproot hash-type behavior; and ECDSA/Schnorr verification.
+17. **Bitcoin Core 31.1 Standardness Policy** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/policy/policy.h
-    - Supports: Mandatory versus standard script flags and the policy status of low-S and NULLFAIL.
-17. **Bitcoin Core 31.1 Public-Key Implementation** | Bitcoin Core contributors
+    - Supports: MANDATORY and STANDARD script-flag classifications and the policy status of STRICTENC, low-S, and NULLFAIL.
+18. **Bitcoin Core 31.1 Consensus Flag Selection** | Bitcoin Core contributors
+    - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/validation.cpp
+    - Supports: GetBlockScriptFlags consensus selection and the boundary from policy constants.
+19. **Bitcoin Core 31.1 Public-Key Implementation** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/pubkey.cpp
     - Supports: ECDSA verification, low-S normalization, public-key parsing, and Schnorr verification interfaces.
-18. **Bitcoin Core 31.1 Private-Key Implementation** | Bitcoin Core contributors
+20. **Bitcoin Core 31.1 Private-Key Implementation** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/key.cpp
     - Supports: ECDSA and Schnorr signature construction and nonce interfaces.
-19. **Bitcoin Core 31.1 PSBT Documentation** | Bitcoin Core contributors
+21. **Bitcoin Core 31.1 PSBT Documentation** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/doc/psbt.md
     - Supports: Bitcoin Core’s release-specific PSBT workflow and role boundaries.
-20. **Bitcoin Core 31.1 Signing Provider Interface** | Bitcoin Core contributors
+22. **Bitcoin Core 31.1 Signing Provider Interface** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/script/sign.h
     - Supports: Signature production, provider, and transaction-signing interfaces.
-21. **Bitcoin Core 31.1 Script Tests** | Bitcoin Core contributors
+23. **Bitcoin Core 31.1 Script Tests** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/test/script_tests.cpp
     - Supports: Legacy, SegWit, Taproot, encoding, sighash, consensus, and policy test cases.
-22. **Bitcoin Core 31.1 BIP 341 Wallet Test Vectors** | Bitcoin Core contributors
+24. **Bitcoin Core 31.1 BIP 341 Wallet Test Vectors** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/test/data/bip341_wallet_vectors.json
     - Supports: Taproot output and signature-hash wallet construction vectors.
-23. **Bitcoin Core 31.1 Transaction Signing Functional Test** | Bitcoin Core contributors
+25. **Bitcoin Core 31.1 Transaction Signing Functional Test** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/test/functional/rpc_signrawtransaction.py
     - Supports: End-to-end transaction signing, sighash selection, and error cases.
-24. **Bitcoin Core 31.1 PSBT Functional Test** | Bitcoin Core contributors
+26. **Bitcoin Core 31.1 PSBT Functional Test** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/test/functional/rpc_psbt.py
     - Supports: PSBT creation, update, signing, combination, finalization, and error behavior.
 
@@ -353,7 +365,7 @@ Bitcoin signatures authorize transaction inputs—not identities or encrypted me
 
 ## 8. Estimated reading time
 
-18 to 21 minutes
+19 to 22 minutes
 
 ## 9. Planned internal links
 
@@ -376,8 +388,9 @@ Do not activate planned links until the destination exists as a real published p
 - [x] Private keys, public keys, addresses, authorization, personal identity, and long-term control are kept distinct.
 - [x] Signing and hashing are not described as encryption.
 - [x] ECDSA and BIP 340 Schnorr contexts and encodings are separated without presenting either as universally superior.
-- [x] SIGHASH_ALL, NONE, SINGLE, ANYONECANPAY, and Taproot DEFAULT are explained with context-sensitive boundaries.
+- [x] SIGHASH_ALL, NONE, SINGLE, ANYONECANPAY, Taproot DEFAULT, and undefined hash-type boundaries are explained by signature version.
 - [x] Legacy, BIP 143, BIP 341, and BIP 342 signature-message constructions remain distinct.
+- [x] Legacy constant-one and SegWit-v0 zero-hash SIGHASH_SINGLE behavior are not conflated.
 - [x] Signature hashes are not confused with transaction identifiers.
 - [x] Strict DER consensus, Bitcoin Core low-S policy, NULLFAIL policy, and tapscript consensus failure behavior are separately classified.
 - [x] Amount commitments are distinguished across legacy, SegWit version 0, and Taproot signing.
@@ -388,9 +401,12 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer: Pending — Bitcoin cryptography and implementation specialist
-- Review date: Pending
-- Notes: Human Verification remains pending. The specialist pass must reproduce legacy, BIP 143, BIP 341, and BIP 342 signature messages; confirm the historical SIGHASH_SINGLE boundary; recheck BIP 66 strict-DER scope; verify Bitcoin Core 31.1 mandatory and standard policy flags for low-S and NULLFAIL; confirm Schnorr signature lengths and tapscript failure behavior; and review PSBT, offline-signer, hardware-wallet, deterministic nonce, malleability, and BIP 322 message-signing claims.
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-26
+- Primary evidence reviewed: BIPs 32, 66, 141, 143, 174, 322, 340, 341, 342, and 371; RFC 6979; Bitcoin Core `v31.1` commit `9be056a8a72b624dae9623b2f7bded92c2a21c91`; `src/script/interpreter.h`, `src/script/interpreter.cpp`, `src/policy/policy.h`, `src/validation.cpp`, `src/pubkey.cpp`, `src/key.cpp`, `src/script/sign.h`, and `doc/psbt.md`; `src/test/script_tests.cpp`, `src/test/data/bip341_wallet_vectors.json`, `test/functional/rpc_signrawtransaction.py`, and `test/functional/rpc_psbt.py`.
+- Material corrections made: Separated the legacy constant-one SIGHASH_SINGLE result from SegWit version 0’s zero `hashOutputs` message and Taproot’s validation failure; added undefined ECDSA and Taproot hash-type behavior; clarified that `MANDATORY_SCRIPT_VERIFY_FLAGS` is not itself the source of all consensus flags and that low-S, NULLFAIL, and STRICTENC are standardness boundaries in Bitcoin Core 31.1; retained strict-DER consensus and tapscript’s separate failed-signature behavior; and strengthened PSBT/BIP 32 metadata and signer-display limits.
+- Remaining sensitivities: Consensus behavior depends on the active signature version and script flags; relay and mining policy can change independently; wallet construction, PSBT interpretation, derivation checks, hardware displays, message-signing conventions, and firmware support remain product- and release-specific.
+- Renewal requirement: Future BIP revisions, Bitcoin Core releases, policy changes, wallet or signing-device updates, or new message-signing conventions require renewed verification. Human Verification does not authorize copy-lock.
 
 ## 12. Illustration brief
 
