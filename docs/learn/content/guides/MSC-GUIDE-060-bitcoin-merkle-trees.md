@@ -180,7 +180,7 @@ The commitment is placed in a coinbase output script beginning with:
 
 `OP_RETURN 0x24 aa21a9ed`
 
-followed by the 32-byte commitment. If multiple outputs match the pattern, the highest-index matching output is used. When a witness commitment is required, the coinbase input’s witness must contain exactly one 32-byte reserved value.
+followed by the 32-byte commitment. If multiple outputs match the pattern, the highest-index matching output is used. A witness commitment is required when the block contains any transaction with nonempty witness data. If every transaction has empty witness data, the commitment output is optional; when a matching commitment is present, the commitment and coinbase witness rules still apply. When a witness commitment is required, the coinbase input’s witness must contain exactly one 32-byte reserved value.
 
 Because the coinbase transaction’s `txid` is a leaf of the ordinary transaction Merkle tree, the block header commits to the coinbase transaction, which contains the witness commitment. This links witness data to the header without placing another root directly in the header.
 
@@ -398,7 +398,7 @@ Merkle trees make compact commitments possible. They do not collapse Bitcoin’s
    - Supports: Partial Merkle-tree format, matched transaction extraction, Bloom-filter privacy tradeoffs, omission boundary, and SPV use.
 3. **BIP 141 — Segregated Witness** | Eric Lombrozo, Johnson Lau, Pieter Wuille
    - URL: https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki
-   - Supports: wtxid leaves, zero coinbase leaf, witness root, reserved value, coinbase commitment format, and matching-output rule.
+   - Supports: wtxid leaves, zero coinbase leaf, witness root, reserved value, coinbase commitment format, requirement boundary, and highest-index matching-output rule.
 4. **BIP 341 — Taproot: SegWit Version 1 Spending Rules** | Pieter Wuille, Jonas Nick, Anthony Towns
    - URL: https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki
    - Supports: TapLeaf, TapBranch, lexicographic branch ordering, TapTweak, control-block proof, and output-key commitment.
@@ -425,7 +425,7 @@ Merkle trees make compact commitments possible. They do not collapse Bitcoin’s
     - Supports: txid and wtxid construction used as leaves.
 12. **Bitcoin Core 31.1 Block Validation** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/validation.cpp
-    - Supports: Merkle-root validation, mutation rejection, witness commitment validation, and chain-context boundaries.
+    - Supports: Merkle-root validation, mutation rejection, witness-commitment requirement and validation, and chain-context boundaries.
 13. **Bitcoin Core 31.1 Partial Merkle Tree Interface** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/src/merkleblock.h
     - Supports: Partial-tree structure, serialized fields, matched bits, and extraction interface.
@@ -443,7 +443,7 @@ Merkle trees make compact commitments possible. They do not collapse Bitcoin’s
     - Supports: Generated-input parsing and structural test evidence.
 18. **Bitcoin Core 31.1 SegWit Functional Test** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/test/functional/p2p_segwit.py
-    - Supports: Coinbase reserved value, witness root, commitment output, malformed cases, and validation behavior.
+    - Supports: Coinbase reserved value, witness root, commitment requirement and output selection, malformed cases, and validation behavior.
 19. **Bitcoin Core 31.1 Taproot Functional Test** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin/blob/v31.1/test/functional/feature_taproot.py
     - Supports: Script trees, control blocks, branch paths, leaf versions, parity, and script-path validation.
@@ -502,7 +502,7 @@ Do not activate planned links until the destination exists as a real published p
 - [x] Inclusion, transaction validity, block validity, confirmation, active-chain membership, economic finality, ownership, and UTXO state remain distinct.
 - [x] CVE-2012-2459 is described as a structural duplicate-node ambiguity rather than a SHA-256 collision.
 - [x] Bitcoin Core’s mutation detection distinguishes actual duplicate siblings from artificial odd-node duplication.
-- [x] Witness tree leaves, zero coinbase wtxid, reserved value, commitment hash, and coinbase output format are correct.
+- [x] Witness tree leaves, zero coinbase wtxid, reserved value, commitment hash, requirement boundary, and coinbase output format are correct.
 - [x] BIP 37 partial-tree format, omission boundary, privacy limitations, and SPV validation gap are qualified.
 - [x] TapLeaf, TapBranch, lexicographic ordering, TapTweak, control blocks, and script-tree privacy boundaries remain distinct from block trees.
 - [x] The block transaction root is not described as a UTXO-set commitment.
@@ -513,9 +513,12 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer: Pending — Bitcoin cryptography and implementation specialist
-- Review date: Pending
-- Notes: Human Verification remains pending. The specialist pass must reproduce Bitcoin Core 31.1 transaction and witness roots, branch paths, odd-node handling, mutation detection and tests; confirm the CVE-2012-2459 description; recheck witness reserved-value and commitment validation; parse BIP 37 partial-tree and privacy boundaries; reproduce TapLeaf, TapBranch, lexicographic ordering, tweak, parity, and control-block rules; and confirm the distinctions among inclusion, validity, active-chain confirmation, economic finality, and UTXO state.
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-26
+- Primary evidence reviewed: The Bitcoin white paper; BIPs 37, 141, 158, 341, and 342; CVE-2012-2459; Bitcoin Core `v31.1` commit `9be056a8a72b624dae9623b2f7bded92c2a21c91`; `src/consensus/merkle.cpp`, `src/consensus/merkle.h`, `src/primitives/block.h`, `src/primitives/transaction.cpp`, `src/validation.cpp`, `src/merkleblock.h`, `src/merkleblock.cpp`, `src/script/interpreter.cpp`, `src/hash.h`, and `doc/design/assumeutxo.md`; `src/test/merkle_tests.cpp`, `src/test/merkleblock_tests.cpp`, `src/test/fuzz/merkleblock.cpp`, `test/functional/p2p_segwit.py`, `test/functional/feature_taproot.py`, and `src/test/data/bip341_wallet_vectors.json`.
+- Material corrections made: Confirmed ordered txid leaves, pairwise double-SHA-256, internal byte order, odd-node duplication, proof positions, logarithmic branch growth, and header commitment; reproduced CVE-2012-2459 mutation detection and its tests; added the exact witness-commitment requirement boundary for blocks with and without witness data while preserving the reserved value and highest-index output rule; confirmed BIP 37 traversal, flag, omission, and privacy limits; and retained the separation among transaction inclusion, validity, active-chain confirmation, economic finality, UTXO state, and Taproot script commitments.
+- Remaining sensitivities: Inclusion claims depend on a trusted or independently validated root and the assumed hash properties; active-chain and confirmation conclusions depend on the verifier’s chain view; BIP 37 service behavior remains implementation- and configuration-specific; Taproot wallet tree construction and control-block production are product-specific; and future commitment or accumulator proposals are not deployed merely because related research exists.
+- Renewal requirement: Future BIP changes, Bitcoin Core releases, consensus-validation changes, light-client protocol changes, Taproot implementation changes, or material hash-analysis results require renewed verification. Human Verification does not authorize copy-lock.
 
 ## 12. Illustration brief
 
