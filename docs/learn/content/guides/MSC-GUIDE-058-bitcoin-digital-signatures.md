@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-058
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: How Digital Signatures Work in Bitcoin
 handle: bitcoin-digital-signatures
@@ -12,8 +12,8 @@ primary_path: Build on Bitcoin
 secondary_paths:
   - Understand the Network
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-26
+copy_locked_date: 2026-07-26
 ---
 
 # How Digital Signatures Work in Bitcoin
