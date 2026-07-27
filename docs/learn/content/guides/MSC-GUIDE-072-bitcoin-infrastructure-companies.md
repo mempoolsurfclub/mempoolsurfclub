@@ -96,6 +96,8 @@ An application programming interface lets software request data or actions throu
 
 An API is not the Bitcoin network. It is a view or control surface built on one or more underlying systems.
 
+Bitcoin Core’s RPC command set and behavior are version-specific. The current exported Bitcoin Core 31.0.0 RPC documentation describes that release; it should not be treated as proof that a provider runs the same version, enables every component, exposes every command, or preserves the same configuration and security boundary.
+
 The provider decides:
 
 - which data fields exist;
@@ -175,7 +177,7 @@ A fleet-management platform can monitor thousands of machines and change power o
 
 These providers can become concentrated control points even when they do not own the miners. Remote access, update signing, administrative credentials, and fallback procedures matter. A compromised management system could redirect hashrate or disrupt operations.
 
-Stratum V2 specifications and reference implementations document public work on mining communication and job negotiation. Their existence does not prove uniform deployment. Mining companies and pools may use older protocols, proprietary systems, or partial integrations.
+Stratum V2 specifications and public implementation repositories document work on mining communication and job negotiation. Their existence does not prove uniform deployment. Mining companies and pools may use older protocols, proprietary systems, or partial integrations, and the current application repository must be evaluated according to its stated maturity.
 
 ### Hardware and signing systems
 
@@ -357,15 +359,16 @@ Bitcoin infrastructure makes other systems possible. Its value often comes from 
 1. **Bitcoin Core Integration and Staging Tree** | Bitcoin Core contributors
    - URL: https://github.com/bitcoin/bitcoin
    - Accessed: July 27, 2026
-   - Supports: Full-node implementation, public development process, validation software, and the distinction between infrastructure services and independent consensus enforcement.
-2. **Bitcoin Core RPC Reference** | Bitcoin.org developer documentation contributors
-   - URL: https://developer.bitcoin.org/reference/rpc/
+   - Supports: Full-node implementation, public development and release process, validation software, and the distinction between infrastructure services and independent consensus enforcement.
+2. **Bitcoin Core 31.0.0 RPC Documentation** | Bitcoin Core contributors
+   - URL: https://bitcoincore.org/en/doc/31.0.0/
+   - Version: Bitcoin Core 31.0.0
    - Accessed: July 27, 2026
-   - Supports: Node remote-procedure-call interfaces and the bounded distinction between node commands, wallet functions, network data, and third-party APIs.
+   - Supports: Versioned RPC commands and categories exported from Bitcoin Core 31.0.0. It does not establish which version, components, commands, permissions, or configuration a hosted provider exposes.
 3. **Esplora Repository** | Blockstream and Esplora contributors
    - URL: https://github.com/Blockstream/esplora
    - Accessed: July 27, 2026
-   - Supports: Current open-source blockchain explorer and backend scope, self-hosting instructions, indexer dependency, and licensing.
+   - Supports: Current open-source blockchain explorer and frontend scope, self-hosting instructions, backend dependency, and licensing.
 4. **Esplora HTTP API Documentation** | Blockstream and Esplora contributors
    - URL: https://github.com/Blockstream/esplora/blob/master/API.md
    - Accessed: July 27, 2026
@@ -377,7 +380,7 @@ Bitcoin infrastructure makes other systems possible. Its value often comes from 
 6. **Lightning Network Daemon Repository** | Lightning Labs and lnd contributors
    - URL: https://github.com/lightningnetwork/lnd
    - Accessed: July 27, 2026
-   - Supports: Current Lightning node implementation, APIs, operational documentation, database and backup considerations, releases, and security policy.
+   - Supports: Current Lightning node implementation, APIs, operational documentation, database and backup considerations, tagged releases, beta warning, and security policy.
 7. **Lightspark Documentation** | Lightspark
    - URL: https://docs.lightspark.com/
    - Accessed: July 27, 2026
@@ -389,7 +392,7 @@ Bitcoin infrastructure makes other systems possible. Its value often comes from 
 9. **Voltage Bitcoin Core FAQ** | Voltage
    - URL: https://docs.voltage.cloud/bitcoin-core-faq
    - Accessed: July 27, 2026
-   - Supports: Company-documented Bitcoin Core hosting model, shared-node behavior, supported implementation, and data boundaries.
+   - Supports: Company-documented Bitcoin Core hosting model, shared-node behavior for described configurations, supported implementation, and data boundaries.
 10. **Voltage Bitcoin Core Developer Guide** | Voltage
     - URL: https://docs.voltage.cloud/bitcoin-core-developer-guide
     - Accessed: July 27, 2026
@@ -397,11 +400,11 @@ Bitcoin infrastructure makes other systems possible. Its value often comes from 
 11. **Voltage Node Security and Backups** | Voltage
     - URL: https://docs.voltage.cloud/node-security-and-backups
     - Accessed: July 27, 2026
-    - Supports: Company-documented responsibilities for managed node credentials, backups, recovery, and security; establishes provider claims rather than independent assurance.
+    - Supports: Company-documented responsibilities for managed node credentials, backups, recovery, and security; establishes provider claims rather than independent assurance or a tested restoration result.
 12. **Hardware Wallet Interface Repository** | Bitcoin Core HWI contributors
     - URL: https://github.com/bitcoin-core/HWI
     - Accessed: July 27, 2026
-    - Supports: Current open-source software interface between Bitcoin wallet software and supported hardware signing devices.
+    - Supports: Current open-source software interface between Bitcoin wallet software and supported hardware signing devices; does not certify the security of those devices.
 13. **Stratum V2 Specifications** | Stratum Mining contributors
     - URL: https://github.com/stratum-mining/sv2-spec
     - Accessed: July 27, 2026
@@ -409,7 +412,7 @@ Bitcoin infrastructure makes other systems possible. Its value often comes from 
 14. **LDK rust-lightning Repository** | Lightning Dev Kit contributors
     - URL: https://github.com/lightningdevkit/rust-lightning
     - Accessed: July 27, 2026
-    - Supports: Modular open-source Lightning library, component boundaries, releases, licensing, and the distinction between embedded software and hosted operations.
+    - Supports: Modular open-source Lightning library code, component boundaries, licensing, repository tags and versioned package context, and the distinction between embedded software and hosted operations.
 
 ## 5. SEO title
 
@@ -470,18 +473,19 @@ Do not activate planned links until the destination exists as a real published p
 - [x] The guide does not take over the planned scope of Guides 073–076 on exchanges, wallet providers, marketplaces, and service providers.
 - [x] Named companies and projects are examples, not endorsements or rankings.
 - [x] Planned internal links remain inactive.
-- [x] Human Verification remains pending.
+- [x] Human Verification is complete for the specialist pass.
 - [x] Publication-time renewal is required for products, repositories, versions, APIs, custody, pricing, regions, security claims, and operational terms.
 
 ## 11. Human verification
 
-- Reviewer: Pending focused Bitcoin infrastructure, node, Lightning, and security specialist review
-- Review date: Pending
-- Primary evidence reviewed by human specialist: Pending
-- Material corrections made: Pending
-- Remaining technical, privacy, security, commercial, legal, and reputational sensitivities: Pending
-- Renewal requirement: Recheck all current repositories, releases, APIs, hosted-service terms, custody boundaries, security documentation, regions, and product states immediately before publication.
-- Authorization boundary: Human Verification is incomplete and does not authorize Editorial Manager acceptance, copy-lock, publication, deployment, or activation of planned links.
+- Reviewer: Mempool Surf Club Editorial
+- Review date: July 27, 2026
+- Primary evidence reviewed: Bitcoin Core’s repository, Bitcoin Core 31.0 release materials, and versioned 31.0.0 RPC documentation; Esplora and its HTTP API documentation; the mempool open-source repository; lnd, including its current tagged release and beta warning; Lightspark documentation and SDK materials; Voltage Bitcoin Core, developer-access, node-security, and backup documentation; Bitcoin Core HWI; Stratum V2 specifications and current repository maturity; and LDK/rust-lightning.
+- Verification approach: Distinguished open-source implementation code, versioned documentation, hosted products, proprietary operational systems, and provider-operated services. Checked node, RPC, ZMQ, API, indexer, explorer, wallet-backend, Lightning, mining, signing, backup, credential, and recovery roles by technical function and control boundary. Provider documentation was treated as the provider’s stated behavior rather than independent assurance; shared and dedicated service labels were not treated as customer ownership or administration; and local node policy, mempool observations, derived data, and company access controls were kept separate from Bitcoin consensus.
+- Material corrections made: Replaced the unversioned third-party Bitcoin RPC reference with the current Bitcoin Core 31.0.0 exported RPC documentation and added an explicit deployed-version boundary; narrowed Esplora’s description to its documented frontend and backend dependency rather than treating the repository alone as a complete backend; narrowed rust-lightning version claims to repository tags and versioned package context; bounded Stratum V2 implementation maturity; and completed the Human Verification record.
+- Remaining sensitivities: Production software versions, patches, configurations, credentials, logging, telemetry, data retention, service regions, pricing, service levels, backup scope, restoration testing, key and seed control, metadata visibility, account suspension, proprietary components, and export paths may differ from public documentation or change without preserving earlier behavior. Repository availability does not establish hosted-service performance; audits and security statements remain version-, environment-, scope-, and date-specific; and provider concentration can create correlated privacy, availability, policy, jurisdiction, and migration risk.
+- Renewal requirement: Immediately before publication, recheck Bitcoin Core’s latest supported release and matching RPC documentation; Esplora, mempool, lnd, HWI, Stratum V2, and LDK repositories, tags, licenses, security policies, and maturity labels; Lightspark and Voltage product documentation, supported versions, regions, pricing, authentication, shared or dedicated node behavior, credentials, backups, recovery, and export procedures; current API and ZMQ behavior; any deployed, beta, experimental, limited, proposed, or roadmap labels; and every security, privacy, reliability, or migration claim against the exact current product and environment.
+- Authorization boundary: Completed Human Verification does not authorize Editorial Manager acceptance, copy-lock, ready-for-review transition, merge, publication, deployment, illustration generation, activation of planned links, or Phase 20.
 
 ## 12. Illustration brief
 
