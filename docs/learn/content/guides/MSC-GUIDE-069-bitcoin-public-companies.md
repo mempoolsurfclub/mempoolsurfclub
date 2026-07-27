@@ -124,7 +124,7 @@ When evaluating custody, readers should locate the actual responsible entity, go
 
 A public-market product can offer price exposure without giving investors direct custody. Spot bitcoin trusts and exchange-traded products typically involve a sponsor, trustee, administrator, custodian, authorized participants, market makers, and exchanges. Each role is contractual.
 
-The iShares Bitcoin Trust’s 2025 Form 10-K, for example, describes bitcoin custody, creation and redemption processes, service providers, fees, fork treatment, insurance limitations, and vendor risks. Those disclosures show how a product is operated. They do not convert the sponsor, custodian, or shareholders into Bitcoin protocol governors.
+The iShares Bitcoin Trust ETF’s 2025 Form 10-K, for example, describes bitcoin custody, creation and redemption processes, service providers, fees, fork treatment, insurance limitations, and vendor risks. Those disclosures show how a product is operated. They do not convert the sponsor, custodian, or shareholders into Bitcoin protocol governors.
 
 The wrapper creates risks that do not exist in direct self-custody, including sponsor decisions, service-provider failure, trading-market discounts or premiums, fees, redemption limits, and legal restrictions. Direct self-custody creates different risks, including key loss and operational error. Neither model should be described as universally safer without a defined threat model.
 
@@ -194,32 +194,39 @@ Public companies participate in Bitcoin through many structures. The most useful
 
 1. **Strategy Inc. 2025 Form 10-K** | Strategy Inc.; U.S. Securities and Exchange Commission
    - URL: https://www.sec.gov/Archives/edgar/data/1050446/000105044626000020/mstr-20251231.htm
+   - Filed: February 19, 2026
    - Accessed: July 27, 2026
    - Supports: Dated company disclosures about its bitcoin strategy, holdings, custodians, capital plan, debt and equity financing, software business, governance, accounting, and risk factors.
 2. **Strategy Inc. First-Quarter 2026 Form 10-Q** | Strategy Inc.; U.S. Securities and Exchange Commission
    - URL: https://www.sec.gov/Archives/edgar/data/1050446/000105044626000031/mstr-20260331.htm
+   - Filed: May 6, 2026
    - Accessed: July 27, 2026
    - Supports: Interim financial statements, fair-value accounting, financing activity, and the company’s disclosed bitcoin holdings as of April 26, 2026.
 3. **Coinbase Global, Inc. 2025 Form 10-K** | Coinbase Global, Inc.; U.S. Securities and Exchange Commission
    - URL: https://www.sec.gov/Archives/edgar/data/1679788/000167978826000015/coin-20251231.htm
+   - Filed: February 12, 2026
    - Accessed: July 27, 2026
    - Supports: Company disclosures about trading, custody, institutional and subscription services, client assets, legal entities, internal controls, regulation, concentration, and operational risks.
 4. **Block, Inc. 2025 Form 10-K** | Block, Inc.; U.S. Securities and Exchange Commission
    - URL: https://www.sec.gov/Archives/edgar/data/1512673/000162828026012254/xyz-20251231.htm
+   - Filed: February 26, 2026
    - Accessed: July 27, 2026
    - Supports: Company disclosures about its operating segments, Bitcoin-related products, company-owned bitcoin, customer activity, product inventory, accounting, and risk factors.
 5. **Block, Inc. 2025 Digital Assets Note** | Block, Inc.; U.S. Securities and Exchange Commission
    - URL: https://www.sec.gov/Archives/edgar/data/1512673/000162828026012254/R10.htm
+   - Filed with Form 10-K: February 26, 2026
    - Accessed: July 27, 2026
    - Supports: Specific financial-statement presentation of bitcoin held for investment, customer-related activity, and Bitcoin product inventory.
 6. **Riot Platforms, Inc. 2025 Form 10-K** | Riot Platforms, Inc.; U.S. Securities and Exchange Commission
    - URL: https://www.sec.gov/Archives/edgar/data/1167419/000110465926022322/riot-20251231x10k.htm
+   - Filed: March 2, 2026
    - Accessed: July 27, 2026
    - Supports: Public mining-company disclosures about self-mining, power, sites, hashrate measures, curtailment, costs, depreciation, financing, and operational risks.
-7. **iShares Bitcoin Trust 2025 Form 10-K** | iShares Delaware Trust Sponsor LLC; U.S. Securities and Exchange Commission
-   - URL: https://www.sec.gov/Archives/edgar/data/2015034/000119312526071952/btc-20251231.htm
+7. **iShares Bitcoin Trust ETF 2025 Form 10-K** | iShares Bitcoin Trust ETF; iShares Delaware Trust Sponsor LLC; U.S. Securities and Exchange Commission
+   - URL: https://www.sec.gov/Archives/edgar/data/1980994/000143774926006058/bit20251231_10k.htm
+   - Filed: February 27, 2026
    - Accessed: July 27, 2026
-   - Supports: Trust structure, custody, service-provider roles, creation and redemption, fees, fork treatment, insurance limitations, and vendor dependence.
+   - Supports: The trust’s legal structure, bitcoin custody, service-provider roles, creation and redemption, fees, fork treatment, insurance limitations, and vendor dependence as disclosed for the year ended December 31, 2025.
 8. **Accounting Standards Update 2023-08: Crypto Assets** | Financial Accounting Standards Board
    - URL: https://fasb.org/Page/Document?pdf=ASU%202023-08.pdf&title=ACCOUNTING%20STANDARDS%20UPDATE%202023-08%E2%80%94Intangibles%E2%80%94Goodwill%20and%20Other%E2%80%94Crypto%20Assets%20%28Subtopic%20350-60%29
    - Published: December 2023
@@ -300,18 +307,19 @@ Do not activate planned links until the destination exists as a real published p
 - [x] Market capitalization, holdings, executive status, and public visibility are not presented as technical authority.
 - [x] Named companies are examples, not endorsements, rankings, or investment recommendations.
 - [x] Planned internal links remain inactive.
-- [x] Human Verification remains pending.
+- [x] Human Verification is complete for the specialist pass.
 - [x] Publication-time renewal is required for holdings, products, filings, financing, custody, accounting, governance, and jurisdictional claims.
 
 ## 11. Human verification
 
-- Reviewer: Pending focused public-company and accounting specialist review
-- Review date: Pending
-- Primary evidence reviewed by human specialist: Pending
-- Material corrections made: Pending
-- Remaining factual, accounting, legal, commercial, and reputational sensitivities: Pending
-- Renewal requirement: Recheck all current filings, holdings, products, debt terms, custody relationships, accounting guidance, and jurisdictional statements immediately before publication.
-- Authorization boundary: Human Verification is incomplete and does not authorize Editorial Manager acceptance, copy-lock, publication, deployment, or activation of planned links.
+- Reviewer: Mempool Surf Club Editorial
+- Review date: July 27, 2026
+- Primary evidence reviewed: Strategy Inc. 2025 Form 10-K filed February 19, 2026; Strategy first-quarter 2026 Form 10-Q filed May 6, 2026; Coinbase Global, Inc. 2025 Form 10-K; Block, Inc. 2025 Form 10-K and its digital-assets financial-statement note; Riot Platforms, Inc. 2025 Form 10-K; iShares Bitcoin Trust ETF 2025 Form 10-K filed February 27, 2026; FASB ASU 2023-08 and current effective-date materials; SEC and Investor.gov public-company and shareholder materials; and the Bitcoin Core repository.
+- Verification approach: Matched company and trust legal names, CIKs, accession records, form types, reporting periods, filing dates, holdings dates, accounting scope, custody roles, capital-structure disclosures, and source-note claims. Filings were treated as evidence of what the filer disclosed, not as independent proof of performance, control effectiveness, liquidity, safety, or future results. Corporate and product authority was checked separately from Bitcoin implementation review, software adoption, and independent consensus enforcement.
+- Material corrections made: Corrected the exchange-traded-product example and source from a URL that actually resolved to the Grayscale Bitcoin Mini Trust ETF filing to the iShares Bitcoin Trust ETF 2025 Form 10-K; updated the legal name in the article; added exact filing dates to the named SEC evidence; and narrowed source support to the disclosures each record establishes.
+- Remaining sensitivities: Holdings, debt, preferred and common-equity issuance, collateral, custodians, customer-asset treatment, product terms, service providers, accounting presentation, governance, and legal obligations can change after the reviewed records. Interim reports may be unaudited; fair-value gains and losses do not establish liquidity or cash flow; custody and control effectiveness remain operational questions; and U.S. securities and accounting statements are jurisdiction-specific.
+- Renewal requirement: Immediately before publication, recheck the newest annual, quarterly, and current filings; exact holdings and as-of dates; outstanding debt, preferred securities, share counts, collateral and pledged assets; custody and customer-asset disclosures; trust governing documents and service providers; FASB effective-date materials; executive and governance status; and all jurisdiction-specific legal or accounting statements.
+- Authorization boundary: Completed Human Verification does not authorize Editorial Manager acceptance, copy-lock, ready-for-review transition, merge, publication, deployment, illustration generation, activation of planned links, or Phase 20.
 
 ## 12. Illustration brief
 
