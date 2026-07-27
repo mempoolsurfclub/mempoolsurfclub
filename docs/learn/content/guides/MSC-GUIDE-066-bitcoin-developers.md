@@ -135,7 +135,7 @@ Standards work attempts to make independently built systems communicate predicta
 
 A standards author defines or documents behavior. An editor may check formatting and process. Implementers decide whether and how to support it. Users and operators decide whether to deploy supporting software. Those are separate roles.
 
-The deployed BIP process makes the boundary explicit: publication indicates that a proposal meets repository criteria, not that it has community consensus or guaranteed adoption.
+BIP 3, currently marked Deployed in the BIPs repository, makes the boundary explicit: publication indicates that a proposal meets repository criteria, not that it has community consensus or guaranteed adoption.
 
 ### The practical workflow
 
@@ -148,7 +148,7 @@ A realistic development workflow is iterative:
 5. **Add tests.** Cover expected behavior, failure paths, and regressions.
 6. **Request review.** Reviewers challenge the design and implementation.
 7. **Revise.** Address findings, reduce scope, or abandon the approach.
-8. **Integrate.** A project-specific maintainer may merge an accepted change.
+8. **Integrate.** A project-specific maintainer or committer with the required repository permission may merge an accepted change.
 9. **Release.** Release engineers package and communicate a version.
 10. **Deploy.** Users, operators, and businesses choose whether to install it.
 11. **Monitor.** Observe production behavior, compatibility, and security.
@@ -158,7 +158,7 @@ Not every task passes through every stage, and the stages may repeat. The import
 
 ### Contributor, reviewer, maintainer, and committer
 
-A **contributor** submits code, tests, review, documentation, or research. A **reviewer** examines proposed work. A **maintainer** performs project-specific coordination, integration, or release duties. A **committer** has technical permission to write to a repository or sign a release.
+A **contributor** submits code, tests, review, documentation, or research. A **reviewer** examines proposed work. A **maintainer** performs project-specific coordination, integration, or release duties. A **committer** has technical permission to write or merge in a specific repository. Release engineering and release signing are separate responsibilities unless a project assigns both to the same person.
 
 One person may hold several roles, but permissions remain scoped to a project. Commit access can help integrate an accepted change; it does not make the committer a ruler over users, miners, businesses, or other implementations.
 
@@ -166,13 +166,13 @@ Titles can also be informal. The safest source is the project’s current docume
 
 ### BIP author, researcher, and implementer
 
-A BIP author owns and explains a proposal. A researcher may analyze it. An implementer may write code. A reviewer may find problems. A project may publish support. Operators may deploy it. These roles can belong to different people and organizations.
+A BIP author is responsible for describing and maintaining a proposal, and may appoint a deputy under the BIP process. A researcher may analyze it. An implementer may write code. A reviewer may find problems. A project may publish support. Operators may deploy it. These roles can belong to different people and organizations.
 
 A BIP number is not a certification. A draft can remain unused. A complete specification can be adopted by some projects and ignored by others. A consensus proposal requires coordination beyond the BIP repository because the repository does not govern network adoption.
 
-### Employee and grant-funded contributor
+### Employee, contractor, and grant-funded contributor
 
-An employee may be directed to work on a company product, or may contribute to open-source software under an employer-funded program. A grant-funded contributor may have more independence but still report milestones or operate within a funder’s selection process.
+An employee may be directed to work on a company product, or may contribute to open-source software under an employer-funded program. A contractor works under a defined engagement that may differ from both employment and independent volunteer contribution. A grant-funded contributor may have more independence but still report milestones or operate within a funder’s selection process.
 
 Employment or funding should be disclosed when materially relevant. Neither proves that the employer or funder authored every change. Neither gives the organization control over Bitcoin consensus.
 
@@ -282,10 +282,10 @@ The work is demanding because Bitcoin combines adversarial security, long-lived 
     - URL: https://opensats.org/transparency
     - Accessed: July 26, 2026
     - Supports: Current public framework for grant selection, grantees, financial reports, policies, and conflicts.
-17. **Stratum V2 Reference Implementation** | Stratum Mining contributors
+17. **Stratum V2 Protocol Libraries** | Stratum Mining contributors
     - URL: https://github.com/stratum-mining/stratum
     - Accessed: July 26, 2026
-    - Supports: Current mining protocol and software development as distinct from node consensus enforcement.
+    - Supports: Current low-level Stratum V1 and V2 protocol libraries, contribution and testing surface, and the repository’s distinction from the separate alpha-stage `sv2-apps` application repository; mining communication software remains distinct from node consensus enforcement.
 
 ## 5. SEO title
 
@@ -345,12 +345,17 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer: Pending ecosystem specialist review
-- Review date: Pending
-- Primary evidence reviewed: Pending
-- Material corrections made: Pending
-- Remaining sensitivities: Pending
-- Renewal requirement: Pending
+- Reviewer: Mempool Surf Club Editorial
+- Review date: July 26, 2026
+- Primary evidence reviewed: Bitcoin Core repository, contribution guidance, developer notes, test documentation, and security policy; BIP 3 and the Bitcoin BIPs repository; lnd, rust-lightning, BDK, HWI, and libsecp256k1 repositories; Bitcoin Design contribution documentation; Brink’s 2025 engineering report; OpenSats transparency records; Stratum V2 protocol-library and application repositories.
+- Named-role and affiliation verification approach: Role definitions were checked against current project records and treated as project-specific rather than universal titles. Contributor, reviewer, maintainer, committer, BIP author or deputy, release engineer, employee, contractor, and grantee were kept separate. No repository permission, job title, or funding relationship was treated as protocol authority.
+- Historical-attribution evidence: The guide does not assign invention, ownership of Bitcoin development, or movement leadership to a person. BIP authorship is described through the current BIP process record rather than reputation or retrospective biography.
+- Technical evidence: Bitcoin Core records support review, testing, integration, release, and responsible-disclosure boundaries; BIP 3 supports author, deputy, editor, publication, and adoption distinctions; Lightning, wallet-library, hardware-interface, cryptographic-library, design, and Stratum repositories support the current role examples.
+- Legal evidence: No intellectual-property or individualized legal proposition is made. Licensing is discussed only as a software dependency consideration and must be checked against the applicable project license and jurisdiction when used operationally.
+- Material corrections made: Separated committer permission from release signing; changed integration wording to accommodate project-specific maintainers or committers; replaced “owns” with responsibility-based BIP-author language; added contractors to the employment and funding distinction; identified BIP 3 as the currently Deployed process document; corrected the Stratum source from a broad “reference implementation” label to the current protocol-libraries repository and noted the separate alpha application repository.
+- Remaining factual, historical, commercial, technical, legal, and reputational sensitivities: Repository permissions, maintainer labels, release practices, funding arrangements, project maturity, and contribution paths can change. Project documentation is authoritative for its own process but does not prove ecosystem-wide adoption, security, expertise, or employment.
+- Renewal requirement: Recheck repository scope, contribution documentation, security policy, releases, role assignments, funding disclosures, and Stratum repository split immediately before publication. Date any named current role and remove it if an official project or organization record cannot verify it.
+- Authorization boundary: Completion of Human Verification does not authorize Editorial Manager acceptance, copy-lock, publication, deployment, or activation of planned links.
 
 ## 12. Illustration brief
 
