@@ -105,7 +105,7 @@ FinCEN’s May 2019 guidance discusses how U.S. Bank Secrecy Act obligations may
 
 Startups can be funded by founders, customers, grants, angel investors, venture funds, strategic investors, debt, token or security offerings where lawful, or a combination of sources.
 
-Early-stage equity and simple agreements for future equity can provide capital before a priced financing round. Y Combinator publishes current SAFE financing documents that illustrate one common U.S. early-stage structure. The document defines a contractual path to future equity under specified terms. It does not guarantee a future round, product success, or fair outcome for every party.
+Early-stage equity and simple agreements for future equity can provide capital before a priced financing round. Y Combinator publishes multiple current post-money SAFE forms and related documents for U.S. companies, along with forms for certain other jurisdictions. The forms use different contractual terms, including valuation-cap, discount, and most-favored-nation structures. They illustrate common early-stage financing arrangements but are not identical, do not guarantee a future financing round, and do not establish product success or a fair outcome for every party.
 
 U.S. private offerings may rely on exemptions from public registration. The SEC’s current exempt-offering resources and Form D materials explain regulatory pathways and filing records. A Form D notice establishes that an issuer reported an exempt offering. It does not show that the company is profitable, technically sound, fully funded, or endorsed by the SEC.
 
@@ -128,7 +128,7 @@ Venture capital can support security work, hiring, audits, liquidity, and distri
 
 A startup may publish a client library while keeping the server proprietary. It may open-source a node implementation but operate a closed liquidity platform. It may use open-source Bitcoin software inside a hosted service whose deployment, data, keys, and policies are controlled by the company. It may publish code but retain trademarks, hardware designs, cloud tooling, or signing infrastructure.
 
-Current public repositories for projects such as lnd and LDK show how implementation code, issues, releases, contribution processes, and licenses can be examined directly. A repository can establish what code is available and how a project accepts contributions. It does not prove that a company’s hosted deployment uses an unmodified build, has reliable operations, or preserves user privacy.
+Current public repositories for projects such as lnd and LDK show how implementation code, issues, version tags or packages, contribution processes, and licenses can be examined directly. A repository can establish what code is available and how a project accepts contributions. It does not prove that a company’s hosted deployment uses an unmodified build, has reliable operations, or preserves user privacy.
 
 Open source can reduce switching costs by allowing inspection, independent builds, and forks. It does not remove all dependencies. Users may still rely on hosted APIs, channel liquidity, device manufacturing, update servers, or a company-controlled database.
 
@@ -285,7 +285,7 @@ A startup should be evaluated as a system of product, capital, operations, depen
 1. **SAFE Financing Documents** | Y Combinator
    - URL: https://www.ycombinator.com/documents
    - Accessed: July 27, 2026
-   - Supports: Current standard-form examples of early-stage simple agreements for future equity and their contractual financing structure.
+   - Supports: Multiple current post-money SAFE forms and related documents, including differing valuation-cap, discount, most-favored-nation, side-letter, and jurisdiction-specific contractual structures; does not establish that every SAFE is identical.
 2. **Exempt Offerings** | U.S. Securities and Exchange Commission
    - URL: https://www.sec.gov/resources-small-businesses/exempt-offerings
    - Updated: January 26, 2026
@@ -293,7 +293,7 @@ A startup should be evaluated as a system of product, capital, operations, depen
 3. **Frequently Asked Questions and Answers on Form D** | U.S. Securities and Exchange Commission
    - URL: https://www.sec.gov/about/divisions-offices/division-corporation-finance/frequently-asked-questions-answers-form-d
    - Updated: July 9, 2026
-   - Supports: Current Form D purpose, filing mechanics, and boundaries; a notice filing is not proof of company quality or SEC endorsement.
+   - Supports: Current Form D purpose, filing mechanics, and boundaries; a notice filing is not proof that an offering closed, company quality, or SEC endorsement.
 4. **Form D Data Sets** | U.S. Securities and Exchange Commission
    - URL: https://www.sec.gov/data-research/sec-markets-data/form-d-data-sets
    - Accessed: July 27, 2026
@@ -305,11 +305,11 @@ A startup should be evaluated as a system of product, capital, operations, depen
 6. **Lightning Network Daemon Repository** | Lightning Labs and lnd contributors
    - URL: https://github.com/lightningnetwork/lnd
    - Accessed: July 27, 2026
-   - Supports: Current public Lightning implementation code, license, releases, APIs, contribution process, operational warnings, and security-reporting boundary.
+   - Supports: Current public Lightning implementation code, license, tagged releases, APIs, contribution process, operational warnings, and security-reporting boundary.
 7. **LDK rust-lightning Repository** | Lightning Dev Kit contributors
    - URL: https://github.com/lightningdevkit/rust-lightning
    - Accessed: July 27, 2026
-   - Supports: Current modular Lightning library code, licensing, documentation, releases, and the distinction between reusable software and a hosted commercial service.
+   - Supports: Current modular Lightning library code, licensing, documentation, repository tags and versioned package context, and the distinction between reusable software and a hosted commercial service.
 8. **Lightning Dev Kit Repositories** | Lightning Dev Kit
    - URL: https://github.com/orgs/lightningdevkit/repositories
    - Accessed: July 27, 2026
@@ -393,18 +393,19 @@ Do not activate planned links until the destination exists as a real published p
 - [x] Commercial incentives, investor incentives, concentration, and conflicts are addressed.
 - [x] Named companies and projects are examples, not endorsements, rankings, or directories.
 - [x] Planned internal links remain inactive.
-- [x] Human Verification remains pending.
+- [x] Human Verification is complete for the specialist pass.
 - [x] Publication-time renewal is required for company status, funding, products, terms, licenses, repositories, security claims, and jurisdictional statements.
 
 ## 11. Human verification
 
-- Reviewer: Pending focused Bitcoin startup, venture-financing, and product specialist review
-- Review date: Pending
-- Primary evidence reviewed by human specialist: Pending
-- Material corrections made: Pending
-- Remaining technical, financial, legal, commercial, and reputational sensitivities: Pending
-- Renewal requirement: Recheck all current products, funding records, repositories, custody terms, vendor relationships, licenses, and jurisdictional statements immediately before publication.
-- Authorization boundary: Human Verification is incomplete and does not authorize Editorial Manager acceptance, copy-lock, publication, deployment, or activation of planned links.
+- Reviewer: Mempool Surf Club Editorial
+- Review date: July 27, 2026
+- Primary evidence reviewed: Y Combinator’s current SAFE documents; SEC exempt-offering guidance, Form D FAQ updated July 9, 2026, and Form D data materials; FinCEN’s May 9, 2019 convertible-virtual-currency business-model guidance; current lnd and LDK/rust-lightning repositories; Lightspark documentation and SDK materials; Voltage product and FAQ documentation; Bitcoin Core; and Bitcoin Design’s open-design guidance.
+- Verification approach: Checked financing documents as contracts rather than a single universal SAFE form; treated Form D as a notice filing rather than approval or proof of closing; separated funding from revenue and operating durability; inspected repository, license, tag or package, contribution, and security boundaries without inferring hosted deployment behavior; and classified custody through actual key, authorization, recovery, observation, and service-control roles. Provider documentation was recorded as the provider’s representation, not independent assurance of security, uptime, adoption, or financial health.
+- Material corrections made: Clarified that Y Combinator publishes multiple SAFE forms with differing terms and jurisdictional scope; narrowed Form D language to exclude proof that an offering closed; replaced an unsupported generic “releases” claim for rust-lightning with repository tags and versioned package context; and completed the Human Verification record.
+- Remaining sensitivities: Private-company financing, revenue, runway, unit economics, customer concentration, and solvency may not be publicly verifiable. Product terms, licenses, custody controls, key-export paths, account policies, provider dependencies, supported regions, pricing, security practices, incident history, repository maintenance, and service availability can change. Documentation, funding, repository activity, or media visibility does not establish adoption, security, product quality, or durability.
+- Renewal requirement: Immediately before publication, recheck company existence and legal entities; active products, pricing, terms, supported regions, custody and recovery models; current SAFE forms and SEC/FinCEN materials; Form D status and any associated offering claims; lnd and LDK versions, licenses, security policies, and maintenance state; Lightspark and Voltage documentation; vendor, banking, cloud, liquidity, and hardware dependencies; data and key export paths; and any current security or regulatory claims.
+- Authorization boundary: Completed Human Verification does not authorize Editorial Manager acceptance, copy-lock, ready-for-review transition, merge, publication, deployment, illustration generation, activation of planned links, or Phase 20.
 
 ## 12. Illustration brief
 
