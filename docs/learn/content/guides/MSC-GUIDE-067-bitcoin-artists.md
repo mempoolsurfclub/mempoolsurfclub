@@ -40,7 +40,7 @@ Culture also shapes what people notice. Art may emphasize scarcity, autonomy, en
 
 ### Early visual symbols and community graphics
 
-Bitcoin’s visual language developed through public experimentation rather than a commissioned corporate identity program. Early forum posts and community archives show changing coin images, wordmarks, symbols, and layout conventions. The familiar orange circle and white slanted “B” became widely used through community adoption, but no central brand owner makes it an official logo for every Bitcoin participant.
+Bitcoin’s visual language developed through public experimentation rather than a commissioned corporate identity program. On November 1, 2010, the pseudonymous forum user bitboy published orange-circle Bitcoin graphics and offered the posted work for public-domain use. That original record documents one influential publication, while later widespread adoption reflects broader community copying, adaptation, and reuse. No central brand owner makes the familiar symbol an official logo for every Bitcoin participant.
 
 This history matters because visual familiarity can be mistaken for institutional authority. A widely recognized symbol may function as shared culture while remaining open to adaptation, criticism, and regional variation.
 
@@ -106,7 +106,7 @@ Because installations can disappear, photographs, plans, interviews, and institu
 
 Digital Bitcoin-themed art can exist entirely offchain, be distributed through ordinary websites, or use Bitcoin-related protocols for recording, referencing, or transferring data.
 
-An inscription, as described by the Ord project’s current handbook, places content in the witness data of a Bitcoin transaction and uses ordinal theory and supporting software to identify and track it. The underlying transaction and witness are part of Bitcoin’s data. The inscription identity, content-type handling, numbering, and transfer conventions depend on the ordinal protocol and its implementations.
+An inscription, as described by the Ord project’s current handbook, stores content in a Taproot script revealed in the witness of a script-path spend. Bitcoin consensus validates the transaction, witness, and script under Bitcoin rules. Ord software recognizes a project-defined envelope, assigns an inscription identity and number, interprets content fields, and associates the inscription with a satoshi and later outputs according to ordinal theory.
 
 This distinction matters. Bitcoin consensus validates the transaction under Bitcoin rules. It does not declare artistic merit, ownership of copyright, authenticity of a real-world object, or agreement with ordinal theory.
 
@@ -116,9 +116,11 @@ Bitcoin-themed art is broader than inscriptions. An oil painting about mining is
 
 An inscription record can demonstrate that particular data appeared in a transaction at a particular place in the chain. It does not by itself prove that the inscriber created the work, owned the copyright, received permission, or transferred intellectual-property rights.
 
-Control of the output associated by ordinal software with an inscription is also not identical to copyright ownership. Copyright, licensing, moral rights, trademarks, and contractual rights depend on law and facts outside the protocol record.
+Control of the output associated by Ord software with an inscription is also not identical to copyright ownership. Copyright, licensing, moral rights, trademarks, and contractual rights depend on law, contract, and facts outside the protocol record.
 
-Collectors, platforms, and artists may use terms such as ownership, edition, provenance, or authenticity differently. A careful description states what the transaction proves, what the protocol interprets, what the artist claims, and what legal or historical conclusion remains external.
+For example, under United States law, ownership of copyright is distinct from ownership of a material object, and a copyright transfer other than by operation of law generally requires a signed writing. Other jurisdictions and agreements may apply different rules. This guide does not provide individualized legal advice.
+
+Collectors, platforms, and artists may use terms such as ownership, edition, provenance, or authenticity differently. A careful description states what the Bitcoin transaction proves, what Ord software interprets, what the artist or platform claims, and what legal or historical conclusion remains external.
 
 ### Rare sats and cultural interpretation
 
@@ -185,7 +187,7 @@ Bitcoin culture is plural because participation is plural. Its art is strongest 
 - **Bitcoin culture:** Plural practices, symbols, stories, aesthetics, and interpretations formed around Bitcoin.
 - **Bitcoin-themed art:** Work about Bitcoin regardless of whether it is recorded onchain.
 - **Onchain art:** Art whose data or identifying record uses blockchain transactions; the exact mechanism and dependencies must be stated.
-- **Inscription:** Data placed in Bitcoin transaction witness and identified through the Ord project’s inscription protocol and software.
+- **Inscription:** Content encoded in a Taproot script revealed through Bitcoin witness data and identified and tracked by Ord software using project-defined conventions.
 - **Ordinal theory:** Off-consensus numbering and tracking convention that assigns identities and order to satoshis.
 - **Rare sat:** Collector category defined by ordinal theory, not a separate consensus-recognized asset class.
 - **Provenance:** Documented history of a work, record, or claimed ownership chain.
@@ -254,18 +256,18 @@ Bitcoin culture is plural because participation is plural. Its art is strongest 
     - URL: https://github.com/bitcoin/bitcoin
     - Accessed: July 26, 2026
     - Supports: Current validating implementation and public evidence that Bitcoin software enforces transaction and block rules rather than artistic judgments.
-15. **Bitcoin Design Foundation: Apply** | Bitcoin Design Foundation
-    - URL: https://bitcoindesignfoundation.org/apply
+15. **More Bitcoin Logos, Buttons, and Other Graphics** | bitboy; Bitcoin Forum
+    - URL: https://bitcointalk.org/index.php?topic=1631.msg20111
+    - Published: November 1, 2010
+    - Supports: Original pseudonymous publication of the familiar orange-circle Bitcoin graphics and the poster’s public-domain statement; does not by itself establish every later adaptation, use, or legal conclusion.
+16. **17 U.S.C. § 202: Ownership of Copyright as Distinct from Ownership of Material Object** | United States House of Representatives, Office of the Law Revision Counsel
+    - URL: https://uscode.house.gov/view.xhtml?edition=prelim&req=granuleid%3AUSC-prelim-title17-section202
     - Accessed: July 26, 2026
-    - Supports: Current grant support for open-source Bitcoin design work and the existence of a disclosed funding relationship.
-16. **OpenSats: Bitcoin Design Community Project Record** | Open Sats Initiative, Inc.
-    - URL: https://opensats.org/projects/bitcoindesign
+    - Supports: United States statutory distinction between copyright ownership and ownership or transfer of the material object embodying a work.
+17. **17 U.S.C. § 204: Execution of Transfers of Copyright Ownership** | United States House of Representatives, Office of the Law Revision Counsel
+    - URL: https://uscode.house.gov/view.xhtml?edition=prelim&num=0&req=granuleid%3AUSC-prelim-title17-section204%28a%29
     - Accessed: July 26, 2026
-    - Supports: Current funder description of Bitcoin Design Community outputs and support; establishes the funder’s statement, not independent artistic authority.
-17. **OpenSats Transparency** | Open Sats Initiative, Inc.
-    - URL: https://opensats.org/transparency
-    - Accessed: July 26, 2026
-    - Supports: Current grant, policy, financial, and conflict-disclosure records relevant to cultural and design funding.
+    - Supports: United States statutory writing-and-signature requirement for most transfers of copyright ownership other than by operation of law; jurisdiction-specific and not individualized legal advice.
 
 ## 5. SEO title
 
@@ -324,12 +326,17 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer: Pending ecosystem specialist review
-- Review date: Pending
-- Primary evidence reviewed: Pending
-- Material corrections made: Pending
-- Remaining sensitivities: Pending
-- Renewal requirement: Pending
+- Reviewer: Mempool Surf Club Editorial
+- Review date: July 26, 2026
+- Primary evidence reviewed: Original November 1, 2010 Bitcointalk post by the pseudonymous user bitboy; Bitcoin Design visual-language, guide, contribution, open-design, and timeline records; Ordinal Theory Handbook introduction, inscriptions, provenance, and metadata documentation; BIP 141 and BIP 341; BIP 3; Bitcoin Core repository; current United States Code, Title 17, Sections 202 and 204.
+- Named-role and affiliation verification approach: The guide avoids a ranked list of living artists and does not infer legal identities behind pseudonyms. Project and community affiliations were checked against direct project records on the review date. Artist statements, funder descriptions, community interpretations, and independent historical conclusions remain separate.
+- Historical-attribution evidence: The original forum post establishes that bitboy published the familiar orange-circle graphics on November 1, 2010 and offered the posted work for public-domain use. The guide treats later widespread adoption as community history, not proof that one person created or officially owns Bitcoin culture.
+- Technical evidence: BIP 141 and BIP 341 establish Bitcoin witness and Taproot script-path behavior. The Ord handbook establishes the project-defined envelope, inscription, numbering, sat-tracking, metadata, provenance, and rarity conventions. Bitcoin Core and Bitcoin consensus validate transactions and scripts; they do not enforce Ord’s numbering, collector categories, artistic judgments, or legal rights.
+- Legal evidence: United States Code Title 17 Section 202 establishes that copyright ownership is distinct from ownership of a material object, and Section 204 generally requires a signed writing for a copyright transfer other than by operation of law. These are United States examples, not universal rules or individualized legal advice; other jurisdictions and contracts may differ.
+- Material corrections made: Added the original 2010 forum record and carefully limited what it proves; corrected inscription wording to distinguish Taproot witness data from Ord recognition and tracking; described inscription identity, numbering, rarity, provenance, and associated-output tracking as application or indexer conventions rather than Bitcoin consensus; added jurisdiction-qualified United States copyright-transfer support; replaced three weaker funding sources with the direct historical and legal records.
+- Remaining factual, historical, cultural, commercial, technical, legal, and reputational sensitivities: Cultural origin stories, pseudonymous attribution, deleted media, portfolio status, sponsorship, platform records, inscription indexing, renderer behavior, provenance claims, licensing, and legal rights can change or remain disputed. Onchain availability does not establish authorship, authorization, authenticity, preservation quality, artistic merit, or legal ownership.
+- Renewal requirement: Before publication, recheck the original forum archive, Bitcoin Design records, Ord documentation and software behavior, BIP 141 and BIP 341, and the current law of every jurisdiction discussed. Date any current affiliation or platform claim, and remove any attribution that cannot be supported by an original publication, direct portfolio, institutional archive, or equivalent primary record.
+- Authorization boundary: Completion of Human Verification does not authorize Editorial Manager acceptance, copy-lock, publication, deployment, illustration generation, or activation of planned links.
 
 ## 12. Illustration brief
 
