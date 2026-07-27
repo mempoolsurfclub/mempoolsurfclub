@@ -1,0 +1,397 @@
+name: Phase 18 copy-lock once
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+    paths:
+      - .github/workflows/phase18-copylock-once.yml
+
+permissions:
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: phase18-copylock-once-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  copy-lock:
+    if: >-
+      github.repository == 'mempoolsurfclub/mempoolsurfclub' &&
+      github.event.pull_request.head.ref == 'automation/phase18-copylock-pr-trigger' &&
+      github.event.pull_request.base.ref == 'main' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout accepted Phase 18 branch
+        uses: actions/checkout@v4
+        with:
+          ref: content/learn-people-065-068
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Create, audit, and push metadata-only copy-lock commit
+        env:
+          EXPECTED_MAIN: 42194b2adfd347486a1d8960708f4a83c2de0b56
+          EXPECTED_HEAD: dd35654640d49414758429758f7d14c94dc2cb46
+          SOURCE_BRANCH: content/learn-people-065-068
+          COMMIT_MESSAGE: Lock Phase 18 Bitcoin ecosystem people guides
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          event = json.loads(Path(os.environ["GITHUB_EVENT_PATH"]).read_text())
+          assert os.environ["GITHUB_REPOSITORY"] == "mempoolsurfclub/mempoolsurfclub"
+          assert event["pull_request"]["head"]["ref"] == "automation/phase18-copylock-pr-trigger"
+          assert event["pull_request"]["base"]["ref"] == "main"
+          assert event["pull_request"]["head"]["repo"]["full_name"] == os.environ["GITHUB_REPOSITORY"]
+          PY
+
+          git fetch --prune origin
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          test "$(git ls-remote origin "refs/heads/$SOURCE_BRANCH" | cut -f1)" = "$EXPECTED_HEAD"
+          test "$(git ls-remote origin refs/heads/main | cut -f1)" = "$EXPECTED_MAIN"
+          test -z "$(git status --porcelain)"
+          test -z "$(git log --format='%H' "$EXPECTED_HEAD"..HEAD)"
+          if git log --all --format='%s' | grep -Fxq "$COMMIT_MESSAGE"; then
+            echo "Copy-lock commit already exists; refusing to edit." >&2
+            exit 1
+          fi
+
+          python3 - <<'PY'
+          from collections import Counter
+          from pathlib import Path
+          import json
+          import os
+          import re
+          import subprocess
+
+          accepted = os.environ["EXPECTED_HEAD"]
+          manifest_path = Path("docs/learn/content/content-manifest.json")
+          guides = {
+              "065": Path("docs/learn/content/guides/MSC-GUIDE-065-bitcoin-builders.md"),
+              "066": Path("docs/learn/content/guides/MSC-GUIDE-066-bitcoin-developers.md"),
+              "067": Path("docs/learn/content/guides/MSC-GUIDE-067-bitcoin-artists.md"),
+              "068": Path("docs/learn/content/guides/MSC-GUIDE-068-bitcoin-industry-leaders.md"),
+          }
+          authorized = [manifest_path, *guides.values()]
+          expected_counts = {
+              "065": (2146, 17),
+              "066": (2128, 17),
+              "067": (2212, 17),
+              "068": (2320, 17),
+          }
+          word_re = re.compile(r"\b[\w’'-]+\b", re.UNICODE)
+          transitions = [
+              (b"status: EDITORIAL_REVIEW\n", b"status: COPY_LOCKED\n"),
+              (b"reviewed_date: null\n", b"reviewed_date: 2026-07-26\n"),
+              (b"copy_locked_date: null\n", b"copy_locked_date: 2026-07-26\n"),
+          ]
+
+          def run(*args):
+              return subprocess.check_output(args)
+
+          def original(path):
+              return run("git", "show", f"{accepted}:{path.as_posix()}")
+
+          def section(text, start, end):
+              if text.count(start) != 1 or text.count(end) != 1:
+                  raise SystemExit(f"Section boundary mismatch: {start!r} / {end!r}")
+              return text.split(start, 1)[1].split(end, 1)[0]
+
+          def metrics(path, data):
+              text = data.decode("utf-8")
+              article = section(text, "## 2. Full article", "## 3. Key Terms")
+              sources = section(text, "## 4. Sources", "## 5. SEO title")
+              links = section(text, "## 9. Planned internal links", "## 10. Accuracy review checklist")
+              checklist = section(text, "## 10. Accuracy review checklist", "## 11. Human verification")
+              human = section(text, "## 11. Human verification", "## 12. Illustration brief")
+              illustrations = text.split("## 12. Illustration brief", 1)[1]
+
+              section_numbers = re.findall(r"(?m)^## (\d+)\. ", text)
+              if section_numbers != [str(i) for i in range(1, 13)]:
+                  raise SystemExit(f"Package section mismatch in {path}: {section_numbers}")
+              if len(re.findall(r"(?m)^### Illustration [123]$", illustrations)) != 3:
+                  raise SystemExit(f"Illustration heading mismatch in {path}")
+              if illustrations.count("- Status: PLANNED") != 3:
+                  raise SystemExit(f"Illustration status mismatch in {path}")
+              if "http://" in links or "https://" in links or re.search(r"\]\(", links):
+                  raise SystemExit(f"Active planned link detected in {path}")
+              if "- [ ]" in checklist:
+                  raise SystemExit(f"Incomplete checklist item in {path}")
+              if "- Reviewer: Mempool Surf Club Editorial" not in human:
+                  raise SystemExit(f"Human Verification reviewer mismatch in {path}")
+              if "- Review date: July 26, 2026" not in human:
+                  raise SystemExit(f"Human Verification date mismatch in {path}")
+              if "- Authorization boundary:" not in human:
+                  raise SystemExit(f"Human Verification authorization boundary missing in {path}")
+
+              return {
+                  "full_article_words": len(word_re.findall(article)),
+                  "sources": len(re.findall(r"(?m)^\d+\.\s+\*\*", sources)),
+                  "illustrations": 3,
+              }
+
+          original_bytes = {}
+          pre_counts = {}
+          original_modes = {}
+          original_blobs = {}
+
+          for number, path in guides.items():
+              data = original(path)
+              if path.read_bytes() != data:
+                  raise SystemExit(f"Working file differs from accepted head before edit: {path}")
+              original_bytes[path] = data
+              pre_counts[number] = metrics(path, data)
+              expected_words, expected_sources = expected_counts[number]
+              actual = pre_counts[number]
+              if (actual["full_article_words"], actual["sources"]) != (expected_words, expected_sources):
+                  raise SystemExit(f"Pre-lock count mismatch for {path}: {actual}")
+
+          old_manifest = original(manifest_path)
+          if manifest_path.read_bytes() != old_manifest:
+              raise SystemExit("Manifest differs from accepted head before edit")
+          original_bytes[manifest_path] = old_manifest
+
+          for path in authorized:
+              tree_line = run("git", "ls-tree", accepted, path.as_posix()).decode().strip()
+              mode, object_type, blob_and_path = tree_line.split(maxsplit=2)
+              blob = blob_and_path.split("\t", 1)[0]
+              if object_type != "blob":
+                  raise SystemExit(f"Unexpected object type for {path}: {object_type}")
+              original_modes[path.as_posix()] = mode
+              original_blobs[path.as_posix()] = blob
+
+          new_manifest = old_manifest
+          manifest_substitutions = 0
+          for number in guides:
+              registry = f'MSC-GUIDE-{number}'.encode()
+              marker = b'      "registry_id": "' + registry + b'"'
+              if new_manifest.count(marker) != 1:
+                  raise SystemExit(f"Manifest registry occurrence mismatch for {registry.decode()}")
+              marker_at = new_manifest.index(marker)
+              entry_start = new_manifest.rfind(b"    {\n", 0, marker_at)
+              entry_end = new_manifest.index(b"\n    }", marker_at) + len(b"\n    }")
+              entry = new_manifest[entry_start:entry_end]
+              old = b'      "status": "EDITORIAL_REVIEW"'
+              new = b'      "status": "COPY_LOCKED"'
+              if entry.count(old) != 1 or entry.count(new) != 0:
+                  raise SystemExit(f"Manifest status mismatch for {registry.decode()}")
+              changed_entry = entry.replace(old, new, 1)
+              new_manifest = new_manifest[:entry_start] + changed_entry + new_manifest[entry_end:]
+              manifest_substitutions += 1
+
+          if manifest_substitutions != 4:
+              raise SystemExit(f"Manifest substitution count mismatch: {manifest_substitutions}")
+          json.loads(new_manifest.decode("utf-8"))
+
+          reversed_manifest = new_manifest
+          for number in guides:
+              registry = f'MSC-GUIDE-{number}'.encode()
+              marker = b'      "registry_id": "' + registry + b'"'
+              marker_at = reversed_manifest.index(marker)
+              entry_start = reversed_manifest.rfind(b"    {\n", 0, marker_at)
+              entry_end = reversed_manifest.index(b"\n    }", marker_at) + len(b"\n    }")
+              entry = reversed_manifest[entry_start:entry_end]
+              entry = entry.replace(
+                  b'      "status": "COPY_LOCKED"',
+                  b'      "status": "EDITORIAL_REVIEW"',
+                  1,
+              )
+              reversed_manifest = reversed_manifest[:entry_start] + entry + reversed_manifest[entry_end:]
+          if reversed_manifest != old_manifest:
+              raise SystemExit("Manifest reverse-byte verification failed")
+          manifest_path.write_bytes(new_manifest)
+
+          post_counts = {}
+          for number, path in guides.items():
+              before = original_bytes[path]
+              if not before.startswith(b"---\n"):
+                  raise SystemExit(f"Unexpected frontmatter opening in {path}")
+              front_end = before.find(b"\n---\n", 4)
+              if front_end < 0:
+                  raise SystemExit(f"Frontmatter closing delimiter missing in {path}")
+              split_at = front_end + len(b"\n---\n")
+              front = before[:split_at]
+              body = before[split_at:]
+              new_front = front
+              for old, new in transitions:
+                  if new_front.count(old) != 1:
+                      raise SystemExit(f"Expected field absent or duplicated in {path}: {old!r}")
+                  if new_front.count(new) != 0:
+                      raise SystemExit(f"New field already present in {path}: {new!r}")
+                  new_front = new_front.replace(old, new, 1)
+              after = new_front + body
+              if after[split_at + (len(new_front) - len(front)):] != body:
+                  raise SystemExit(f"Body preservation failed in {path}")
+
+              reversed_bytes = after
+              after_front_end = reversed_bytes.find(b"\n---\n", 4)
+              after_split = after_front_end + len(b"\n---\n")
+              reverse_front = reversed_bytes[:after_split]
+              reverse_body = reversed_bytes[after_split:]
+              for old, new in reversed(transitions):
+                  if reverse_front.count(new) != 1:
+                      raise SystemExit(f"Reverse field mismatch in {path}: {new!r}")
+                  reverse_front = reverse_front.replace(new, old, 1)
+              if reverse_front + reverse_body != before:
+                  raise SystemExit(f"Guide reverse-byte verification failed for {path}")
+
+              path.write_bytes(after)
+              post_counts[number] = metrics(path, after)
+              if post_counts[number] != pre_counts[number]:
+                  raise SystemExit(f"Post-lock count or package mismatch for {path}")
+
+          guide_067 = guides["067"].read_text(encoding="utf-8")
+          required_067 = [
+              "On November 1, 2010, the pseudonymous forum user bitboy published",
+              "The record does not establish when that statement was added or provide a legally conclusive copyright determination.",
+              "Bitcoin consensus validates the transaction, witness, and script under Bitcoin rules. Ord software recognizes a project-defined envelope",
+              "Original post date: November 1, 2010",
+              "Current page last edit: July 10, 2014",
+              "Creative Commons Attribution-ShareAlike language and later licensing discussion and changes.",
+              "17 U.S.C. § 202",
+              "17 U.S.C. § 204",
+              "Do not infer legal identity, geography, demographic attributes, or motives without consent and evidence.",
+          ]
+          for phrase in required_067:
+              if phrase not in guide_067:
+                  raise SystemExit(f"Guide 067 preservation phrase missing: {phrase}")
+
+          status_lines = run("git", "status", "--short").decode().splitlines()
+          expected_paths = sorted(path.as_posix() for path in authorized)
+          actual_paths = sorted(line[3:] for line in status_lines)
+          if actual_paths != expected_paths or any(line[:2] != " M" for line in status_lines):
+              raise SystemExit(f"Unexpected git status: {status_lines}")
+
+          diff = run("git", "diff", "--unified=0", accepted, "--", *expected_paths).decode("utf-8")
+          changed_lines = [
+              line for line in diff.splitlines()
+              if (line.startswith("+") or line.startswith("-"))
+              and not line.startswith("+++")
+              and not line.startswith("---")
+          ]
+          expected_changes = Counter({
+              '-      "status": "EDITORIAL_REVIEW"': 4,
+              '+      "status": "COPY_LOCKED"': 4,
+              "-status: EDITORIAL_REVIEW": 4,
+              "+status: COPY_LOCKED": 4,
+              "-reviewed_date: null": 4,
+              "+reviewed_date: 2026-07-26": 4,
+              "-copy_locked_date: null": 4,
+              "+copy_locked_date: 2026-07-26": 4,
+          })
+          if Counter(changed_lines) != expected_changes:
+              raise SystemExit(f"Unexpected accepted-head diff lines: {Counter(changed_lines)}")
+
+          candidate_blobs = {}
+          for path in authorized:
+              candidate_blobs[path.as_posix()] = run("git", "hash-object", path.as_posix()).decode().strip()
+
+          audit = {
+              "accepted_head": accepted,
+              "authorized_files": expected_paths,
+              "pre_counts": pre_counts,
+              "post_edit_counts": post_counts,
+              "original_modes": original_modes,
+              "original_blobs": original_blobs,
+              "candidate_blobs": candidate_blobs,
+              "manifest_substitutions": manifest_substitutions,
+          }
+          Path("/tmp/phase18-audit.json").write_text(json.dumps(audit, indent=2, sort_keys=True) + "\n")
+          print("PRE_COMMIT_AUDIT")
+          print(json.dumps(audit, indent=2, sort_keys=True))
+          PY
+
+          cat > /tmp/authorized-files <<'EOF'
+          docs/learn/content/content-manifest.json
+          docs/learn/content/guides/MSC-GUIDE-065-bitcoin-builders.md
+          docs/learn/content/guides/MSC-GUIDE-066-bitcoin-developers.md
+          docs/learn/content/guides/MSC-GUIDE-067-bitcoin-artists.md
+          docs/learn/content/guides/MSC-GUIDE-068-bitcoin-industry-leaders.md
+          EOF
+
+          git status --short
+          git diff --check
+          test -z "$(git diff --summary)"
+          git diff --name-only | sort > /tmp/actual-files
+          diff -u <(sort /tmp/authorized-files) /tmp/actual-files
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add --pathspec-from-file=/tmp/authorized-files
+          git diff --cached --check
+          git commit -m "$COMMIT_MESSAGE"
+
+          FINAL_HEAD="$(git rev-parse HEAD)"
+          test "$(git rev-parse HEAD^)" = "$EXPECTED_HEAD"
+          test "$(git log -1 --pretty=%s)" = "$COMMIT_MESSAGE"
+          test "$(git rev-list --count "$EXPECTED_HEAD"..HEAD)" = "1"
+          git diff --name-only "$EXPECTED_HEAD" HEAD | sort > /tmp/committed-files
+          diff -u <(sort /tmp/authorized-files) /tmp/committed-files
+          test -z "$(git diff --summary "$EXPECTED_HEAD" HEAD)"
+          git diff --check "$EXPECTED_HEAD" HEAD
+
+          python3 - <<'PY'
+          from collections import Counter
+          from pathlib import Path
+          import json
+          import os
+          import subprocess
+
+          accepted = os.environ["EXPECTED_HEAD"]
+          audit = json.loads(Path("/tmp/phase18-audit.json").read_text())
+          expected_changes = Counter({
+              '-      "status": "EDITORIAL_REVIEW"': 4,
+              '+      "status": "COPY_LOCKED"': 4,
+              "-status: EDITORIAL_REVIEW": 4,
+              "+status: COPY_LOCKED": 4,
+              "-reviewed_date: null": 4,
+              "+reviewed_date: 2026-07-26": 4,
+              "-copy_locked_date: null": 4,
+              "+copy_locked_date: 2026-07-26": 4,
+          })
+          diff = subprocess.check_output(
+              ["git", "diff", "--unified=0", accepted, "HEAD", "--", *audit["authorized_files"]]
+          ).decode("utf-8")
+          changed_lines = [
+              line for line in diff.splitlines()
+              if (line.startswith("+") or line.startswith("-"))
+              and not line.startswith("+++")
+              and not line.startswith("---")
+          ]
+          if Counter(changed_lines) != expected_changes:
+              raise SystemExit("Committed diff is not the exact metadata-only change set")
+
+          for path, expected_blob in audit["candidate_blobs"].items():
+              tree_line = subprocess.check_output(["git", "ls-tree", "HEAD", path]).decode().strip()
+              mode, object_type, blob_and_path = tree_line.split(maxsplit=2)
+              actual_blob = blob_and_path.split("\t", 1)[0]
+              if actual_blob != expected_blob:
+                  raise SystemExit(f"Candidate blob mismatch for {path}: {actual_blob} != {expected_blob}")
+              if mode != audit["original_modes"][path] or object_type != "blob":
+                  raise SystemExit(f"Mode or object type changed for {path}")
+          print("POST_COMMIT_AUDIT")
+          print(json.dumps({
+              "copy_lock_commit": subprocess.check_output(["git", "rev-parse", "HEAD"]).decode().strip(),
+              "parent": subprocess.check_output(["git", "rev-parse", "HEAD^"]).decode().strip(),
+              "message": subprocess.check_output(["git", "log", "-1", "--pretty=%s"]).decode().strip(),
+              "candidate_blobs": audit["candidate_blobs"],
+              "post_lock_counts": audit["post_edit_counts"],
+          }, indent=2, sort_keys=True))
+          PY
+
+          test "$(git ls-remote origin "refs/heads/$SOURCE_BRANCH" | cut -f1)" = "$EXPECTED_HEAD"
+          git push origin "HEAD:refs/heads/$SOURCE_BRANCH"
+          test "$(git ls-remote origin "refs/heads/$SOURCE_BRANCH" | cut -f1)" = "$FINAL_HEAD"
+          echo "FINAL_HEAD=$FINAL_HEAD"
