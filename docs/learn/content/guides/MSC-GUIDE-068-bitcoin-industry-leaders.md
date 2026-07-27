@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-068
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: How Bitcoin Industry Leaders Shape the Ecosystem
 handle: bitcoin-industry-leaders
@@ -12,8 +12,8 @@ primary_path: Explore the Ecosystem
 secondary_paths:
   - Start With Bitcoin
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-26
+copy_locked_date: 2026-07-26
 ---
 
 # How Bitcoin Industry Leaders Shape the Ecosystem

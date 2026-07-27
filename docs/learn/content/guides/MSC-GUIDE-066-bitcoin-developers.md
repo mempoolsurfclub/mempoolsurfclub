@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-066
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: What Bitcoin Developers Do
 handle: bitcoin-developers
@@ -12,8 +12,8 @@ primary_path: Explore the Ecosystem
 secondary_paths:
   - Build on Bitcoin
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-26
+copy_locked_date: 2026-07-26
 ---
 
 # What Bitcoin Developers Do
