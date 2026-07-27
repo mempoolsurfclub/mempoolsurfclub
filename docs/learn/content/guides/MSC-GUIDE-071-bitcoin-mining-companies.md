@@ -145,7 +145,7 @@ Pool arrangements differ in:
 - orphan or stale-block treatment; and
 - whether miners can select or construct templates.
 
-Stratum V2 specifications and implementations document ongoing work on mining communication, including job negotiation. A repository establishes the current specification or software state. It does not prove that every company or pool has deployed every feature.
+Stratum V2 specifications, protocol libraries, and application repositories document ongoing work on mining communication, including job negotiation. As of July 27, 2026, the `sv2-apps` repository describes its application-level crates as alpha. Public specification or implementation availability does not prove that a mining company or pool has deployed every component or feature.
 
 A company should disclose material pool concentration and settlement exposure. Mining through a pool can reduce payout variance, but it adds operational and counterparty dependence.
 
@@ -274,38 +274,44 @@ Mining companies are industrial operators within Bitcoin’s incentive system. T
    - Supports: Technical description of solo and pooled mining, block templates, share work, reward allocation, and the distinction between pool coordination and valid network blocks.
 2. **Riot Platforms, Inc. 2025 Form 10-K** | Riot Platforms, Inc.; U.S. Securities and Exchange Commission
    - URL: https://www.sec.gov/Archives/edgar/data/1167419/000110465926022322/riot-20251231x10k.htm
+   - Filed: March 2, 2026
    - Accessed: July 27, 2026
    - Supports: Company-defined deployed and average operating hashrate, self-mining, power strategy, site development, curtailment, equipment, costs, depreciation, financing, and risk disclosures.
 3. **Riot Platforms, Inc. First-Quarter 2026 Form 10-Q** | Riot Platforms, Inc.; U.S. Securities and Exchange Commission
    - URL: https://www.sec.gov/Archives/edgar/data/1167419/000110465926053120/riot-20260331x10q.htm
+   - Filed: April 30, 2026
    - Accessed: July 27, 2026
    - Supports: Interim company disclosures about mining revenue, power credits, fleet operations, bitcoin, costs, assets, and financing for the quarter ended March 31, 2026.
 4. **MARA Holdings, Inc. 2025 Form 10-K** | MARA Holdings, Inc.; U.S. Securities and Exchange Commission
    - URL: https://www.sec.gov/Archives/edgar/data/1507605/000150760526000007/mara-20251231.htm
+   - Filed: March 2, 2026
    - Accessed: July 27, 2026
    - Supports: Company disclosures about owned and hosted sites, self-mining, mining pools, energy, equipment, depreciation, bitcoin production, holdings, financing, and operational risks.
-5. **MARA First-Quarter 2026 Shareholder Letter** | MARA Holdings, Inc.; U.S. Securities and Exchange Commission
+5. **MARA First-Quarter 2026 Shareholder Letter, Exhibit 99.1 to Form 8-K** | MARA Holdings, Inc.; U.S. Securities and Exchange Commission
    - URL: https://www.sec.gov/Archives/edgar/data/1507605/000150760526000014/q126shareholderletter.htm
+   - Furnished: May 11, 2026
    - Accessed: July 27, 2026
-   - Supports: Dated company-reported production, energized hashrate, site and energy developments, financial results, and management-defined metrics; establishes company reporting rather than independent verification.
+   - Supports: Dated company-reported production, energized hashrate, site and energy developments, financial results, and management-defined metrics. The letter was furnished under Item 2.02 rather than deemed filed and establishes company reporting, not independent verification.
 6. **CleanSpark, Inc. 2025 Form 10-K** | CleanSpark, Inc.; U.S. Securities and Exchange Commission
    - URL: https://www.sec.gov/Archives/edgar/data/827876/000119312525297510/clsk-20250930.htm
+   - Filed: November 25, 2025
    - Accessed: July 27, 2026
    - Supports: Company disclosures about self-mining, miners in service versus owned, operational hashrate, energy, sites, pool activity, equipment, depreciation, financing, and risks.
 7. **Stratum V2 Specifications** | Stratum Mining contributors
    - URL: https://github.com/stratum-mining/sv2-spec
    - Accessed: July 27, 2026
    - Supports: Current public specifications for mining communication, roles, channels, work negotiation, and job negotiation; does not establish universal deployment.
-8. **Stratum V2 Reference Implementation** | Stratum Mining contributors
-   - URL: https://github.com/stratum-mining/stratum
+8. **Stratum V2 Applications and Reference Implementation** | Stratum Mining contributors
+   - URL: https://github.com/stratum-mining/sv2-apps
    - Accessed: July 27, 2026
-   - Supports: Current public implementation, releases, components, and project status for Stratum V2 software.
+   - Supports: Current public application-level pool and miner components, releases, integration tests, and the repository’s stated alpha project status. It does not establish production deployment by any particular company or pool.
 9. **Bitcoin Core Integration and Staging Tree** | Bitcoin Core contributors
    - URL: https://github.com/bitcoin/bitcoin
    - Accessed: July 27, 2026
    - Supports: Independent block validation by node software and the boundary between miner block construction and consensus-rule enforcement.
 10. **Strategy Inc. 2025 Form 10-K** | Strategy Inc.; U.S. Securities and Exchange Commission
     - URL: https://www.sec.gov/Archives/edgar/data/1050446/000105044626000020/mstr-20251231.htm
+    - Filed: February 19, 2026
     - Accessed: July 27, 2026
     - Supports: Comparative treasury, custody, fair-value, financing, and risk disclosures used to separate holding bitcoin from industrial mining operations.
 11. **Accounting Standards Update 2023-08: Crypto Assets** | Financial Accounting Standards Board
@@ -315,7 +321,7 @@ Mining companies are industrial operators within Bitcoin’s incentive system. T
 12. **SEC Filings and Forms** | U.S. Securities and Exchange Commission
     - URL: https://www.sec.gov/edgar/search-and-access
     - Accessed: July 27, 2026
-    - Supports: Primary filing access for annual, quarterly, current, and exhibit records used to distinguish audited, interim, filed, and promotional company information.
+    - Supports: Primary filing access for annual, quarterly, current, and exhibit records used to distinguish audited, interim, filed, furnished, and promotional company information.
 
 ## 5. SEO title
 
@@ -371,18 +377,19 @@ Do not activate planned links until the destination exists as a real published p
 - [x] Commercial incentives, supplier concentration, pool dependence, site concentration, and financing risks are addressed.
 - [x] Named companies are examples, not endorsements, rankings, or investment recommendations.
 - [x] Planned internal links remain inactive.
-- [x] Human Verification remains pending.
+- [x] Human Verification is complete for the specialist pass.
 - [x] Publication-time renewal is required for all operational, financial, environmental, regulatory, and company-role claims.
 
 ## 11. Human verification
 
-- Reviewer: Pending focused Bitcoin mining operations, energy, and accounting specialist review
-- Review date: Pending
-- Primary evidence reviewed by human specialist: Pending
-- Material corrections made: Pending
-- Remaining technical, operational, financial, environmental, legal, and reputational sensitivities: Pending
-- Renewal requirement: Recheck all current filings, production reports, definitions, pool relationships, power arrangements, equipment, holdings, financing, and environmental methodologies immediately before publication.
-- Authorization boundary: Human Verification is incomplete and does not authorize Editorial Manager acceptance, copy-lock, publication, deployment, or activation of planned links.
+- Reviewer: Mempool Surf Club Editorial
+- Review date: July 27, 2026
+- Primary evidence reviewed: Riot Platforms, Inc. 2025 Form 10-K filed March 2, 2026 and first-quarter 2026 Form 10-Q filed April 30, 2026; MARA Holdings, Inc. 2025 Form 10-K filed March 2, 2026 and first-quarter 2026 shareholder letter furnished as Exhibit 99.1 to a May 11, 2026 Form 8-K; CleanSpark, Inc. 2025 Form 10-K filed November 25, 2025; Stratum V2 specifications, protocol-library repository, and current `sv2-apps` application repository; Bitcoin Core; FASB ASU 2023-08; SEC filing-access materials; and the cited mining technical documentation.
+- Verification approach: Matched company legal names, CIKs, accessions, filing or furnished status, reporting periods, site and fleet boundaries, and each company-defined metric to its primary record. Separated self-mining, hosting, pools, manufacturers, customer-owned equipment, and site ownership; preserved planned, energized, deployed, operational, average operating, realized, and estimated network hashrate distinctions; and treated company reports, power credits, environmental claims, and shareholder letters as company-reported evidence rather than independent measurement. Mining template policy was checked separately from validating-node consensus enforcement.
+- Material corrections made: Replaced the incorrectly characterized Stratum V2 “reference implementation” source, which now identifies itself as the low-level protocol-library repository, with the current `sv2-apps` application repository; stated the repository’s alpha status and limited deployment inference; identified MARA’s shareholder letter as Exhibit 99.1 furnished under Item 2.02 rather than deemed filed; added exact filing dates; and completed the Human Verification record.
+- Remaining sensitivities: Production, holdings, fleet counts, site status, power prices, pool relationships, equipment ownership, and hashrate are time-sensitive and often company-defined. Interim figures and shareholder letters may be unaudited; network hashrate is estimated; “cost to mine” metrics can omit material expenses; curtailment and grid benefits depend on contract, site, market, and counterfactual; and energy-source or emissions claims depend on boundaries, certificates, models, offsets, and assurance scope. Contracts, litigation, financing, tariffs, permits, environmental rules, and operating conditions can change.
+- Renewal requirement: Immediately before publication, recheck the newest annual, quarterly, current, and production reports; exact metric definitions and dates; site ownership and hosting status; planned, energized, deployed, operational, average operating, realized, and network hashrate figures; fleet ownership and operating counts; pools and payout terms; power contracts, credits, and curtailment programs; bitcoin production, sales, holdings, collateral, debt, equity issuance, capital expenditures, depreciation, and cash flow; Stratum V2 repository status and deployment evidence; and every environmental, grid, regulatory, and jurisdictional claim.
+- Authorization boundary: Completed Human Verification does not authorize Editorial Manager acceptance, copy-lock, ready-for-review transition, merge, publication, deployment, illustration generation, activation of planned links, or Phase 20.
 
 ## 12. Illustration brief
 
