@@ -103,7 +103,7 @@ The relevant questions are whether funding relationships are disclosed, selectio
 
 Industry participants may join standards work for wallets, payments, Lightning, mining, custody, or interoperability. Their practical experience can improve specifications. Their commercial interests can also shape priorities.
 
-Participation in a standards discussion is not mandatory adoption. A BIP author proposes and documents. Editors administer a repository process. Implementers choose support. Operators and users choose software. The deployed BIP process explicitly states that publication is not community consensus or a general recommendation.
+Participation in a standards discussion is not mandatory adoption. A BIP author proposes and documents. Editors administer a repository process. Implementers choose support. Operators and users choose software. BIP 3, currently marked Deployed in the BIPs repository, explicitly states that publication is not community consensus or a general recommendation.
 
 A company with many customers may accelerate a standard by implementing it. That is distribution influence. Other projects can still reject, modify, or compete with the approach unless a separate protocol deployment process makes the behavior part of enforced consensus.
 
@@ -282,10 +282,10 @@ That approach avoids both hero worship and the opposite mistake of pretending in
     - URL: https://github.com/lightningnetwork/lnd
     - Accessed: July 26, 2026
     - Supports: Current implementation, operator, standards, API, and security responsibilities distinct from network-wide authority.
-13. **Stratum V2 Reference Implementation** | Stratum Mining contributors
+13. **Stratum V2 Protocol Libraries** | Stratum Mining contributors
     - URL: https://github.com/stratum-mining/stratum
     - Accessed: July 26, 2026
-    - Supports: Current mining protocol software and the distinction between mining communication infrastructure and consensus validation.
+    - Supports: Current low-level Stratum V1 and V2 protocol libraries and the repository’s distinction from the separate alpha-stage `sv2-apps` application repository; mining communication infrastructure remains distinct from node consensus validation.
 14. **Bitcoin Design Guide** | Bitcoin Design Community
     - URL: https://bitcoin.design/guide/
     - Accessed: July 26, 2026
@@ -365,12 +365,17 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer: Pending ecosystem specialist review
-- Review date: Pending
-- Primary evidence reviewed: Pending
-- Material corrections made: Pending
-- Remaining sensitivities: Pending
-- Renewal requirement: Pending
+- Reviewer: Mempool Surf Club Editorial
+- Review date: July 26, 2026
+- Primary evidence reviewed: BIP 3 and the Bitcoin BIPs repository; Bitcoin Core repository; Coinbase Global, iShares Bitcoin Trust, and Invesco Galaxy Bitcoin ETF 2025 Forms 10-K; Brink’s 2025 annual and engineering reports; OpenSats transparency portal, 2025 year-in-review, application criteria, seventeenth Bitcoin grant wave, and mission statement; lnd repository; Stratum V2 protocol-library, application, and specification repositories; Bitcoin Design Guide and Open Design documentation.
+- Named-role and affiliation verification approach: The article explains influence channels without naming individual executives or treating a title as authority. Current organizations, filings, programs, and project scopes were checked against official repositories, reports, policies, or regulatory filings on the review date. Corporate policy, nonprofit governance, funding, repository permission, standards participation, and consensus adoption remain separate.
+- Historical-attribution evidence: No person is credited as an official Bitcoin leader, movement founder, or network spokesperson. Historical claims are limited to dated filings, reports, repository records, and organizational publications.
+- Technical evidence: Bitcoin Core and BIP 3 support the boundaries between software projects, proposal publication, deployment, and consensus adoption. lnd and the Stratum repositories support Lightning and mining-infrastructure examples. Product, custody, and vendor-dependence claims are tied to filed issuer or company disclosures.
+- Legal evidence: Regulatory and lobbying statements are framed as jurisdiction- and date-specific analytical channels, not as claims that one organization speaks for Bitcoin. The guide gives no individualized legal advice.
+- Material corrections made: Identified BIP 3 as the currently Deployed process document; corrected the Stratum source to the current low-level protocol-libraries repository and documented the separate alpha application repository; preserved filing-based custody and vendor-dependence examples as issuer or company disclosures rather than proof of effectiveness, neutrality, or protocol control.
+- Remaining factual, historical, cultural, commercial, technical, legal, and reputational sensitivities: Corporate roles, custody providers, contracts, insurance, filing disclosures, grant totals, board processes, donor relationships, policy positions, lobbying activity, mining dependencies, repository maturity, and product defaults can change. Structural risks are analytical questions and must not be converted into allegations of capture, collusion, misconduct, or improper influence without direct evidence.
+- Renewal requirement: Immediately before publication, recheck all filings and amendments, organization governance and transparency pages, grant programs, custody relationships, repository scope and maturity, standards records, and any policy or lobbying claim. Date every current role or relationship and remove it when current primary evidence is unavailable.
+- Authorization boundary: Completion of Human Verification does not authorize Editorial Manager acceptance, copy-lock, marking the PR ready, publication, deployment, or activation of planned links.
 
 ## 12. Illustration brief
 
