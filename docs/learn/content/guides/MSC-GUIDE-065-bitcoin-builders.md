@@ -52,7 +52,7 @@ The boundary is not absolute. A wallet developer may discover a protocol edge ca
 
 Protocol researchers examine how Bitcoin behaves and how proposed changes might affect security, privacy, incentives, interoperability, and deployment. Research can appear in papers, mailing-list posts, issue discussions, repositories, talks, or test implementations.
 
-Bitcoin Improvement Proposals provide a publication and documentation process for mature ideas. A BIP author describes a proposal; the author does not command its adoption. The deployed BIP process explicitly separates publication from consensus and states that no formal decision body governs Bitcoin development or decides adoption.
+Bitcoin Improvement Proposals provide a publication and documentation process for mature ideas. A BIP author describes a proposal; the author does not command its adoption. BIP 3, currently marked Deployed in the BIPs repository, explicitly separates publication from consensus and states that no formal or informal decision body governs Bitcoin development or decides adoption.
 
 Node implementations translate protocol rules and engineering choices into software. Bitcoin Core is one major implementation, but the ecosystem also contains other node software and specialized libraries. A patch to any repository is only a proposal to that project. Acceptance depends on its maintainers, reviewers, tests, project norms, and release process. Even after software is released, users choose whether to run it.
 
@@ -315,12 +315,17 @@ Do not activate planned links until the destination exists as a real published p
 
 ## 11. Human verification
 
-- Reviewer: Pending ecosystem specialist review
-- Review date: Pending
-- Primary evidence reviewed: Pending
-- Material corrections made: Pending
-- Remaining sensitivities: Pending
-- Renewal requirement: Pending
+- Reviewer: Mempool Surf Club Editorial
+- Review date: July 26, 2026
+- Primary evidence reviewed: Bitcoin Core repository, CONTRIBUTING.md, developer notes, test documentation, and security policy; BIP 3 and the Bitcoin BIPs repository; lnd and rust-lightning repositories; Bitcoin Design Guide and Open Design documentation; Brink’s 2025 annual and engineering reports; OpenSats transparency records and 2025 year-in-review; Ord inscription documentation; Coinbase Global and iShares Bitcoin Trust 2025 Forms 10-K.
+- Named-role and affiliation verification approach: Current examples were checked against the maintaining project, organization, or filed disclosure on the review date. No personal title was used as evidence of protocol authority. Project authorship, repository permission, employment, grant funding, product policy, deployment, and consensus adoption were evaluated as separate relationships.
+- Historical-attribution evidence: No claim of a cultural or technical “first” and no pseudonymous identity attribution is made. Historical statements are limited to durable role and process distinctions supported by repository and proposal records.
+- Technical evidence: Bitcoin Core project records support implementation, review, testing, and disclosure boundaries; BIP 3 supports publication and adoption boundaries; lnd, rust-lightning, Ord, wallet-design, custody, and filing records support the named ecosystem examples and their project-specific scope.
+- Legal evidence: The guide states only the durable boundary that legal and policy work is jurisdiction- and date-specific and does not itself alter Bitcoin consensus; it does not give individualized legal advice.
+- Material corrections made: Reframed the BIP-process sentence to identify BIP 3 as the currently Deployed process document rather than describing an abstract “deployed BIP process.” Confirmed that the guide distinguishes building Bitcoin from building with Bitcoin, preserves project-versus-protocol boundaries, and treats current organizations as dated examples rather than endorsements.
+- Remaining factual, historical, cultural, commercial, legal, and reputational sensitivities: Project activity, organizational programs, funding relationships, custody disclosures, implementation practices, and product policies can change. Funder and company publications are self-reported or filed disclosures and do not independently prove effectiveness, neutrality, security, or control.
+- Renewal requirement: Recheck every current repository, organizational report, grant program, filing, custody relationship, and dated example immediately before publication. Renew any current role or affiliation against an official project page, repository record, governance page, or filing; remove it if current primary evidence is unavailable.
+- Authorization boundary: Completion of Human Verification does not authorize Editorial Manager acceptance, copy-lock, publication, deployment, or activation of planned links.
 
 ## 12. Illustration brief
 
