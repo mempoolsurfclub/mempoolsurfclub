@@ -314,22 +314,25 @@ A startup should be evaluated as a system of product, capital, operations, depen
    - URL: https://github.com/orgs/lightningdevkit/repositories
    - Accessed: July 27, 2026
    - Supports: Public component boundaries across libraries, sample applications, bindings, and tooling.
-9. **Lightspark Documentation** | Lightspark
-   - URL: https://docs.lightspark.com/
+9. **Integrating Lightning Network for Enterprise: A Practical Guide** | Lightspark
+   - URL: https://www.lightspark.com/knowledge/integrating-lightning-network-for-enterprise
+   - Published: January 30, 2026
    - Accessed: July 27, 2026
-   - Supports: Company-documented scope of managed Lightning infrastructure, APIs, SDKs, node and payment functions; establishes product claims, not independent proof of performance.
-10. **Lightspark SDK Getting Started** | Lightspark
-    - URL: https://docs.lightspark.com/lightspark-sdk/getting-started
+   - Supports: Lightspark’s provider-stated Lightspark Node and Lightspark Connect scope for node operations, channel and liquidity management, routing, APIs and SDKs, monitoring, and remote-key or provider-managed signing options; does not independently establish uptime, security, custody outcomes, recovery performance, or suitability.
+10. **The Lightspark JS+TS SDK** | Lightspark
+    - URL: https://github.com/lightsparkdev/js-sdk/blob/main/packages/lightspark-sdk/README.md
     - Accessed: July 27, 2026
-    - Supports: Current company-documented authentication, SDK integration, API usage, and developer dependency boundaries.
-11. **Getting Started with Voltage** | Voltage
-    - URL: https://docs.voltage.cloud/getting-started-with-voltage
+    - Supports: Current public SDK availability, API-token and OAuth authentication paths, invoice creation, node event subscriptions, and loading a node signing key with a node ID and password before a sensitive payment operation; does not establish hosted node operations, liquidity, backups, or recovery.
+11. **Creating a Node Walkthrough** | Voltage
+    - URL: https://docs.voltage.cloud/creating-a-node-walkthrough
+    - Updated: June 25, 2026
     - Accessed: July 27, 2026
-    - Supports: Company-documented managed Bitcoin and Lightning provisioning workflow and hosted-service scope.
-12. **Voltage FAQ** | Voltage
-    - URL: https://docs.voltage.cloud/voltage-faq
+    - Supports: Voltage’s documented API workflow for Lightning-node provisioning, customer seed generation, wallet initialization with a password, macaroon return, and encrypted seed and macaroon backup uploads.
+12. **Node Security and Backups** | Voltage
+    - URL: https://docs.voltage.cloud/node-security-and-backups
+    - Updated: June 25, 2026
     - Accessed: July 27, 2026
-    - Supports: Company-documented product, billing, node, data, and operational boundaries; establishes the provider’s current representations rather than independent reliability.
+    - Supports: Voltage’s documented Aezeed access and external LND recovery procedure, node-password use and non-storage statement, and macaroon-plus-endpoint authentication for API access; does not establish successful restoration, provider continuity, or a complete migration path.
 13. **Bitcoin Core Integration and Staging Tree** | Bitcoin Core contributors
     - URL: https://github.com/bitcoin/bitcoin
     - Accessed: July 27, 2026
@@ -400,11 +403,11 @@ Do not activate planned links until the destination exists as a real published p
 
 - Reviewer: Mempool Surf Club Editorial
 - Review date: July 27, 2026
-- Primary evidence reviewed: Y Combinator’s current SAFE documents; SEC exempt-offering guidance, Form D FAQ updated July 9, 2026, and Form D data materials; FinCEN’s May 9, 2019 convertible-virtual-currency business-model guidance; current lnd and LDK/rust-lightning repositories; Lightspark documentation and SDK materials; Voltage product and FAQ documentation; Bitcoin Core; and Bitcoin Design’s open-design guidance.
-- Verification approach: Checked financing documents as contracts rather than a single universal SAFE form; treated Form D as a notice filing rather than approval or proof of closing; separated funding from revenue and operating durability; inspected repository, license, tag or package, contribution, and security boundaries without inferring hosted deployment behavior; and classified custody through actual key, authorization, recovery, observation, and service-control roles. Provider documentation was recorded as the provider’s representation, not independent assurance of security, uptime, adoption, or financial health.
-- Material corrections made: Clarified that Y Combinator publishes multiple SAFE forms with differing terms and jurisdictional scope; narrowed Form D language to exclude proof that an offering closed; replaced an unsupported generic “releases” claim for rust-lightning with repository tags and versioned package context; and completed the Human Verification record.
-- Remaining sensitivities: Private-company financing, revenue, runway, unit economics, customer concentration, and solvency may not be publicly verifiable. Product terms, licenses, custody controls, key-export paths, account policies, provider dependencies, supported regions, pricing, security practices, incident history, repository maintenance, and service availability can change. Documentation, funding, repository activity, or media visibility does not establish adoption, security, product quality, or durability.
-- Renewal requirement: Immediately before publication, recheck company existence and legal entities; active products, pricing, terms, supported regions, custody and recovery models; current SAFE forms and SEC/FinCEN materials; Form D status and any associated offering claims; lnd and LDK versions, licenses, security policies, and maintenance state; Lightspark and Voltage documentation; vendor, banking, cloud, liquidity, and hardware dependencies; data and key export paths; and any current security or regulatory claims.
+- Primary evidence reviewed: Y Combinator’s current SAFE documents; SEC exempt-offering guidance, Form D FAQ updated July 9, 2026, and Form D data materials; FinCEN’s May 9, 2019 convertible-virtual-currency business-model guidance; current lnd and LDK/rust-lightning repositories; Lightspark’s January 30, 2026 enterprise Lightning integration guide and current public JS/TS SDK README; Voltage’s Creating a Node Walkthrough and Node Security and Backups pages, both updated June 25, 2026; Bitcoin Core; and Bitcoin Design’s open-design guidance.
+- Verification approach: Checked financing documents as contracts rather than a single universal SAFE form; treated Form D as a notice filing rather than approval or proof of closing; separated funding from revenue and operating durability; inspected repository, license, tag or package, contribution, and security boundaries without inferring hosted deployment behavior; and classified custody through actual key, authorization, recovery, observation, and service-control roles. Reopened each provider URL in a fresh direct request, rejected search-result and redirect-cache remnants, kept Lightspark Node and Lightspark Connect distinct from Grid, and treated each provider page as the provider’s representation rather than independent assurance of security, uptime, adoption, restoration, or financial health.
+- Material corrections made: Clarified that Y Combinator publishes multiple SAFE forms with differing terms and jurisdictional scope; narrowed Form D language to exclude proof that an offering closed; replaced an unsupported generic “releases” claim for rust-lightning with repository tags and versioned package context; completed the Human Verification record; and, after the first Editorial Manager acceptance review found that the recorded provider pages no longer resolved as assigned, removed the old Lightspark documentation home, Lightspark SDK Getting Started, Getting Started with Voltage, and Voltage FAQ entries and replaced them with directly resolving product-specific official sources. The renewed sources reconfirm node provisioning, APIs and SDKs, authentication, operation signing, liquidity and routing roles, password and macaroon boundaries, seed access, backups, and external recovery only within the scope each current page states; unsupported billing, provider-failure, complete-export, and guaranteed-recovery implications were not retained.
+- Remaining sensitivities: Private-company financing, revenue, runway, unit economics, customer concentration, and solvency may not be publicly verifiable. Lightspark product names, SDK behavior, key-management options, routing and liquidity features, and the relationship among Lightspark Node, Lightspark Connect, and Grid can change. Voltage provisioning, credentials, seed and password handling, backups, recovery, export, billing, provider continuity, and migration procedures can change or differ by node type and account. Provider documentation does not independently establish adoption, security, privacy, uptime, restoration success, product quality, or durability.
+- Renewal requirement: Immediately before publication, recheck company existence and legal entities; active products, pricing, terms, supported regions, custody and recovery models; current SAFE forms and SEC/FinCEN materials; Form D status and any associated offering claims; lnd and LDK versions, licenses, security policies, and maintenance state; and every Lightspark and Voltage URL recorded here through a fresh direct request. Reconfirm exact current product naming, SDK authentication and signing behavior, node provisioning, key and credential control, channel and liquidity responsibilities, backup and recovery steps, export and migration limits, billing and provider-failure terms, vendor dependencies, and any current security or regulatory claim without relying on cached search results.
 - Authorization boundary: Completed Human Verification does not authorize Editorial Manager acceptance, copy-lock, ready-for-review transition, merge, publication, deployment, illustration generation, activation of planned links, or Phase 20.
 
 ## 12. Illustration brief
