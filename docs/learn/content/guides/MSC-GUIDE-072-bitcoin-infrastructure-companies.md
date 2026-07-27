@@ -75,7 +75,7 @@ These services reduce operational work. They also change the control boundary.
 
 With a self-operated node, the user selects the hardware, software, network, data access, and update process. With a hosted node, the provider may control the machine, account, network path, or software lifecycle. The customer may have administrative credentials without controlling the underlying infrastructure.
 
-Voltage’s current documentation, accessed July 27, 2026, describes managed Bitcoin Core and Lightning products, including shared Bitcoin Core nodes for certain Lightning configurations, developer access, backups, and provider-managed operations. That documentation establishes the service model described by Voltage. It does not prove that the service is appropriate for every threat model or that it cannot fail.
+Voltage’s current Bitcoin Core Getting Started page, accessed July 27, 2026, describes provider-deployed full or pruned Bitcoin Core instances with access to mempool, chainstate, configuration settings, RPC users, peer controls, and a dedicated RPC hostname; hot-wallet functionality and wallet RPC methods are disabled. Voltage’s LND documentation separately describes hosted Lightning nodes with macaroon-authenticated REST and gRPC access, while its security page describes seed, node-password, and external-recovery procedures. These pages establish the interfaces Voltage describes. They do not establish customer control of the underlying server, independent restoration results, privacy, availability, or suitability for every threat model.
 
 Questions for hosted nodes include:
 
@@ -151,7 +151,7 @@ The important distinction is between controlling keys and supplying information.
 
 Lightning infrastructure can include node implementations, hosted nodes, channel operations, routing, liquidity, watchtowers, payment APIs, SDKs, monitoring, and backup systems.
 
-The lnd repository documents a current open-source Lightning implementation, APIs, database behavior, operational guidance, and security-reporting process. Lightspark publishes documentation for managed Lightning infrastructure and software development kits. Voltage publishes documentation for managed nodes and related services.
+The lnd repository documents a current open-source Lightning implementation, APIs, database behavior, operational guidance, and security-reporting process. Lightspark’s current public materials describe Lightspark Node as a managed Lightning service, and its official JS/TS SDK repository documents client authentication, node access, invoice creation, payment operations, and node event subscriptions. Voltage publishes separate documentation for hosted LND API access and node security and backups.
 
 These sources show different layers:
 
@@ -381,26 +381,29 @@ Bitcoin infrastructure makes other systems possible. Its value often comes from 
    - URL: https://github.com/lightningnetwork/lnd
    - Accessed: July 27, 2026
    - Supports: Current Lightning node implementation, APIs, operational documentation, database and backup considerations, tagged releases, beta warning, and security policy.
-7. **Lightspark Documentation** | Lightspark
-   - URL: https://docs.lightspark.com/
+7. **Integrating Lightning Network for Enterprise: A Practical Guide** | Lightspark
+   - URL: https://www.lightspark.com/knowledge/integrating-lightning-network-for-enterprise
+   - Published: January 30, 2026
    - Accessed: July 27, 2026
-   - Supports: Company-documented managed Lightning infrastructure, APIs, SDKs, payment functions, and enterprise integration scope; does not independently establish performance.
-8. **Lightspark SDK Getting Started** | Lightspark
-   - URL: https://docs.lightspark.com/lightspark-sdk/getting-started
+   - Supports: Lightspark’s provider-stated Lightspark Node and Lightspark Connect scope for managed node operations, channel and liquidity management, routing, payment APIs and SDKs, monitoring, and remote-key or provider-managed signing options; does not independently establish reliability, security, privacy, recovery, liquidity performance, adoption, or suitability.
+8. **The Lightspark JS+TS SDK** | Lightspark
+   - URL: https://github.com/lightsparkdev/js-sdk/blob/main/packages/lightspark-sdk/README.md
    - Accessed: July 27, 2026
-   - Supports: Current company-documented API authentication, SDK integration, and hosted-service dependency boundaries.
-9. **Voltage Bitcoin Core FAQ** | Voltage
-   - URL: https://docs.voltage.cloud/bitcoin-core-faq
+   - Supports: Current public SDK availability, API-token and OAuth authentication, invoice creation, node event subscriptions, and loading a node signing key with a node ID and password before a payment operation; does not establish hosted node operations, liquidity, routing, backups, or recovery.
+9. **Bitcoin Core Getting Started** | Voltage
+   - URL: https://docs.voltage.cloud/bitcoin-core-getting-started
+   - Updated: July 30, 2024
    - Accessed: July 27, 2026
-   - Supports: Company-documented Bitcoin Core hosting model, shared-node behavior for described configurations, supported implementation, and data boundaries.
-10. **Voltage Bitcoin Core Developer Guide** | Voltage
-    - URL: https://docs.voltage.cloud/bitcoin-core-developer-guide
+   - Supports: Voltage’s documented full or pruned Bitcoin Core deployment, mempool and chainstate access, configuration settings, disabled hot-wallet and wallet-RPC functions, RPC users, dedicated RPC hostname, peer controls, and selected node settings; does not establish the deployed Bitcoin Core version, ZMQ access, underlying server administration, complete export, or customer ownership.
+10. **LND Node API** | Voltage
+    - URL: https://docs.voltage.cloud/lnd-node-api
     - Accessed: July 27, 2026
-    - Supports: Company-documented RPC, ZMQ, authentication, and developer-access boundaries for managed Bitcoin Core infrastructure.
-11. **Voltage Node Security and Backups** | Voltage
+    - Supports: Voltage’s documented hosted LND REST and gRPC interfaces, macaroon authentication, node-specific API base URL, and service ports; does not establish uptime, liquidity, routing performance, backups, recovery, or provider continuity.
+11. **Node Security and Backups** | Voltage
     - URL: https://docs.voltage.cloud/node-security-and-backups
+    - Updated: June 25, 2026
     - Accessed: July 27, 2026
-    - Supports: Company-documented responsibilities for managed node credentials, backups, recovery, and security; establishes provider claims rather than independent assurance or a tested restoration result.
+    - Supports: Voltage’s documented Aezeed access and external LND recovery procedure, node-password use and non-storage statement, and macaroon-plus-endpoint authentication for API access; does not establish successful restoration, provider continuity, or a complete migration path.
 12. **Hardware Wallet Interface Repository** | Bitcoin Core HWI contributors
     - URL: https://github.com/bitcoin-core/HWI
     - Accessed: July 27, 2026
@@ -480,11 +483,11 @@ Do not activate planned links until the destination exists as a real published p
 
 - Reviewer: Mempool Surf Club Editorial
 - Review date: July 27, 2026
-- Primary evidence reviewed: Bitcoin Core’s repository, Bitcoin Core 31.0 release materials, and versioned 31.0.0 RPC documentation; Esplora and its HTTP API documentation; the mempool open-source repository; lnd, including its current tagged release and beta warning; Lightspark documentation and SDK materials; Voltage Bitcoin Core, developer-access, node-security, and backup documentation; Bitcoin Core HWI; Stratum V2 specifications and current repository maturity; and LDK/rust-lightning.
-- Verification approach: Distinguished open-source implementation code, versioned documentation, hosted products, proprietary operational systems, and provider-operated services. Checked node, RPC, ZMQ, API, indexer, explorer, wallet-backend, Lightning, mining, signing, backup, credential, and recovery roles by technical function and control boundary. Provider documentation was treated as the provider’s stated behavior rather than independent assurance; shared and dedicated service labels were not treated as customer ownership or administration; and local node policy, mempool observations, derived data, and company access controls were kept separate from Bitcoin consensus.
-- Material corrections made: Replaced the unversioned third-party Bitcoin RPC reference with the current Bitcoin Core 31.0.0 exported RPC documentation and added an explicit deployed-version boundary; corrected the Esplora article and source description to distinguish its browser interface from the esplora-electrs HTTP backend it uses; narrowed rust-lightning version claims to repository tags and versioned package context; bounded Stratum V2 implementation maturity; and completed the Human Verification record.
-- Remaining sensitivities: Production software versions, patches, configurations, credentials, logging, telemetry, data retention, service regions, pricing, service levels, backup scope, restoration testing, key and seed control, metadata visibility, account suspension, proprietary components, and export paths may differ from public documentation or change without preserving earlier behavior. Repository availability does not establish hosted-service performance; audits and security statements remain version-, environment-, scope-, and date-specific; and provider concentration can create correlated privacy, availability, policy, jurisdiction, and migration risk.
-- Renewal requirement: Immediately before publication, recheck Bitcoin Core’s latest supported release and matching RPC documentation; Esplora, mempool, lnd, HWI, Stratum V2, and LDK repositories, tags, licenses, security policies, and maturity labels; Lightspark and Voltage product documentation, supported versions, regions, pricing, authentication, shared or dedicated node behavior, credentials, backups, recovery, and export procedures; current API and ZMQ behavior; any deployed, beta, experimental, limited, proposed, or roadmap labels; and every security, privacy, reliability, or migration claim against the exact current product and environment.
+- Primary evidence reviewed: Bitcoin Core’s repository, Bitcoin Core 31.0 release materials, and versioned 31.0.0 RPC documentation; Esplora and its HTTP API documentation; the mempool open-source repository; lnd, including its current tagged release and beta warning; Lightspark’s January 30, 2026 enterprise Lightning integration guide and current public JS/TS SDK README; Voltage’s Bitcoin Core Getting Started, LND Node API, and Node Security and Backups pages; Bitcoin Core HWI; Stratum V2 specifications and current repository maturity; and LDK/rust-lightning.
+- Verification approach: Distinguished open-source implementation code, versioned documentation, hosted products, proprietary operational systems, and provider-operated services. Reopened every renewed provider URL in a fresh direct request, rejected search-result and redirect-cache remnants, separated Lightspark Node and Lightspark Connect from Grid, and separated Voltage Bitcoin Core infrastructure from Voltage LND API and recovery behavior. Checked node, RPC, API, indexer, explorer, wallet-backend, Lightning, mining, signing, backup, credential, and recovery roles by technical function and control boundary. Provider documentation was treated as the provider’s stated behavior rather than independent assurance; local node policy, mempool observations, derived data, and company access controls remained separate from Bitcoin consensus.
+- Material corrections made: Replaced the unversioned third-party Bitcoin RPC reference with the current Bitcoin Core 31.0.0 exported RPC documentation and added an explicit deployed-version boundary; corrected the Esplora article and source description to distinguish its browser interface from the esplora-electrs HTTP backend it uses; narrowed rust-lightning version claims to repository tags and versioned package context; bounded Stratum V2 implementation maturity; completed the Human Verification record; and, after the first Editorial Manager acceptance review found that the recorded provider pages no longer resolved as assigned, removed the old Lightspark documentation home, Lightspark SDK Getting Started, Voltage Bitcoin Core FAQ, and Voltage Bitcoin Core Developer Guide entries. Directly resolving official sources now reconfirm Lightspark Node and Connect roles, SDK authentication and signing behavior, Voltage full or pruned Bitcoin Core deployment, mempool, chainstate, settings, disabled wallet functions, RPC users and hostname, peer controls, hosted LND API authentication, credentials, backups, and external recovery. The unsupported shared-Bitcoin-node statement was removed, and claims about Voltage version selection, ZMQ access, complete export, customer ownership, and independently tested recovery were not retained.
+- Remaining sensitivities: Production software versions, patches, configurations, credentials, logging, telemetry, data retention, service regions, pricing, service levels, backup scope, restoration testing, key and seed control, metadata visibility, account suspension, proprietary components, export paths, and the relationship among Lightspark Node, Lightspark Connect, and Grid may differ from public documentation or change without preserving earlier behavior. Repository availability does not establish hosted-service performance; provider statements do not independently establish reliability, security, privacy, recovery, liquidity, adoption, or suitability; and provider concentration can create correlated privacy, availability, policy, jurisdiction, and migration risk.
+- Renewal requirement: Immediately before publication, recheck Bitcoin Core’s latest supported release and matching RPC documentation; Esplora, mempool, lnd, HWI, Stratum V2, and LDK repositories, tags, licenses, security policies, and maturity labels; and every Lightspark and Voltage URL recorded here through a fresh direct request. Reconfirm exact product naming and state, Lightspark authentication and signing behavior, channel and liquidity responsibilities, Voltage Bitcoin Core full or pruned configuration, wallet functionality, RPC users and authentication, command and peer access, deployed version, configuration, mempool settings, ZMQ availability, LND credentials, backups, recovery, export and migration limits, and every security, privacy, reliability, or operational claim against the exact current product and environment without relying on cached results.
 - Authorization boundary: Completed Human Verification does not authorize Editorial Manager acceptance, copy-lock, ready-for-review transition, merge, publication, deployment, illustration generation, activation of planned links, or Phase 20.
 
 ## 12. Illustration brief
