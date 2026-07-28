@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-072
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: What Bitcoin Infrastructure Companies Do
 handle: bitcoin-infrastructure-companies
@@ -12,8 +12,8 @@ primary_path: Explore the Ecosystem
 secondary_paths:
   - Build on Bitcoin
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-27
+copy_locked_date: 2026-07-27
 ---
 
 # What Bitcoin Infrastructure Companies Do
