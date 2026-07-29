@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-HUB-BASICS
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: category-hub
 h1: Bitcoin Basics
 handle: learn-bitcoin-basics
@@ -8,8 +8,8 @@ category: Bitcoin Basics
 subcategory: All four approved subcategories
 production_batch: "Phase 1.02: hub skeleton; finalize after Phase 5"
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-28
+copy_locked_date: 2026-07-28
 ---
 
 # Bitcoin Basics
@@ -469,25 +469,22 @@ No destination URL is assigned in this editorial package.
 - [x] Planned anchors, cards, and related destinations remain inactive and contain no URL.
 - [x] Hub Key Terms use synchronized definitions compatible with the copy-locked guides.
 - [x] Exactly three complete illustration briefs are included.
-- [x] Human Verification remains pending.
+- [x] Human Verification is complete.
 - [x] No em dash or en dash character appears.
 
 ## 13. Human verification
 
-- State: Pending
-- Reviewer: Not assigned
-- Review date: Not assigned
-- Future reviewer must verify:
-  - All sixteen card records against the copy-locked MSC-GUIDE-001 through MSC-GUIDE-016 files, including IDs, H1s, sequence, depth, format, reading times, and description accuracy.
-  - The exact Foundations, Using Bitcoin, Security, and Essentials category order.
-  - Key Term synchronization with the approved guide definitions.
-  - Wallet, custody, key, seed phrase, transaction, UTXO, confirmation, security, privacy, halving, and issuance boundaries.
-  - The distinction between canonical navigation and learning-path order.
-  - Planned-link and anchor inactivity, with no destination treated as published from a planned handle.
-  - Completeness of all three illustration briefs and their `Status: PLANNED` values.
-  - Any technical, implementation, service-behavior, or publication claim that needs renewal immediately before publication.
-
-Human Verification has not been completed. `reviewed_date` and `copy_locked_date` remain `null`.
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-28
+- Notes:
+  - Verified all sixteen card records against copy-locked Guides MSC-GUIDE-001 through MSC-GUIDE-016, including IDs, H1s, canonical order, subcategory placement, depth, format, reading times, and description accuracy.
+  - Confirmed Foundations, Using Bitcoin, Security, and Essentials remain in the approved order.
+  - Confirmed Key Terms remain synchronized with the approved guide definitions.
+  - Confirmed wallet, custody, key, seed phrase, transaction, UTXO, confirmation, security, privacy, halving, and issuance boundaries remain accurate.
+  - Confirmed canonical category order remains distinct from curated learning-path order.
+  - Confirmed all planned links, anchors, cards, and related destinations remain inactive and contain no confirmed destination URL.
+  - Confirmed exactly three complete illustration briefs remain present and all use `Status: PLANNED`.
+  - Confirmed publication-time renewal remains required for any claim whose accuracy depends on future protocol, implementation, service, or publication state.
 
 ## 14. Illustration brief
 
