@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-HUB-BUILDING
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: category-hub
 h1: Building on Bitcoin
 handle: learn-building-on-bitcoin
@@ -8,8 +8,8 @@ category: Building on Bitcoin
 subcategory: All four approved subcategories
 production_batch: "Phase 1.04: hub skeleton; finalize after Phase 13"
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-28
+copy_locked_date: 2026-07-28
 ---
 
 # Building on Bitcoin
@@ -425,17 +425,25 @@ No destination URL is assigned in this editorial package.
 - [x] Planned cards, anchors, relationships, and URLs remain inactive.
 - [x] Key Terms remain synchronized with the sixteen copy-locked guides.
 - [x] Exactly three complete illustration briefs are included.
-- [ ] Human Verification remains pending.
-- [ ] Independent editorial review must verify the sixteen cards and current maturity claims before copy-lock.
+- [x] Human Verification is complete.
+- [x] Independent editorial review accepted the sixteen cards and current maturity claims before copy-lock.
 - [x] No em dash or en dash character appears.
 
 ## 13. Human verification
 
-- Reviewer: Pending
-- Review date: Pending
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-28
 - Notes:
-  - Human Verification has not yet been completed.
-  - The independent editorial review must verify all sixteen cards, source-guide alignment, current maturity claims, technical boundaries, inactive links, and illustration-brief completeness before copy-lock.
+  - Verified all sixteen card records against copy-locked Guides MSC-GUIDE-033 through MSC-GUIDE-048, including IDs, H1s, canonical order, subcategory placement, depth, format, reading times, and description accuracy.
+  - Confirmed Layer 2, Digital Assets, Development, and Innovation remain in the approved order while preserving their distinct settlement, custody, liquidity, liveness, exit, operator, data-retention, validation, security, and maturity properties.
+  - Confirmed Key Terms remain synchronized with the copy-locked source guides.
+  - Confirmed Bitcoin consensus, policy, protocol, implementation, hosted-service, on-chain, off-chain, client-side, custody, bridge, federation, operator, oracle, indexer, data-availability, asset, and maturity boundaries remain accurate.
+  - Confirmed current maturity and deployment language was independently renewed against official primary sources on 2026-07-28 and remains accurate for the accepted draft.
+  - Confirmed BIP 347 remains Complete rather than Deployed and the proposed OP_CAT behavior is not active on Bitcoin mainnet.
+  - Confirmed canonical category order remains distinct from the curated Build on Bitcoin learning-path order.
+  - Confirmed all planned links, anchors, cards, and related destinations remain inactive and contain no confirmed destination URL.
+  - Confirmed exactly three complete illustration briefs remain present and all use `Status: PLANNED`.
+  - Confirmed publication-time renewal remains required for any claim whose accuracy depends on future protocol, implementation, service, maturity, deployment, release, or publication state.
 
 ## 14. Illustration brief
 
