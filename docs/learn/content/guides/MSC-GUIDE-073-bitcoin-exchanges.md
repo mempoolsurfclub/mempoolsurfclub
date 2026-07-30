@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-073
-status: ACCURACY_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: How Bitcoin Exchanges Work
 handle: bitcoin-exchanges
@@ -13,7 +13,7 @@ secondary_paths:
   - Use Bitcoin Safely
 author_display: Mempool Surf Club Editorial
 reviewed_date: 2026-07-30
-copy_locked_date: TBD
+copy_locked_date: 2026-07-30
 ---
 
 # How Bitcoin Exchanges Work
