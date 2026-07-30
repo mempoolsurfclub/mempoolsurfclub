@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-PATH-BUILD
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: learning-path
 h1: Build on Bitcoin
 handle: build-on-bitcoin
@@ -8,8 +8,8 @@ category: Not applicable. This is a cross-category learning route.
 subcategory: Multiple canonical subcategories. The path does not own topic pages.
 production_batch: "Phase 1.10: path skeleton; Finalize after Phase 17."
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-30
+copy_locked_date: 2026-07-30
 ---
 
 # Build on Bitcoin
@@ -591,16 +591,21 @@ All step links, hub links, learning-path branches, anchors, routes, website page
 - [x] Technical capability is separated from maturity and adoption.
 - [x] No Markdown step links or active destination URLs appear.
 - [x] Exactly three complete illustration briefs are included and remain PLANNED.
-- [x] Human Verification and independent editorial review remain pending.
+- [x] Human Verification was completed by Mempool Surf Club Editorial on 2026-07-30.
+- [x] Independent editorial review accepted the exact draft head before copy-lock.
 - [x] No em dash or en dash character appears.
 
 ## 13. Human verification
 
-- Reviewer: Pending
-- Review date: Pending
-- Human Verification: incomplete
-- Independent editorial review: required before copy-lock
-- Notes: No approval, acceptance, copy-lock, publication, or implementation decision is claimed in this draft.
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-30
+- Human Verification: complete
+- Independent editorial review: `BUILD ON BITCOIN PATH EDITORIAL REVIEW: ACCEPTED`
+- Notes:
+  - The independent editorial review accepted exact draft head `912bd45f68d91b903e2f207af670dd7d8c1ac059`.
+  - The review verified the complete path, seven-stage sequence, all twenty-nine cards, source-guide metadata, current technical boundaries, inactive links, and all three planned illustration briefs.
+  - No required corrections were identified.
+  - Mutable release, BIP-status, implementation, protocol-maturity, documentation, and operational claims require renewed verification before publication if publication occurs materially later than July 30, 2026.
 
 ## 14. Illustration brief
 
