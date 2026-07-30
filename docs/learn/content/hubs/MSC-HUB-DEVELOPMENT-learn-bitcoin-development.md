@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-HUB-DEVELOPMENT
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: category-hub
 h1: Bitcoin Development
 handle: learn-bitcoin-development
@@ -8,8 +8,8 @@ category: Bitcoin Development
 subcategory: All four approved subcategories
 production_batch: "Phase 1.05: hub skeleton; finalize after Phase 17"
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-29
+copy_locked_date: 2026-07-29
 ---
 
 # Bitcoin Development
@@ -499,16 +499,19 @@ Every relationship below remains inactive editorial planning. No destination URL
 - [x] Exactly twenty-eight Key Terms are included.
 - [x] Exactly three complete illustration briefs are included, each with `Status: PLANNED`.
 - [x] No em dash or en dash character appears.
-- [ ] Human Verification remains pending.
-- [ ] Independent editorial review must verify the sixteen cards and current release, implementation, BIP, cryptography, testing, and infrastructure claims before copy-lock.
+- [x] Human Verification was completed by Mempool Surf Club Editorial on 2026-07-29.
+- [x] Independent editorial review verified the sixteen cards and current release, implementation, BIP, cryptography, testing, and infrastructure claims before copy-lock.
 
 ## 13. Human verification
 
-- Reviewer: Pending
-- Review date: Pending
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-29
 - Notes:
-  - Human Verification has not yet been completed.
-  - Independent editorial review must verify all sixteen cards, source-guide alignment, current release and implementation claims, BIP statuses, technical boundaries, inactive links, and illustration-brief completeness before copy-lock.
+  - Human Verification is complete.
+  - Independent editorial review returned `EDITORIAL DECISION: ACCEPTED` against head `0be702b94fdbb9692f339dd3b69223901111efb9`.
+  - The review verified all sixteen cards, source-guide alignment, current release and implementation claims, BIP statuses, technical boundaries, inactive links, and illustration-brief completeness.
+  - No required corrections were identified.
+  - Mutable release, lifecycle, BIP-header, implementation, documentation, and operational claims require renewal again before publication if materially later than July 29, 2026.
 
 ## 14. Illustration brief
 
