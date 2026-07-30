@@ -284,7 +284,7 @@ Understanding which events are on-chain, which remain internal, and who controls
 
 16. **Crypto Asset Custody Basics for Retail Investors - Investor Bulletin** | SEC Office of Investor Education and Assistance
 
-    * URL: [https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/crypto-asset-custody-basics-retail-investors-investor-bulletin-0](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/crypto-asset-custody-basics-retail-investors-investor-bulletin-0)
+    * URL: [https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins/crypto-asset-custody-basics-retail-investors-investor-bulletin-0](https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins/crypto-asset-custody-basics-retail-investors-investor-bulletin-0)
     * Published: December 12, 2025
     * Accessed: July 30, 2026
     * Supports: The distinction between self-custody and third-party custody, common hot and cold storage labels, and custody-related operational and insolvency questions.
