@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-PATH-ECOSYSTEM
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: learning-path
 h1: Explore the Ecosystem
 handle: explore-the-ecosystem
@@ -8,8 +8,8 @@ category: Not applicable. This is a cross-category learning route.
 subcategory: Multiple canonical subcategories. The path does not own topic pages.
 production_batch: "Phase 1.11: path skeleton; Finalize after Phase 21."
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-31
+copy_locked_date: 2026-07-31
 ---
 
 # Explore the Ecosystem
@@ -510,16 +510,21 @@ A reader completes the path after Step 18 and should be able to classify an ecos
 - [x] Mutable title, company, provider, legal, event, funding, project-role, release, and adoption claims require publication-time renewal.
 - [x] Exactly three complete illustration briefs are included, each with `Status: PLANNED`.
 - [x] No active guide URL, Markdown step link, em dash, or en dash appears.
-- [ ] Human Verification remains pending.
-- [ ] Independent editorial review must verify all eighteen route cards, source-guide alignment, exact sequence, stage transitions, branches, completion state, and illustration briefs before copy-lock.
+- [x] Human Verification was completed by Mempool Surf Club Editorial on 2026-07-31.
+- [x] Independent editorial and accuracy review verified all eighteen route cards, source-guide alignment, exact sequence, stage transitions, branches, completion state, return destination, current-claim boundaries, inactive links, and illustration-brief completeness before copy-lock.
 
 ## 13. Human verification
 
-- Reviewer: Pending
-- Review date: Pending
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-31
 - Notes:
-  - Human Verification has not yet been completed.
-  - Independent editorial review must verify the exact eighteen-guide sequence, six-stage progression, source-guide metadata, route-card rationale, authority boundaries, branching, completion state, return destination, renewal requirements, inactive links, and illustration-brief completeness before copy-lock.
+  - Human Verification is complete.
+  - Independent editorial and accuracy review was completed against draft head `18a095a202b36a54bacb0b740828d97cf707b455`, the live registry and manifest, all eighteen copy-locked source guides, and the merged copy-locked Bitcoin Ecosystem hub.
+  - The review verified the exact eighteen-guide sequence, six-stage progression, source-guide metadata, route-card rationale, authority boundaries, branching, completion state, return destination, renewal requirements, inactive links, and three complete planned illustration briefs.
+  - Required corrections: None.
+  - Editorial decision: `EXPLORE THE ECOSYSTEM PATH EDITORIAL REVIEW: ACCEPTED`.
+  - Copy Lock record: `COPY_LOCKED` on 2026-07-31.
+  - Mutable title, company, provider, legal, event, funding, project-role, release, and adoption claims require renewal immediately before publication.
 
 ## 14. Illustration brief
 
