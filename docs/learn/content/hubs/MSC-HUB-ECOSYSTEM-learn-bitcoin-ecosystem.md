@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-HUB-ECOSYSTEM
-status: EDITORIAL_REVIEW
+status: COPY_LOCKED
 page_role: category-hub
 h1: Bitcoin Ecosystem
 handle: learn-bitcoin-ecosystem
@@ -8,8 +8,8 @@ category: Bitcoin Ecosystem
 subcategory: All four approved subcategories
 production_batch: "Phase 1.06: hub skeleton; finalize after Phase 21"
 author_display: Mempool Surf Club Editorial
-reviewed_date: null
-copy_locked_date: null
+reviewed_date: 2026-07-31
+copy_locked_date: 2026-07-31
 ---
 
 # Bitcoin Ecosystem
@@ -475,16 +475,21 @@ Every relationship below remains inactive editorial planning. No destination URL
 - [x] Planned internal links, anchors, cards, and destinations remain inactive and URL-free.
 - [x] Exactly three complete illustration briefs are included, each with `Status: PLANNED`.
 - [x] No em dash or en dash character appears.
-- [ ] Human Verification remains pending.
-- [ ] Independent editorial review must verify all sixteen cards, source-guide alignment, current-claim boundaries, inactive links, and illustration-brief completeness before copy-lock.
+- [x] Human Verification was completed by Mempool Surf Club Editorial on 2026-07-31.
+- [x] Independent editorial and accuracy review verified all sixteen cards, source-guide alignment, current-claim boundaries, inactive links, and illustration-brief completeness before copy-lock.
 
 ## 13. Human verification
 
-- Reviewer: Pending
-- Review date: Pending
+- Reviewer: Mempool Surf Club Editorial
+- Review date: 2026-07-31
 - Notes:
-  - Human Verification has not yet been completed.
-  - Independent editorial review must verify all sixteen cards, the four subcategory boundaries, source-guide metadata, evidence limitations, renewal requirements, inactive links, and illustration-brief completeness before copy-lock.
+  - Human Verification is complete.
+  - Independent editorial and accuracy review was completed against draft head `dee47ec8941b2b5bb2313812d0f9b883e8fc7ca4`, the live registry and manifest, and the sixteen copy-locked source guides.
+  - One required correction was identified: Illustration 2 referenced a nonexistent section heading. The placement was corrected to the existing section titled Incentives and tradeoffs during copy lock.
+  - The review verified the four canonical subcategories, all sixteen cards, source-guide metadata, evidence limits, renewal requirements, inactive links, and three complete planned illustration briefs.
+  - Editorial decision: ACCEPTED after the stated correction.
+  - Copy Lock record: `COPY_LOCKED` on 2026-07-31.
+  - Mutable company, provider, legal, regulatory, funding, event, repository-role, software, and adoption claims require renewal immediately before publication.
 
 ## 14. Illustration brief
 
@@ -505,7 +510,7 @@ Every relationship below remains inactive editorial planning. No destination URL
 
 - Concept title: The Influence Soundings Map
 - Educational purpose: Distinguish different sources of ecosystem influence from the limited authority granted inside a project, company, market, event, or jurisdiction.
-- Recommended placement: After the section titled Influence without authority.
+- Recommended placement: After the section titled Incentives and tradeoffs.
 - Visual description: Nautical sounding chart with separate currents labeled Expertise, Capital, Infrastructure, Customers, Distribution, Funding, Policy, and Media. Each current reaches a bounded station such as Repository, Company, Exchange, Conference, or Regulator. None reaches the central marker labeled Bitcoin consensus authority. Small depth notes identify accountability, concentration, conflicts, and exit options. Use vintage engineering-cartography style, muted colors, approved borders, and no ranking symbols.
 - Required labels: Expertise, Capital, Infrastructure, Customers, Distribution, Funding, Policy, Media, Repository, Company, Exchange, Conference, Regulator, Consensus authority, Exit
 - Caption: Ecosystem influence travels through specific channels and institutions; its authority remains bounded by the system that grants it.
