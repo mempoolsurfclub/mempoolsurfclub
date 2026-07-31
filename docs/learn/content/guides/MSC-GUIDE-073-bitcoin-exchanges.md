@@ -421,7 +421,7 @@ Do not activate planned links until the destination exists as a real published p
 * [x] Exactly three illustration briefs remain PLANNED.
 * [x] Human Verification is complete.
 * [x] Accuracy Review is approved.
-* [ ] Copy Lock is approved.
+* [x] Copy Lock is approved.
 * [ ] Publication-time source renewal is complete.
 
 ## 11. Human verification
