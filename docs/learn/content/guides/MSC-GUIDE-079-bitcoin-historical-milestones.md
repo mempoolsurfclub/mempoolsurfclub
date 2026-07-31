@@ -98,7 +98,7 @@ Debate over block capacity, transaction malleability, and upgrade methods intens
 
 This was not one milestone but a **sequence of proposal, implementation, signaling, coordination, and activation events**. It demonstrated why these terms must remain separate. A BIP documented a specification. A software release implemented rules. Signaling communicated miner readiness under a deployment mechanism. Nodes enforcing the activated rules determined which blocks they accepted.
 
-A separate incompatible chain, Bitcoin Cash, began on August 1, 2017. That business and community split did not automatically redefine the rules enforced by Bitcoin nodes. The period remains disputed because participants assign different importance to companies, miners, developers, users, and economic actors. The documented sequence is firmer than any single heroic narrative about who “controlled” the outcome.
+The period also produced incompatible software and chain histories outside the rules enforced by Bitcoin nodes. Participants continue to assign different importance to companies, miners, developers, users, and economic actors. The documented activation sequence is firmer than any single heroic narrative about who “controlled” the outcome.
 
 ### September 7, 2021 — El Salvador changed the legal environment
 
@@ -262,7 +262,23 @@ The January 2024 orders approved exchange rule changes for products holding spot
    * Supports: The height-based subsidy calculation and validation of coinbase value against subsidy plus fees.
    * Limitation: Current implementation source does not by itself establish the historical timestamp of each halving block.
 
-10. **11/12 March 2013 Chain Fork Information** | bitcoin.org
+10. **Bitcoin block 210,000** | mempool.space
+
+   * URL: [https://mempool.space/block/000000000000048b95347e83192f69cf0366076336c639f9b7228e9ba171342e](https://mempool.space/block/000000000000048b95347e83192f69cf0366076336c639f9b7228e9ba171342e)
+   * Published or updated: Historical block data
+   * Accessed: July 31, 2026
+   * Supports: Block height 210,000 and its timestamp of November 28, 2012.
+   * Limitation: Explorer data reflects decoded chain data and does not explain the social or market interpretation of the first halving.
+
+11. **Bitcoin block 840,000** | mempool.space
+
+   * URL: [https://mempool.space/block/0000000000000000000320283a032748cef8227873ff4872689bf23f1cda83a5](https://mempool.space/block/0000000000000000000320283a032748cef8227873ff4872689bf23f1cda83a5)
+   * Published or updated: Historical block data
+   * Accessed: July 31, 2026
+   * Supports: Block height 840,000, its April 20, 2024 timestamp, and the 3.125 BTC coinbase subsidy shown in the block.
+   * Limitation: Explorer data does not establish later market, mining, or adoption effects.
+
+12. **11/12 March 2013 Chain Fork Information** | bitcoin.org
 
    * URL: [https://bitcoin.org/chainfork](https://bitcoin.org/chainfork)
    * Published or updated: March 11, 2013; last updated May 16, 2013
@@ -270,7 +286,7 @@ The January 2024 orders approved exchange rule changes for products holding spot
    * Supports: The block 225,430 incompatibility, competing chains, miner rollback request, and 0.8.1 response.
    * Limitation: A contemporaneous operational notice, not a complete independent postmortem of every participant’s decision.
 
-11. **Bitcoin Core version 0.8.1 released** | bitcoin.org
+13. **Bitcoin Core version 0.8.1 released** | bitcoin.org
 
    * URL: [https://bitcoin.org/en/release/v0.8.1](https://bitcoin.org/en/release/v0.8.1)
    * Published or updated: March 18, 2013
@@ -278,7 +294,7 @@ The January 2024 orders approved exchange rule changes for products holding spot
    * Supports: The maintenance rule intended to avoid chain-forking incompatibility and the checkpoint around block 225,430.
    * Limitation: Release notes describe the software response, not all economic or operational effects.
 
-12. **Russian Nationals Charged With Hacking One Cryptocurrency Exchange and Illicitly Operating Another** | U.S. Department of Justice
+14. **Russian Nationals Charged With Hacking One Cryptocurrency Exchange and Illicitly Operating Another** | U.S. Department of Justice
 
    * URL: [https://www.justice.gov/usao-ndca/pr/russian-nationals-charged-hacking-one-cryptocurrency-exchange-and-illicitly-operating](https://www.justice.gov/usao-ndca/pr/russian-nationals-charged-hacking-one-cryptocurrency-exchange-and-illicitly-operating)
    * Published or updated: June 9, 2023
@@ -286,7 +302,7 @@ The January 2024 orders approved exchange rule changes for products holding spot
    * Supports: Mt. Gox’s role as a custodial exchange, its 2014 cessation, and allegations concerning approximately 647,000 stolen bitcoin.
    * Limitation: Criminal charges contain allegations; defendants are presumed innocent unless proven guilty, and the release is not a full civil-rehabilitation record.
 
-13. **BIP 141: Segregated Witness** | Bitcoin Improvement Proposals
+15. **BIP 141: Segregated Witness** | Bitcoin Improvement Proposals
 
    * URL: [https://bips.dev/141/](https://bips.dev/141/)
    * Published or updated: Assigned December 21, 2015; deployed
@@ -294,7 +310,15 @@ The January 2024 orders approved exchange rule changes for products holding spot
    * Supports: SegWit’s consensus specification, technical purpose, BIP 9 deployment design, and distinction between specification and activation.
    * Limitation: The BIP does not alone document every social dispute, implementation decision, or adoption outcome.
 
-14. **BIP 148: Mandatory activation of segwit deployment** | Bitcoin Improvement Proposals
+16. **Bitcoin Core 0.13.1 released with Segregated Witness** | Bitcoin Core
+
+   * URL: [https://bitcoincore.org/en/2016/10/27/release-0.13.1/](https://bitcoincore.org/en/2016/10/27/release-0.13.1/)
+   * Published or updated: October 27, 2016
+   * Accessed: July 31, 2026
+   * Supports: Release of Bitcoin Core 0.13.1 with SegWit implementation and BIP 9 activation parameters.
+   * Limitation: A software release did not itself activate SegWit or prove adoption by miners, nodes, wallets, or businesses.
+
+17. **BIP 148: Mandatory activation of segwit deployment** | Bitcoin Improvement Proposals
 
    * URL: [https://bips.dev/148/](https://bips.dev/148/)
    * Published or updated: Assigned March 12, 2017; deployed
@@ -302,7 +326,7 @@ The January 2024 orders approved exchange rule changes for products holding spot
    * Supports: The proposed flag-day enforcement path and its relationship to the existing SegWit deployment.
    * Limitation: The proposal reflects one activation strategy and does not prove a single account of why SegWit ultimately activated.
 
-15. **Segregated Witness Wallet Development Guide** | Bitcoin Core
+18. **Segregated Witness Wallet Development Guide** | Bitcoin Core
 
    * URL: [https://bitcoincore.org/en/segwit_wallet_dev/](https://bitcoincore.org/en/segwit_wallet_dev/)
    * Published or updated: Current historical guide reviewed July 31, 2026
@@ -310,7 +334,7 @@ The January 2024 orders approved exchange rule changes for products holding spot
    * Supports: Enforcement of SegWit rules from block height 481,824.
    * Limitation: Developer guidance does not measure wallet, exchange, or user adoption.
 
-16. **BIP 341: Taproot** | Bitcoin Improvement Proposals
+19. **BIP 341: Taproot** | Bitcoin Improvement Proposals
 
    * URL: [https://bips.dev/341/](https://bips.dev/341/)
    * Published or updated: Assigned January 19, 2020; deployed
@@ -318,7 +342,7 @@ The January 2024 orders approved exchange rule changes for products holding spot
    * Supports: Taproot’s consensus design and relationship to Schnorr signatures and Tapscript.
    * Limitation: Specification does not establish deployment completion or later usage by itself.
 
-17. **Bitcoin Optech Newsletter #175** | Bitcoin Optech
+20. **Bitcoin Optech Newsletter #175** | Bitcoin Optech
 
    * URL: [https://bitcoinops.org/en/newsletters/2021/11/17/](https://bitcoinops.org/en/newsletters/2021/11/17/)
    * Published or updated: November 17, 2021
@@ -326,7 +350,15 @@ The January 2024 orders approved exchange rule changes for products holding spot
    * Supports: Taproot activation at block 709,632 and the distinction between activation and immediate transaction inclusion by mining pools.
    * Limitation: Technical newsletter coverage is not a complete measurement of ecosystem adoption.
 
-18. **El Salvador: Request for Extended Arrangement Under the Extended Fund Facility** | International Monetary Fund
+21. **Decreto No. 57 — Ley Bitcoin** | Asamblea Legislativa de El Salvador
+
+   * URL: [https://www.asamblea.gob.sv/leyes-y-decretos/decretos-por-anios/2021/0](https://www.asamblea.gob.sv/leyes-y-decretos/decretos-por-anios/2021/0)
+   * Published or updated: June 8, 2021
+   * Accessed: July 31, 2026
+   * Supports: The official legislative record identifying Decreto No. 57 as the Bitcoin Law and its 2021 enactment.
+   * Limitation: The index record does not by itself measure implementation, voluntary use, public costs, or later legal amendments.
+
+22. **El Salvador: Request for Extended Arrangement Under the Extended Fund Facility** | International Monetary Fund
 
    * URL: [https://www.elibrary.imf.org/view/journals/002/2025/058/article-A001-en.xml](https://www.elibrary.imf.org/view/journals/002/2025/058/article-A001-en.xml)
    * Published or updated: February 2025
@@ -334,7 +366,7 @@ The January 2024 orders approved exchange rule changes for products holding spot
    * Supports: The 2025 amendments removing essential legal-tender features, making private acceptance voluntary, requiring tax payments in U.S. dollars, and confining public-sector use.
    * Limitation: IMF program documentation is not the original 2021 statute and does not independently measure every private transaction or public attitude.
 
-19. **Statement on the Approval of Spot Bitcoin Exchange-Traded Products** | U.S. Securities and Exchange Commission
+23. **Statement on the Approval of Spot Bitcoin Exchange-Traded Products** | U.S. Securities and Exchange Commission
 
    * URL: [https://www.sec.gov/newsroom/speeches-statements/gensler-statement-spot-bitcoin-011023](https://www.sec.gov/newsroom/speeches-statements/gensler-statement-spot-bitcoin-011023)
    * Published or updated: January 10, 2024
@@ -342,7 +374,7 @@ The January 2024 orders approved exchange rule changes for products holding spot
    * Supports: Commission approval of listing and trading for multiple spot bitcoin ETP shares and the agency’s stated limits on that action.
    * Limitation: A chair statement summarizes the action; the controlling details are in the Commission’s approval order.
 
-20. **Order Granting Accelerated Approval, Release No. 34-99306** | U.S. Securities and Exchange Commission
+24. **Order Granting Accelerated Approval, Release No. 34-99306** | U.S. Securities and Exchange Commission
 
    * URL: [https://www.sec.gov/files/rules/sro/nysearca/2024/34-99306.pdf](https://www.sec.gov/files/rules/sro/nysearca/2024/34-99306.pdf)
    * Published or updated: January 10, 2024
