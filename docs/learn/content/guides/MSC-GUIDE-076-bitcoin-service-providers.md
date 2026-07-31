@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-076
-status: ACCURACY_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: What Bitcoin Service Providers Do
 handle: bitcoin-service-providers
@@ -13,7 +13,7 @@ secondary_paths:
   - Start With Bitcoin
 author_display: Mempool Surf Club Editorial
 reviewed_date: 2026-07-31
-copy_locked_date: TBD
+copy_locked_date: 2026-07-31
 ---
 
 # What Bitcoin Service Providers Do
@@ -399,7 +399,7 @@ Do not activate planned links until each destination exists as a real published 
 * [x] Full Article word count and reading-time estimate meet the registry range.
 * [x] Every mutable provider, protocol, legal, security-guidance, and tax claim was renewed during Accuracy Review.
 * [x] Accuracy Review is approved.
-* [ ] Copy Lock is approved.
+* [x] Copy Lock is approved.
 * [ ] Publication-time source renewal is complete.
 
 ## 11. Human verification
