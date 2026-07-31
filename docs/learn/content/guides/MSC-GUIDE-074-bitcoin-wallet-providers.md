@@ -1,6 +1,6 @@
 ---
 registry_id: MSC-GUIDE-074
-status: ACCURACY_REVIEW
+status: COPY_LOCKED
 page_role: topic-guide
 h1: How Bitcoin Wallet Providers Operate
 handle: bitcoin-wallet-providers
@@ -13,7 +13,7 @@ secondary_paths:
   - Use Bitcoin Safely
 author_display: Mempool Surf Club Editorial
 reviewed_date: 2026-07-30
-copy_locked_date: TBD
+copy_locked_date: 2026-07-30
 ---
 
 # How Bitcoin Wallet Providers Operate
@@ -398,7 +398,7 @@ Do not activate planned links until each destination exists as a real published 
 * [x] Full Article word count and reading-time estimate meet the registry range.
 * [x] Every provider-specific, release, recovery, privacy, and legal claim was renewed during Accuracy Review.
 * [x] Accuracy Review is approved.
-* [ ] Copy Lock is approved.
+* [x] Copy Lock is approved.
 * [ ] Publication-time source renewal is complete.
 
 ## 11. Human verification
