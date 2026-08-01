@@ -1,0 +1,72 @@
+name: Learn validation
+
+on:
+  pull_request:
+    paths:
+      - 'docs/learn/**'
+      - 'scripts/**'
+      - 'templates/**'
+      - 'sections/**'
+      - 'snippets/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/learn-validation.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/learn/**'
+      - 'scripts/**'
+      - 'templates/**'
+      - 'sections/**'
+      - 'snippets/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/learn-validation.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: learn-validation-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  learn-validation:
+    name: Learn editorial library
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund --package-lock=false
+
+      - name: Validate approved Learn registry
+        run: npm run validate:learn-registry
+
+      - name: Validate Learn manifest and packages
+        run: npm run validate:learn-library
+
+      - name: Verify deterministic Learn-data generation
+        run: |
+          npm run build:learn-data
+          git diff --exit-code -- \
+            snippets/msc-learn-guide-data.liquid \
+            snippets/msc-learn-category-data.liquid \
+            snippets/msc-learn-path-data.liquid \
+            snippets/msc-learn-route-data.liquid \
+            snippets/msc-learn-glossary-data.liquid
+
+      - name: Parse theme JSON templates
+        run: npm run test:json
+
+      - name: Check patch whitespace
+        run: git diff --check
