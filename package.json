@@ -2,9 +2,11 @@
   "scripts": {
     "build:learn-data": "node scripts/generate-msc-learn-data.mjs",
     "build:learn-guide-pilot": "node scripts/generate-msc-learn-guide-001-runtime.mjs",
+    "build:learn-hub-pilot": "node scripts/generate-msc-learn-basics-hub-runtime.mjs",
     "validate:learn-registry": "node scripts/generate-msc-learn-data.mjs --validate-only",
     "validate:learn-library": "node scripts/validate-msc-learn-library.mjs",
     "validate:learn-guide-pilot": "node scripts/generate-msc-learn-guide-001-runtime.mjs --check",
+    "validate:learn-hub-pilot": "node scripts/generate-msc-learn-basics-hub-runtime.mjs --check",
     "test:json": "node scripts/parse-json-templates.mjs"
   },
   "devDependencies": {}
