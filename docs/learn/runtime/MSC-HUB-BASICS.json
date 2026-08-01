@@ -1,0 +1,685 @@
+{
+  "schema_version": 1,
+  "source": {
+    "file": "docs/learn/content/hubs/MSC-HUB-BASICS-learn-bitcoin-basics.md",
+    "sha256": "11166115ea9293f2ca63f9de6fe26caee437cc033abc14f4fe98bd38fffec7e2",
+    "registry_file": "docs/learn/MSC_Learn_Master_Registry.json",
+    "registry_sha256": "db8021fe6e2e202708f5a74894b3469e02c5c616b8ecb4ec45ccb7d350d3e5aa",
+    "manifest_file": "docs/learn/content/content-manifest.json",
+    "manifest_sha256": "a12310c5e284be63ad411c74af9747778f5d420a780bbc5ef1bcbc9b96c218c8",
+    "manifest_record": {
+      "registry_id": "MSC-HUB-BASICS",
+      "content_file": "docs/learn/content/hubs/MSC-HUB-BASICS-learn-bitcoin-basics.md",
+      "status": "COPY_LOCKED"
+    }
+  },
+  "registry_id": "MSC-HUB-BASICS",
+  "status": "COPY_LOCKED",
+  "page_role": "category-hub",
+  "h1": "Bitcoin Basics",
+  "introductory_deck": "Build a durable foundation for understanding, holding, and using bitcoin. This category connects the system's purpose, wallet and custody choices, transaction mechanics, security practices, privacy limits, UTXOs, confirmations, issuance, and safe everyday habits without assuming prior Bitcoin knowledge.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "Bitcoin Basics is the first category in Mempool Surf Club Learn, but it is not only a glossary of beginner terms. It establishes the conceptual and practical boundaries readers need before moving into the Bitcoin Network, Building on Bitcoin, Bitcoin Development, or the Bitcoin Ecosystem.\n\nThose boundaries matter because familiar words are often used as though they describe the same thing. A wallet is not an address. A private key is not a seed phrase. A seed phrase is not always a complete recovery plan. A custodial account is not the same arrangement as direct key control. A transaction can be signed without being broadcast, broadcast without being confirmed, and confirmed without becoming absolutely final. Privacy can improve at one layer while information still leaks through another.\n\nThe purpose of this hub is to give readers the concepts and practical habits needed to understand, hold, and use bitcoin with confidence. Confidence here does not mean certainty, risk-free use, or financial gain. It means identifying which system layer is involved, which claims come from the protocol, which choices belong to software or services, and which responsibilities remain with the user.",
+      "body_html": "<p>Bitcoin Basics is the first category in Mempool Surf Club Learn, but it is not only a glossary of beginner terms. It establishes the conceptual and practical boundaries readers need before moving into the Bitcoin Network, Building on Bitcoin, Bitcoin Development, or the Bitcoin Ecosystem.</p>\n<p>Those boundaries matter because familiar words are often used as though they describe the same thing. A wallet is not an address. A private key is not a seed phrase. A seed phrase is not always a complete recovery plan. A custodial account is not the same arrangement as direct key control. A transaction can be signed without being broadcast, broadcast without being confirmed, and confirmed without becoming absolutely final. Privacy can improve at one layer while information still leaks through another.</p>\n<p>The purpose of this hub is to give readers the concepts and practical habits needed to understand, hold, and use bitcoin with confidence. Confidence here does not mean certainty, risk-free use, or financial gain. It means identifying which system layer is involved, which claims come from the protocol, which choices belong to software or services, and which responsibilities remain with the user.</p>"
+    },
+    {
+      "heading": "A systems map, not a list of definitions",
+      "body_markdown": "Bitcoin combines a peer-to-peer network with a digitally scarce native asset, bitcoin. The network records transactions, applies consensus rules, and allows independently operated software to verify valid history. The asset is accounted for through transaction outputs rather than one central account database.\n\nThat high-level description becomes useful only when its parts remain distinct.\n\nWallet software manages keys, constructs transactions, and helps users interact with Bitcoin. It does not contain bitcoin as coin files. A wallet calculates a useful balance by identifying transaction outputs connected to the keys, scripts, or watch-only information it manages.\n\nCustody asks who controls the keys or authorization needed to move bitcoin. In self-custody, the user or a user-defined arrangement directly controls that authorization. In a custodial account, a service controls the relevant keys and records a customer claim. Neither arrangement is automatically correct for every person. Each places trust, support, recovery, privacy, and failure risk in different locations.\n\nTransactions spend existing unspent transaction outputs, or UTXOs, and create new outputs. A wallet may hide that structure behind a send screen, but the output model explains input selection, change, fees, balances, privacy links, and later spending.\n\nSecurity and privacy overlap, but they are not the same goal. Security includes reducing unauthorized spending, permanent loss, operational failure, and recovery failure. Privacy concerns how transaction activity, ownership relationships, and identity can be observed or connected. A device, node, network route, wallet feature, or collaborative transaction may reduce a specific exposure without guaranteeing complete security or anonymity.\n\nThis category builds a map of those relationships one guide at a time.",
+      "body_html": "<p>Bitcoin combines a peer-to-peer network with a digitally scarce native asset, bitcoin. The network records transactions, applies consensus rules, and allows independently operated software to verify valid history. The asset is accounted for through transaction outputs rather than one central account database.</p>\n<p>That high-level description becomes useful only when its parts remain distinct.</p>\n<p>Wallet software manages keys, constructs transactions, and helps users interact with Bitcoin. It does not contain bitcoin as coin files. A wallet calculates a useful balance by identifying transaction outputs connected to the keys, scripts, or watch-only information it manages.</p>\n<p>Custody asks who controls the keys or authorization needed to move bitcoin. In self-custody, the user or a user-defined arrangement directly controls that authorization. In a custodial account, a service controls the relevant keys and records a customer claim. Neither arrangement is automatically correct for every person. Each places trust, support, recovery, privacy, and failure risk in different locations.</p>\n<p>Transactions spend existing unspent transaction outputs, or UTXOs, and create new outputs. A wallet may hide that structure behind a send screen, but the output model explains input selection, change, fees, balances, privacy links, and later spending.</p>\n<p>Security and privacy overlap, but they are not the same goal. Security includes reducing unauthorized spending, permanent loss, operational failure, and recovery failure. Privacy concerns how transaction activity, ownership relationships, and identity can be observed or connected. A device, node, network route, wallet feature, or collaborative transaction may reduce a specific exposure without guaranteeing complete security or anonymity.</p>\n<p>This category builds a map of those relationships one guide at a time.</p>"
+    },
+    {
+      "heading": "Foundations",
+      "body_markdown": "Foundations begins with the broadest question: What is Bitcoin?\n\nThe first guide distinguishes Bitcoin the network from bitcoin the asset and introduces nodes, miners, wallets, transactions, proof of work, UTXOs, confirmations, and issuance. The second asks why this combination of open participation, verifiable rules, digital scarcity, and key-based ownership may matter while preserving the system's costs, limits, and tradeoffs.\n\nThe history sequence places Bitcoin inside decades of work on digital cash, cryptography, timestamping, and proof of work. It separates protocol milestones from market events, company failures, and cultural stories. The Satoshi guide narrows the historical record further. It explains the documented work of Bitcoin's pseudonymous creator without treating an unverified identity theory as fact or turning authorship into permanent control.\n\nThese guides create the starting point for everything that follows. Bitcoin has no central issuer, but services around it may still be centralized. Public rules can be inspected, but that does not make software flawless. Scarcity describes an issuance constraint, not a promise about demand, market price, or purchasing power. Open participation reduces certain permission boundaries, but it does not remove technology, legal, access, or operational constraints.",
+      "body_html": "<p>Foundations begins with the broadest question: What is Bitcoin?</p>\n<p>The first guide distinguishes Bitcoin the network from bitcoin the asset and introduces nodes, miners, wallets, transactions, proof of work, UTXOs, confirmations, and issuance. The second asks why this combination of open participation, verifiable rules, digital scarcity, and key-based ownership may matter while preserving the system&#39;s costs, limits, and tradeoffs.</p>\n<p>The history sequence places Bitcoin inside decades of work on digital cash, cryptography, timestamping, and proof of work. It separates protocol milestones from market events, company failures, and cultural stories. The Satoshi guide narrows the historical record further. It explains the documented work of Bitcoin&#39;s pseudonymous creator without treating an unverified identity theory as fact or turning authorship into permanent control.</p>\n<p>These guides create the starting point for everything that follows. Bitcoin has no central issuer, but services around it may still be centralized. Public rules can be inspected, but that does not make software flawless. Scarcity describes an issuance constraint, not a promise about demand, market price, or purchasing power. Open participation reduces certain permission boundaries, but it does not remove technology, legal, access, or operational constraints.</p>"
+    },
+    {
+      "heading": "Using Bitcoin",
+      "body_markdown": "Using Bitcoin moves from the system into the tools and actions most readers encounter first.\n\nA Bitcoin wallet manages keys and transaction workflows. It may generate receiving information, identify relevant UTXOs, calculate a balance, select inputs, create outputs, estimate fees, coordinate signatures, and track confirmation state. Those functions can live in one application or be divided among a coordinator, signer, node, server, backup, and several people.\n\nSelf-custody is one possible custody arrangement. It can reduce dependence on a custodian, while shifting backup, recovery, device, continuity, and transaction-verification responsibilities to the user or the arrangement they design. Custody should not be treated as a binary moral judgment. The useful question is where spending authority sits, which dependencies remain, and what happens if a device, service, location, or participant becomes unavailable.\n\nThe sending and receiving guide follows an on-chain payment from receiving information through review, input selection, signing, broadcast, node acceptance, miner selection, block inclusion, and later confirmation depth. Each stage answers a different question. A readable QR code does not prove that a destination is correct. A valid signature authorizes transaction data but does not broadcast it. A node may accept a transaction into its local mempool without creating a confirmation. A fee estimate forecasts competition for block space rather than reserving a place in the next block.\n\nThe transaction and fee guide then opens the data structure beneath the interface. It explains why UTXOs are spent as complete units, why change is a new output, why the on-chain fee is the difference between input and output value, and why fee rate relates to transaction weight rather than the amount being transferred.",
+      "body_html": "<p>Using Bitcoin moves from the system into the tools and actions most readers encounter first.</p>\n<p>A Bitcoin wallet manages keys and transaction workflows. It may generate receiving information, identify relevant UTXOs, calculate a balance, select inputs, create outputs, estimate fees, coordinate signatures, and track confirmation state. Those functions can live in one application or be divided among a coordinator, signer, node, server, backup, and several people.</p>\n<p>Self-custody is one possible custody arrangement. It can reduce dependence on a custodian, while shifting backup, recovery, device, continuity, and transaction-verification responsibilities to the user or the arrangement they design. Custody should not be treated as a binary moral judgment. The useful question is where spending authority sits, which dependencies remain, and what happens if a device, service, location, or participant becomes unavailable.</p>\n<p>The sending and receiving guide follows an on-chain payment from receiving information through review, input selection, signing, broadcast, node acceptance, miner selection, block inclusion, and later confirmation depth. Each stage answers a different question. A readable QR code does not prove that a destination is correct. A valid signature authorizes transaction data but does not broadcast it. A node may accept a transaction into its local mempool without creating a confirmation. A fee estimate forecasts competition for block space rather than reserving a place in the next block.</p>\n<p>The transaction and fee guide then opens the data structure beneath the interface. It explains why UTXOs are spent as complete units, why change is a new output, why the on-chain fee is the difference between input and output value, and why fee rate relates to transaction weight rather than the amount being transferred.</p>"
+    },
+    {
+      "heading": "Security",
+      "body_markdown": "Security begins with recovery material because many serious mistakes come from collapsing several controls into one concept.\n\nA seed phrase is a human-readable backup representation used by many wallets to derive keys under a wallet standard. It is not an address, a device PIN, an application password, or one private key. Recovery can also depend on a passphrase, derivation paths, script types, descriptors, account information, multisignature policy, other signers, or wallet-specific records.\n\nPrivate and public keys occupy another layer. A private key is secret cryptographic material used to authorize spending. A related public key can support signature verification without revealing the private key under Bitcoin's cryptographic assumptions. Addresses are destination representations used by wallets to construct locking scripts. Keys do not hold bitcoin, and an address is not a wallet.\n\nThe security guide turns those components into a maintainable system. It asks readers to consider theft, loss, software origin, devices, backups, transaction review, recovery, physical access, inheritance, and the people involved. More complexity is not automatically more security. A plan that cannot be understood, maintained, or recovered can become its own failure mode.\n\nThe privacy guide maps information across the public blockchain, wallet queries, network connections, services, merchants, devices, payment communication, and later spending. Bitcoin is pseudonymous, not automatically anonymous. Fresh addresses, personal nodes, Tor, coin control, CoinJoin, PayJoin, or Lightning may change specific information flows, but no single tool removes every possible link.",
+      "body_html": "<p>Security begins with recovery material because many serious mistakes come from collapsing several controls into one concept.</p>\n<p>A seed phrase is a human-readable backup representation used by many wallets to derive keys under a wallet standard. It is not an address, a device PIN, an application password, or one private key. Recovery can also depend on a passphrase, derivation paths, script types, descriptors, account information, multisignature policy, other signers, or wallet-specific records.</p>\n<p>Private and public keys occupy another layer. A private key is secret cryptographic material used to authorize spending. A related public key can support signature verification without revealing the private key under Bitcoin&#39;s cryptographic assumptions. Addresses are destination representations used by wallets to construct locking scripts. Keys do not hold bitcoin, and an address is not a wallet.</p>\n<p>The security guide turns those components into a maintainable system. It asks readers to consider theft, loss, software origin, devices, backups, transaction review, recovery, physical access, inheritance, and the people involved. More complexity is not automatically more security. A plan that cannot be understood, maintained, or recovered can become its own failure mode.</p>\n<p>The privacy guide maps information across the public blockchain, wallet queries, network connections, services, merchants, devices, payment communication, and later spending. Bitcoin is pseudonymous, not automatically anonymous. Fresh addresses, personal nodes, Tor, coin control, CoinJoin, PayJoin, or Lightning may change specific information flows, but no single tool removes every possible link.</p>"
+    },
+    {
+      "heading": "Essentials",
+      "body_markdown": "Essentials connects everyday use to four ideas that readers will meet throughout the rest of Learn.\n\nUTXOs explain Bitcoin's output-based accounting model. A transaction spends specific earlier outputs and creates new ones. Wallet balances are calculated views over those outputs, not protocol-level account balances. Input selection affects transaction weight, fees, change, privacy, and future wallet structure.\n\nConfirmations explain settlement depth. A transaction receives its first confirmation when it is included in a valid block on a node's active chain. Additional blocks increase depth and usually reduce practical reorganization risk. They do not create absolute finality, prove legal identity, settle a commercial dispute, or provide one universal safe count for every payment.\n\nThe halving guide explains Bitcoin's consensus-enforced issuance schedule. The block subsidy began at 50 BTC and is reduced by half every 210,000 blocks under current mainnet rules. The halving reduces the permitted subsidy for future blocks. It does not cut existing balances, guarantee miner behavior, or operate as a price mechanism.\n\nThe final guide brings the category together through safe everyday practices. It treats safety as an ongoing process: understand the custody model, obtain software through expected sources, know what each control protects, maintain recovery information, verify payment details, review fees and confirmations, manage privacy deliberately, and revisit the setup when people, devices, software, value, or circumstances change.",
+      "body_html": "<p>Essentials connects everyday use to four ideas that readers will meet throughout the rest of Learn.</p>\n<p>UTXOs explain Bitcoin&#39;s output-based accounting model. A transaction spends specific earlier outputs and creates new ones. Wallet balances are calculated views over those outputs, not protocol-level account balances. Input selection affects transaction weight, fees, change, privacy, and future wallet structure.</p>\n<p>Confirmations explain settlement depth. A transaction receives its first confirmation when it is included in a valid block on a node&#39;s active chain. Additional blocks increase depth and usually reduce practical reorganization risk. They do not create absolute finality, prove legal identity, settle a commercial dispute, or provide one universal safe count for every payment.</p>\n<p>The halving guide explains Bitcoin&#39;s consensus-enforced issuance schedule. The block subsidy began at 50 BTC and is reduced by half every 210,000 blocks under current mainnet rules. The halving reduces the permitted subsidy for future blocks. It does not cut existing balances, guarantee miner behavior, or operate as a price mechanism.</p>\n<p>The final guide brings the category together through safe everyday practices. It treats safety as an ongoing process: understand the custody model, obtain software through expected sources, know what each control protects, maintain recovery information, verify payment details, review fees and confirmations, manage privacy deliberately, and revisit the setup when people, devices, software, value, or circumstances change.</p>"
+    },
+    {
+      "heading": "How the four subcategories connect",
+      "body_markdown": "The four subcategories are ordered, but they are not isolated.\n\nFoundations explains what the system is and why its design choices matter. Using Bitcoin shows how wallets, custody, transactions, and fees turn those ideas into action. Security examines the keys, recovery information, devices, people, and information flows that make those actions dependable or risky. Essentials reveals the output, confirmation, issuance, and maintenance concepts that connect everyday use to the wider network.\n\nEach guide adds one part of a larger systems map. A wallet guide becomes clearer after Bitcoin and UTXOs are distinguished. A custody decision becomes clearer after keys and recovery are separated. Confirmation policy becomes clearer after transaction broadcast and block inclusion are separated. Privacy becomes clearer after UTXO selection, change, services, and later spending are visible.\n\nReaders do not need to memorize every detail on the first pass. The goal is to know where a question belongs and which boundaries should remain intact.",
+      "body_html": "<p>The four subcategories are ordered, but they are not isolated.</p>\n<p>Foundations explains what the system is and why its design choices matter. Using Bitcoin shows how wallets, custody, transactions, and fees turn those ideas into action. Security examines the keys, recovery information, devices, people, and information flows that make those actions dependable or risky. Essentials reveals the output, confirmation, issuance, and maintenance concepts that connect everyday use to the wider network.</p>\n<p>Each guide adds one part of a larger systems map. A wallet guide becomes clearer after Bitcoin and UTXOs are distinguished. A custody decision becomes clearer after keys and recovery are separated. Confirmation policy becomes clearer after transaction broadcast and block inclusion are separated. Privacy becomes clearer after UTXO selection, change, services, and later spending are visible.</p>\n<p>Readers do not need to memorize every detail on the first pass. The goal is to know where a question belongs and which boundaries should remain intact.</p>"
+    },
+    {
+      "heading": "How to use this hub",
+      "body_markdown": "There are three planned ways to enter the category.\n\nFirst, follow the complete sixteen-guide category in canonical order. This is the most complete route. It starts with the system and its history, moves into wallets and transactions, develops security and privacy boundaries, and finishes with UTXOs, confirmations, issuance, and maintainable everyday practice.\n\nSecond, enter one of the four subcategories based on the current need. Foundations supports readers asking what Bitcoin is or how it developed. Using Bitcoin supports wallet, custody, payment, and fee questions. Security supports recovery, keys, threat modeling, and privacy questions. Essentials supports readers who need a clearer model of outputs, confirmations, the halving, or practical maintenance.\n\nThird, use MSC-PATH-START | Start With Bitcoin as the curated starting route. A learning path can select a teaching order across destinations, while the hub preserves the permanent canonical category order. MSC-PATH-SAFE | Use Bitcoin Safely and MSC-PATH-NETWORK | Understand the Network are planned related paths for readers with narrower goals.\n\nThe category prepares readers for MSC-HUB-NETWORK | The Bitcoin Network without duplicating it. Bitcoin Basics introduces transactions, UTXOs, confirmations, nodes, miners, and consensus only as needed for safe understanding and use. The Network category goes deeper into mining, node operation, mempools, blocks, proof of work, chain selection, consensus, and upgrades.\n\nAll anchors, cards, and related destinations are planned intent only. They must remain inactive until implementation confirms real published destinations and URLs.",
+      "body_html": "<p>There are three planned ways to enter the category.</p>\n<p>First, follow the complete sixteen-guide category in canonical order. This is the most complete route. It starts with the system and its history, moves into wallets and transactions, develops security and privacy boundaries, and finishes with UTXOs, confirmations, issuance, and maintainable everyday practice.</p>\n<p>Second, enter one of the four subcategories based on the current need. Foundations supports readers asking what Bitcoin is or how it developed. Using Bitcoin supports wallet, custody, payment, and fee questions. Security supports recovery, keys, threat modeling, and privacy questions. Essentials supports readers who need a clearer model of outputs, confirmations, the halving, or practical maintenance.</p>\n<p>Third, use MSC-PATH-START | Start With Bitcoin as the curated starting route. A learning path can select a teaching order across destinations, while the hub preserves the permanent canonical category order. MSC-PATH-SAFE | Use Bitcoin Safely and MSC-PATH-NETWORK | Understand the Network are planned related paths for readers with narrower goals.</p>\n<p>The category prepares readers for MSC-HUB-NETWORK | The Bitcoin Network without duplicating it. Bitcoin Basics introduces transactions, UTXOs, confirmations, nodes, miners, and consensus only as needed for safe understanding and use. The Network category goes deeper into mining, node operation, mempools, blocks, proof of work, chain selection, consensus, and upgrades.</p>\n<p>All anchors, cards, and related destinations are planned intent only. They must remain inactive until implementation confirms real published destinations and URLs.</p>"
+    }
+  ],
+  "subcategories": [
+    {
+      "name": "Foundations",
+      "guide_ids": [
+        "MSC-GUIDE-001",
+        "MSC-GUIDE-002",
+        "MSC-GUIDE-003",
+        "MSC-GUIDE-004"
+      ],
+      "cards": [
+        {
+          "registry_id": "MSC-GUIDE-001",
+          "h1": "What Is Bitcoin?",
+          "description": "Build a clear first model of Bitcoin as a peer-to-peer network and digitally scarce asset, then connect nodes, miners, wallets, UTXOs, proof of work, confirmations, and issuance.",
+          "depth": "Surface",
+          "format": "Explainer",
+          "reading_time": "8 to 9 minutes",
+          "action_label": "Read guide",
+          "status_note": "COPY_LOCKED editorial source, not yet a confirmed published URL",
+          "active": false,
+          "url": null
+        },
+        {
+          "registry_id": "MSC-GUIDE-002",
+          "h1": "Why Does Bitcoin Matter?",
+          "description": "Examine open participation, independently verifiable rules, constrained issuance, key-based ownership, settlement, and censorship resistance alongside their practical limits and tradeoffs.",
+          "depth": "Surface",
+          "format": "Explainer",
+          "reading_time": "9 to 10 minutes",
+          "action_label": "Read guide",
+          "status_note": "COPY_LOCKED editorial source, not yet a confirmed published URL",
+          "active": false,
+          "url": null
+        },
+        {
+          "registry_id": "MSC-GUIDE-003",
+          "h1": "A History of Bitcoin",
+          "description": "Trace Bitcoin from earlier digital-cash research and the 2008 white paper through launch, early transactions, specialized mining, open-source development, major upgrades, markets, and community growth.",
+          "depth": "Surface",
+          "format": "History",
+          "reading_time": "9 to 10 minutes",
+          "action_label": "Read guide",
+          "status_note": "COPY_LOCKED editorial source, not yet a confirmed published URL",
+          "active": false,
+          "url": null
+        },
+        {
+          "registry_id": "MSC-GUIDE-004",
+          "h1": "Who Was Satoshi Nakamoto?",
+          "description": "Separate the documented work of Bitcoin's pseudonymous creator from unsupported identity theories, and see why authorship never became permanent authority over the network.",
+          "depth": "Surface",
+          "format": "History",
+          "reading_time": "8 to 9 minutes",
+          "action_label": "Read guide",
+          "status_note": "COPY_LOCKED editorial source, not yet a confirmed published URL",
+          "active": false,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Using Bitcoin",
+      "guide_ids": [
+        "MSC-GUIDE-005",
+        "MSC-GUIDE-006",
+        "MSC-GUIDE-007",
+        "MSC-GUIDE-008"
+      ],
+      "cards": [
+        {
+          "registry_id": "MSC-GUIDE-005",
+          "h1": "What Is a Bitcoin Wallet?",
+          "description": "Learn how wallets manage keys, watch outputs, calculate balances, construct transactions, coordinate signers, and support recovery without storing bitcoin as coin files.",
+          "depth": "Surface",
+          "format": "Explainer",
+          "reading_time": "9 to 10 minutes",
+          "action_label": "Read guide",
+          "status_note": "COPY_LOCKED editorial source, not yet a confirmed published URL",
+          "active": false,
+          "url": null
+        },
+        {
+          "registry_id": "MSC-GUIDE-006",
+          "h1": "What Is Bitcoin Self-Custody?",
+          "description": "Compare custodial claims with direct key control, then explore single-signature, multisignature, collaborative, device, backup, recovery, privacy, and continuity tradeoffs.",
+          "depth": "Surface",
+          "format": "Guide",
+          "reading_time": "10 to 11 minutes",
+          "action_label": "Read guide",
+          "status_note": "COPY_LOCKED editorial source, not yet a confirmed published URL",
+          "active": false,
+          "url": null
+        },
+        {
+          "registry_id": "MSC-GUIDE-007",
+          "h1": "How to Send and Receive Bitcoin",
+          "description": "Follow an on-chain payment from receiving information and human review through UTXO selection, signing, broadcast, node relay, miner selection, block inclusion, and confirmation.",
+          "depth": "Surface",
+          "format": "Walkthrough",
+          "reading_time": "10 to 11 minutes",
+          "action_label": "Read guide",
+          "status_note": "COPY_LOCKED editorial source, not yet a confirmed published URL",
+          "active": false,
+          "url": null
+        },
+        {
+          "registry_id": "MSC-GUIDE-008",
+          "h1": "How Bitcoin Transactions and Fees Work",
+          "description": "Open the transaction structure beneath a wallet screen, including inputs, outputs, change, weight, sat/vB fee rates, node-local mempools, miner selection, replacement, CPFP, and settlement risk.",
+          "depth": "Shallow",
+          "format": "Explainer",
+          "reading_time": "11 to 13 minutes",
+          "action_label": "Read guide",
+          "status_note": "COPY_LOCKED editorial source, not yet a confirmed published URL",
+          "active": false,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Security",
+      "guide_ids": [
+        "MSC-GUIDE-009",
+        "MSC-GUIDE-010",
+        "MSC-GUIDE-011",
+        "MSC-GUIDE-012"
+      ],
+      "cards": [
+        {
+          "registry_id": "MSC-GUIDE-009",
+          "h1": "What Is a Bitcoin Seed Phrase?",
+          "description": "Understand mnemonic recovery, BIP 39, passphrases, HD key derivation, script discovery, multisignature records, backup tradeoffs, and why a phrase may not be the complete wallet plan.",
+          "depth": "Surface",
+          "format": "Explainer",
+          "reading_time": "9 to 11 minutes",
+          "action_label": "Read guide",
+          "status_note": "COPY_LOCKED editorial source, not yet a confirmed published URL",
+          "active": false,
+          "url": null
+        },
+        {
+          "registry_id": "MSC-GUIDE-010",
+          "h1": "How Bitcoin Public and Private Keys Work",
+          "description": "See how private keys authorize spending, public keys verify signatures, addresses represent destinations, and HD wallets derive many keys while creating distinct security and privacy boundaries.",
+          "depth": "Shallow",
+          "format": "Explainer",
+          "reading_time": "10 to 12 minutes",
+          "action_label": "Read guide",
+          "status_note": "COPY_LOCKED editorial source, not yet a confirmed published URL",
+          "active": false,
+          "url": null
+        },
+        {
+          "registry_id": "MSC-GUIDE-011",
+          "h1": "How to Keep Bitcoin Secure",
+          "description": "Build a maintainable threat model across theft, loss, software origin, signers, devices, backups, transaction review, recovery, privacy, physical access, inheritance, and changing conditions.",
+          "depth": "Surface",
+          "format": "Guide",
+          "reading_time": "10 to 12 minutes",
+          "action_label": "Read guide",
+          "status_note": "COPY_LOCKED editorial source, not yet a confirmed published URL",
+          "active": false,
+          "url": null
+        },
+        {
+          "registry_id": "MSC-GUIDE-012",
+          "h1": "How Bitcoin Privacy Works",
+          "description": "Map the information visible through the blockchain, wallet servers, peers, services, payment records, devices, and later spending while keeping every privacy technique within its actual limits.",
+          "depth": "Shallow",
+          "format": "Guide",
+          "reading_time": "11 to 13 minutes",
+          "action_label": "Read guide",
+          "status_note": "COPY_LOCKED editorial source, not yet a confirmed published URL",
+          "active": false,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Essentials",
+      "guide_ids": [
+        "MSC-GUIDE-013",
+        "MSC-GUIDE-014",
+        "MSC-GUIDE-015",
+        "MSC-GUIDE-016"
+      ],
+      "cards": [
+        {
+          "registry_id": "MSC-GUIDE-013",
+          "h1": "What Are UTXOs in Bitcoin?",
+          "description": "Replace the account-balance mental model with Bitcoin's output-based state, then connect inputs, outputs, change, fees, wallet balances, coin selection, dust policy, privacy, and node validation.",
+          "depth": "Shallow",
+          "format": "Explainer",
+          "reading_time": "10 to 12 minutes",
+          "action_label": "Read guide",
+          "status_note": "COPY_LOCKED editorial source, not yet a confirmed published URL",
+          "active": false,
+          "url": null
+        },
+        {
+          "registry_id": "MSC-GUIDE-014",
+          "h1": "How Bitcoin Confirmations Work",
+          "description": "Learn when confirmation begins, how cumulative proof of work and active-chain depth matter, what reorganizations can change, and why no universal count creates absolute finality.",
+          "depth": "Surface",
+          "format": "Explainer",
+          "reading_time": "9 to 11 minutes",
+          "action_label": "Read guide",
+          "status_note": "COPY_LOCKED editorial source, not yet a confirmed published URL",
+          "active": false,
+          "url": null
+        },
+        {
+          "registry_id": "MSC-GUIDE-015",
+          "h1": "What Is the Bitcoin Halving?",
+          "description": "Follow the consensus-enforced block subsidy schedule by height, separate subsidy from transaction fees, and keep issuance mechanics distinct from miner economics, difficulty, and price claims.",
+          "depth": "Surface",
+          "format": "Explainer",
+          "reading_time": "9 to 11 minutes",
+          "action_label": "Read guide",
+          "status_note": "COPY_LOCKED editorial source, not yet a confirmed published URL",
+          "active": false,
+          "url": null
+        },
+        {
+          "registry_id": "MSC-GUIDE-016",
+          "h1": "Bitcoin Best Practices for Safe Everyday Use",
+          "description": "Turn the category into a maintainable routine for custody, software sourcing, recovery, payment review, fees, confirmations, UTXO handling, privacy, support boundaries, continuity, and ongoing review.",
+          "depth": "Surface",
+          "format": "Guide",
+          "reading_time": "11 to 13 minutes",
+          "action_label": "Read guide",
+          "status_note": "COPY_LOCKED editorial source, not yet a confirmed published URL",
+          "active": false,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "canonical_guide_ids": [
+    "MSC-GUIDE-001",
+    "MSC-GUIDE-002",
+    "MSC-GUIDE-003",
+    "MSC-GUIDE-004",
+    "MSC-GUIDE-005",
+    "MSC-GUIDE-006",
+    "MSC-GUIDE-007",
+    "MSC-GUIDE-008",
+    "MSC-GUIDE-009",
+    "MSC-GUIDE-010",
+    "MSC-GUIDE-011",
+    "MSC-GUIDE-012",
+    "MSC-GUIDE-013",
+    "MSC-GUIDE-014",
+    "MSC-GUIDE-015",
+    "MSC-GUIDE-016"
+  ],
+  "key_terms": [
+    {
+      "term": "Bitcoin",
+      "definition": "An open monetary network and asset governed by independently verified consensus rules."
+    },
+    {
+      "term": "Wallet",
+      "definition": "Software or hardware that manages keys, constructs transactions, and helps users interact with Bitcoin."
+    },
+    {
+      "term": "Self-Custody",
+      "definition": "Direct control of the keys needed to spend bitcoin."
+    },
+    {
+      "term": "Private key",
+      "definition": "Secret cryptographic material used to authorize spending."
+    },
+    {
+      "term": "Seed phrase",
+      "definition": "A human-readable backup representation used by many wallets to derive keys under a wallet standard."
+    },
+    {
+      "term": "Transaction",
+      "definition": "A data structure that spends existing UTXOs and creates new outputs."
+    },
+    {
+      "term": "UTXO",
+      "definition": "An unspent transaction output that can be used as an input in a later transaction."
+    },
+    {
+      "term": "Confirmation",
+      "definition": "The inclusion of a transaction in a block, followed by additional blocks that increase settlement depth."
+    },
+    {
+      "term": "Halving",
+      "definition": "The scheduled reduction in Bitcoin's block subsidy after each 210,000-block interval."
+    },
+    {
+      "term": "Block subsidy",
+      "definition": "New bitcoin created under the issuance schedule and paid through a block's coinbase transaction."
+    },
+    {
+      "term": "Bitcoin privacy",
+      "definition": "The degree to which transaction activity, ownership relationships, and user identity can remain difficult to observe or connect."
+    }
+  ],
+  "sources": [
+    {
+      "title": "MSC Learn Master Registry",
+      "author_or_publisher": "Mempool Surf Club Editorial",
+      "repository_path": "`docs/learn/MSC_Learn_Master_Registry.json`",
+      "supports": "The Bitcoin Basics category identity, purpose, four-subcategory order, anchor intents, canonical sixteen-guide sequence, destination relationships, depth, format, and production timing."
+    },
+    {
+      "title": "Learn content manifest",
+      "author_or_publisher": "Mempool Surf Club Editorial",
+      "repository_path": "`docs/learn/content/content-manifest.json`",
+      "supports": "Permanent destination paths, registry identifiers, editorial statuses, and the separation between planning content and generated runtime data. It is not runtime or publication evidence."
+    },
+    {
+      "title": "Copy-locked Foundations Guides MSC-GUIDE-001 through MSC-GUIDE-004",
+      "author_or_publisher": "Mempool Surf Club Editorial",
+      "repository_path": "`docs/learn/content/guides/`",
+      "supports": "Bitcoin's core definition, purpose and tradeoffs, documented history, Satoshi boundaries, synchronized Key Terms, card descriptions, depth, format, and reading-time metadata."
+    },
+    {
+      "title": "Copy-locked Using Bitcoin Guides MSC-GUIDE-005 through MSC-GUIDE-008",
+      "author_or_publisher": "Mempool Surf Club Editorial",
+      "repository_path": "`docs/learn/content/guides/`",
+      "supports": "Wallet functions, custody models, sending and receiving, transaction structure, fees, synchronized Key Terms, card descriptions, depth, format, and reading-time metadata."
+    },
+    {
+      "title": "Copy-locked Security Guides MSC-GUIDE-009 through MSC-GUIDE-012",
+      "author_or_publisher": "Mempool Surf Club Editorial",
+      "repository_path": "`docs/learn/content/guides/`",
+      "supports": "Seed phrases, keys, security planning, privacy layers and limits, synchronized Key Terms, card descriptions, depth, format, and reading-time metadata."
+    },
+    {
+      "title": "Copy-locked Essentials Guides MSC-GUIDE-013 through MSC-GUIDE-016",
+      "author_or_publisher": "Mempool Surf Club Editorial",
+      "repository_path": "`docs/learn/content/guides/`",
+      "supports": "UTXOs, confirmations, halving and issuance boundaries, safe everyday practices, synchronized Key Terms, card descriptions, depth, format, and reading-time metadata."
+    }
+  ],
+  "seo_title": "Bitcoin Basics: Learn Wallets, Transactions, Security, and More",
+  "meta_description": "Learn Bitcoin basics through 16 calm, technically grounded guides covering foundations, wallets, custody, transactions, security, privacy, UTXOs, confirmations, and issuance.",
+  "excerpt": "Build a durable Bitcoin foundation through 16 guides covering the system's purpose, wallets, custody, transactions, recovery, security, privacy, UTXOs, confirmations, the halving, and safe everyday use.",
+  "reading_time": "18 minutes for hub orientation and card review",
+  "relationships": {
+    "parent": {
+      "registry_id": "MSC-LRN-HOME",
+      "title": "Learn How Bitcoin Moves",
+      "active": false,
+      "url": null
+    },
+    "previous": null,
+    "next": {
+      "registry_id": "MSC-HUB-NETWORK",
+      "title": "The Bitcoin Network",
+      "active": false,
+      "url": null
+    },
+    "primary_path": {
+      "registry_id": "MSC-PATH-START",
+      "title": "Start With Bitcoin",
+      "active": false,
+      "url": null
+    },
+    "secondary_paths": [
+      {
+        "registry_id": "MSC-PATH-SAFE",
+        "title": "Use Bitcoin Safely",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-PATH-NETWORK",
+        "title": "Understand the Network",
+        "active": false,
+        "url": null
+      }
+    ],
+    "planned_internal_links": [
+      {
+        "registry_id": "MSC-PATH-START",
+        "title": "Start With Bitcoin",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-PATH-SAFE",
+        "title": "Use Bitcoin Safely",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-PATH-NETWORK",
+        "title": "Understand the Network",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-HUB-NETWORK",
+        "title": "The Bitcoin Network",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-ROUTE-001",
+        "title": "How a Bitcoin Transaction Moves",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GLOSSARY-001",
+        "title": "Bitcoin Glossary",
+        "active": false,
+        "url": null
+      }
+    ]
+  },
+  "review": {
+    "reviewed_date": "2026-07-28",
+    "copy_locked_date": "2026-07-28",
+    "human_verification": {
+      "reviewer": "Mempool Surf Club Editorial",
+      "review_date": "2026-07-28",
+      "notes": [
+        "Verified all sixteen card records against copy-locked Guides MSC-GUIDE-001 through MSC-GUIDE-016, including IDs, H1s, canonical order, subcategory placement, depth, format, reading times, and description accuracy.",
+        "Confirmed Foundations, Using Bitcoin, Security, and Essentials remain in the approved order.",
+        "Confirmed Key Terms remain synchronized with the approved guide definitions.",
+        "Confirmed wallet, custody, key, seed phrase, transaction, UTXO, confirmation, security, privacy, halving, and issuance boundaries remain accurate.",
+        "Confirmed canonical category order remains distinct from curated learning-path order.",
+        "Confirmed all planned links, anchors, cards, and related destinations remain inactive and contain no confirmed destination URL.",
+        "Confirmed exactly three complete illustration briefs remain present and all use `Status: PLANNED`.",
+        "Confirmed publication-time renewal remains required for any claim whose accuracy depends on future protocol, implementation, service, or publication state."
+      ]
+    },
+    "accuracy_checklist": [
+      {
+        "checked": true,
+        "statement": "Registry metadata matches the approved master registry and content manifest."
+      },
+      {
+        "checked": true,
+        "statement": "Foundations, Using Bitcoin, Security, and Essentials appear in approved order."
+      },
+      {
+        "checked": true,
+        "statement": "The hub contains exactly sixteen guide cards."
+      },
+      {
+        "checked": true,
+        "statement": "The cards follow the canonical MSC-GUIDE-001 through MSC-GUIDE-016 order."
+      },
+      {
+        "checked": true,
+        "statement": "Every card uses the approved Registry ID, H1, depth, format, and guide reading time."
+      },
+      {
+        "checked": true,
+        "statement": "Every card description is specific to its copy-locked guide."
+      },
+      {
+        "checked": true,
+        "statement": "Wallets are not described as containers that hold bitcoin files."
+      },
+      {
+        "checked": true,
+        "statement": "Wallet, address, private key, seed phrase, and custody remain distinct."
+      },
+      {
+        "checked": true,
+        "statement": "Custody is not presented as a binary moral judgment."
+      },
+      {
+        "checked": true,
+        "statement": "Signing, broadcast, mempool acceptance, block inclusion, and confirmation remain distinct."
+      },
+      {
+        "checked": true,
+        "statement": "Transaction fee, fee rate, UTXO selection, change, and wallet balance remain distinct."
+      },
+      {
+        "checked": true,
+        "statement": "Confirmation count is not presented as absolute finality or one universal acceptance rule."
+      },
+      {
+        "checked": true,
+        "statement": "Security is presented as a maintainable system rather than one product or checklist."
+      },
+      {
+        "checked": true,
+        "statement": "Privacy techniques are not presented as anonymity guarantees."
+      },
+      {
+        "checked": true,
+        "statement": "The halving is described as a consensus-enforced subsidy schedule rather than a price mechanism."
+      },
+      {
+        "checked": true,
+        "statement": "Current issuance remains below the commonly cited limit of 21 million BTC without using Bitcoin Core amount.h as proof of the schedule."
+      },
+      {
+        "checked": true,
+        "statement": "Canonical category order remains distinct from curated learning-path order."
+      },
+      {
+        "checked": true,
+        "statement": "Planned anchors, cards, and related destinations remain inactive and contain no URL."
+      },
+      {
+        "checked": true,
+        "statement": "Hub Key Terms use synchronized definitions compatible with the copy-locked guides."
+      },
+      {
+        "checked": true,
+        "statement": "Exactly three complete illustration briefs are included."
+      },
+      {
+        "checked": true,
+        "statement": "Human Verification is complete."
+      },
+      {
+        "checked": true,
+        "statement": "No em dash or en dash character appears."
+      }
+    ]
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "Four Learning Regions of Bitcoin Basics",
+      "educational_purpose": "Show how Foundations, Using Bitcoin, Security, and Essentials form one connected learning map while preserving the purpose of each region.",
+      "recommended_placement": "After the section titled How the four subcategories connect.",
+      "visual_description": "Vintage nautical chart divided into four adjoining coastal regions. Foundations forms the chart legend and horizon reference. Using Bitcoin follows a navigable route through wallet and transaction markers. Security includes protected harbors for keys, recovery, and privacy. Essentials contains chart symbols for UTXOs, confirmation depth, issuance, and maintenance. Routes connect the regions without placing one region in command.",
+      "required_labels": "Foundations, Using Bitcoin, Security, Essentials, Bitcoin, Wallets and transactions, Keys and recovery, UTXOs and confirmations",
+      "caption": "Bitcoin Basics connects four learning regions that keep core concepts distinct before showing how they work together.",
+      "alt_text": "Vintage nautical learning map showing Foundations, Using Bitcoin, Security, and Essentials as four connected Bitcoin Basics regions.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack the four regions in approved order and preserve one visible route between each adjacent region.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "Wallet, Keys, Transactions, and Ledger",
+      "educational_purpose": "Prevent readers from treating a wallet, key, address, transaction, UTXO, and Bitcoin's public record as the same object.",
+      "recommended_placement": "After the section titled A systems map, not a list of definitions.",
+      "visual_description": "Vintage technical cutaway presented like a harbor logistics chart. A wallet workbench manages key material and constructs a transaction. A private signing instrument authorizes the transaction without becoming the transaction itself. The transaction moves toward independently validated public ledger records where outputs are created. Bitcoin is never shown as a coin stored inside the wallet.",
+      "required_labels": "Wallet, Private key, Public information, Address, Transaction, Signature, UTXO, Validated public record",
+      "caption": "A wallet manages keys and transaction tools, while Bitcoin records validated transactions and their spendable outputs.",
+      "alt_text": "Technical chart separating a Bitcoin wallet, private key, address, signature, transaction, UTXO, and validated public record.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Use a left-to-right sequence on desktop and a top-to-bottom sequence on mobile, keeping every label attached to its own object.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Three Ways Through Bitcoin Basics",
+      "educational_purpose": "Explain the difference among complete canonical order, focused subcategory entry, and the curated Start With Bitcoin learning path.",
+      "recommended_placement": "After the section titled How to use this hub.",
+      "visual_description": "Weathered navigation chart with one departure marker and three clearly labeled routes. The canonical route visits all sixteen numbered guide markers in order. The subcategory route enters one of four named ports. The Start With Bitcoin route follows a curated set of waypoints. A legend states that all routes are editorial intent until published destinations and URLs are confirmed.",
+      "required_labels": "Canonical order, Sixteen guides, Foundations, Using Bitcoin, Security, Essentials, Start With Bitcoin, Planned routes only",
+      "caption": "Readers can follow the complete category, enter one focused subcategory, or use the curated Start With Bitcoin route.",
+      "alt_text": "Nautical navigation chart showing canonical sixteen-guide order, four subcategory entry points, and the curated Start With Bitcoin path.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Preserve the three route labels and show the four subcategory ports as a compact vertical list beside the Start With Bitcoin route.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  },
+  "synchronization": {
+    "expected_subcategories": [
+      "Foundations",
+      "Using Bitcoin",
+      "Security",
+      "Essentials"
+    ],
+    "expected_guide_ids": [
+      "MSC-GUIDE-001",
+      "MSC-GUIDE-002",
+      "MSC-GUIDE-003",
+      "MSC-GUIDE-004",
+      "MSC-GUIDE-005",
+      "MSC-GUIDE-006",
+      "MSC-GUIDE-007",
+      "MSC-GUIDE-008",
+      "MSC-GUIDE-009",
+      "MSC-GUIDE-010",
+      "MSC-GUIDE-011",
+      "MSC-GUIDE-012",
+      "MSC-GUIDE-013",
+      "MSC-GUIDE-014",
+      "MSC-GUIDE-015",
+      "MSC-GUIDE-016"
+    ],
+    "registry_subcategories": [
+      "Foundations",
+      "Using Bitcoin",
+      "Security",
+      "Essentials"
+    ],
+    "registry_guide_ids": [
+      "MSC-GUIDE-001",
+      "MSC-GUIDE-002",
+      "MSC-GUIDE-003",
+      "MSC-GUIDE-004",
+      "MSC-GUIDE-005",
+      "MSC-GUIDE-006",
+      "MSC-GUIDE-007",
+      "MSC-GUIDE-008",
+      "MSC-GUIDE-009",
+      "MSC-GUIDE-010",
+      "MSC-GUIDE-011",
+      "MSC-GUIDE-012",
+      "MSC-GUIDE-013",
+      "MSC-GUIDE-014",
+      "MSC-GUIDE-015",
+      "MSC-GUIDE-016"
+    ]
+  }
+}
