@@ -141,7 +141,7 @@ Path order is educational sequencing. It does not replace the canonical previous
 - Understand before continuing: Signing, local checks, relay, mempool acceptance, mining, validation, chain selection, and confirmations are distinct stages.
 - Depth: Progressive synthesis
 - Estimated reading time: 16 to 18 minutes
-- Planned status: EDITORIAL_REVIEW editorial package, not yet a confirmed published URL
+- Planned status: COPY_LOCKED editorial package, not yet a confirmed published URL
 - URL: None. Keep inactive until publication and URL confirmation.
 
 ### Step 4: MSC-GUIDE-025 | What Happens Inside the Bitcoin Mempool?
