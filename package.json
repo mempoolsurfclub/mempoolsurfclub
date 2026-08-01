@@ -1,1 +1,9 @@
-{"scripts":{"build:learn-data":"node scripts/generate-msc-learn-data.mjs","validate:learn-registry":"node scripts/generate-msc-learn-data.mjs --validate-only","test:json":"node scripts/parse-json-templates.mjs"},"devDependencies":{}}
+{
+  "scripts": {
+    "build:learn-data": "node scripts/generate-msc-learn-data.mjs",
+    "validate:learn-registry": "node scripts/generate-msc-learn-data.mjs --validate-only",
+    "validate:learn-library": "node scripts/validate-msc-learn-library.mjs",
+    "test:json": "node scripts/parse-json-templates.mjs"
+  },
+  "devDependencies": {}
+}
