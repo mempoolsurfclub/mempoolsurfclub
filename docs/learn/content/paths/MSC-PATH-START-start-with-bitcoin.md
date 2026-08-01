@@ -262,7 +262,7 @@ Path order is educational sequencing. It does not replace each destination's per
 - Understand before continuing: One transaction crosses wallet, peer, node, mining, validation, chain-selection, confirmation, and UTXO-state boundaries.
 - Depth: Progressive synthesis
 - Estimated reading time: 16 to 18 minutes
-- Planned status: EDITORIAL_REVIEW editorial package, not yet a confirmed published URL
+- Planned status: COPY_LOCKED editorial package, not yet a confirmed published URL
 - URL: None. Keep inactive until publication and URL confirmation.
 
 ## 5. Key Terms
