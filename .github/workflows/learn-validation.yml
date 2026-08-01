@@ -61,6 +61,9 @@ jobs:
       - name: Validate Bitcoin Basics hub runtime pilot
         run: npm run validate:learn-hub-pilot
 
+      - name: Validate Start With Bitcoin path runtime pilot
+        run: npm run validate:learn-path-pilot
+
       - name: Verify deterministic Learn-data generation
         run: |
           npm run build:learn-data
