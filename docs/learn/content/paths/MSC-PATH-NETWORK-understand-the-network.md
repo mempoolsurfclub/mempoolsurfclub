@@ -388,12 +388,12 @@ Path order is educational sequencing. It does not replace the canonical previous
 5. **Copy-locked Mining guides MSC-GUIDE-017 through MSC-GUIDE-020**
    Author or publisher: Mempool Surf Club Editorial
    Repository path: `docs/learn/content/guides/`
-   Supports: Mining, pools, ASIC hardware, difficulty adjustment, step outcomes, depth, and reading-time metadata.
+   Supports: Mining, pools, ASIC hardware, difficulty adjustment, step outcomes, and reading-time metadata.
 
 6. **Copy-locked Consensus guides MSC-GUIDE-029 through MSC-GUIDE-032**
    Author or publisher: Mempool Surf Club Editorial
    Repository path: `docs/learn/content/guides/`
-   Supports: Proof-of-work security, technical consensus, soft forks, upgrades, step outcomes, depth, and reading-time metadata.
+   Supports: Proof-of-work security, technical consensus, soft forks, upgrades, step outcomes, and reading-time metadata.
 
 7. **MSC-ROUTE-001 editorial package**
    Author or publisher: Mempool Surf Club Editorial
