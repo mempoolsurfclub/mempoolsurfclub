@@ -151,7 +151,7 @@ function checklist(markdown) {
 }
 
 function human(markdown) {
-  const notes = norm(markdown.split(/^- Notes:\s*$/m)[1] || '').split('\n').map((line) => line.match(/^\s{2}-\s+(.+)$/)?.[1]).filter(Boolean);
+  const notes = norm(markdown.split(/^- Notes:\s*$/m)[1] || '').split('\n').map((line) => line.match(/^\s*-\s+(.+)$/)?.[1]).filter(Boolean);
   return {
     reviewer: markdown.match(/^- Reviewer:\s*(.+)$/m)?.[1]?.trim() || null,
     review_date: markdown.match(/^- Review date:\s*(.+)$/m)?.[1]?.trim() || null,
