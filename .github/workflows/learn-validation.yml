@@ -55,6 +55,9 @@ jobs:
       - name: Validate Learn manifest and packages
         run: npm run validate:learn-library
 
+      - name: Validate Guide 001 runtime pilot
+        run: npm run validate:learn-guide-pilot
+
       - name: Verify deterministic Learn-data generation
         run: |
           npm run build:learn-data
