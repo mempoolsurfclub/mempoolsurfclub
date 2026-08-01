@@ -1,0 +1,62 @@
+name: Temporary Learn synchronization scope cleanup
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - synchronize
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    if: github.event.pull_request.head.ref == 'content/learn-sync-corrections'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out correction branch
+        uses: actions/checkout@v4
+        with:
+          ref: content/learn-sync-corrections
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Restore exact authorized scope and validate
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "620af191e1d17543a3773abc78c57caaf997c065"
+
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('docs/learn/content/paths/MSC-PATH-NETWORK-understand-the-network.md')
+          text = path.read_text()
+          replacements = {
+              'Supports: Mining, pools, ASIC hardware, difficulty adjustment, step outcomes, depth, and reading-time metadata.':
+                  'Supports: Mining, pools, ASIC hardware, difficulty adjustment, step outcomes, and reading-time metadata.',
+              'Supports: Proof-of-work security, technical consensus, soft forks, upgrades, step outcomes, depth, and reading-time metadata.':
+                  'Supports: Proof-of-work security, technical consensus, soft forks, upgrades, step outcomes, and reading-time metadata.',
+          }
+          for old, new in replacements.items():
+              assert text.count(old) == 1, (old, text.count(old))
+              text = text.replace(old, new)
+          path.write_text(text)
+          PY
+
+          npm run validate:learn-registry
+          npm run build:learn-data
+          npm run test:json
+          git diff --check
+
+          actual="$(git diff --name-only)"
+          test "$actual" = 'docs/learn/content/paths/MSC-PATH-NETWORK-understand-the-network.md'
+
+          git rm .github/workflows/learn-sync-scope-cleanup-once.yml
+          git config user.name 'Mempool Surf Club Automation'
+          git config user.email 'actions@users.noreply.github.com'
+          git add docs/learn/content/paths/MSC-PATH-NETWORK-understand-the-network.md
+          git commit -m 'Restore Learn synchronization scope'
+          git push origin HEAD:content/learn-sync-corrections
