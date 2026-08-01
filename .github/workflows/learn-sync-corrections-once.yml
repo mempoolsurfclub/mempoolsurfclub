@@ -62,8 +62,8 @@ jobs:
               next_step = text.find('\n### Step ', start + len(heading))
               section = text[start:] if next_step == -1 else text[start:next_step]
               assert destination in section
-              assert 'Destination status at review: `COPY_LOCKED`' in section
-              assert 'Destination status at review: `EDITORIAL_REVIEW`' not in section
+              assert 'Planned status: COPY_LOCKED editorial' in section
+              assert 'Planned status: EDITORIAL_REVIEW editorial' not in section
           PY
 
           npm run validate:learn-registry
