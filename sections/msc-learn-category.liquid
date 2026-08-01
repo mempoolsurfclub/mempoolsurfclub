@@ -1,13 +1,30 @@
 {{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
-{%- capture learn_category_data -%}{%- render 'msc-learn-category-data' -%}{%- endcapture -%}{%- capture learn_guide_data -%}{%- render 'msc-learn-guide-data' -%}{%- endcapture -%}{%- assign newline_delimiter = '
-' -%}{%- assign category_rows = learn_category_data | strip | split: newline_delimiter -%}{%- assign guide_rows = learn_guide_data | strip | split: newline_delimiter -%}{%- assign current = '' -%}{%- for row in category_rows -%}{%- assign item = row | split: '[[MSC_FIELD]]' -%}{%- if item[1] == page.handle -%}{%- assign current = item -%}{%- endif -%}{%- endfor -%}{%- assign learn_page = pages['learn'] -%}
-<section class="msc-shell msc-learn-page"><div class="msc-container msc-learn-page__container">
-{% render 'msc-learn-breadcrumbs', learn_page: learn_page, current_label: page.title %}
-<header class="msc-learn-page__header"><p class="msc-section-kicker">Category Hub</p><h1>{{ page.title | escape }}</h1>{% render 'msc-learn-page-meta', page: page, depth: current[9] %}<div class="msc-learn-article rte">{{ page.content }}</div></header>
-{% render 'msc-learn-category-nav', current_handle: page.handle %}
-{%- assign subs = current[3] | split: '[[MSC_LIST]]' -%}{%- assign anchors = current[4] | split: '[[MSC_LIST]]' -%}
-{%- for sub in subs -%}{%- capture cards -%}{%- for row in guide_rows -%}{%- assign g = row | split: '[[MSC_FIELD]]' -%}{%- if g[3] == page.handle and g[5] == sub -%}{% render 'msc-learn-guide-card', handle: g[1], depth: g[7], format: g[8] %}{%- endif -%}{%- endfor -%}{%- endcapture -%}{%- if cards contains 'msc-learn-guide-card' -%}<section class="msc-learn-subcategory" id="{{ anchors[forloop.index0] }}"><h2>{{ sub | escape }}</h2><div class="msc-learn-card-grid">{{ cards }}</div></section>{%- endif -%}{%- endfor -%}
-{%- assign sequence_ids = current[10] | split: '[[MSC_LIST]]' -%}{%- capture sequence_cards -%}{%- for id in sequence_ids -%}{%- for row in guide_rows -%}{%- assign g = row | split: '[[MSC_FIELD]]' -%}{%- if g[0] == id -%}{% render 'msc-learn-guide-card', handle: g[1], depth: g[7], format: g[8] %}{%- endif -%}{%- endfor -%}{%- endfor -%}{%- endcapture -%}{%- if sequence_cards contains 'msc-learn-guide-card' -%}<section class="msc-learn-subcategory"><h2>Recommended Sequence</h2><div class="msc-learn-card-grid">{{ sequence_cards }}</div></section>{%- endif -%}
-{% render 'msc-learn-prev-next', previous_handle: current[6], next_handle: current[7], parent_handle: 'learn', parent_label: 'Learn', learn_page: learn_page %}
-</div></section>
-{% schema %}{"name":"MSC Learn category","settings":[]}{% endschema %}
+{%- assign pilot_registry_id = section.settings.registry_id | strip -%}
+{%- case pilot_registry_id -%}
+  {%- when 'MSC-HUB-BASICS' -%}
+    {% render 'msc-learn-basics-hub-runtime' %}
+  {%- else -%}
+    <section class="msc-shell msc-learn-page" data-msc-preview-only="true">
+      <div class="msc-container msc-learn-page__container">
+        <header class="msc-learn-page__header">
+          <p class="msc-section-kicker">Learn runtime preview</p>
+          <h1>Category preview unavailable</h1>
+          <p>No structured runtime package is registered for {{ pilot_registry_id | escape }}.</p>
+        </header>
+      </div>
+    </section>
+{%- endcase -%}
+{% schema %}
+{
+  "name": "MSC Learn category",
+  "settings": [
+    {
+      "type": "text",
+      "id": "registry_id",
+      "label": "Registry ID",
+      "default": "MSC-HUB-BASICS",
+      "info": "Preview-only binding. Do not enter a handle or URL."
+    }
+  ]
+}
+{% endschema %}
