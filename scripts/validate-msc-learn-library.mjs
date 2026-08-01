@@ -72,7 +72,7 @@ function recordId(record) {
 }
 
 function recordRole(record) {
-  return valueOf(record, ['Page role', 'page_role', 'type']);
+  return String(valueOf(record, ['Page role', 'page_role', 'type'])).replace(/^page-role:/, '');
 }
 
 function recordHandle(record) {
