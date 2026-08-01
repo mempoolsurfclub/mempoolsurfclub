@@ -1,42 +1,75 @@
 name: Learn validation
 
 on:
+  pull_request:
+    paths:
+      - 'docs/learn/**'
+      - 'scripts/**'
+      - 'templates/**'
+      - 'sections/**'
+      - 'snippets/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/learn-validation.yml'
   push:
     branches:
-      - engineering/learn-guide-001-pilot
+      - main
+    paths:
+      - 'docs/learn/**'
+      - 'scripts/**'
+      - 'templates/**'
+      - 'sections/**'
+      - 'snippets/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/learn-validation.yml'
 
 permissions:
-  contents: write
+  contents: read
+
+concurrency:
+  group: learn-validation-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  materialize-guide-001:
-    if: github.actor != 'github-actions[bot]'
-    name: Materialize Guide 001 runtime
+  learn-validation:
+    name: Learn editorial library
     runs-on: ubuntu-latest
     timeout-minutes: 10
+
     steps:
-      - name: Check out pilot branch
+      - name: Check out repository
         uses: actions/checkout@v4
-        with:
-          ref: engineering/learn-guide-001-pilot
-          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
 
-      - name: Build Guide 001 runtime artifacts
-        run: npm run build:learn-guide-pilot
+      - name: Install dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund --package-lock=false
 
-      - name: Commit generated artifacts
+      - name: Validate approved Learn registry
+        run: npm run validate:learn-registry
+
+      - name: Validate Learn manifest and packages
+        run: npm run validate:learn-library
+
+      - name: Validate Guide 001 runtime pilot
+        run: npm run validate:learn-guide-pilot
+
+      - name: Verify deterministic Learn-data generation
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/learn/runtime/MSC-GUIDE-001.json snippets/msc-learn-guide-001-runtime.liquid
-          if git diff --cached --quiet; then
-            echo "Generated artifacts already match."
-            exit 0
-          fi
-          git commit -m "Materialize Guide 001 runtime data [skip ci]"
-          git push origin HEAD:engineering/learn-guide-001-pilot
+          npm run build:learn-data
+          git diff --exit-code -- \
+            snippets/msc-learn-guide-data.liquid \
+            snippets/msc-learn-category-data.liquid \
+            snippets/msc-learn-path-data.liquid \
+            snippets/msc-learn-route-data.liquid \
+            snippets/msc-learn-glossary-data.liquid
+
+      - name: Parse theme JSON templates
+        run: npm run test:json
+
+      - name: Check patch whitespace
+        run: git diff --check
