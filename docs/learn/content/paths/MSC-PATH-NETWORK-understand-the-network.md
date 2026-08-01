@@ -141,7 +141,7 @@ Path order is educational sequencing. It does not replace the canonical previous
 - Understand before continuing: Signing, local checks, relay, mempool acceptance, mining, validation, chain selection, and confirmations are distinct stages.
 - Depth: Progressive synthesis
 - Estimated reading time: 16 to 18 minutes
-- Planned status: EDITORIAL_REVIEW editorial package, not yet a confirmed published URL
+- Planned status: COPY_LOCKED editorial package, not yet a confirmed published URL
 - URL: None. Keep inactive until publication and URL confirmation.
 
 ### Step 4: MSC-GUIDE-025 | What Happens Inside the Bitcoin Mempool?
@@ -388,12 +388,12 @@ Path order is educational sequencing. It does not replace the canonical previous
 5. **Copy-locked Mining guides MSC-GUIDE-017 through MSC-GUIDE-020**
    Author or publisher: Mempool Surf Club Editorial
    Repository path: `docs/learn/content/guides/`
-   Supports: Mining, pools, ASIC hardware, difficulty adjustment, step outcomes, and reading-time metadata.
+   Supports: Mining, pools, ASIC hardware, difficulty adjustment, step outcomes, depth, and reading-time metadata.
 
 6. **Copy-locked Consensus guides MSC-GUIDE-029 through MSC-GUIDE-032**
    Author or publisher: Mempool Surf Club Editorial
    Repository path: `docs/learn/content/guides/`
-   Supports: Proof-of-work security, technical consensus, soft forks, upgrades, step outcomes, and reading-time metadata.
+   Supports: Proof-of-work security, technical consensus, soft forks, upgrades, step outcomes, depth, and reading-time metadata.
 
 7. **MSC-ROUTE-001 editorial package**
    Author or publisher: Mempool Surf Club Editorial
