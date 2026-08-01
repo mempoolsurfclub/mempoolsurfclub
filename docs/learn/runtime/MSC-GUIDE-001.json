@@ -1,0 +1,335 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-001-what-is-bitcoin.md",
+  "source_sha256": "2f1a5e00965c411f10aaa790fa092b5e2064254ca42cf77e017a7f7127c08407",
+  "registry_id": "MSC-GUIDE-001",
+  "status": "COPY_LOCKED",
+  "h1": "What Is Bitcoin?",
+  "introductory_deck": "Bitcoin is a peer-to-peer network with a digitally scarce native asset, bitcoin. It allows people to verify and transfer value without relying on a central issuer, while placing more responsibility on users to understand keys, custody, transactions, and risk.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "Bitcoin entered public view as a proposal for electronic cash that could move directly between people without requiring a financial institution to approve every payment. It has since grown into a public network, an open-source software ecosystem, and a scarce digital asset.\n\nThe clearest way to understand Bitcoin is not through price charts or slogans. Begin with the system itself.",
+      "body_html": "<p>Bitcoin entered public view as a proposal for electronic cash that could move directly between people without requiring a financial institution to approve every payment. It has since grown into a public network, an open-source software ecosystem, and a scarce digital asset.</p>\n<p>The clearest way to understand Bitcoin is not through price charts or slogans. Begin with the system itself.</p>"
+    },
+    {
+      "heading": "Bitcoin in One Clear Definition",
+      "body_markdown": "Bitcoin is a peer-to-peer network that lets participants verify and transfer a digitally scarce asset, called bitcoin, without relying on a central issuer or transaction processor.\n\nThat definition contains two connected ideas. Bitcoin, with a capital B, refers to the network, protocol, and broader system. Lowercase bitcoin refers to units of the asset. BTC is the common ticker symbol.\n\nNo company prints new bitcoin, maintains a master account database, or has unilateral authority to rewrite the rules. Instead, independently operated computers exchange transaction and block data, verify that data against shared rules, and reject anything that fails those rules.\n\nThis does not mean every part of Bitcoin is equally decentralized. Mining, custody, software development, and services can each have points of concentration. The base network, however, does not depend on one company whose permission is required for every valid transaction.",
+      "body_html": "<p>Bitcoin is a peer-to-peer network that lets participants verify and transfer a digitally scarce asset, called bitcoin, without relying on a central issuer or transaction processor.</p>\n<p>That definition contains two connected ideas. Bitcoin, with a capital B, refers to the network, protocol, and broader system. Lowercase bitcoin refers to units of the asset. BTC is the common ticker symbol.</p>\n<p>No company prints new bitcoin, maintains a master account database, or has unilateral authority to rewrite the rules. Instead, independently operated computers exchange transaction and block data, verify that data against shared rules, and reject anything that fails those rules.</p>\n<p>This does not mean every part of Bitcoin is equally decentralized. Mining, custody, software development, and services can each have points of concentration. The base network, however, does not depend on one company whose permission is required for every valid transaction.</p>"
+    },
+    {
+      "heading": "Bitcoin the Network and bitcoin the Asset",
+      "body_markdown": "The Bitcoin network is the communication and verification system. Nodes relay and validate information, miners compete to produce blocks, and users create transactions.\n\nThe asset, bitcoin, is what the network accounts for. One bitcoin equals 100 million satoshis.\n\nBitcoin does not use a traditional account ledger where the network stores a single balance beside each person's name. Its public record contains transactions. Those transactions create outputs, and an output that has not yet been spent is called an unspent transaction output, or UTXO.\n\nA wallet calculates what it can spend by identifying UTXOs controlled by the user's keys. The displayed balance is a convenient summary created by wallet software, not an account balance written directly into the blockchain.",
+      "body_html": "<p>The Bitcoin network is the communication and verification system. Nodes relay and validate information, miners compete to produce blocks, and users create transactions.</p>\n<p>The asset, bitcoin, is what the network accounts for. One bitcoin equals 100 million satoshis.</p>\n<p>Bitcoin does not use a traditional account ledger where the network stores a single balance beside each person&#39;s name. Its public record contains transactions. Those transactions create outputs, and an output that has not yet been spent is called an unspent transaction output, or UTXO.</p>\n<p>A wallet calculates what it can spend by identifying UTXOs controlled by the user&#39;s keys. The displayed balance is a convenient summary created by wallet software, not an account balance written directly into the blockchain.</p>"
+    },
+    {
+      "heading": "Why Bitcoin Was Created",
+      "body_markdown": "Online payments generally depend on trusted intermediaries that keep records, approve transactions, reverse payments, and settle disputes.\n\nSatoshi Nakamoto introduced Bitcoin in 2008 as a peer-to-peer electronic cash system intended to reduce that dependency. The central technical problem was double-spending. Digital information can be copied easily, so a digital money system needs a reliable way to prevent the same value from being spent more than once.\n\nA centralized system solves this with one official ledger operator. Bitcoin proposed public transactions, blocks ordered through proof of work, and independent verification by network participants.\n\nBitcoin did not remove trust from every part of life. It made the monetary and transaction rules independently verifiable through software.",
+      "body_html": "<p>Online payments generally depend on trusted intermediaries that keep records, approve transactions, reverse payments, and settle disputes.</p>\n<p>Satoshi Nakamoto introduced Bitcoin in 2008 as a peer-to-peer electronic cash system intended to reduce that dependency. The central technical problem was double-spending. Digital information can be copied easily, so a digital money system needs a reliable way to prevent the same value from being spent more than once.</p>\n<p>A centralized system solves this with one official ledger operator. Bitcoin proposed public transactions, blocks ordered through proof of work, and independent verification by network participants.</p>\n<p>Bitcoin did not remove trust from every part of life. It made the monetary and transaction rules independently verifiable through software.</p>"
+    },
+    {
+      "heading": "How Bitcoin Works at a High Level",
+      "body_markdown": "A Bitcoin payment usually moves through several stages:\n\n1. A wallet constructs a transaction.\n2. The transaction identifies existing UTXOs to spend.\n3. It creates new outputs, usually including one for the recipient and sometimes one returning change to the sender.\n4. The wallet signs the transaction with the required private keys.\n5. The signed transaction is broadcast to peers.\n6. Nodes check whether it follows the applicable rules and relay it if accepted.\n7. Miners choose from available valid transactions while building candidate blocks.\n8. A miner finds valid proof of work and broadcasts the block.\n9. Nodes independently validate the block.\n10. If accepted, the block becomes part of the node's valid chain, and the transaction receives a confirmation.\n\nThis simplified sequence captures the main flow. Different participants perform different jobs, and each node reaches its own conclusion by applying the rules it runs.",
+      "body_html": "<p>A Bitcoin payment usually moves through several stages:</p>\n<ol><li>A wallet constructs a transaction.</li><li>The transaction identifies existing UTXOs to spend.</li><li>It creates new outputs, usually including one for the recipient and sometimes one returning change to the sender.</li><li>The wallet signs the transaction with the required private keys.</li><li>The signed transaction is broadcast to peers.</li><li>Nodes check whether it follows the applicable rules and relay it if accepted.</li><li>Miners choose from available valid transactions while building candidate blocks.</li><li>A miner finds valid proof of work and broadcasts the block.</li><li>Nodes independently validate the block.</li><li>If accepted, the block becomes part of the node&#39;s valid chain, and the transaction receives a confirmation.</li></ol>\n<p>This simplified sequence captures the main flow. Different participants perform different jobs, and each node reaches its own conclusion by applying the rules it runs.</p>"
+    },
+    {
+      "heading": "What Nodes Do",
+      "body_markdown": "A Bitcoin node is software that communicates with peers and checks Bitcoin data. A full node validates blocks and transactions according to the rules implemented by the software its operator chooses to run.\n\nNodes check matters such as whether transaction inputs refer to available UTXOs, whether required signatures are valid, whether a block satisfies proof-of-work requirements, and whether new bitcoin has been created within the permitted issuance rules.\n\nThis is why miners do not simply control Bitcoin. A miner can propose a block, but a validating node does not have to accept it. If the block breaks the rules, the node rejects it, even if the miner spent real energy producing it.\n\nConsensus is not a ballot sent to a central counter. It emerges as participants independently apply compatible rules and converge on a valid chain with the most accumulated proof of work.",
+      "body_html": "<p>A Bitcoin node is software that communicates with peers and checks Bitcoin data. A full node validates blocks and transactions according to the rules implemented by the software its operator chooses to run.</p>\n<p>Nodes check matters such as whether transaction inputs refer to available UTXOs, whether required signatures are valid, whether a block satisfies proof-of-work requirements, and whether new bitcoin has been created within the permitted issuance rules.</p>\n<p>This is why miners do not simply control Bitcoin. A miner can propose a block, but a validating node does not have to accept it. If the block breaks the rules, the node rejects it, even if the miner spent real energy producing it.</p>\n<p>Consensus is not a ballot sent to a central counter. It emerges as participants independently apply compatible rules and converge on a valid chain with the most accumulated proof of work.</p>"
+    },
+    {
+      "heading": "What Miners Do",
+      "body_markdown": "Miners assemble candidate blocks from valid transactions and compete to produce proof of work. They repeatedly hash block-header data while changing available values, searching for a result below the network's current target.\n\nThe result is difficult to produce but easy for nodes to verify. Proof of work connects block production to real-world cost, makes confirmed history expensive to rewrite, and lets the network compare competing valid chains by accumulated work.\n\nThe hash attempts do not solve an outside scientific problem, but the work is part of Bitcoin's security and ordering mechanism.\n\nMiners also receive compensation through transaction fees and the block subsidy permitted by the protocol. Their transaction choices can affect which valid transactions confirm first, but miners cannot make an invalid transaction valid or force validating nodes to accept an invalid block.",
+      "body_html": "<p>Miners assemble candidate blocks from valid transactions and compete to produce proof of work. They repeatedly hash block-header data while changing available values, searching for a result below the network&#39;s current target.</p>\n<p>The result is difficult to produce but easy for nodes to verify. Proof of work connects block production to real-world cost, makes confirmed history expensive to rewrite, and lets the network compare competing valid chains by accumulated work.</p>\n<p>The hash attempts do not solve an outside scientific problem, but the work is part of Bitcoin&#39;s security and ordering mechanism.</p>\n<p>Miners also receive compensation through transaction fees and the block subsidy permitted by the protocol. Their transaction choices can affect which valid transactions confirm first, but miners cannot make an invalid transaction valid or force validating nodes to accept an invalid block.</p>"
+    },
+    {
+      "heading": "How Ownership and Wallets Work",
+      "body_markdown": "A Bitcoin wallet does not hold coins as files. It manages keys and the tools needed to identify spendable UTXOs, construct transactions, and create signatures.\n\nA private key is secret data used to authorize a spend under the relevant locking conditions. The corresponding public information can help create receiving instructions and verify signatures. A Bitcoin address is a user-facing encoding that helps a sender construct an output with particular spending conditions. An address is not the wallet itself.\n\nMany modern wallets derive multiple keys from one underlying backup. Some present that backup as a sequence of words, often called a seed phrase or recovery phrase. A recovery phrase is not simply another name for one private key. Depending on the wallet's standard and setup, it may allow the wallet to recreate many related keys and addresses.\n\nControl of the necessary keys usually provides the ability to authorize spending. Losing or exposing them can mean losing access or control. Self-custody shifts more responsibility to the user.",
+      "body_html": "<p>A Bitcoin wallet does not hold coins as files. It manages keys and the tools needed to identify spendable UTXOs, construct transactions, and create signatures.</p>\n<p>A private key is secret data used to authorize a spend under the relevant locking conditions. The corresponding public information can help create receiving instructions and verify signatures. A Bitcoin address is a user-facing encoding that helps a sender construct an output with particular spending conditions. An address is not the wallet itself.</p>\n<p>Many modern wallets derive multiple keys from one underlying backup. Some present that backup as a sequence of words, often called a seed phrase or recovery phrase. A recovery phrase is not simply another name for one private key. Depending on the wallet&#39;s standard and setup, it may allow the wallet to recreate many related keys and addresses.</p>\n<p>Control of the necessary keys usually provides the ability to authorize spending. Losing or exposing them can mean losing access or control. Self-custody shifts more responsibility to the user.</p>"
+    },
+    {
+      "heading": "Why Bitcoin Is Scarce",
+      "body_markdown": "Bitcoin's issuance rules are part of the consensus rules that validating nodes independently enforce. New bitcoin enters circulation through the block subsidy, which began at 50 BTC per block and is reduced by half every 210,000 blocks. Under the current rules, total issuance remains below the commonly cited limit of 21 million BTC. Scarcity here describes an issuance constraint, not a promise about market price, future demand, or purchasing power.\n\nNo central issuer can create an extra batch because demand rises or a budget changes. Participants can inspect the software, verify the issuance rules, and reject blocks that create bitcoin outside the rules they enforce.",
+      "body_html": "<p>Bitcoin&#39;s issuance rules are part of the consensus rules that validating nodes independently enforce. New bitcoin enters circulation through the block subsidy, which began at 50 BTC per block and is reduced by half every 210,000 blocks. Under the current rules, total issuance remains below the commonly cited limit of 21 million BTC. Scarcity here describes an issuance constraint, not a promise about market price, future demand, or purchasing power.</p>\n<p>No central issuer can create an extra batch because demand rises or a budget changes. Participants can inspect the software, verify the issuance rules, and reject blocks that create bitcoin outside the rules they enforce.</p>"
+    },
+    {
+      "heading": "What Bitcoin Changes",
+      "body_markdown": "Bitcoin gives users a way to transfer value through an open network without requiring one central payment company to maintain the authoritative record.\n\nIts monetary rules are unusually visible. Anyone can inspect the software, run a node, and check whether blocks follow the rules.\n\nBitcoin can support payments, saving, automated settlement, and other uses. The network provides a base system rather than one approved reason for using it.\n\nBitcoin also changes the relationship between ownership and responsibility. A person who controls the necessary keys may be able to transact without asking a bank or payment company for permission. That control can be useful, but it also means mistakes may not have a customer service department capable of reversing them.",
+      "body_html": "<p>Bitcoin gives users a way to transfer value through an open network without requiring one central payment company to maintain the authoritative record.</p>\n<p>Its monetary rules are unusually visible. Anyone can inspect the software, run a node, and check whether blocks follow the rules.</p>\n<p>Bitcoin can support payments, saving, automated settlement, and other uses. The network provides a base system rather than one approved reason for using it.</p>\n<p>Bitcoin also changes the relationship between ownership and responsibility. A person who controls the necessary keys may be able to transact without asking a bank or payment company for permission. That control can be useful, but it also means mistakes may not have a customer service department capable of reversing them.</p>"
+    },
+    {
+      "heading": "What Bitcoin Does Not Guarantee",
+      "body_markdown": "Bitcoin does not guarantee profit. It does not make every payment instant or free. A transaction may remain unconfirmed if its fee is too low, if it conflicts with another transaction, or if it fails relay or policy requirements.\n\nBitcoin transactions are public, but they are not automatically tied to legal names. This makes the system pseudonymous, not fully anonymous. Addresses and transaction patterns can sometimes be connected to people through blockchain analysis, reused addresses, exchange records, merchant information, or other outside data.\n\nTransactions become harder to replace as more proof of work is added after them, but irreversible is not absolute. Unconfirmed transactions carry different risks, and recent blocks can occasionally be reorganized.\n\nBitcoin also does not protect users from every mistake. Sending to the wrong destination, mishandling backups, trusting malicious software, revealing private information, or leaving funds with an unreliable custodian can still cause loss.\n\nDecentralization reduces certain single points of control. It does not remove operational risk, regulation, volatility, or the need for careful security.",
+      "body_html": "<p>Bitcoin does not guarantee profit. It does not make every payment instant or free. A transaction may remain unconfirmed if its fee is too low, if it conflicts with another transaction, or if it fails relay or policy requirements.</p>\n<p>Bitcoin transactions are public, but they are not automatically tied to legal names. This makes the system pseudonymous, not fully anonymous. Addresses and transaction patterns can sometimes be connected to people through blockchain analysis, reused addresses, exchange records, merchant information, or other outside data.</p>\n<p>Transactions become harder to replace as more proof of work is added after them, but irreversible is not absolute. Unconfirmed transactions carry different risks, and recent blocks can occasionally be reorganized.</p>\n<p>Bitcoin also does not protect users from every mistake. Sending to the wrong destination, mishandling backups, trusting malicious software, revealing private information, or leaving funds with an unreliable custodian can still cause loss.</p>\n<p>Decentralization reduces certain single points of control. It does not remove operational risk, regulation, volatility, or the need for careful security.</p>"
+    },
+    {
+      "heading": "A Simple Example of Using Bitcoin",
+      "body_markdown": "Suppose Maya wants to send bitcoin to Jordan.\n\nJordan's wallet provides receiving information, commonly shown as an address or QR code. Maya enters the destination and amount. Her wallet selects one or more UTXOs she can spend, creates an output for Jordan, may create a change output for Maya, and assigns the remaining difference as a transaction fee.\n\nMaya reviews the details and approves the payment. Her wallet signs the transaction with the necessary private key material and broadcasts it.\n\nNodes receiving the transaction check it. They do not need to know Maya's or Jordan's legal identity. They need to determine whether the transaction follows the rules, including whether the referenced outputs are available and the authorization is valid.\n\nIf accepted, the transaction may enter nodes' mempools, which are local collections of valid unconfirmed transactions. A miner may select it for a candidate block. When a valid block containing the transaction is found and accepted by nodes, Jordan's payment receives its first confirmation. Later blocks add more settlement depth.\n\nNo individual step guarantees immediate inclusion. The fee, network conditions, transaction structure, node policies, and miner selection can all affect the path.",
+      "body_html": "<p>Suppose Maya wants to send bitcoin to Jordan.</p>\n<p>Jordan&#39;s wallet provides receiving information, commonly shown as an address or QR code. Maya enters the destination and amount. Her wallet selects one or more UTXOs she can spend, creates an output for Jordan, may create a change output for Maya, and assigns the remaining difference as a transaction fee.</p>\n<p>Maya reviews the details and approves the payment. Her wallet signs the transaction with the necessary private key material and broadcasts it.</p>\n<p>Nodes receiving the transaction check it. They do not need to know Maya&#39;s or Jordan&#39;s legal identity. They need to determine whether the transaction follows the rules, including whether the referenced outputs are available and the authorization is valid.</p>\n<p>If accepted, the transaction may enter nodes&#39; mempools, which are local collections of valid unconfirmed transactions. A miner may select it for a candidate block. When a valid block containing the transaction is found and accepted by nodes, Jordan&#39;s payment receives its first confirmation. Later blocks add more settlement depth.</p>\n<p>No individual step guarantees immediate inclusion. The fee, network conditions, transaction structure, node policies, and miner selection can all affect the path.</p>"
+    },
+    {
+      "heading": "Where to Continue Learning",
+      "body_markdown": "The useful next question is not simply whether Bitcoin is interesting. It is why this combination of open participation, verifiable rules, digital scarcity, and user-controlled keys matters.\n\nThe next guide, Why Does Bitcoin Matter?, examines that question directly.\n\nReaders can then continue into wallets, self-custody, transactions, mining, nodes, security, privacy, or Bitcoin's history. The deeper structure becomes clearer once each role is examined on its own.",
+      "body_html": "<p>The useful next question is not simply whether Bitcoin is interesting. It is why this combination of open participation, verifiable rules, digital scarcity, and user-controlled keys matters.</p>\n<p>The next guide, Why Does Bitcoin Matter?, examines that question directly.</p>\n<p>Readers can then continue into wallets, self-custody, transactions, mining, nodes, security, privacy, or Bitcoin&#39;s history. The deeper structure becomes clearer once each role is examined on its own.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Bitcoin",
+      "definition": "An open monetary network and asset governed by independently verified consensus rules."
+    },
+    {
+      "term": "Bitcoin network",
+      "definition": "The peer-to-peer system of nodes, miners, transactions, and consensus rules that operates Bitcoin."
+    },
+    {
+      "term": "Blockchain",
+      "definition": "The ordered history of valid Bitcoin blocks selected by accumulated proof of work."
+    },
+    {
+      "term": "Node",
+      "definition": "Bitcoin software that communicates with peers and may validate, relay, store, or serve network data."
+    },
+    {
+      "term": "Miner",
+      "definition": "An operator that constructs candidate blocks and performs proof of work."
+    },
+    {
+      "term": "Proof of work",
+      "definition": "The computational process miners use to produce block hashes below the network target."
+    },
+    {
+      "term": "Transaction",
+      "definition": "A data structure that spends existing UTXOs and creates new outputs."
+    },
+    {
+      "term": "Wallet",
+      "definition": "Software or hardware that manages keys, constructs transactions, and helps users interact with Bitcoin."
+    },
+    {
+      "term": "Private key",
+      "definition": "Secret cryptographic material used to authorize spending."
+    },
+    {
+      "term": "UTXO",
+      "definition": "An unspent transaction output that can be used as an input in a later transaction."
+    },
+    {
+      "term": "Confirmation",
+      "definition": "The inclusion of a transaction in a block, followed by additional blocks that increase settlement depth."
+    },
+    {
+      "term": "Block",
+      "definition": "A valid batch of Bitcoin transactions linked to prior chain history through proof of work."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bitcoin: A Peer-to-Peer Electronic Cash System",
+      "author_or_publisher": "Satoshi Nakamoto",
+      "direct_url": "https://bitcoin.org/bitcoin.pdf",
+      "supports": "Bitcoin's peer-to-peer design, double-spending model, digital signatures, proof of work, transaction ordering, initial issuance and incentive model, and original privacy model."
+    },
+    {
+      "title": "Bitcoin P2P e-cash paper",
+      "author_or_publisher": "Satoshi Nakamoto",
+      "publisher": "The Cryptography Mailing List archive",
+      "direct_url": "https://www.metzdowd.com/pipermail/cryptography/2008-October/014810.html",
+      "supports": "The October 2008 public introduction of Bitcoin as a peer-to-peer electronic cash system without a trusted mint."
+    },
+    {
+      "title": "Bitcoin Core README",
+      "publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/README.md",
+      "supports": "Bitcoin Core's role in connecting to the peer-to-peer network and fully validating blocks and transactions."
+    },
+    {
+      "title": "Bitcoin Developer Guide: Block Chain",
+      "publisher": "Bitcoin Project developer documentation",
+      "direct_url": "https://developer.bitcoin.org/devguide/block_chain.html",
+      "supports": "The public transaction record, independent full-node validation, consensus rules, UTXOs, blocks, proof of work, confirmations, and transaction fees."
+    },
+    {
+      "title": "Bitcoin Developer Guide: Transactions",
+      "publisher": "Bitcoin Project developer documentation",
+      "direct_url": "https://developer.bitcoin.org/devguide/transactions.html",
+      "supports": "Transaction inputs and outputs, UTXOs, wallet balance calculation, transaction construction, change outputs, and transaction authorization."
+    },
+    {
+      "title": "Bitcoin Developer Guide: P2P Network",
+      "publisher": "Bitcoin Project developer documentation",
+      "direct_url": "https://developer.bitcoin.org/devguide/p2p_network.html",
+      "supports": "Peer communication and the role of full nodes in verifying and relaying blocks and transactions."
+    },
+    {
+      "title": "Bitcoin Core Consensus Amount Definitions",
+      "publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/src/consensus/amount.h",
+      "supports": "One BTC equals 100 million satoshis and Bitcoin Core's consensus-critical monetary range check. The file explicitly states that `MAX_MONEY` is not the total money supply."
+    },
+    {
+      "title": "Bitcoin Core Mainnet Consensus Parameters",
+      "publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp",
+      "supports": "The 210,000-block subsidy-halving interval used on Bitcoin mainnet."
+    },
+    {
+      "title": "Bitcoin Core Block Subsidy Function",
+      "publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp",
+      "supports": "The initial 50 BTC block subsidy and the halving calculation applied at each configured subsidy interval."
+    },
+    {
+      "title": "BIP 32: Hierarchical Deterministic Wallets",
+      "author_or_publisher": "Pieter Wuille",
+      "direct_url": "https://bips.dev/32/",
+      "supports": "The derivation of multiple related wallet keys from underlying seed material."
+    },
+    {
+      "title": "BIP 39: Mnemonic Code for Generating Deterministic Keys",
+      "authors": "Marek Palatinus, Pavol Rusnak, Aaron Voisine, and Sean Bowe",
+      "direct_url": "https://bips.dev/39/",
+      "supports": "Mnemonic word sequences, seed generation, and their use with deterministic wallet systems."
+    }
+  ],
+  "seo_title": "What Is Bitcoin? A Clear Guide to How Bitcoin Works",
+  "meta_description": "Learn what Bitcoin is and how nodes, miners, wallets, proof of work, UTXOs, and digital scarcity work without a central issuer.",
+  "excerpt": "Bitcoin is a peer-to-peer network with a digitally scarce native asset, bitcoin. This introductory guide explains how nodes, miners, wallets, transactions, proof of work, and Bitcoin's issuance rules fit together.",
+  "reading_time": "8 to 9 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-BASICS",
+    "label": "Bitcoin Basics",
+    "subcategory": "Foundations",
+    "depth": "Surface",
+    "format": "Explainer"
+  },
+  "relationships": {
+    "previous": null,
+    "next": {
+      "registry_id": "MSC-GUIDE-002",
+      "title": "Why Does Bitcoin Matter?",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": [
+      {
+        "registry_id": "MSC-GUIDE-002",
+        "title": "Why Does Bitcoin Matter?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-003",
+        "title": "A History of Bitcoin",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-005",
+        "title": "What Is a Bitcoin Wallet?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-006",
+        "title": "What Is Bitcoin Self-Custody?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-007",
+        "title": "How to Send and Receive Bitcoin",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-008",
+        "title": "How Bitcoin Transactions and Fees Work",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-017",
+        "title": "How Bitcoin Mining Works",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-021",
+        "title": "What Is a Bitcoin Full Node?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-029",
+        "title": "How Bitcoin Proof of Work Secures the Network",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GLOSSARY-001",
+        "title": "Bitcoin Glossary",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-HUB-BASICS",
+        "title": "Bitcoin Basics",
+        "active": false,
+        "url": null
+      }
+    ]
+  },
+  "review_dates": {
+    "reviewed": "2026-07-14",
+    "copy_locked": "2026-07-14",
+    "human_verification": "2026-07-14"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "Bitcoin the Network and bitcoin the Asset",
+      "educational_purpose": "Help readers separate Bitcoin as a distributed system from bitcoin as the asset transferred and accounted for by that system.",
+      "recommended_placement": "After the section titled Bitcoin the Network and bitcoin the Asset.",
+      "visual_description": "A restrained ocean-chart field showing a distributed mesh of nodes with no central hub. A single marked signal moves through the mesh to represent bitcoin as the asset. Use simple editorial linework with Ink and Deep as the primary colors, Sea for network structure, and small Sand markers on Paper.",
+      "required_labels": "Bitcoin network, Nodes, bitcoin asset, No central issuer",
+      "caption": "Bitcoin is the network and protocol. bitcoin is the asset the network verifies and transfers.",
+      "alt_text": "Editorial line illustration of a distributed Bitcoin node network with a marked bitcoin unit moving through it and no central hub.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Keep the moving asset marker and at least five connected nodes inside the center 80 percent of the composition.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "How a Bitcoin Transaction Moves",
+      "educational_purpose": "Clarify the high-level sequence from wallet construction through node validation, mempool relay, mining, block inclusion, and confirmation.",
+      "recommended_placement": "After the section titled How Bitcoin Works at a High Level.",
+      "visual_description": "A navigation-route diagram with one clear current moving through six stages. Avoid a corporate flowchart. Use layered depth lines and simple symbols for the wallet, nodes, mempool, miner, block, and confirmation.",
+      "required_labels": "Wallet, Nodes, Mempool, Miner, Block, Confirmation",
+      "caption": "A Bitcoin transaction moves through independently operated participants before receiving confirmation in a valid block.",
+      "alt_text": "Navigation-chart style diagram showing a Bitcoin transaction moving from a wallet to nodes, a mempool, a miner, a block, and confirmation.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Allow the route to stack vertically while preserving the six stages in order.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Keys Control Spending, Wallets Manage the Process",
+      "educational_purpose": "Correct the misconception that a wallet stores coin files and show that keys authorize spending from transaction outputs.",
+      "recommended_placement": "After the section titled How Ownership and Wallets Work.",
+      "visual_description": "A minimal technical plate showing a wallet tool managing a key, a group of spendable outputs, and a signed transaction. The wallet should appear as an interface and organizer, not as a container holding coins. Use Ink linework, Sea structural accents, and Sand highlights.",
+      "required_labels": "Wallet, Private key, Spendable output, Signed transaction",
+      "caption": "A wallet manages keys and transactions. The keys authorize spending from available Bitcoin outputs.",
+      "alt_text": "Editorial diagram showing wallet software managing a private key, spendable transaction outputs, and a signed Bitcoin transaction.",
+      "image_orientation": "Square",
+      "mobile_crop_notes": "Keep the wallet, key, and spendable output relationship centered with all four labels readable.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}
