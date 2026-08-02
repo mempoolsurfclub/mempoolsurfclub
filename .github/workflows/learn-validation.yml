@@ -25,7 +25,7 @@ on:
       - '.github/workflows/learn-validation.yml'
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: learn-validation-${{ github.workflow }}-${{ github.ref }}
@@ -38,11 +38,8 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - name: Check out pull request head
+      - name: Check out repository
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -52,29 +49,45 @@ jobs:
       - name: Install dependencies
         run: npm install --ignore-scripts --no-audit --no-fund --package-lock=false
 
-      - name: Apply Stage 1 correction payload
-        run: bash scripts/learn-runtime/apply-stage1-correction.sh
+      - name: Validate approved Learn registry
+        run: npm run validate:learn-registry
+
+      - name: Validate Learn manifest and packages
+        run: npm run validate:learn-library
 
       - name: Test Learn runtime contract
         run: npm run test:learn-runtime-contract
 
-      - name: Materialize Learn runtime audit
-        run: npm run materialize:learn-runtime-audit
-
       - name: Audit all 92 Learn runtime packages
         run: npm run audit:learn-runtime
 
-      - name: Commit corrected Stage 1 implementation
-        if: github.event_name == 'pull_request'
+      - name: Validate Guide 001 runtime pilot
+        run: npm run validate:learn-guide-pilot
+
+      - name: Validate Bitcoin Basics hub runtime pilot
+        run: npm run validate:learn-hub-pilot
+
+      - name: Validate Start With Bitcoin path runtime pilot
+        run: npm run validate:learn-path-pilot
+
+      - name: Validate featured transaction route runtime pilot
+        run: npm run validate:learn-route-pilot
+
+      - name: Validate Bitcoin Glossary runtime pilot
+        run: npm run validate:learn-glossary-pilot
+
+      - name: Verify deterministic Learn-data generation
         run: |
-          rm -f scripts/learn-runtime/apply-stage1-correction.sh \
-            scripts/learn-runtime/.stage1-patch-* \
-            scripts/learn-runtime/.stage1-exact-*
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -A -- \
-            scripts/learn-runtime \
-            docs/learn/runtime/schema/msc-learn-runtime-v2.schema.json \
-            docs/learn/runtime/reports/package-compatibility.json
-          git commit -m 'fix: close Learn runtime security and schema contracts'
-          git push origin HEAD:${{ github.head_ref }}
+          npm run build:learn-data
+          git diff --exit-code -- \
+            snippets/msc-learn-guide-data.liquid \
+            snippets/msc-learn-category-data.liquid \
+            snippets/msc-learn-path-data.liquid \
+            snippets/msc-learn-route-data.liquid \
+            snippets/msc-learn-glossary-data.liquid
+
+      - name: Parse theme JSON templates
+        run: npm run test:json
+
+      - name: Check patch whitespace
+        run: git diff --check
