@@ -1,8 +1,30 @@
 {{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
-{%- capture learn_glossary_data -%}{%- render 'msc-learn-glossary-data' -%}{%- endcapture -%}{%- assign newline_delimiter = '
-' -%}{%- assign rows = learn_glossary_data | strip | split: newline_delimiter -%}{%- assign learn_page = pages['learn'] -%}{%- assign letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' | split: '' -%}
-<section class="msc-shell msc-learn-page"><div class="msc-container msc-learn-page__container">
-{% render 'msc-learn-breadcrumbs', learn_page: learn_page, current_label: page.title %}<header class="msc-learn-page__header"><p class="msc-section-kicker">Glossary</p><h1>{{ page.title | escape }}</h1><div class="msc-learn-article rte">{{ page.content }}</div></header>
-{%- for letter in letters -%}{%- capture group -%}{%- for row in rows -%}{%- assign t = row | split: '[[MSC_FIELD]]' -%}{%- assign first = t[0] | slice: 0 | upcase -%}{%- if first == letter -%}{%- assign guide_page = pages[t[3]] -%}<article class="msc-learn-glossary-term"><h3>{{ t[0] | escape }}</h3><p>{{ t[1] | escape }}</p>{%- if guide_page -%}<a href="{{ guide_page.url }}">Read the related guide</a>{%- endif -%}</article>{%- endif -%}{%- endfor -%}{%- endcapture -%}{%- if group contains 'msc-learn-glossary-term' -%}<section class="msc-learn-glossary-group" id="glossary-{{ letter }}"><h2>{{ letter }}</h2>{{ group }}</section>{%- endif -%}{%- endfor -%}
-</div></section>
-{% schema %}{"name":"MSC Learn glossary","settings":[]}{% endschema %}
+{%- assign pilot_registry_id = section.settings.registry_id | strip -%}
+{%- case pilot_registry_id -%}
+  {%- when 'MSC-GLOSSARY-001' -%}
+    {% render 'msc-learn-glossary-runtime' %}
+  {%- else -%}
+    <section class="msc-shell msc-learn-page" data-msc-preview-only="true">
+      <div class="msc-container msc-learn-page__container">
+        <header class="msc-learn-page__header">
+          <p class="msc-section-kicker">Learn runtime preview</p>
+          <h1>Glossary preview unavailable</h1>
+          <p>No structured runtime package is registered for {{ pilot_registry_id | escape }}.</p>
+        </header>
+      </div>
+    </section>
+{%- endcase -%}
+{% schema %}
+{
+  "name": "MSC Learn glossary",
+  "settings": [
+    {
+      "type": "text",
+      "id": "registry_id",
+      "label": "Registry ID",
+      "default": "MSC-GLOSSARY-001",
+      "info": "Preview-only binding. Do not enter a handle or URL."
+    }
+  ]
+}
+{% endschema %}

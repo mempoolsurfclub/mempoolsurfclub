@@ -67,6 +67,9 @@ jobs:
       - name: Validate featured transaction route runtime pilot
         run: npm run validate:learn-route-pilot
 
+      - name: Validate Bitcoin Glossary runtime pilot
+        run: npm run validate:learn-glossary-pilot
+
       - name: Verify deterministic Learn-data generation
         run: |
           npm run build:learn-data
