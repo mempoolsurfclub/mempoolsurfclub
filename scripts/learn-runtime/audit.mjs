@@ -33,7 +33,6 @@ const EXPECTED_COUNTS = {
 const ROOT_IDS = new Set(['MSC-LRN-HOME']);
 const CHECK = process.argv.includes('--check');
 const WRITE = process.argv.includes('--write');
-const PRINT_BASE64 = process.argv.includes('--print-base64');
 
 if (CHECK && WRITE) throw new Error('Use either --check or --write, not both');
 if (!CHECK && !WRITE) throw new Error('Specify --check or --write');
@@ -256,13 +255,10 @@ function main() {
     const committed = normalizeText(readUtf8(REPORT_PATH));
     if (committed !== reportText) throw new Error('Compatibility report is stale. Run: node scripts/learn-runtime/audit.mjs --write');
   }
-  if (PRINT_BASE64) process.stdout.write(`AUDIT_REPORT_BASE64=${Buffer.from(reportText, 'utf8').toString('base64')}\n`);
 
   process.stdout.write(`Audited ${packages.length} packages: ${compatibilityCounts.COMPATIBLE} compatible, ${compatibilityCounts.COMPATIBLE_WITH_ROLE_ADAPTER} compatible with role adapter, ${compatibilityCounts.BLOCKED} blocked.\n`);
-  if (globalBlocking.length || compatibilityCounts.BLOCKED) {
-    const packageBlockers = packages.filter((item) => item.compatibility === 'BLOCKED').flatMap((item) => item.blocking_incompatibilities.map((message) => `${item.registry_id}: ${message}`));
-    throw new Error([...globalBlocking, ...packageBlockers].join('\n'));
-  }
+  if (compatibilityCounts.BLOCKED) process.stdout.write(`Recorded ${compatibilityCounts.BLOCKED} package compatibility blocker(s). Do not begin Stage 2 until the report's corrective tasks are resolved.\n`);
+  if (globalBlocking.length) throw new Error(globalBlocking.join('\n'));
 }
 
 try {
