@@ -83,9 +83,17 @@
               "page_role": {
                 "const": "topic-guide"
               }
-            }
+            },
+            "type": "object",
+            "required": [
+              "page_role"
+            ]
           }
-        }
+        },
+        "type": "object",
+        "required": [
+          "identity"
+        ]
       },
       "then": {
         "properties": {
@@ -103,9 +111,17 @@
               "page_role": {
                 "const": "category-hub"
               }
-            }
+            },
+            "type": "object",
+            "required": [
+              "page_role"
+            ]
           }
-        }
+        },
+        "type": "object",
+        "required": [
+          "identity"
+        ]
       },
       "then": {
         "properties": {
@@ -123,9 +139,17 @@
               "page_role": {
                 "const": "learning-path"
               }
-            }
+            },
+            "type": "object",
+            "required": [
+              "page_role"
+            ]
           }
-        }
+        },
+        "type": "object",
+        "required": [
+          "identity"
+        ]
       },
       "then": {
         "properties": {
@@ -143,9 +167,17 @@
               "page_role": {
                 "const": "featured-route"
               }
-            }
+            },
+            "type": "object",
+            "required": [
+              "page_role"
+            ]
           }
-        }
+        },
+        "type": "object",
+        "required": [
+          "identity"
+        ]
       },
       "then": {
         "properties": {
@@ -163,9 +195,17 @@
               "page_role": {
                 "const": "glossary-index"
               }
-            }
+            },
+            "type": "object",
+            "required": [
+              "page_role"
+            ]
           }
-        }
+        },
+        "type": "object",
+        "required": [
+          "identity"
+        ]
       },
       "then": {
         "properties": {
@@ -212,8 +252,15 @@
           "const": "COPY_LOCKED"
         },
         "h1": {
-          "type": "string",
-          "minLength": 1
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
         },
         "planning_handle": {
           "type": "string",
@@ -303,7 +350,8 @@
               "$ref": "#/$defs/safeText"
             },
             {
-              "minLength": 1
+              "minLength": 1,
+              "type": "string"
             }
           ]
         },
@@ -329,7 +377,8 @@
               "$ref": "#/$defs/safeText"
             },
             {
-              "minLength": 1
+              "minLength": 1,
+              "type": "string"
             }
           ]
         },
@@ -339,7 +388,8 @@
               "$ref": "#/$defs/safeText"
             },
             {
-              "minLength": 1
+              "minLength": 1,
+              "type": "string"
             }
           ]
         }
@@ -361,7 +411,8 @@
               "$ref": "#/$defs/safeText"
             },
             {
-              "minLength": 1
+              "minLength": 1,
+              "type": "string"
             }
           ]
         },
@@ -394,7 +445,8 @@
               "$ref": "#/$defs/safeText"
             },
             {
-              "minLength": 1
+              "minLength": 1,
+              "type": "string"
             }
           ]
         }
@@ -416,7 +468,8 @@
               "$ref": "#/$defs/safeText"
             },
             {
-              "minLength": 1
+              "minLength": 1,
+              "type": "string"
             }
           ]
         },
@@ -426,7 +479,8 @@
               "$ref": "#/$defs/safeText"
             },
             {
-              "minLength": 1
+              "minLength": 1,
+              "type": "string"
             }
           ]
         },
@@ -436,7 +490,8 @@
               "$ref": "#/$defs/safeText"
             },
             {
-              "minLength": 1
+              "minLength": 1,
+              "type": "string"
             }
           ]
         },
@@ -446,7 +501,8 @@
               "$ref": "#/$defs/safeText"
             },
             {
-              "minLength": 1
+              "minLength": 1,
+              "type": "string"
             }
           ]
         }
@@ -491,7 +547,8 @@
               "$ref": "#/$defs/safeText"
             },
             {
-              "minLength": 1
+              "minLength": 1,
+              "type": "string"
             }
           ]
         },
@@ -558,9 +615,13 @@
           ],
           "properties": {
             "reviewer": {
-              "type": [
-                "string",
-                "null"
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/safeText"
+                },
+                {
+                  "type": "null"
+                }
               ]
             },
             "review_date": {
@@ -573,7 +634,7 @@
             "notes": {
               "type": "array",
               "items": {
-                "type": "string"
+                "$ref": "#/$defs/safeText"
               }
             }
           }
@@ -592,8 +653,15 @@
                 "type": "boolean"
               },
               "statement": {
-                "type": "string",
-                "minLength": 1
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/safeText"
+                  },
+                  {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                ]
               }
             }
           }
@@ -624,41 +692,90 @@
           "pattern": "^illustration-[1-9][0-9]*$"
         },
         "title": {
-          "type": "string",
-          "minLength": 1
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
         },
         "educational_purpose": {
-          "type": "string",
-          "minLength": 1
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
         },
         "recommended_placement": {
-          "type": "string",
-          "minLength": 1
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
         },
         "visual_description": {
-          "type": "string",
-          "minLength": 1
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
         },
         "required_labels": {
           "type": "array",
           "items": {
-            "type": "string"
+            "$ref": "#/$defs/safeText"
           }
         },
         "caption": {
-          "type": "string",
-          "minLength": 1
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
         },
         "alt_text": {
-          "type": "string",
-          "minLength": 1
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
         },
         "orientation": {
-          "type": "string",
-          "minLength": 1
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
         },
         "mobile_crop_notes": {
-          "type": "string"
+          "$ref": "#/$defs/safeText"
         },
         "status": {
           "const": "PLANNED"
@@ -893,22 +1010,50 @@
               "$ref": "#/$defs/registryId"
             },
             "title": {
-              "type": "string",
-              "minLength": 1
+              "allOf": [
+                {
+                  "$ref": "#/$defs/safeText"
+                },
+                {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              ]
             },
             "subcategory": {
-              "type": "string",
-              "minLength": 1
+              "allOf": [
+                {
+                  "$ref": "#/$defs/safeText"
+                },
+                {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              ]
             }
           }
         },
         "depth": {
-          "type": "string",
-          "minLength": 1
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
         },
         "format": {
-          "type": "string",
-          "minLength": 1
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
         }
       }
     },
@@ -943,8 +1088,15 @@
                 "minLength": 1
               },
               "title": {
-                "type": "string",
-                "minLength": 1
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/safeText"
+                  },
+                  {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                ]
               },
               "guide_cards": {
                 "type": "array",
@@ -995,8 +1147,15 @@
                 "minimum": 1
               },
               "title": {
-                "type": "string",
-                "minLength": 1
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/safeText"
+                  },
+                  {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                ]
               },
               "steps": {
                 "type": "array",
@@ -1052,12 +1211,26 @@
                 "minimum": 1
               },
               "heading": {
-                "type": "string",
-                "minLength": 1
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/safeText"
+                  },
+                  {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                ]
               },
               "route_state": {
-                "type": "string",
-                "minLength": 1
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/safeText"
+                  },
+                  {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                ]
               },
               "active": {
                 "const": false
@@ -1071,7 +1244,8 @@
                     "$ref": "#/$defs/safeText"
                   },
                   {
-                    "minLength": 1
+                    "minLength": 1,
+                    "type": "string"
                   }
                 ]
               }
@@ -1117,7 +1291,8 @@
             "minimum": 1
           },
           "propertyNames": {
-            "pattern": "^[a-z]$"
+            "pattern": "^[a-z]$",
+            "type": "string"
           },
           "minProperties": 1
         },
@@ -1155,12 +1330,26 @@
                   ],
                   "properties": {
                     "preferred_term": {
-                      "type": "string",
-                      "minLength": 1
+                      "allOf": [
+                        {
+                          "$ref": "#/$defs/safeText"
+                        },
+                        {
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      ]
                     },
                     "definition": {
-                      "type": "string",
-                      "minLength": 1
+                      "allOf": [
+                        {
+                          "$ref": "#/$defs/safeText"
+                        },
+                        {
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      ]
                     },
                     "canonical_destination_registry_id": {
                       "$ref": "#/$defs/registryId"
@@ -1184,7 +1373,8 @@
                               "$ref": "#/$defs/safeText"
                             },
                             {
-                              "minLength": 1
+                              "minLength": 1,
+                              "type": "string"
                             }
                           ]
                         },
@@ -1194,7 +1384,8 @@
                               "$ref": "#/$defs/safeText"
                             },
                             {
-                              "minLength": 1
+                              "minLength": 1,
+                              "type": "string"
                             }
                           ]
                         },
@@ -1204,7 +1395,8 @@
                               "$ref": "#/$defs/safeText"
                             },
                             {
-                              "minLength": 1
+                              "minLength": 1,
+                              "type": "string"
                             }
                           ]
                         }
@@ -1230,8 +1422,8 @@
     },
     "safeText": {
       "type": "string",
-      "pattern": "^(?![\\s\\S]*(?:<!--[\\s\\S]*?-->|<![A-Za-z][^>]*>|<\\/?[A-Za-z][A-Za-z0-9:-]*(?:\\s[^<>]*?)?\\s*\\/?>|\\[[^\\]]+\\]\\([^\\n)]+\\)|!\\[[^\\]]*\\]\\([^\\n)]+\\)|\\bon[a-z]+\\s*=|\\b(?:javascript|data|vbscript)\\s*:))[\\s\\S]*$",
-      "$comment": "Plain text only. Raw HTML, Markdown links or images, inline event handlers, and unsafe URI schemes are forbidden. Future renderers must escape this value and must not send it directly to unescaped Liquid output."
+      "pattern": "^(?![\\s\\S]*(?:<!--[\\s\\S]*?-->|<![^>]*>|<\\s*\\/\\s*[A-Za-z][A-Za-z0-9:_-]*\\s*>|<\\s*[A-Za-z][A-Za-z0-9:_-]*-[A-Za-z0-9:_-]*(?:\\s[^<>]*?)?\\s*\\/?>|<\\s*[A-Za-z][A-Za-z0-9:_-]*\\s+[^<>]*?\\s*\\/?>|<\\s*[A-Za-z][A-Za-z0-9:_-]*\\s*\\/\\s*>|<\\s*(?:[aA]|[aA][bB][bB][rR]|[aA][dD][dD][rR][eE][sS][sS]|[aA][rR][eE][aA]|[aA][rR][tT][iI][cC][lL][eE]|[aA][sS][iI][dD][eE]|[aA][uU][dD][iI][oO]|[bB]|[bB][aA][sS][eE]|[bB][dD][iI]|[bB][dD][oO]|[bB][lL][oO][cC][kK][qQ][uU][oO][tT][eE]|[bB][oO][dD][yY]|[bB][rR]|[bB][uU][tT][tT][oO][nN]|[cC][aA][nN][vV][aA][sS]|[cC][aA][pP][tT][iI][oO][nN]|[cC][iI][tT][eE]|[cC][oO][dD][eE]|[cC][oO][lL]|[cC][oO][lL][gG][rR][oO][uU][pP]|[dD][aA][tT][aA]|[dD][aA][tT][aA][lL][iI][sS][tT]|[dD][dD]|[dD][eE][lL]|[dD][eE][tT][aA][iI][lL][sS]|[dD][fF][nN]|[dD][iI][aA][lL][oO][gG]|[dD][iI][vV]|[dD][lL]|[dD][tT]|[eE][mM]|[eE][mM][bB][eE][dD]|[fF][iI][eE][lL][dD][sS][eE][tT]|[fF][iI][gG][cC][aA][pP][tT][iI][oO][nN]|[fF][iI][gG][uU][rR][eE]|[fF][oO][oO][tT][eE][rR]|[fF][oO][rR][mM]|[hH]1|[hH]2|[hH]3|[hH]4|[hH]5|[hH]6|[hH][eE][aA][dD]|[hH][eE][aA][dD][eE][rR]|[hH][gG][rR][oO][uU][pP]|[hH][rR]|[hH][tT][mM][lL]|[iI]|[iI][fF][rR][aA][mM][eE]|[iI][mM][gG]|[iI][nN][pP][uU][tT]|[iI][nN][sS]|[kK][bB][dD]|[lL][aA][bB][eE][lL]|[lL][eE][gG][eE][nN][dD]|[lL][iI]|[lL][iI][nN][kK]|[mM][aA][iI][nN]|[mM][aA][pP]|[mM][aA][rR][kK]|[mM][eE][nN][uU]|[mM][eE][tT][aA]|[mM][eE][tT][eE][rR]|[nN][aA][vV]|[nN][oO][sS][cC][rR][iI][pP][tT]|[oO][bB][jJ][eE][cC][tT]|[oO][lL]|[oO][pP][tT][gG][rR][oO][uU][pP]|[oO][pP][tT][iI][oO][nN]|[oO][uU][tT][pP][uU][tT]|[pP]|[pP][iI][cC][tT][uU][rR][eE]|[pP][rR][eE]|[pP][rR][oO][gG][rR][eE][sS][sS]|[qQ]|[rR][pP]|[rR][tT]|[rR][uU][bB][yY]|[sS]|[sS][aA][mM][pP]|[sS][cC][rR][iI][pP][tT]|[sS][eE][aA][rR][cC][hH]|[sS][eE][cC][tT][iI][oO][nN]|[sS][eE][lL][eE][cC][tT]|[sS][lL][oO][tT]|[sS][mM][aA][lL][lL]|[sS][oO][uU][rR][cC][eE]|[sS][pP][aA][nN]|[sS][tT][rR][oO][nN][gG]|[sS][tT][yY][lL][eE]|[sS][uU][bB]|[sS][uU][mM][mM][aA][rR][yY]|[sS][uU][pP]|[tT][aA][bB][lL][eE]|[tT][bB][oO][dD][yY]|[tT][dD]|[tT][eE][mM][pP][lL][aA][tT][eE]|[tT][eE][xX][tT][aA][rR][eE][aA]|[tT][fF][oO][oO][tT]|[tT][hH]|[tT][hH][eE][aA][dD]|[tT][iI][mM][eE]|[tT][iI][tT][lL][eE]|[tT][rR]|[tT][rR][aA][cC][kK]|[uU]|[uU][lL]|[vV][aA][rR]|[vV][iI][dD][eE][oO]|[wW][bB][rR])\\s*>|\\[[^\\[\\]\\n]+\\]\\([^()\\n]+\\)|!\\[[^\\]\\n]*\\]\\([^()\\n]+\\)|\\]\\s*\\(|\\bon[a-z]+\\s*=|\\b(?:javascript|data|vbscript)\\s*:))[\\s\\S]*$",
+      "$comment": "Plain text only. Known or structural HTML, custom elements, Markdown links or images, malformed link syntax, inline event handlers, and unsafe URI schemes are forbidden. Simple Bitcoin placeholders such as <pubkey> remain allowed and every future renderer must escape this value."
     },
     "richTextContentBlock": {
       "type": "object",
@@ -1303,7 +1495,8 @@
               "$ref": "#/$defs/safeText"
             },
             {
-              "minLength": 1
+              "minLength": 1,
+              "type": "string"
             }
           ]
         },
@@ -1337,7 +1530,8 @@
                 "$ref": "#/$defs/safeText"
               },
               {
-                "minLength": 1
+                "minLength": 1,
+                "type": "string"
               }
             ]
           },
@@ -1371,7 +1565,8 @@
               "$ref": "#/$defs/safeText"
             },
             {
-              "minLength": 1
+              "minLength": 1,
+              "type": "string"
             }
           ]
         },

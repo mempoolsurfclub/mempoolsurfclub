@@ -45,9 +45,13 @@ const COMMON_REQUIRED_TITLES = [
 const STRUCTURED_LIST_SECTION = /sources|human verification|accuracy (?:review )?checklist|illustration brief|planned internal links/i;
 const STRUCTURED_FIELD_SECTION = /sources|human verification|illustration brief|card or step copy|destination structure or sequence/i;
 const VALID_FENCE_LANGUAGE = /^[A-Za-z0-9][A-Za-z0-9_+.-]*$/;
-const MARKDOWN_LINK_PATTERN = /(?<!!)\[([^\]]+)\]\(([^\n)]+)\)/g;
-const MARKDOWN_IMAGE_PATTERN = /!\[[^\]]*\]\([^\n)]+\)/g;
-const HTML_TOKEN_PATTERN = /<!--[\s\S]*?-->|<![A-Za-z][^>]*>|<\/?[A-Za-z][A-Za-z0-9:-]*(?:\s[^<>]*?)?\s*\/?>/g;
+const MARKDOWN_LINK_PATTERN = /(?<!!)\[([^\[\]\n]+)\]\(([^()\n]+)\)/g;
+const MARKDOWN_IMAGE_PATTERN = /!\[[^\]\n]*\]\([^()\n]+\)/g;
+const HTML_CANDIDATE_PATTERN = /<!--[\s\S]*?-->|<![^>]*>|<\s*\/?\s*[A-Za-z][A-Za-z0-9:_-]*(?:\s[^<>]*?)?\s*\/?>/g;
+const KNOWN_HTML_ELEMENTS = new Set(`a abbr address area article aside audio b base bdi bdo blockquote body br button canvas caption cite code col colgroup data datalist dd del details dfn dialog div dl dt em embed fieldset figcaption figure footer form h1 h2 h3 h4 h5 h6 head header hgroup hr html i iframe img input ins kbd label legend li link main map mark menu meta meter nav noscript object ol optgroup option output p picture pre progress q rp rt ruby s samp script search section select slot small source span strong style sub summary sup table tbody td template textarea tfoot th thead time title tr track u ul var video wbr`.split(' '));
+const SOURCE_FIELD_PATTERN = /^\s*(?:[-*]\s+)?(?:Direct URL|URL|Reference):\s*(.+?)\s*$/i;
+const NUMBERED_SOURCE_OPENER = /^\d+\.\s+\*\*[^*\n]+\*\*(?:\s+\|.*)?\s*$/;
+const PLAIN_URL_PATTERN = /\bhttps?:\/\/[^\s<>()]+/gi;
 
 function collectMatches(text, pattern) {
   return [...text.matchAll(pattern)].map((match) => match[0]);
@@ -240,6 +244,8 @@ function parsePipeRow(line) {
   return {
     cells,
     separators,
+    leading_outer_pipe: edge.leading,
+    trailing_outer_pipe: edge.trailing,
     outer_pipe_syntax: edge.leading || edge.trailing,
     balanced_inline_code: codeFenceLength === 0,
   };
@@ -259,12 +265,35 @@ function delimiterLike(row) {
   return Boolean(row?.cells.length && row.cells.every((cell) => /^:?-+:?$/.test(cell)));
 }
 
-function forbiddenTableCell(cell) {
-  if (HTML_TOKEN_PATTERN.test(cell)) {
-    HTML_TOKEN_PATTERN.lastIndex = 0;
-    return 'raw-html';
+function delimiterIntent(row) {
+  return Boolean(row?.cells.length && row.cells.every((cell) => /^:?-*:?$/.test(cell)) && row.cells.some((cell) => cell.includes('-')));
+}
+
+function isActualHtmlToken(token) {
+  if (/^<!--/.test(token) || /^<!/.test(token)) return true;
+  const match = token.match(/^<\s*(\/?)\s*([A-Za-z][A-Za-z0-9:_-]*)([\s\S]*?)>$/);
+  if (!match) return false;
+  const [, closing, rawName, rawSuffix] = match;
+  const name = rawName.toLowerCase();
+  const suffix = rawSuffix.trim();
+  if (closing) return true;
+  if (KNOWN_HTML_ELEMENTS.has(name)) return true;
+  if (name.includes('-')) return true;
+  if (suffix) return true;
+  return false;
+}
+
+function actualHtmlTokens(text) {
+  const hits = [];
+  for (const match of text.matchAll(HTML_CANDIDATE_PATTERN)) {
+    if (isActualHtmlToken(match[0])) hits.push({ token: match[0], index: match.index });
   }
-  HTML_TOKEN_PATTERN.lastIndex = 0;
+  HTML_CANDIDATE_PATTERN.lastIndex = 0;
+  return hits;
+}
+
+function forbiddenTableCell(cell) {
+  if (actualHtmlTokens(cell).length) return 'raw-html';
   if (MARKDOWN_IMAGE_PATTERN.test(cell)) {
     MARKDOWN_IMAGE_PATTERN.lastIndex = 0;
     return 'markdown-image';
@@ -313,9 +342,12 @@ function isTableCandidate(lines, index) {
   const second = index + 1 < lines.length ? parsePipeRow(lines[index + 1]) : null;
   const secondEligible = tableRowEligible(lines[index + 1] || '', second);
   if (first.outer_pipe_syntax) return true;
-  if (secondEligible && delimiterLike(second)) return true;
-  if (secondEligible && first.cells.length >= 2 && second.cells.length === first.cells.length) return true;
-  return false;
+  return Boolean(secondEligible && delimiterIntent(second));
+}
+
+function sameOuterPipeStyle(left, right) {
+  return left?.leading_outer_pipe === right?.leading_outer_pipe
+    && left?.trailing_outer_pipe === right?.trailing_outer_pipe;
 }
 
 function isolateSemanticTables(markdown) {
@@ -332,7 +364,7 @@ function isolateSemanticTables(markdown) {
     const header = parsePipeRow(lines[index]);
     const delimiter = index + 1 <= runEnd ? parsePipeRow(lines[index + 1]) : null;
     const hasDelimiter = delimiterLike(delimiter);
-    const bodyStart = hasDelimiter ? index + 2 : index + 1;
+    const bodyStart = hasDelimiter || delimiterIntent(delimiter) ? index + 2 : index + 1;
     const bodyIndexes = [];
     for (let cursor = bodyStart; cursor <= runEnd; cursor += 1) bodyIndexes.push(cursor);
 
@@ -343,12 +375,14 @@ function isolateSemanticTables(markdown) {
     if (!hasDelimiter) reasons.push('missing-or-malformed-delimiter-row');
 
     const alignments = hasDelimiter ? delimiter.cells.map(delimiterAlignment) : [];
+    if (delimiter && header && !sameOuterPipeStyle(header, delimiter)) reasons.push('mixed-outer-pipe-style');
     if (hasDelimiter && delimiter.cells.length !== header.cells.length) reasons.push('delimiter-column-count-mismatch');
     if (hasDelimiter && alignments.some((alignment) => alignment === undefined)) reasons.push('invalid-delimiter-cell');
-    if (hasDelimiter && !bodyIndexes.length) reasons.push('missing-body-row');
+    if ((hasDelimiter || delimiterIntent(delimiter)) && !bodyIndexes.length) reasons.push('missing-body-row');
 
     const bodyRows = bodyIndexes.map((lineIndex) => parsePipeRow(lines[lineIndex]));
     if (bodyRows.some((row) => !row?.balanced_inline_code)) reasons.push('structurally-ambiguous-cell');
+    if (header && bodyRows.some((row) => row && !sameOuterPipeStyle(header, row))) reasons.push('mixed-outer-pipe-style');
     if (header && bodyRows.some((row) => row.cells.length !== header.cells.length)) reasons.push('body-column-count-mismatch');
     if (bodyRows.some((row) => row.cells.some((cell) => !cell))) reasons.push('empty-body-cell');
 
@@ -444,15 +478,14 @@ function maskInlineCode(markdown) {
 function detectRawHtml(markdown) {
   const hits = [];
   const lines = markdown.split('\n');
-  for (const match of markdown.matchAll(HTML_TOKEN_PATTERN)) {
+  for (const match of actualHtmlTokens(markdown)) {
     const lineNumber = markdown.slice(0, match.index).split('\n').length;
     hits.push({
       line: lineNumber,
-      token: match[0],
-      text: lines[lineNumber - 1]?.trim() || match[0],
+      token: match.token,
+      text: lines[lineNumber - 1]?.trim() || match.token,
     });
   }
-  HTML_TOKEN_PATTERN.lastIndex = 0;
   return hits;
 }
 
@@ -467,15 +500,47 @@ function malformedFieldRecords(markdown, sections) {
   }).map((record) => record.line);
 }
 
+function parseStrictHttpsUrl(value) {
+  if (typeof value !== 'string' || /\s/.test(value)) return null;
+  try {
+    const parsed = new URL(value);
+    if (parsed.protocol !== 'https:' || !parsed.hostname || parsed.username || parsed.password) return null;
+    if (parsed.href !== value && parsed.href !== `${value}/`) return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+function parseCompleteSourceReference(value) {
+  const markdown = value.match(/^\[([^\[\]\n]+)\]\(([^()\n]+)\)$/);
+  if (markdown) {
+    const destination = markdown[2].trim();
+    return parseStrictHttpsUrl(destination) ? { kind: 'markdown', destination } : null;
+  }
+  return parseStrictHttpsUrl(value) ? { kind: 'plain', destination: value } : null;
+}
+
 function structuredSourceRecords(markdown, sections) {
   const records = [];
+  const invalid = [];
+  const plainFieldRanges = [];
   const lines = lineRecords(markdown);
   for (const section of sections.filter((item) => /sources/i.test(item.title))) {
     const sectionLines = lines.filter((line) => line.index > section.body_start && line.index < section.end);
+    for (const line of sectionLines) {
+      const field = line.line.match(SOURCE_FIELD_PATTERN);
+      if (!field) continue;
+      const rawValue = field[1];
+      const value = rawValue.trim();
+      const parsed = parseCompleteSourceReference(value);
+      if (parsed?.kind !== 'plain') continue;
+      const valueStart = line.index + line.line.indexOf(rawValue) + rawValue.indexOf(value);
+      plainFieldRanges.push({ start: valueStart, end: valueStart + value.length, line: line.line_number, value, parsed });
+    }
     const starters = [];
     for (let index = 0; index < sectionLines.length; index += 1) {
-      const text = sectionLines[index].line;
-      if (/^###\s+\S/.test(text) || /^\d+\.\s+\*\*.+?\*\*(?:\s+\|.*)?\s*$/.test(text)) starters.push(index);
+      if (NUMBERED_SOURCE_OPENER.test(sectionLines[index].line)) starters.push(index);
     }
     for (let position = 0; position < starters.length; position += 1) {
       const startIndex = starters[position];
@@ -483,15 +548,22 @@ function structuredSourceRecords(markdown, sections) {
       const slice = sectionLines.slice(startIndex, endIndex + 1);
       const approvedRanges = [];
       for (const line of slice) {
-        const field = line.line.match(/^\s*[-*]\s+(?:Direct URL|URL|Reference):\s*(.+)$/i);
+        const field = line.line.match(SOURCE_FIELD_PATTERN);
         if (!field) continue;
-        const valueStart = line.index + line.line.indexOf(field[1]);
-        approvedRanges.push({
+        const rawValue = field[1];
+        const value = rawValue.trim();
+        const valueStart = line.index + line.line.indexOf(rawValue) + rawValue.indexOf(value);
+        const parsed = parseCompleteSourceReference(value);
+        const range = {
           start: valueStart,
-          end: valueStart + field[1].length,
+          end: valueStart + value.length,
           line: line.line_number,
-          value: field[1].trim(),
-        });
+          value,
+          parsed,
+        };
+        approvedRanges.push(range);
+        const linkLike = /\]\s*\(|^[A-Za-z][A-Za-z0-9+.-]*:|^\/\//.test(value);
+        if (!parsed && linkLike) invalid.push({ line: line.line_number, value, reason: 'invalid-or-noncomplete-https-reference' });
       }
       records.push({
         start: slice[0].index,
@@ -500,31 +572,65 @@ function structuredSourceRecords(markdown, sections) {
       });
     }
   }
-  return records;
+  return { records, invalid, plain_field_ranges: plainFieldRanges };
 }
 
-function approvedSourceLink(match, records) {
-  const destination = match.match[2].trim();
-  if (!/^https:\/\//i.test(destination)) return false;
-  const start = match.index;
-  const end = start + match.text.length;
-  return records.some((record) => record.approved_ranges.some((range) => (
-    start >= range.start
-    && end <= range.end
-    && range.value === match.text
-  )));
+function rangeContains(range, start, end, text) {
+  return range.parsed && start === range.start && end === range.end && range.value === text;
+}
+
+function detectMalformedMarkdownLinks(markdown, validMatches) {
+  const chars = [...markdown];
+  for (const match of validMatches) {
+    for (let cursor = match.index; cursor < match.index + match.text.length; cursor += 1) chars[cursor] = ' ';
+  }
+  const residual = chars.join('');
+  const hits = [];
+  for (const record of lineRecords(residual)) {
+    if (/\]\s*\(/.test(record.line) || /\[[^\n]*\]\s*\([^\n]*$/.test(record.line)) {
+      hits.push({ line: record.line_number, text: markdown.split('\n')[record.line_number - 1].trim() });
+    }
+  }
+  return hits;
 }
 
 function detectMarkdownLinks(markdown, sections) {
   const source = [];
   const active = [];
-  const records = structuredSourceRecords(markdown, sections);
-  for (const match of collectMatchObjects(markdown, MARKDOWN_LINK_PATTERN)) {
-    if (approvedSourceLink(match, records)) source.push(match.text);
+  const sourceData = structuredSourceRecords(markdown, sections);
+  const matches = collectMatchObjects(markdown, MARKDOWN_LINK_PATTERN);
+  for (const match of matches) {
+    const start = match.index;
+    const end = start + match.text.length;
+    const approved = sourceData.records.some((record) => record.approved_ranges.some((range) => rangeContains(range, start, end, match.text)));
+    if (approved) source.push(match.text);
     else active.push(match.text);
   }
   MARKDOWN_LINK_PATTERN.lastIndex = 0;
-  return { source, active, structured_records: records.length };
+
+  const plainSource = [];
+  const activePlain = [];
+  for (const match of collectMatchObjects(markdown, PLAIN_URL_PATTERN)) {
+    const insideMarkdown = matches.some((link) => match.index >= link.index && match.index + match.text.length <= link.index + link.text.length);
+    if (insideMarkdown) continue;
+    const start = match.index;
+    const end = start + match.text.length;
+    const approved = sourceData.records.some((record) => record.approved_ranges.some((range) => rangeContains(range, start, end, match.text)))
+      || sourceData.plain_field_ranges.some((range) => rangeContains(range, start, end, match.text));
+    if (approved) plainSource.push(match.text);
+    else activePlain.push(match.text);
+  }
+  PLAIN_URL_PATTERN.lastIndex = 0;
+
+  return {
+    source,
+    source_plain: plainSource,
+    active,
+    active_plain: activePlain,
+    malformed: detectMalformedMarkdownLinks(markdown, matches),
+    invalid_source_references: sourceData.invalid,
+    structured_records: sourceData.records.length,
+  };
 }
 
 function languageCounts(blocks) {
@@ -581,6 +687,9 @@ export function inspectMarkdown(markdown, pageRole) {
   };
   push('raw-html', rawHtml);
   push('active-markdown-link', markdownLinks.active);
+  push('active-plain-url', markdownLinks.active_plain);
+  push('malformed-markdown-link', markdownLinks.malformed);
+  push('invalid-source-reference', markdownLinks.invalid_source_references);
   push('source-markdown-link', markdownLinks.source, false);
   push('markdown-image', markdownImages);
   push('unsupported-table', tableIsolation.unsupported);

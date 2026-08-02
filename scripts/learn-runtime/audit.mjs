@@ -15,6 +15,7 @@ import {
   validateInactiveDestination,
   validateRelationship,
   validateGlossaryOwnership,
+  validateRuntimeCandidate,
 } from './lib/runtime-validation.mjs';
 import { indexRegistry } from './lib/registry.mjs';
 import {
@@ -39,6 +40,16 @@ const EXPECTED_COUNTS = {
 const ROOT_IDS = new Set(['MSC-LRN-HOME']);
 const CHECK = process.argv.includes('--check');
 const WRITE = process.argv.includes('--write');
+const CONTRACT_FILES = [
+  'docs/learn/runtime/schema/msc-learn-runtime-v2.schema.json',
+  'scripts/learn-runtime/lib/markdown.mjs',
+  'scripts/learn-runtime/lib/runtime-validation.mjs',
+  'scripts/learn-runtime/test-contract.mjs',
+  'scripts/learn-runtime/audit.mjs',
+  'package.json',
+  'package-lock.json',
+  '.github/workflows/learn-validation.yml',
+];
 
 if (CHECK && WRITE) throw new Error('Use either --check or --write, not both');
 if (!CHECK && !WRITE) throw new Error('Specify --check or --write');
@@ -96,6 +107,8 @@ function validateRuntimeValidatorDefinition() {
   if (!validateInactiveDestination({ registry_id: 'MSC-GUIDE-001', active: false, url: null, href: '/unsafe' }).length) errors.push('Shared runtime validator does not reject unknown inactive-destination fields');
   if (!validateRelationship({ relation_type: 'next', registry_id: 'MSC-GUIDE-001', title: 'Next', planning_handle: 'next', active: false, url: null, order: 1, metadata: { unsafe: true } }).length) errors.push('Shared runtime validator does not reject unknown relationship metadata');
   if (!validateGlossaryOwnership({ page_role: 'topic-guide', primary_category: 'Basics', subcategory: 'Using', arbitrary: true }).length) errors.push('Shared runtime validator does not reject unknown glossary ownership fields');
+  const composed = validateRuntimeCandidate({});
+  if (composed.valid || !composed.schema_errors.length || composed.runtime_errors.length) errors.push('Mandatory two-layer acceptance path does not reject schema-invalid candidates before runtime invariants');
   return errors;
 }
 
@@ -358,10 +371,14 @@ function main() {
   const missingPackages = packages.filter((item) => item.blocking_incompatibilities.some((message) => message.startsWith('Permanent package is missing'))).length;
 
   const report = {
-    report_version: '1.1.0',
+    report_version: '1.2.0',
     target_runtime_schema_version: EXPECTED_SCHEMA_VERSION,
     source: {
-      schema: { file: SCHEMA_PATH, sha256: sha256(schemaText) },
+      schema: { file: SCHEMA_PATH, sha256: sha256(schemaText), byte_length: Buffer.byteLength(schemaText, 'utf8') },
+      contract_files: CONTRACT_FILES.map((file) => {
+        const text = normalizeText(readUtf8(file));
+        return { file, sha256: sha256(text), byte_length: Buffer.byteLength(text, 'utf8') };
+      }),
       registry: { file: REGISTRY_PATH, sha256: sha256(registryText) },
       manifest: { file: MANIFEST_PATH, sha256: sha256(manifestText) },
       approved_package_directories: approvedPackageDirectories,
