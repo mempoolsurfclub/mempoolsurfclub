@@ -73,6 +73,7 @@ jobs:
               r"  assert.equal(result.valid, true, \`inert code must pass: \${JSON.stringify(result)}\`);": "  assert.equal(result.valid, true, 'inert code must pass: ' + JSON.stringify(result));",
               "  const typedTests = `// URL structure and hostname semantics.": "  const typedTests = String.raw`// URL structure and hostname semantics.",
               r"  assert.equal(result.valid, true, \`\${type}: \${JSON.stringify(result)}\`);": "  assert.equal(result.valid, true, type + ': ' + JSON.stringify(result));",
+              "  if (/^Reference$/i.test(fieldName) && !repositoryPathReason(value)) {\n    return {\n      representation: 'repository-path',\n      normalized_reference: value,\n    };\n  }": "  const repositoryFence = String.fromCharCode(96);\n  const repositoryCandidate = value.startsWith(repositoryFence) && value.endsWith(repositoryFence)\n    ? value.slice(1, -1)\n    : value;\n  if (/^Reference$/i.test(fieldName) && !repositoryPathReason(repositoryCandidate)) {\n    return {\n      representation: 'repository-path',\n      normalized_reference: repositoryCandidate,\n    };\n  }",
           }
           for old, new in replacements.items():
               if text.count(old) != 1:
