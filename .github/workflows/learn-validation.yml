@@ -49,6 +49,17 @@ jobs:
       - name: Install dependencies
         run: npm install --ignore-scripts --no-audit --no-fund --package-lock=false
 
+      - name: Materialize Bitcoin Glossary runtime outputs
+        run: npm run build:learn-glossary-pilot
+
+      - name: Upload Bitcoin Glossary runtime outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: bitcoin-glossary-runtime
+          path: |
+            docs/learn/runtime/MSC-GLOSSARY-001.json
+            snippets/msc-learn-glossary-runtime.liquid
+
       - name: Validate approved Learn registry
         run: npm run validate:learn-registry
 
