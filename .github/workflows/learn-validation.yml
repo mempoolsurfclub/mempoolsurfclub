@@ -67,20 +67,13 @@ jobs:
       - name: Commit corrected Stage 1 implementation
         if: github.event_name == 'pull_request'
         run: |
-          rm -f scripts/learn-runtime/apply-stage1-correction.sh scripts/learn-runtime/.stage1-patch-*
+          rm -f scripts/learn-runtime/apply-stage1-correction.sh \
+            scripts/learn-runtime/.stage1-patch-* \
+            scripts/learn-runtime/.stage1-exact-*
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A -- \
-            scripts/learn-runtime/apply-stage1-correction.sh \
-            scripts/learn-runtime/.stage1-patch-00 \
-            scripts/learn-runtime/.stage1-patch-01 \
-            scripts/learn-runtime/.stage1-patch-02 \
-            scripts/learn-runtime/.stage1-patch-03 \
-            scripts/learn-runtime/.stage1-patch-04 \
-            scripts/learn-runtime/.stage1-patch-05 \
-            scripts/learn-runtime/.stage1-patch-06 \
-            scripts/learn-runtime/lib/markdown.mjs \
-            scripts/learn-runtime/audit.mjs \
+            scripts/learn-runtime \
             docs/learn/runtime/schema/msc-learn-runtime-v2.schema.json \
             docs/learn/runtime/reports/package-compatibility.json
           git commit -m 'fix: close Learn runtime security and schema contracts'
