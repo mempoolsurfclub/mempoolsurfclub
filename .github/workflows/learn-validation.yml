@@ -41,6 +41,14 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Upload repository snapshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: learn-runtime-stage1-snapshot
+          path: .
+          include-hidden-files: true
+          retention-days: 1
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
