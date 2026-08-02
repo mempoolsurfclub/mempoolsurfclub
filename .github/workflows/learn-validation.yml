@@ -11,7 +11,6 @@ on:
       - 'package.json'
       - 'package-lock.json'
       - '.github/workflows/learn-validation.yml'
-      - '.github/learn-runtime-correction/**'
   push:
     branches:
       - main
@@ -26,7 +25,7 @@ on:
       - '.github/workflows/learn-validation.yml'
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: learn-validation-${{ github.workflow }}-${{ github.ref }}
@@ -36,14 +35,11 @@ jobs:
   learn-validation:
     name: Learn editorial library
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 10
 
     steps:
-      - name: Check out pull request head
+      - name: Check out repository
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -54,69 +50,17 @@ jobs:
       - name: Install dependencies
         run: npm ci --ignore-scripts --no-audit --no-fund
 
-      - name: Repair temporary runner source literals
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          path = Path('.github/learn-runtime-correction/runner.mjs')
-          text = path.read_text()
-          replacements = {
-              r"  if (!isObject(source)) return [\`\${path} must be an object\`];": "  if (!isObject(source)) return [path + ' must be an object'];",
-              r"  else errors.push(\`\${path}.reference_type is invalid\`);": "  else errors.push(path + '.reference_type is invalid');",
-              r"  if (reason) errors.push(\`\${path}.reference \${reason}\`);": "  if (reason) errors.push(path + '.reference ' + reason);",
-              r"    value.forEach((entry, index) => walkAll(entry, \`\${path}[\${index}]\`, errors, seen));": "    value.forEach((entry, index) => walkAll(entry, path + '[' + index + ']', errors, seen));",
-              r"    errors.push(...validateGlossaryOwnership(value.ownership, \`\${path}.ownership\`));": "    errors.push(...validateGlossaryOwnership(value.ownership, path + '.ownership'));",
-              r"  assert.ok(affectedPackageIds.has(\`MSC-GUIDE-\${String(number).padStart(3, '0')}\`), \`expected blocked guide \${number}\`);": "  assert.ok(affectedPackageIds.has('MSC-GUIDE-' + String(number).padStart(3, '0')), 'expected blocked guide ' + number);",
-              "  const boundaryTests = `": "  const boundaryTests = String.raw`",
-              r"  assertBlocked(\`## 4. Sources\n\n1. **Source**\n   - URL: \${invalidHost}\n\`, 'invalid-source-reference', \`invalid hostname must block: \${invalidHost}\`);": r"  assertBlocked('## 4. Sources\n\n1. **Source**\n   - URL: ' + invalidHost + '\n', 'invalid-source-reference', 'invalid hostname must block: ' + invalidHost);",
-              "  const runtimePositiveTests = `": "  const runtimePositiveTests = String.raw`",
-              r"  assert.equal(result.valid, true, \`inert code must pass: \${JSON.stringify(result)}\`);": "  assert.equal(result.valid, true, 'inert code must pass: ' + JSON.stringify(result));",
-              "  const typedTests = `// URL structure and hostname semantics.": "  const typedTests = String.raw`// URL structure and hostname semantics.",
-              r"  assert.equal(result.valid, true, \`\${type}: \${JSON.stringify(result)}\`);": "  assert.equal(result.valid, true, type + ': ' + JSON.stringify(result));",
-              r"assert.ok(structuredReferenceCounts['repository-path'] > 0, JSON.stringify(structuredReferenceCounts));": "assert.equal(Number.isInteger(structuredReferenceCounts['repository-path']), true);\nassert.equal(inspectMarkdown('## 4. Sources\\n\\n1. **Repository source**\\n   - Reference: docs/learn/content/example.md\\n', 'topic-guide').source_references.structured[0]?.representation, 'repository-path');",
-          }
-          for old, new in replacements.items():
-              if text.count(old) != 1:
-                  raise SystemExit(f'runner repair expected one match, found {text.count(old)}: {old}')
-              text = text.replace(old, new)
-          path.write_text(text)
-          PY
-          node --check .github/learn-runtime-correction/runner.mjs
-
-      - name: Reproduce third-review failures at starting head
-        run: node .github/learn-runtime-correction/runner.mjs reproduce
-
-      - name: Apply authorized source-boundary correction
-        run: node .github/learn-runtime-correction/runner.mjs apply
-
-      - name: Check corrected JavaScript syntax
-        run: |
-          node --check scripts/learn-runtime/lib/markdown.mjs
-          node --check scripts/learn-runtime/lib/runtime-validation.mjs
-          node --check scripts/learn-runtime/audit.mjs
-          node --check scripts/learn-runtime/test-contract.mjs
-
-      - name: Test Learn runtime contract
-        run: npm run test:learn-runtime-contract
-
-      - name: Materialize and verify deterministic audit
-        run: |
-          npm run materialize:learn-runtime-audit
-          sha256sum docs/learn/runtime/reports/package-compatibility.json > /tmp/learn-runtime-report.sha256
-          npm run materialize:learn-runtime-audit
-          sha256sum --check /tmp/learn-runtime-report.sha256
-          before_mtime="$(stat -c %Y docs/learn/runtime/reports/package-compatibility.json)"
-          npm run audit:learn-runtime
-          after_mtime="$(stat -c %Y docs/learn/runtime/reports/package-compatibility.json)"
-          test "$before_mtime" = "$after_mtime"
-          ! grep -q '"generated_at"' docs/learn/runtime/reports/package-compatibility.json
-          ! grep -q '/home/runner/work' docs/learn/runtime/reports/package-compatibility.json
-
       - name: Validate approved Learn registry
         run: npm run validate:learn-registry
 
       - name: Validate Learn manifest and packages
         run: npm run validate:learn-library
+
+      - name: Test Learn runtime contract
+        run: npm run test:learn-runtime-contract
+
+      - name: Audit all 92 Learn runtime packages
+        run: npm run audit:learn-runtime
 
       - name: Validate Guide 001 runtime pilot
         run: npm run validate:learn-guide-pilot
@@ -133,6 +77,12 @@ jobs:
       - name: Validate Bitcoin Glossary runtime pilot
         run: npm run validate:learn-glossary-pilot
 
+      - name: Verify deterministic Learn runtime audit
+        run: |
+          npm run materialize:learn-runtime-audit
+          git diff --exit-code -- docs/learn/runtime/reports/package-compatibility.json
+          npm run audit:learn-runtime
+
       - name: Verify deterministic Learn-data generation
         run: |
           npm run build:learn-data
@@ -146,38 +96,5 @@ jobs:
       - name: Parse theme JSON templates
         run: npm run test:json
 
-      - name: Prove protected scope and exact net correction
-        env:
-          STARTING_HEAD: 7f8c45d678c0ea56966abf59f570b8efde11e55c
-        run: |
-          git diff --exit-code "$STARTING_HEAD" -- package.json package-lock.json .github/workflows/learn-validation.yml
-          actual="$(git diff --name-only "$STARTING_HEAD" | sort)"
-          expected="$(printf '%s\n' \
-            docs/learn/runtime/reports/package-compatibility.json \
-            docs/learn/runtime/schema/msc-learn-runtime-v2.schema.json \
-            scripts/learn-runtime/audit.mjs \
-            scripts/learn-runtime/lib/markdown.mjs \
-            scripts/learn-runtime/lib/runtime-validation.mjs \
-            scripts/learn-runtime/test-contract.mjs | sort)"
-          test "$actual" = "$expected"
-          test ! -e .github/learn-runtime-correction/runner.mjs
-          git diff --check
-
-      - name: Commit verified correction without workflow mutation
-        env:
-          STARTING_HEAD: 7f8c45d678c0ea56966abf59f570b8efde11e55c
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git restore --source=HEAD -- .github/workflows/learn-validation.yml
-          git add -A -- \
-            .github/learn-runtime-correction \
-            docs/learn/runtime/reports/package-compatibility.json \
-            docs/learn/runtime/schema/msc-learn-runtime-v2.schema.json \
-            scripts/learn-runtime/audit.mjs \
-            scripts/learn-runtime/lib/markdown.mjs \
-            scripts/learn-runtime/lib/runtime-validation.mjs \
-            scripts/learn-runtime/test-contract.mjs
-          git diff --cached --check
-          git commit -m 'fix: complete Learn runtime source boundaries'
-          git push origin HEAD:${{ github.head_ref }}
+      - name: Check patch whitespace
+        run: git diff --check
