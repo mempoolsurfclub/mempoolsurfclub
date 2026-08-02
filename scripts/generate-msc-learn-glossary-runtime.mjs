@@ -136,7 +136,7 @@ function parseGlossaryGroups(markdown, byId) {
       const start = termMatch.index + termMatch[0].length;
       const end = termIndex + 1 < termMatches.length ? termMatches[termIndex + 1].index : groupBody.length;
       const body = normalize(groupBody.slice(start, end)).replace(/\s+/g, ' ');
-      const detail = body.match(/^(.+?)\s+Canonical:\s+`(MSC-[A-Z]+-\d+)`;\s+handle:\s+`([^`]+)`;\s+URL inactive until confirmed\.$/);
+      const detail = body.match(/^(.+?)\s+Canonical:\s+`(MSC-[A-Z0-9-]+)`;\s+handle:\s+`([^`]+)`;\s+URL inactive until confirmed\.$/);
       if (!detail) throw new Error(`Invalid glossary entry for ${termMatch[1].trim()}`);
       const preferredTerm = termMatch[1].trim();
       const destinationId = detail[2];
