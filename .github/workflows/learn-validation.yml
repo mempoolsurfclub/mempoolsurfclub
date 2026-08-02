@@ -54,6 +54,28 @@ jobs:
       - name: Install dependencies
         run: npm ci --ignore-scripts --no-audit --no-fund
 
+      - name: Repair temporary runner source literals
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('.github/learn-runtime-correction/runner.mjs')
+          text = path.read_text()
+          replacements = {
+              r"  if (!isObject(source)) return [\`\${path} must be an object\`];": "  if (!isObject(source)) return [path + ' must be an object'];",
+              r"  else errors.push(\`\${path}.reference_type is invalid\`);": "  else errors.push(path + '.reference_type is invalid');",
+              r"  if (reason) errors.push(\`\${path}.reference \${reason}\`);": "  if (reason) errors.push(path + '.reference ' + reason);",
+              r"    value.forEach((entry, index) => walkAll(entry, \`\${path}[\${index}]\`, errors, seen));": "    value.forEach((entry, index) => walkAll(entry, path + '[' + index + ']', errors, seen));",
+              r"    errors.push(...validateGlossaryOwnership(value.ownership, \`\${path}.ownership\`));": "    errors.push(...validateGlossaryOwnership(value.ownership, path + '.ownership'));",
+              r"  assert.ok(affectedPackageIds.has(\`MSC-GUIDE-\${String(number).padStart(3, '0')}\`), \`expected blocked guide \${number}\`);": "  assert.ok(affectedPackageIds.has('MSC-GUIDE-' + String(number).padStart(3, '0')), 'expected blocked guide ' + number);",
+          }
+          for old, new in replacements.items():
+              if text.count(old) != 1:
+                  raise SystemExit(f'runner repair expected one match, found {text.count(old)}: {old}')
+              text = text.replace(old, new)
+          path.write_text(text)
+          PY
+          node --check .github/learn-runtime-correction/runner.mjs
+
       - name: Reproduce third-review failures at starting head
         run: node .github/learn-runtime-correction/runner.mjs reproduce
 
