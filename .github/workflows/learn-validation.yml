@@ -67,6 +67,12 @@ jobs:
               r"    value.forEach((entry, index) => walkAll(entry, \`\${path}[\${index}]\`, errors, seen));": "    value.forEach((entry, index) => walkAll(entry, path + '[' + index + ']', errors, seen));",
               r"    errors.push(...validateGlossaryOwnership(value.ownership, \`\${path}.ownership\`));": "    errors.push(...validateGlossaryOwnership(value.ownership, path + '.ownership'));",
               r"  assert.ok(affectedPackageIds.has(\`MSC-GUIDE-\${String(number).padStart(3, '0')}\`), \`expected blocked guide \${number}\`);": "  assert.ok(affectedPackageIds.has('MSC-GUIDE-' + String(number).padStart(3, '0')), 'expected blocked guide ' + number);",
+              "  const boundaryTests = `": "  const boundaryTests = String.raw`",
+              r"  assertBlocked(\`## 4. Sources\n\n1. **Source**\n   - URL: \${invalidHost}\n\`, 'invalid-source-reference', \`invalid hostname must block: \${invalidHost}\`);": r"  assertBlocked('## 4. Sources\n\n1. **Source**\n   - URL: ' + invalidHost + '\n', 'invalid-source-reference', 'invalid hostname must block: ' + invalidHost);",
+              "  const runtimePositiveTests = `": "  const runtimePositiveTests = String.raw`",
+              r"  assert.equal(result.valid, true, \`inert code must pass: \${JSON.stringify(result)}\`);": "  assert.equal(result.valid, true, 'inert code must pass: ' + JSON.stringify(result));",
+              "  const typedTests = `// URL structure and hostname semantics.": "  const typedTests = String.raw`// URL structure and hostname semantics.",
+              r"  assert.equal(result.valid, true, \`\${type}: \${JSON.stringify(result)}\`);": "  assert.equal(result.valid, true, type + ': ' + JSON.stringify(result));",
           }
           for old, new in replacements.items():
               if text.count(old) != 1:
