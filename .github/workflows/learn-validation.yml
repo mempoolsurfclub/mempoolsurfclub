@@ -49,6 +49,19 @@ jobs:
       - name: Install dependencies
         run: npm install --ignore-scripts --no-audit --no-fund --package-lock=false
 
+      - name: Correct glossary destination ID parser for materialization
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          target = Path('scripts/generate-msc-learn-glossary-runtime.mjs')
+          text = target.read_text()
+          old = r'(MSC-[A-Z]+-\d+)'
+          new = r'(MSC-[A-Z0-9-]+)'
+          if old not in text:
+              raise SystemExit('Expected glossary destination parser pattern was not found')
+          target.write_text(text.replace(old, new, 1))
+          PY
+
       - name: Materialize Bitcoin Glossary runtime outputs
         run: npm run build:learn-glossary-pilot
 
