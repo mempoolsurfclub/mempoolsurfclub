@@ -20,6 +20,14 @@ const ROLE_PATTERNS = {
   ],
 };
 
+const ROLE_REQUIRED_CONSTRUCTS = {
+  'topic-guide': ['article-subsections'],
+  'category-hub': ['subcategory-records', 'guide-card-records'],
+  'learning-path': ['stage-records', 'path-step-records'],
+  'featured-route': ['lifecycle-step-records', 'companion-guide-records'],
+  'glossary-index': ['letter-groups', 'glossary-term-records'],
+};
+
 const COMMON_REQUIRED_TITLES = [
   /introductory deck/i,
   /key terms/i,
@@ -34,23 +42,29 @@ const COMMON_REQUIRED_TITLES = [
   /illustration brief/i,
 ];
 
-const ROLE_REQUIRED_TITLES = {
-  'topic-guide': [/full article/i],
-  'category-hub': [/full destination copy/i, /(?:guide cards|hub structure|subcategory)/i],
-  'learning-path': [/full destination copy/i, /(?:path structure|stage structure|approved path structure)/i, /(?:step records|path steps|step-by-step)/i],
-  'featured-route': [/full destination copy|transaction lifecycle|route orientation/i, /(?:lifecycle|route steps)/i, /companion/i],
-  'glossary-index': [/full destination copy|glossary orientation/i, /populated letter/i, /(?:glossary entries|preferred terms|letter groups)/i],
-};
+const STRUCTURED_LIST_SECTION = /sources|human verification|accuracy (?:review )?checklist|illustration brief/i;
 
 function collectMatches(text, pattern) {
   return [...text.matchAll(pattern)].map((match) => match[0]);
 }
 
+function collectMatchObjects(text, pattern) {
+  return [...text.matchAll(pattern)].map((match) => ({ text: match[0], index: match.index }));
+}
+
 function numberedSections(markdown) {
-  return [...markdown.matchAll(/^##\s+(\d+)\.\s+(.+)$/gm)].map((match) => ({
+  const matches = [...markdown.matchAll(/^##\s+(\d+)\.\s+(.+)$/gm)];
+  return matches.map((match, index) => ({
     number: Number(match[1]),
     title: match[2].trim(),
+    start: match.index,
+    body_start: match.index + match[0].length,
+    end: matches[index + 1]?.index ?? markdown.length,
   }));
+}
+
+function sectionAt(sections, index) {
+  return sections.find((section) => index >= section.start && index < section.end) || null;
 }
 
 function repeatedNumbers(sections) {
@@ -72,8 +86,36 @@ function headingDepths(markdown) {
   return counts;
 }
 
-function detectNestedLists(markdown) {
-  return markdown.split('\n').filter((line) => /^\s{2,}(?:[-*+] |\d+\. )/.test(line));
+function lineRecords(markdown) {
+  const records = [];
+  let offset = 0;
+  for (const line of markdown.split('\n')) {
+    records.push({ line, index: offset });
+    offset += line.length + 1;
+  }
+  return records;
+}
+
+function detectUnsupportedNestedLists(markdown, sections) {
+  const records = lineRecords(markdown);
+  const hits = [];
+  let previousNonBlank = null;
+  for (const record of records) {
+    if (!record.line.trim()) {
+      previousNonBlank = null;
+      continue;
+    }
+    const current = record.line.match(/^(\s*)(?:[-*+] |\d+\. )/);
+    if (current && current[1].length >= 2) {
+      const section = sectionAt(sections, record.index);
+      if (!section || !STRUCTURED_LIST_SECTION.test(section.title)) {
+        const previous = previousNonBlank?.line.match(/^(\s*)(?:[-*+] |\d+\. )/);
+        if (previous && current[1].length > previous[1].length) hits.push(record.line);
+      }
+    }
+    previousNonBlank = record;
+  }
+  return hits;
 }
 
 function detectRawHtml(markdown) {
@@ -102,18 +144,38 @@ function detectFencedScripts(markdown) {
   return hits;
 }
 
-function malformedFieldRecords(markdown) {
-  return markdown.split('\n').filter((line) => /^\s*-\s+[^:]+$/.test(line) && /(?:Registry ID|Approved H1|Review date|Reviewer|Status|URL|Concept title|Educational purpose|Recommended placement|Visual description|Required labels|Caption|Alt text|Image orientation|Mobile crop notes)/i.test(line));
+function malformedFieldRecords(markdown, sections) {
+  const fieldLabel = /^(Registry ID|Approved H1|Review date|Reviewer|Status|URL|Concept title|Educational purpose|Recommended placement|Visual description|Required labels|Caption|Alt text|Image orientation|Mobile crop notes)\b/i;
+  return lineRecords(markdown).filter((record) => {
+    const item = record.line.match(/^\s*-\s+(.+)$/)?.[1];
+    if (!item || item.includes(':') || /^\[[ xX]\]/.test(item)) return false;
+    const section = sectionAt(sections, record.index);
+    if (section && /accuracy (?:review )?checklist|human verification/i.test(section.title)) return false;
+    return fieldLabel.test(item);
+  }).map((record) => record.line);
+}
+
+function detectMarkdownLinks(markdown, sections) {
+  const source = [];
+  const active = [];
+  for (const match of collectMatchObjects(markdown, /(?<!!)\[[^\]]+\]\([^\n)]+\)/g)) {
+    const section = sectionAt(sections, match.index);
+    if (section && /sources/i.test(section.title)) source.push(match.text);
+    else active.push(match.text);
+  }
+  return { source, active };
 }
 
 export function inspectMarkdown(markdown, pageRole) {
   const sections = numberedSections(markdown);
   const sectionTitles = sections.map((section) => section.title);
+  const indentedListLines = markdown.split('\n').filter((line) => /^\s{2,}(?:[-*+] |\d+\. )/.test(line));
   const constructs = {
     paragraphs: /(^|\n\n)[^#\n\-*`][^\n]*/.test(markdown),
     numbered_destination_sections: sections.length,
     ordered_lists: collectMatches(markdown, /^\d+\.\s+.+$/gm).length,
     unordered_lists: collectMatches(markdown, /^\s*-\s+.+$/gm).length,
+    indented_structured_list_lines: indentedListLines.length,
     heading_depths: headingDepths(markdown),
     inline_code: collectMatches(markdown, /`[^`\n]+`/g).length,
     strong_text: collectMatches(markdown, /\*\*[^*\n]+\*\*/g).length,
@@ -128,20 +190,21 @@ export function inspectMarkdown(markdown, pageRole) {
 
   const rawHtml = detectRawHtml(markdown);
   const markdownImages = collectMatches(markdown, /!\[[^\]]*\]\([^\n)]+\)/g);
-  const markdownLinks = collectMatches(markdown, /(?<!!)\[[^\]]+\]\([^\n)]+\)/g);
+  const markdownLinks = detectMarkdownLinks(markdown, sections);
   const tables = detectTables(markdown);
-  const nestedLists = detectNestedLists(markdown);
+  const nestedLists = detectUnsupportedNestedLists(markdown, sections);
   const fencedScripts = detectFencedScripts(markdown);
   const eventHandlers = collectMatches(markdown, /\bon[a-z]+\s*=/gi);
   const unexpectedHeadings = Object.entries(constructs.heading_depths).filter(([depth]) => Number(depth) > 4).map(([depth, count]) => ({ depth: Number(depth), count }));
-  const malformedFields = malformedFieldRecords(markdown);
+  const malformedFields = malformedFieldRecords(markdown, sections);
 
   const unsupported = [];
   const push = (type, occurrences, blocking = true) => {
     if (occurrences?.length) unsupported.push({ type, count: occurrences.length, blocking, examples: occurrences.slice(0, 3) });
   };
   push('raw-html', rawHtml);
-  push('active-markdown-link', markdownLinks);
+  push('active-markdown-link', markdownLinks.active);
+  push('source-markdown-link', markdownLinks.source, false);
   push('markdown-image', markdownImages);
   push('unsupported-table', tables);
   push('unsupported-nested-list', nestedLists);
@@ -153,16 +216,20 @@ export function inspectMarkdown(markdown, pageRole) {
   const duplicateSectionNumbers = repeatedNumbers(sections);
   if (duplicateSectionNumbers.length) unsupported.push({ type: 'duplicate-numbered-section', count: duplicateSectionNumbers.length, blocking: true, examples: duplicateSectionNumbers });
 
-  const requiredPatterns = [...COMMON_REQUIRED_TITLES, ...(ROLE_REQUIRED_TITLES[pageRole] || [])];
-  const missingRequiredSections = requiredPatterns.filter((pattern) => !sectionTitles.some((title) => pattern.test(title))).map((pattern) => pattern.source);
+  const missingRequiredSections = COMMON_REQUIRED_TITLES.filter((pattern) => !sectionTitles.some((title) => pattern.test(title))).map((pattern) => pattern.source);
+  for (const name of ROLE_REQUIRED_CONSTRUCTS[pageRole] || []) {
+    if (!constructs.role_specific[name]) missingRequiredSections.push(`role-construct:${name}`);
+  }
 
   const observations = [];
+  if (indentedListLines.length) observations.push(`Contains ${indentedListLines.length} indented structured list line(s) inside approved field, source, review, or illustration records.`);
+  if (markdownLinks.source.length) observations.push(`Contains ${markdownLinks.source.length} Markdown source-reference link(s); the future adapter must extract and escape these as reference text rather than render active links.`);
   const fencedBlocks = collectMatches(markdown, /^```[^\n]*$/gm).length;
-  if (fencedBlocks && !fencedScripts.length) observations.push(`Contains ${fencedBlocks} non-script fenced-code delimiter(s); adapter must preserve escaped text.`);
+  if (fencedBlocks && !fencedScripts.length) observations.push(`Contains ${fencedBlocks} non-script fenced-code delimiter(s); the shared Markdown layer must preserve escaped code text.`);
   if ((ROLE_PATTERNS[pageRole] || []).some((entry) => constructs.role_specific[entry.name] > 0)) observations.push('Contains role-specific records requiring the documented page-role adapter.');
 
   return {
-    numbered_sections: sections,
+    numbered_sections: sections.map(({ number, title }) => ({ number, title })),
     constructs,
     unsupported_constructs: unsupported,
     missing_required_sections: missingRequiredSections,
