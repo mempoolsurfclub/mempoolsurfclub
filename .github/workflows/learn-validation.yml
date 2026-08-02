@@ -26,7 +26,7 @@ on:
       - '.github/workflows/learn-validation.yml'
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: learn-validation-${{ github.workflow }}-${{ github.ref }}
@@ -74,6 +74,19 @@ jobs:
             docs/learn/runtime/reports/package-compatibility.json
           if-no-files-found: warn
           retention-days: 1
+
+      - name: Commit deterministic Learn audit report
+        if: github.event_name == 'push' && github.ref == 'refs/heads/engineering/learn-runtime-schema-audit' && steps.runtime-audit.outcome == 'success'
+        shell: bash
+        run: |
+          git add docs/learn/runtime/reports/package-compatibility.json
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Record Learn runtime compatibility audit"
+          git push origin HEAD:engineering/learn-runtime-schema-audit
 
       - name: Require Learn runtime audit success
         if: steps.runtime-audit.outcome == 'failure'
