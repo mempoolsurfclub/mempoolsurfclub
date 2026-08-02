@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { isIP } from 'node:net';
 import Ajv2020 from 'ajv/dist/2020.js';
 
 const SHA256 = /^[a-f0-9]{64}$/;
@@ -10,7 +11,7 @@ const MARKDOWN_IMAGE = /!\[[^\]\n]*\]\([^()\n]+\)/;
 const EVENT_HANDLER = /\bon[a-z]+\s*=/i;
 const UNSAFE_SCHEME = /\b(?:javascript|data|vbscript)\s*:/i;
 const HTML_CANDIDATE = /<!--[\s\S]*?-->|<![^>]*>|<\s*\/?\s*[A-Za-z][A-Za-z0-9:_-]*(?:\s[^<>]*?)?\s*\/?>/g;
-const KNOWN_HTML_ELEMENTS = new Set(`a abbr address area article aside audio b base bdi bdo blockquote body br button canvas caption cite code col colgroup data datalist dd del details dfn dialog div dl dt em embed fieldset figcaption figure footer form h1 h2 h3 h4 h5 h6 head header hgroup hr html i iframe img input ins kbd label legend li link main map mark menu meta meter nav noscript object ol optgroup option output p picture pre progress q rp rt ruby s samp script search section select slot small source span strong style sub summary sup table tbody td template textarea tfoot th thead time title tr track u ul var video wbr`.split(' '));
+const APPROVED_TECHNICAL_PLACEHOLDERS = new Set(['<pubkey>', '<signature>', '<txid>', '<block_hash>']);
 
 const RICH_TEXT_TYPES = new Set(['section', 'paragraph', 'ordered-list', 'unordered-list', 'definition-list', 'callout']);
 const RELATION_TYPES = new Set(['parent', 'previous', 'next', 'return', 'category', 'primary-path', 'secondary-path', 'related-path', 'recommended', 'planned', 'companion', 'step', 'branch']);
@@ -28,7 +29,7 @@ const GLOSSARY_OWNERSHIP_KEYS = new Set(['page_role', 'primary_category', 'subca
 const MACHINE_STRING_KEYS = new Set([
   'schema_version', 'generator_version', 'registry_id', 'status', 'planning_handle',
   'canonical_destination_registry_id', 'canonical_planning_handle', 'relation_type',
-  'reference_type', 'reference', 'file', 'sha256', 'record_sha256', 'source_sha256',
+  'reference_type', 'file', 'sha256', 'record_sha256', 'source_sha256',
   'type', 'id', 'language', 'state', 'publication_source', 'template_suffix',
   'reviewed_date', 'copy_locked_date', 'review_date',
 ]);
@@ -59,13 +60,7 @@ function requiredKeys(value, required, path, errors) {
 }
 
 function isActualHtmlToken(token) {
-  if (/^<!--/.test(token) || /^<!/.test(token)) return true;
-  const match = token.match(/^<\s*(\/?)\s*([A-Za-z][A-Za-z0-9:_-]*)([\s\S]*?)>$/);
-  if (!match) return false;
-  const [, closing, rawName, rawSuffix] = match;
-  const name = rawName.toLowerCase();
-  if (closing || KNOWN_HTML_ELEMENTS.has(name) || name.includes('-')) return true;
-  return Boolean(rawSuffix.trim());
+  return !APPROVED_TECHNICAL_PLACEHOLDERS.has(token);
 }
 
 function containsActualHtml(value) {
@@ -96,17 +91,91 @@ function validateSafeText(value, path, errors, { allowEmpty = true } = {}) {
   if (!allowEmpty && value === '') errors.push(`${path} must not be empty`);
 }
 
-function strictHttpsReason(value) {
-  if (typeof value !== 'string' || /\s/.test(value)) return 'must be a complete HTTPS URL without whitespace';
-  try {
-    const parsed = new URL(value);
-    if (parsed.protocol !== 'https:') return 'must use the https: protocol';
-    if (!parsed.hostname) return 'must contain a hostname';
-    if (parsed.username || parsed.password) return 'must not contain credentials';
+function rawAuthorityHost(value) {
+  const authority = value.slice('https://'.length).split(/[/?#]/, 1)[0];
+  if (!authority || authority.includes('@')) return null;
+  if (authority.startsWith('[')) {
+    const closing = authority.indexOf(']');
+    return closing > 0 ? authority.slice(1, closing) : null;
+  }
+  return authority.replace(/:\d+$/, '');
+}
+
+function hostnameReason(value, parsed) {
+  const normalized = parsed.hostname.startsWith('[') && parsed.hostname.endsWith(']')
+    ? parsed.hostname.slice(1, -1)
+    : parsed.hostname;
+  const rawHost = rawAuthorityHost(value);
+  if (!rawHost) return 'must contain a valid hostname';
+
+  if (/^[0-9.]+$/.test(rawHost)) {
+    if (isIP(rawHost) !== 4) return 'contains an invalid IPv4 address';
     return null;
+  }
+  if (rawHost.includes(':')) {
+    if (isIP(rawHost) !== 6) return 'contains an invalid IPv6 address';
+    return null;
+  }
+  if (isIP(normalized)) return null;
+
+  const hostname = normalized.toLowerCase();
+  if (hostname === 'localhost') return 'must not use localhost';
+  if (hostname.length > 253) return 'hostname exceeds the DNS length limit';
+  const labels = hostname.split('.');
+  if (labels.some((label) => label.length === 0)) return 'hostname contains an empty DNS label';
+  for (const label of labels) {
+    if (label.length > 63) return 'hostname contains a DNS label longer than 63 characters';
+    if (!/^[a-z0-9-]+$/.test(label)) return 'hostname contains invalid DNS characters';
+    if (label.startsWith('-') || label.endsWith('-')) return 'hostname contains a leading or trailing hyphen';
+  }
+  return null;
+}
+
+export function strictHttpsReason(value) {
+  if (typeof value !== 'string' || !value || /\s/.test(value)) {
+    return 'must be a complete HTTPS URL without whitespace';
+  }
+  if (/\[[^\]]+\]\(|!\[/.test(value)) return 'must not contain Markdown syntax';
+  let parsed;
+  try {
+    parsed = new URL(value);
   } catch {
     return 'must be a parseable absolute HTTPS URL';
   }
+  if (parsed.protocol !== 'https:') return 'must use the https: protocol';
+  if (parsed.username || parsed.password) return 'must not contain credentials';
+  if (!parsed.hostname) return 'must contain a hostname';
+  return hostnameReason(value, parsed);
+}
+
+export function repositoryPathReason(value) {
+  if (typeof value !== 'string' || !value) return 'must be a non-empty repository-relative path';
+  if (value.startsWith('/')) return 'must not begin with a slash';
+  if (value.includes('\\')) return 'must not contain backslashes';
+  if (/^[A-Za-z][A-Za-z0-9+.-]*:/.test(value)) return 'must not contain a URL scheme';
+  if (ACTIVE_MARKDOWN_LINK.test(value) || MARKDOWN_IMAGE.test(value) || /\]\s*\(/.test(value)) {
+    return 'must not contain Markdown syntax';
+  }
+  if (!/^[A-Za-z0-9._/-]+$/.test(value)) return 'contains unsupported repository-path characters';
+  const segments = value.split('/');
+  if (segments.some((segment) => !segment || segment === '.' || segment === '..')) {
+    return 'must not contain empty, dot, or parent traversal segments';
+  }
+  return null;
+}
+
+export function validateSourceReference(source, path = 'source_reference') {
+  const errors = [];
+  if (!isObject(source)) return [path + ' must be an object'];
+  const type = source.reference_type;
+  const reference = source.reference;
+  let reason = null;
+  if (type === 'url') reason = strictHttpsReason(reference);
+  else if (type === 'repository-path') reason = repositoryPathReason(reference);
+  else if (type === 'citation' || type === 'other') reason = safeTextReason(reference);
+  else errors.push(path + '.reference_type is invalid');
+  if (reason) errors.push(path + '.reference ' + reason);
+  return errors;
 }
 
 export function validateSemanticTableBlock(block, path = 'content_block') {
@@ -234,7 +303,6 @@ export function validateGlossaryOwnership(ownership, path = 'ownership') {
 }
 
 function shouldValidateString(path, key, parent) {
-  if (key === 'code') return false;
   if (MACHINE_STRING_KEYS.has(key)) return false;
   if (path === 'runtime.identity.page_role') return false;
   if (key === 'format' && parent?.type && RICH_TEXT_TYPES.has(parent.type)) return false;
@@ -249,9 +317,13 @@ function walkAll(value, path, errors, seen = new Set()) {
   if (value === null || typeof value !== 'object' || seen.has(value)) return;
   seen.add(value);
   if (Array.isArray(value)) {
-    value.forEach((entry, index) => walkAll(entry, `${path}[${index}]`, errors, seen));
+    value.forEach((entry, index) => walkAll(entry, path + '[' + index + ']', errors, seen));
     return;
   }
+
+  const inertCode = value.type === 'inert-code';
+  const sourceReference = Object.prototype.hasOwnProperty.call(value, 'reference_type')
+    && Object.prototype.hasOwnProperty.call(value, 'reference');
 
   if (Object.prototype.hasOwnProperty.call(value, 'type')) {
     if ([...RICH_TEXT_TYPES, 'semantic-table', 'inert-code'].includes(value.type)) {
@@ -265,16 +337,18 @@ function walkAll(value, path, errors, seen = new Set()) {
     errors.push(...validateInactiveDestination(value, path));
   }
   if (Object.prototype.hasOwnProperty.call(value, 'ownership')) {
-    errors.push(...validateGlossaryOwnership(value.ownership, `${path}.ownership`));
+    errors.push(...validateGlossaryOwnership(value.ownership, path + '.ownership'));
   }
 
   for (const [key, child] of Object.entries(value)) {
     const childPath = pathJoin(path, key);
-    if (typeof child === 'string' && shouldValidateString(childPath, key, value)) {
-      validateSafeText(child, childPath, errors);
-    } else {
-      walkAll(child, childPath, errors, seen);
+    if (inertCode && key === 'code') continue;
+    if (sourceReference && key === 'reference') continue;
+    if (typeof child === 'string') {
+      if (shouldValidateString(childPath, key, value)) validateSafeText(child, childPath, errors);
+      continue;
     }
+    walkAll(child, childPath, errors, seen);
   }
 }
 
@@ -286,10 +360,7 @@ export function validateRuntimeObject(runtime) {
   }
   if (Array.isArray(runtime.sources)) {
     runtime.sources.forEach((source, index) => {
-      if (source?.reference_type === 'url') {
-        const reason = strictHttpsReason(source.reference);
-        if (reason) errors.push(`runtime.sources[${index}].reference ${reason}`);
-      }
+      errors.push(...validateSourceReference(source, `runtime.sources[${index}]`));
     });
   }
   walkAll(runtime, 'runtime', errors);
@@ -330,7 +401,7 @@ function normalizedRuntimeErrors(errors) {
     if (/raw HTML|Markdown link|Markdown image|event-handler|unsafe URI|malformed Markdown/.test(message)) category = 'unsafe-text';
     else if (/cells must contain exactly|column|rows must|columns must/.test(message)) category = 'semantic-table';
     else if (/executable|controls_enabled|escape_before_render|language/.test(message)) category = 'inert-code';
-    else if (/reference must/.test(message)) category = 'source-reference';
+    else if (/reference|repository-relative path|hostname|IPv[46]|DNS|credentials|localhost/.test(message)) category = 'source-reference';
     return { path, category, message };
   }).sort((a, b) => `${a.path}|${a.category}|${a.message}`.localeCompare(`${b.path}|${b.category}|${b.message}`));
 }

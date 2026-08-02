@@ -1,3 +1,5 @@
+import { repositoryPathReason, strictHttpsReason } from './runtime-validation.mjs';
+
 const ROLE_PATTERNS = {
   'topic-guide': [
     { name: 'article-subsections', pattern: /^###\s+.+$/gm },
@@ -48,8 +50,8 @@ const VALID_FENCE_LANGUAGE = /^[A-Za-z0-9][A-Za-z0-9_+.-]*$/;
 const MARKDOWN_LINK_PATTERN = /(?<!!)\[([^\[\]\n]+)\]\(([^()\n]+)\)/g;
 const MARKDOWN_IMAGE_PATTERN = /!\[[^\]\n]*\]\([^()\n]+\)/g;
 const HTML_CANDIDATE_PATTERN = /<!--[\s\S]*?-->|<![^>]*>|<\s*\/?\s*[A-Za-z][A-Za-z0-9:_-]*(?:\s[^<>]*?)?\s*\/?>/g;
-const KNOWN_HTML_ELEMENTS = new Set(`a abbr address area article aside audio b base bdi bdo blockquote body br button canvas caption cite code col colgroup data datalist dd del details dfn dialog div dl dt em embed fieldset figcaption figure footer form h1 h2 h3 h4 h5 h6 head header hgroup hr html i iframe img input ins kbd label legend li link main map mark menu meta meter nav noscript object ol optgroup option output p picture pre progress q rp rt ruby s samp script search section select slot small source span strong style sub summary sup table tbody td template textarea tfoot th thead time title tr track u ul var video wbr`.split(' '));
-const SOURCE_FIELD_PATTERN = /^\s*(?:[-*]\s+)?(?:Direct URL|URL|Reference):\s*(.+?)\s*$/i;
+const APPROVED_TECHNICAL_PLACEHOLDERS = new Set(['<pubkey>', '<signature>', '<txid>', '<block_hash>']);
+const SOURCE_FIELD_PATTERN = /^\s*(?:[-*]\s+)?(Direct URL|URL|Reference):\s*(.+?)\s*$/i;
 const NUMBERED_SOURCE_OPENER = /^\d+\.\s+\*\*[^*\n]+\*\*(?:\s+\|.*)?\s*$/;
 const PLAIN_URL_PATTERN = /\bhttps?:\/\/[^\s<>()]+/gi;
 
@@ -270,17 +272,7 @@ function delimiterIntent(row) {
 }
 
 function isActualHtmlToken(token) {
-  if (/^<!--/.test(token) || /^<!/.test(token)) return true;
-  const match = token.match(/^<\s*(\/?)\s*([A-Za-z][A-Za-z0-9:_-]*)([\s\S]*?)>$/);
-  if (!match) return false;
-  const [, closing, rawName, rawSuffix] = match;
-  const name = rawName.toLowerCase();
-  const suffix = rawSuffix.trim();
-  if (closing) return true;
-  if (KNOWN_HTML_ELEMENTS.has(name)) return true;
-  if (name.includes('-')) return true;
-  if (suffix) return true;
-  return false;
+  return !APPROVED_TECHNICAL_PLACEHOLDERS.has(token);
 }
 
 function actualHtmlTokens(text) {
@@ -500,79 +492,128 @@ function malformedFieldRecords(markdown, sections) {
   }).map((record) => record.line);
 }
 
-function parseStrictHttpsUrl(value) {
-  if (typeof value !== 'string' || /\s/.test(value)) return null;
-  try {
-    const parsed = new URL(value);
-    if (parsed.protocol !== 'https:' || !parsed.hostname || parsed.username || parsed.password) return null;
-    if (parsed.href !== value && parsed.href !== `${value}/`) return null;
-    return parsed;
-  } catch {
-    return null;
-  }
+function normalizedHttpsReference(value) {
+  return new URL(value).href;
 }
 
-function parseCompleteSourceReference(value) {
+function parseCompleteSourceReference(value, fieldName) {
   const markdown = value.match(/^\[([^\[\]\n]+)\]\(([^()\n]+)\)$/);
   if (markdown) {
     const destination = markdown[2].trim();
-    return parseStrictHttpsUrl(destination) ? { kind: 'markdown', destination } : null;
+    if (!strictHttpsReason(destination)) {
+      return {
+        representation: 'markdown-link',
+        normalized_reference: normalizedHttpsReference(destination),
+      };
+    }
+    return null;
   }
-  return parseStrictHttpsUrl(value) ? { kind: 'plain', destination: value } : null;
+  if (!strictHttpsReason(value)) {
+    return {
+      representation: 'plain-url',
+      normalized_reference: normalizedHttpsReference(value),
+    };
+  }
+  if (/^Reference$/i.test(fieldName) && !repositoryPathReason(value)) {
+    return {
+      representation: 'repository-path',
+      normalized_reference: value,
+    };
+  }
+  return null;
+}
+
+function sourceRecordBoundary(line, openerIndent) {
+  if (!line.trim()) return false;
+  if (NUMBERED_SOURCE_OPENER.test(line)) return true;
+  if (/^ {0,3}#{1,6}\s+/.test(line)) return true;
+  if (/^ {0,3}(?:(?:\*\s*){3,}|(?:-\s*){3,}|(?:_\s*){3,})$/.test(line)) return true;
+  const indent = line.match(/^\s*/)[0].length;
+  return indent <= openerIndent;
+}
+
+function sourceLineForIndex(markdown, index) {
+  return markdown.slice(0, index).split('\n').length;
 }
 
 function structuredSourceRecords(markdown, sections) {
   const records = [];
+  const references = [];
   const invalid = [];
-  const plainFieldRanges = [];
   const lines = lineRecords(markdown);
+  let sourceOrder = 0;
+
   for (const section of sections.filter((item) => /sources/i.test(item.title))) {
     const sectionLines = lines.filter((line) => line.index > section.body_start && line.index < section.end);
-    for (const line of sectionLines) {
-      const field = line.line.match(SOURCE_FIELD_PATTERN);
-      if (!field) continue;
-      const rawValue = field[1];
-      const value = rawValue.trim();
-      const parsed = parseCompleteSourceReference(value);
-      if (parsed?.kind !== 'plain') continue;
-      const valueStart = line.index + line.line.indexOf(rawValue) + rawValue.indexOf(value);
-      plainFieldRanges.push({ start: valueStart, end: valueStart + value.length, line: line.line_number, value, parsed });
-    }
-    const starters = [];
-    for (let index = 0; index < sectionLines.length; index += 1) {
-      if (NUMBERED_SOURCE_OPENER.test(sectionLines[index].line)) starters.push(index);
-    }
-    for (let position = 0; position < starters.length; position += 1) {
-      const startIndex = starters[position];
-      const endIndex = (starters[position + 1] ?? sectionLines.length) - 1;
-      const slice = sectionLines.slice(startIndex, endIndex + 1);
+    for (let startIndex = 0; startIndex < sectionLines.length; startIndex += 1) {
+      const opener = sectionLines[startIndex];
+      if (!NUMBERED_SOURCE_OPENER.test(opener.line)) continue;
+      const openerIndent = opener.line.match(/^\s*/)[0].length;
+      const openerMatch = opener.line.match(/^(\d+)\./);
+      const recordOrder = records.length + 1;
+      let endIndex = startIndex;
+
+      for (let cursor = startIndex + 1; cursor < sectionLines.length; cursor += 1) {
+        const candidate = sectionLines[cursor];
+        if (sourceRecordBoundary(candidate.line, openerIndent)) break;
+        if (candidate.line.trim()) endIndex = cursor;
+      }
+
       const approvedRanges = [];
-      for (const line of slice) {
+      for (const line of sectionLines.slice(startIndex + 1, endIndex + 1)) {
         const field = line.line.match(SOURCE_FIELD_PATTERN);
         if (!field) continue;
-        const rawValue = field[1];
+        const fieldName = field[1];
+        const rawValue = field[2];
         const value = rawValue.trim();
         const valueStart = line.index + line.line.indexOf(rawValue) + rawValue.indexOf(value);
-        const parsed = parseCompleteSourceReference(value);
-        const range = {
-          start: valueStart,
-          end: valueStart + value.length,
-          line: line.line_number,
-          value,
-          parsed,
-        };
-        approvedRanges.push(range);
-        const linkLike = /\]\s*\(|^[A-Za-z][A-Za-z0-9+.-]*:|^\/\//.test(value);
-        if (!parsed && linkLike) invalid.push({ line: line.line_number, value, reason: 'invalid-or-noncomplete-https-reference' });
+        const parsed = parseCompleteSourceReference(value, fieldName);
+        if (parsed) {
+          sourceOrder += 1;
+          const reference = {
+            record_number: openerMatch ? Number(openerMatch[1]) : null,
+            record_order: recordOrder,
+            field_name: fieldName,
+            representation: parsed.representation,
+            normalized_reference: parsed.normalized_reference,
+            source_line: line.line_number,
+            source_order: sourceOrder,
+          };
+          references.push(reference);
+          approvedRanges.push({
+            start: valueStart,
+            end: valueStart + value.length,
+            line: line.line_number,
+            value,
+            parsed,
+            reference,
+          });
+          continue;
+        }
+
+        const looksReferenceLike = /\]\s*\(|^[A-Za-z][A-Za-z0-9+.-]*:|^\/\/|^\/|\\|(?:^|\/)\.\.(?:\/|$)/.test(value);
+        if (!/^Reference$/i.test(fieldName) || looksReferenceLike) {
+          invalid.push({
+            line: line.line_number,
+            field_name: fieldName,
+            value,
+            reason: 'invalid-or-noncomplete-source-reference',
+          });
+        }
       }
+
       records.push({
-        start: slice[0].index,
-        end: slice.at(-1).end,
+        record_number: openerMatch ? Number(openerMatch[1]) : null,
+        record_order: recordOrder,
+        start: opener.index,
+        end: sectionLines[endIndex].end,
         approved_ranges: approvedRanges,
       });
+      startIndex = endIndex;
     }
   }
-  return { records, invalid, plain_field_ranges: plainFieldRanges };
+
+  return { records, references, invalid };
 }
 
 function rangeContains(range, start, end, text) {
@@ -595,41 +636,76 @@ function detectMalformedMarkdownLinks(markdown, validMatches) {
 }
 
 function detectMarkdownLinks(markdown, sections) {
-  const source = [];
-  const active = [];
   const sourceData = structuredSourceRecords(markdown, sections);
+  const source = [];
+  const sourcePlain = [];
+  const sourceRepositoryPaths = [];
+  const active = [];
+  const activePlain = [];
+  const unqualified = [];
   const matches = collectMatchObjects(markdown, MARKDOWN_LINK_PATTERN);
+  let unqualifiedOrder = 0;
+
   for (const match of matches) {
     const start = match.index;
     const end = start + match.text.length;
-    const approved = sourceData.records.some((record) => record.approved_ranges.some((range) => rangeContains(range, start, end, match.text)));
-    if (approved) source.push(match.text);
-    else active.push(match.text);
+    const range = sourceData.records
+      .flatMap((record) => record.approved_ranges)
+      .find((candidate) => rangeContains(candidate, start, end, match.text));
+    if (range?.parsed?.representation === 'markdown-link') {
+      source.push(match.text);
+    } else {
+      active.push(match.text);
+      unqualifiedOrder += 1;
+      unqualified.push({
+        representation: 'markdown-link',
+        normalized_reference: match.match[2].trim(),
+        source_line: sourceLineForIndex(markdown, start),
+        source_order: unqualifiedOrder,
+      });
+    }
   }
   MARKDOWN_LINK_PATTERN.lastIndex = 0;
 
-  const plainSource = [];
-  const activePlain = [];
   for (const match of collectMatchObjects(markdown, PLAIN_URL_PATTERN)) {
-    const insideMarkdown = matches.some((link) => match.index >= link.index && match.index + match.text.length <= link.index + link.text.length);
+    const insideMarkdown = matches.some((link) => match.index >= link.index
+      && match.index + match.text.length <= link.index + link.text.length);
     if (insideMarkdown) continue;
     const start = match.index;
     const end = start + match.text.length;
-    const approved = sourceData.records.some((record) => record.approved_ranges.some((range) => rangeContains(range, start, end, match.text)))
-      || sourceData.plain_field_ranges.some((range) => rangeContains(range, start, end, match.text));
-    if (approved) plainSource.push(match.text);
-    else activePlain.push(match.text);
+    const range = sourceData.records
+      .flatMap((record) => record.approved_ranges)
+      .find((candidate) => rangeContains(candidate, start, end, match.text));
+    if (range?.parsed?.representation === 'plain-url') {
+      sourcePlain.push(match.text);
+    } else {
+      activePlain.push(match.text);
+      unqualifiedOrder += 1;
+      unqualified.push({
+        representation: 'plain-url',
+        normalized_reference: match.text,
+        source_line: sourceLineForIndex(markdown, start),
+        source_order: unqualifiedOrder,
+      });
+    }
   }
   PLAIN_URL_PATTERN.lastIndex = 0;
 
+  for (const reference of sourceData.references) {
+    if (reference.representation === 'repository-path') sourceRepositoryPaths.push(reference.normalized_reference);
+  }
+
   return {
     source,
-    source_plain: plainSource,
+    source_plain: sourcePlain,
+    source_repository_paths: sourceRepositoryPaths,
     active,
     active_plain: activePlain,
     malformed: detectMalformedMarkdownLinks(markdown, matches),
     invalid_source_references: sourceData.invalid,
     structured_records: sourceData.records.length,
+    structured_references: sourceData.references,
+    unqualified_references: unqualified,
   };
 }
 
@@ -691,6 +767,9 @@ export function inspectMarkdown(markdown, pageRole) {
   push('malformed-markdown-link', markdownLinks.malformed);
   push('invalid-source-reference', markdownLinks.invalid_source_references);
   push('source-markdown-link', markdownLinks.source, false);
+  push('source-plain-url', markdownLinks.source_plain, false);
+  push('source-repository-path', markdownLinks.source_repository_paths, false);
+  push('unqualified-source-reference', markdownLinks.unqualified_references);
   push('markdown-image', markdownImages);
   push('unsupported-table', tableIsolation.unsupported);
   push('unsupported-nested-list', nestedLists);
@@ -721,7 +800,13 @@ export function inspectMarkdown(markdown, pageRole) {
 
   const observations = [];
   if (indentedListLines.length) observations.push(`Contains ${indentedListLines.length} indented structured list line(s) inside approved field, source, review, relationship, or illustration records.`);
-  if (markdownLinks.source.length) observations.push(`Contains ${markdownLinks.source.length} validated HTTPS Markdown source-reference link(s); the future adapter must preserve them as reference data and escape them rather than render active links.`);
+  if (markdownLinks.structured_references.length) {
+    const byRepresentation = markdownLinks.structured_references.reduce((counts, reference) => {
+      counts[reference.representation] = (counts[reference.representation] || 0) + 1;
+      return counts;
+    }, {});
+    observations.push(`Contains ${markdownLinks.structured_references.length} validated structured source reference(s) (${Object.entries(byRepresentation).map(([type, count]) => `${type}: ${count}`).join(', ')}); the future adapter must preserve them as inert reference data and escape them rather than render active links.`);
+  }
   if (tableIsolation.tables.length) observations.push(`Contains ${tableIsolation.tables.length} supported semantic Markdown table(s); the role adapter must preserve ordered headers and rows and use the recorded source heading as the non-empty accessible label.`);
   if (fenced.blocks.length) {
     const counts = languageCounts(fenced.blocks);
@@ -736,5 +821,9 @@ export function inspectMarkdown(markdown, pageRole) {
     unsupported_constructs: unsupported,
     missing_required_sections: missingRequiredSections,
     non_blocking_observations: observations,
+    source_references: {
+      structured: markdownLinks.structured_references,
+      unqualified: markdownLinks.unqualified_references,
+    },
   };
 }

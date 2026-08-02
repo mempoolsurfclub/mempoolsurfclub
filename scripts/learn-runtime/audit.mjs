@@ -16,6 +16,9 @@ import {
   validateRelationship,
   validateGlossaryOwnership,
   validateRuntimeCandidate,
+  validateSourceReference,
+  strictHttpsReason,
+  repositoryPathReason,
 } from './lib/runtime-validation.mjs';
 import { indexRegistry } from './lib/registry.mjs';
 import {
@@ -109,6 +112,12 @@ function validateRuntimeValidatorDefinition() {
   if (!validateGlossaryOwnership({ page_role: 'topic-guide', primary_category: 'Basics', subcategory: 'Using', arbitrary: true }).length) errors.push('Shared runtime validator does not reject unknown glossary ownership fields');
   const composed = validateRuntimeCandidate({});
   if (composed.valid || !composed.schema_errors.length || composed.runtime_errors.length) errors.push('Mandatory two-layer acceptance path does not reject schema-invalid candidates before runtime invariants');
+  if (!strictHttpsReason('https://bad_host/path')) errors.push('Strict HTTPS validator accepts a DNS-invalid hostname');
+  if (strictHttpsReason('https://example.com/path')) errors.push('Strict HTTPS validator rejects a valid DNS hostname');
+  if (repositoryPathReason('docs/learn/content/example.md')) errors.push('Repository-path validator rejects a valid repository path');
+  if (!repositoryPathReason('../escape.md')) errors.push('Repository-path validator accepts parent traversal');
+  if (validateSourceReference({ reference_type: 'citation', reference: '<svg>' }).length === 0) errors.push('Typed citation validation accepts real markup');
+  if (validateContentBlock({ ...validCode, code: '<script>alert(1)</script>\n' }).length) errors.push('Explicit inert-code validation rejects exact markup-looking code data');
   return errors;
 }
 
@@ -166,6 +175,12 @@ function validateSchemaDefinition(schema) {
   for (const name of ['topicGuideRoleData', 'categoryHubRoleData', 'learningPathRoleData', 'featuredRouteRoleData', 'glossaryIndexRoleData']) {
     if (!schema?.$defs?.[name]) errors.push(`Schema is missing role extension: ${name}`);
   }
+  const safeTextComment = String(schema?.$defs?.safeText?.$comment || '');
+  for (const placeholder of ['<pubkey>', '<signature>', '<txid>', '<block_hash>']) {
+    if (!safeTextComment.includes(placeholder)) errors.push(`Schema safeText does not identify approved placeholder: ${placeholder}`);
+  }
+  const sourceReference = schema?.$defs?.sourceReference;
+  if (!Array.isArray(sourceReference?.allOf) || sourceReference.allOf.length !== 4) errors.push('Schema sourceReference must define four type-aware reference branches');
   return errors;
 }
 
@@ -183,6 +198,7 @@ function emptyBlockedRecord(identity, blocking, observations) {
     compatibility: 'BLOCKED',
     blocking_incompatibilities: blocking,
     non_blocking_observations: observations,
+    source_references_detected: { structured: [], unqualified: [] },
   };
 }
 
@@ -304,6 +320,18 @@ function auditPackage(entry, registryRecord) {
     compatibility,
     blocking_incompatibilities: blocking,
     non_blocking_observations: [...new Set(observations)],
+    source_references_detected: {
+      structured: markdown.source_references.structured.map((reference) => ({
+        registry_id: entry.registry_id,
+        package_path: entry.content_file,
+        ...reference,
+      })),
+      unqualified: markdown.source_references.unqualified.map((reference) => ({
+        registry_id: entry.registry_id,
+        package_path: entry.content_file,
+        ...reference,
+      })),
+    },
   };
 }
 
@@ -345,12 +373,23 @@ function main() {
     (sum, item) => sum + item.unsupported_constructs_detected.reduce((inner, issue) => inner + issue.count, 0),
     0,
   );
-  const structuredSourceReferences = packages.reduce(
-    (sum, item) => sum + item.unsupported_constructs_detected
-      .filter((issue) => issue.type === 'source-markdown-link' && issue.blocking === false)
-      .reduce((inner, issue) => inner + issue.count, 0),
-    0,
-  );
+  const structuredReferences = packages.flatMap((item) => item.source_references_detected.structured);
+  const unqualifiedReferences = packages.flatMap((item) => item.source_references_detected.unqualified);
+  const structuredReferenceCounts = {
+    plain_https: structuredReferences.filter((item) => item.representation === 'plain-url').length,
+    markdown_https: structuredReferences.filter((item) => item.representation === 'markdown-link').length,
+    repository_path: structuredReferences.filter((item) => item.representation === 'repository-path').length,
+    total: structuredReferences.length,
+  };
+  const unqualifiedReferenceCounts = {
+    plain_url: unqualifiedReferences.filter((item) => item.representation === 'plain-url').length,
+    markdown_link: unqualifiedReferences.filter((item) => item.representation === 'markdown-link').length,
+    total: unqualifiedReferences.length,
+  };
+  const affectedPackageIds = packages
+    .filter((item) => item.source_references_detected.unqualified.length)
+    .map((item) => item.registry_id)
+    .sort((a, b) => a.localeCompare(b));
   const supportedSemanticTables = packages.reduce((sum, item) => sum + (item.markdown_constructs_detected.semantic_tables?.length || 0), 0);
   const supportedInertFencedCodeBlocks = packages.reduce((sum, item) => sum + (item.markdown_constructs_detected.inert_fenced_code_blocks?.length || 0), 0);
   const supportedFencedCodeLanguages = {};
@@ -371,7 +410,7 @@ function main() {
   const missingPackages = packages.filter((item) => item.blocking_incompatibilities.some((message) => message.startsWith('Permanent package is missing'))).length;
 
   const report = {
-    report_version: '1.2.0',
+    report_version: '1.3.0',
     target_runtime_schema_version: EXPECTED_SCHEMA_VERSION,
     source: {
       schema: { file: SCHEMA_PATH, sha256: sha256(schemaText), byte_length: Buffer.byteLength(schemaText, 'utf8') },
@@ -397,7 +436,14 @@ function main() {
       supported_semantic_tables: supportedSemanticTables,
       supported_inert_fenced_code_blocks: supportedInertFencedCodeBlocks,
       supported_fenced_code_languages: supportedFencedCodeLanguages,
-      structured_source_reference_observations: structuredSourceReferences,
+      structured_plain_https_references: structuredReferenceCounts.plain_https,
+      structured_markdown_https_references: structuredReferenceCounts.markdown_https,
+      structured_repository_path_references: structuredReferenceCounts.repository_path,
+      total_structured_references: structuredReferenceCounts.total,
+      unqualified_plain_url_references: unqualifiedReferenceCounts.plain_url,
+      unqualified_markdown_links: unqualifiedReferenceCounts.markdown_link,
+      total_unqualified_source_references: unqualifiedReferenceCounts.total,
+      affected_package_ids: affectedPackageIds,
       unsupported_tables: unsupportedTables,
       unsupported_fenced_code_blocks: unsupportedFencedCodeBlocks,
       unsupported_markdown_occurrences: unsupportedOccurrences,

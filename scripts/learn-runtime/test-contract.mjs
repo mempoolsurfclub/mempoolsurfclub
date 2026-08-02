@@ -7,6 +7,9 @@ import {
   validateContentBlock,
   validateRuntimeCandidate,
   validateRuntimeObject,
+  validateSourceReference,
+  strictHttpsReason,
+  repositoryPathReason,
 } from './lib/runtime-validation.mjs';
 
 const SHA = 'a'.repeat(64);
@@ -180,11 +183,14 @@ for (const placeholder of ['<pubkey>', '<signature>', '<txid>', '<block_hash>'])
   assert.equal(safeTextReason(`Bitcoin data uses ${placeholder}.`), null);
   assertNotBlocked(`Bitcoin data uses ${placeholder}.`, 'raw-html');
 }
-for (const html of ['<script>', '<a>', '<form>', '<button>', '<input>', '<x-widget>', '<div onclick="run()">', '</div>', '<!-- comment -->', '<!DOCTYPE html>']) {
+for (const html of ['<svg>', '<SVG>', '<math>', '<marquee>', '<script>', '<style>', '<form>', '<button>', '<input>', '<iframe>', '<a>', '<x-widget>', '<div onclick="run()">', '</div>', '</pubkey>', '<pubkey/>', '<pubkey onclick="run()">', '<!-- comment -->', '<!DOCTYPE html>']) {
   assert.ok(safeTextReason(html)?.includes('HTML') || safeTextReason(html)?.includes('event'));
   assertBlocked(html, 'raw-html', `actual HTML must block: ${html}`);
 }
 assertNotBlocked('The comparison value < 5 remains ordinary text.', 'raw-html');
+assertNotBlocked('The comparison height > width remains ordinary text.', 'raw-html');
+assert.equal(safeTextReason('Use <pubkey>, <signature>, <txid>, and <block_hash> together.'), null);
+assert.equal(blocks('### Placeholder table\n\nA | B\n--- | ---\n<pubkey> | <signature>\n').semantic_tables.length, 1);
 
 // Structured Sources records and URL parsing.
 const validSource = '## 4. Sources\n\n1. **Primary source** | Publisher\n   - URL: [x](https://example.com/source)\n   - Supports: Exact support.\n';
@@ -205,6 +211,26 @@ assertBlocked('## 4. Sources\n\n1. **Source**\n   - Supports: [x](https://exampl
 assertBlocked('[x [y]](https://example.com)', 'malformed-markdown-link', 'nested malformed link must block');
 assertBlocked('[x](https://example.com', 'malformed-markdown-link', 'unbalanced link must block');
 
+assertBlocked('## 4. Sources\n\n### Notes\n\n- URL: https://example.com\n', 'unqualified-source-reference', 'H3 plain URL must be unqualified');
+assertBlocked('## 4. Sources\n\n### Notes\n\n- URL: [x](https://example.com)\n', 'unqualified-source-reference', 'H3 Markdown link must be unqualified');
+for (const boundaryFixture of [
+  '## 4. Sources\n\n1. **Primary source**\n   - URL: https://one.example\n\n### Notes\n   - URL: https://after.example\n',
+  '## 4. Sources\n\n1. **Primary source**\n   - URL: https://one.example\n\n### Notes\n   - URL: [x](https://after.example)\n',
+  '## 4. Sources\n\n1. **One**\n   - URL: https://one.example\n\n- URL: https://between.example\n\n2. **Two**\n   - URL: https://two.example\n',
+  '## 4. Sources\n\n1. **One**\n   - URL: https://one.example\n\n- URL: [x](https://between.example)\n\n2. **Two**\n   - URL: https://two.example\n',
+  '## 4. Sources\n\n1. **One**\n   - URL: https://one.example\n\n- URL: https://after.example\n',
+  '## 4. Sources\n\n1. **One**\n   - URL: https://one.example\n\n- URL: [x](https://after.example)\n',
+]) assertBlocked(boundaryFixture, 'unqualified-source-reference', 'record termination must expose unqualified references');
+{
+  const multiple = inspectMarkdown('## 4. Sources\n\n1. **One**\n   - URL: https://one.example\n\n2. **Two**\n   - URL: [two](https://two.example)\n', 'topic-guide');
+  assert.equal(multiple.source_references.structured.length, 2);
+  assert.deepEqual(multiple.source_references.structured.map((item) => item.record_number), [1, 2]);
+  assert.equal(multiple.source_references.unqualified.length, 0);
+}
+for (const invalidHost of ['https://bad_host/path', 'https://-bad.example', 'https://bad-.example', 'https://bad..example', 'https://localhost/path']) {
+  assertBlocked('## 4. Sources\n\n1. **Source**\n   - URL: ' + invalidHost + '\n', 'invalid-source-reference', 'invalid hostname must block: ' + invalidHost);
+}
+
 // Fenced-code safety and exact preservation.
 const fenced = blocks('```sh\n  echo one\n\n  echo two\n```\n').inert_fenced_code_blocks[0];
 assert.equal(fenced.language, 'sh');
@@ -223,6 +249,47 @@ for (const role of roles) {
   assert.deepEqual(result.schema_errors, []);
   assert.deepEqual(result.runtime_errors, []);
   assert.equal(assertRuntimeCandidate(fixtures[role]), fixtures[role]);
+}
+
+
+// Approved placeholders remain accepted in complete runtime fields and table cells.
+{
+  const r = clone(fixtures['topic-guide']);
+  r.identity.h1 = 'Uses <pubkey> and <signature>.';
+  r.role_data.article_sections[0] = {
+    id: 'table-placeholders', type: 'semantic-table', label: 'Placeholder table', label_source: 'nearest-source-heading',
+    columns: [{ id: 'column-1', header: '<pubkey>', alignment: null }, { id: 'column-2', header: '<signature>', alignment: null }],
+    rows: [{ cells: ['<txid>', '<block_hash>'] }], source_sha256: SHA,
+  };
+  const result = validateRuntimeCandidate(r);
+  assert.equal(result.valid, true, JSON.stringify(result));
+  assert.deepEqual(result.schema_errors, []);
+  assert.deepEqual(result.runtime_errors, []);
+}
+
+// Exact inert code remains exempt only through the explicit inert-code contract.
+for (const code of ['<script>alert(1)</script>\n', '[link](javascript:example)\n']) {
+  const r = clone(fixtures['topic-guide']);
+  r.role_data.article_sections[0] = {
+    id: 'code-safe', type: 'inert-code', language: 'text', code,
+    executable: false, controls_enabled: false, escape_before_render: true, source_sha256: SHA,
+  };
+  const result = validateRuntimeCandidate(r);
+  assert.equal(result.valid, true, 'inert code must pass: ' + JSON.stringify(result));
+  assert.deepEqual(result.schema_errors, []);
+  assert.deepEqual(result.runtime_errors, []);
+}
+{
+  const r = clone(fixtures['topic-guide']);
+  r.role_data.article_sections[0].text = '<script>alert(1)</script>';
+  assertSchemaFailure(r, '/role_data/article_sections/0/text', 'pattern');
+  assertDirectRuntimeFailure(r, 'runtime.role_data.article_sections[0].text', 'raw HTML');
+}
+{
+  const r = clone(fixtures['topic-guide']);
+  r.role_data.article_sections[0].text = '[link](javascript:example)';
+  assertSchemaFailure(r, '/role_data/article_sections/0/text', 'pattern');
+  assertDirectRuntimeFailure(r, 'runtime.role_data.article_sections[0].text', 'Markdown link');
 }
 
 // Every required less-obvious user-facing role location is safe in schema and runtime traversal.
@@ -251,6 +318,18 @@ for (const [role, path, mutate] of unsafeCases) {
   const runtime = clone(fixtures[role]); mutate(runtime);
   assertSchemaFailure(runtime, `/${path.replaceAll('.', '/').replace(/\[(\d+)\]/g, '/$1')}`, 'pattern');
   assertDirectRuntimeFailure(runtime, `runtime.${path}`, 'raw HTML');
+}
+
+
+{
+  const r = clone(fixtures['topic-guide']); r.identity.h1 = '<svg>';
+  assertSchemaFailure(r, '/identity/h1', 'pattern');
+  assertDirectRuntimeFailure(r, 'runtime.identity.h1', 'raw HTML');
+}
+{
+  const r = clone(fixtures['topic-guide']); r.sources[0].reference_type = 'citation'; r.sources[0].reference = '<svg>';
+  assertSchemaFailure(r, '/sources/0/reference', 'pattern');
+  assertDirectRuntimeFailure(r, 'runtime.sources[0].reference', 'raw HTML');
 }
 
 // Structural schema negatives with exact paths/categories.
@@ -300,27 +379,99 @@ for (const [field, value] of [['executable', true], ['controls_enabled', true], 
   assertSchemaFailure(r, `/role_data/article_sections/0/${field}`, 'const');
 }
 
-// URL parser is a post-schema invariant for inert reference data.
-for (const badUrl of ['https://', 'https://bad host/example', 'http://example.com', '//example.com', '/relative']) {
+// URL structure and hostname semantics.
+for (const validUrl of [
+  'https://example.com/path',
+  'https://sub.example.com/path',
+  'https://xn--bcher-kva.example/path',
+  'https://192.0.2.1/path',
+  'https://[2001:db8::1]/path',
+]) assert.equal(strictHttpsReason(validUrl), null, validUrl);
+for (const invalidUrl of [
+  'https://bad_host/path',
+  'https://-bad.example',
+  'https://bad-.example',
+  'https://bad..example',
+  'https://localhost/path',
+  'https://999.1.1.1/path',
+  'https://[2001:db8:::1]/path',
+  'https://user:pass@example.com',
+  'https://',
+  'http://example.com',
+  '//example.com',
+  '/relative',
+  'javascript:example',
+  'https://bad host/example',
+]) assert.ok(strictHttpsReason(invalidUrl), invalidUrl);
+
+for (const badUrl of ['https://bad_host/path', 'https://-bad.example', 'https://bad-.example', 'https://bad..example', 'https://localhost/path', 'https://999.1.1.1/path']) {
   const r = clone(fixtures['topic-guide']); r.sources[0].reference = badUrl;
-  assertRuntimeFailure(r, 'runtime.sources[0].reference', 'source-reference', 'must');
+  assertRuntimeFailure(r, 'runtime.sources[0].reference', 'source-reference', '');
+}
+for (const structurallyBadUrl of ['https://', 'https://bad host/example', 'http://example.com', '//example.com', '/relative', 'https://user:pass@example.com']) {
+  const r = clone(fixtures['topic-guide']); r.sources[0].reference = structurallyBadUrl;
+  assertSchemaFailure(r, '/sources/0/reference', 'pattern');
 }
 
-// Corpus-level parser regression: derive, do not hardcode parser output.
+// Type-aware source reference policy.
+for (const [type, reference] of [
+  ['url', 'https://example.com/source'],
+  ['repository-path', 'docs/learn/content/example.md'],
+  ['citation', 'Bitcoin Core documentation using <txid>.'],
+  ['other', 'Archived technical reference.'],
+]) {
+  const r = clone(fixtures['topic-guide']); r.sources[0].reference_type = type; r.sources[0].reference = reference;
+  const result = validateRuntimeCandidate(r);
+  assert.equal(result.valid, true, type + ': ' + JSON.stringify(result));
+  assert.deepEqual(validateSourceReference(r.sources[0], 'runtime.sources[0]'), []);
+}
+for (const pathValue of ['/absolute/path', '../escape.md', 'docs/../escape.md', 'https://example.com/path', 'docs\\escape.md']) {
+  assert.ok(repositoryPathReason(pathValue));
+  const r = clone(fixtures['topic-guide']); r.sources[0].reference_type = 'repository-path'; r.sources[0].reference = pathValue;
+  assertSchemaFailure(r, '/sources/0/reference', 'pattern');
+}
+for (const [type, reference] of [
+  ['citation', '[active](https://example.com)'],
+  ['citation', '![image](image.png)'],
+  ['other', '<svg>'],
+  ['other', 'javascript:example'],
+]) {
+  const r = clone(fixtures['topic-guide']); r.sources[0].reference_type = type; r.sources[0].reference = reference;
+  assertSchemaFailure(r, '/sources/0/reference', 'pattern');
+  assertDirectRuntimeFailure(r, 'runtime.sources[0].reference', type === 'other' && reference === '<svg>' ? 'raw HTML' : reference.startsWith('!') ? 'Markdown image' : reference.startsWith('[') ? 'Markdown link' : 'unsafe URI');
+}
+
+// Corpus-level parser regression: all counts are derived from the corrected production parser.
 const manifest = JSON.parse(fs.readFileSync('docs/learn/content/content-manifest.json', 'utf8'));
 assert.equal(manifest.entries.length, 92);
-let sourceReferenceCount = 0;
-let unqualifiedSourceLinks = 0;
+const structuredReferenceCounts = { 'plain-url': 0, 'markdown-link': 0, 'repository-path': 0 };
+const unqualifiedReferenceCounts = { 'plain-url': 0, 'markdown-link': 0 };
+const affectedPackageIds = new Set();
 for (const entry of manifest.entries) {
   const markdown = fs.readFileSync(entry.content_file, 'utf8');
   const result = inspectMarkdown(markdown, entry.page_role);
-  sourceReferenceCount += result.unsupported_constructs.find((item) => item.type === 'source-markdown-link')?.count || 0;
-  unqualifiedSourceLinks += result.unsupported_constructs
-    .filter((item) => ['active-markdown-link', 'active-plain-url', 'malformed-markdown-link', 'invalid-source-reference'].includes(item.type))
-    .reduce((sum, item) => sum + item.count, 0);
+  for (const reference of result.source_references.structured) {
+    structuredReferenceCounts[reference.representation] += 1;
+    assert.ok(reference.record_order > 0);
+    assert.ok(reference.field_name);
+    assert.ok(reference.source_line > 0);
+  }
+  for (const reference of result.source_references.unqualified) {
+    unqualifiedReferenceCounts[reference.representation] += 1;
+    affectedPackageIds.add(entry.registry_id);
+    assert.ok(reference.source_line > 0);
+  }
 }
-assert.equal(sourceReferenceCount, 171, `derived structured source references changed: ${sourceReferenceCount}`);
-assert.equal(unqualifiedSourceLinks, 0, `unqualified source links found: ${unqualifiedSourceLinks}`);
+const sourceReferenceCount = Object.values(structuredReferenceCounts).reduce((sum, count) => sum + count, 0);
+const unqualifiedSourceLinks = Object.values(unqualifiedReferenceCounts).reduce((sum, count) => sum + count, 0);
+assert.ok(structuredReferenceCounts['plain-url'] > 0, JSON.stringify(structuredReferenceCounts));
+assert.ok(structuredReferenceCounts['markdown-link'] > 0, JSON.stringify(structuredReferenceCounts));
+assert.equal(Number.isInteger(structuredReferenceCounts['repository-path']), true);
+assert.equal(inspectMarkdown('## 4. Sources\n\n1. **Repository source**\n   - Reference: docs/learn/content/example.md\n', 'topic-guide').source_references.structured[0]?.representation, 'repository-path');
+assert.ok(unqualifiedSourceLinks > 0, JSON.stringify(unqualifiedReferenceCounts));
+for (let number = 1; number <= 20; number += 1) {
+  assert.ok(affectedPackageIds.has('MSC-GUIDE-' + String(number).padStart(3, '0')), 'expected blocked guide ' + number);
+}
 
 // Direct content-block assertions retain precise invariant coverage.
 const validTable = {
@@ -332,4 +483,4 @@ assert.deepEqual(validateContentBlock(validTable), []);
 assert.ok(validateContentBlock({ ...validTable, rows: [{ cells: ['a'] }] }).some((error) => error.includes('exactly 2 cells')));
 assert.equal(safeTextReason('Bitcoin pushes <signature>.'), null);
 
-process.stdout.write(`MSC Learn runtime contract tests passed: five roles, 92 packages, ${sourceReferenceCount} structured source references.\n`);
+process.stdout.write(`MSC Learn runtime contract tests passed: five roles, 92 packages, ${sourceReferenceCount} structured references, ${unqualifiedSourceLinks} unqualified references, ${affectedPackageIds.size} affected packages.\n`);
