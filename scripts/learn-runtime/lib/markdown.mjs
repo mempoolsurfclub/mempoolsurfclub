@@ -42,7 +42,8 @@ const COMMON_REQUIRED_TITLES = [
   /illustration brief/i,
 ];
 
-const STRUCTURED_LIST_SECTION = /sources|human verification|accuracy (?:review )?checklist|illustration brief/i;
+const STRUCTURED_LIST_SECTION = /sources|human verification|accuracy (?:review )?checklist|illustration brief|planned internal links/i;
+const STRUCTURED_FIELD_SECTION = /sources|human verification|illustration brief|card or step copy|destination structure or sequence/i;
 
 function collectMatches(text, pattern) {
   return [...text.matchAll(pattern)].map((match) => match[0]);
@@ -150,7 +151,7 @@ function malformedFieldRecords(markdown, sections) {
     const item = record.line.match(/^\s*-\s+(.+)$/)?.[1];
     if (!item || item.includes(':') || /^\[[ xX]\]/.test(item)) return false;
     const section = sectionAt(sections, record.index);
-    if (section && /accuracy (?:review )?checklist|human verification/i.test(section.title)) return false;
+    if (!section || !STRUCTURED_FIELD_SECTION.test(section.title)) return false;
     return fieldLabel.test(item);
   }).map((record) => record.line);
 }
@@ -222,7 +223,7 @@ export function inspectMarkdown(markdown, pageRole) {
   }
 
   const observations = [];
-  if (indentedListLines.length) observations.push(`Contains ${indentedListLines.length} indented structured list line(s) inside approved field, source, review, or illustration records.`);
+  if (indentedListLines.length) observations.push(`Contains ${indentedListLines.length} indented structured list line(s) inside approved field, source, review, relationship, or illustration records.`);
   if (markdownLinks.source.length) observations.push(`Contains ${markdownLinks.source.length} Markdown source-reference link(s); the future adapter must extract and escape these as reference text rather than render active links.`);
   const fencedBlocks = collectMatches(markdown, /^```[^\n]*$/gm).length;
   if (fencedBlocks && !fencedScripts.length) observations.push(`Contains ${fencedBlocks} non-script fenced-code delimiter(s); the shared Markdown layer must preserve escaped code text.`);
