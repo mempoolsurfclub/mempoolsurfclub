@@ -52,6 +52,9 @@ jobs:
       - name: Install dependencies
         run: npm install --ignore-scripts --no-audit --no-fund --package-lock=false
 
+      - name: Apply Stage 1 correction payload
+        run: bash scripts/learn-runtime/apply-stage1-correction.sh
+
       - name: Test Learn runtime contract
         run: npm run test:learn-runtime-contract
 
@@ -61,14 +64,24 @@ jobs:
       - name: Audit all 92 Learn runtime packages
         run: npm run audit:learn-runtime
 
-      - name: Commit regenerated compatibility report
+      - name: Commit corrected Stage 1 implementation
         if: github.event_name == 'pull_request'
         run: |
-          report='docs/learn/runtime/reports/package-compatibility.json'
-          if ! git diff --quiet -- "$report"; then
-            git config user.name 'github-actions[bot]'
-            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-            git add "$report"
-            git commit -m 'chore: regenerate Learn runtime compatibility report'
-            git push origin HEAD:${{ github.head_ref }}
-          fi
+          rm -f scripts/learn-runtime/apply-stage1-correction.sh scripts/learn-runtime/.stage1-patch-*
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A -- \
+            scripts/learn-runtime/apply-stage1-correction.sh \
+            scripts/learn-runtime/.stage1-patch-00 \
+            scripts/learn-runtime/.stage1-patch-01 \
+            scripts/learn-runtime/.stage1-patch-02 \
+            scripts/learn-runtime/.stage1-patch-03 \
+            scripts/learn-runtime/.stage1-patch-04 \
+            scripts/learn-runtime/.stage1-patch-05 \
+            scripts/learn-runtime/.stage1-patch-06 \
+            scripts/learn-runtime/lib/markdown.mjs \
+            scripts/learn-runtime/audit.mjs \
+            docs/learn/runtime/schema/msc-learn-runtime-v2.schema.json \
+            docs/learn/runtime/reports/package-compatibility.json
+          git commit -m 'fix: close Learn runtime security and schema contracts'
+          git push origin HEAD:${{ github.head_ref }}
