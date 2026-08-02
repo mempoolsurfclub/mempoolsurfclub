@@ -15,7 +15,8 @@
     "validate:learn-path-pilot": "node scripts/generate-msc-learn-start-path-runtime.mjs --check",
     "validate:learn-route-pilot": "node scripts/generate-msc-learn-transaction-route-runtime.mjs --check",
     "validate:learn-glossary-pilot": "node scripts/generate-msc-learn-glossary-runtime.mjs --check",
-    "test:json": "node scripts/parse-json-templates.mjs"
+    "test:json": "node scripts/parse-json-templates.mjs",
+    "test:learn-runtime-contract": "node scripts/learn-runtime/test-contract.mjs"
   },
   "devDependencies": {}
 }
