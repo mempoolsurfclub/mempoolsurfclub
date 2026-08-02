@@ -45,13 +45,16 @@ const COMMON_REQUIRED_TITLES = [
 const STRUCTURED_LIST_SECTION = /sources|human verification|accuracy (?:review )?checklist|illustration brief|planned internal links/i;
 const STRUCTURED_FIELD_SECTION = /sources|human verification|illustration brief|card or step copy|destination structure or sequence/i;
 const VALID_FENCE_LANGUAGE = /^[A-Za-z0-9][A-Za-z0-9_+.-]*$/;
+const MARKDOWN_LINK_PATTERN = /(?<!!)\[([^\]]+)\]\(([^\n)]+)\)/g;
+const MARKDOWN_IMAGE_PATTERN = /!\[[^\]]*\]\([^\n)]+\)/g;
+const HTML_TOKEN_PATTERN = /<!--[\s\S]*?-->|<![A-Za-z][^>]*>|<\/?[A-Za-z][A-Za-z0-9:-]*(?:\s[^<>]*?)?\s*\/?>/g;
 
 function collectMatches(text, pattern) {
   return [...text.matchAll(pattern)].map((match) => match[0]);
 }
 
 function collectMatchObjects(text, pattern) {
-  return [...text.matchAll(pattern)].map((match) => ({ text: match[0], index: match.index }));
+  return [...text.matchAll(pattern)].map((match) => ({ text: match[0], index: match.index, match }));
 }
 
 function numberedSections(markdown) {
@@ -92,7 +95,7 @@ function lineRecords(markdown) {
   const records = [];
   let offset = 0;
   for (const [lineIndex, line] of markdown.split('\n').entries()) {
-    records.push({ line, index: offset, line_number: lineIndex + 1 });
+    records.push({ line, index: offset, end: offset + line.length, line_number: lineIndex + 1 });
     offset += line.length + 1;
   }
   return records;
@@ -105,11 +108,7 @@ function maskLine(line) {
 function fenceMarker(line) {
   const match = line.match(/^ {0,3}(`{3,}|~{3,})([^\n]*)$/);
   if (!match) return null;
-  return {
-    character: match[1][0],
-    length: match[1].length,
-    suffix: match[2],
-  };
+  return { character: match[1][0], length: match[1].length, suffix: match[2] };
 }
 
 function isClosingFence(marker, opener) {
@@ -151,11 +150,7 @@ function isolateFencedCode(markdown) {
     for (let cursor = index; cursor <= maskEnd; cursor += 1) masked[cursor] = maskLine(lines[cursor]);
 
     if (closingIndex < 0) {
-      unsupported.push({
-        line: openingLine,
-        reason: 'unclosed-fence',
-        example: lines[index].trim(),
-      });
+      unsupported.push({ line: openingLine, reason: 'unclosed-fence', example: lines[index].trim() });
       break;
     }
 
@@ -186,11 +181,7 @@ function isolateFencedCode(markdown) {
     index = closingIndex;
   }
 
-  return {
-    markdown: masked.join('\n'),
-    blocks,
-    unsupported,
-  };
+  return { markdown: masked.join('\n'), blocks, unsupported };
 }
 
 function isEscaped(text, index) {
@@ -199,15 +190,26 @@ function isEscaped(text, index) {
   return backslashes % 2 === 1;
 }
 
-function splitPipeRow(line) {
+function edgePipeState(line) {
+  const trimmed = line.trim();
+  return {
+    leading: trimmed.startsWith('|'),
+    trailing: trimmed.endsWith('|') && !isEscaped(trimmed, trimmed.length - 1),
+  };
+}
+
+function parsePipeRow(line) {
   let text = line.trim();
+  const edge = edgePipeState(line);
   if (!text.includes('|')) return null;
-  if (text.startsWith('|')) text = text.slice(1);
-  if (text.endsWith('|') && !isEscaped(text, text.length - 1)) text = text.slice(0, -1);
+  if (edge.leading) text = text.slice(1);
+  if (edge.trailing) text = text.slice(0, -1);
 
   const cells = [];
   let cell = '';
   let separators = 0;
+  let codeFenceLength = 0;
+
   for (let index = 0; index < text.length; index += 1) {
     const character = text[index];
     if (character === '\\' && text[index + 1] === '|') {
@@ -215,7 +217,16 @@ function splitPipeRow(line) {
       index += 1;
       continue;
     }
-    if (character === '|' && !isEscaped(text, index)) {
+    if (character === '`' && !isEscaped(text, index)) {
+      let run = 1;
+      while (text[index + run] === '`') run += 1;
+      if (!codeFenceLength) codeFenceLength = run;
+      else if (run === codeFenceLength) codeFenceLength = 0;
+      cell += '`'.repeat(run);
+      index += run - 1;
+      continue;
+    }
+    if (character === '|' && !isEscaped(text, index) && !codeFenceLength) {
       cells.push(cell.trim());
       cell = '';
       separators += 1;
@@ -224,7 +235,14 @@ function splitPipeRow(line) {
     cell += character;
   }
   cells.push(cell.trim());
-  return separators ? cells : null;
+
+  if (!separators && !(edge.leading && edge.trailing)) return null;
+  return {
+    cells,
+    separators,
+    outer_pipe_syntax: edge.leading || edge.trailing,
+    balanced_inline_code: codeFenceLength === 0,
+  };
 }
 
 function delimiterAlignment(cell) {
@@ -237,18 +255,27 @@ function delimiterAlignment(cell) {
   return null;
 }
 
-function looksLikeDelimiterRow(line) {
-  const cells = splitPipeRow(line);
-  return Boolean(cells?.length && cells.every((cell) => /^:?-+:?$/.test(cell)));
+function delimiterLike(row) {
+  return Boolean(row?.cells.length && row.cells.every((cell) => /^:?-+:?$/.test(cell)));
 }
 
 function forbiddenTableCell(cell) {
-  if (/<\/?[A-Za-z][^>]*>/.test(cell)) return 'raw-html';
-  if (/!\[[^\]]*\]\([^\n)]+\)/.test(cell)) return 'markdown-image';
-  if (/(?<!!)\[[^\]]+\]\([^\n)]+\)/.test(cell)) return 'active-destination-link';
+  if (HTML_TOKEN_PATTERN.test(cell)) {
+    HTML_TOKEN_PATTERN.lastIndex = 0;
+    return 'raw-html';
+  }
+  HTML_TOKEN_PATTERN.lastIndex = 0;
+  if (MARKDOWN_IMAGE_PATTERN.test(cell)) {
+    MARKDOWN_IMAGE_PATTERN.lastIndex = 0;
+    return 'markdown-image';
+  }
+  MARKDOWN_IMAGE_PATTERN.lastIndex = 0;
+  if (MARKDOWN_LINK_PATTERN.test(cell)) {
+    MARKDOWN_LINK_PATTERN.lastIndex = 0;
+    return 'active-destination-link';
+  }
+  MARKDOWN_LINK_PATTERN.lastIndex = 0;
   if (cell.endsWith('\\')) return 'multiline-cell';
-  const backticks = (cell.match(/`/g) || []).length;
-  if (backticks % 2 !== 0) return 'structurally-ambiguous-cell';
   return null;
 }
 
@@ -260,60 +287,96 @@ function nearestApprovedHeading(lines, beforeIndex) {
   return null;
 }
 
+function tableRowEligible(line, parsed) {
+  if (!parsed) return false;
+  if (parsed.outer_pipe_syntax) return true;
+  const trimmed = line.trim();
+  if (/^(?:[-*+]\s+|\d+\.\s+|#{1,6}\s+)/.test(trimmed)) return false;
+  return true;
+}
+
+function candidateRunEnd(lines, startIndex) {
+  const first = parsePipeRow(lines[startIndex]);
+  if (!tableRowEligible(lines[startIndex], first)) return startIndex;
+  let cursor = startIndex + 1;
+  while (cursor < lines.length && lines[cursor].trim()) {
+    const parsed = parsePipeRow(lines[cursor]);
+    if (!tableRowEligible(lines[cursor], parsed)) break;
+    cursor += 1;
+  }
+  return cursor - 1;
+}
+
+function isTableCandidate(lines, index) {
+  const first = parsePipeRow(lines[index]);
+  if (!tableRowEligible(lines[index], first)) return false;
+  const second = index + 1 < lines.length ? parsePipeRow(lines[index + 1]) : null;
+  const secondEligible = tableRowEligible(lines[index + 1] || '', second);
+  if (first.outer_pipe_syntax) return true;
+  if (secondEligible && delimiterLike(second)) return true;
+  if (secondEligible && first.cells.length >= 2 && second.cells.length === first.cells.length) return true;
+  return false;
+}
+
 function isolateSemanticTables(markdown) {
   const lines = markdown.split('\n');
   const masked = [...lines];
   const tables = [];
   const unsupported = [];
-  const consumed = new Set();
   let sourceOrder = 0;
 
-  for (let delimiterIndex = 1; delimiterIndex < lines.length; delimiterIndex += 1) {
-    if (consumed.has(delimiterIndex) || !looksLikeDelimiterRow(lines[delimiterIndex])) continue;
-    const headerIndex = delimiterIndex - 1;
-    const headerCells = splitPipeRow(lines[headerIndex]);
-    const delimiterCells = splitPipeRow(lines[delimiterIndex]);
-    if (!headerCells || !delimiterCells) continue;
+  for (let index = 0; index < lines.length; index += 1) {
+    if (!isTableCandidate(lines, index)) continue;
 
-    const bodyLines = [];
-    let cursor = delimiterIndex + 1;
-    while (cursor < lines.length && lines[cursor].trim() && splitPipeRow(lines[cursor])) {
-      bodyLines.push(cursor);
-      cursor += 1;
-    }
-
-    const tableLines = [headerIndex, delimiterIndex, ...bodyLines];
-    for (const lineIndex of tableLines) {
-      consumed.add(lineIndex);
-      masked[lineIndex] = maskLine(lines[lineIndex]);
-    }
+    const runEnd = candidateRunEnd(lines, index);
+    const header = parsePipeRow(lines[index]);
+    const delimiter = index + 1 <= runEnd ? parsePipeRow(lines[index + 1]) : null;
+    const hasDelimiter = delimiterLike(delimiter);
+    const bodyStart = hasDelimiter ? index + 2 : index + 1;
+    const bodyIndexes = [];
+    for (let cursor = bodyStart; cursor <= runEnd; cursor += 1) bodyIndexes.push(cursor);
 
     const reasons = [];
-    if (headerCells.length < 2) reasons.push('fewer-than-two-columns');
-    if (headerCells.some((cell) => !cell)) reasons.push('empty-header-cell');
-    if (delimiterCells.length !== headerCells.length) reasons.push('delimiter-column-count-mismatch');
-    const alignments = delimiterCells.map(delimiterAlignment);
-    if (alignments.some((alignment) => alignment === undefined)) reasons.push('invalid-delimiter-cell');
-    if (!bodyLines.length) reasons.push('missing-body-row');
+    if (!header?.balanced_inline_code) reasons.push('structurally-ambiguous-cell');
+    if (!header || header.cells.length < 2) reasons.push('fewer-than-two-columns');
+    if (header?.cells.some((cell) => !cell)) reasons.push('empty-header-cell');
+    if (!hasDelimiter) reasons.push('missing-or-malformed-delimiter-row');
 
-    const bodyRows = bodyLines.map((lineIndex) => splitPipeRow(lines[lineIndex]));
-    if (bodyRows.some((cells) => cells.length !== headerCells.length)) reasons.push('body-column-count-mismatch');
-    const allTextCells = [...headerCells, ...bodyRows.flat()];
+    const alignments = hasDelimiter ? delimiter.cells.map(delimiterAlignment) : [];
+    if (hasDelimiter && delimiter.cells.length !== header.cells.length) reasons.push('delimiter-column-count-mismatch');
+    if (hasDelimiter && alignments.some((alignment) => alignment === undefined)) reasons.push('invalid-delimiter-cell');
+    if (hasDelimiter && !bodyIndexes.length) reasons.push('missing-body-row');
+
+    const bodyRows = bodyIndexes.map((lineIndex) => parsePipeRow(lines[lineIndex]));
+    if (bodyRows.some((row) => !row?.balanced_inline_code)) reasons.push('structurally-ambiguous-cell');
+    if (header && bodyRows.some((row) => row.cells.length !== header.cells.length)) reasons.push('body-column-count-mismatch');
+    if (bodyRows.some((row) => row.cells.some((cell) => !cell))) reasons.push('empty-body-cell');
+
+    const allTextCells = [
+      ...(header?.cells || []),
+      ...bodyRows.flatMap((row) => row?.cells || []),
+    ];
     for (const cell of allTextCells) {
       const reason = forbiddenTableCell(cell);
       if (reason) reasons.push(reason);
     }
 
-    const heading = nearestApprovedHeading(lines, headerIndex);
+    if (runEnd + 1 < lines.length && /^\s+\S/.test(lines[runEnd + 1]) && lines[runEnd + 1].trim()) {
+      reasons.push('ambiguous-multiline-row');
+    }
+
+    const heading = nearestApprovedHeading(lines, index);
     if (!heading?.text) reasons.push('missing-accessible-source-heading');
+
+    for (let cursor = index; cursor <= runEnd; cursor += 1) masked[cursor] = maskLine(lines[cursor]);
 
     if (reasons.length) {
       unsupported.push({
-        line: headerIndex + 1,
-        header: lines[headerIndex].trim(),
+        line: index + 1,
+        header: lines[index].trim(),
         reasons: [...new Set(reasons)],
       });
-      delimiterIndex = Math.max(delimiterIndex, cursor - 1);
+      index = runEnd;
       continue;
     }
 
@@ -322,46 +385,20 @@ function isolateSemanticTables(markdown) {
       type: 'semantic-table',
       label: heading.text,
       label_source: 'nearest-source-heading',
-      source_heading: {
-        depth: heading.depth,
-        text: heading.text,
-        line: heading.line,
-      },
-      columns: headerCells.map((header, index) => ({
-        id: `column-${index + 1}`,
-        header,
-        alignment: alignments[index],
+      source_heading: { depth: heading.depth, text: heading.text, line: heading.line },
+      columns: header.cells.map((headerText, columnIndex) => ({
+        id: `column-${columnIndex + 1}`,
+        header: headerText,
+        alignment: alignments[columnIndex],
       })),
-      rows: bodyRows.map((cells) => ({ cells })),
+      rows: bodyRows.map((row) => ({ cells: row.cells })),
       source_order: sourceOrder,
-      source_line: headerIndex + 1,
+      source_line: index + 1,
     });
-    delimiterIndex = Math.max(delimiterIndex, cursor - 1);
+    index = runEnd;
   }
 
-  for (let index = 0; index < lines.length - 1; index += 1) {
-    if (consumed.has(index) || consumed.has(index + 1)) continue;
-    const first = splitPipeRow(lines[index]);
-    const second = splitPipeRow(lines[index + 1]);
-    if (!first || !second || first.length < 2 || second.length < 2) continue;
-    if (!(lines[index].trim().startsWith('|') || lines[index].trim().endsWith('|'))) continue;
-    unsupported.push({
-      line: index + 1,
-      header: lines[index].trim(),
-      reasons: ['missing-or-malformed-delimiter-row'],
-    });
-    consumed.add(index);
-    consumed.add(index + 1);
-    masked[index] = maskLine(lines[index]);
-    masked[index + 1] = maskLine(lines[index + 1]);
-    index += 1;
-  }
-
-  return {
-    markdown: masked.join('\n'),
-    tables,
-    unsupported,
-  };
+  return { markdown: masked.join('\n'), tables, unsupported };
 }
 
 function detectUnsupportedNestedLists(markdown, sections) {
@@ -386,12 +423,37 @@ function detectUnsupportedNestedLists(markdown, sections) {
   return hits;
 }
 
+function maskInlineCode(markdown) {
+  return markdown.split('\n').map((line) => {
+    const chars = [...line];
+    let index = 0;
+    while (index < line.length) {
+      if (line[index] !== '`' || isEscaped(line, index)) { index += 1; continue; }
+      let run = 1;
+      while (line[index + run] === '`') run += 1;
+      const marker = '`'.repeat(run);
+      const close = line.indexOf(marker, index + run);
+      if (close < 0) { index += run; continue; }
+      for (let cursor = index; cursor < close + run; cursor += 1) chars[cursor] = ' ';
+      index = close + run;
+    }
+    return chars.join('');
+  }).join('\n');
+}
+
 function detectRawHtml(markdown) {
-  return markdown.split('\n').filter((line) => {
-    const trimmed = line.trim();
-    if (!trimmed.startsWith('<')) return false;
-    return /^<\/?[A-Za-z][^>]*>/.test(trimmed);
-  });
+  const hits = [];
+  const lines = markdown.split('\n');
+  for (const match of markdown.matchAll(HTML_TOKEN_PATTERN)) {
+    const lineNumber = markdown.slice(0, match.index).split('\n').length;
+    hits.push({
+      line: lineNumber,
+      token: match[0],
+      text: lines[lineNumber - 1]?.trim() || match[0],
+    });
+  }
+  HTML_TOKEN_PATTERN.lastIndex = 0;
+  return hits;
 }
 
 function malformedFieldRecords(markdown, sections) {
@@ -405,15 +467,64 @@ function malformedFieldRecords(markdown, sections) {
   }).map((record) => record.line);
 }
 
+function structuredSourceRecords(markdown, sections) {
+  const records = [];
+  const lines = lineRecords(markdown);
+  for (const section of sections.filter((item) => /sources/i.test(item.title))) {
+    const sectionLines = lines.filter((line) => line.index > section.body_start && line.index < section.end);
+    const starters = [];
+    for (let index = 0; index < sectionLines.length; index += 1) {
+      const text = sectionLines[index].line;
+      if (/^###\s+\S/.test(text) || /^\d+\.\s+\*\*.+?\*\*(?:\s+\|.*)?\s*$/.test(text)) starters.push(index);
+    }
+    for (let position = 0; position < starters.length; position += 1) {
+      const startIndex = starters[position];
+      const endIndex = (starters[position + 1] ?? sectionLines.length) - 1;
+      const slice = sectionLines.slice(startIndex, endIndex + 1);
+      const approvedRanges = [];
+      for (const line of slice) {
+        const field = line.line.match(/^\s*[-*]\s+(?:Direct URL|URL|Reference):\s*(.+)$/i);
+        if (!field) continue;
+        const valueStart = line.index + line.line.indexOf(field[1]);
+        approvedRanges.push({
+          start: valueStart,
+          end: valueStart + field[1].length,
+          line: line.line_number,
+          value: field[1].trim(),
+        });
+      }
+      records.push({
+        start: slice[0].index,
+        end: slice.at(-1).end,
+        approved_ranges: approvedRanges,
+      });
+    }
+  }
+  return records;
+}
+
+function approvedSourceLink(match, records) {
+  const destination = match.match[2].trim();
+  if (!/^https:\/\//i.test(destination)) return false;
+  const start = match.index;
+  const end = start + match.text.length;
+  return records.some((record) => record.approved_ranges.some((range) => (
+    start >= range.start
+    && end <= range.end
+    && range.value === match.text
+  )));
+}
+
 function detectMarkdownLinks(markdown, sections) {
   const source = [];
   const active = [];
-  for (const match of collectMatchObjects(markdown, /(?<!!)\[[^\]]+\]\([^\n)]+\)/g)) {
-    const section = sectionAt(sections, match.index);
-    if (section && /sources/i.test(section.title)) source.push(match.text);
+  const records = structuredSourceRecords(markdown, sections);
+  for (const match of collectMatchObjects(markdown, MARKDOWN_LINK_PATTERN)) {
+    if (approvedSourceLink(match, records)) source.push(match.text);
     else active.push(match.text);
   }
-  return { source, active };
+  MARKDOWN_LINK_PATTERN.lastIndex = 0;
+  return { source, active, structured_records: records.length };
 }
 
 function languageCounts(blocks) {
@@ -442,7 +553,7 @@ export function inspectMarkdown(markdown, pageRole) {
     inline_code: collectMatches(scanMarkdown, /`[^`\n]+`/g).length,
     strong_text: collectMatches(scanMarkdown, /\*\*[^*\n]+\*\*/g).length,
     structured_key_terms: collectMatches(scanMarkdown, /^\s*-\s+\*\*.+?:\*\*\s+.+$/gm).length,
-    structured_sources: collectMatches(scanMarkdown, /^\d+\.\s+\*\*.+?\*\*\s*$/gm).length,
+    structured_sources: collectMatches(scanMarkdown, /^\d+\.\s+\*\*.+?\*\*\s*(?:\|.*)?$/gm).length,
     human_verification_sections: sectionTitles.filter((title) => /human verification/i.test(title)).length,
     accuracy_checklist_items: collectMatches(scanMarkdown, /^\s*-\s+\[[ xX]\]\s+.+$/gm).length,
     illustration_briefs: collectMatches(scanMarkdown, /^###\s+Illustration\s+\d+(?:\s+\(optional\))?\s*$/gm).length,
@@ -452,12 +563,16 @@ export function inspectMarkdown(markdown, pageRole) {
   };
   for (const entry of ROLE_PATTERNS[pageRole] || []) constructs.role_specific[entry.name] = collectMatches(scanMarkdown, entry.pattern).length;
 
-  const rawHtml = detectRawHtml(scanMarkdown);
-  const markdownImages = collectMatches(scanMarkdown, /!\[[^\]]*\]\([^\n)]+\)/g);
-  const markdownLinks = detectMarkdownLinks(scanMarkdown, sections);
+  const securityScanMarkdown = maskInlineCode(scanMarkdown);
+  const rawHtml = detectRawHtml(securityScanMarkdown);
+  const markdownImages = collectMatches(securityScanMarkdown, MARKDOWN_IMAGE_PATTERN);
+  MARKDOWN_IMAGE_PATTERN.lastIndex = 0;
+  const markdownLinks = detectMarkdownLinks(securityScanMarkdown, sections);
   const nestedLists = detectUnsupportedNestedLists(scanMarkdown, sections);
-  const eventHandlers = collectMatches(scanMarkdown, /\bon[a-z]+\s*=/gi);
-  const unexpectedHeadings = Object.entries(constructs.heading_depths).filter(([depth]) => Number(depth) > 4).map(([depth, count]) => ({ depth: Number(depth), count }));
+  const eventHandlers = collectMatches(securityScanMarkdown, /\bon[a-z]+\s*=/gi);
+  const unexpectedHeadings = Object.entries(constructs.heading_depths)
+    .filter(([depth]) => Number(depth) > 4)
+    .map(([depth, count]) => ({ depth: Number(depth), count }));
   const malformedFields = malformedFieldRecords(scanMarkdown, sections);
 
   const unsupported = [];
@@ -472,20 +587,32 @@ export function inspectMarkdown(markdown, pageRole) {
   push('unsupported-nested-list', nestedLists);
   push('unsupported-fenced-code', fenced.unsupported);
   push('inline-event-handler-text', eventHandlers);
-  if (unexpectedHeadings.length) unsupported.push({ type: 'unexpected-heading-depth', count: unexpectedHeadings.reduce((sum, item) => sum + item.count, 0), blocking: true, examples: unexpectedHeadings });
+  if (unexpectedHeadings.length) unsupported.push({
+    type: 'unexpected-heading-depth',
+    count: unexpectedHeadings.reduce((sum, item) => sum + item.count, 0),
+    blocking: true,
+    examples: unexpectedHeadings,
+  });
   push('malformed-field-record', malformedFields);
 
   const duplicateSectionNumbers = repeatedNumbers(sections);
-  if (duplicateSectionNumbers.length) unsupported.push({ type: 'duplicate-numbered-section', count: duplicateSectionNumbers.length, blocking: true, examples: duplicateSectionNumbers });
+  if (duplicateSectionNumbers.length) unsupported.push({
+    type: 'duplicate-numbered-section',
+    count: duplicateSectionNumbers.length,
+    blocking: true,
+    examples: duplicateSectionNumbers,
+  });
 
-  const missingRequiredSections = COMMON_REQUIRED_TITLES.filter((pattern) => !sectionTitles.some((title) => pattern.test(title))).map((pattern) => pattern.source);
+  const missingRequiredSections = COMMON_REQUIRED_TITLES
+    .filter((pattern) => !sectionTitles.some((title) => pattern.test(title)))
+    .map((pattern) => pattern.source);
   for (const name of ROLE_REQUIRED_CONSTRUCTS[pageRole] || []) {
     if (!constructs.role_specific[name]) missingRequiredSections.push(`role-construct:${name}`);
   }
 
   const observations = [];
   if (indentedListLines.length) observations.push(`Contains ${indentedListLines.length} indented structured list line(s) inside approved field, source, review, relationship, or illustration records.`);
-  if (markdownLinks.source.length) observations.push(`Contains ${markdownLinks.source.length} Markdown source-reference link(s); the future adapter must extract and escape these as reference text rather than render active links.`);
+  if (markdownLinks.source.length) observations.push(`Contains ${markdownLinks.source.length} validated HTTPS Markdown source-reference link(s); the future adapter must preserve them as reference data and escape them rather than render active links.`);
   if (tableIsolation.tables.length) observations.push(`Contains ${tableIsolation.tables.length} supported semantic Markdown table(s); the role adapter must preserve ordered headers and rows and use the recorded source heading as the non-empty accessible label.`);
   if (fenced.blocks.length) {
     const counts = languageCounts(fenced.blocks);

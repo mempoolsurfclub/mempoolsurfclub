@@ -10,6 +10,12 @@ import {
 } from './lib/hashing.mjs';
 import { parseFrontmatter } from './lib/frontmatter.mjs';
 import { inspectMarkdown } from './lib/markdown.mjs';
+import {
+  validateContentBlock,
+  validateInactiveDestination,
+  validateRelationship,
+  validateGlossaryOwnership,
+} from './lib/runtime-validation.mjs';
 import { indexRegistry } from './lib/registry.mjs';
 import {
   approvedPackageDirectories,
@@ -58,8 +64,44 @@ function compareField(label, values, blocking) {
   };
 }
 
-function validateSchemaDefinition(schema) {
+function validateRuntimeValidatorDefinition() {
+  const sha = '0'.repeat(64);
+  const validTable = {
+    id: 'table-1',
+    type: 'semantic-table',
+    label: 'Example table',
+    label_source: 'nearest-source-heading',
+    columns: [
+      { id: 'column-1', header: 'First', alignment: null },
+      { id: 'column-2', header: 'Second', alignment: 'right' },
+    ],
+    rows: [{ cells: ['a', 'b'] }],
+    source_sha256: sha,
+  };
+  const validCode = {
+    id: 'code-1',
+    type: 'inert-code',
+    language: 'sh',
+    code: 'echo safe\n',
+    executable: false,
+    controls_enabled: false,
+    escape_before_render: true,
+    source_sha256: sha,
+  };
   const errors = [];
+  if (validateContentBlock(validTable).length) errors.push('Shared runtime validator rejects a valid semantic table');
+  if (!validateContentBlock({ ...validTable, rows: [{ cells: ['a', 'b', 'c'] }] }).length) errors.push('Shared runtime validator does not reject semantic-table row-width mismatch');
+  if (validateContentBlock(validCode).length) errors.push('Shared runtime validator rejects a valid inert-code block');
+  if (!validateContentBlock({ ...validCode, executable: true }).length) errors.push('Shared runtime validator does not reject executable inert code');
+  if (!validateInactiveDestination({ registry_id: 'MSC-GUIDE-001', active: false, url: null, href: '/unsafe' }).length) errors.push('Shared runtime validator does not reject unknown inactive-destination fields');
+  if (!validateRelationship({ relation_type: 'next', registry_id: 'MSC-GUIDE-001', title: 'Next', planning_handle: 'next', active: false, url: null, order: 1, metadata: { unsafe: true } }).length) errors.push('Shared runtime validator does not reject unknown relationship metadata');
+  if (!validateGlossaryOwnership({ page_role: 'topic-guide', primary_category: 'Basics', subcategory: 'Using', arbitrary: true }).length) errors.push('Shared runtime validator does not reject unknown glossary ownership fields');
+  return errors;
+}
+
+function validateSchemaDefinition(schema) {
+  const errors = [...validateRuntimeValidatorDefinition()];
+  if (schema?.$schema !== 'https://json-schema.org/draft/2020-12/schema') errors.push('Schema must declare JSON Schema Draft 2020-12');
   if (schema?.properties?.schema_version?.const !== EXPECTED_SCHEMA_VERSION) errors.push('Schema version must be const 2.0.0');
   const required = ['schema_version', 'generator_version', 'identity', 'source', 'content', 'key_terms', 'sources', 'seo', 'relationships', 'review', 'illustrations', 'publication', 'role_data'];
   for (const field of required) if (!schema?.required?.includes(field)) errors.push(`Schema is missing required envelope field: ${field}`);
@@ -70,32 +112,36 @@ function validateSchemaDefinition(schema) {
   if (publication?.public_url?.type !== 'null') errors.push('Schema public_url must be null');
   if (publication?.shopify_page_id?.type !== 'null') errors.push('Schema shopify_page_id must be null');
   if (publication?.links_active?.const !== false) errors.push('Schema links_active must be false');
-  const relationship = schema?.$defs?.relationship?.properties || {};
+  const relationshipDefinition = schema?.$defs?.relationship;
+  const relationship = relationshipDefinition?.properties || {};
+  if (relationshipDefinition?.additionalProperties !== false) errors.push('Schema relationship must reject unknown fields');
+  if (relationship?.metadata) errors.push('Schema relationship must not expose unrestricted metadata');
   if (relationship?.active?.const !== false || relationship?.url?.type !== 'null') errors.push('Schema relationships must remain inactive with null URLs');
+  const inactiveDestination = schema?.$defs?.inactiveDestination;
+  if (inactiveDestination?.additionalProperties !== false) errors.push('Schema inactiveDestination must reject unknown fields');
   const contentBlockRefs = schema?.$defs?.contentBlock?.oneOf?.map((item) => item.$ref) || [];
   for (const ref of ['#/$defs/richTextContentBlock', '#/$defs/semanticTableBlock', '#/$defs/inertCodeBlock']) {
     if (!contentBlockRefs.includes(ref)) errors.push(`Schema contentBlock is missing supported block ref: ${ref}`);
   }
+  const richText = schema?.$defs?.richTextContentBlock;
+  if (richText?.additionalProperties !== false) errors.push('Schema richTextContentBlock must reject unknown fields');
+  if (richText?.properties?.html) errors.push('Schema richTextContentBlock must not authorize HTML');
+  if (richText?.properties?.text?.$ref !== '#/$defs/safeText') errors.push('Schema richTextContentBlock must use safe plain text');
+  if (richText?.properties?.format?.const !== 'plain-text') errors.push('Schema richTextContentBlock format must be plain-text');
+  if (richText?.properties?.escape_before_render?.const !== true) errors.push('Schema richTextContentBlock must require escaping before render');
   const semanticTable = schema?.$defs?.semanticTableBlock;
   if (semanticTable?.properties?.type?.const !== 'semantic-table') errors.push('Schema semanticTableBlock type must be semantic-table');
-  if (semanticTable?.properties?.label?.minLength !== 1) errors.push('Schema semanticTableBlock must require a non-empty accessible label');
   if (semanticTable?.properties?.columns?.minItems !== 2) errors.push('Schema semanticTableBlock must require at least two ordered columns');
   if (semanticTable?.properties?.rows?.minItems !== 1) errors.push('Schema semanticTableBlock must require at least one ordered body row');
-  const tableColumn = schema?.$defs?.semanticTableColumn;
-  if (tableColumn?.properties?.header?.minLength !== 1) errors.push('Schema semanticTableColumn must require non-empty header text');
-  const alignments = tableColumn?.properties?.alignment?.enum || [];
-  for (const alignment of ['left', 'center', 'right', null]) {
-    if (!alignments.includes(alignment)) errors.push(`Schema semanticTableColumn is missing alignment value: ${alignment}`);
-  }
   const tableRow = schema?.$defs?.semanticTableRow;
-  if (tableRow?.properties?.cells?.minItems !== 2) errors.push('Schema semanticTableRow must require at least two ordered cells');
-  if (!String(tableRow?.properties?.cells?.$comment || '').includes('exactly the same number of cells')) errors.push('Schema semanticTableRow must record the equal-column-count audit invariant');
+  if (!String(tableRow?.properties?.cells?.$comment || '').includes('runtime-validation.mjs')) errors.push('Schema semanticTableRow must document the shared runtime-validator invariant');
   const inertCode = schema?.$defs?.inertCodeBlock;
   if (inertCode?.properties?.type?.const !== 'inert-code') errors.push('Schema inertCodeBlock type must be inert-code');
   if (inertCode?.properties?.executable?.const !== false) errors.push('Schema inertCodeBlock executable must be false');
   if (inertCode?.properties?.controls_enabled?.const !== false) errors.push('Schema inertCodeBlock controls_enabled must be false');
   if (inertCode?.properties?.escape_before_render?.const !== true) errors.push('Schema inertCodeBlock escape_before_render must be true');
-  if (!Array.isArray(inertCode?.properties?.language?.type) || !inertCode.properties.language.type.includes('null')) errors.push('Schema inertCodeBlock language must allow null');
+  const ownership = schema?.$defs?.glossaryIndexRoleData?.properties?.letter_groups?.items?.properties?.terms?.items?.properties?.ownership;
+  if (ownership?.additionalProperties !== false) errors.push('Schema glossary ownership must reject unknown fields');
   for (const roleDefinition of ['topicGuideRoleData', 'categoryHubRoleData']) {
     const ref = schema?.$defs?.[roleDefinition]?.properties?.article_sections?.items?.$ref;
     if (ref !== '#/$defs/contentBlock') errors.push(`Schema ${roleDefinition} must include shared contentBlock records`);
@@ -125,6 +171,36 @@ function emptyBlockedRecord(identity, blocking, observations) {
     blocking_incompatibilities: blocking,
     non_blocking_observations: observations,
   };
+}
+
+function validateInspectedBlocks(markdown, packageSha, blocking) {
+  for (const [index, table] of (markdown.constructs.semantic_tables || []).entries()) {
+    const runtimeBlock = {
+      id: `table-${index + 1}`,
+      type: table.type,
+      label: table.label,
+      label_source: table.label_source,
+      columns: table.columns,
+      rows: table.rows,
+      source_sha256: packageSha,
+    };
+    const errors = validateContentBlock(runtimeBlock, `semantic_table_${index + 1}`);
+    if (errors.length) blocking.push(`Runtime semantic-table validation failed: ${errors.join('; ')}`);
+  }
+  for (const [index, code] of (markdown.constructs.inert_fenced_code_blocks || []).entries()) {
+    const runtimeBlock = {
+      id: `code-${index + 1}`,
+      type: code.type,
+      language: code.language,
+      code: code.code,
+      executable: code.executable,
+      controls_enabled: code.controls_enabled,
+      escape_before_render: code.escape_before_render,
+      source_sha256: packageSha,
+    };
+    const errors = validateContentBlock(runtimeBlock, `inert_code_${index + 1}`);
+    if (errors.length) blocking.push(`Runtime inert-code validation failed: ${errors.join('; ')}`);
+  }
 }
 
 function auditPackage(entry, registryRecord) {
@@ -188,6 +264,7 @@ function auditPackage(entry, registryRecord) {
   const markdown = inspectMarkdown(parsed.body, entry.page_role);
   if (markdown.missing_required_sections.length) blocking.push(`Missing required numbered section pattern(s): ${markdown.missing_required_sections.join(', ')}`);
   for (const issue of markdown.unsupported_constructs.filter((item) => item.blocking)) blocking.push(`Unsupported Markdown construct ${issue.type} (${issue.count})`);
+  validateInspectedBlocks(markdown, identity.package_sha256, blocking);
   observations.push(...markdown.non_blocking_observations);
   if (registryRecord?.status && registryRecord.status !== 'COPY_LOCKED') observations.push(`Registry workflow status remains ${registryRecord.status}; package and manifest editorial status are COPY_LOCKED.`);
 
@@ -255,14 +332,14 @@ function main() {
     (sum, item) => sum + item.unsupported_constructs_detected.reduce((inner, issue) => inner + issue.count, 0),
     0,
   );
-  const supportedSemanticTables = packages.reduce(
-    (sum, item) => sum + (item.markdown_constructs_detected.semantic_tables?.length || 0),
+  const structuredSourceReferences = packages.reduce(
+    (sum, item) => sum + item.unsupported_constructs_detected
+      .filter((issue) => issue.type === 'source-markdown-link' && issue.blocking === false)
+      .reduce((inner, issue) => inner + issue.count, 0),
     0,
   );
-  const supportedInertFencedCodeBlocks = packages.reduce(
-    (sum, item) => sum + (item.markdown_constructs_detected.inert_fenced_code_blocks?.length || 0),
-    0,
-  );
+  const supportedSemanticTables = packages.reduce((sum, item) => sum + (item.markdown_constructs_detected.semantic_tables?.length || 0), 0);
+  const supportedInertFencedCodeBlocks = packages.reduce((sum, item) => sum + (item.markdown_constructs_detected.inert_fenced_code_blocks?.length || 0), 0);
   const supportedFencedCodeLanguages = {};
   for (const item of packages) {
     for (const block of item.markdown_constructs_detected.inert_fenced_code_blocks || []) {
@@ -271,21 +348,17 @@ function main() {
     }
   }
   const unsupportedTables = packages.reduce(
-    (sum, item) => sum + item.unsupported_constructs_detected
-      .filter((issue) => issue.type === 'unsupported-table')
-      .reduce((inner, issue) => inner + issue.count, 0),
+    (sum, item) => sum + item.unsupported_constructs_detected.filter((issue) => issue.type === 'unsupported-table').reduce((inner, issue) => inner + issue.count, 0),
     0,
   );
   const unsupportedFencedCodeBlocks = packages.reduce(
-    (sum, item) => sum + item.unsupported_constructs_detected
-      .filter((issue) => issue.type === 'unsupported-fenced-code')
-      .reduce((inner, issue) => inner + issue.count, 0),
+    (sum, item) => sum + item.unsupported_constructs_detected.filter((issue) => issue.type === 'unsupported-fenced-code').reduce((inner, issue) => inner + issue.count, 0),
     0,
   );
   const missingPackages = packages.filter((item) => item.blocking_incompatibilities.some((message) => message.startsWith('Permanent package is missing'))).length;
 
   const report = {
-    report_version: '1.0.0',
+    report_version: '1.1.0',
     target_runtime_schema_version: EXPECTED_SCHEMA_VERSION,
     source: {
       schema: { file: SCHEMA_PATH, sha256: sha256(schemaText) },
@@ -307,6 +380,7 @@ function main() {
       supported_semantic_tables: supportedSemanticTables,
       supported_inert_fenced_code_blocks: supportedInertFencedCodeBlocks,
       supported_fenced_code_languages: supportedFencedCodeLanguages,
+      structured_source_reference_observations: structuredSourceReferences,
       unsupported_tables: unsupportedTables,
       unsupported_fenced_code_blocks: unsupportedFencedCodeBlocks,
       unsupported_markdown_occurrences: unsupportedOccurrences,
