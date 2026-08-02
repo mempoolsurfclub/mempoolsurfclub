@@ -14,6 +14,7 @@ on:
   push:
     branches:
       - main
+      - engineering/learn-runtime-schema-audit
     paths:
       - 'docs/learn/**'
       - 'scripts/**'
@@ -54,6 +55,9 @@ jobs:
 
       - name: Validate Learn manifest and packages
         run: npm run validate:learn-library
+
+      - name: Audit all 92 Learn runtime packages
+        run: npm run materialize:learn-runtime-audit
 
       - name: Validate Guide 001 runtime pilot
         run: npm run validate:learn-guide-pilot
