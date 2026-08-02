@@ -114,11 +114,11 @@ jobs:
           rm -rf .github/learn-runtime-correction
           npm run materialize:learn-runtime-audit
           npm run audit:learn-runtime
+          git restore --source=HEAD -- .github/workflows/learn-validation.yml
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A -- \
             .github/learn-runtime-correction \
-            .github/workflows/learn-validation.yml \
             docs/learn/runtime/reports/package-compatibility.json \
             docs/learn/runtime/schema/msc-learn-runtime-v2.schema.json \
             package.json \
