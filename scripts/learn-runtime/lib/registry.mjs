@@ -2,7 +2,7 @@ import { canonicalRecordSha256 } from './hashing.mjs';
 
 const ALIASES = {
   registry_id: ['Registry ID', 'registry_id', 'id'],
-  h1: ['Final recommended H1', 'Final H1', 'Recommended title', 'Display label', 'Title', 'name', 'final_h1'],
+  h1: ['Final recommended H1', 'Final H1', 'Recommended title', 'Title', 'final_h1'],
   page_role: ['Page role', 'page_role'],
   planning_handle: ['Recommended slug', 'handle', 'Planning handle', 'planning_handle'],
   status: ['Status', 'status'],
