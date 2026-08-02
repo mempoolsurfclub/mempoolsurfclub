@@ -163,6 +163,23 @@ function normalizedSourceFieldKey(label) {
   return label.trim().toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
 }
 
+const CANONICAL_SOURCE_FIELD_LABELS = Object.freeze([
+  'Author or publisher',
+  'Direct URL',
+  'Publisher',
+  'Authors',
+  'Supports',
+]);
+
+function assertCanonicalSourceFieldDelimiter(content, context) {
+  for (const label of CANONICAL_SOURCE_FIELD_LABELS) {
+    if (!content.startsWith(label)) continue;
+    const next = content[label.length];
+    if (next === ':') return;
+    if (next === undefined || /\s/.test(next)) throw new Error(context);
+  }
+}
+
 function addSourceField(fields, label, value, context) {
   const key = normalizedSourceFieldKey(label);
   if (!key) throw new Error(`${context} has an empty normalized field key`);
@@ -195,6 +212,10 @@ function parseLegacySourceRecords(markdown) {
       continue;
     }
     if (!current) throw new Error(`Unexpected content before legacy source record: ${line}`);
+    const bullet = line.match(/^-\s+(.*)$/);
+    if (bullet) {
+      assertCanonicalSourceFieldDelimiter(bullet[1], `Unsupported legacy source record content: ${line}`);
+    }
     const field = line.match(/^-\s+([^:]+):(?=\s|$)\s*(.*)$/);
     if (!field) throw new Error(`Unsupported legacy source record content: ${line}`);
     addSourceField(current.fields, field[1], field[2], `Legacy source record "${current.title}"`);
@@ -238,14 +259,15 @@ function parseNumberedSourceRecords(markdown) {
     if (!current) throw new Error(`Unexpected content before numbered source record: ${line}`);
 
     const continuationIndent = String(current.number).length + 2;
-    const field = line.match(new RegExp(`^ {${continuationIndent}}-\\s+([^:]+):(?=\\s|$)\\s*(.*)$`));
-    if (!field) {
-      const bullet = line.match(/^(\s*)-\s+/);
-      if (bullet && bullet[1].length !== continuationIndent) {
-        throw new Error(`Numbered source record ${current.number} field is not indented by exactly ${continuationIndent} spaces: ${line}`);
-      }
-      throw new Error(`Unsupported numbered source record content: ${line}`);
+    const bullet = line.match(/^(\s*)-\s+(.*)$/);
+    if (bullet && bullet[1].length !== continuationIndent) {
+      throw new Error(`Numbered source record ${current.number} field is not indented by exactly ${continuationIndent} spaces: ${line}`);
     }
+    if (bullet) {
+      assertCanonicalSourceFieldDelimiter(bullet[2], `Unsupported numbered source record content: ${line}`);
+    }
+    const field = line.match(new RegExp(`^ {${continuationIndent}}-\\s+([^:]+):(?=\\s|$)\\s*(.*)$`));
+    if (!field) throw new Error(`Unsupported numbered source record content: ${line}`);
     addSourceField(current.fields, field[1], field[2], `Numbered source record ${current.number}`);
   }
 
@@ -391,13 +413,60 @@ function verifySourceParserContract() {
 
   const legacyControl = parseLegacySourceRecords(`### A
 
-- Direct URL: https://example.com`);
+- Author or publisher: Example Author
+- Publisher: Example Publisher
+- Authors: Alice Example and Bob Example
+- Direct URL: https://example.com
+- Supports: Existing statement.
+- Published at: 12:30 UTC
+- Reference: urn:example:test
+- Optional field:`);
   const numberedControl = parseNumberedSourceRecords(`1. **A**
 
-   - Direct URL: https://example.com`);
-  const expectedControl = [{ title: 'A', direct_url: 'https://example.com' }];
+   - Author or publisher: Example Author
+   - Publisher: Example Publisher
+   - Authors: Alice Example and Bob Example
+   - Direct URL: https://example.com
+   - Supports: Existing statement.
+   - Published at: 12:30 UTC
+   - Reference: urn:example:test
+   - Optional field:`);
+  const expectedControl = [{
+    title: 'A',
+    author_or_publisher: 'Example Author',
+    publisher: 'Example Publisher',
+    authors: 'Alice Example and Bob Example',
+    direct_url: 'https://example.com',
+    supports: 'Existing statement.',
+    published_at: '12:30 UTC',
+    reference: 'urn:example:test',
+    optional_field: '',
+  }];
   assert.deepStrictEqual(legacyControl, expectedControl);
   assert.deepStrictEqual(numberedControl, expectedControl);
+
+  const malformedCanonicalFields = [
+    'Supports statement with: later detail',
+    'Author or publisher information: Value',
+    'Publisher information: Value',
+    'Authors information: Value',
+    'Direct URL information: Value',
+    'Supports information: Value',
+  ];
+  for (const malformedField of malformedCanonicalFields) {
+    assert.throws(
+      () => parseLegacySourceRecords(`### A
+
+- ${malformedField}`),
+      /Unsupported legacy source record content/,
+    );
+    assert.throws(
+      () => parseNumberedSourceRecords(`1. **A**
+
+   - ${malformedField}`),
+      /Unsupported numbered source record content/,
+    );
+  }
 
   assert.throws(
     () => parseLegacySourceRecords(`### A
