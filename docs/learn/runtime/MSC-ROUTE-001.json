@@ -1,0 +1,840 @@
+{
+  "schema_version": 1,
+  "source": {
+    "file": "docs/learn/content/routes/MSC-ROUTE-001-how-a-bitcoin-transaction-moves.md",
+    "sha256": "3dd1758ac5f5fb180bc2fee69f522c857dec1b5d63f4a8af8b6a669c8d19dd67",
+    "registry_file": "docs/learn/MSC_Learn_Master_Registry.json",
+    "registry_sha256": "db8021fe6e2e202708f5a74894b3469e02c5c616b8ecb4ec45ccb7d350d3e5aa",
+    "manifest_file": "docs/learn/content/content-manifest.json",
+    "manifest_sha256": "a12310c5e284be63ad411c74af9747778f5d420a780bbc5ef1bcbc9b96c218c8",
+    "manifest_record": {
+      "registry_id": "MSC-ROUTE-001",
+      "content_file": "docs/learn/content/routes/MSC-ROUTE-001-how-a-bitcoin-transaction-moves.md",
+      "page_role": "featured-route",
+      "status": "COPY_LOCKED"
+    },
+    "registry_record": {
+      "registry_id": "MSC-ROUTE-001",
+      "h1": "How a Bitcoin Transaction Moves",
+      "page_role": "page-role:featured-route",
+      "status": "PLANNED",
+      "parent_destination": "MSC-HUB-NETWORK | The Bitcoin Network",
+      "primary_learning_path": "Understand the Network",
+      "secondary_learning_paths": [
+        "Start With Bitcoin",
+        "Use Bitcoin Safely"
+      ]
+    }
+  },
+  "registry_id": "MSC-ROUTE-001",
+  "status": "COPY_LOCKED",
+  "page_role": "featured-route",
+  "h1": "How a Bitcoin Transaction Moves",
+  "introductory_deck": "Follow one ordinary Bitcoin transaction from wallet input selection and signing through local checks, peer relay, node-local mempools, miner selection, proof of work, independent block validation, confirmation depth, and UTXO-set updates.",
+  "orientation": {
+    "intro_markdown": "An ordinary Bitcoin transaction passes through several systems before a wallet can describe it as confirmed. The process begins with spendable outputs and signing keys, continues through local node policy and peer relay, may reach a mining template, and becomes part of selected history only after a valid block is produced and independently accepted.\n\nThe lifecycle below follows one transaction without assuming that every wallet, node, miner, or service uses identical software or policy.",
+    "intro_html": "<p>An ordinary Bitcoin transaction passes through several systems before a wallet can describe it as confirmed. The process begins with spendable outputs and signing keys, continues through local node policy and peer relay, may reach a mining template, and becomes part of selected history only after a valid block is produced and independently accepted.</p>\n<p>The lifecycle below follows one transaction without assuming that every wallet, node, miner, or service uses identical software or policy.</p>",
+    "lifecycle_scope_markdown": "1. Wallet identifies spendable UTXOs and creates recipient and change outputs.\n2. Signing software authorizes the defined transaction data without exposing private keys.\n3. Wallet or node software performs local preflight checks.\n4. One or more nodes may relay the transaction across peer connections.\n5. Individual nodes may accept it into their own local mempools.\n6. A miner or pool may select it for a candidate template.\n7. The candidate block commits to the transaction through block structures.\n8. Miners search for a header hash satisfying the required target.\n9. Nodes independently validate the complete block.\n10. Valid candidate branches are compared by accumulated work.\n11. Selected-chain inclusion creates confirmation depth.\n12. Block connection spends inputs and creates new UTXOs.\n\nThe sequence describes one ordinary on-chain lifecycle. Individual software, policy, relay paths, and reorganization outcomes can differ.",
+    "lifecycle_scope_html": "<ol><li>Wallet identifies spendable UTXOs and creates recipient and change outputs.</li><li>Signing software authorizes the defined transaction data without exposing private keys.</li><li>Wallet or node software performs local preflight checks.</li><li>One or more nodes may relay the transaction across peer connections.</li><li>Individual nodes may accept it into their own local mempools.</li><li>A miner or pool may select it for a candidate template.</li><li>The candidate block commits to the transaction through block structures.</li><li>Miners search for a header hash satisfying the required target.</li><li>Nodes independently validate the complete block.</li><li>Valid candidate branches are compared by accumulated work.</li><li>Selected-chain inclusion creates confirmation depth.</li><li>Block connection spends inputs and creates new UTXOs.</li></ol>\n<p>The sequence describes one ordinary on-chain lifecycle. Individual software, policy, relay paths, and reorganization outcomes can differ.</p>"
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "heading": "A wallet selects spendable outputs",
+      "explanatory_markdown": "Bitcoin does not store one protocol-level account balance for each user. Value exists in transaction outputs with defined spending conditions. An unspent transaction output, or UTXO, can be referenced as an input in a later transaction.\n\nA wallet first identifies outputs it can spend. Coin selection may consider value, confirmation state, input count, labels, privacy, transaction weight, fee rate, change, and policy constraints. The wallet can choose one output or combine several outputs as inputs.\n\nEach selected input consumes the referenced output as a complete unit. If the total input value exceeds the intended payment plus fee, the transaction normally creates a change output controlled by the wallet. The recipient output and change output are both new on-chain output records. The ordinary fee is the difference between total input value and total output value.\n\nAn address is not an account containing bitcoin. It is a destination representation that helps wallet software construct a locking script. The output is the on-chain record that assigns value to that spending condition.\n\nAt this stage, the wallet has a proposed transaction structure. No signature has been added, no peer has received it, and no miner has selected it.",
+      "explanatory_html": "<p>Bitcoin does not store one protocol-level account balance for each user. Value exists in transaction outputs with defined spending conditions. An unspent transaction output, or UTXO, can be referenced as an input in a later transaction.</p>\n<p>A wallet first identifies outputs it can spend. Coin selection may consider value, confirmation state, input count, labels, privacy, transaction weight, fee rate, change, and policy constraints. The wallet can choose one output or combine several outputs as inputs.</p>\n<p>Each selected input consumes the referenced output as a complete unit. If the total input value exceeds the intended payment plus fee, the transaction normally creates a change output controlled by the wallet. The recipient output and change output are both new on-chain output records. The ordinary fee is the difference between total input value and total output value.</p>\n<p>An address is not an account containing bitcoin. It is a destination representation that helps wallet software construct a locking script. The output is the on-chain record that assigns value to that spending condition.</p>\n<p>At this stage, the wallet has a proposed transaction structure. No signature has been added, no peer has received it, and no miner has selected it.</p>",
+      "active": false,
+      "url": null,
+      "route_state": "Wallet identifies spendable UTXOs and creates recipient and change outputs."
+    },
+    {
+      "step_number": 2,
+      "heading": "The wallet creates signatures",
+      "explanatory_markdown": "The wallet or connected signing device prepares authorization for the selected inputs. Private keys remain under the signer's control and should not be revealed to peers, miners, nodes, or recipients.\n\nA digital signature proves that valid private key material authorized the defined transaction data under the applicable spending condition. The exact signed data depends on the script and signature-hash rules. The signature is attached as unlocking data that nodes can check with public information.\n\nNodes do not need the private key. They evaluate the public key, signature, transaction data, and script rules. A valid signature does not prove the recipient is trustworthy, the invoice is correct, or the signer understood the interface. It proves a narrower cryptographic authorization.\n\nSigning also does not broadcast the transaction. A fully signed transaction can remain on an offline device, be transferred to another coordinator, or never be submitted. It has zero confirmations until it appears in a valid block on a node's selected chain.",
+      "explanatory_html": "<p>The wallet or connected signing device prepares authorization for the selected inputs. Private keys remain under the signer&#39;s control and should not be revealed to peers, miners, nodes, or recipients.</p>\n<p>A digital signature proves that valid private key material authorized the defined transaction data under the applicable spending condition. The exact signed data depends on the script and signature-hash rules. The signature is attached as unlocking data that nodes can check with public information.</p>\n<p>Nodes do not need the private key. They evaluate the public key, signature, transaction data, and script rules. A valid signature does not prove the recipient is trustworthy, the invoice is correct, or the signer understood the interface. It proves a narrower cryptographic authorization.</p>\n<p>Signing also does not broadcast the transaction. A fully signed transaction can remain on an offline device, be transferred to another coordinator, or never be submitted. It has zero confirmations until it appears in a valid block on a node&#39;s selected chain.</p>",
+      "active": false,
+      "url": null,
+      "route_state": "Signing software authorizes the defined transaction data without exposing private keys."
+    },
+    {
+      "step_number": 3,
+      "heading": "The transaction receives local checks",
+      "explanatory_markdown": "Before submission, wallet software or a connected node may perform local checks. These can detect malformed data, missing signatures, amounts outside permitted ranges, unavailable inputs, fee problems, and transaction structures the software will not create or relay.\n\nTwo boundaries matter here.\n\nConsensus rules determine whether transaction data can be valid in a block under the applicable chain state. Local policy determines whether a particular node will accept and relay the transaction before confirmation. Policy can address fee conditions, standard forms, resource use, replacement, package relationships, and denial-of-service limits.\n\nA policy rejection does not necessarily mean the transaction could never be valid inside a block. A compatible node must evaluate a received block under consensus rules even when the block contains a transaction its own mempool policy would not have admitted.\n\nThe reverse is also important. A higher fee does not repair an invalid signature, a nonexistent input, an already spent output, or a broken amount rule. Fee competition influences relay and miner selection within the set of transactions that can be valid. It does not purchase an exception to consensus.\n\nLocal preflight checks improve feedback, but they do not create network acceptance or confirmation.",
+      "explanatory_html": "<p>Before submission, wallet software or a connected node may perform local checks. These can detect malformed data, missing signatures, amounts outside permitted ranges, unavailable inputs, fee problems, and transaction structures the software will not create or relay.</p>\n<p>Two boundaries matter here.</p>\n<p>Consensus rules determine whether transaction data can be valid in a block under the applicable chain state. Local policy determines whether a particular node will accept and relay the transaction before confirmation. Policy can address fee conditions, standard forms, resource use, replacement, package relationships, and denial-of-service limits.</p>\n<p>A policy rejection does not necessarily mean the transaction could never be valid inside a block. A compatible node must evaluate a received block under consensus rules even when the block contains a transaction its own mempool policy would not have admitted.</p>\n<p>The reverse is also important. A higher fee does not repair an invalid signature, a nonexistent input, an already spent output, or a broken amount rule. Fee competition influences relay and miner selection within the set of transactions that can be valid. It does not purchase an exception to consensus.</p>\n<p>Local preflight checks improve feedback, but they do not create network acceptance or confirmation.</p>",
+      "active": false,
+      "url": null,
+      "route_state": "Wallet or node software performs local preflight checks."
+    },
+    {
+      "step_number": 4,
+      "heading": "Peers relay the transaction",
+      "explanatory_markdown": "The wallet submits the transaction to a node or service. A receiving Bitcoin node evaluates it and may announce it to selected peers under local relay policy. Peers can request the transaction and perform their own checks.\n\nThere is no central Bitcoin broadcast server. Propagation happens across peer connections. Nodes can receive the transaction at different times, in different orders, or not at all. Privacy protections, peer topology, network delay, policy differences, conflicts, resource limits, and restarts can all change what a node sees.\n\nBroadcast therefore means an attempt to introduce the transaction to one or more network paths. It does not guarantee that every node receives it, every node accepts it, every miner learns about it, or any miner includes it.\n\nA transaction identifier shows which transaction data is being discussed. It is not a receipt promising relay or settlement.",
+      "explanatory_html": "<p>The wallet submits the transaction to a node or service. A receiving Bitcoin node evaluates it and may announce it to selected peers under local relay policy. Peers can request the transaction and perform their own checks.</p>\n<p>There is no central Bitcoin broadcast server. Propagation happens across peer connections. Nodes can receive the transaction at different times, in different orders, or not at all. Privacy protections, peer topology, network delay, policy differences, conflicts, resource limits, and restarts can all change what a node sees.</p>\n<p>Broadcast therefore means an attempt to introduce the transaction to one or more network paths. It does not guarantee that every node receives it, every node accepts it, every miner learns about it, or any miner includes it.</p>\n<p>A transaction identifier shows which transaction data is being discussed. It is not a receipt promising relay or settlement.</p>",
+      "active": false,
+      "url": null,
+      "route_state": "One or more nodes may relay the transaction across peer connections."
+    },
+    {
+      "step_number": 5,
+      "heading": "Nodes may place it in local mempools",
+      "explanatory_markdown": "A node that accepts the unconfirmed transaction can place it in its own mempool. The mempool is that node's local collection of valid unconfirmed transactions eligible for relay or block inclusion under current policy.\n\nDifferent nodes can maintain different mempools. One node may already hold a conflicting transaction. Another may apply a higher rolling minimum fee, use different replacement rules, lack an unconfirmed parent, reach a memory limit, or simply never receive the transaction.\n\nMempool entries can have parent and child relationships. They can be replaced by conflicting transactions under policy, evicted for resource management, expire under local settings, or be removed when a block confirms a conflict. A reorganization can also return eligible transactions from disconnected blocks to an unconfirmed state.\n\nAn unconfirmed transaction is not yet part of the selected blockchain. Mempool acceptance is not a consensus certificate and is not the first confirmation. It is one node's current decision about temporary unconfirmed data.",
+      "explanatory_html": "<p>A node that accepts the unconfirmed transaction can place it in its own mempool. The mempool is that node&#39;s local collection of valid unconfirmed transactions eligible for relay or block inclusion under current policy.</p>\n<p>Different nodes can maintain different mempools. One node may already hold a conflicting transaction. Another may apply a higher rolling minimum fee, use different replacement rules, lack an unconfirmed parent, reach a memory limit, or simply never receive the transaction.</p>\n<p>Mempool entries can have parent and child relationships. They can be replaced by conflicting transactions under policy, evicted for resource management, expire under local settings, or be removed when a block confirms a conflict. A reorganization can also return eligible transactions from disconnected blocks to an unconfirmed state.</p>\n<p>An unconfirmed transaction is not yet part of the selected blockchain. Mempool acceptance is not a consensus certificate and is not the first confirmation. It is one node&#39;s current decision about temporary unconfirmed data.</p>",
+      "active": false,
+      "url": null,
+      "route_state": "Individual nodes may accept it into their own local mempools."
+    },
+    {
+      "step_number": 6,
+      "heading": "A miner or pool may select it",
+      "explanatory_markdown": "A mining system builds a candidate block from transactions it knows about and chooses to include. The source can be a local mempool, direct submission, private relay, pool infrastructure, or another template provider.\n\nSelection can consider fees, fee rates, transaction dependencies, block weight, operator policy, direct agreements, and template strategy. A transaction with a high fee is not guaranteed inclusion. A transaction can also be mined without having appeared in every public node's mempool.\n\nUnder many pool arrangements, a pool or template provider constructs candidate work while connected mining machines perform assigned header hashing. Pool participants submit hashes meeting an easier share target so the pool can estimate contributed work. Most shares are internal accounting messages, not Bitcoin blocks.\n\nTemplate control affects which valid transactions are attempted. It does not make invalid data acceptable to full nodes.",
+      "explanatory_html": "<p>A mining system builds a candidate block from transactions it knows about and chooses to include. The source can be a local mempool, direct submission, private relay, pool infrastructure, or another template provider.</p>\n<p>Selection can consider fees, fee rates, transaction dependencies, block weight, operator policy, direct agreements, and template strategy. A transaction with a high fee is not guaranteed inclusion. A transaction can also be mined without having appeared in every public node&#39;s mempool.</p>\n<p>Under many pool arrangements, a pool or template provider constructs candidate work while connected mining machines perform assigned header hashing. Pool participants submit hashes meeting an easier share target so the pool can estimate contributed work. Most shares are internal accounting messages, not Bitcoin blocks.</p>\n<p>Template control affects which valid transactions are attempted. It does not make invalid data acceptable to full nodes.</p>",
+      "active": false,
+      "url": null,
+      "route_state": "A miner or pool may select it for a candidate template."
+    },
+    {
+      "step_number": 7,
+      "heading": "The transaction enters a candidate block",
+      "explanatory_markdown": "If selected, the transaction becomes part of a candidate block assembled by a miner or pool system.\n\nThe first transaction in the candidate is the coinbase transaction. It can claim no more than the permitted block subsidy plus the transaction fees available from the ordinary transactions in the block. The candidate also includes the selected transaction list, an ordered Merkle commitment, any required witness commitment, block limits, and an 80-byte header.\n\nThe header contains version, previous block hash, Merkle root, timestamp, encoded target, and nonce. The previous-block field chooses the parent. The Merkle root commits to the ordered transaction identifiers. Changes to transactions, order, or coinbase data alter commitments and therefore alter the header being hashed.\n\nA candidate block is still a proposal. The transaction has not received a confirmation merely because it appears in a template.",
+      "explanatory_html": "<p>If selected, the transaction becomes part of a candidate block assembled by a miner or pool system.</p>\n<p>The first transaction in the candidate is the coinbase transaction. It can claim no more than the permitted block subsidy plus the transaction fees available from the ordinary transactions in the block. The candidate also includes the selected transaction list, an ordered Merkle commitment, any required witness commitment, block limits, and an 80-byte header.</p>\n<p>The header contains version, previous block hash, Merkle root, timestamp, encoded target, and nonce. The previous-block field chooses the parent. The Merkle root commits to the ordered transaction identifiers. Changes to transactions, order, or coinbase data alter commitments and therefore alter the header being hashed.</p>\n<p>A candidate block is still a proposal. The transaction has not received a confirmation merely because it appears in a template.</p>",
+      "active": false,
+      "url": null,
+      "route_state": "The candidate block commits to the transaction through block structures."
+    },
+    {
+      "step_number": 8,
+      "heading": "Miners perform proof of work",
+      "explanatory_markdown": "Mining hardware repeatedly hashes candidate block headers with double SHA-256. Each result is compared with the target required for the candidate's chain position.\n\nA valid proof-of-work hash is numerically less than or equal to that target. Miners change nonce values and other permitted header-related data to create new candidates. Failed hashes do not accumulate partial on-chain progress. Each attempted header either satisfies the target or it does not.\n\nFinding a qualifying result can require enormous work. Verifying that result is comparatively cheap.\n\nProof of work qualifies the header for submission. It does not check every transaction, signature, UTXO, coinbase amount, block commitment, or resource limit. A block can have a header hash below the target and still be invalid.",
+      "explanatory_html": "<p>Mining hardware repeatedly hashes candidate block headers with double SHA-256. Each result is compared with the target required for the candidate&#39;s chain position.</p>\n<p>A valid proof-of-work hash is numerically less than or equal to that target. Miners change nonce values and other permitted header-related data to create new candidates. Failed hashes do not accumulate partial on-chain progress. Each attempted header either satisfies the target or it does not.</p>\n<p>Finding a qualifying result can require enormous work. Verifying that result is comparatively cheap.</p>\n<p>Proof of work qualifies the header for submission. It does not check every transaction, signature, UTXO, coinbase amount, block commitment, or resource limit. A block can have a header hash below the target and still be invalid.</p>",
+      "active": false,
+      "url": null,
+      "route_state": "Miners search for a header hash satisfying the required target."
+    },
+    {
+      "step_number": 9,
+      "heading": "Nodes independently validate the block",
+      "explanatory_markdown": "The mining system broadcasts the corresponding full block. Each validating node performs its own checks before changing local state.\n\nThe node verifies the header proof of work and the target required at that height. It checks the parent relationship, version and activation rules, and time constraints. It recomputes transaction and witness commitments.\n\nFor the transactions, the node checks syntax, amounts, locktime and sequence rules, signatures and scripts, input availability, and spending conditions. It prevents prohibited double spends by evaluating inputs against applicable chainstate and earlier transactions in the block. It checks block weight and other consensus resource limits. It verifies the coinbase structure and confirms that the claimed value does not exceed subsidy plus fees.\n\nIf any required rule fails, the node rejects the block. The work spent producing it does not make the block acceptable.\n\nIf the block passes, it becomes a valid candidate for chain activation. Validation and chain selection are still separate decisions.",
+      "explanatory_html": "<p>The mining system broadcasts the corresponding full block. Each validating node performs its own checks before changing local state.</p>\n<p>The node verifies the header proof of work and the target required at that height. It checks the parent relationship, version and activation rules, and time constraints. It recomputes transaction and witness commitments.</p>\n<p>For the transactions, the node checks syntax, amounts, locktime and sequence rules, signatures and scripts, input availability, and spending conditions. It prevents prohibited double spends by evaluating inputs against applicable chainstate and earlier transactions in the block. It checks block weight and other consensus resource limits. It verifies the coinbase structure and confirms that the claimed value does not exceed subsidy plus fees.</p>\n<p>If any required rule fails, the node rejects the block. The work spent producing it does not make the block acceptable.</p>\n<p>If the block passes, it becomes a valid candidate for chain activation. Validation and chain selection are still separate decisions.</p>",
+      "active": false,
+      "url": null,
+      "route_state": "Nodes independently validate the complete block."
+    },
+    {
+      "step_number": 10,
+      "heading": "Valid candidate chains are compared by accumulated work",
+      "explanatory_markdown": "A node can know more than one valid branch. Two miners may produce valid blocks extending the same parent before either block has propagated widely.\n\nAmong valid candidate chains, Bitcoin Core tracks accumulated proof of work as chainwork. The node attempts to activate the valid chain with the greatest accumulated work under its rules. This is more precise than saying it selects the branch with the greatest raw block count.\n\nProof of work cannot make an invalid chain valid. Chainwork comparison happens only after the relevant data passes validation.\n\nWhen a competing valid branch overtakes the active branch, the node can reorganize. It disconnects blocks back to the shared ancestor, reverses their chainstate effects, connects blocks from the stronger valid branch, and reconciles unconfirmed transactions.\n\nA transaction in a disconnected block can lose confirmations, return to a mempool if still valid and acceptable, appear in the new branch, conflict with a new selected-chain spend, or remain absent.",
+      "explanatory_html": "<p>A node can know more than one valid branch. Two miners may produce valid blocks extending the same parent before either block has propagated widely.</p>\n<p>Among valid candidate chains, Bitcoin Core tracks accumulated proof of work as chainwork. The node attempts to activate the valid chain with the greatest accumulated work under its rules. This is more precise than saying it selects the branch with the greatest raw block count.</p>\n<p>Proof of work cannot make an invalid chain valid. Chainwork comparison happens only after the relevant data passes validation.</p>\n<p>When a competing valid branch overtakes the active branch, the node can reorganize. It disconnects blocks back to the shared ancestor, reverses their chainstate effects, connects blocks from the stronger valid branch, and reconciles unconfirmed transactions.</p>\n<p>A transaction in a disconnected block can lose confirmations, return to a mempool if still valid and acceptable, appear in the new branch, conflict with a new selected-chain spend, or remain absent.</p>",
+      "active": false,
+      "url": null,
+      "route_state": "Valid candidate branches are compared by accumulated work."
+    },
+    {
+      "step_number": 11,
+      "heading": "The transaction receives confirmations",
+      "explanatory_markdown": "The transaction receives its first confirmation when it appears in a valid block on the node's selected chain. If another valid block extends that chain, the transaction has two confirmations from that node's current view. Each later block adds depth.\n\nAdditional depth means more proof of work has accumulated above the transaction's block. Replacing that history generally requires a competing valid branch to replace the transaction's block and overtake the continuing selected chain.\n\nConfirmations are probabilistic settlement depth, not absolute finality. Bitcoin has no ordinary depth field that makes reorganization mathematically impossible. Deeper reorganizations are generally more difficult and less practical under normal assumptions, but the relevant risk depends on value, delivery, reversibility, counterparty behavior, hash power, connectivity, and operational context.\n\nWallets, merchants, exchanges, and services choose their own confirmation requirements. Those policies do not change the protocol's validity rules.",
+      "explanatory_html": "<p>The transaction receives its first confirmation when it appears in a valid block on the node&#39;s selected chain. If another valid block extends that chain, the transaction has two confirmations from that node&#39;s current view. Each later block adds depth.</p>\n<p>Additional depth means more proof of work has accumulated above the transaction&#39;s block. Replacing that history generally requires a competing valid branch to replace the transaction&#39;s block and overtake the continuing selected chain.</p>\n<p>Confirmations are probabilistic settlement depth, not absolute finality. Bitcoin has no ordinary depth field that makes reorganization mathematically impossible. Deeper reorganizations are generally more difficult and less practical under normal assumptions, but the relevant risk depends on value, delivery, reversibility, counterparty behavior, hash power, connectivity, and operational context.</p>\n<p>Wallets, merchants, exchanges, and services choose their own confirmation requirements. Those policies do not change the protocol&#39;s validity rules.</p>",
+      "active": false,
+      "url": null,
+      "route_state": "Selected-chain inclusion creates confirmation depth."
+    },
+    {
+      "step_number": 12,
+      "heading": "The transaction updates the UTXO set",
+      "explanatory_markdown": "When the block connects to selected chainstate, the transaction's inputs become spent in that state. The transaction's new outputs become available under their spending conditions, subject to later chain changes.\n\nThe recipient wallet can identify an output it controls and include that output in its displayed balance. The sender wallet can identify the change output it controls. Those balances are calculated views over separate outputs. They are not account balances stored in one central Bitcoin database.\n\nA later transaction can reference one of the new outputs as an input, continuing the lifecycle. A reorganization can reverse active-chain state if the containing block is disconnected, which is why wallet displays and services must follow current selected history.\n\nThe complete movement is therefore not one transfer between two account rows. It is a sequence of transaction construction, authorization, local evaluation, peer propagation, optional mempool storage, miner selection, candidate-block construction, proof of work, independent validation, valid-chain selection, confirmation depth, and UTXO-state transition.",
+      "explanatory_html": "<p>When the block connects to selected chainstate, the transaction&#39;s inputs become spent in that state. The transaction&#39;s new outputs become available under their spending conditions, subject to later chain changes.</p>\n<p>The recipient wallet can identify an output it controls and include that output in its displayed balance. The sender wallet can identify the change output it controls. Those balances are calculated views over separate outputs. They are not account balances stored in one central Bitcoin database.</p>\n<p>A later transaction can reference one of the new outputs as an input, continuing the lifecycle. A reorganization can reverse active-chain state if the containing block is disconnected, which is why wallet displays and services must follow current selected history.</p>\n<p>The complete movement is therefore not one transfer between two account rows. It is a sequence of transaction construction, authorization, local evaluation, peer propagation, optional mempool storage, miner selection, candidate-block construction, proof of work, independent validation, valid-chain selection, confirmation depth, and UTXO-state transition.</p>",
+      "active": false,
+      "url": null,
+      "route_state": "Block connection spends inputs and creates new UTXOs."
+    }
+  ],
+  "companion_guides": [
+    {
+      "registry_id": "MSC-GUIDE-005",
+      "title": "What Is a Bitcoin Wallet?",
+      "companion_role": "Explains the software and hardware role that manages keys, constructs transactions, and presents balances.",
+      "editorial_status": "COPY_LOCKED source package",
+      "planned_action": "Continue to companion guide",
+      "planning_url_note": "None. Keep inactive until publication and URL confirmation.",
+      "active": false,
+      "url": null
+    },
+    {
+      "registry_id": "MSC-GUIDE-007",
+      "title": "How to Send and Receive Bitcoin",
+      "companion_role": "Provides the practical wallet workflow around destinations, review, signing, broadcast, and confirmation.",
+      "editorial_status": "COPY_LOCKED source package",
+      "planned_action": "Continue to companion guide",
+      "planning_url_note": "None. Keep inactive until publication and URL confirmation.",
+      "active": false,
+      "url": null
+    },
+    {
+      "registry_id": "MSC-GUIDE-008",
+      "title": "How Bitcoin Transactions and Fees Work",
+      "companion_role": "Supplies the detailed transaction structure, fee, weight, fee-rate, and replacement foundations.",
+      "editorial_status": "COPY_LOCKED source package",
+      "planned_action": "Continue to companion guide",
+      "planning_url_note": "None. Keep inactive until publication and URL confirmation.",
+      "active": false,
+      "url": null
+    },
+    {
+      "registry_id": "MSC-GUIDE-010",
+      "title": "How Bitcoin Public and Private Keys Work",
+      "companion_role": "Explains key derivation, signatures, public verification, and the limits of cryptographic authorization.",
+      "editorial_status": "COPY_LOCKED source package",
+      "planned_action": "Continue to companion guide",
+      "planning_url_note": "None. Keep inactive until publication and URL confirmation.",
+      "active": false,
+      "url": null
+    },
+    {
+      "registry_id": "MSC-GUIDE-013",
+      "title": "What Are UTXOs in Bitcoin?",
+      "companion_role": "Defines inputs, outputs, change, wallet balance views, coin selection, and UTXO-set state.",
+      "editorial_status": "COPY_LOCKED source package",
+      "planned_action": "Continue to companion guide",
+      "planning_url_note": "None. Keep inactive until publication and URL confirmation.",
+      "active": false,
+      "url": null
+    },
+    {
+      "registry_id": "MSC-GUIDE-014",
+      "title": "How Bitcoin Confirmations Work",
+      "companion_role": "Explains first confirmation, depth, competing valid branches, reorganizations, and contextual settlement policy.",
+      "editorial_status": "COPY_LOCKED source package",
+      "planned_action": "Continue to companion guide",
+      "planning_url_note": "None. Keep inactive until publication and URL confirmation.",
+      "active": false,
+      "url": null
+    },
+    {
+      "registry_id": "MSC-GUIDE-017",
+      "title": "How Bitcoin Mining Works",
+      "companion_role": "Details candidate-block assembly, coinbase construction, header hashing, submission, and node validation.",
+      "editorial_status": "COPY_LOCKED source package",
+      "planned_action": "Continue to companion guide",
+      "planning_url_note": "None. Keep inactive until publication and URL confirmation.",
+      "active": false,
+      "url": null
+    },
+    {
+      "registry_id": "MSC-GUIDE-018",
+      "title": "How Bitcoin Mining Pools Work",
+      "companion_role": "Separates template construction, pool jobs, share targets, hashing devices, block submission, and payout accounting.",
+      "editorial_status": "COPY_LOCKED source package",
+      "planned_action": "Continue to companion guide",
+      "planning_url_note": "None. Keep inactive until publication and URL confirmation.",
+      "active": false,
+      "url": null
+    },
+    {
+      "registry_id": "MSC-GUIDE-021",
+      "title": "What Is a Bitcoin Full Node?",
+      "companion_role": "Explains independent validation, chainstate, active-chain selection, policy, relay, and storage boundaries.",
+      "editorial_status": "COPY_LOCKED source package",
+      "planned_action": "Continue to companion guide",
+      "planning_url_note": "None. Keep inactive until publication and URL confirmation.",
+      "active": false,
+      "url": null
+    },
+    {
+      "registry_id": "MSC-GUIDE-025",
+      "title": "What Happens Inside the Bitcoin Mempool?",
+      "companion_role": "Explains node-local admission, policy, relay, conflicts, replacement, eviction, and reorganization handling.",
+      "editorial_status": "COPY_LOCKED source package",
+      "planned_action": "Continue to companion guide",
+      "planning_url_note": "None. Keep inactive until publication and URL confirmation.",
+      "active": false,
+      "url": null
+    },
+    {
+      "registry_id": "MSC-GUIDE-026",
+      "title": "How Bitcoin Blocks Work",
+      "companion_role": "Details headers, transactions, coinbase rules, Merkle and witness commitments, block limits, and validation.",
+      "editorial_status": "COPY_LOCKED source package",
+      "planned_action": "Continue to companion guide",
+      "planning_url_note": "None. Keep inactive until publication and URL confirmation.",
+      "active": false,
+      "url": null
+    },
+    {
+      "registry_id": "MSC-GUIDE-027",
+      "title": "How the Bitcoin Blockchain Works",
+      "companion_role": "Expands selected history, chainwork, reorganizations, confirmation depth, and state updates.",
+      "editorial_status": "COPY_LOCKED source package",
+      "planned_action": "Continue to companion guide",
+      "planning_url_note": "None. Keep inactive until publication and URL confirmation.",
+      "active": false,
+      "url": null
+    },
+    {
+      "registry_id": "MSC-GUIDE-029",
+      "title": "How Bitcoin Proof of Work Secures the Network",
+      "companion_role": "Explains targets, costly production, cheap verification, accumulated work, and majority-hashpower limits.",
+      "editorial_status": "COPY_LOCKED source package",
+      "planned_action": "Continue to companion guide",
+      "planning_url_note": "None. Keep inactive until publication and URL confirmation.",
+      "active": false,
+      "url": null
+    },
+    {
+      "registry_id": "MSC-GUIDE-030",
+      "title": "How Bitcoin Reaches Consensus",
+      "companion_role": "Connects compatible validation rules, local policy, proof-of-work ordering, software choice, and coordination.",
+      "editorial_status": "COPY_LOCKED source package",
+      "planned_action": "Continue to companion guide",
+      "planning_url_note": "None. Keep inactive until publication and URL confirmation.",
+      "active": false,
+      "url": null
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Wallet",
+      "definition": "Software or hardware that manages keys, constructs transactions, and helps users interact with Bitcoin."
+    },
+    {
+      "term": "Transaction",
+      "definition": "A data structure that spends existing UTXOs and creates new outputs."
+    },
+    {
+      "term": "UTXO",
+      "definition": "An unspent transaction output that can be used as an input in a later transaction."
+    },
+    {
+      "term": "Input",
+      "definition": "A transaction field that spends a previous UTXO and supplies unlocking data."
+    },
+    {
+      "term": "Output",
+      "definition": "A transaction field that assigns value to a new locking condition."
+    },
+    {
+      "term": "Change output",
+      "definition": "A transaction output that returns unspent input value to a wallet-controlled destination."
+    },
+    {
+      "term": "Digital signature",
+      "definition": "Cryptographic proof that a valid private key authorized a transaction or message."
+    },
+    {
+      "term": "Transaction relay",
+      "definition": "The peer-to-peer propagation of transactions between nodes under local policy rules."
+    },
+    {
+      "term": "Mempool",
+      "definition": "A node's local collection of valid unconfirmed transactions eligible for relay or block inclusion."
+    },
+    {
+      "term": "Block",
+      "definition": "A valid batch of Bitcoin transactions linked to prior chain history through proof of work."
+    },
+    {
+      "term": "Proof of work",
+      "definition": "The computational process miners use to produce block hashes below the network target."
+    },
+    {
+      "term": "Validation",
+      "definition": "The process of checking transactions and blocks against applicable rules."
+    },
+    {
+      "term": "Confirmation",
+      "definition": "The inclusion of a transaction in a block, followed by additional blocks that increase settlement depth."
+    },
+    {
+      "term": "Reorganization",
+      "definition": "A change in the selected chain tip when a competing valid chain accumulates more proof of work."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bitcoin: A Peer-to-Peer Electronic Cash System",
+      "url": "https://bitcoin.org/bitcoin.pdf",
+      "supports": "Transaction chaining, digital signatures, peer-to-peer propagation, proof-of-work blocks, accumulated-work ordering, incentives, and probabilistic confirmation depth."
+    },
+    {
+      "title": "Bitcoin Core wallet coin-selection and transaction-creation implementation",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/wallet/spend.cpp",
+      "supports": "Wallet input selection, recipient outputs, change creation, fee calculation, transaction construction, and wallet-specific selection constraints."
+    },
+    {
+      "title": "Bitcoin Core signing implementation",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/script/sign.cpp",
+      "supports": "Producing and combining transaction signatures and the separation between transaction construction, signing, and later validation."
+    },
+    {
+      "title": "Bitcoin Core script interpreter interface",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/script/interpreter.h",
+      "supports": "Signature verification, script execution, signature-hash behavior, and consensus and policy verification flags."
+    },
+    {
+      "title": "Bitcoin Core transaction validation and chainstate implementation",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/validation.cpp",
+      "supports": "Transaction and block validation, mempool admission, input availability, block connection and disconnection, candidate-chain activation, reorganizations, and UTXO-state changes."
+    },
+    {
+      "title": "Bitcoin Core peer-processing implementation",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/net_processing.cpp",
+      "supports": "Transaction announcements, peer requests, transaction and block relay, missing-input handling, and the limits of peer-to-peer propagation."
+    },
+    {
+      "title": "Bitcoin Core transaction mempool implementation",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/txmempool.cpp",
+      "supports": "Node-local mempool storage, transaction relationships, conflicts, removal, replacement effects, and updates during chain changes."
+    },
+    {
+      "title": "Bitcoin Core block-assembly implementation",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/node/miner.cpp",
+      "supports": "Candidate-block construction, transaction selection, dependency ordering, coinbase creation, subsidy-plus-fee calculation, block limits, and header preparation."
+    },
+    {
+      "title": "Bitcoin Core block data structures",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/primitives/block.h",
+      "supports": "The six serialized block-header fields, the 80-byte header structure, transaction vectors, and the distinction between a header and a full block."
+    },
+    {
+      "title": "Bitcoin Core proof-of-work implementation",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/pow.cpp",
+      "supports": "Required-target calculation, compact target decoding, proof-of-work checking, and the separation between target compliance and full block validity."
+    },
+    {
+      "title": "Bitcoin Core chainwork implementation",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/chain.cpp",
+      "supports": "Per-block proof calculation, accumulated chainwork, and comparison of valid chain history."
+    },
+    {
+      "title": "Bitcoin Core coins view interface",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/coins.h",
+      "supports": "The UTXO coins view, spent and unspent output records, cache layers, and the state used to validate transaction inputs."
+    },
+    {
+      "title": "BIP 141: Segregated Witness",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki",
+      "supports": "Witness programs, witness transaction identifiers, block weight, transaction and witness commitments, and consensus validation boundaries."
+    },
+    {
+      "title": "Bitcoin Developer Guide: Transactions",
+      "url": "https://developer.bitcoin.org/devguide/transactions.html",
+      "supports": "Inputs, outputs, addresses, change, transaction fees, signatures, transaction identifiers, and the UTXO transaction model."
+    },
+    {
+      "title": "Bitcoin Developer Guide: P2P Network",
+      "url": "https://developer.bitcoin.org/devguide/p2p_network.html",
+      "supports": "Peer discovery, transaction and block announcements, message exchange, relay, and node-local network views."
+    },
+    {
+      "title": "Bitcoin Developer Guide: Block Chain",
+      "url": "https://developer.bitcoin.org/devguide/block_chain.html",
+      "supports": "Block headers, Merkle commitments, proof of work, UTXO validation, confirmations, competing branches, and reorganizations."
+    }
+  ],
+  "seo_title": "How a Bitcoin Transaction Moves: Wallet to Confirmation",
+  "meta_description": "Trace a Bitcoin transaction through signing, peer relay, local mempools, mining, proof of work, block validation, confirmations, and UTXO updates.",
+  "excerpt": "See how one Bitcoin transaction moves from wallet-selected outputs and signatures through relay, local mempools, mining, independent validation, confirmation depth, and updated UTXO state.",
+  "reading_time": "16 to 18 minutes",
+  "relationships": {
+    "parent_category": {
+      "registry_id": "MSC-HUB-NETWORK",
+      "title": "The Bitcoin Network",
+      "active": false,
+      "url": null
+    },
+    "learning_paths": [
+      {
+        "registry_id": "MSC-PATH-NETWORK",
+        "title": "Understand the Network",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-PATH-START",
+        "title": "Start With Bitcoin",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-PATH-SAFE",
+        "title": "Use Bitcoin Safely",
+        "active": false,
+        "url": null
+      }
+    ],
+    "previous": {
+      "registry_id": "MSC-GUIDE-013",
+      "title": "What Are UTXOs in Bitcoin?",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-025",
+      "title": "What Happens Inside the Bitcoin Mempool?",
+      "active": false,
+      "url": null
+    },
+    "recommended_branch": {
+      "registry_id": "MSC-GUIDE-021",
+      "title": "What Is a Bitcoin Full Node?",
+      "active": false,
+      "url": null
+    },
+    "return_destination": {
+      "registry_id": "MSC-HUB-NETWORK",
+      "title": "The Bitcoin Network",
+      "active": false,
+      "url": null
+    },
+    "planned": [
+      {
+        "registry_id": "MSC-GUIDE-005",
+        "title": "What Is a Bitcoin Wallet?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-007",
+        "title": "How to Send and Receive Bitcoin",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-008",
+        "title": "How Bitcoin Transactions and Fees Work",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-010",
+        "title": "How Bitcoin Public and Private Keys Work",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-013",
+        "title": "What Are UTXOs in Bitcoin?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-014",
+        "title": "How Bitcoin Confirmations Work",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-017",
+        "title": "How Bitcoin Mining Works",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-018",
+        "title": "How Bitcoin Mining Pools Work",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-021",
+        "title": "What Is a Bitcoin Full Node?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-025",
+        "title": "What Happens Inside the Bitcoin Mempool?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-026",
+        "title": "How Bitcoin Blocks Work",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-027",
+        "title": "How the Bitcoin Blockchain Works",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-029",
+        "title": "How Bitcoin Proof of Work Secures the Network",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-030",
+        "title": "How Bitcoin Reaches Consensus",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-PATH-START",
+        "title": "Start With Bitcoin",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-PATH-NETWORK",
+        "title": "Understand the Network",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-HUB-NETWORK",
+        "title": "The Bitcoin Network",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GLOSSARY-001",
+        "title": "Bitcoin Glossary",
+        "active": false,
+        "url": null
+      }
+    ]
+  },
+  "review": {
+    "reviewed_date": "2026-07-19",
+    "copy_locked_date": "2026-07-19",
+    "human_verification": {
+      "reviewer": "Mempool Surf Club Editorial",
+      "review_date": "2026-07-19",
+      "notes": [
+        "Verified the complete 12-stage transaction lifecycle against the listed Bitcoin Core v31.0 sources, BIP 141, the Bitcoin white paper, and developer documentation.",
+        "Confirmed consensus validity remains separate from local policy; broadcast does not guarantee relay or confirmation; proof of work does not replace block validation; and chainwork comparison applies only among valid candidates.",
+        "Confirmed the maturity wording correction, probabilistic confirmation language, all 16 source entries, companion relationships, inactive links, synchronized glossary definitions, and exactly three illustrations remaining `PLANNED`."
+      ]
+    },
+    "accuracy_checklist": [
+      {
+        "checked": true,
+        "statement": "Registry metadata matches the approved master registry."
+      },
+      {
+        "checked": true,
+        "statement": "The walkthrough contains exactly 12 lifecycle sections in the approved order."
+      },
+      {
+        "checked": true,
+        "statement": "Wallet balances are treated as calculated views over controlled outputs rather than protocol accounts."
+      },
+      {
+        "checked": true,
+        "statement": "Addresses are distinguished from on-chain outputs."
+      },
+      {
+        "checked": true,
+        "statement": "Signing is separated from broadcast and confirmation."
+      },
+      {
+        "checked": true,
+        "statement": "Consensus validity is separated from local mempool policy."
+      },
+      {
+        "checked": true,
+        "statement": "A higher fee is not described as repairing an invalid signature or nonexistent input."
+      },
+      {
+        "checked": true,
+        "statement": "Peer relay is not described as a universal or guaranteed broadcast."
+      },
+      {
+        "checked": true,
+        "statement": "Mempools are described as node-local and temporary."
+      },
+      {
+        "checked": true,
+        "statement": "Miner selection is not guaranteed and is not restricted to one public mempool."
+      },
+      {
+        "checked": true,
+        "statement": "Candidate blocks, valid blocks, and selected-chain blocks remain distinct."
+      },
+      {
+        "checked": true,
+        "statement": "Pool template construction and connected hashing devices remain distinct."
+      },
+      {
+        "checked": true,
+        "statement": "Failed proof-of-work hashes are not described as partial progress."
+      },
+      {
+        "checked": true,
+        "statement": "Proof of work is not described as complete block validation."
+      },
+      {
+        "checked": true,
+        "statement": "Nodes independently validate proof of work, transactions, UTXOs, scripts, coinbase limits, commitments, and block limits."
+      },
+      {
+        "checked": true,
+        "statement": "Chainwork is compared only among valid candidate chains."
+      },
+      {
+        "checked": true,
+        "statement": "Confirmations are probabilistic rather than absolute finality."
+      },
+      {
+        "checked": true,
+        "statement": "UTXO-set updates are connected to selected chainstate and reorganization behavior."
+      },
+      {
+        "checked": true,
+        "statement": "Companion-guide references do not duplicate their full articles."
+      },
+      {
+        "checked": true,
+        "statement": "External URLs appear only in Sources."
+      },
+      {
+        "checked": true,
+        "statement": "Planned Internal Links contain no URLs."
+      },
+      {
+        "checked": true,
+        "statement": "Exact approved glossary definitions are used."
+      },
+      {
+        "checked": true,
+        "statement": "Human Verification remains pending."
+      },
+      {
+        "checked": true,
+        "statement": "Exactly three complete illustration briefs are included."
+      },
+      {
+        "checked": true,
+        "statement": "No em dash or en dash character appears."
+      }
+    ]
+  },
+  "illustration_briefs": [
+    {
+      "heading": "Illustration 1",
+      "concept_title": "The Twelve-Stage Transaction Voyage",
+      "educational_purpose": "Show the complete lifecycle without suggesting that one central system performs every step.",
+      "recommended_placement": "After the section titled The complete movement is therefore not one transfer between two account rows.",
+      "visual_description": "Old nautical voyage chart with twelve numbered checkpoints from UTXO selection through UTXO-set update. Different vessel and station symbols distinguish wallet, peers, nodes, miners, blocks, and chainstate.",
+      "required_labels": "Select UTXOs, Sign, Local checks, Relay, Local mempools, Miner selection, Candidate block, Proof of work, Node validation, Chainwork, Confirmations, UTXO update",
+      "caption": "A Bitcoin transaction crosses wallet, peer, node, mining, validation, and chainstate boundaries before becoming confirmed selected history.",
+      "alt_text": "Twelve-stage Bitcoin transaction lifecycle diagram from wallet UTXO selection and signing through relay, mining, validation, confirmation, and UTXO-set update.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Convert the voyage into a vertical numbered route with one short label per checkpoint.",
+      "status": "PLANNED"
+    },
+    {
+      "heading": "Illustration 2",
+      "concept_title": "Local Mempools Across Peer Routes",
+      "educational_purpose": "Prevent the route from implying one global transaction waiting room.",
+      "recommended_placement": "After the section titled Nodes may place it in local mempools.",
+      "visual_description": "Ocean-current network map with four node stations. One transaction appears in three local mempools, a conflict appears in one, and another node has not received either. Arrows show selective relay between peers.",
+      "required_labels": "Node A mempool, Node B mempool, Node C mempool, Node D, Relay, Accepted, Policy rejected, Not received, Conflict",
+      "caption": "Nodes can receive and retain different unconfirmed transactions while still enforcing compatible block consensus rules.",
+      "alt_text": "Peer network diagram showing four Bitcoin nodes with different local mempool contents due to relay, policy, conflicts, and missing data.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack four node stations vertically and show one shared transaction plus one differing status beside each.",
+      "status": "PLANNED"
+    },
+    {
+      "heading": "Illustration 3",
+      "concept_title": "Proof of Work Before Full Validation",
+      "educational_purpose": "Separate a qualifying header from acceptance of the complete block.",
+      "recommended_placement": "After the section titled Nodes independently validate the block.",
+      "visual_description": "Technical checkpoint plate. A block header crosses a target gate labeled Proof of work valid, then the full block enters a larger inspection station for transactions, signatures, UTXOs, coinbase value, commitments, and resource limits. Invalid routes leave the second station.",
+      "required_labels": "Header hash, Target, Qualifying proof of work, Full block, Transactions, Signatures, UTXOs, Coinbase limit, Commitments, Block limits, Accept, Reject",
+      "caption": "A qualifying header allows block submission, but nodes accept the block only after every required consensus check passes.",
+      "alt_text": "Bitcoin validation diagram showing a block header passing proof-of-work target checking before the full block undergoes transaction, signature, UTXO, coinbase, commitment, and resource validation.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Place the target gate above the full-block inspection and keep the accept and reject routes visible at the bottom.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "shopify_page_id": null,
+    "links_active": false
+  },
+  "synchronization": {
+    "expected_step_headings": [
+      "A wallet selects spendable outputs",
+      "The wallet creates signatures",
+      "The transaction receives local checks",
+      "Peers relay the transaction",
+      "Nodes may place it in local mempools",
+      "A miner or pool may select it",
+      "The transaction enters a candidate block",
+      "Miners perform proof of work",
+      "Nodes independently validate the block",
+      "Valid candidate chains are compared by accumulated work",
+      "The transaction receives confirmations",
+      "The transaction updates the UTXO set"
+    ],
+    "source_step_headings": [
+      "A wallet selects spendable outputs",
+      "The wallet creates signatures",
+      "The transaction receives local checks",
+      "Peers relay the transaction",
+      "Nodes may place it in local mempools",
+      "A miner or pool may select it",
+      "The transaction enters a candidate block",
+      "Miners perform proof of work",
+      "Nodes independently validate the block",
+      "Valid candidate chains are compared by accumulated work",
+      "The transaction receives confirmations",
+      "The transaction updates the UTXO set"
+    ],
+    "source_route_states": [
+      "Wallet identifies spendable UTXOs and creates recipient and change outputs.",
+      "Signing software authorizes the defined transaction data without exposing private keys.",
+      "Wallet or node software performs local preflight checks.",
+      "One or more nodes may relay the transaction across peer connections.",
+      "Individual nodes may accept it into their own local mempools.",
+      "A miner or pool may select it for a candidate template.",
+      "The candidate block commits to the transaction through block structures.",
+      "Miners search for a header hash satisfying the required target.",
+      "Nodes independently validate the complete block.",
+      "Valid candidate branches are compared by accumulated work.",
+      "Selected-chain inclusion creates confirmation depth.",
+      "Block connection spends inputs and creates new UTXOs."
+    ],
+    "companion_ids": [
+      "MSC-GUIDE-005",
+      "MSC-GUIDE-007",
+      "MSC-GUIDE-008",
+      "MSC-GUIDE-010",
+      "MSC-GUIDE-013",
+      "MSC-GUIDE-014",
+      "MSC-GUIDE-017",
+      "MSC-GUIDE-018",
+      "MSC-GUIDE-021",
+      "MSC-GUIDE-025",
+      "MSC-GUIDE-026",
+      "MSC-GUIDE-027",
+      "MSC-GUIDE-029",
+      "MSC-GUIDE-030"
+    ],
+    "planned_relationship_ids": [
+      "MSC-GUIDE-005",
+      "MSC-GUIDE-007",
+      "MSC-GUIDE-008",
+      "MSC-GUIDE-010",
+      "MSC-GUIDE-013",
+      "MSC-GUIDE-014",
+      "MSC-GUIDE-017",
+      "MSC-GUIDE-018",
+      "MSC-GUIDE-021",
+      "MSC-GUIDE-025",
+      "MSC-GUIDE-026",
+      "MSC-GUIDE-027",
+      "MSC-GUIDE-029",
+      "MSC-GUIDE-030",
+      "MSC-PATH-START",
+      "MSC-PATH-NETWORK",
+      "MSC-HUB-NETWORK",
+      "MSC-GLOSSARY-001"
+    ]
+  }
+}
