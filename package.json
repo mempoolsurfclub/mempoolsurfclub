@@ -6,7 +6,7 @@
     "build:learn-path-pilot": "node scripts/generate-msc-learn-start-path-runtime.mjs",
     "build:learn-route-pilot": "node scripts/generate-msc-learn-transaction-route-runtime.mjs",
     "build:learn-glossary-pilot": "node scripts/generate-msc-learn-glossary-runtime.mjs",
-    "materialize:learn-runtime-audit": "node scripts/learn-runtime/audit.mjs --write --print-base64",
+    "materialize:learn-runtime-audit": "node scripts/learn-runtime/audit.mjs --write",
     "audit:learn-runtime": "node scripts/learn-runtime/audit.mjs --check",
     "validate:learn-registry": "node scripts/generate-msc-learn-data.mjs --validate-only",
     "validate:learn-library": "node scripts/validate-msc-learn-library.mjs",
