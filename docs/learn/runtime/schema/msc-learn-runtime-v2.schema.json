@@ -1,0 +1,384 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.mempoolsurfclub.com/schemas/learn-runtime/2.0.0",
+  "title": "Mempool Surf Club Learn Runtime v2",
+  "description": "Shared generated runtime envelope for copy-locked Mempool Surf Club Learn destinations. This schema does not assert that the five destination-specific pilot records conform to v2.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generator_version",
+    "identity",
+    "source",
+    "content",
+    "key_terms",
+    "sources",
+    "seo",
+    "relationships",
+    "review",
+    "illustrations",
+    "publication",
+    "role_data"
+  ],
+  "properties": {
+    "schema_version": { "const": "2.0.0" },
+    "generator_version": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?$"
+    },
+    "identity": { "$ref": "#/$defs/identity" },
+    "source": { "$ref": "#/$defs/source" },
+    "content": { "$ref": "#/$defs/content" },
+    "key_terms": { "type": "array", "items": { "$ref": "#/$defs/keyTerm" } },
+    "sources": { "type": "array", "items": { "$ref": "#/$defs/sourceReference" } },
+    "seo": { "$ref": "#/$defs/seo" },
+    "relationships": { "type": "array", "items": { "$ref": "#/$defs/relationship" } },
+    "review": { "$ref": "#/$defs/review" },
+    "illustrations": { "type": "array", "items": { "$ref": "#/$defs/illustration" } },
+    "publication": { "$ref": "#/$defs/publication" },
+    "role_data": { "type": "object" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "identity": { "properties": { "page_role": { "const": "topic-guide" } } } } },
+      "then": { "properties": { "role_data": { "$ref": "#/$defs/topicGuideRoleData" } } }
+    },
+    {
+      "if": { "properties": { "identity": { "properties": { "page_role": { "const": "category-hub" } } } } },
+      "then": { "properties": { "role_data": { "$ref": "#/$defs/categoryHubRoleData" } } }
+    },
+    {
+      "if": { "properties": { "identity": { "properties": { "page_role": { "const": "learning-path" } } } } },
+      "then": { "properties": { "role_data": { "$ref": "#/$defs/learningPathRoleData" } } }
+    },
+    {
+      "if": { "properties": { "identity": { "properties": { "page_role": { "const": "featured-route" } } } } },
+      "then": { "properties": { "role_data": { "$ref": "#/$defs/featuredRouteRoleData" } } }
+    },
+    {
+      "if": { "properties": { "identity": { "properties": { "page_role": { "const": "glossary-index" } } } } },
+      "then": { "properties": { "role_data": { "$ref": "#/$defs/glossaryIndexRoleData" } } }
+    }
+  ],
+  "$defs": {
+    "registryId": {
+      "type": "string",
+      "pattern": "^MSC-(?:GUIDE-[0-9]{3}|HUB-[A-Z]+|PATH-[A-Z]+|ROUTE-[0-9]{3}|GLOSSARY-[0-9]{3})$"
+    },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["registry_id", "page_role", "status", "h1", "planning_handle"],
+      "properties": {
+        "registry_id": { "$ref": "#/$defs/registryId" },
+        "page_role": { "enum": ["topic-guide", "category-hub", "learning-path", "featured-route", "glossary-index"] },
+        "status": { "const": "COPY_LOCKED" },
+        "h1": { "type": "string", "minLength": 1 },
+        "planning_handle": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" }
+      }
+    },
+    "identityEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["file", "sha256", "record_sha256"],
+      "properties": {
+        "file": { "type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "record_sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["package", "registry", "manifest"],
+      "properties": {
+        "package": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["file", "sha256"],
+          "properties": {
+            "file": { "type": "string", "pattern": "^docs/learn/content/(?:guides|hubs|paths|routes)/.+\\.md$" },
+            "sha256": { "$ref": "#/$defs/sha256" }
+          }
+        },
+        "registry": { "$ref": "#/$defs/identityEvidence" },
+        "manifest": { "$ref": "#/$defs/identityEvidence" }
+      }
+    },
+    "contentBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "heading", "html", "source_sha256"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "type": { "enum": ["section", "paragraph", "ordered-list", "unordered-list", "definition-list", "callout"] },
+        "heading": { "type": ["string", "null"] },
+        "html": { "type": "string" },
+        "source_sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "content": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["introductory_deck", "orientation"],
+      "properties": {
+        "introductory_deck": { "type": "string", "minLength": 1 },
+        "orientation": { "type": "array", "items": { "$ref": "#/$defs/contentBlock" } }
+      }
+    },
+    "keyTerm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["term", "definition"],
+      "properties": {
+        "term": { "type": "string", "minLength": 1 },
+        "definition": { "type": "string", "minLength": 1 }
+      }
+    },
+    "sourceReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "reference_type", "reference", "supports"],
+      "properties": {
+        "title": { "type": "string", "minLength": 1 },
+        "author_or_publisher": { "type": ["string", "null"] },
+        "reference_type": { "enum": ["url", "repository-path", "citation", "other"] },
+        "reference": { "type": "string", "minLength": 1 },
+        "supports": { "type": "string", "minLength": 1 }
+      }
+    },
+    "seo": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "meta_description", "excerpt", "reading_time"],
+      "properties": {
+        "title": { "type": "string", "minLength": 1 },
+        "meta_description": { "type": "string", "minLength": 1 },
+        "excerpt": { "type": "string", "minLength": 1 },
+        "reading_time": { "type": "string", "minLength": 1 }
+      }
+    },
+    "relationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relation_type", "registry_id", "title", "planning_handle", "active", "url", "order"],
+      "properties": {
+        "relation_type": { "enum": ["parent", "previous", "next", "return", "category", "primary-path", "secondary-path", "related-path", "recommended", "planned", "companion", "step", "branch"] },
+        "registry_id": { "$ref": "#/$defs/registryId" },
+        "title": { "type": "string", "minLength": 1 },
+        "planning_handle": { "type": ["string", "null"], "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "active": { "const": false },
+        "url": { "type": "null" },
+        "order": { "type": "integer", "minimum": 0 },
+        "placement": { "type": ["string", "null"] },
+        "required": { "type": ["boolean", "null"] },
+        "metadata": { "type": "object" }
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reviewed_date", "copy_locked_date", "human_verification", "accuracy_checklist"],
+      "properties": {
+        "reviewed_date": { "type": "string", "format": "date" },
+        "copy_locked_date": { "type": "string", "format": "date" },
+        "human_verification": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["reviewer", "review_date", "notes"],
+          "properties": {
+            "reviewer": { "type": ["string", "null"] },
+            "review_date": { "type": ["string", "null"], "format": "date" },
+            "notes": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "accuracy_checklist": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["checked", "statement"],
+            "properties": {
+              "checked": { "type": "boolean" },
+              "statement": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    },
+    "illustration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "educational_purpose", "recommended_placement", "visual_description", "required_labels", "caption", "alt_text", "orientation", "mobile_crop_notes", "status", "asset", "render"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^illustration-[1-9][0-9]*$" },
+        "title": { "type": "string", "minLength": 1 },
+        "educational_purpose": { "type": "string", "minLength": 1 },
+        "recommended_placement": { "type": "string", "minLength": 1 },
+        "visual_description": { "type": "string", "minLength": 1 },
+        "required_labels": { "type": "array", "items": { "type": "string" } },
+        "caption": { "type": "string", "minLength": 1 },
+        "alt_text": { "type": "string", "minLength": 1 },
+        "orientation": { "type": "string", "minLength": 1 },
+        "mobile_crop_notes": { "type": "string" },
+        "status": { "const": "PLANNED" },
+        "asset": { "type": "null" },
+        "render": { "const": false }
+      }
+    },
+    "publication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "public_url", "shopify_page_id", "template_suffix", "links_active", "publication_source"],
+      "properties": {
+        "state": { "const": "PREVIEW_ONLY" },
+        "public_url": { "type": "null" },
+        "shopify_page_id": { "type": "null" },
+        "template_suffix": { "type": "null" },
+        "links_active": { "const": false },
+        "publication_source": { "type": "null" }
+      }
+    },
+    "inactiveDestination": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["registry_id", "active", "url"],
+      "properties": {
+        "registry_id": { "$ref": "#/$defs/registryId" },
+        "active": { "const": false },
+        "url": { "type": "null" }
+      }
+    },
+    "topicGuideRoleData": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["article_sections", "category", "depth", "format"],
+      "properties": {
+        "article_sections": { "type": "array", "items": { "$ref": "#/$defs/contentBlock" } },
+        "category": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["registry_id", "title", "subcategory"],
+          "properties": {
+            "registry_id": { "$ref": "#/$defs/registryId" },
+            "title": { "type": "string", "minLength": 1 },
+            "subcategory": { "type": "string", "minLength": 1 }
+          }
+        },
+        "depth": { "type": "string", "minLength": 1 },
+        "format": { "type": "string", "minLength": 1 }
+      }
+    },
+    "categoryHubRoleData": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["article_sections", "subcategories", "canonical_destination_ids"],
+      "properties": {
+        "article_sections": { "type": "array", "items": { "$ref": "#/$defs/contentBlock" } },
+        "subcategories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "title", "guide_cards"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "title": { "type": "string", "minLength": 1 },
+              "guide_cards": { "type": "array", "items": { "$ref": "#/$defs/inactiveDestination" } }
+            }
+          }
+        },
+        "canonical_destination_ids": { "type": "array", "items": { "$ref": "#/$defs/registryId" } }
+      }
+    },
+    "learningPathRoleData": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["orientation", "stages", "branches"],
+      "properties": {
+        "orientation": { "type": "array", "items": { "$ref": "#/$defs/contentBlock" } },
+        "stages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["stage_number", "title", "summary_html", "steps"],
+            "properties": {
+              "stage_number": { "type": "integer", "minimum": 1 },
+              "title": { "type": "string", "minLength": 1 },
+              "summary_html": { "type": "string" },
+              "steps": { "type": "array", "items": { "$ref": "#/$defs/inactiveDestination" } }
+            }
+          }
+        },
+        "branches": { "type": "array", "items": { "$ref": "#/$defs/inactiveDestination" } }
+      }
+    },
+    "featuredRouteRoleData": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["orientation", "lifecycle_steps", "companions"],
+      "properties": {
+        "orientation": { "type": "array", "items": { "$ref": "#/$defs/contentBlock" } },
+        "lifecycle_steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["step_number", "heading", "explanatory_html", "route_state", "active", "url"],
+            "properties": {
+              "step_number": { "type": "integer", "minimum": 1 },
+              "heading": { "type": "string", "minLength": 1 },
+              "explanatory_html": { "type": "string", "minLength": 1 },
+              "route_state": { "type": "string", "minLength": 1 },
+              "active": { "const": false },
+              "url": { "type": "null" }
+            }
+          }
+        },
+        "companions": { "type": "array", "items": { "$ref": "#/$defs/inactiveDestination" } }
+      }
+    },
+    "glossaryIndexRoleData": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["orientation", "populated_letter_sequence", "populated_letter_counts", "letter_groups", "total_terms"],
+      "properties": {
+        "orientation": { "type": "array", "items": { "$ref": "#/$defs/contentBlock" } },
+        "populated_letter_sequence": { "type": "array", "items": { "type": "string", "pattern": "^[a-z]$" } },
+        "populated_letter_counts": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 1 } },
+        "letter_groups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["letter", "term_count", "terms"],
+            "properties": {
+              "letter": { "type": "string", "pattern": "^[a-z]$" },
+              "term_count": { "type": "integer", "minimum": 1 },
+              "terms": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["preferred_term", "definition", "canonical_destination_registry_id", "canonical_planning_handle", "active", "url"],
+                  "properties": {
+                    "preferred_term": { "type": "string", "minLength": 1 },
+                    "definition": { "type": "string", "minLength": 1 },
+                    "canonical_destination_registry_id": { "$ref": "#/$defs/registryId" },
+                    "canonical_planning_handle": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+                    "ownership": { "type": "object" },
+                    "active": { "const": false },
+                    "url": { "type": "null" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "total_terms": { "type": "integer", "minimum": 1 }
+      }
+    }
+  }
+}
