@@ -195,7 +195,7 @@ function parseLegacySourceRecords(markdown) {
       continue;
     }
     if (!current) throw new Error(`Unexpected content before legacy source record: ${line}`);
-    const field = line.match(/^-\s+([^:]+):\s*(.*)$/);
+    const field = line.match(/^-\s+([^:]+):(?=\s|$)\s*(.*)$/);
     if (!field) throw new Error(`Unsupported legacy source record content: ${line}`);
     addSourceField(current.fields, field[1], field[2], `Legacy source record "${current.title}"`);
   }
@@ -238,9 +238,10 @@ function parseNumberedSourceRecords(markdown) {
     if (!current) throw new Error(`Unexpected content before numbered source record: ${line}`);
 
     const continuationIndent = String(current.number).length + 2;
-    const field = line.match(new RegExp(`^ {${continuationIndent}}-\\s+([^:]+):\\s*(.*)$`));
+    const field = line.match(new RegExp(`^ {${continuationIndent}}-\\s+([^:]+):(?=\\s|$)\\s*(.*)$`));
     if (!field) {
-      if (/^\s*-\s+/.test(line)) {
+      const bullet = line.match(/^(\s*)-\s+/);
+      if (bullet && bullet[1].length !== continuationIndent) {
         throw new Error(`Numbered source record ${current.number} field is not indented by exactly ${continuationIndent} spaces: ${line}`);
       }
       throw new Error(`Unsupported numbered source record content: ${line}`);
@@ -387,6 +388,29 @@ function verifySourceParserContract() {
     - Author or publisher: Author Ten
     - Direct URL: https://example.com/ten
     - Supports: Tenth statement.`;
+
+  const legacyControl = parseLegacySourceRecords(`### A
+
+- Direct URL: https://example.com`);
+  const numberedControl = parseNumberedSourceRecords(`1. **A**
+
+   - Direct URL: https://example.com`);
+  const expectedControl = [{ title: 'A', direct_url: 'https://example.com' }];
+  assert.deepStrictEqual(legacyControl, expectedControl);
+  assert.deepStrictEqual(numberedControl, expectedControl);
+
+  assert.throws(
+    () => parseLegacySourceRecords(`### A
+
+- Direct URL https://example.com`),
+    /Unsupported legacy source record content: - Direct URL https:\/\/example\.com/,
+  );
+  assert.throws(
+    () => parseNumberedSourceRecords(`1. **A**
+
+   - Direct URL https://example.com`),
+    /Unsupported numbered source record content:    - Direct URL https:\/\/example\.com/,
+  );
 
   const legacy = parseSourceRecords(legacyFixture);
   const numbered = parseSourceRecords(numberedFixture);
