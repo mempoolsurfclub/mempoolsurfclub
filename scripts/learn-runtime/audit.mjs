@@ -72,6 +72,38 @@ function validateSchemaDefinition(schema) {
   if (publication?.links_active?.const !== false) errors.push('Schema links_active must be false');
   const relationship = schema?.$defs?.relationship?.properties || {};
   if (relationship?.active?.const !== false || relationship?.url?.type !== 'null') errors.push('Schema relationships must remain inactive with null URLs');
+  const contentBlockRefs = schema?.$defs?.contentBlock?.oneOf?.map((item) => item.$ref) || [];
+  for (const ref of ['#/$defs/richTextContentBlock', '#/$defs/semanticTableBlock', '#/$defs/inertCodeBlock']) {
+    if (!contentBlockRefs.includes(ref)) errors.push(`Schema contentBlock is missing supported block ref: ${ref}`);
+  }
+  const semanticTable = schema?.$defs?.semanticTableBlock;
+  if (semanticTable?.properties?.type?.const !== 'semantic-table') errors.push('Schema semanticTableBlock type must be semantic-table');
+  if (semanticTable?.properties?.label?.minLength !== 1) errors.push('Schema semanticTableBlock must require a non-empty accessible label');
+  if (semanticTable?.properties?.columns?.minItems !== 2) errors.push('Schema semanticTableBlock must require at least two ordered columns');
+  if (semanticTable?.properties?.rows?.minItems !== 1) errors.push('Schema semanticTableBlock must require at least one ordered body row');
+  const tableColumn = schema?.$defs?.semanticTableColumn;
+  if (tableColumn?.properties?.header?.minLength !== 1) errors.push('Schema semanticTableColumn must require non-empty header text');
+  const alignments = tableColumn?.properties?.alignment?.enum || [];
+  for (const alignment of ['left', 'center', 'right', null]) {
+    if (!alignments.includes(alignment)) errors.push(`Schema semanticTableColumn is missing alignment value: ${alignment}`);
+  }
+  const tableRow = schema?.$defs?.semanticTableRow;
+  if (tableRow?.properties?.cells?.minItems !== 2) errors.push('Schema semanticTableRow must require at least two ordered cells');
+  if (!String(tableRow?.properties?.cells?.$comment || '').includes('exactly the same number of cells')) errors.push('Schema semanticTableRow must record the equal-column-count audit invariant');
+  const inertCode = schema?.$defs?.inertCodeBlock;
+  if (inertCode?.properties?.type?.const !== 'inert-code') errors.push('Schema inertCodeBlock type must be inert-code');
+  if (inertCode?.properties?.executable?.const !== false) errors.push('Schema inertCodeBlock executable must be false');
+  if (inertCode?.properties?.controls_enabled?.const !== false) errors.push('Schema inertCodeBlock controls_enabled must be false');
+  if (inertCode?.properties?.escape_before_render?.const !== true) errors.push('Schema inertCodeBlock escape_before_render must be true');
+  if (!Array.isArray(inertCode?.properties?.language?.type) || !inertCode.properties.language.type.includes('null')) errors.push('Schema inertCodeBlock language must allow null');
+  for (const roleDefinition of ['topicGuideRoleData', 'categoryHubRoleData']) {
+    const ref = schema?.$defs?.[roleDefinition]?.properties?.article_sections?.items?.$ref;
+    if (ref !== '#/$defs/contentBlock') errors.push(`Schema ${roleDefinition} must include shared contentBlock records`);
+  }
+  for (const roleDefinition of ['learningPathRoleData', 'featuredRouteRoleData', 'glossaryIndexRoleData']) {
+    const ref = schema?.$defs?.[roleDefinition]?.properties?.orientation?.items?.$ref;
+    if (ref !== '#/$defs/contentBlock') errors.push(`Schema ${roleDefinition} must include shared contentBlock records`);
+  }
   for (const name of ['topicGuideRoleData', 'categoryHubRoleData', 'learningPathRoleData', 'featuredRouteRoleData', 'glossaryIndexRoleData']) {
     if (!schema?.$defs?.[name]) errors.push(`Schema is missing role extension: ${name}`);
   }
@@ -161,7 +193,11 @@ function auditPackage(entry, registryRecord) {
 
   let compatibility = 'BLOCKED';
   if (!blocking.length) {
-    const requiresRoleAdapter = entry.page_role !== 'topic-guide' || observations.some((item) => item.includes('role-specific'));
+    const requiresStructuredAdapter = markdown.constructs.semantic_tables.length > 0
+      || markdown.constructs.inert_fenced_code_blocks.length > 0;
+    const requiresRoleAdapter = entry.page_role !== 'topic-guide'
+      || requiresStructuredAdapter
+      || observations.some((item) => item.includes('role-specific'));
     compatibility = requiresRoleAdapter ? 'COMPATIBLE_WITH_ROLE_ADAPTER' : 'COMPATIBLE';
   }
 
@@ -219,6 +255,33 @@ function main() {
     (sum, item) => sum + item.unsupported_constructs_detected.reduce((inner, issue) => inner + issue.count, 0),
     0,
   );
+  const supportedSemanticTables = packages.reduce(
+    (sum, item) => sum + (item.markdown_constructs_detected.semantic_tables?.length || 0),
+    0,
+  );
+  const supportedInertFencedCodeBlocks = packages.reduce(
+    (sum, item) => sum + (item.markdown_constructs_detected.inert_fenced_code_blocks?.length || 0),
+    0,
+  );
+  const supportedFencedCodeLanguages = {};
+  for (const item of packages) {
+    for (const block of item.markdown_constructs_detected.inert_fenced_code_blocks || []) {
+      const language = block.language || 'unlabeled';
+      supportedFencedCodeLanguages[language] = (supportedFencedCodeLanguages[language] || 0) + 1;
+    }
+  }
+  const unsupportedTables = packages.reduce(
+    (sum, item) => sum + item.unsupported_constructs_detected
+      .filter((issue) => issue.type === 'unsupported-table')
+      .reduce((inner, issue) => inner + issue.count, 0),
+    0,
+  );
+  const unsupportedFencedCodeBlocks = packages.reduce(
+    (sum, item) => sum + item.unsupported_constructs_detected
+      .filter((issue) => issue.type === 'unsupported-fenced-code')
+      .reduce((inner, issue) => inner + issue.count, 0),
+    0,
+  );
   const missingPackages = packages.filter((item) => item.blocking_incompatibilities.some((message) => message.startsWith('Permanent package is missing'))).length;
 
   const report = {
@@ -240,6 +303,12 @@ function main() {
       duplicate_manifest_ids: manifestIndex.duplicate_ids.length,
       duplicate_registry_ids: registryIndex.duplicate_ids.length,
       duplicate_package_paths: manifestIndex.duplicate_paths.length,
+      global_identity_or_library_blockers: globalBlocking.length,
+      supported_semantic_tables: supportedSemanticTables,
+      supported_inert_fenced_code_blocks: supportedInertFencedCodeBlocks,
+      supported_fenced_code_languages: supportedFencedCodeLanguages,
+      unsupported_tables: unsupportedTables,
+      unsupported_fenced_code_blocks: unsupportedFencedCodeBlocks,
       unsupported_markdown_occurrences: unsupportedOccurrences,
       root_records_audited: rootEntries.length,
     },

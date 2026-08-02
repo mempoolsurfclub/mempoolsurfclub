@@ -107,6 +107,13 @@
       }
     },
     "contentBlock": {
+      "oneOf": [
+        { "$ref": "#/$defs/richTextContentBlock" },
+        { "$ref": "#/$defs/semanticTableBlock" },
+        { "$ref": "#/$defs/inertCodeBlock" }
+      ]
+    },
+    "richTextContentBlock": {
       "type": "object",
       "additionalProperties": false,
       "required": ["id", "type", "heading", "html", "source_sha256"],
@@ -115,6 +122,66 @@
         "type": { "enum": ["section", "paragraph", "ordered-list", "unordered-list", "definition-list", "callout"] },
         "heading": { "type": ["string", "null"] },
         "html": { "type": "string" },
+        "source_sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "semanticTableColumn": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "header", "alignment"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^column-[1-9][0-9]*$" },
+        "header": { "type": "string", "minLength": 1 },
+        "alignment": { "type": ["string", "null"], "enum": ["left", "center", "right", null] }
+      }
+    },
+    "semanticTableRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cells"],
+      "properties": {
+        "cells": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "type": "string" },
+          "$comment": "The Stage 1 Markdown audit and future generator must enforce that every row contains exactly the same number of cells as the ordered columns array."
+        }
+      }
+    },
+    "semanticTableBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "label", "label_source", "columns", "rows", "source_sha256"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "type": { "const": "semantic-table" },
+        "label": { "type": "string", "minLength": 1 },
+        "label_source": { "enum": ["explicit-caption", "nearest-source-heading"] },
+        "columns": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "$ref": "#/$defs/semanticTableColumn" }
+        },
+        "rows": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/semanticTableRow" }
+        },
+        "source_sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "inertCodeBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "language", "code", "executable", "controls_enabled", "escape_before_render", "source_sha256"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "type": { "const": "inert-code" },
+        "language": { "type": ["string", "null"], "pattern": "^[A-Za-z0-9][A-Za-z0-9_+.-]*$" },
+        "code": { "type": "string" },
+        "executable": { "const": false },
+        "controls_enabled": { "const": false },
+        "escape_before_render": { "const": true },
         "source_sha256": { "$ref": "#/$defs/sha256" }
       }
     },
