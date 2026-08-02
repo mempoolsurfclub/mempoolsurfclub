@@ -1,0 +1,42 @@
+name: Materialize Bitcoin Glossary runtime
+
+on:
+  push:
+    branches:
+      - engineering/learn-glossary-pilot
+    paths:
+      - 'scripts/generate-msc-learn-glossary-runtime.mjs'
+      - 'package.json'
+      - '.github/workflows/materialize-glossary-runtime.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          ref: engineering/learn-glossary-pilot
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Generate runtime outputs
+        run: npm run build:learn-glossary-pilot
+
+      - name: Commit generated outputs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/learn/runtime/MSC-GLOSSARY-001.json snippets/msc-learn-glossary-runtime.liquid
+          if git diff --cached --quiet; then
+            echo "Generated outputs already synchronized."
+            exit 0
+          fi
+          git commit -m "Generate Bitcoin Glossary runtime outputs"
+          git push
