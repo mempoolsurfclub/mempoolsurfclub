@@ -273,101 +273,101 @@ The next canonical guide explains UTXOs in more detail. That model is essential 
 
 ## 4. Sources
 
-### Bitcoin: A Peer-to-Peer Electronic Cash System
+1. **Bitcoin: A Peer-to-Peer Electronic Cash System**
 
-- Author or publisher: Satoshi Nakamoto
-- Direct URL: https://bitcoin.org/bitcoin.pdf
-- Supports: Bitcoin's original public-key privacy model, public transaction history, and recommendation against address reuse.
+   - Author or publisher: Satoshi Nakamoto
+   - Direct URL: https://bitcoin.org/bitcoin.pdf
+   - Supports: Bitcoin's original public-key privacy model, public transaction history, and recommendation against address reuse.
 
-### Bitcoin Developer Guide: Transactions
+2. **Bitcoin Developer Guide: Transactions**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/transactions.html
-- Supports: UTXOs, inputs, outputs, change, transaction construction, addresses, and wallet behavior relevant to transaction-graph privacy.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/transactions.html
+   - Supports: UTXOs, inputs, outputs, change, transaction construction, addresses, and wallet behavior relevant to transaction-graph privacy.
 
-### Bitcoin Developer Guide: P2P Network
+3. **Bitcoin Developer Guide: P2P Network**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/p2p_network.html
-- Supports: Peer connections, transaction relay, and network behavior relevant to transaction-broadcast privacy.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/p2p_network.html
+   - Supports: Peer connections, transaction relay, and network behavior relevant to transaction-broadcast privacy.
 
-### BIP 157: Client Side Block Filtering
+4. **BIP 157: Client Side Block Filtering**
 
-- Author or publisher: Alex Akselrod and Olaoluwa Osuntokun
-- Direct URL: https://bips.dev/157/
-- Supports: Peer protocol messages and client-side compact block-filter retrieval.
+   - Author or publisher: Alex Akselrod and Olaoluwa Osuntokun
+   - Direct URL: https://bips.dev/157/
+   - Supports: Peer protocol messages and client-side compact block-filter retrieval.
 
-### BIP 158: Compact Block Filters for Light Clients
+5. **BIP 158: Compact Block Filters for Light Clients**
 
-- Author or publisher: Alex Akselrod and Olaoluwa Osuntokun
-- Direct URL: https://bips.dev/158/
-- Supports: Compact filter construction and local matching that can reduce direct disclosure of wallet watch targets.
+   - Author or publisher: Alex Akselrod and Olaoluwa Osuntokun
+   - Direct URL: https://bips.dev/158/
+   - Supports: Compact filter construction and local matching that can reduce direct disclosure of wallet watch targets.
 
-### BIP 78: A Simple PayJoin Proposal
+6. **BIP 78: A Simple PayJoin Proposal**
 
-- Author or publisher: Nicolas Dorier
-- Direct URL: https://bips.dev/78/
-- Supports: Receiver input contribution, PayJoin negotiation, common-input-ownership heuristic disruption, and sender validation requirements.
+   - Author or publisher: Nicolas Dorier
+   - Direct URL: https://bips.dev/78/
+   - Supports: Receiver input contribution, PayJoin negotiation, common-input-ownership heuristic disruption, and sender validation requirements.
 
-### CoinJoin: Bitcoin Privacy for the Real World
+7. **CoinJoin: Bitcoin Privacy for the Real World**
 
-- Author or publisher: Gregory Maxwell
-- Direct URL: https://bitcointalk.org/index.php?topic=279249.0
-- Supports: The original CoinJoin proposal, multi-participant transaction construction, independent input signatures, and why shared-input transactions weaken the common-input-ownership assumption.
+   - Author or publisher: Gregory Maxwell
+   - Direct URL: https://bitcointalk.org/index.php?topic=279249.0
+   - Supports: The original CoinJoin proposal, multi-participant transaction construction, independent input signatures, and why shared-input transactions weaken the common-input-ownership assumption.
 
-### A Fistful of Bitcoins: Characterizing Payments Among Men with No Names
+8. **A Fistful of Bitcoins: Characterizing Payments Among Men with No Names**
 
-- Author or publisher: Sarah Meiklejohn, Marjori Pomarole, Grant Jordan, Kirill Levchenko, Damon McCoy, Geoffrey Voelker, and Stefan Savage
-- Direct URL: https://cseweb.ucsd.edu/~smeiklejohn/files/imc13.pdf
-- Supports: Transaction clustering methods, common-input analysis, change heuristics, service interaction, and the uncertainty involved in connecting blockchain activity to entities.
+   - Author or publisher: Sarah Meiklejohn, Marjori Pomarole, Grant Jordan, Kirill Levchenko, Damon McCoy, Geoffrey Voelker, and Stefan Savage
+   - Direct URL: https://cseweb.ucsd.edu/~smeiklejohn/files/imc13.pdf
+   - Supports: Transaction clustering methods, common-input analysis, change heuristics, service interaction, and the uncertainty involved in connecting blockchain activity to entities.
 
-### An Analysis of Anonymity in the Bitcoin System
+9. **An Analysis of Anonymity in the Bitcoin System**
 
-- Author or publisher: Fergal Reid and Martin Harrigan
-- Direct URL: https://arxiv.org/abs/1107.4524
-- Supports: Transaction-network analysis and the possibility of linking pseudonymous activity through graph structure and external information.
+   - Author or publisher: Fergal Reid and Martin Harrigan
+   - Direct URL: https://arxiv.org/abs/1107.4524
+   - Supports: Transaction-network analysis and the possibility of linking pseudonymous activity through graph structure and external information.
 
-### BIP 32: Hierarchical Deterministic Wallets
+10. **BIP 32: Hierarchical Deterministic Wallets**
 
-- Author or publisher: Pieter Wuille
-- Direct URL: https://bips.dev/32/
-- Supports: Extended public keys, public derivation, wallet branches, and the privacy consequences of sharing broad public wallet information.
+    - Author or publisher: Pieter Wuille
+    - Direct URL: https://bips.dev/32/
+    - Supports: Extended public keys, public derivation, wallet branches, and the privacy consequences of sharing broad public wallet information.
 
-### Bitcoin Optech: Transaction Origin Privacy
+11. **Bitcoin Optech: Transaction Origin Privacy**
 
-- Author or publisher: Bitcoin Optech
-- Direct URL: https://bitcoinops.org/en/topics/transaction-origin-privacy/
-- Supports: Network-level transaction-origin observation, relay privacy considerations, and implementation-sensitive broadcasting behavior.
+    - Author or publisher: Bitcoin Optech
+    - Direct URL: https://bitcoinops.org/en/topics/transaction-origin-privacy/
+    - Supports: Network-level transaction-origin observation, relay privacy considerations, and implementation-sensitive broadcasting behavior.
 
-### Bitcoin Optech: Coin Selection
+12. **Bitcoin Optech: Coin Selection**
 
-- Author or publisher: Bitcoin Optech
-- Direct URL: https://bitcoinops.org/en/topics/coin-selection/
-- Supports: Wallet input selection, coin control, consolidation, fees, and transaction-graph privacy tradeoffs.
+    - Author or publisher: Bitcoin Optech
+    - Direct URL: https://bitcoinops.org/en/topics/coin-selection/
+    - Supports: Wallet input selection, coin control, consolidation, fees, and transaction-graph privacy tradeoffs.
 
-### Tor Project: About Tor
+13. **Tor Project: About Tor**
 
-- Author or publisher: The Tor Project
-- Direct URL: https://support.torproject.org/about/what-is-tor/
-- Supports: Tor's layered routing model and its role in reducing direct source-IP disclosure without changing application-layer data.
+    - Author or publisher: The Tor Project
+    - Direct URL: https://support.torproject.org/about/what-is-tor/
+    - Supports: Tor's layered routing model and its role in reducing direct source-IP disclosure without changing application-layer data.
 
-### BOLT 4: Onion Routing Protocol
+14. **BOLT 4: Onion Routing Protocol**
 
-- Author or publisher: Lightning specification contributors
-- Direct URL: https://github.com/lightning/bolts/blob/master/04-onion-routing.md
-- Supports: Lightning onion routing, per-hop information boundaries, and the distinction between routed payment privacy and on-chain privacy.
+    - Author or publisher: Lightning specification contributors
+    - Direct URL: https://github.com/lightning/bolts/blob/master/04-onion-routing.md
+    - Supports: Lightning onion routing, per-hop information boundaries, and the distinction between routed payment privacy and on-chain privacy.
 
-### BOLT 3: Bitcoin Transaction and Script Formats
+15. **BOLT 3: Bitcoin Transaction and Script Formats**
 
-- Author or publisher: Lightning specification contributors
-- Direct URL: https://github.com/lightning/bolts/blob/master/03-transactions.md
-- Supports: The Bitcoin funding, commitment, and closing transaction structures used by Lightning channels.
+    - Author or publisher: Lightning specification contributors
+    - Direct URL: https://github.com/lightning/bolts/blob/master/03-transactions.md
+    - Supports: The Bitcoin funding, commitment, and closing transaction structures used by Lightning channels.
 
-### An Empirical Analysis of Privacy in the Lightning Network
+16. **An Empirical Analysis of Privacy in the Lightning Network**
 
-- Author or publisher: George Kappos, Haaroon Yousaf, Ania Piotrowska, Sanket Kanjalkar, Sergi Delgado-Segura, Andrew Miller, and Sarah Meiklejohn
-- Direct URL: https://arxiv.org/abs/2003.12470
-- Supports: Empirical Lightning privacy limitations, including attacks using public network information to infer channel balances and possible payment endpoints.
+    - Author or publisher: George Kappos, Haaroon Yousaf, Ania Piotrowska, Sanket Kanjalkar, Sergi Delgado-Segura, Andrew Miller, and Sarah Meiklejohn
+    - Direct URL: https://arxiv.org/abs/2003.12470
+    - Supports: Empirical Lightning privacy limitations, including attacks using public network information to infer channel balances and possible payment endpoints.
 
 ## 5. SEO title
 
