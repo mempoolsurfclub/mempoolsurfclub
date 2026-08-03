@@ -468,10 +468,10 @@ assert.ok(structuredReferenceCounts['plain-url'] > 0, JSON.stringify(structuredR
 assert.ok(structuredReferenceCounts['markdown-link'] > 0, JSON.stringify(structuredReferenceCounts));
 assert.equal(Number.isInteger(structuredReferenceCounts['repository-path']), true);
 assert.equal(inspectMarkdown('## 4. Sources\n\n1. **Repository source**\n   - Reference: docs/learn/content/example.md\n', 'topic-guide').source_references.structured[0]?.representation, 'repository-path');
-assert.ok(unqualifiedSourceLinks > 0, JSON.stringify(unqualifiedReferenceCounts));
-for (let number = 1; number <= 20; number += 1) {
-  assert.ok(affectedPackageIds.has('MSC-GUIDE-' + String(number).padStart(3, '0')), 'expected blocked guide ' + number);
-}
+assert.equal(unqualifiedReferenceCounts['plain-url'], 0, JSON.stringify(unqualifiedReferenceCounts));
+assert.equal(unqualifiedReferenceCounts['markdown-link'], 0, JSON.stringify(unqualifiedReferenceCounts));
+assert.equal(unqualifiedSourceLinks, 0, JSON.stringify(unqualifiedReferenceCounts));
+assert.equal(affectedPackageIds.size, 0, JSON.stringify([...affectedPackageIds].sort()));
 
 // Direct content-block assertions retain precise invariant coverage.
 const validTable = {
