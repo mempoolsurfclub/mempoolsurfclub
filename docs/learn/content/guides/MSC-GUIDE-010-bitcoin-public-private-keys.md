@@ -225,71 +225,71 @@ The next guide looks beyond the key itself and asks how wallet software, devices
 
 ## 4. Sources
 
-### SEC 2: Recommended Elliptic Curve Domain Parameters
+1. **SEC 2: Recommended Elliptic Curve Domain Parameters**
 
-- Author or publisher: Standards for Efficient Cryptography Group
-- Direct URL: https://www.secg.org/sec2-v2.pdf
-- Supports: The secp256k1 field, curve, generator, and order parameters used by Bitcoin key and signature systems.
+   - Author or publisher: Standards for Efficient Cryptography Group
+   - Direct URL: https://www.secg.org/sec2-v2.pdf
+   - Supports: The secp256k1 field, curve, generator, and order parameters used by Bitcoin key and signature systems.
 
-### BIP 32: Hierarchical Deterministic Wallets
+2. **BIP 32: Hierarchical Deterministic Wallets**
 
-- Author or publisher: Pieter Wuille
-- Direct URL: https://bips.dev/32/
-- Supports: Hierarchical key trees, extended private and public keys, hardened and non-hardened derivation, public derivation, and extended-key security boundaries.
+   - Author or publisher: Pieter Wuille
+   - Direct URL: https://bips.dev/32/
+   - Supports: Hierarchical key trees, extended private and public keys, hardened and non-hardened derivation, public derivation, and extended-key security boundaries.
 
-### BIP 39: Mnemonic Code for Generating Deterministic Keys
+3. **BIP 39: Mnemonic Code for Generating Deterministic Keys**
 
-- Author or publisher: Marek Palatinus, Pavol Rusnak, Aaron Voisine, and Sean Bowe
-- Direct URL: https://bips.dev/39/
-- Supports: The relationship between mnemonic words, optional passphrases, seed material, and deterministic wallet derivation.
+   - Author or publisher: Marek Palatinus, Pavol Rusnak, Aaron Voisine, and Sean Bowe
+   - Direct URL: https://bips.dev/39/
+   - Supports: The relationship between mnemonic words, optional passphrases, seed material, and deterministic wallet derivation.
 
-### Bitcoin Developer Guide: Transactions
+4. **Bitcoin Developer Guide: Transactions**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/transactions.html
-- Supports: Transaction outputs, public-key-hash spending, script conditions, signatures, addresses, inputs, and witness data.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/transactions.html
+   - Supports: Transaction outputs, public-key-hash spending, script conditions, signatures, addresses, inputs, and witness data.
 
-### Bitcoin Developer Reference: Transactions
+5. **Bitcoin Developer Reference: Transactions**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/reference/transactions.html
-- Supports: Transaction serialization, script and witness fields, signature-related data, and standard output forms.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/reference/transactions.html
+   - Supports: Transaction serialization, script and witness fields, signature-related data, and standard output forms.
 
-### BIP 340: Schnorr Signatures for secp256k1
+6. **BIP 340: Schnorr Signatures for secp256k1**
 
-- Author or publisher: Pieter Wuille, Jonas Nick, and Tim Ruffing
-- Direct URL: https://bips.dev/340/
-- Supports: Bitcoin's Schnorr signature specification, public-key representation, signing, and verification rules.
+   - Author or publisher: Pieter Wuille, Jonas Nick, and Tim Ruffing
+   - Direct URL: https://bips.dev/340/
+   - Supports: Bitcoin's Schnorr signature specification, public-key representation, signing, and verification rules.
 
-### BIP 341: Taproot
+7. **BIP 341: Taproot**
 
-- Author or publisher: Pieter Wuille, Jonas Nick, and Anthony Towns
-- Direct URL: https://bips.dev/341/
-- Supports: Taproot output keys, key-path spending, script commitments, and SegWit version 1 spending rules.
+   - Author or publisher: Pieter Wuille, Jonas Nick, and Anthony Towns
+   - Direct URL: https://bips.dev/341/
+   - Supports: Taproot output keys, key-path spending, script commitments, and SegWit version 1 spending rules.
 
-### BIP 342: Validation of Taproot Scripts
+8. **BIP 342: Validation of Taproot Scripts**
 
-- Author or publisher: Pieter Wuille, Jonas Nick, and Anthony Towns
-- Direct URL: https://bips.dev/342/
-- Supports: Tapscript validation and Schnorr signature use within Taproot script paths.
+   - Author or publisher: Pieter Wuille, Jonas Nick, and Anthony Towns
+   - Direct URL: https://bips.dev/342/
+   - Supports: Tapscript validation and Schnorr signature use within Taproot script paths.
 
-### BIP 173: Base32 Address Format for Native v0-16 Witness Outputs
+9. **BIP 173: Base32 Address Format for Native v0-16 Witness Outputs**
 
-- Author or publisher: Pieter Wuille and Greg Maxwell
-- Direct URL: https://bips.dev/173/
-- Supports: Bech32 address encoding and the distinction between an address representation and the underlying witness program.
+   - Author or publisher: Pieter Wuille and Greg Maxwell
+   - Direct URL: https://bips.dev/173/
+   - Supports: Bech32 address encoding and the distinction between an address representation and the underlying witness program.
 
-### BIP 350: Bech32m Format for v1+ Witness Addresses
+10. **BIP 350: Bech32m Format for v1+ Witness Addresses**
 
-- Author or publisher: Pieter Wuille
-- Direct URL: https://bips.dev/350/
-- Supports: Bech32m encoding for witness version 1 and later address representations.
+    - Author or publisher: Pieter Wuille
+    - Direct URL: https://bips.dev/350/
+    - Supports: Bech32m encoding for witness version 1 and later address representations.
 
-### BIP 380: Output Script Descriptors General Operation
+11. **BIP 380: Output Script Descriptors General Operation**
 
-- Author or publisher: Pieter Wuille and Ava Chow
-- Direct URL: https://bips.dev/380/
-- Supports: Combining key origins, extended keys, derivation paths, and script expressions into wallet descriptors.
+    - Author or publisher: Pieter Wuille and Ava Chow
+    - Direct URL: https://bips.dev/380/
+    - Supports: Combining key origins, extended keys, derivation paths, and script expressions into wallet descriptors.
 
 ## 5. SEO title
 
