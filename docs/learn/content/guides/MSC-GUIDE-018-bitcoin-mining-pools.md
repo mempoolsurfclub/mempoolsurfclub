@@ -292,71 +292,71 @@ The next guide moves down one layer to the specialized hardware performing most 
 
 ## 4. Sources
 
-### BIP 22: getblocktemplate Fundamentals
+1. **BIP 22: getblocktemplate Fundamentals**
 
-- Author or publisher: Luke Dashjr
-- Direct URL: https://bips.dev/22/
-- Supports: Full block-template delivery, template fields, transaction dependencies, compact target data, client customization, proposal mode, and block submission fundamentals.
+   - Author or publisher: Luke Dashjr
+   - Direct URL: https://bips.dev/22/
+   - Supports: Full block-template delivery, template fields, transaction dependencies, compact target data, client customization, proposal mode, and block submission fundamentals.
 
-### BIP 23: getblocktemplate Pooled Mining
+2. **BIP 23: getblocktemplate Pooled Mining**
 
-- Author or publisher: Luke Dashjr
-- Direct URL: https://bips.dev/23/
-- Supports: Optional pooled-mining extensions for long polling, share targets, coinbase mutation, work identifiers, and abbreviated submissions.
+   - Author or publisher: Luke Dashjr
+   - Direct URL: https://bips.dev/23/
+   - Supports: Optional pooled-mining extensions for long polling, share targets, coinbase mutation, work identifiers, and abbreviated submissions.
 
-### Bitcoin Core Mining RPC
+3. **Bitcoin Core Mining RPC**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/rpc/mining.cpp
-- Supports: Current Bitcoin Core `getblocktemplate`, template proposal, block submission, target, transaction, and network-hashrate RPC behavior.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/rpc/mining.cpp
+   - Supports: Current Bitcoin Core `getblocktemplate`, template proposal, block submission, target, transaction, and network-hashrate RPC behavior.
 
-### Bitcoin Core Block Assembler
+4. **Bitcoin Core Block Assembler**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/node/miner.cpp
-- Supports: Current Bitcoin Core transaction selection, dependency handling, block limits, coinbase construction, subsidy-plus-fee accounting, and candidate-header preparation.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/node/miner.cpp
+   - Supports: Current Bitcoin Core transaction selection, dependency handling, block limits, coinbase construction, subsidy-plus-fee accounting, and candidate-header preparation.
 
-### Stratum V2 Protocol Overview
+5. **Stratum V2 Protocol Overview**
 
-- Author or publisher: Stratum V2 specification contributors
-- Direct URL: https://stratumprotocol.org/specification/03-protocol-overview/
-- Supports: Separation of the Mining, Job Declaration, and Template Distribution protocols and the optional roles used in different Stratum V2 architectures.
+   - Author or publisher: Stratum V2 specification contributors
+   - Direct URL: https://stratumprotocol.org/specification/03-protocol-overview/
+   - Supports: Separation of the Mining, Job Declaration, and Template Distribution protocols and the optional roles used in different Stratum V2 architectures.
 
-### Stratum V2 Mining Protocol
+6. **Stratum V2 Mining Protocol**
 
-- Author or publisher: Stratum V2 specification contributors
-- Direct URL: https://stratumprotocol.org/specification/05-mining-protocol/
-- Supports: Mining-job distribution, standard and extended jobs, unique search-space assignment, share submission, and optional custom-job use.
+   - Author or publisher: Stratum V2 specification contributors
+   - Direct URL: https://stratumprotocol.org/specification/05-mining-protocol/
+   - Supports: Mining-job distribution, standard and extended jobs, unique search-space assignment, share submission, and optional custom-job use.
 
-### Stratum V2 Job Declaration Protocol
+7. **Stratum V2 Job Declaration Protocol**
 
-- Author or publisher: Stratum V2 specification contributors
-- Direct URL: https://stratumprotocol.org/specification/06-job-declaration-protocol/
-- Supports: Optional miner-side custom-template declaration, pool acknowledgment, job tokens, and the roles required for miner-selected transaction templates.
+   - Author or publisher: Stratum V2 specification contributors
+   - Direct URL: https://stratumprotocol.org/specification/06-job-declaration-protocol/
+   - Supports: Optional miner-side custom-template declaration, pool acknowledgment, job tokens, and the roles required for miner-selected transaction templates.
 
-### Stratum V2 Template Distribution Protocol
+8. **Stratum V2 Template Distribution Protocol**
 
-- Author or publisher: Stratum V2 specification contributors
-- Direct URL: https://stratumprotocol.org/specification/07-template-distribution-protocol/
-- Supports: Template-provider communication, template identifiers, previous-block data, target information, and transaction-data exchange.
+   - Author or publisher: Stratum V2 specification contributors
+   - Direct URL: https://stratumprotocol.org/specification/07-template-distribution-protocol/
+   - Supports: Template-provider communication, template identifiers, previous-block data, target information, and transaction-data exchange.
 
-### Analysis of Bitcoin Pooled Mining Reward Systems
+9. **Analysis of Bitcoin Pooled Mining Reward Systems**
 
-- Author or publisher: Meni Rosenfeld
-- Direct URL: https://arxiv.org/abs/1112.4980
-- Supports: Solo-mining variance, pooled-mining accounting, PPS, score-based, PPLNS, and the tradeoffs among reward-sharing systems.
+   - Author or publisher: Meni Rosenfeld
+   - Direct URL: https://arxiv.org/abs/1112.4980
+   - Supports: Solo-mining variance, pooled-mining accounting, PPS, score-based, PPLNS, and the tradeoffs among reward-sharing systems.
 
-### Bitcoin Core Consensus Constants
+10. **Bitcoin Core Consensus Constants**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/consensus/consensus.h
-- Supports: The 100-block coinbase maturity rule that applies independently of a pool's internal payout schedule.
+    - Author or publisher: Bitcoin Core developers
+    - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/consensus/consensus.h
+    - Supports: The 100-block coinbase maturity rule that applies independently of a pool's internal payout schedule.
 
-### Bitcoin: A Peer-to-Peer Electronic Cash System
+11. **Bitcoin: A Peer-to-Peer Electronic Cash System**
 
-- Author or publisher: Satoshi Nakamoto
-- Direct URL: https://bitcoin.org/bitcoin.pdf
-- Supports: Probabilistic proof-of-work discovery, network incentives, block subsidy and transaction-fee revenue, and independent verification context.
+    - Author or publisher: Satoshi Nakamoto
+    - Direct URL: https://bitcoin.org/bitcoin.pdf
+    - Supports: Probabilistic proof-of-work discovery, network incentives, block subsidy and transaction-fee revenue, and independent verification context.
 
 ## 5. SEO title
 
