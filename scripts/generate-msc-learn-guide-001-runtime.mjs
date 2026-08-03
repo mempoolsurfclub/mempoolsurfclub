@@ -1,3 +1,4 @@
+import assert from 'node:assert/strict';
 import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
@@ -158,6 +159,360 @@ function parseHeadingRecords(markdown) {
   });
 }
 
+function normalizedSourceFieldKey(label) {
+  return label.trim().toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+}
+
+const CANONICAL_SOURCE_FIELD_LABELS = Object.freeze([
+  'Author or publisher',
+  'Direct URL',
+  'Publisher',
+  'Authors',
+  'Supports',
+]);
+
+function assertCanonicalSourceFieldDelimiter(content, context) {
+  for (const label of CANONICAL_SOURCE_FIELD_LABELS) {
+    if (!content.startsWith(label)) continue;
+    const next = content[label.length];
+    if (next === ':') return;
+    if (next === undefined || /\s/.test(next)) throw new Error(context);
+  }
+}
+
+function addSourceField(fields, label, value, context) {
+  const key = normalizedSourceFieldKey(label);
+  if (!key) throw new Error(`${context} has an empty normalized field key`);
+  if (Object.prototype.hasOwnProperty.call(fields, key)) {
+    throw new Error(`${context} contains duplicate normalized field key: ${key}`);
+  }
+  fields[key] = value.trim();
+}
+
+function parseLegacySourceRecords(markdown) {
+  const lines = normalize(markdown).split('\n');
+  const records = [];
+  let current = null;
+
+  const finishRecord = () => {
+    if (!current) return;
+    if (!Object.keys(current.fields).length) throw new Error(`Legacy source record "${current.title}" has no fields`);
+    records.push({ title: current.title, ...current.fields });
+    current = null;
+  };
+
+  for (const line of lines) {
+    if (!line.trim()) continue;
+    const heading = line.match(/^###(?:\s+(.*))?$/);
+    if (heading) {
+      finishRecord();
+      const title = (heading[1] || '').trim();
+      if (!title) throw new Error('Legacy source record has an empty H3 title');
+      current = { title, fields: {} };
+      continue;
+    }
+    if (!current) throw new Error(`Unexpected content before legacy source record: ${line}`);
+    const bullet = line.match(/^-\s+(.*)$/);
+    if (bullet) {
+      assertCanonicalSourceFieldDelimiter(bullet[1], `Unsupported legacy source record content: ${line}`);
+    }
+    const field = line.match(/^-\s+([^:]+):(?=\s|$)\s*(.*)$/);
+    if (!field) throw new Error(`Unsupported legacy source record content: ${line}`);
+    addSourceField(current.fields, field[1], field[2], `Legacy source record "${current.title}"`);
+  }
+
+  finishRecord();
+  if (!records.length) throw new Error('Sources section did not contain any legacy H3 records');
+  return records;
+}
+
+function parseNumberedSourceRecords(markdown) {
+  const lines = normalize(markdown).split('\n');
+  const records = [];
+  let current = null;
+  let expectedNumber = 1;
+
+  const finishRecord = () => {
+    if (!current) return;
+    if (!Object.keys(current.fields).length) throw new Error(`Numbered source record ${current.number} has no subordinate fields`);
+    records.push({ title: current.title, ...current.fields });
+    current = null;
+  };
+
+  for (const line of lines) {
+    if (!line.trim()) continue;
+    const opener = line.match(/^(\d+)\. \*\*(.*?)\*\*$/);
+    if (opener) {
+      finishRecord();
+      const number = Number(opener[1]);
+      if (opener[1] !== String(number)) throw new Error(`Numbered source record uses noncanonical numbering: ${opener[1]}`);
+      if (number !== expectedNumber) {
+        throw new Error(`Numbered source records must be continuous from 1; expected ${expectedNumber}, found ${number}`);
+      }
+      const title = opener[2].trim();
+      if (!title) throw new Error(`Numbered source record ${number} has an empty title`);
+      current = { number, title, fields: {} };
+      expectedNumber += 1;
+      continue;
+    }
+    if (/^\d+\.\s*/.test(line)) throw new Error(`Malformed numbered source opener: ${line}`);
+    if (!current) throw new Error(`Unexpected content before numbered source record: ${line}`);
+
+    const continuationIndent = String(current.number).length + 2;
+    const bullet = line.match(/^(\s*)-\s+(.*)$/);
+    if (bullet && bullet[1].length !== continuationIndent) {
+      throw new Error(`Numbered source record ${current.number} field is not indented by exactly ${continuationIndent} spaces: ${line}`);
+    }
+    if (bullet) {
+      assertCanonicalSourceFieldDelimiter(bullet[2], `Unsupported numbered source record content: ${line}`);
+    }
+    const field = line.match(new RegExp(`^ {${continuationIndent}}-\\s+([^:]+):(?=\\s|$)\\s*(.*)$`));
+    if (!field) throw new Error(`Unsupported numbered source record content: ${line}`);
+    addSourceField(current.fields, field[1], field[2], `Numbered source record ${current.number}`);
+  }
+
+  finishRecord();
+  if (!records.length) throw new Error('Sources section did not contain any numbered records');
+  return records;
+}
+
+function parseSourceRecords(markdown) {
+  const source = normalize(markdown);
+  if (!source) throw new Error('Sources section must not be empty');
+  const lines = source.split('\n');
+  const hasLegacy = lines.some((line) => /^###(?:\s|$)/.test(line));
+  const hasNumbered = lines.some((line) => /^\d+\.\s*/.test(line));
+  if (hasLegacy && hasNumbered) throw new Error('Sources section must not mix legacy H3 and numbered source records');
+  if (hasLegacy) return parseLegacySourceRecords(source);
+  if (hasNumbered) return parseNumberedSourceRecords(source);
+  throw new Error('Nonempty Sources section matches neither supported source format');
+}
+
+function verifySourceParserContract() {
+  const legacyFixture = `### Source One
+
+- Author or publisher: Example Author
+- Publisher: Example Publisher
+- Direct URL: https://example.com/one
+- Supports: First statement.
+
+### Source Two
+
+- Authors: Alice Example and Bob Example
+- Direct URL: https://example.com/two
+- Supports: Second statement.
+
+### Source Three
+
+- Publisher: Publisher Three
+- Direct URL: https://example.com/three
+- Supports: Third statement.
+
+### Source Four
+
+- Author or publisher: Author Four
+- Direct URL: https://example.com/four
+- Supports: Fourth statement.
+
+### Source Five
+
+- Author or publisher: Author Five
+- Direct URL: https://example.com/five
+- Supports: Fifth statement.
+
+### Source Six
+
+- Author or publisher: Author Six
+- Direct URL: https://example.com/six
+- Supports: Sixth statement.
+
+### Source Seven
+
+- Author or publisher: Author Seven
+- Direct URL: https://example.com/seven
+- Supports: Seventh statement.
+
+### Source Eight
+
+- Author or publisher: Author Eight
+- Direct URL: https://example.com/eight
+- Supports: Eighth statement.
+
+### Source Nine
+
+- Author or publisher: Author Nine
+- Direct URL: https://example.com/nine
+- Supports: Ninth statement.
+
+### Source Ten
+
+- Author or publisher: Author Ten
+- Direct URL: https://example.com/ten
+- Supports: Tenth statement.`;
+
+  const numberedFixture = `1. **Source One**
+
+   - Author or publisher: Example Author
+   - Publisher: Example Publisher
+   - Direct URL: https://example.com/one
+   - Supports: First statement.
+
+2. **Source Two**
+
+   - Authors: Alice Example and Bob Example
+   - Direct URL: https://example.com/two
+   - Supports: Second statement.
+
+3. **Source Three**
+
+   - Publisher: Publisher Three
+   - Direct URL: https://example.com/three
+   - Supports: Third statement.
+
+4. **Source Four**
+
+   - Author or publisher: Author Four
+   - Direct URL: https://example.com/four
+   - Supports: Fourth statement.
+
+5. **Source Five**
+
+   - Author or publisher: Author Five
+   - Direct URL: https://example.com/five
+   - Supports: Fifth statement.
+
+6. **Source Six**
+
+   - Author or publisher: Author Six
+   - Direct URL: https://example.com/six
+   - Supports: Sixth statement.
+
+7. **Source Seven**
+
+   - Author or publisher: Author Seven
+   - Direct URL: https://example.com/seven
+   - Supports: Seventh statement.
+
+8. **Source Eight**
+
+   - Author or publisher: Author Eight
+   - Direct URL: https://example.com/eight
+   - Supports: Eighth statement.
+
+9. **Source Nine**
+
+   - Author or publisher: Author Nine
+   - Direct URL: https://example.com/nine
+   - Supports: Ninth statement.
+
+10. **Source Ten**
+
+    - Author or publisher: Author Ten
+    - Direct URL: https://example.com/ten
+    - Supports: Tenth statement.`;
+
+  const legacyControl = parseLegacySourceRecords(`### A
+
+- Author or publisher: Example Author
+- Publisher: Example Publisher
+- Authors: Alice Example and Bob Example
+- Direct URL: https://example.com
+- Supports: Existing statement.
+- Published at: 12:30 UTC
+- Reference: urn:example:test
+- Optional field:`);
+  const numberedControl = parseNumberedSourceRecords(`1. **A**
+
+   - Author or publisher: Example Author
+   - Publisher: Example Publisher
+   - Authors: Alice Example and Bob Example
+   - Direct URL: https://example.com
+   - Supports: Existing statement.
+   - Published at: 12:30 UTC
+   - Reference: urn:example:test
+   - Optional field:`);
+  const expectedControl = [{
+    title: 'A',
+    author_or_publisher: 'Example Author',
+    publisher: 'Example Publisher',
+    authors: 'Alice Example and Bob Example',
+    direct_url: 'https://example.com',
+    supports: 'Existing statement.',
+    published_at: '12:30 UTC',
+    reference: 'urn:example:test',
+    optional_field: '',
+  }];
+  assert.deepStrictEqual(legacyControl, expectedControl);
+  assert.deepStrictEqual(numberedControl, expectedControl);
+
+  const malformedCanonicalFields = [
+    'Supports statement with: later detail',
+    'Author or publisher information: Value',
+    'Publisher information: Value',
+    'Authors information: Value',
+    'Direct URL information: Value',
+    'Supports information: Value',
+    'Supports note: Value',
+    'Supports',
+    'Direct URL note: Value',
+    'Direct URL',
+    'Publisher note: Value',
+    'Publisher',
+    'Authors list: Value',
+    'Authors',
+    'Author or publisher note: Value',
+    'Author or publisher',
+  ];
+  for (const malformedField of malformedCanonicalFields) {
+    assert.throws(
+      () => parseLegacySourceRecords(`### A
+
+- ${malformedField}`),
+      /Unsupported legacy source record content/,
+    );
+    assert.throws(
+      () => parseNumberedSourceRecords(`1. **A**
+
+   - ${malformedField}`),
+      /Unsupported numbered source record content/,
+    );
+  }
+
+  assert.throws(
+    () => parseLegacySourceRecords(`### A
+
+- Direct URL https://example.com`),
+    /Unsupported legacy source record content: - Direct URL https:\/\/example\.com/,
+  );
+  assert.throws(
+    () => parseNumberedSourceRecords(`1. **A**
+
+   - Direct URL https://example.com`),
+    /Unsupported numbered source record content:    - Direct URL https:\/\/example\.com/,
+  );
+
+  const legacy = parseSourceRecords(legacyFixture);
+  const numbered = parseSourceRecords(numberedFixture);
+  assert.deepStrictEqual(numbered, legacy);
+  assert.deepStrictEqual(Object.keys(legacy[0]), ['title', 'author_or_publisher', 'publisher', 'direct_url', 'supports']);
+  assert.deepStrictEqual(Object.keys(legacy[1]), ['title', 'authors', 'direct_url', 'supports']);
+  assert.equal(legacy[9].title, 'Source Ten');
+
+  const failures = [
+    [`### Legacy\n\n- Direct URL: https://example.com\n\n1. **Numbered**\n\n   - Direct URL: https://example.org`, /must not mix/],
+    [`2. **Starts at two**\n\n   - Direct URL: https://example.com`, /expected 1, found 2/],
+    [`1. **One**\n\n   - Direct URL: https://example.com\n\n3. **Three**\n\n   - Direct URL: https://example.org`, /expected 2, found 3/],
+    [`### Duplicate\n\n- Author or publisher: One\n- Author-or-publisher: Two`, /duplicate normalized field key/],
+    [`1. **Duplicate**\n\n   - Author or publisher: One\n   - Author-or-publisher: Two`, /duplicate normalized field key/],
+    [`1. **Unindented**\n\n- Direct URL: https://example.com`, /not indented by exactly 3 spaces/],
+    [`1. ****\n\n   - Direct URL: https://example.com`, /empty title/],
+    [`1. **No fields**`, /no subordinate fields/],
+    [`1. **Unsupported**\n\n   - Direct URL: https://example.com\n   unexpected prose`, /Unsupported numbered source record content/],
+    [`Source title\n\n- Direct URL: https://example.com`, /neither supported source format/],
+  ];
+  for (const [fixture, expected] of failures) assert.throws(() => parseSourceRecords(fixture), expected);
+}
+
 function registryRecords(registry) {
   if (Array.isArray(registry.records)) return registry.records;
   return [registry.homepage, registry.glossary_index, registry.featured_route,
@@ -202,7 +557,7 @@ function buildData() {
     introductory_deck: sections.get(1).body,
     article_sections: parseArticle(sections.get(2).body),
     key_terms: parseKeyTerms(sections.get(3).body),
-    sources: parseHeadingRecords(sections.get(4).body),
+    sources: parseSourceRecords(sections.get(4).body),
     seo_title: sections.get(5).body,
     meta_description: sections.get(6).body,
     excerpt: sections.get(7).body,
@@ -274,6 +629,8 @@ function validate(data, jsonText, snippet) {
   const secondSnippet = buildSnippet(secondData);
   if (jsonText !== secondJson || snippet !== secondSnippet) throw new Error('Guide runtime generation is not deterministic');
 }
+
+verifySourceParserContract();
 
 const data = buildData();
 const jsonText = `${JSON.stringify(data, null, 2)}\n`;
