@@ -369,7 +369,7 @@ Look for dated support statements, security contacts, recent meaningful review, 
     * Limitation: Funding descriptions do not establish repository permissions, merge outcomes, or Bitcoin consensus control.
 
 18. **Guide 066: What Bitcoin Developers Do** | Mempool Surf Club
-    * URL: Repository file `docs/learn/content/guides/MSC-GUIDE-066-bitcoin-developers.md`
+    * Reference: docs/learn/content/guides/MSC-GUIDE-066-bitcoin-developers.md
     * Published or updated: Copy-locked July 26, 2026
     * Accessed: July 31, 2026
     * Supports: Approved MSC terminology for developer, contributor, reviewer, maintainer, committer, funding, release, and consensus boundaries.
