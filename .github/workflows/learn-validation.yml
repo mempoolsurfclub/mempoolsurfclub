@@ -45,15 +45,22 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: npm
 
       - name: Install dependencies
-        run: npm install --ignore-scripts --no-audit --no-fund --package-lock=false
+        run: npm ci --ignore-scripts --no-audit --no-fund
 
       - name: Validate approved Learn registry
         run: npm run validate:learn-registry
 
       - name: Validate Learn manifest and packages
         run: npm run validate:learn-library
+
+      - name: Test Learn runtime contract
+        run: npm run test:learn-runtime-contract
+
+      - name: Audit all 92 Learn runtime packages
+        run: npm run audit:learn-runtime
 
       - name: Validate Guide 001 runtime pilot
         run: npm run validate:learn-guide-pilot
@@ -69,6 +76,12 @@ jobs:
 
       - name: Validate Bitcoin Glossary runtime pilot
         run: npm run validate:learn-glossary-pilot
+
+      - name: Verify deterministic Learn runtime audit
+        run: |
+          npm run materialize:learn-runtime-audit
+          git diff --exit-code -- docs/learn/runtime/reports/package-compatibility.json
+          npm run audit:learn-runtime
 
       - name: Verify deterministic Learn-data generation
         run: |

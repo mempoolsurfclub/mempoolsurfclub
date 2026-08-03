@@ -1,0 +1,1750 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.mempoolsurfclub.com/schemas/learn-runtime/2.0.0",
+  "title": "Mempool Surf Club Learn Runtime v2",
+  "description": "Shared generated runtime envelope for copy-locked Mempool Surf Club Learn destinations. Rich text is non-executable plain text and all runtime output must pass the shared post-schema validator. This schema does not assert that the five destination-specific pilot records conform to v2.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generator_version",
+    "identity",
+    "source",
+    "content",
+    "key_terms",
+    "sources",
+    "seo",
+    "relationships",
+    "review",
+    "illustrations",
+    "publication",
+    "role_data"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "2.0.0"
+    },
+    "generator_version": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?$"
+    },
+    "identity": {
+      "$ref": "#/$defs/identity"
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    },
+    "content": {
+      "$ref": "#/$defs/content"
+    },
+    "key_terms": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/keyTerm"
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/sourceReference"
+      }
+    },
+    "seo": {
+      "$ref": "#/$defs/seo"
+    },
+    "relationships": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/relationship"
+      }
+    },
+    "review": {
+      "$ref": "#/$defs/review"
+    },
+    "illustrations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/illustration"
+      }
+    },
+    "publication": {
+      "$ref": "#/$defs/publication"
+    },
+    "role_data": {
+      "type": "object"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "identity": {
+            "properties": {
+              "page_role": {
+                "const": "topic-guide"
+              }
+            },
+            "type": "object",
+            "required": [
+              "page_role"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "identity"
+        ]
+      },
+      "then": {
+        "properties": {
+          "role_data": {
+            "$ref": "#/$defs/topicGuideRoleData"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "identity": {
+            "properties": {
+              "page_role": {
+                "const": "category-hub"
+              }
+            },
+            "type": "object",
+            "required": [
+              "page_role"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "identity"
+        ]
+      },
+      "then": {
+        "properties": {
+          "role_data": {
+            "$ref": "#/$defs/categoryHubRoleData"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "identity": {
+            "properties": {
+              "page_role": {
+                "const": "learning-path"
+              }
+            },
+            "type": "object",
+            "required": [
+              "page_role"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "identity"
+        ]
+      },
+      "then": {
+        "properties": {
+          "role_data": {
+            "$ref": "#/$defs/learningPathRoleData"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "identity": {
+            "properties": {
+              "page_role": {
+                "const": "featured-route"
+              }
+            },
+            "type": "object",
+            "required": [
+              "page_role"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "identity"
+        ]
+      },
+      "then": {
+        "properties": {
+          "role_data": {
+            "$ref": "#/$defs/featuredRouteRoleData"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "identity": {
+            "properties": {
+              "page_role": {
+                "const": "glossary-index"
+              }
+            },
+            "type": "object",
+            "required": [
+              "page_role"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "identity"
+        ]
+      },
+      "then": {
+        "properties": {
+          "role_data": {
+            "$ref": "#/$defs/glossaryIndexRoleData"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "registryId": {
+      "type": "string",
+      "pattern": "^MSC-(?:GUIDE-[0-9]{3}|HUB-[A-Z]+|PATH-[A-Z]+|ROUTE-[0-9]{3}|GLOSSARY-[0-9]{3})$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "registry_id",
+        "page_role",
+        "status",
+        "h1",
+        "planning_handle"
+      ],
+      "properties": {
+        "registry_id": {
+          "$ref": "#/$defs/registryId"
+        },
+        "page_role": {
+          "enum": [
+            "topic-guide",
+            "category-hub",
+            "learning-path",
+            "featured-route",
+            "glossary-index"
+          ]
+        },
+        "status": {
+          "const": "COPY_LOCKED"
+        },
+        "h1": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
+        },
+        "planning_handle": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        }
+      }
+    },
+    "identityEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "file",
+        "sha256",
+        "record_sha256"
+      ],
+      "properties": {
+        "file": {
+          "type": "string",
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "record_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "package",
+        "registry",
+        "manifest"
+      ],
+      "properties": {
+        "package": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "file",
+            "sha256"
+          ],
+          "properties": {
+            "file": {
+              "type": "string",
+              "pattern": "^docs/learn/content/(?:guides|hubs|paths|routes)/.+\\.md$"
+            },
+            "sha256": {
+              "$ref": "#/$defs/sha256"
+            }
+          }
+        },
+        "registry": {
+          "$ref": "#/$defs/identityEvidence"
+        },
+        "manifest": {
+          "$ref": "#/$defs/identityEvidence"
+        }
+      }
+    },
+    "contentBlock": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/richTextContentBlock"
+        },
+        {
+          "$ref": "#/$defs/semanticTableBlock"
+        },
+        {
+          "$ref": "#/$defs/inertCodeBlock"
+        }
+      ]
+    },
+    "content": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "introductory_deck",
+        "orientation"
+      ],
+      "properties": {
+        "introductory_deck": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
+        },
+        "orientation": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/contentBlock"
+          }
+        }
+      }
+    },
+    "keyTerm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "term",
+        "definition"
+      ],
+      "properties": {
+        "term": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
+        },
+        "definition": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    "sourceReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "reference_type",
+        "reference",
+        "supports"
+      ],
+      "properties": {
+        "title": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
+        },
+        "author_or_publisher": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reference_type": {
+          "enum": [
+            "url",
+            "repository-path",
+            "citation",
+            "other"
+          ]
+        },
+        "reference": {
+          "type": "string",
+          "minLength": 1
+        },
+        "supports": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "reference_type": {
+                "const": "url"
+              }
+            },
+            "required": [
+              "reference_type"
+            ]
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "reference": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^(?!.*\\[[^\\]]+\\]\\()(?!https:\\/\\/[^/?#\\s]*@)https:\\/\\/[^\\s]+$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "reference_type": {
+                "const": "repository-path"
+              }
+            },
+            "required": [
+              "reference_type"
+            ]
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "reference": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\)(?![A-Za-z][A-Za-z0-9+.-]*:)(?!.*\\[[^\\]]+\\]\\()(?!.*!\\[)[A-Za-z0-9._/-]+$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "reference_type": {
+                "const": "citation"
+              }
+            },
+            "required": [
+              "reference_type"
+            ]
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "reference": {
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/safeText"
+                  },
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "reference_type": {
+                "const": "other"
+              }
+            },
+            "required": [
+              "reference_type"
+            ]
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "reference": {
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/safeText"
+                  },
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "seo": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "meta_description",
+        "excerpt",
+        "reading_time"
+      ],
+      "properties": {
+        "title": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
+        },
+        "meta_description": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
+        },
+        "excerpt": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
+        },
+        "reading_time": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    "relationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "relation_type",
+        "registry_id",
+        "title",
+        "planning_handle",
+        "active",
+        "url",
+        "order"
+      ],
+      "properties": {
+        "relation_type": {
+          "enum": [
+            "parent",
+            "previous",
+            "next",
+            "return",
+            "category",
+            "primary-path",
+            "secondary-path",
+            "related-path",
+            "recommended",
+            "planned",
+            "companion",
+            "step",
+            "branch"
+          ]
+        },
+        "registry_id": {
+          "$ref": "#/$defs/registryId"
+        },
+        "title": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
+        },
+        "planning_handle": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "active": {
+          "const": false
+        },
+        "url": {
+          "type": "null"
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "placement": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "required": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reviewed_date",
+        "copy_locked_date",
+        "human_verification",
+        "accuracy_checklist"
+      ],
+      "properties": {
+        "reviewed_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "copy_locked_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "human_verification": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "reviewer",
+            "review_date",
+            "notes"
+          ],
+          "properties": {
+            "reviewer": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/safeText"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "review_date": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            },
+            "notes": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/safeText"
+              }
+            }
+          }
+        },
+        "accuracy_checklist": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "checked",
+              "statement"
+            ],
+            "properties": {
+              "checked": {
+                "type": "boolean"
+              },
+              "statement": {
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/safeText"
+                  },
+                  {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "illustration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "educational_purpose",
+        "recommended_placement",
+        "visual_description",
+        "required_labels",
+        "caption",
+        "alt_text",
+        "orientation",
+        "mobile_crop_notes",
+        "status",
+        "asset",
+        "render"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^illustration-[1-9][0-9]*$"
+        },
+        "title": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
+        },
+        "educational_purpose": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
+        },
+        "recommended_placement": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
+        },
+        "visual_description": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
+        },
+        "required_labels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/safeText"
+          }
+        },
+        "caption": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
+        },
+        "alt_text": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
+        },
+        "orientation": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
+        },
+        "mobile_crop_notes": {
+          "$ref": "#/$defs/safeText"
+        },
+        "status": {
+          "const": "PLANNED"
+        },
+        "asset": {
+          "type": "null"
+        },
+        "render": {
+          "const": false
+        }
+      }
+    },
+    "publication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "public_url",
+        "shopify_page_id",
+        "template_suffix",
+        "links_active",
+        "publication_source"
+      ],
+      "properties": {
+        "state": {
+          "const": "PREVIEW_ONLY"
+        },
+        "public_url": {
+          "type": "null"
+        },
+        "shopify_page_id": {
+          "type": "null"
+        },
+        "template_suffix": {
+          "type": "null"
+        },
+        "links_active": {
+          "const": false
+        },
+        "publication_source": {
+          "type": "null"
+        }
+      }
+    },
+    "inactiveDestination": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "registry_id",
+        "active",
+        "url"
+      ],
+      "properties": {
+        "registry_id": {
+          "$ref": "#/$defs/registryId"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "planning_handle": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "label": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "description": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "depth": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "format": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reading_time": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status_note": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "action_label": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "step_number": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "after_step_number": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "placement": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "requirement": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "planned_status": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "understand_before_continuing": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "active": {
+          "const": false
+        },
+        "url": {
+          "type": "null"
+        }
+      }
+    },
+    "topicGuideRoleData": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "article_sections",
+        "category",
+        "depth",
+        "format"
+      ],
+      "properties": {
+        "article_sections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/contentBlock"
+          }
+        },
+        "category": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "registry_id",
+            "title",
+            "subcategory"
+          ],
+          "properties": {
+            "registry_id": {
+              "$ref": "#/$defs/registryId"
+            },
+            "title": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/safeText"
+                },
+                {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              ]
+            },
+            "subcategory": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/safeText"
+                },
+                {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        "depth": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
+        },
+        "format": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    "categoryHubRoleData": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "article_sections",
+        "subcategories",
+        "canonical_destination_ids"
+      ],
+      "properties": {
+        "article_sections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/contentBlock"
+          }
+        },
+        "subcategories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "title",
+              "guide_cards"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "title": {
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/safeText"
+                  },
+                  {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                ]
+              },
+              "guide_cards": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/inactiveDestination"
+                }
+              }
+            }
+          }
+        },
+        "canonical_destination_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/registryId"
+          }
+        }
+      }
+    },
+    "learningPathRoleData": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "orientation",
+        "stages",
+        "branches"
+      ],
+      "properties": {
+        "orientation": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/contentBlock"
+          }
+        },
+        "stages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "stage_number",
+              "title",
+              "summary_text",
+              "steps"
+            ],
+            "properties": {
+              "stage_number": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "title": {
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/safeText"
+                  },
+                  {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                ]
+              },
+              "steps": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/inactiveDestination"
+                }
+              },
+              "summary_text": {
+                "$ref": "#/$defs/safeText"
+              }
+            }
+          }
+        },
+        "branches": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/inactiveDestination"
+          }
+        }
+      }
+    },
+    "featuredRouteRoleData": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "orientation",
+        "lifecycle_steps",
+        "companions"
+      ],
+      "properties": {
+        "orientation": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/contentBlock"
+          }
+        },
+        "lifecycle_steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "step_number",
+              "heading",
+              "explanatory_text",
+              "route_state",
+              "active",
+              "url"
+            ],
+            "properties": {
+              "step_number": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "heading": {
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/safeText"
+                  },
+                  {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                ]
+              },
+              "route_state": {
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/safeText"
+                  },
+                  {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                ]
+              },
+              "active": {
+                "const": false
+              },
+              "url": {
+                "type": "null"
+              },
+              "explanatory_text": {
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/safeText"
+                  },
+                  {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "companions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/inactiveDestination"
+          }
+        }
+      }
+    },
+    "glossaryIndexRoleData": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "orientation",
+        "populated_letter_sequence",
+        "populated_letter_counts",
+        "letter_groups",
+        "total_terms"
+      ],
+      "properties": {
+        "orientation": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/contentBlock"
+          }
+        },
+        "populated_letter_sequence": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z]$"
+          }
+        },
+        "populated_letter_counts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "propertyNames": {
+            "pattern": "^[a-z]$",
+            "type": "string"
+          },
+          "minProperties": 1
+        },
+        "letter_groups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "letter",
+              "term_count",
+              "terms"
+            ],
+            "properties": {
+              "letter": {
+                "type": "string",
+                "pattern": "^[a-z]$"
+              },
+              "term_count": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "terms": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "preferred_term",
+                    "definition",
+                    "canonical_destination_registry_id",
+                    "canonical_planning_handle",
+                    "active",
+                    "url"
+                  ],
+                  "properties": {
+                    "preferred_term": {
+                      "allOf": [
+                        {
+                          "$ref": "#/$defs/safeText"
+                        },
+                        {
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "definition": {
+                      "allOf": [
+                        {
+                          "$ref": "#/$defs/safeText"
+                        },
+                        {
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "canonical_destination_registry_id": {
+                      "$ref": "#/$defs/registryId"
+                    },
+                    "canonical_planning_handle": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                    },
+                    "ownership": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "page_role",
+                        "primary_category",
+                        "subcategory"
+                      ],
+                      "properties": {
+                        "page_role": {
+                          "allOf": [
+                            {
+                              "$ref": "#/$defs/safeText"
+                            },
+                            {
+                              "minLength": 1,
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "primary_category": {
+                          "allOf": [
+                            {
+                              "$ref": "#/$defs/safeText"
+                            },
+                            {
+                              "minLength": 1,
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "subcategory": {
+                          "allOf": [
+                            {
+                              "$ref": "#/$defs/safeText"
+                            },
+                            {
+                              "minLength": 1,
+                              "type": "string"
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "active": {
+                      "const": false
+                    },
+                    "url": {
+                      "type": "null"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "total_terms": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "safeText": {
+      "type": "string",
+      "pattern": "^(?![\\s\\S]*(?:<!--[\\s\\S]*?-->|<![^>]*>|<(?!pubkey>|signature>|txid>|block_hash>)\\s*\\/?\\s*[A-Za-z][A-Za-z0-9:_-]*(?:\\s[^<>]*?)?\\s*\\/?>|\\[[^\\[\\]\\n]+\\]\\([^()\\n]+\\)|!\\[[^\\]\\n]*\\]\\([^()\\n]+\\)|\\]\\s*\\(|\\bon[a-z]+\\s*=|\\b(?:javascript|data|vbscript)\\s*:))[\\s\\S]*$",
+      "$comment": "Plain text only. The exact case-sensitive escaped technical placeholders <pubkey>, <signature>, <txid>, and <block_hash> are allowed. Every other tag-shaped token, comments, declarations, Markdown links or images, malformed link syntax, inline event handlers, and unsafe URI schemes are forbidden. Every renderer must escape this value."
+    },
+    "richTextContentBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "heading",
+        "text",
+        "format",
+        "escape_before_render",
+        "source_sha256"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "enum": [
+            "section",
+            "paragraph",
+            "ordered-list",
+            "unordered-list",
+            "definition-list",
+            "callout"
+          ]
+        },
+        "heading": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "text": {
+          "$ref": "#/$defs/safeText"
+        },
+        "format": {
+          "const": "plain-text"
+        },
+        "escape_before_render": {
+          "const": true
+        },
+        "source_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "semanticTableColumn": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "header",
+        "alignment"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^column-[1-9][0-9]*$"
+        },
+        "header": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
+        },
+        "alignment": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "left",
+            "center",
+            "right",
+            null
+          ]
+        }
+      }
+    },
+    "semanticTableRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cells"
+      ],
+      "properties": {
+        "cells": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/safeText"
+              },
+              {
+                "minLength": 1,
+                "type": "string"
+              }
+            ]
+          },
+          "$comment": "JSON Schema cannot compare this array length with the sibling columns array. scripts/learn-runtime/lib/runtime-validation.mjs must enforce exact row-width equality after schema validation and before any Stage 2 output is accepted."
+        }
+      }
+    },
+    "semanticTableBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "label",
+        "label_source",
+        "columns",
+        "rows",
+        "source_sha256"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "const": "semantic-table"
+        },
+        "label": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/safeText"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ]
+        },
+        "label_source": {
+          "enum": [
+            "explicit-caption",
+            "nearest-source-heading"
+          ]
+        },
+        "columns": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/semanticTableColumn"
+          }
+        },
+        "rows": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/semanticTableRow"
+          }
+        },
+        "source_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "$comment": "Column IDs must be unique and sequential and every row width must equal the columns length. These cross-item invariants are enforced by the shared runtime validator after schema validation."
+    },
+    "inertCodeBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "language",
+        "code",
+        "executable",
+        "controls_enabled",
+        "escape_before_render",
+        "source_sha256"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "const": "inert-code"
+        },
+        "language": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_+.-]*$"
+        },
+        "code": {
+          "type": "string"
+        },
+        "executable": {
+          "const": false
+        },
+        "controls_enabled": {
+          "const": false
+        },
+        "escape_before_render": {
+          "const": true
+        },
+        "source_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    }
+  }
+}
