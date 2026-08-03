@@ -242,71 +242,71 @@ The featured route, How a Bitcoin Transaction Moves, will later connect transact
 
 ## 4. Sources
 
-### Bitcoin Developer Guide: Payment Processing
+1. **Bitcoin Developer Guide: Payment Processing**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/payment_processing.html
-- Supports: Wallet-neutral payment workflows, receiving information, transaction detection, confirmation monitoring, and payment-processing considerations.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/payment_processing.html
+   - Supports: Wallet-neutral payment workflows, receiving information, transaction detection, confirmation monitoring, and payment-processing considerations.
 
-### Bitcoin Developer Guide: Transactions
+2. **Bitcoin Developer Guide: Transactions**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/transactions.html
-- Supports: Inputs, outputs, UTXOs, change, signatures, transaction construction, and wallet balance behavior.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/transactions.html
+   - Supports: Inputs, outputs, UTXOs, change, signatures, transaction construction, and wallet balance behavior.
 
-### Bitcoin Developer Guide: P2P Network
+3. **Bitcoin Developer Guide: P2P Network**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/p2p_network.html
-- Supports: Transaction broadcast, peer relay, node validation, mempool behavior, and block propagation.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/p2p_network.html
+   - Supports: Transaction broadcast, peer relay, node validation, mempool behavior, and block propagation.
 
-### Bitcoin Core Network Parameters
+4. **Bitcoin Core Network Parameters**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp
-- Supports: The separate mainnet, testnet, signet, and regtest network parameters and their network-specific address and encoding configuration.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp
+   - Supports: The separate mainnet, testnet, signet, and regtest network parameters and their network-specific address and encoding configuration.
 
-### BIP 21: URI Scheme
+5. **BIP 21: URI Scheme**
 
-- Author or publisher: Nils Schneider and Matt Corallo
-- Direct URL: https://bips.dev/21/
-- Supports: Bitcoin payment-request URIs containing addresses, optional amounts, labels, messages, and extensible parameters.
+   - Author or publisher: Nils Schneider and Matt Corallo
+   - Direct URL: https://bips.dev/21/
+   - Supports: Bitcoin payment-request URIs containing addresses, optional amounts, labels, messages, and extensible parameters.
 
-### BIP 173: Base32 Address Format for Native v0-16 Witness Outputs
+6. **BIP 173: Base32 Address Format for Native v0-16 Witness Outputs**
 
-- Author or publisher: Pieter Wuille and Greg Maxwell
-- Direct URL: https://bips.dev/173/
-- Supports: Bech32 encoding for native witness version 0 addresses and network-readable human-readable prefixes.
+   - Author or publisher: Pieter Wuille and Greg Maxwell
+   - Direct URL: https://bips.dev/173/
+   - Supports: Bech32 encoding for native witness version 0 addresses and network-readable human-readable prefixes.
 
-### BIP 350: Bech32m Format for v1+ Witness Addresses
+7. **BIP 350: Bech32m Format for v1+ Witness Addresses**
 
-- Author or publisher: Pieter Wuille
-- Direct URL: https://bips.dev/350/
-- Supports: Bech32m encoding for witness version 1 and later addresses and the compatibility distinction between address formats.
+   - Author or publisher: Pieter Wuille
+   - Direct URL: https://bips.dev/350/
+   - Supports: Bech32m encoding for witness version 1 and later addresses and the compatibility distinction between address formats.
 
-### BIP 125: Opt-in Full Replace-by-Fee Signaling
+8. **BIP 125: Opt-in Full Replace-by-Fee Signaling**
 
-- Author or publisher: David Harding and Peter Todd
-- Direct URL: https://bips.dev/125/
-- Supports: The historical opt-in replace-by-fee signaling design and replacement-policy considerations. Current node behavior must be verified separately.
+   - Author or publisher: David Harding and Peter Todd
+   - Direct URL: https://bips.dev/125/
+   - Supports: The historical opt-in replace-by-fee signaling design and replacement-policy considerations. Current node behavior must be verified separately.
 
-### Replace-by-fee
+9. **Replace-by-fee**
 
-- Author or publisher: Bitcoin Optech
-- Direct URL: https://bitcoinops.org/en/topics/replace-by-fee/
-- Supports: Current technical context for replacing unconfirmed transactions, wallet and node policy differences, and the limits of fee-bumping assumptions.
+   - Author or publisher: Bitcoin Optech
+   - Direct URL: https://bitcoinops.org/en/topics/replace-by-fee/
+   - Supports: Current technical context for replacing unconfirmed transactions, wallet and node policy differences, and the limits of fee-bumping assumptions.
 
-### Child pays for parent
+10. **Child pays for parent**
 
-- Author or publisher: Bitcoin Optech
-- Direct URL: https://bitcoinops.org/en/topics/cpfp/
-- Supports: CPFP as a method for increasing the combined fee incentive of an unconfirmed parent and child transaction package.
+    - Author or publisher: Bitcoin Optech
+    - Direct URL: https://bitcoinops.org/en/topics/cpfp/
+    - Supports: CPFP as a method for increasing the combined fee incentive of an unconfirmed parent and child transaction package.
 
-### Bitcoin Core 31.0 Release Notes
+11. **Bitcoin Core 31.0 Release Notes**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://bitcoincore.org/en/releases/31.0/
-- Supports: Current Bitcoin Core mempool and replacement-policy changes that affect how wallet developers should reason about fee management and relay behavior.
+    - Author or publisher: Bitcoin Core developers
+    - Direct URL: https://bitcoincore.org/en/releases/31.0/
+    - Supports: Current Bitcoin Core mempool and replacement-policy changes that affect how wallet developers should reason about fee management and relay behavior.
 
 ## 5. SEO title
 
