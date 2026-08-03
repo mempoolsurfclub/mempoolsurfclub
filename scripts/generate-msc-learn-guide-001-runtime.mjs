@@ -452,6 +452,16 @@ function verifySourceParserContract() {
     'Authors information: Value',
     'Direct URL information: Value',
     'Supports information: Value',
+    'Supports note: Value',
+    'Supports',
+    'Direct URL note: Value',
+    'Direct URL',
+    'Publisher note: Value',
+    'Publisher',
+    'Authors list: Value',
+    'Authors',
+    'Author or publisher note: Value',
+    'Author or publisher',
   ];
   for (const malformedField of malformedCanonicalFields) {
     assert.throws(
