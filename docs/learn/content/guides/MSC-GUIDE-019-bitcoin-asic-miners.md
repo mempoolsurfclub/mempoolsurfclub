@@ -305,59 +305,59 @@ The next guide explains the consensus process that changes the required proof-of
 
 ## 4. Sources
 
-### FIPS 180-4: Secure Hash Standard
+1. **FIPS 180-4: Secure Hash Standard**
 
-- Author or publisher: National Institute of Standards and Technology
-- Direct URL: https://doi.org/10.6028/NIST.FIPS.180-4
-- Supports: The SHA-256 algorithm, 256-bit digest size, and deterministic hash-function behavior used in Bitcoin's double-SHA-256 block-header hashing.
+   - Author or publisher: National Institute of Standards and Technology
+   - Direct URL: https://doi.org/10.6028/NIST.FIPS.180-4
+   - Supports: The SHA-256 algorithm, 256-bit digest size, and deterministic hash-function behavior used in Bitcoin's double-SHA-256 block-header hashing.
 
-### Bitcoin: A Peer-to-Peer Electronic Cash System
+2. **Bitcoin: A Peer-to-Peer Electronic Cash System**
 
-- Author or publisher: Satoshi Nakamoto
-- Direct URL: https://bitcoin.org/bitcoin.pdf
-- Supports: Repeated proof-of-work hashing, probabilistic block discovery, network incentives, and the relationship between hashing work and chain extension.
+   - Author or publisher: Satoshi Nakamoto
+   - Direct URL: https://bitcoin.org/bitcoin.pdf
+   - Supports: Repeated proof-of-work hashing, probabilistic block discovery, network incentives, and the relationship between hashing work and chain extension.
 
-### Bitcoin Developer Guide: Mining
+3. **Bitcoin Developer Guide: Mining**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/mining.html
-- Supports: Block-header hashing, nonce and extranonce search space, Merkle-root updates, mining jobs, and block submission.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/mining.html
+   - Supports: Block-header hashing, nonce and extranonce search space, Merkle-root updates, mining jobs, and block submission.
 
-### Bitcoin Core Block Header
+4. **Bitcoin Core Block Header**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/primitives/block.h
-- Supports: The six serialized Bitcoin block-header fields and the data repeatedly hashed by mining equipment.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/primitives/block.h
+   - Supports: The six serialized Bitcoin block-header fields and the data repeatedly hashed by mining equipment.
 
-### Bitcoin Core Block Hash Implementation
+5. **Bitcoin Core Block Hash Implementation**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/primitives/block.cpp
-- Supports: Bitcoin Core's current block-header hash computation.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/primitives/block.cpp
+   - Supports: Bitcoin Core's current block-header hash computation.
 
-### Bitcoin Core SHA-256 Implementation Interface
+6. **Bitcoin Core SHA-256 Implementation Interface**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/crypto/sha256.h
-- Supports: Bitcoin Core's SHA-256 hashing interface and fixed 32-byte output size.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/crypto/sha256.h
+   - Supports: Bitcoin Core's SHA-256 hashing interface and fixed 32-byte output size.
 
-### Stratum V2 Mining Protocol
+7. **Stratum V2 Mining Protocol**
 
-- Author or publisher: Stratum V2 specification contributors
-- Direct URL: https://stratumprotocol.org/specification/05-mining-protocol/
-- Supports: Mining-device job receipt, standard and extended header search space, extranonce use, version rolling, time rolling, and share submission.
+   - Author or publisher: Stratum V2 specification contributors
+   - Direct URL: https://stratumprotocol.org/specification/05-mining-protocol/
+   - Supports: Mining-device job receipt, standard and extended header search space, extranonce use, version rolling, time rolling, and share submission.
 
-### Bitcoin Core Mining RPC
+8. **Bitcoin Core Mining RPC**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/rpc/mining.cpp
-- Supports: Network-hashrate estimation from observed chain work and elapsed time rather than a central global counter.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/rpc/mining.cpp
+   - Supports: Network-hashrate estimation from observed chain work and elapsed time rather than a central global counter.
 
-### International System of Units: The SI Brochure
+9. **International System of Units: The SI Brochure**
 
-- Author or publisher: Bureau International des Poids et Mesures
-- Direct URL: https://www.bipm.org/en/publications/si-brochure
-- Supports: Watts as joules per second and the unit relationships used to derive joules per terahash from watts and terahashes per second.
+   - Author or publisher: Bureau International des Poids et Mesures
+   - Direct URL: https://www.bipm.org/en/publications/si-brochure
+   - Supports: Watts as joules per second and the unit relationships used to derive joules per terahash from watts and terahashes per second.
 
 ## 5. SEO title
 

@@ -196,59 +196,59 @@ The next guide turns from custody structure to transaction practice. How to Send
 
 ## 4. Sources
 
-### Bitcoin Developer Guide: Wallets
+1. **Bitcoin Developer Guide: Wallets**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/wallets.html
-- Supports: Deterministic wallets, wallet backups, key derivation, and wallet structures relevant to direct key control and recovery.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/wallets.html
+   - Supports: Deterministic wallets, wallet backups, key derivation, and wallet structures relevant to direct key control and recovery.
 
-### BIP 32: Hierarchical Deterministic Wallets
+2. **BIP 32: Hierarchical Deterministic Wallets**
 
-- Author or publisher: Pieter Wuille
-- Direct URL: https://bips.dev/32/
-- Supports: Hierarchical deterministic key trees, extended keys, and the relationship between seed material and multiple derived keys.
+   - Author or publisher: Pieter Wuille
+   - Direct URL: https://bips.dev/32/
+   - Supports: Hierarchical deterministic key trees, extended keys, and the relationship between seed material and multiple derived keys.
 
-### BIP 39: Mnemonic Code for Generating Deterministic Keys
+3. **BIP 39: Mnemonic Code for Generating Deterministic Keys**
 
-- Author or publisher: Marek Palatinus, Pavol Rusnak, Aaron Voisine, and Sean Bowe
-- Direct URL: https://bips.dev/39/
-- Supports: One specific mnemonic method for producing deterministic-wallet seed material and the optional passphrase mechanism defined by that standard.
+   - Author or publisher: Marek Palatinus, Pavol Rusnak, Aaron Voisine, and Sean Bowe
+   - Direct URL: https://bips.dev/39/
+   - Supports: One specific mnemonic method for producing deterministic-wallet seed material and the optional passphrase mechanism defined by that standard.
 
-### BIP 174: Partially Signed Bitcoin Transaction Format
+4. **BIP 174: Partially Signed Bitcoin Transaction Format**
 
-- Author or publisher: Andrew Chow
-- Direct URL: https://bips.dev/174/
-- Supports: Coordinating transaction construction and multiple signing roles without placing every private key in one wallet process.
+   - Author or publisher: Andrew Chow
+   - Direct URL: https://bips.dev/174/
+   - Supports: Coordinating transaction construction and multiple signing roles without placing every private key in one wallet process.
 
-### BIP 129: Bitcoin Secure Multisig Setup
+5. **BIP 129: Bitcoin Secure Multisig Setup**
 
-- Author or publisher: Hugo Nguyen, Peter Gray, Marko Bencun, Aaron Chen, and Rodolfo Novak
-- Direct URL: https://bips.dev/129/
-- Supports: Multisignature setup risks, signer and coordinator roles, configuration verification, and preserving an interoperable multisignature descriptor record.
+   - Author or publisher: Hugo Nguyen, Peter Gray, Marko Bencun, Aaron Chen, and Rodolfo Novak
+   - Direct URL: https://bips.dev/129/
+   - Supports: Multisignature setup risks, signer and coordinator roles, configuration verification, and preserving an interoperable multisignature descriptor record.
 
-### BIP 380: Output Script Descriptors General Operation
+6. **BIP 380: Output Script Descriptors General Operation**
 
-- Author or publisher: Pieter Wuille and Ava Chow
-- Direct URL: https://bips.dev/380/
-- Supports: Descriptors as a representation of wallet scripts, key origins, derivation information, and recovery-relevant configuration.
+   - Author or publisher: Pieter Wuille and Ava Chow
+   - Direct URL: https://bips.dev/380/
+   - Supports: Descriptors as a representation of wallet scripts, key origins, derivation information, and recovery-relevant configuration.
 
-### Bitcoin Core: Partially Signed Bitcoin Transactions
+7. **Bitcoin Core: Partially Signed Bitcoin Transactions**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/doc/psbt.md
-- Supports: Bitcoin Core workflows that separate transaction creation, signing, finalization, and broadcast.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/doc/psbt.md
+   - Supports: Bitcoin Core workflows that separate transaction creation, signing, finalization, and broadcast.
 
-### Bitcoin Core: Output Script Descriptors
+8. **Bitcoin Core: Output Script Descriptors**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/doc/descriptors.md
-- Supports: Descriptor-wallet concepts, watch-only information, script descriptions, and key-origin data used in wallet recovery and coordination.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/doc/descriptors.md
+   - Supports: Descriptor-wallet concepts, watch-only information, script descriptions, and key-origin data used in wallet recovery and coordination.
 
-### Hardware Wallet Interface
+9. **Hardware Wallet Interface**
 
-- Author or publisher: Bitcoin Core HWI contributors
-- Direct URL: https://github.com/bitcoin-core/HWI/blob/master/README.md
-- Supports: The separation between Bitcoin wallet software and supported hardware signing devices through a common interface.
+   - Author or publisher: Bitcoin Core HWI contributors
+   - Direct URL: https://github.com/bitcoin-core/HWI/blob/master/README.md
+   - Supports: The separation between Bitcoin wallet software and supported hardware signing devices through a common interface.
 
 ## 5. SEO title
 

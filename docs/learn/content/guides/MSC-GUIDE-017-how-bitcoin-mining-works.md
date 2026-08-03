@@ -243,71 +243,71 @@ The next guide explains how mining pools assign work, measure shares, submit blo
 
 ## 4. Sources
 
-### Bitcoin: A Peer-to-Peer Electronic Cash System
+1. **Bitcoin: A Peer-to-Peer Electronic Cash System**
 
-- Author or publisher: Satoshi Nakamoto
-- Direct URL: https://bitcoin.org/bitcoin.pdf
-- Supports: Bitcoin's proof-of-work chain, incentive model, transaction ordering, probabilistic block discovery, and broad difficulty-adjustment purpose.
+   - Author or publisher: Satoshi Nakamoto
+   - Direct URL: https://bitcoin.org/bitcoin.pdf
+   - Supports: Bitcoin's proof-of-work chain, incentive model, transaction ordering, probabilistic block discovery, and broad difficulty-adjustment purpose.
 
-### Bitcoin Developer Guide: Mining
+2. **Bitcoin Developer Guide: Mining**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/mining.html
-- Supports: Candidate-block construction, coinbase creation, Merkle-root updates, block-header hashing, extranonce use, and block submission.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/mining.html
+   - Supports: Candidate-block construction, coinbase creation, Merkle-root updates, block-header hashing, extranonce use, and block submission.
 
-### Bitcoin Developer Guide: Block Chain
+3. **Bitcoin Developer Guide: Block Chain**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/block_chain.html
-- Supports: Block structure, proof of work, Merkle commitments, node validation, chain selection, block subsidies, fees, and coinbase maturity context.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/block_chain.html
+   - Supports: Block structure, proof of work, Merkle commitments, node validation, chain selection, block subsidies, fees, and coinbase maturity context.
 
-### Bitcoin Core Block Assembler
+4. **Bitcoin Core Block Assembler**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/node/miner.cpp
-- Supports: Current Bitcoin Core candidate-block assembly, mempool transaction selection, coinbase construction, subsidy-plus-fee calculation, header preparation, and pre-submission validity testing.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/node/miner.cpp
+   - Supports: Current Bitcoin Core candidate-block assembly, mempool transaction selection, coinbase construction, subsidy-plus-fee calculation, header preparation, and pre-submission validity testing.
 
-### Bitcoin Core Mining Interface
+5. **Bitcoin Core Mining Interface**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/node/miner.h
-- Supports: Current interfaces and structures separating block creation, coinbase data, block templates, and mining options.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/node/miner.h
+   - Supports: Current interfaces and structures separating block creation, coinbase data, block templates, and mining options.
 
-### Bitcoin Core Mining RPC
+6. **Bitcoin Core Mining RPC**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/rpc/mining.cpp
-- Supports: Current getblocktemplate, submitblock, generate, and network-hashrate estimation behavior exposed by Bitcoin Core mining RPCs.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/rpc/mining.cpp
+   - Supports: Current getblocktemplate, submitblock, generate, and network-hashrate estimation behavior exposed by Bitcoin Core mining RPCs.
 
-### Bitcoin Core Block Header
+7. **Bitcoin Core Block Header**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/primitives/block.h
-- Supports: The serialized block-header fields: version, previous-block hash, Merkle root, time, compact target, and nonce.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/primitives/block.h
+   - Supports: The serialized block-header fields: version, previous-block hash, Merkle root, time, compact target, and nonce.
 
-### Bitcoin Core Proof of Work
+8. **Bitcoin Core Proof of Work**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/pow.cpp
-- Supports: Target derivation from compact `nBits`, proof-of-work comparison, difficulty-boundary behavior, and network-specific proof-of-work rules.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/pow.cpp
+   - Supports: Target derivation from compact `nBits`, proof-of-work comparison, difficulty-boundary behavior, and network-specific proof-of-work rules.
 
-### Bitcoin Core Block Validation
+9. **Bitcoin Core Block Validation**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp
-- Supports: Independent block and transaction validation, coinbase value checks, chain-state connection, and rejection of invalid blocks.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp
+   - Supports: Independent block and transaction validation, coinbase value checks, chain-state connection, and rejection of invalid blocks.
 
-### Bitcoin Core Consensus Constants
+10. **Bitcoin Core Consensus Constants**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/consensus/consensus.h
-- Supports: The 100-block coinbase maturity constant and core block-weight and consensus limits.
+    - Author or publisher: Bitcoin Core developers
+    - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/consensus/consensus.h
+    - Supports: The 100-block coinbase maturity constant and core block-weight and consensus limits.
 
-### FIPS 180-4: Secure Hash Standard
+11. **FIPS 180-4: Secure Hash Standard**
 
-- Author or publisher: National Institute of Standards and Technology
-- Direct URL: https://doi.org/10.6028/NIST.FIPS.180-4
-- Supports: The SHA-256 algorithm and fixed-length digest behavior used in Bitcoin's double-SHA-256 block-header hashing.
+    - Author or publisher: National Institute of Standards and Technology
+    - Direct URL: https://doi.org/10.6028/NIST.FIPS.180-4
+    - Supports: The SHA-256 algorithm and fixed-length digest behavior used in Bitcoin's double-SHA-256 block-header hashing.
 
 ## 5. SEO title
 

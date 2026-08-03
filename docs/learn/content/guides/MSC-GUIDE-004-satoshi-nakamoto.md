@@ -170,59 +170,59 @@ The next guide moves from history into practical use by explaining what a Bitcoi
 
 ## 4. Sources
 
-### Bitcoin: A Peer-to-Peer Electronic Cash System
+1. **Bitcoin: A Peer-to-Peer Electronic Cash System**
 
-- Author or publisher: Satoshi Nakamoto
-- Direct URL: https://bitcoin.org/bitcoin.pdf
-- Supports: Satoshi's authorship under the pseudonym, the original Bitcoin design, and the technical purpose described in the paper.
+   - Author or publisher: Satoshi Nakamoto
+   - Direct URL: https://bitcoin.org/bitcoin.pdf
+   - Supports: Satoshi's authorship under the pseudonym, the original Bitcoin design, and the technical purpose described in the paper.
 
-### Bitcoin P2P e-cash paper
+2. **Bitcoin P2P e-cash paper**
 
-- Author or publisher: Satoshi Nakamoto, Cryptography Mailing List archive
-- Direct URL: https://www.metzdowd.com/pipermail/cryptography/2008-October/014810.html
-- Supports: The October 31, 2008 public announcement and Satoshi's original description of the proposal.
+   - Author or publisher: Satoshi Nakamoto, Cryptography Mailing List archive
+   - Direct URL: https://www.metzdowd.com/pipermail/cryptography/2008-October/014810.html
+   - Supports: The October 31, 2008 public announcement and Satoshi's original description of the proposal.
 
-### Bitcoin v0.1 released
+3. **Bitcoin v0.1 released**
 
-- Author or publisher: Satoshi Nakamoto, Cryptography Mailing List archive
-- Direct URL: https://www.metzdowd.com/pipermail/cryptography/2009-January/014994.html
-- Supports: Satoshi's release of the first public Bitcoin software and the early software's stated capabilities.
+   - Author or publisher: Satoshi Nakamoto, Cryptography Mailing List archive
+   - Direct URL: https://www.metzdowd.com/pipermail/cryptography/2009-January/014994.html
+   - Supports: Satoshi's release of the first public Bitcoin software and the early software's stated capabilities.
 
-### Cryptography Mailing List Emails
+4. **Cryptography Mailing List Emails**
 
-- Author or publisher: Satoshi Nakamoto Institute archive
-- Direct URL: https://satoshi.nakamotoinstitute.org/emails/cryptography/
-- Supports: Satoshi's public technical discussion surrounding the white paper and early Bitcoin design.
+   - Author or publisher: Satoshi Nakamoto Institute archive
+   - Direct URL: https://satoshi.nakamotoinstitute.org/emails/cryptography/
+   - Supports: Satoshi's public technical discussion surrounding the white paper and early Bitcoin design.
 
-### bitcoin-list Emails
+5. **bitcoin-list Emails**
 
-- Author or publisher: Satoshi Nakamoto Institute archive
-- Direct URL: https://satoshi.nakamotoinstitute.org/emails/bitcoin-list/
-- Supports: Public release notes, software discussion, security notices, and later messages from Bitcoin's early development period.
+   - Author or publisher: Satoshi Nakamoto Institute archive
+   - Direct URL: https://satoshi.nakamotoinstitute.org/emails/bitcoin-list/
+   - Supports: Public release notes, software discussion, security notices, and later messages from Bitcoin's early development period.
 
-### BitcoinTalk Posts
+6. **BitcoinTalk Posts**
 
-- Author or publisher: Satoshi Nakamoto Institute archive
-- Direct URL: https://satoshi.nakamotoinstitute.org/posts/bitcointalk/
-- Supports: Satoshi's archived public forum discussions, technical explanations, and the visible decline of public participation.
+   - Author or publisher: Satoshi Nakamoto Institute archive
+   - Direct URL: https://satoshi.nakamotoinstitute.org/posts/bitcointalk/
+   - Supports: Satoshi's archived public forum discussions, technical explanations, and the visible decline of public participation.
 
-### Hal Finney received the first Bitcoin transaction. Here's how he describes it.
+7. **Hal Finney received the first Bitcoin transaction. Here's how he describes it.**
 
-- Author or publisher: Andrea Peterson, The Washington Post
-- Direct URL: https://www.washingtonpost.com/news/the-switch/wp/2014/01/03/hal-finney-received-the-first-bitcoin-transaction-heres-how-he-describes-it/
-- Supports: Hal Finney's account of early software testing, receiving a test transaction, and corresponding with Satoshi about bugs.
+   - Author or publisher: Andrea Peterson, The Washington Post
+   - Direct URL: https://www.washingtonpost.com/news/the-switch/wp/2014/01/03/hal-finney-received-the-first-bitcoin-transaction-heres-how-he-describes-it/
+   - Supports: Hal Finney's account of early software testing, receiving a test transaction, and corresponding with Satoshi about bugs.
 
-### Bitcoin Core source repository
+8. **Bitcoin Core source repository**
 
-- Author or publisher: Bitcoin Core contributors
-- Direct URL: https://github.com/bitcoin/bitcoin
-- Supports: The public open-source software lineage and the continuing development of Bitcoin software without a central owner.
+   - Author or publisher: Bitcoin Core contributors
+   - Direct URL: https://github.com/bitcoin/bitcoin
+   - Supports: The public open-source software lineage and the continuing development of Bitcoin software without a central owner.
 
-### Bitcoin Core commit history
+9. **Bitcoin Core commit history**
 
-- Author or publisher: Bitcoin Core contributors
-- Direct URL: https://github.com/bitcoin/bitcoin/commits/master/
-- Supports: The public record of continued software contributions, review, and maintenance after Bitcoin's early period.
+   - Author or publisher: Bitcoin Core contributors
+   - Direct URL: https://github.com/bitcoin/bitcoin/commits/master/
+   - Supports: The public record of continued software contributions, review, and maintenance after Bitcoin's early period.
 
 ## 5. SEO title
 

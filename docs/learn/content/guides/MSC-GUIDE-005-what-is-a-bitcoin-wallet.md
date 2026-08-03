@@ -171,59 +171,59 @@ What Is Bitcoin Self-Custody? examines custodial accounts, direct key control, b
 
 ## 4. Sources
 
-### Bitcoin Developer Guide: Wallets
+1. **Bitcoin Developer Guide: Wallets**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/wallets.html
-- Supports: Wallet key management, deterministic wallets, wallet files, backups, and the distinction between wallet functions and Bitcoin transaction outputs.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/wallets.html
+   - Supports: Wallet key management, deterministic wallets, wallet files, backups, and the distinction between wallet functions and Bitcoin transaction outputs.
 
-### Bitcoin Developer Guide: Transactions
+2. **Bitcoin Developer Guide: Transactions**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/transactions.html
-- Supports: UTXOs, transaction inputs and outputs, change, authorization, wallet balance calculation, and address-related transaction construction.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/transactions.html
+   - Supports: UTXOs, transaction inputs and outputs, change, authorization, wallet balance calculation, and address-related transaction construction.
 
-### BIP 32: Hierarchical Deterministic Wallets
+3. **BIP 32: Hierarchical Deterministic Wallets**
 
-- Author or publisher: Pieter Wuille
-- Direct URL: https://bips.dev/32/
-- Supports: Hierarchical key derivation, extended keys, and deriving multiple related keys from underlying seed material.
+   - Author or publisher: Pieter Wuille
+   - Direct URL: https://bips.dev/32/
+   - Supports: Hierarchical key derivation, extended keys, and deriving multiple related keys from underlying seed material.
 
-### BIP 39: Mnemonic Code for Generating Deterministic Keys
+4. **BIP 39: Mnemonic Code for Generating Deterministic Keys**
 
-- Author or publisher: Marek Palatinus, Pavol Rusnak, Aaron Voisine, and Sean Bowe
-- Direct URL: https://bips.dev/39/
-- Supports: One specific mnemonic method for generating deterministic-wallet seed material. It does not establish that every Bitcoin wallet uses BIP 39.
+   - Author or publisher: Marek Palatinus, Pavol Rusnak, Aaron Voisine, and Sean Bowe
+   - Direct URL: https://bips.dev/39/
+   - Supports: One specific mnemonic method for generating deterministic-wallet seed material. It does not establish that every Bitcoin wallet uses BIP 39.
 
-### BIP 174: Partially Signed Bitcoin Transaction Format
+5. **BIP 174: Partially Signed Bitcoin Transaction Format**
 
-- Author or publisher: Andrew Chow
-- Direct URL: https://bips.dev/174/
-- Supports: Separation of transaction creation, updating, signing, and finalization across compatible wallet roles and devices.
+   - Author or publisher: Andrew Chow
+   - Direct URL: https://bips.dev/174/
+   - Supports: Separation of transaction creation, updating, signing, and finalization across compatible wallet roles and devices.
 
-### BIP 173: Base32 Address Format for Native v0-16 Witness Outputs
+6. **BIP 173: Base32 Address Format for Native v0-16 Witness Outputs**
 
-- Author or publisher: Pieter Wuille and Greg Maxwell
-- Direct URL: https://bips.dev/173/
-- Supports: The Bech32 address format for native witness version 0 outputs and address error-detection properties.
+   - Author or publisher: Pieter Wuille and Greg Maxwell
+   - Direct URL: https://bips.dev/173/
+   - Supports: The Bech32 address format for native witness version 0 outputs and address error-detection properties.
 
-### BIP 350: Bech32m Format for v1+ Witness Addresses
+7. **BIP 350: Bech32m Format for v1+ Witness Addresses**
 
-- Author or publisher: Pieter Wuille
-- Direct URL: https://bips.dev/350/
-- Supports: Bech32m encoding for witness version 1 and later addresses and the compatibility distinction from Bech32.
+   - Author or publisher: Pieter Wuille
+   - Direct URL: https://bips.dev/350/
+   - Supports: Bech32m encoding for witness version 1 and later addresses and the compatibility distinction from Bech32.
 
-### Output Script Descriptors General Operation
+8. **Output Script Descriptors General Operation**
 
-- Author or publisher: Pieter Wuille and Ava Chow, Bitcoin Improvement Proposals
-- Direct URL: https://bips.dev/380/
-- Supports: Descriptors as a method for representing wallet script types, keys, origins, derivation paths, and recovery-relevant wallet structure.
+   - Author or publisher: Pieter Wuille and Ava Chow, Bitcoin Improvement Proposals
+   - Direct URL: https://bips.dev/380/
+   - Supports: Descriptors as a method for representing wallet script types, keys, origins, derivation paths, and recovery-relevant wallet structure.
 
-### Bitcoin Core: Managing Wallets
+9. **Bitcoin Core: Managing Wallets**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/doc/managing-wallets.md
-- Supports: Current Bitcoin Core wallet loading, creation, descriptor-wallet operation, and wallet-management behavior.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/doc/managing-wallets.md
+   - Supports: Current Bitcoin Core wallet loading, creation, descriptor-wallet operation, and wallet-management behavior.
 
 ## 5. SEO title
 

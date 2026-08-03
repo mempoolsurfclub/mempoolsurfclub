@@ -293,101 +293,101 @@ The next guide begins the Bitcoin Network category with a closer look at how min
 
 ## 4. Sources
 
-### Bitcoin Developer Guide: Wallets
+1. **Bitcoin Developer Guide: Wallets**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/wallets.html
-- Supports: Wallet roles, deterministic backups, encrypted wallet files, key management, and wallet interaction with Bitcoin network data.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/wallets.html
+   - Supports: Wallet roles, deterministic backups, encrypted wallet files, key management, and wallet interaction with Bitcoin network data.
 
-### Bitcoin Developer Guide: Transactions
+2. **Bitcoin Developer Guide: Transactions**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/transactions.html
-- Supports: Addresses, inputs, outputs, change, fees, transaction construction, address reuse, and transaction privacy considerations.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/transactions.html
+   - Supports: Addresses, inputs, outputs, change, fees, transaction construction, address reuse, and transaction privacy considerations.
 
-### Bitcoin Developer Guide: Payment Processing
+3. **Bitcoin Developer Guide: Payment Processing**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/payment_processing.html
-- Supports: Receiving and monitoring payments, confirmation handling, payment-processing risks, and operational responses to chain changes.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/payment_processing.html
+   - Supports: Receiving and monitoring payments, confirmation handling, payment-processing risks, and operational responses to chain changes.
 
-### Bitcoin Core: Managing Wallets
+4. **Bitcoin Core: Managing Wallets**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/doc/managing-wallets.md
-- Supports: Current Bitcoin Core wallet creation, loading, backups, descriptor wallets, and wallet-management behavior.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/doc/managing-wallets.md
+   - Supports: Current Bitcoin Core wallet creation, loading, backups, descriptor wallets, and wallet-management behavior.
 
-### Bitcoin Core Binary Verification
+5. **Bitcoin Core Binary Verification**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/contrib/verify-binaries/README.md
-- Supports: Project-supported procedures for checking Bitcoin Core release artifacts and signatures.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/contrib/verify-binaries/README.md
+   - Supports: Project-supported procedures for checking Bitcoin Core release artifacts and signatures.
 
-### Bitcoin Core Downloads
+6. **Bitcoin Core Downloads**
 
-- Author or publisher: Bitcoin Core project
-- Direct URL: https://bitcoincore.org/en/download/
-- Supports: The official Bitcoin Core release channel, current release files, checksums, signatures, and verification references.
+   - Author or publisher: Bitcoin Core project
+   - Direct URL: https://bitcoincore.org/en/download/
+   - Supports: The official Bitcoin Core release channel, current release files, checksums, signatures, and verification references.
 
-### BIP 21: URI Scheme
+7. **BIP 21: URI Scheme**
 
-- Author or publisher: Nils Schneider and Matt Corallo
-- Direct URL: https://bips.dev/21/
-- Supports: The Bitcoin payment URI structure for an address, optional amount, label, message, and extensible parameters.
+   - Author or publisher: Nils Schneider and Matt Corallo
+   - Direct URL: https://bips.dev/21/
+   - Supports: The Bitcoin payment URI structure for an address, optional amount, label, message, and extensible parameters.
 
-### BIP 32: Hierarchical Deterministic Wallets
+8. **BIP 32: Hierarchical Deterministic Wallets**
 
-- Author or publisher: Pieter Wuille
-- Direct URL: https://bips.dev/32/
-- Supports: Hierarchical wallet derivation, extended keys, receiving branches, and recovery dependencies.
+   - Author or publisher: Pieter Wuille
+   - Direct URL: https://bips.dev/32/
+   - Supports: Hierarchical wallet derivation, extended keys, receiving branches, and recovery dependencies.
 
-### BIP 39: Mnemonic Code for Generating Deterministic Keys
+9. **BIP 39: Mnemonic Code for Generating Deterministic Keys**
 
-- Author or publisher: Marek Palatinus, Pavol Rusnak, Aaron Voisine, and Sean Bowe
-- Direct URL: https://bips.dev/39/
-- Supports: Mnemonic backups, optional passphrases, seed generation, and limits of assuming universal wallet compatibility.
+   - Author or publisher: Marek Palatinus, Pavol Rusnak, Aaron Voisine, and Sean Bowe
+   - Direct URL: https://bips.dev/39/
+   - Supports: Mnemonic backups, optional passphrases, seed generation, and limits of assuming universal wallet compatibility.
 
-### BIP 78: A Simple PayJoin Proposal
+10. **BIP 78: A Simple PayJoin Proposal**
 
-- Author or publisher: Nicolas Dorier
-- Direct URL: https://bips.dev/78/
-- Supports: Payment negotiation, receiver input contribution, sender validation requirements, and privacy and compatibility considerations for PayJoin.
+    - Author or publisher: Nicolas Dorier
+    - Direct URL: https://bips.dev/78/
+    - Supports: Payment negotiation, receiver input contribution, sender validation requirements, and privacy and compatibility considerations for PayJoin.
 
-### BIP 129: Bitcoin Secure Multisig Setup
+11. **BIP 129: Bitcoin Secure Multisig Setup**
 
-- Author or publisher: Hugo Nguyen, Peter Gray, Marko Bencun, Aaron Chen, and Rodolfo Novak
-- Direct URL: https://bips.dev/129/
-- Supports: Multisignature setup records, participant verification, wallet policy, and recovery information.
+    - Author or publisher: Hugo Nguyen, Peter Gray, Marko Bencun, Aaron Chen, and Rodolfo Novak
+    - Direct URL: https://bips.dev/129/
+    - Supports: Multisignature setup records, participant verification, wallet policy, and recovery information.
 
-### BIP 174: Partially Signed Bitcoin Transaction Format
+12. **BIP 174: Partially Signed Bitcoin Transaction Format**
 
-- Author or publisher: Andrew Chow
-- Direct URL: https://bips.dev/174/
-- Supports: Separation of transaction creation, updating, signing, and finalization across devices or participants.
+    - Author or publisher: Andrew Chow
+    - Direct URL: https://bips.dev/174/
+    - Supports: Separation of transaction creation, updating, signing, and finalization across devices or participants.
 
-### BIP 380: Output Script Descriptors General Operation
+13. **BIP 380: Output Script Descriptors General Operation**
 
-- Author or publisher: Pieter Wuille and Ava Chow
-- Direct URL: https://bips.dev/380/
-- Supports: Representing wallet scripts, key origins, derivation paths, and recovery-relevant structure.
+    - Author or publisher: Pieter Wuille and Ava Chow
+    - Direct URL: https://bips.dev/380/
+    - Supports: Representing wallet scripts, key origins, derivation paths, and recovery-relevant structure.
 
-### Bitcoin Optech: Coin Selection
+14. **Bitcoin Optech: Coin Selection**
 
-- Author or publisher: Bitcoin Optech
-- Direct URL: https://bitcoinops.org/en/topics/coin-selection/
-- Supports: Input selection, coin control, fees, change, consolidation, privacy, and wallet-complexity tradeoffs.
+    - Author or publisher: Bitcoin Optech
+    - Direct URL: https://bitcoinops.org/en/topics/coin-selection/
+    - Supports: Input selection, coin control, fees, change, consolidation, privacy, and wallet-complexity tradeoffs.
 
-### Tor Project: What Is Tor?
+15. **Tor Project: What Is Tor?**
 
-- Author or publisher: The Tor Project
-- Direct URL: https://support.torproject.org/about/what-is-tor/
-- Supports: Tor's layered routing model and its limited role in reducing direct source-IP disclosure.
+    - Author or publisher: The Tor Project
+    - Direct URL: https://support.torproject.org/about/what-is-tor/
+    - Supports: Tor's layered routing model and its limited role in reducing direct source-IP disclosure.
 
-### BOLT 4: Onion Routing Protocol
+16. **BOLT 4: Onion Routing Protocol**
 
-- Author or publisher: Lightning specification contributors
-- Direct URL: https://github.com/lightning/bolts/blob/master/04-onion-routing.md
-- Supports: Lightning onion routing, adjacent-hop information, and the distinction between routed-payment privacy and public on-chain information.
+    - Author or publisher: Lightning specification contributors
+    - Direct URL: https://github.com/lightning/bolts/blob/master/04-onion-routing.md
+    - Supports: Lightning onion routing, adjacent-hop information, and the distinction between routed-payment privacy and public on-chain information.
 
 ## 5. SEO title
 

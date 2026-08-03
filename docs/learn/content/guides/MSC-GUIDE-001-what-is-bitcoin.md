@@ -183,72 +183,72 @@ Readers can then continue into wallets, self-custody, transactions, mining, node
 
 ## 4. Sources
 
-### Bitcoin: A Peer-to-Peer Electronic Cash System
+1. **Bitcoin: A Peer-to-Peer Electronic Cash System**
 
-- Author or publisher: Satoshi Nakamoto
-- Direct URL: https://bitcoin.org/bitcoin.pdf
-- Supports: Bitcoin's peer-to-peer design, double-spending model, digital signatures, proof of work, transaction ordering, initial issuance and incentive model, and original privacy model.
+   - Author or publisher: Satoshi Nakamoto
+   - Direct URL: https://bitcoin.org/bitcoin.pdf
+   - Supports: Bitcoin's peer-to-peer design, double-spending model, digital signatures, proof of work, transaction ordering, initial issuance and incentive model, and original privacy model.
 
-### Bitcoin P2P e-cash paper
+2. **Bitcoin P2P e-cash paper**
 
-- Author or publisher: Satoshi Nakamoto
-- Publisher: The Cryptography Mailing List archive
-- Direct URL: https://www.metzdowd.com/pipermail/cryptography/2008-October/014810.html
-- Supports: The October 2008 public introduction of Bitcoin as a peer-to-peer electronic cash system without a trusted mint.
+   - Author or publisher: Satoshi Nakamoto
+   - Publisher: The Cryptography Mailing List archive
+   - Direct URL: https://www.metzdowd.com/pipermail/cryptography/2008-October/014810.html
+   - Supports: The October 2008 public introduction of Bitcoin as a peer-to-peer electronic cash system without a trusted mint.
 
-### Bitcoin Core README
+3. **Bitcoin Core README**
 
-- Publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/README.md
-- Supports: Bitcoin Core's role in connecting to the peer-to-peer network and fully validating blocks and transactions.
+   - Publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/README.md
+   - Supports: Bitcoin Core's role in connecting to the peer-to-peer network and fully validating blocks and transactions.
 
-### Bitcoin Developer Guide: Block Chain
+4. **Bitcoin Developer Guide: Block Chain**
 
-- Publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/block_chain.html
-- Supports: The public transaction record, independent full-node validation, consensus rules, UTXOs, blocks, proof of work, confirmations, and transaction fees.
+   - Publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/block_chain.html
+   - Supports: The public transaction record, independent full-node validation, consensus rules, UTXOs, blocks, proof of work, confirmations, and transaction fees.
 
-### Bitcoin Developer Guide: Transactions
+5. **Bitcoin Developer Guide: Transactions**
 
-- Publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/transactions.html
-- Supports: Transaction inputs and outputs, UTXOs, wallet balance calculation, transaction construction, change outputs, and transaction authorization.
+   - Publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/transactions.html
+   - Supports: Transaction inputs and outputs, UTXOs, wallet balance calculation, transaction construction, change outputs, and transaction authorization.
 
-### Bitcoin Developer Guide: P2P Network
+6. **Bitcoin Developer Guide: P2P Network**
 
-- Publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/p2p_network.html
-- Supports: Peer communication and the role of full nodes in verifying and relaying blocks and transactions.
+   - Publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/p2p_network.html
+   - Supports: Peer communication and the role of full nodes in verifying and relaying blocks and transactions.
 
-### Bitcoin Core Consensus Amount Definitions
+7. **Bitcoin Core Consensus Amount Definitions**
 
-- Publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/consensus/amount.h
-- Supports: One BTC equals 100 million satoshis and Bitcoin Core's consensus-critical monetary range check. The file explicitly states that `MAX_MONEY` is not the total money supply.
+   - Publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/consensus/amount.h
+   - Supports: One BTC equals 100 million satoshis and Bitcoin Core's consensus-critical monetary range check. The file explicitly states that `MAX_MONEY` is not the total money supply.
 
-### Bitcoin Core Mainnet Consensus Parameters
+8. **Bitcoin Core Mainnet Consensus Parameters**
 
-- Publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp
-- Supports: The 210,000-block subsidy-halving interval used on Bitcoin mainnet.
+   - Publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp
+   - Supports: The 210,000-block subsidy-halving interval used on Bitcoin mainnet.
 
-### Bitcoin Core Block Subsidy Function
+9. **Bitcoin Core Block Subsidy Function**
 
-- Publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp
-- Supports: The initial 50 BTC block subsidy and the halving calculation applied at each configured subsidy interval.
+   - Publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp
+   - Supports: The initial 50 BTC block subsidy and the halving calculation applied at each configured subsidy interval.
 
-### BIP 32: Hierarchical Deterministic Wallets
+10. **BIP 32: Hierarchical Deterministic Wallets**
 
-- Author or publisher: Pieter Wuille
-- Direct URL: https://bips.dev/32/
-- Supports: The derivation of multiple related wallet keys from underlying seed material.
+    - Author or publisher: Pieter Wuille
+    - Direct URL: https://bips.dev/32/
+    - Supports: The derivation of multiple related wallet keys from underlying seed material.
 
-### BIP 39: Mnemonic Code for Generating Deterministic Keys
+11. **BIP 39: Mnemonic Code for Generating Deterministic Keys**
 
-- Authors: Marek Palatinus, Pavol Rusnak, Aaron Voisine, and Sean Bowe
-- Direct URL: https://bips.dev/39/
-- Supports: Mnemonic word sequences, seed generation, and their use with deterministic wallet systems.
+    - Authors: Marek Palatinus, Pavol Rusnak, Aaron Voisine, and Sean Bowe
+    - Direct URL: https://bips.dev/39/
+    - Supports: Mnemonic word sequences, seed generation, and their use with deterministic wallet systems.
 
 ## 5. SEO title
 

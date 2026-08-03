@@ -218,53 +218,53 @@ The next guide turns from protocol mechanics to the practical habits that help p
 
 ## 4. Sources
 
-### Bitcoin Core Mainnet Consensus Parameters
+1. **Bitcoin Core Mainnet Consensus Parameters**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp
-- Supports: The mainnet subsidy-halving interval of 210,000 blocks and the separation of mainnet parameters from other Bitcoin testing networks.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp
+   - Supports: The mainnet subsidy-halving interval of 210,000 blocks and the separation of mainnet parameters from other Bitcoin testing networks.
 
-### Bitcoin Core Subsidy and Block Validation
+2. **Bitcoin Core Subsidy and Block Validation**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp
-- Supports: The initial 50 BTC subsidy, integer halving calculation, use of block height and the configured interval, zero subsidy after the effective halving range is exhausted, and validation of coinbase value against the permitted subsidy plus transaction fees.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp
+   - Supports: The initial 50 BTC subsidy, integer halving calculation, use of block height and the configured interval, zero subsidy after the effective halving range is exhausted, and validation of coinbase value against the permitted subsidy plus transaction fees.
 
-### Bitcoin Developer Guide: Block Chain
+3. **Bitcoin Developer Guide: Block Chain**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/block_chain.html
-- Supports: Coinbase transactions, block height, mining rewards, subsidy maturity context, block timing, and the role of proof of work.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/block_chain.html
+   - Supports: Coinbase transactions, block height, mining rewards, subsidy maturity context, block timing, and the role of proof of work.
 
-### Bitcoin Developer Guide: Mining
+4. **Bitcoin Developer Guide: Mining**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/mining.html
-- Supports: Candidate-block construction, coinbase transactions, transaction fees, mining work, and block submission.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/mining.html
+   - Supports: Candidate-block construction, coinbase transactions, transaction fees, mining work, and block submission.
 
-### Bitcoin: A Peer-to-Peer Electronic Cash System
+5. **Bitcoin: A Peer-to-Peer Electronic Cash System**
 
-- Author or publisher: Satoshi Nakamoto
-- Direct URL: https://bitcoin.org/bitcoin.pdf
-- Supports: The incentive model combining newly issued units and transaction fees, proof of work, and the difficulty adjustment's role in targeting a stable average block rate.
+   - Author or publisher: Satoshi Nakamoto
+   - Direct URL: https://bitcoin.org/bitcoin.pdf
+   - Supports: The incentive model combining newly issued units and transaction fees, proof of work, and the difficulty adjustment's role in targeting a stable average block rate.
 
-### Bitcoin Core Proof-of-Work Calculation
+6. **Bitcoin Core Proof-of-Work Calculation**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/pow.cpp
-- Supports: The difficulty adjustment calculation, target-timespan logic, and its separation from the block-subsidy schedule.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/pow.cpp
+   - Supports: The difficulty adjustment calculation, target-timespan logic, and its separation from the block-subsidy schedule.
 
-### Bitcoin Core Consensus Parameters
+7. **Bitcoin Core Consensus Parameters**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/consensus/params.h
-- Supports: Consensus parameter fields for subsidy-halving and proof-of-work adjustment intervals.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/consensus/params.h
+   - Supports: Consensus parameter fields for subsidy-halving and proof-of-work adjustment intervals.
 
-### BIP 42: A Finite Monetary Supply for Bitcoin
+8. **BIP 42: A Finite Monetary Supply for Bitcoin**
 
-- Author or publisher: Pieter Wuille
-- Direct URL: https://bips.dev/42/
-- Supports: The subsidy-shift correction, finite subsidy behavior, and the historical implementation issue that could otherwise have restarted issuance.
+   - Author or publisher: Pieter Wuille
+   - Direct URL: https://bips.dev/42/
+   - Supports: The subsidy-shift correction, finite subsidy behavior, and the historical implementation issue that could otherwise have restarted issuance.
 
 ## 5. SEO title
 

@@ -196,59 +196,59 @@ The next guide explains the public and private keys that the wallet ultimately d
 
 ## 4. Sources
 
-### BIP 39: Mnemonic Code for Generating Deterministic Keys
+1. **BIP 39: Mnemonic Code for Generating Deterministic Keys**
 
-- Author or publisher: Marek Palatinus, Pavol Rusnak, Aaron Voisine, and Sean Bowe
-- Direct URL: https://bips.dev/39/
-- Supports: BIP 39 entropy and checksum encoding, standard mnemonic lengths, UTF-8 NFKD normalization, optional-passphrase processing through PBKDF2 with HMAC-SHA512, and conversion into 512 bits of seed material.
+   - Author or publisher: Marek Palatinus, Pavol Rusnak, Aaron Voisine, and Sean Bowe
+   - Direct URL: https://bips.dev/39/
+   - Supports: BIP 39 entropy and checksum encoding, standard mnemonic lengths, UTF-8 NFKD normalization, optional-passphrase processing through PBKDF2 with HMAC-SHA512, and conversion into 512 bits of seed material.
 
-### BIP 32: Hierarchical Deterministic Wallets
+2. **BIP 32: Hierarchical Deterministic Wallets**
 
-- Author or publisher: Pieter Wuille
-- Direct URL: https://bips.dev/32/
-- Supports: Deriving a hierarchy of private and public keys from seed material, extended keys, hardened and non-hardened derivation, and wallet tree structure.
+   - Author or publisher: Pieter Wuille
+   - Direct URL: https://bips.dev/32/
+   - Supports: Deriving a hierarchy of private and public keys from seed material, extended keys, hardened and non-hardened derivation, and wallet tree structure.
 
-### BIP 44: Multi-Account Hierarchy for Deterministic Wallets
+3. **BIP 44: Multi-Account Hierarchy for Deterministic Wallets**
 
-- Author or publisher: Marek Palatinus and Pavol Rusnak
-- Direct URL: https://bips.dev/44/
-- Supports: One widely used account and derivation-path structure layered on hierarchical deterministic wallets.
+   - Author or publisher: Marek Palatinus and Pavol Rusnak
+   - Direct URL: https://bips.dev/44/
+   - Supports: One widely used account and derivation-path structure layered on hierarchical deterministic wallets.
 
-### BIP 84: Derivation Scheme for P2WPKH Based Accounts
+4. **BIP 84: Derivation Scheme for P2WPKH Based Accounts**
 
-- Author or publisher: Pavol Rusnak
-- Direct URL: https://bips.dev/84/
-- Supports: A script-specific derivation convention and the need for compatible wallets to scan the intended account structure.
+   - Author or publisher: Pavol Rusnak
+   - Direct URL: https://bips.dev/84/
+   - Supports: A script-specific derivation convention and the need for compatible wallets to scan the intended account structure.
 
-### BIP 86: Key Derivation for Single Key P2TR Outputs
+5. **BIP 86: Key Derivation for Single Key P2TR Outputs**
 
-- Author or publisher: Ava Chow
-- Direct URL: https://bips.dev/86/
-- Supports: A Taproot-specific derivation convention and the relationship between key derivation and output type.
+   - Author or publisher: Ava Chow
+   - Direct URL: https://bips.dev/86/
+   - Supports: A Taproot-specific derivation convention and the relationship between key derivation and output type.
 
-### BIP 380: Output Script Descriptors General Operation
+6. **BIP 380: Output Script Descriptors General Operation**
 
-- Author or publisher: Pieter Wuille and Ava Chow
-- Direct URL: https://bips.dev/380/
-- Supports: Descriptors as a way to represent script types, keys, origins, derivation paths, and recovery-relevant wallet structure.
+   - Author or publisher: Pieter Wuille and Ava Chow
+   - Direct URL: https://bips.dev/380/
+   - Supports: Descriptors as a way to represent script types, keys, origins, derivation paths, and recovery-relevant wallet structure.
 
-### BIP 129: Bitcoin Secure Multisig Setup
+7. **BIP 129: Bitcoin Secure Multisig Setup**
 
-- Author or publisher: Hugo Nguyen, Peter Gray, Marko Bencun, Aaron Chen, and Rodolfo Novak
-- Direct URL: https://bips.dev/129/
-- Supports: Multisignature setup information, wallet policy records, participant verification, and recovery information beyond one signer phrase.
+   - Author or publisher: Hugo Nguyen, Peter Gray, Marko Bencun, Aaron Chen, and Rodolfo Novak
+   - Direct URL: https://bips.dev/129/
+   - Supports: Multisignature setup information, wallet policy records, participant verification, and recovery information beyond one signer phrase.
 
-### Bitcoin Developer Guide: Wallets
+8. **Bitcoin Developer Guide: Wallets**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/wallets.html
-- Supports: Deterministic wallet concepts, wallet backups, key generation, and the difference between wallet data and Bitcoin transaction outputs.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/wallets.html
+   - Supports: Deterministic wallet concepts, wallet backups, key generation, and the difference between wallet data and Bitcoin transaction outputs.
 
-### Bitcoin Core: Managing Wallets
+9. **Bitcoin Core: Managing Wallets**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/doc/managing-wallets.md
-- Supports: Current Bitcoin Core wallet creation, loading, backup, and descriptor-wallet management behavior.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/doc/managing-wallets.md
+   - Supports: Current Bitcoin Core wallet creation, loading, backup, and descriptor-wallet management behavior.
 
 ## 5. SEO title
 

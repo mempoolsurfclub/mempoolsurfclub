@@ -166,59 +166,59 @@ The next step is to understand how that alternative developed. Bitcoin's history
 
 ## 4. Sources
 
-### Bitcoin: A Peer-to-Peer Electronic Cash System
+1. **Bitcoin: A Peer-to-Peer Electronic Cash System**
 
-- Author or publisher: Satoshi Nakamoto
-- Direct URL: https://bitcoin.org/bitcoin.pdf
-- Supports: Bitcoin's peer-to-peer payment model, reduced reliance on trusted third parties, public transaction history, proof of work, and issuance incentives.
+   - Author or publisher: Satoshi Nakamoto
+   - Direct URL: https://bitcoin.org/bitcoin.pdf
+   - Supports: Bitcoin's peer-to-peer payment model, reduced reliance on trusted third parties, public transaction history, proof of work, and issuance incentives.
 
-### Bitcoin P2P e-cash paper
+2. **Bitcoin P2P e-cash paper**
 
-- Author or publisher: Satoshi Nakamoto, Cryptography Mailing List archive
-- Direct URL: https://www.metzdowd.com/pipermail/cryptography/2008-October/014810.html
-- Supports: The original public framing of Bitcoin as a peer-to-peer electronic cash system without a trusted central party.
+   - Author or publisher: Satoshi Nakamoto, Cryptography Mailing List archive
+   - Direct URL: https://www.metzdowd.com/pipermail/cryptography/2008-October/014810.html
+   - Supports: The original public framing of Bitcoin as a peer-to-peer electronic cash system without a trusted central party.
 
-### Bitcoin Core README
+3. **Bitcoin Core README**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/README.md
-- Supports: Bitcoin Core's open-source status and role in connecting to the peer-to-peer network and fully validating blocks and transactions.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/README.md
+   - Supports: Bitcoin Core's open-source status and role in connecting to the peer-to-peer network and fully validating blocks and transactions.
 
-### Bitcoin Developer Guide: Block Chain
+4. **Bitcoin Developer Guide: Block Chain**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/block_chain.html
-- Supports: Independent validation, the block chain, transaction outputs, proof of work, confirmations, and consensus-related limits.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/block_chain.html
+   - Supports: Independent validation, the block chain, transaction outputs, proof of work, confirmations, and consensus-related limits.
 
-### Bitcoin Developer Guide: P2P Network
+5. **Bitcoin Developer Guide: P2P Network**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/p2p_network.html
-- Supports: Peer communication, transaction and block relay, and the network's distributed operating model.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/p2p_network.html
+   - Supports: Peer communication, transaction and block relay, and the network's distributed operating model.
 
-### Bitcoin Developer Guide: Transactions
+6. **Bitcoin Developer Guide: Transactions**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/transactions.html
-- Supports: Key-controlled transaction authorization, inputs, outputs, and the practical role of wallets.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/transactions.html
+   - Supports: Key-controlled transaction authorization, inputs, outputs, and the practical role of wallets.
 
-### Bitcoin Core Mainnet Consensus Parameters
+7. **Bitcoin Core Mainnet Consensus Parameters**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp
-- Supports: Bitcoin mainnet's 210,000-block subsidy-halving interval and other network consensus parameters.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp
+   - Supports: Bitcoin mainnet's 210,000-block subsidy-halving interval and other network consensus parameters.
 
-### Bitcoin Core Block Subsidy Function
+8. **Bitcoin Core Block Subsidy Function**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp
-- Supports: The initial 50 BTC block subsidy and the subsidy-halving calculation applied at each configured halving interval.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp
+   - Supports: The initial 50 BTC block subsidy and the subsidy-halving calculation applied at each configured halving interval.
 
-### Bitcoin Core Consensus Amount Definitions
+9. **Bitcoin Core Consensus Amount Definitions**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/consensus/amount.h
-- Supports: One BTC equals 100 million satoshis and Bitcoin Core's consensus-critical monetary range check. The file explicitly states that MAX_MONEY is not the total money supply.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/consensus/amount.h
+   - Supports: One BTC equals 100 million satoshis and Bitcoin Core's consensus-critical monetary range check. The file explicitly states that MAX_MONEY is not the total money supply.
 
 ## 5. SEO title
 

@@ -259,77 +259,77 @@ The next canonical guide, What Is a Bitcoin Seed Phrase?, shifts from transactio
 
 ## 4. Sources
 
-### Bitcoin: A Peer-to-Peer Electronic Cash System
+1. **Bitcoin: A Peer-to-Peer Electronic Cash System**
 
-- Author or publisher: Satoshi Nakamoto
-- Direct URL: https://bitcoin.org/bitcoin.pdf
-- Supports: The input-and-output transaction model, transaction fees as input value not assigned to outputs, public transaction ordering, and proof-of-work confirmation context.
+   - Author or publisher: Satoshi Nakamoto
+   - Direct URL: https://bitcoin.org/bitcoin.pdf
+   - Supports: The input-and-output transaction model, transaction fees as input value not assigned to outputs, public transaction ordering, and proof-of-work confirmation context.
 
-### Bitcoin Developer Guide: Transactions
+2. **Bitcoin Developer Guide: Transactions**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/transactions.html
-- Supports: UTXOs, inputs, outputs, change, signatures, transaction identifiers, transaction fees, and wallet construction behavior.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/transactions.html
+   - Supports: UTXOs, inputs, outputs, change, signatures, transaction identifiers, transaction fees, and wallet construction behavior.
 
-### Bitcoin Developer Guide: P2P Network
+3. **Bitcoin Developer Guide: P2P Network**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/p2p_network.html
-- Supports: Transaction relay, node validation, mempool admission, inventory announcements, and block propagation.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/p2p_network.html
+   - Supports: Transaction relay, node validation, mempool admission, inventory announcements, and block propagation.
 
-### BIP 141: Segregated Witness
+4. **BIP 141: Segregated Witness**
 
-- Author or publisher: Eric Lombrozo, Johnson Lau, and Pieter Wuille
-- Direct URL: https://bips.dev/141/
-- Supports: Transaction weight, virtual size, witness data, txid and wtxid distinctions, and SegWit's transaction-malleability changes.
+   - Author or publisher: Eric Lombrozo, Johnson Lau, and Pieter Wuille
+   - Direct URL: https://bips.dev/141/
+   - Supports: Transaction weight, virtual size, witness data, txid and wtxid distinctions, and SegWit's transaction-malleability changes.
 
-### BIP 125: Opt-in Full Replace-by-Fee Signaling
+5. **BIP 125: Opt-in Full Replace-by-Fee Signaling**
 
-- Author or publisher: David Harding and Peter Todd
-- Direct URL: https://bips.dev/125/
-- Supports: The historical opt-in RBF signaling and replacement-policy model. Current Bitcoin Core behavior is supported separately.
+   - Author or publisher: David Harding and Peter Todd
+   - Direct URL: https://bips.dev/125/
+   - Supports: The historical opt-in RBF signaling and replacement-policy model. Current Bitcoin Core behavior is supported separately.
 
-### Bitcoin Core 29.0 Release Notes
+6. **Bitcoin Core 29.0 Release Notes**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://bitcoincore.org/en/releases/29.0/
-- Supports: The Bitcoin Core change making full replace-by-fee standard behavior and removing the prior configuration option.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://bitcoincore.org/en/releases/29.0/
+   - Supports: The Bitcoin Core change making full replace-by-fee standard behavior and removing the prior configuration option.
 
-### Bitcoin Core 31.0 Release Notes
+7. **Bitcoin Core 31.0 Release Notes**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://bitcoincore.org/en/releases/31.0/
-- Supports: Current Bitcoin Core cluster mempool, replacement, package, and mempool-policy changes relevant to fee management.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://bitcoincore.org/en/releases/31.0/
+   - Supports: Current Bitcoin Core cluster mempool, replacement, package, and mempool-policy changes relevant to fee management.
 
-### Fee estimation
+8. **Fee estimation**
 
-- Author or publisher: Bitcoin Optech
-- Direct URL: https://bitcoinops.org/en/topics/fee-estimation/
-- Supports: Fee estimation as a probabilistic process based on block-space demand, historical behavior, and miner selection rather than a timing guarantee.
+   - Author or publisher: Bitcoin Optech
+   - Direct URL: https://bitcoinops.org/en/topics/fee-estimation/
+   - Supports: Fee estimation as a probabilistic process based on block-space demand, historical behavior, and miner selection rather than a timing guarantee.
 
-### Replace-by-fee
+9. **Replace-by-fee**
 
-- Author or publisher: Bitcoin Optech
-- Direct URL: https://bitcoinops.org/en/topics/replace-by-fee/
-- Supports: RBF design, current implementation context, wallet behavior, and replacement-policy tradeoffs.
+   - Author or publisher: Bitcoin Optech
+   - Direct URL: https://bitcoinops.org/en/topics/replace-by-fee/
+   - Supports: RBF design, current implementation context, wallet behavior, and replacement-policy tradeoffs.
 
-### Child pays for parent
+10. **Child pays for parent**
 
-- Author or publisher: Bitcoin Optech
-- Direct URL: https://bitcoinops.org/en/topics/cpfp/
-- Supports: CPFP package economics, use of spendable child outputs, and the conditions required for miners to evaluate a parent and child together.
+    - Author or publisher: Bitcoin Optech
+    - Direct URL: https://bitcoinops.org/en/topics/cpfp/
+    - Supports: CPFP package economics, use of spendable child outputs, and the conditions required for miners to evaluate a parent and child together.
 
-### Transaction pinning
+11. **Transaction pinning**
 
-- Author or publisher: Bitcoin Optech
-- Direct URL: https://bitcoinops.org/en/topics/transaction-pinning/
-- Supports: Transaction structures and policy interactions that can interfere with fee bumping, replacement, or package confirmation.
+    - Author or publisher: Bitcoin Optech
+    - Direct URL: https://bitcoinops.org/en/topics/transaction-pinning/
+    - Supports: Transaction structures and policy interactions that can interfere with fee bumping, replacement, or package confirmation.
 
-### Package relay
+12. **Package relay**
 
-- Author or publisher: Bitcoin Optech
-- Direct URL: https://bitcoinops.org/en/topics/package-relay/
-- Supports: Relay and validation of related transaction packages and the evolving policy context for unconfirmed parent-child transaction graphs.
+    - Author or publisher: Bitcoin Optech
+    - Direct URL: https://bitcoinops.org/en/topics/package-relay/
+    - Supports: Relay and validation of related transaction packages and the evolving policy context for unconfirmed parent-child transaction graphs.
 
 ## 5. SEO title
 

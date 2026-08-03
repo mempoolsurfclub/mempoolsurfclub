@@ -218,65 +218,65 @@ The next guide explains what happens after a transaction spends those outputs an
 
 ## 4. Sources
 
-### Bitcoin: A Peer-to-Peer Electronic Cash System
+1. **Bitcoin: A Peer-to-Peer Electronic Cash System**
 
-- Author or publisher: Satoshi Nakamoto
-- Direct URL: https://bitcoin.org/bitcoin.pdf
-- Supports: Bitcoin's transaction-chain model, transaction inputs and outputs, double-spend prevention, and validation without a central account database.
+   - Author or publisher: Satoshi Nakamoto
+   - Direct URL: https://bitcoin.org/bitcoin.pdf
+   - Supports: Bitcoin's transaction-chain model, transaction inputs and outputs, double-spend prevention, and validation without a central account database.
 
-### Bitcoin Developer Guide: Transactions
+2. **Bitcoin Developer Guide: Transactions**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/transactions.html
-- Supports: UTXOs, inputs, outputs, change, transaction fees, coinbase transactions, and wallet transaction construction.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/transactions.html
+   - Supports: UTXOs, inputs, outputs, change, transaction fees, coinbase transactions, and wallet transaction construction.
 
-### Bitcoin Developer Reference: Transactions
+3. **Bitcoin Developer Reference: Transactions**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/reference/transactions.html
-- Supports: Transaction serialization, outpoints, input references, output values, scripts, witness data, and coinbase transaction structure.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/reference/transactions.html
+   - Supports: Transaction serialization, outpoints, input references, output values, scripts, witness data, and coinbase transaction structure.
 
-### Bitcoin Core Coins View Interface
+4. **Bitcoin Core Coins View Interface**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/coins.h
-- Supports: Bitcoin Core's representation and access patterns for unspent transaction outputs used during validation.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/coins.h
+   - Supports: Bitcoin Core's representation and access patterns for unspent transaction outputs used during validation.
 
-### Bitcoin Core Coins View Implementation
+5. **Bitcoin Core Coins View Implementation**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/coins.cpp
-- Supports: Bitcoin Core's UTXO cache and database behavior, including adding, spending, and flushing coin records.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/coins.cpp
+   - Supports: Bitcoin Core's UTXO cache and database behavior, including adding, spending, and flushing coin records.
 
-### Bitcoin Core Consensus Constants
+6. **Bitcoin Core Consensus Constants**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/consensus/consensus.h
-- Supports: The consensus coinbase maturity constant used when validating spends of coinbase outputs.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/consensus/consensus.h
+   - Supports: The consensus coinbase maturity constant used when validating spends of coinbase outputs.
 
-### Bitcoin Core Validation
+7. **Bitcoin Core Validation**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp
-- Supports: Transaction and block validation against the coins view, input-value checks, coinbase maturity enforcement, active-chain state updates, and reorganization handling.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp
+   - Supports: Transaction and block validation against the coins view, input-value checks, coinbase maturity enforcement, active-chain state updates, and reorganization handling.
 
-### Bitcoin Core Transaction Policy
+8. **Bitcoin Core Transaction Policy**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/policy/policy.cpp
-- Supports: Dust-threshold calculations and the separation of relay or standardness policy from consensus validity.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/policy/policy.cpp
+   - Supports: Dust-threshold calculations and the separation of relay or standardness policy from consensus validity.
 
-### Bitcoin Optech: Coin Selection
+9. **Bitcoin Optech: Coin Selection**
 
-- Author or publisher: Bitcoin Optech
-- Direct URL: https://bitcoinops.org/en/topics/coin-selection/
-- Supports: Wallet coin selection, input count, change, fees, privacy considerations, consolidation, and policy-sensitive wallet behavior.
+   - Author or publisher: Bitcoin Optech
+   - Direct URL: https://bitcoinops.org/en/topics/coin-selection/
+   - Supports: Wallet coin selection, input count, change, fees, privacy considerations, consolidation, and policy-sensitive wallet behavior.
 
-### Bitcoin Developer Guide: Block Chain
+10. **Bitcoin Developer Guide: Block Chain**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/block_chain.html
-- Supports: Chain state, transaction inclusion, block validation, and the relationship between validated history and spendable outputs.
+    - Author or publisher: Bitcoin Project developer documentation
+    - Direct URL: https://developer.bitcoin.org/devguide/block_chain.html
+    - Supports: Chain state, transaction inclusion, block validation, and the relationship between validated history and spendable outputs.
 
 ## 5. SEO title
 

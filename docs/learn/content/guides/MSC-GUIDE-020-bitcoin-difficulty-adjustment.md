@@ -342,71 +342,71 @@ The next guide moves from mining into node operation and explains how a Bitcoin 
 
 ## 4. Sources
 
-### Bitcoin Core Proof-of-Work Implementation
+1. **Bitcoin Core Proof-of-Work Implementation**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/pow.cpp
-- Supports: Retarget-boundary detection, first-block lookup, actual-timespan subtraction, one-quarter and four-times clamps, target multiplication and division, proof-of-work limit, compact conversion, and hash-to-target validation.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/pow.cpp
+   - Supports: Retarget-boundary detection, first-block lookup, actual-timespan subtraction, one-quarter and four-times clamps, target multiplication and division, proof-of-work limit, compact conversion, and hash-to-target validation.
 
-### Bitcoin Core Proof-of-Work Interface
+2. **Bitcoin Core Proof-of-Work Interface**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/pow.h
-- Supports: Current proof-of-work calculation and validation interfaces used by Bitcoin Core.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/pow.h
+   - Supports: Current proof-of-work calculation and validation interfaces used by Bitcoin Core.
 
-### Bitcoin Core Consensus Parameters
+3. **Bitcoin Core Consensus Parameters**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/consensus/params.h
-- Supports: Target spacing, target timespan, difficulty-adjustment interval calculation, proof-of-work limit fields, minimum-difficulty flags, and network-specific retarget controls.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/consensus/params.h
+   - Supports: Target spacing, target timespan, difficulty-adjustment interval calculation, proof-of-work limit fields, minimum-difficulty flags, and network-specific retarget controls.
 
-### Bitcoin Core Mainnet and Testing-Network Parameters
+4. **Bitcoin Core Mainnet and Testing-Network Parameters**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp
-- Supports: Mainnet's 600-second spacing, 1,209,600-second target timespan, disabled minimum-difficulty exception, proof-of-work limit, and distinct testnet, signet, and regtest parameters.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp
+   - Supports: Mainnet's 600-second spacing, 1,209,600-second target timespan, disabled minimum-difficulty exception, proof-of-work limit, and distinct testnet, signet, and regtest parameters.
 
-### Bitcoin Core Block Header
+5. **Bitcoin Core Block Header**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/primitives/block.h
-- Supports: The `nBits` compact-target field and the other serialized block-header fields.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/primitives/block.h
+   - Supports: The `nBits` compact-target field and the other serialized block-header fields.
 
-### Bitcoin Core Arithmetic Target Encoding
+6. **Bitcoin Core Arithmetic Target Encoding**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/arith_uint256.cpp
-- Supports: `SetCompact` and `GetCompact` conversion between compact `nBits` representation and full arithmetic targets, including sign, exponent, mantissa, overflow, and rounding behavior.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/arith_uint256.cpp
+   - Supports: `SetCompact` and `GetCompact` conversion between compact `nBits` representation and full arithmetic targets, including sign, exponent, mantissa, overflow, and rounding behavior.
 
-### Bitcoin Core Chainwork Calculation
+7. **Bitcoin Core Chainwork Calculation**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/chain.cpp
-- Supports: Per-block proof calculation from target and accumulated chainwork as a concept distinct from periodic retargeting.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/chain.cpp
+   - Supports: Per-block proof calculation from target and accumulated chainwork as a concept distinct from periodic retargeting.
 
-### Bitcoin Core Proof-of-Work Tests
+8. **Bitcoin Core Proof-of-Work Tests**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/test/pow_tests.cpp
-- Supports: Current tests for retarget calculations, allowed adjustment ranges, compact targets, and network-specific proof-of-work behavior.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/test/pow_tests.cpp
+   - Supports: Current tests for retarget calculations, allowed adjustment ranges, compact targets, and network-specific proof-of-work behavior.
 
-### Bitcoin Core Validation
+9. **Bitcoin Core Validation**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp
-- Supports: Header proof-of-work checking, required-target enforcement, block-time constraints, block validation, and active-chain processing.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp
+   - Supports: Header proof-of-work checking, required-target enforcement, block-time constraints, block validation, and active-chain processing.
 
-### Bitcoin: A Peer-to-Peer Electronic Cash System
+10. **Bitcoin: A Peer-to-Peer Electronic Cash System**
 
-- Author or publisher: Satoshi Nakamoto
-- Direct URL: https://bitcoin.org/bitcoin.pdf
-- Supports: The broad design goal of adjusting proof-of-work difficulty from prior block timing to maintain an average production rate as hardware speed and participation change.
+    - Author or publisher: Satoshi Nakamoto
+    - Direct URL: https://bitcoin.org/bitcoin.pdf
+    - Supports: The broad design goal of adjusting proof-of-work difficulty from prior block timing to maintain an average production rate as hardware speed and participation change.
 
-### Bitcoin Developer Guide: Block Chain
+11. **Bitcoin Developer Guide: Block Chain**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/block_chain.html
-- Supports: Proof-of-work targets, compact target representation, block headers, cumulative work, timestamps, and general difficulty-adjustment context.
+    - Author or publisher: Bitcoin Project developer documentation
+    - Direct URL: https://developer.bitcoin.org/devguide/block_chain.html
+    - Supports: Proof-of-work targets, compact target representation, block headers, cumulative work, timestamps, and general difficulty-adjustment context.
 
 ## 5. SEO title
 

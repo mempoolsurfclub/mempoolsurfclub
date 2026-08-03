@@ -251,65 +251,65 @@ The next guide looks at privacy as another form of information security, with it
 
 ## 4. Sources
 
-### Bitcoin Developer Guide: Wallets
+1. **Bitcoin Developer Guide: Wallets**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/wallets.html
-- Supports: Wallet key management, deterministic backups, encrypted wallet files, and separation between wallet functions and Bitcoin outputs.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/wallets.html
+   - Supports: Wallet key management, deterministic backups, encrypted wallet files, and separation between wallet functions and Bitcoin outputs.
 
-### BIP 39: Mnemonic Code for Generating Deterministic Keys
+2. **BIP 39: Mnemonic Code for Generating Deterministic Keys**
 
-- Author or publisher: Marek Palatinus, Pavol Rusnak, Aaron Voisine, and Sean Bowe
-- Direct URL: https://bips.dev/39/
-- Supports: Mnemonic backups, optional passphrases, checksum behavior, and the limits of assuming universal BIP 39 compatibility.
+   - Author or publisher: Marek Palatinus, Pavol Rusnak, Aaron Voisine, and Sean Bowe
+   - Direct URL: https://bips.dev/39/
+   - Supports: Mnemonic backups, optional passphrases, checksum behavior, and the limits of assuming universal BIP 39 compatibility.
 
-### BIP 32: Hierarchical Deterministic Wallets
+3. **BIP 32: Hierarchical Deterministic Wallets**
 
-- Author or publisher: Pieter Wuille
-- Direct URL: https://bips.dev/32/
-- Supports: Hierarchical key derivation, extended keys, watch-only derivation, hardened branches, and recovery structure.
+   - Author or publisher: Pieter Wuille
+   - Direct URL: https://bips.dev/32/
+   - Supports: Hierarchical key derivation, extended keys, watch-only derivation, hardened branches, and recovery structure.
 
-### BIP 129: Bitcoin Secure Multisig Setup
+4. **BIP 129: Bitcoin Secure Multisig Setup**
 
-- Author or publisher: Hugo Nguyen, Peter Gray, Marko Bencun, Aaron Chen, and Rodolfo Novak
-- Direct URL: https://bips.dev/129/
-- Supports: Multisignature setup records, participant verification, wallet policy, and coordination information needed for reliable recovery.
+   - Author or publisher: Hugo Nguyen, Peter Gray, Marko Bencun, Aaron Chen, and Rodolfo Novak
+   - Direct URL: https://bips.dev/129/
+   - Supports: Multisignature setup records, participant verification, wallet policy, and coordination information needed for reliable recovery.
 
-### BIP 174: Partially Signed Bitcoin Transaction Format
+5. **BIP 174: Partially Signed Bitcoin Transaction Format**
 
-- Author or publisher: Andrew Chow
-- Direct URL: https://bips.dev/174/
-- Supports: Separating transaction creation, updating, signing, and finalization across devices and participants.
+   - Author or publisher: Andrew Chow
+   - Direct URL: https://bips.dev/174/
+   - Supports: Separating transaction creation, updating, signing, and finalization across devices and participants.
 
-### BIP 380: Output Script Descriptors General Operation
+6. **BIP 380: Output Script Descriptors General Operation**
 
-- Author or publisher: Pieter Wuille and Ava Chow
-- Direct URL: https://bips.dev/380/
-- Supports: Describing wallet scripts, keys, origins, and derivation paths for coordination and recovery.
+   - Author or publisher: Pieter Wuille and Ava Chow
+   - Direct URL: https://bips.dev/380/
+   - Supports: Describing wallet scripts, keys, origins, and derivation paths for coordination and recovery.
 
-### Bitcoin Core: Managing Wallets
+7. **Bitcoin Core: Managing Wallets**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/doc/managing-wallets.md
-- Supports: Bitcoin Core wallet creation, loading, backups, descriptor wallets, and wallet-management behavior.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/doc/managing-wallets.md
+   - Supports: Bitcoin Core wallet creation, loading, backups, descriptor wallets, and wallet-management behavior.
 
-### Bitcoin Core Binary Verification
+8. **Bitcoin Core Binary Verification**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/contrib/verify-binaries/README.md
-- Supports: Project-supported methods for checking downloaded Bitcoin Core release artifacts and signatures.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/contrib/verify-binaries/README.md
+   - Supports: Project-supported methods for checking downloaded Bitcoin Core release artifacts and signatures.
 
-### Bitcoin Core Downloads
+9. **Bitcoin Core Downloads**
 
-- Author or publisher: Bitcoin Core project
-- Direct URL: https://bitcoincore.org/en/download/
-- Supports: The official Bitcoin Core release channel, published checksums, signatures, and current release-verification references.
+   - Author or publisher: Bitcoin Core project
+   - Direct URL: https://bitcoincore.org/en/download/
+   - Supports: The official Bitcoin Core release channel, published checksums, signatures, and current release-verification references.
 
-### BIP 21: URI Scheme
+10. **BIP 21: URI Scheme**
 
-- Author or publisher: Nils Schneider and Matt Corallo
-- Direct URL: https://bips.dev/21/
-- Supports: The Bitcoin payment URI structure for an address, optional amount, label, message, and extensible parameters.
+    - Author or publisher: Nils Schneider and Matt Corallo
+    - Direct URL: https://bips.dev/21/
+    - Supports: The Bitcoin payment URI structure for an address, optional amount, label, message, and extensible parameters.
 
 ## 5. SEO title
 

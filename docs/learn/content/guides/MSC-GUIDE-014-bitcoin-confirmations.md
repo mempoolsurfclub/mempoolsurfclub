@@ -215,53 +215,53 @@ Bitcoin confirmations provide increasing technical settlement assurance within B
 
 ## 4. Sources
 
-### Bitcoin: A Peer-to-Peer Electronic Cash System
+1. **Bitcoin: A Peer-to-Peer Electronic Cash System**
 
-- Author or publisher: Satoshi Nakamoto
-- Direct URL: https://bitcoin.org/bitcoin.pdf
-- Supports: Proof-of-work chain selection, cumulative work, transaction ordering, the probability framing for replacing deeper history, and the long-run block-production target.
+   - Author or publisher: Satoshi Nakamoto
+   - Direct URL: https://bitcoin.org/bitcoin.pdf
+   - Supports: Proof-of-work chain selection, cumulative work, transaction ordering, the probability framing for replacing deeper history, and the long-run block-production target.
 
-### Bitcoin Developer Guide: Block Chain
+2. **Bitcoin Developer Guide: Block Chain**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/block_chain.html
-- Supports: Independent block validation, competing chain tips, active-chain selection, confirmations, stale blocks, and chain reorganizations.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/block_chain.html
+   - Supports: Independent block validation, competing chain tips, active-chain selection, confirmations, stale blocks, and chain reorganizations.
 
-### Bitcoin Developer Guide: Transactions
+3. **Bitcoin Developer Guide: Transactions**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/transactions.html
-- Supports: Transaction inputs, outputs, conflicts, transaction identifiers, and the distinction between transaction validity and block confirmation.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/transactions.html
+   - Supports: Transaction inputs, outputs, conflicts, transaction identifiers, and the distinction between transaction validity and block confirmation.
 
-### Bitcoin Developer Guide: P2P Network
+4. **Bitcoin Developer Guide: P2P Network**
 
-- Author or publisher: Bitcoin Project developer documentation
-- Direct URL: https://developer.bitcoin.org/devguide/p2p_network.html
-- Supports: Peer-to-peer transaction and block propagation, node-local network views, and the separation between relay and chain inclusion.
+   - Author or publisher: Bitcoin Project developer documentation
+   - Direct URL: https://developer.bitcoin.org/devguide/p2p_network.html
+   - Supports: Peer-to-peer transaction and block propagation, node-local network views, and the separation between relay and chain inclusion.
 
-### Bitcoin Core Chain Data Structures
+5. **Bitcoin Core Chain Data Structures**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/chain.h
-- Supports: Block indexes, block height, chain work, active-chain ancestry, and the data used to compare valid chain candidates.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/chain.h
+   - Supports: Block indexes, block height, chain work, active-chain ancestry, and the data used to compare valid chain candidates.
 
-### Bitcoin Core Validation
+6. **Bitcoin Core Validation**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp
-- Supports: Block and transaction validation, active-chain connection and disconnection, chain-tip activation, transaction conflict handling, and reorganization processing.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp
+   - Supports: Block and transaction validation, active-chain connection and disconnection, chain-tip activation, transaction conflict handling, and reorganization processing.
 
-### Bitcoin Core Mempool Implementation
+7. **Bitcoin Core Mempool Implementation**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/txmempool.cpp
-- Supports: Node-local mempool storage, transaction removal, conflicts, and mempool updates during chain changes.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/txmempool.cpp
+   - Supports: Node-local mempool storage, transaction removal, conflicts, and mempool updates during chain changes.
 
-### BIP 125: Opt-in Full Replace-by-Fee Signaling
+8. **BIP 125: Opt-in Full Replace-by-Fee Signaling**
 
-- Author or publisher: David A. Harding and Peter Todd
-- Direct URL: https://bips.dev/125/
-- Supports: The documented opt-in replacement model and why replacement and conflicting transactions matter before confirmation.
+   - Author or publisher: David A. Harding and Peter Todd
+   - Direct URL: https://bips.dev/125/
+   - Supports: The documented opt-in replacement model and why replacement and conflicting transactions matter before confirmation.
 
 ## 5. SEO title
 

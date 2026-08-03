@@ -169,101 +169,101 @@ The next guide narrows the focus to Satoshi Nakamoto. It examines the documented
 
 ## 4. Sources
 
-### Bitcoin: A Peer-to-Peer Electronic Cash System
+1. **Bitcoin: A Peer-to-Peer Electronic Cash System**
 
-- Author or publisher: Satoshi Nakamoto
-- Direct URL: https://bitcoin.org/bitcoin.pdf
-- Supports: Bitcoin's technical foundations and its direct references to earlier work on b-money, Hashcash, and timestamping.
+   - Author or publisher: Satoshi Nakamoto
+   - Direct URL: https://bitcoin.org/bitcoin.pdf
+   - Supports: Bitcoin's technical foundations and its direct references to earlier work on b-money, Hashcash, and timestamping.
 
-### Blind Signatures for Untraceable Payments
+2. **Blind Signatures for Untraceable Payments**
 
-- Author or publisher: David Chaum, Springer
-- Direct URL: https://link.springer.com/chapter/10.1007/978-1-4757-0602-4_18
-- Supports: Chaum's blind-signature design for private electronic payments and the issuing-institution model described in the Before Bitcoin section.
+   - Author or publisher: David Chaum, Springer
+   - Direct URL: https://link.springer.com/chapter/10.1007/978-1-4757-0602-4_18
+   - Supports: Chaum's blind-signature design for private electronic payments and the issuing-institution model described in the Before Bitcoin section.
 
-### Hashcash - A Denial of Service Counter-Measure
+3. **Hashcash - A Denial of Service Counter-Measure**
 
-- Author or publisher: Adam Back, Satoshi Nakamoto Institute archive
-- Direct URL: https://nakamotoinstitute.org/library/hashcash/
-- Supports: Back's Hashcash proof-of-work system and its purpose of limiting email spam, denial-of-service attacks, and other network abuse.
+   - Author or publisher: Adam Back, Satoshi Nakamoto Institute archive
+   - Direct URL: https://nakamotoinstitute.org/library/hashcash/
+   - Supports: Back's Hashcash proof-of-work system and its purpose of limiting email spam, denial-of-service attacks, and other network abuse.
 
-### b-money
+4. **b-money**
 
-- Author or publisher: Wei Dai, Satoshi Nakamoto Institute archive
-- Direct URL: https://nakamotoinstitute.org/library/b-money/
-- Supports: Dai's proposal for distributed electronic money using pseudonymous participants, signed transfers, distributed account records, and computational money creation.
+   - Author or publisher: Wei Dai, Satoshi Nakamoto Institute archive
+   - Direct URL: https://nakamotoinstitute.org/library/b-money/
+   - Supports: Dai's proposal for distributed electronic money using pseudonymous participants, signed transfers, distributed account records, and computational money creation.
 
-### Bit gold
+5. **Bit gold**
 
-- Author or publisher: Nick Szabo
-- Direct URL: https://unenumerated.blogspot.com/2005/12/bit-gold.html
-- Supports: Szabo's proposal for scarce digital value using proof of work, timestamping, and a distributed title registry.
+   - Author or publisher: Nick Szabo
+   - Direct URL: https://unenumerated.blogspot.com/2005/12/bit-gold.html
+   - Supports: Szabo's proposal for scarce digital value using proof of work, timestamping, and a distributed title registry.
 
-### Bitcoin P2P e-cash paper
+6. **Bitcoin P2P e-cash paper**
 
-- Author or publisher: Satoshi Nakamoto, Cryptography Mailing List archive
-- Direct URL: https://www.metzdowd.com/pipermail/cryptography/2008-October/014810.html
-- Supports: The October 31, 2008 public announcement of the Bitcoin white paper.
+   - Author or publisher: Satoshi Nakamoto, Cryptography Mailing List archive
+   - Direct URL: https://www.metzdowd.com/pipermail/cryptography/2008-October/014810.html
+   - Supports: The October 31, 2008 public announcement of the Bitcoin white paper.
 
-### Bitcoin v0.1 released
+7. **Bitcoin v0.1 released**
 
-- Author or publisher: Satoshi Nakamoto, Cryptography Mailing List archive
-- Direct URL: https://www.metzdowd.com/pipermail/cryptography/2009-January/014994.html
-- Supports: The January 2009 release of the first public Bitcoin software and its early operating description.
+   - Author or publisher: Satoshi Nakamoto, Cryptography Mailing List archive
+   - Direct URL: https://www.metzdowd.com/pipermail/cryptography/2009-January/014994.html
+   - Supports: The January 2009 release of the first public Bitcoin software and its early operating description.
 
-### Bitcoin Core Mainnet Consensus Parameters
+8. **Bitcoin Core Mainnet Consensus Parameters**
 
-- Author or publisher: Bitcoin Core developers
-- Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp
-- Supports: The genesis block construction, timestamp, embedded newspaper text, and mainnet consensus parameters.
+   - Author or publisher: Bitcoin Core developers
+   - Direct URL: https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp
+   - Supports: The genesis block construction, timestamp, embedded newspaper text, and mainnet consensus parameters.
 
-### Bitcoin and me
+9. **Bitcoin and me**
 
-- Author or publisher: Hal Finney, Satoshi Nakamoto Institute archive of the original BitcoinTalk post
-- Direct URL: https://nakamotoinstitute.org/library/bitcoin-and-me/
-- Supports: Finney's account of running the early Bitcoin software, receiving a ten-bitcoin test transaction from Satoshi, and reporting bugs.
+   - Author or publisher: Hal Finney, Satoshi Nakamoto Institute archive of the original BitcoinTalk post
+   - Direct URL: https://nakamotoinstitute.org/library/bitcoin-and-me/
+   - Supports: Finney's account of running the early Bitcoin software, receiving a ten-bitcoin test transaction from Satoshi, and reporting bugs.
 
-### Pizza for bitcoins?
+10. **Pizza for bitcoins?**
 
-- Author or publisher: Laszlo Hanyecz and BitcoinTalk participants
-- Direct URL: https://bitcointalk.org/index.php?topic=137.0
-- Supports: The original May 2010 forum offer and discussion that became known as the Bitcoin pizza transaction.
+    - Author or publisher: Laszlo Hanyecz and BitcoinTalk participants
+    - Direct URL: https://bitcointalk.org/index.php?topic=137.0
+    - Supports: The original May 2010 forum offer and discussion that became known as the Bitcoin pizza transaction.
 
-### BIP 16: Pay to Script Hash
+11. **BIP 16: Pay to Script Hash**
 
-- Author or publisher: Gavin Andresen, Bitcoin Improvement Proposals
-- Direct URL: https://bips.dev/16/
-- Supports: The design and historical context of Pay to Script Hash.
+    - Author or publisher: Gavin Andresen, Bitcoin Improvement Proposals
+    - Direct URL: https://bips.dev/16/
+    - Supports: The design and historical context of Pay to Script Hash.
 
-### BIP 141: Segregated Witness
+12. **BIP 141: Segregated Witness**
 
-- Author or publisher: Eric Lombrozo, Johnson Lau, and Pieter Wuille, Bitcoin Improvement Proposals
-- Direct URL: https://bips.dev/141/
-- Supports: SegWit's consensus design, witness structure, transaction malleability changes, and block weight.
+    - Author or publisher: Eric Lombrozo, Johnson Lau, and Pieter Wuille, Bitcoin Improvement Proposals
+    - Direct URL: https://bips.dev/141/
+    - Supports: SegWit's consensus design, witness structure, transaction malleability changes, and block weight.
 
-### Segregated witness
+13. **Segregated witness**
 
-- Author or publisher: Bitcoin Optech
-- Direct URL: https://bitcoinops.org/en/topics/segregated-witness/
-- Supports: SegWit's activation in 2017 and its technical deployment history.
+    - Author or publisher: Bitcoin Optech
+    - Direct URL: https://bitcoinops.org/en/topics/segregated-witness/
+    - Supports: SegWit's activation in 2017 and its technical deployment history.
 
-### BIP 341: Taproot
+14. **BIP 341: Taproot**
 
-- Author or publisher: Pieter Wuille, Jonas Nick, and Anthony Towns, Bitcoin Improvement Proposals
-- Direct URL: https://bips.dev/341/
-- Supports: Taproot's consensus design, Schnorr-based key-path spending, and script-path structure.
+    - Author or publisher: Pieter Wuille, Jonas Nick, and Anthony Towns, Bitcoin Improvement Proposals
+    - Direct URL: https://bips.dev/341/
+    - Supports: Taproot's consensus design, Schnorr-based key-path spending, and script-path structure.
 
-### Bitcoin Optech Newsletter #175
+15. **Bitcoin Optech Newsletter #175**
 
-- Author or publisher: Bitcoin Optech
-- Direct URL: https://bitcoinops.org/en/newsletters/2021/11/17/
-- Supports: Taproot's activation at block height 709,632 in November 2021.
+    - Author or publisher: Bitcoin Optech
+    - Direct URL: https://bitcoinops.org/en/newsletters/2021/11/17/
+    - Supports: Taproot's activation at block height 709,632 in November 2021.
 
-### Bitcoin Core source repository
+16. **Bitcoin Core source repository**
 
-- Author or publisher: Bitcoin Core contributors
-- Direct URL: https://github.com/bitcoin/bitcoin
-- Supports: The continuing open-source software lineage, public contribution history, releases, and distributed maintenance of Bitcoin Core.
+    - Author or publisher: Bitcoin Core contributors
+    - Direct URL: https://github.com/bitcoin/bitcoin
+    - Supports: The continuing open-source software lineage, public contribution history, releases, and distributed maintenance of Bitcoin Core.
 
 ## 5. SEO title
 
