@@ -25,7 +25,7 @@ on:
       - '.github/workflows/learn-validation.yml'
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: learn-validation-${{ github.workflow }}-${{ github.ref }}
@@ -38,11 +38,8 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - name: Check out PR head branch
+      - name: Check out repository
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -61,26 +58,6 @@ jobs:
 
       - name: Test Learn runtime contract
         run: npm run test:learn-runtime-contract
-
-      - name: Restore approved workflow content for deterministic report hashing
-        run: git show 8b44acbd6e4a281ec45c695017406625e61298df:.github/workflows/learn-validation.yml > .github/workflows/learn-validation.yml
-
-      - name: Materialize zero-blocker compatibility report
-        run: npm run materialize:learn-runtime-audit
-
-      - name: Commit regenerated compatibility report when changed
-        env:
-          HEAD_BRANCH: ${{ github.event.pull_request.head.ref }}
-        run: |
-          if git diff --quiet -- docs/learn/runtime/reports/package-compatibility.json; then
-            echo "Compatibility report is already current."
-          else
-            git add docs/learn/runtime/reports/package-compatibility.json
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git commit -m "build: synchronize zero-blocker audit contract hashes"
-            git push origin HEAD:"${HEAD_BRANCH}"
-          fi
 
       - name: Audit all 92 Learn runtime packages
         run: npm run audit:learn-runtime
