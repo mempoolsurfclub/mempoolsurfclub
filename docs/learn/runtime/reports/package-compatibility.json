@@ -1,8 +1,8 @@
 {
   "compatibility_categories": {
-    "BLOCKED": 21,
+    "BLOCKED": 0,
     "COMPATIBLE": 0,
-    "COMPATIBLE_WITH_ROLE_ADAPTER": 71
+    "COMPATIBLE_WITH_ROLE_ADAPTER": 92
   },
   "global_blocking_incompatibilities": [],
   "packages": [
@@ -1913,11 +1913,8 @@
       ]
     },
     {
-      "blocking_incompatibilities": [
-        "Unsupported Markdown construct active-plain-url (11)",
-        "Unsupported Markdown construct unqualified-source-reference (11)"
-      ],
-      "compatibility": "BLOCKED",
+      "blocking_incompatibilities": [],
+      "compatibility": "COMPATIBLE_WITH_ROLE_ADAPTER",
       "h1_agreement": {
         "agrees": true,
         "values": {
@@ -1933,32 +1930,33 @@
         "heading_depths": {
           "1": 1,
           "2": 12,
-          "3": 26
+          "3": 15
         },
         "human_verification_sections": 1,
         "illustration_briefs": 3,
-        "indented_structured_list_lines": 3,
+        "indented_structured_list_lines": 37,
         "inert_fenced_code_blocks": [],
         "inline_code": 1,
         "numbered_destination_sections": 12,
-        "ordered_lists": 10,
+        "ordered_lists": 21,
         "paragraphs": true,
         "role_specific": {
-          "article-subsections": 26
+          "article-subsections": 15
         },
         "semantic_tables": [],
-        "strong_text": 12,
+        "strong_text": 23,
         "structured_key_terms": 0,
-        "structured_sources": 0,
+        "structured_sources": 11,
         "unordered_lists": 101
       },
       "non_blocking_observations": [
-        "Contains 3 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 37 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 11 validated structured source reference(s) (plain-url: 11); the future adapter must preserve them as inert reference data and escape them rather than render active links.",
         "Contains role-specific records requiring the documented page-role adapter.",
         "Registry workflow status remains PLANNED; package and manifest editorial status are COPY_LOCKED."
       ],
       "package_path": "docs/learn/content/guides/MSC-GUIDE-001-what-is-bitcoin.md",
-      "package_sha256": "2f1a5e00965c411f10aaa790fa092b5e2064254ca42cf77e017a7f7127c08407",
+      "package_sha256": "bcc1447513b3992498138cd5dda8d2cc6c46d1c42da739304baec7a46f67e868",
       "package_status": "COPY_LOCKED",
       "page_role": "topic-guide",
       "planning_handle_agreement": {
@@ -2030,97 +2028,130 @@
         }
       },
       "source_references_detected": {
-        "structured": [],
-        "unqualified": [
+        "structured": [
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoin.org/bitcoin.pdf",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-001-what-is-bitcoin.md",
+            "record_number": 1,
+            "record_order": 1,
             "registry_id": "MSC-GUIDE-001",
             "representation": "plain-url",
             "source_line": 172,
             "source_order": 1
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://www.metzdowd.com/pipermail/cryptography/2008-October/014810.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-001-what-is-bitcoin.md",
+            "record_number": 2,
+            "record_order": 2,
             "registry_id": "MSC-GUIDE-001",
             "representation": "plain-url",
             "source_line": 179,
             "source_order": 2
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/README.md",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-001-what-is-bitcoin.md",
+            "record_number": 3,
+            "record_order": 3,
             "registry_id": "MSC-GUIDE-001",
             "representation": "plain-url",
             "source_line": 185,
             "source_order": 3
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/block_chain.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-001-what-is-bitcoin.md",
+            "record_number": 4,
+            "record_order": 4,
             "registry_id": "MSC-GUIDE-001",
             "representation": "plain-url",
             "source_line": 191,
             "source_order": 4
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/transactions.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-001-what-is-bitcoin.md",
+            "record_number": 5,
+            "record_order": 5,
             "registry_id": "MSC-GUIDE-001",
             "representation": "plain-url",
             "source_line": 197,
             "source_order": 5
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/p2p_network.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-001-what-is-bitcoin.md",
+            "record_number": 6,
+            "record_order": 6,
             "registry_id": "MSC-GUIDE-001",
             "representation": "plain-url",
             "source_line": 203,
             "source_order": 6
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/consensus/amount.h",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-001-what-is-bitcoin.md",
+            "record_number": 7,
+            "record_order": 7,
             "registry_id": "MSC-GUIDE-001",
             "representation": "plain-url",
             "source_line": 209,
             "source_order": 7
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-001-what-is-bitcoin.md",
+            "record_number": 8,
+            "record_order": 8,
             "registry_id": "MSC-GUIDE-001",
             "representation": "plain-url",
             "source_line": 215,
             "source_order": 8
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-001-what-is-bitcoin.md",
+            "record_number": 9,
+            "record_order": 9,
             "registry_id": "MSC-GUIDE-001",
             "representation": "plain-url",
             "source_line": 221,
             "source_order": 9
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/32/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-001-what-is-bitcoin.md",
+            "record_number": 10,
+            "record_order": 10,
             "registry_id": "MSC-GUIDE-001",
             "representation": "plain-url",
             "source_line": 227,
             "source_order": 10
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/39/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-001-what-is-bitcoin.md",
+            "record_number": 11,
+            "record_order": 11,
             "registry_id": "MSC-GUIDE-001",
             "representation": "plain-url",
             "source_line": 233,
             "source_order": 11
           }
-        ]
+        ],
+        "unqualified": []
       },
       "status_agreement": {
         "agrees": true,
@@ -2131,48 +2162,20 @@
       },
       "unsupported_constructs_detected": [
         {
-          "blocking": true,
+          "blocking": false,
           "count": 11,
           "examples": [
             "https://bitcoin.org/bitcoin.pdf",
             "https://www.metzdowd.com/pipermail/cryptography/2008-October/014810.html",
             "https://github.com/bitcoin/bitcoin/blob/master/README.md"
           ],
-          "type": "active-plain-url"
-        },
-        {
-          "blocking": true,
-          "count": 11,
-          "examples": [
-            {
-              "normalized_reference": "https://bitcoin.org/bitcoin.pdf",
-              "representation": "plain-url",
-              "source_line": 172,
-              "source_order": 1
-            },
-            {
-              "normalized_reference": "https://www.metzdowd.com/pipermail/cryptography/2008-October/014810.html",
-              "representation": "plain-url",
-              "source_line": 179,
-              "source_order": 2
-            },
-            {
-              "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/README.md",
-              "representation": "plain-url",
-              "source_line": 185,
-              "source_order": 3
-            }
-          ],
-          "type": "unqualified-source-reference"
+          "type": "source-plain-url"
         }
       ]
     },
     {
-      "blocking_incompatibilities": [
-        "Unsupported Markdown construct active-plain-url (9)",
-        "Unsupported Markdown construct unqualified-source-reference (9)"
-      ],
-      "compatibility": "BLOCKED",
+      "blocking_incompatibilities": [],
+      "compatibility": "COMPATIBLE_WITH_ROLE_ADAPTER",
       "h1_agreement": {
         "agrees": true,
         "values": {
@@ -2188,32 +2191,33 @@
         "heading_depths": {
           "1": 1,
           "2": 12,
-          "3": 25
+          "3": 16
         },
         "human_verification_sections": 1,
         "illustration_briefs": 3,
-        "indented_structured_list_lines": 3,
+        "indented_structured_list_lines": 30,
         "inert_fenced_code_blocks": [],
         "inline_code": 0,
         "numbered_destination_sections": 12,
-        "ordered_lists": 0,
+        "ordered_lists": 9,
         "paragraphs": true,
         "role_specific": {
-          "article-subsections": 25
+          "article-subsections": 16
         },
         "semantic_tables": [],
-        "strong_text": 6,
+        "strong_text": 15,
         "structured_key_terms": 0,
-        "structured_sources": 0,
+        "structured_sources": 9,
         "unordered_lists": 84
       },
       "non_blocking_observations": [
-        "Contains 3 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 30 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 9 validated structured source reference(s) (plain-url: 9); the future adapter must preserve them as inert reference data and escape them rather than render active links.",
         "Contains role-specific records requiring the documented page-role adapter.",
         "Registry workflow status remains PLANNED; package and manifest editorial status are COPY_LOCKED."
       ],
       "package_path": "docs/learn/content/guides/MSC-GUIDE-002-why-bitcoin.md",
-      "package_sha256": "c9405cdb5dd6010247803f16ea84d803fe695359e2d0b6d9295da0aed57b1d13",
+      "package_sha256": "be14ee3143dd294d374b725e6fe368ebba3ce55b93ed047b1495f74c4029f300",
       "package_status": "COPY_LOCKED",
       "page_role": "topic-guide",
       "planning_handle_agreement": {
@@ -2285,81 +2289,108 @@
         }
       },
       "source_references_detected": {
-        "structured": [],
-        "unqualified": [
+        "structured": [
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoin.org/bitcoin.pdf",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-002-why-bitcoin.md",
+            "record_number": 1,
+            "record_order": 1,
             "registry_id": "MSC-GUIDE-002",
             "representation": "plain-url",
             "source_line": 155,
             "source_order": 1
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://www.metzdowd.com/pipermail/cryptography/2008-October/014810.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-002-why-bitcoin.md",
+            "record_number": 2,
+            "record_order": 2,
             "registry_id": "MSC-GUIDE-002",
             "representation": "plain-url",
             "source_line": 161,
             "source_order": 2
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/README.md",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-002-why-bitcoin.md",
+            "record_number": 3,
+            "record_order": 3,
             "registry_id": "MSC-GUIDE-002",
             "representation": "plain-url",
             "source_line": 167,
             "source_order": 3
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/block_chain.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-002-why-bitcoin.md",
+            "record_number": 4,
+            "record_order": 4,
             "registry_id": "MSC-GUIDE-002",
             "representation": "plain-url",
             "source_line": 173,
             "source_order": 4
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/p2p_network.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-002-why-bitcoin.md",
+            "record_number": 5,
+            "record_order": 5,
             "registry_id": "MSC-GUIDE-002",
             "representation": "plain-url",
             "source_line": 179,
             "source_order": 5
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/transactions.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-002-why-bitcoin.md",
+            "record_number": 6,
+            "record_order": 6,
             "registry_id": "MSC-GUIDE-002",
             "representation": "plain-url",
             "source_line": 185,
             "source_order": 6
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-002-why-bitcoin.md",
+            "record_number": 7,
+            "record_order": 7,
             "registry_id": "MSC-GUIDE-002",
             "representation": "plain-url",
             "source_line": 191,
             "source_order": 7
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-002-why-bitcoin.md",
+            "record_number": 8,
+            "record_order": 8,
             "registry_id": "MSC-GUIDE-002",
             "representation": "plain-url",
             "source_line": 197,
             "source_order": 8
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/consensus/amount.h",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-002-why-bitcoin.md",
+            "record_number": 9,
+            "record_order": 9,
             "registry_id": "MSC-GUIDE-002",
             "representation": "plain-url",
             "source_line": 203,
             "source_order": 9
           }
-        ]
+        ],
+        "unqualified": []
       },
       "status_agreement": {
         "agrees": true,
@@ -2370,48 +2401,20 @@
       },
       "unsupported_constructs_detected": [
         {
-          "blocking": true,
+          "blocking": false,
           "count": 9,
           "examples": [
             "https://bitcoin.org/bitcoin.pdf",
             "https://www.metzdowd.com/pipermail/cryptography/2008-October/014810.html",
             "https://github.com/bitcoin/bitcoin/blob/master/README.md"
           ],
-          "type": "active-plain-url"
-        },
-        {
-          "blocking": true,
-          "count": 9,
-          "examples": [
-            {
-              "normalized_reference": "https://bitcoin.org/bitcoin.pdf",
-              "representation": "plain-url",
-              "source_line": 155,
-              "source_order": 1
-            },
-            {
-              "normalized_reference": "https://www.metzdowd.com/pipermail/cryptography/2008-October/014810.html",
-              "representation": "plain-url",
-              "source_line": 161,
-              "source_order": 2
-            },
-            {
-              "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/README.md",
-              "representation": "plain-url",
-              "source_line": 167,
-              "source_order": 3
-            }
-          ],
-          "type": "unqualified-source-reference"
+          "type": "source-plain-url"
         }
       ]
     },
     {
-      "blocking_incompatibilities": [
-        "Unsupported Markdown construct active-plain-url (16)",
-        "Unsupported Markdown construct unqualified-source-reference (16)"
-      ],
-      "compatibility": "BLOCKED",
+      "blocking_incompatibilities": [],
+      "compatibility": "COMPATIBLE_WITH_ROLE_ADAPTER",
       "h1_agreement": {
         "agrees": true,
         "values": {
@@ -2427,32 +2430,33 @@
         "heading_depths": {
           "1": 1,
           "2": 12,
-          "3": 31
+          "3": 15
         },
         "human_verification_sections": 1,
         "illustration_briefs": 3,
-        "indented_structured_list_lines": 3,
+        "indented_structured_list_lines": 51,
         "inert_fenced_code_blocks": [],
         "inline_code": 0,
         "numbered_destination_sections": 12,
-        "ordered_lists": 4,
+        "ordered_lists": 20,
         "paragraphs": true,
         "role_specific": {
-          "article-subsections": 31
+          "article-subsections": 15
         },
         "semantic_tables": [],
-        "strong_text": 6,
+        "strong_text": 22,
         "structured_key_terms": 0,
-        "structured_sources": 0,
+        "structured_sources": 16,
         "unordered_lists": 109
       },
       "non_blocking_observations": [
-        "Contains 3 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 51 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 16 validated structured source reference(s) (plain-url: 16); the future adapter must preserve them as inert reference data and escape them rather than render active links.",
         "Contains role-specific records requiring the documented page-role adapter.",
         "Registry workflow status remains PLANNED; package and manifest editorial status are COPY_LOCKED."
       ],
       "package_path": "docs/learn/content/guides/MSC-GUIDE-003-bitcoin-history.md",
-      "package_sha256": "c35f64eda9a7290d4b84d8e70ec566efdbf3141f888e219414c1c2965b88d816",
+      "package_sha256": "4849c95ce89b84aecd1fa3463ab7744531cbec6e072cf72a0564df5cba8aed6c",
       "package_status": "COPY_LOCKED",
       "page_role": "topic-guide",
       "planning_handle_agreement": {
@@ -2524,137 +2528,185 @@
         }
       },
       "source_references_detected": {
-        "structured": [],
-        "unqualified": [
+        "structured": [
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoin.org/bitcoin.pdf",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-003-bitcoin-history.md",
+            "record_number": 1,
+            "record_order": 1,
             "registry_id": "MSC-GUIDE-003",
             "representation": "plain-url",
             "source_line": 158,
             "source_order": 1
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://link.springer.com/chapter/10.1007/978-1-4757-0602-4_18",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-003-bitcoin-history.md",
+            "record_number": 2,
+            "record_order": 2,
             "registry_id": "MSC-GUIDE-003",
             "representation": "plain-url",
             "source_line": 164,
             "source_order": 2
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://nakamotoinstitute.org/library/hashcash/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-003-bitcoin-history.md",
+            "record_number": 3,
+            "record_order": 3,
             "registry_id": "MSC-GUIDE-003",
             "representation": "plain-url",
             "source_line": 170,
             "source_order": 3
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://nakamotoinstitute.org/library/b-money/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-003-bitcoin-history.md",
+            "record_number": 4,
+            "record_order": 4,
             "registry_id": "MSC-GUIDE-003",
             "representation": "plain-url",
             "source_line": 176,
             "source_order": 4
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://unenumerated.blogspot.com/2005/12/bit-gold.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-003-bitcoin-history.md",
+            "record_number": 5,
+            "record_order": 5,
             "registry_id": "MSC-GUIDE-003",
             "representation": "plain-url",
             "source_line": 182,
             "source_order": 5
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://www.metzdowd.com/pipermail/cryptography/2008-October/014810.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-003-bitcoin-history.md",
+            "record_number": 6,
+            "record_order": 6,
             "registry_id": "MSC-GUIDE-003",
             "representation": "plain-url",
             "source_line": 188,
             "source_order": 6
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://www.metzdowd.com/pipermail/cryptography/2009-January/014994.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-003-bitcoin-history.md",
+            "record_number": 7,
+            "record_order": 7,
             "registry_id": "MSC-GUIDE-003",
             "representation": "plain-url",
             "source_line": 194,
             "source_order": 7
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-003-bitcoin-history.md",
+            "record_number": 8,
+            "record_order": 8,
             "registry_id": "MSC-GUIDE-003",
             "representation": "plain-url",
             "source_line": 200,
             "source_order": 8
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://nakamotoinstitute.org/library/bitcoin-and-me/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-003-bitcoin-history.md",
+            "record_number": 9,
+            "record_order": 9,
             "registry_id": "MSC-GUIDE-003",
             "representation": "plain-url",
             "source_line": 206,
             "source_order": 9
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcointalk.org/index.php?topic=137.0",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-003-bitcoin-history.md",
+            "record_number": 10,
+            "record_order": 10,
             "registry_id": "MSC-GUIDE-003",
             "representation": "plain-url",
             "source_line": 212,
             "source_order": 10
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/16/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-003-bitcoin-history.md",
+            "record_number": 11,
+            "record_order": 11,
             "registry_id": "MSC-GUIDE-003",
             "representation": "plain-url",
             "source_line": 218,
             "source_order": 11
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/141/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-003-bitcoin-history.md",
+            "record_number": 12,
+            "record_order": 12,
             "registry_id": "MSC-GUIDE-003",
             "representation": "plain-url",
             "source_line": 224,
             "source_order": 12
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoinops.org/en/topics/segregated-witness/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-003-bitcoin-history.md",
+            "record_number": 13,
+            "record_order": 13,
             "registry_id": "MSC-GUIDE-003",
             "representation": "plain-url",
             "source_line": 230,
             "source_order": 13
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/341/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-003-bitcoin-history.md",
+            "record_number": 14,
+            "record_order": 14,
             "registry_id": "MSC-GUIDE-003",
             "representation": "plain-url",
             "source_line": 236,
             "source_order": 14
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoinops.org/en/newsletters/2021/11/17/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-003-bitcoin-history.md",
+            "record_number": 15,
+            "record_order": 15,
             "registry_id": "MSC-GUIDE-003",
             "representation": "plain-url",
             "source_line": 242,
             "source_order": 15
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-003-bitcoin-history.md",
+            "record_number": 16,
+            "record_order": 16,
             "registry_id": "MSC-GUIDE-003",
             "representation": "plain-url",
             "source_line": 248,
             "source_order": 16
           }
-        ]
+        ],
+        "unqualified": []
       },
       "status_agreement": {
         "agrees": true,
@@ -2665,48 +2717,20 @@
       },
       "unsupported_constructs_detected": [
         {
-          "blocking": true,
+          "blocking": false,
           "count": 16,
           "examples": [
             "https://bitcoin.org/bitcoin.pdf",
             "https://link.springer.com/chapter/10.1007/978-1-4757-0602-4_18",
             "https://nakamotoinstitute.org/library/hashcash/"
           ],
-          "type": "active-plain-url"
-        },
-        {
-          "blocking": true,
-          "count": 16,
-          "examples": [
-            {
-              "normalized_reference": "https://bitcoin.org/bitcoin.pdf",
-              "representation": "plain-url",
-              "source_line": 158,
-              "source_order": 1
-            },
-            {
-              "normalized_reference": "https://link.springer.com/chapter/10.1007/978-1-4757-0602-4_18",
-              "representation": "plain-url",
-              "source_line": 164,
-              "source_order": 2
-            },
-            {
-              "normalized_reference": "https://nakamotoinstitute.org/library/hashcash/",
-              "representation": "plain-url",
-              "source_line": 170,
-              "source_order": 3
-            }
-          ],
-          "type": "unqualified-source-reference"
+          "type": "source-plain-url"
         }
       ]
     },
     {
-      "blocking_incompatibilities": [
-        "Unsupported Markdown construct active-plain-url (9)",
-        "Unsupported Markdown construct unqualified-source-reference (9)"
-      ],
-      "compatibility": "BLOCKED",
+      "blocking_incompatibilities": [],
+      "compatibility": "COMPATIBLE_WITH_ROLE_ADAPTER",
       "h1_agreement": {
         "agrees": true,
         "values": {
@@ -2722,32 +2746,33 @@
         "heading_depths": {
           "1": 1,
           "2": 12,
-          "3": 24
+          "3": 15
         },
         "human_verification_sections": 1,
         "illustration_briefs": 3,
-        "indented_structured_list_lines": 3,
+        "indented_structured_list_lines": 30,
         "inert_fenced_code_blocks": [],
         "inline_code": 0,
         "numbered_destination_sections": 12,
-        "ordered_lists": 0,
+        "ordered_lists": 9,
         "paragraphs": true,
         "role_specific": {
-          "article-subsections": 24
+          "article-subsections": 15
         },
         "semantic_tables": [],
-        "strong_text": 6,
+        "strong_text": 15,
         "structured_key_terms": 0,
-        "structured_sources": 0,
+        "structured_sources": 9,
         "unordered_lists": 87
       },
       "non_blocking_observations": [
-        "Contains 3 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 30 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 9 validated structured source reference(s) (plain-url: 9); the future adapter must preserve them as inert reference data and escape them rather than render active links.",
         "Contains role-specific records requiring the documented page-role adapter.",
         "Registry workflow status remains PLANNED; package and manifest editorial status are COPY_LOCKED."
       ],
       "package_path": "docs/learn/content/guides/MSC-GUIDE-004-satoshi-nakamoto.md",
-      "package_sha256": "e6a550fe8ce6c5f7342d233b8d598bed470890d915ba31e16a791404209f795b",
+      "package_sha256": "4475528686dd5496734b9526a21d391e952373163f286d10f2bbfa789a936894",
       "package_status": "COPY_LOCKED",
       "page_role": "topic-guide",
       "planning_handle_agreement": {
@@ -2819,81 +2844,108 @@
         }
       },
       "source_references_detected": {
-        "structured": [],
-        "unqualified": [
+        "structured": [
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoin.org/bitcoin.pdf",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-004-satoshi-nakamoto.md",
+            "record_number": 1,
+            "record_order": 1,
             "registry_id": "MSC-GUIDE-004",
             "representation": "plain-url",
             "source_line": 159,
             "source_order": 1
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://www.metzdowd.com/pipermail/cryptography/2008-October/014810.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-004-satoshi-nakamoto.md",
+            "record_number": 2,
+            "record_order": 2,
             "registry_id": "MSC-GUIDE-004",
             "representation": "plain-url",
             "source_line": 165,
             "source_order": 2
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://www.metzdowd.com/pipermail/cryptography/2009-January/014994.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-004-satoshi-nakamoto.md",
+            "record_number": 3,
+            "record_order": 3,
             "registry_id": "MSC-GUIDE-004",
             "representation": "plain-url",
             "source_line": 171,
             "source_order": 3
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://satoshi.nakamotoinstitute.org/emails/cryptography/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-004-satoshi-nakamoto.md",
+            "record_number": 4,
+            "record_order": 4,
             "registry_id": "MSC-GUIDE-004",
             "representation": "plain-url",
             "source_line": 177,
             "source_order": 4
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://satoshi.nakamotoinstitute.org/emails/bitcoin-list/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-004-satoshi-nakamoto.md",
+            "record_number": 5,
+            "record_order": 5,
             "registry_id": "MSC-GUIDE-004",
             "representation": "plain-url",
             "source_line": 183,
             "source_order": 5
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://satoshi.nakamotoinstitute.org/posts/bitcointalk/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-004-satoshi-nakamoto.md",
+            "record_number": 6,
+            "record_order": 6,
             "registry_id": "MSC-GUIDE-004",
             "representation": "plain-url",
             "source_line": 189,
             "source_order": 6
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://www.washingtonpost.com/news/the-switch/wp/2014/01/03/hal-finney-received-the-first-bitcoin-transaction-heres-how-he-describes-it/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-004-satoshi-nakamoto.md",
+            "record_number": 7,
+            "record_order": 7,
             "registry_id": "MSC-GUIDE-004",
             "representation": "plain-url",
             "source_line": 195,
             "source_order": 7
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-004-satoshi-nakamoto.md",
+            "record_number": 8,
+            "record_order": 8,
             "registry_id": "MSC-GUIDE-004",
             "representation": "plain-url",
             "source_line": 201,
             "source_order": 8
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/commits/master/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-004-satoshi-nakamoto.md",
+            "record_number": 9,
+            "record_order": 9,
             "registry_id": "MSC-GUIDE-004",
             "representation": "plain-url",
             "source_line": 207,
             "source_order": 9
           }
-        ]
+        ],
+        "unqualified": []
       },
       "status_agreement": {
         "agrees": true,
@@ -2904,48 +2956,20 @@
       },
       "unsupported_constructs_detected": [
         {
-          "blocking": true,
+          "blocking": false,
           "count": 9,
           "examples": [
             "https://bitcoin.org/bitcoin.pdf",
             "https://www.metzdowd.com/pipermail/cryptography/2008-October/014810.html",
             "https://www.metzdowd.com/pipermail/cryptography/2009-January/014994.html"
           ],
-          "type": "active-plain-url"
-        },
-        {
-          "blocking": true,
-          "count": 9,
-          "examples": [
-            {
-              "normalized_reference": "https://bitcoin.org/bitcoin.pdf",
-              "representation": "plain-url",
-              "source_line": 159,
-              "source_order": 1
-            },
-            {
-              "normalized_reference": "https://www.metzdowd.com/pipermail/cryptography/2008-October/014810.html",
-              "representation": "plain-url",
-              "source_line": 165,
-              "source_order": 2
-            },
-            {
-              "normalized_reference": "https://www.metzdowd.com/pipermail/cryptography/2009-January/014994.html",
-              "representation": "plain-url",
-              "source_line": 171,
-              "source_order": 3
-            }
-          ],
-          "type": "unqualified-source-reference"
+          "type": "source-plain-url"
         }
       ]
     },
     {
-      "blocking_incompatibilities": [
-        "Unsupported Markdown construct active-plain-url (9)",
-        "Unsupported Markdown construct unqualified-source-reference (9)"
-      ],
-      "compatibility": "BLOCKED",
+      "blocking_incompatibilities": [],
+      "compatibility": "COMPATIBLE_WITH_ROLE_ADAPTER",
       "h1_agreement": {
         "agrees": true,
         "values": {
@@ -2961,32 +2985,33 @@
         "heading_depths": {
           "1": 1,
           "2": 12,
-          "3": 23
+          "3": 14
         },
         "human_verification_sections": 1,
         "illustration_briefs": 3,
-        "indented_structured_list_lines": 4,
+        "indented_structured_list_lines": 31,
         "inert_fenced_code_blocks": [],
         "inline_code": 0,
         "numbered_destination_sections": 12,
-        "ordered_lists": 8,
+        "ordered_lists": 17,
         "paragraphs": true,
         "role_specific": {
-          "article-subsections": 23
+          "article-subsections": 14
         },
         "semantic_tables": [],
-        "strong_text": 6,
+        "strong_text": 15,
         "structured_key_terms": 0,
-        "structured_sources": 0,
+        "structured_sources": 9,
         "unordered_lists": 85
       },
       "non_blocking_observations": [
-        "Contains 4 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 31 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 9 validated structured source reference(s) (plain-url: 9); the future adapter must preserve them as inert reference data and escape them rather than render active links.",
         "Contains role-specific records requiring the documented page-role adapter.",
         "Registry workflow status remains PLANNED; package and manifest editorial status are COPY_LOCKED."
       ],
       "package_path": "docs/learn/content/guides/MSC-GUIDE-005-what-is-a-bitcoin-wallet.md",
-      "package_sha256": "edc3ace0a0464a51f923053eac0e7643ff32244671125c8383c7ddded547ac4c",
+      "package_sha256": "bc8039fee99757fdfdad7737383232d2804c9420469200ae63b608a8e482a1e6",
       "package_status": "COPY_LOCKED",
       "page_role": "topic-guide",
       "planning_handle_agreement": {
@@ -3058,81 +3083,108 @@
         }
       },
       "source_references_detected": {
-        "structured": [],
-        "unqualified": [
+        "structured": [
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/wallets.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-005-what-is-a-bitcoin-wallet.md",
+            "record_number": 1,
+            "record_order": 1,
             "registry_id": "MSC-GUIDE-005",
             "representation": "plain-url",
             "source_line": 160,
             "source_order": 1
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/transactions.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-005-what-is-a-bitcoin-wallet.md",
+            "record_number": 2,
+            "record_order": 2,
             "registry_id": "MSC-GUIDE-005",
             "representation": "plain-url",
             "source_line": 166,
             "source_order": 2
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/32/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-005-what-is-a-bitcoin-wallet.md",
+            "record_number": 3,
+            "record_order": 3,
             "registry_id": "MSC-GUIDE-005",
             "representation": "plain-url",
             "source_line": 172,
             "source_order": 3
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/39/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-005-what-is-a-bitcoin-wallet.md",
+            "record_number": 4,
+            "record_order": 4,
             "registry_id": "MSC-GUIDE-005",
             "representation": "plain-url",
             "source_line": 178,
             "source_order": 4
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/174/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-005-what-is-a-bitcoin-wallet.md",
+            "record_number": 5,
+            "record_order": 5,
             "registry_id": "MSC-GUIDE-005",
             "representation": "plain-url",
             "source_line": 184,
             "source_order": 5
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/173/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-005-what-is-a-bitcoin-wallet.md",
+            "record_number": 6,
+            "record_order": 6,
             "registry_id": "MSC-GUIDE-005",
             "representation": "plain-url",
             "source_line": 190,
             "source_order": 6
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/350/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-005-what-is-a-bitcoin-wallet.md",
+            "record_number": 7,
+            "record_order": 7,
             "registry_id": "MSC-GUIDE-005",
             "representation": "plain-url",
             "source_line": 196,
             "source_order": 7
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/380/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-005-what-is-a-bitcoin-wallet.md",
+            "record_number": 8,
+            "record_order": 8,
             "registry_id": "MSC-GUIDE-005",
             "representation": "plain-url",
             "source_line": 202,
             "source_order": 8
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/doc/managing-wallets.md",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-005-what-is-a-bitcoin-wallet.md",
+            "record_number": 9,
+            "record_order": 9,
             "registry_id": "MSC-GUIDE-005",
             "representation": "plain-url",
             "source_line": 208,
             "source_order": 9
           }
-        ]
+        ],
+        "unqualified": []
       },
       "status_agreement": {
         "agrees": true,
@@ -3143,48 +3195,20 @@
       },
       "unsupported_constructs_detected": [
         {
-          "blocking": true,
+          "blocking": false,
           "count": 9,
           "examples": [
             "https://developer.bitcoin.org/devguide/wallets.html",
             "https://developer.bitcoin.org/devguide/transactions.html",
             "https://bips.dev/32/"
           ],
-          "type": "active-plain-url"
-        },
-        {
-          "blocking": true,
-          "count": 9,
-          "examples": [
-            {
-              "normalized_reference": "https://developer.bitcoin.org/devguide/wallets.html",
-              "representation": "plain-url",
-              "source_line": 160,
-              "source_order": 1
-            },
-            {
-              "normalized_reference": "https://developer.bitcoin.org/devguide/transactions.html",
-              "representation": "plain-url",
-              "source_line": 166,
-              "source_order": 2
-            },
-            {
-              "normalized_reference": "https://bips.dev/32/",
-              "representation": "plain-url",
-              "source_line": 172,
-              "source_order": 3
-            }
-          ],
-          "type": "unqualified-source-reference"
+          "type": "source-plain-url"
         }
       ]
     },
     {
-      "blocking_incompatibilities": [
-        "Unsupported Markdown construct active-plain-url (9)",
-        "Unsupported Markdown construct unqualified-source-reference (9)"
-      ],
-      "compatibility": "BLOCKED",
+      "blocking_incompatibilities": [],
+      "compatibility": "COMPATIBLE_WITH_ROLE_ADAPTER",
       "h1_agreement": {
         "agrees": true,
         "values": {
@@ -3200,32 +3224,33 @@
         "heading_depths": {
           "1": 1,
           "2": 12,
-          "3": 25
+          "3": 16
         },
         "human_verification_sections": 1,
         "illustration_briefs": 3,
-        "indented_structured_list_lines": 4,
+        "indented_structured_list_lines": 31,
         "inert_fenced_code_blocks": [],
         "inline_code": 0,
         "numbered_destination_sections": 12,
-        "ordered_lists": 7,
+        "ordered_lists": 16,
         "paragraphs": true,
         "role_specific": {
-          "article-subsections": 25
+          "article-subsections": 16
         },
         "semantic_tables": [],
-        "strong_text": 6,
+        "strong_text": 15,
         "structured_key_terms": 0,
-        "structured_sources": 0,
+        "structured_sources": 9,
         "unordered_lists": 86
       },
       "non_blocking_observations": [
-        "Contains 4 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 31 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 9 validated structured source reference(s) (plain-url: 9); the future adapter must preserve them as inert reference data and escape them rather than render active links.",
         "Contains role-specific records requiring the documented page-role adapter.",
         "Registry workflow status remains PLANNED; package and manifest editorial status are COPY_LOCKED."
       ],
       "package_path": "docs/learn/content/guides/MSC-GUIDE-006-bitcoin-self-custody.md",
-      "package_sha256": "29d75bacae971be28e048a8e4c46e1cd9faa3f036d0b861b703158fe509628f3",
+      "package_sha256": "15f39021f4d81024502f22ef0a10c19b4d0fb1d1a71558452a1c99fdb70261fe",
       "package_status": "COPY_LOCKED",
       "page_role": "topic-guide",
       "planning_handle_agreement": {
@@ -3297,81 +3322,108 @@
         }
       },
       "source_references_detected": {
-        "structured": [],
-        "unqualified": [
+        "structured": [
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/wallets.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-006-bitcoin-self-custody.md",
+            "record_number": 1,
+            "record_order": 1,
             "registry_id": "MSC-GUIDE-006",
             "representation": "plain-url",
             "source_line": 185,
             "source_order": 1
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/32/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-006-bitcoin-self-custody.md",
+            "record_number": 2,
+            "record_order": 2,
             "registry_id": "MSC-GUIDE-006",
             "representation": "plain-url",
             "source_line": 191,
             "source_order": 2
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/39/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-006-bitcoin-self-custody.md",
+            "record_number": 3,
+            "record_order": 3,
             "registry_id": "MSC-GUIDE-006",
             "representation": "plain-url",
             "source_line": 197,
             "source_order": 3
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/174/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-006-bitcoin-self-custody.md",
+            "record_number": 4,
+            "record_order": 4,
             "registry_id": "MSC-GUIDE-006",
             "representation": "plain-url",
             "source_line": 203,
             "source_order": 4
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/129/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-006-bitcoin-self-custody.md",
+            "record_number": 5,
+            "record_order": 5,
             "registry_id": "MSC-GUIDE-006",
             "representation": "plain-url",
             "source_line": 209,
             "source_order": 5
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/380/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-006-bitcoin-self-custody.md",
+            "record_number": 6,
+            "record_order": 6,
             "registry_id": "MSC-GUIDE-006",
             "representation": "plain-url",
             "source_line": 215,
             "source_order": 6
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/doc/psbt.md",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-006-bitcoin-self-custody.md",
+            "record_number": 7,
+            "record_order": 7,
             "registry_id": "MSC-GUIDE-006",
             "representation": "plain-url",
             "source_line": 221,
             "source_order": 7
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/doc/descriptors.md",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-006-bitcoin-self-custody.md",
+            "record_number": 8,
+            "record_order": 8,
             "registry_id": "MSC-GUIDE-006",
             "representation": "plain-url",
             "source_line": 227,
             "source_order": 8
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin-core/HWI/blob/master/README.md",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-006-bitcoin-self-custody.md",
+            "record_number": 9,
+            "record_order": 9,
             "registry_id": "MSC-GUIDE-006",
             "representation": "plain-url",
             "source_line": 233,
             "source_order": 9
           }
-        ]
+        ],
+        "unqualified": []
       },
       "status_agreement": {
         "agrees": true,
@@ -3382,48 +3434,20 @@
       },
       "unsupported_constructs_detected": [
         {
-          "blocking": true,
+          "blocking": false,
           "count": 9,
           "examples": [
             "https://developer.bitcoin.org/devguide/wallets.html",
             "https://bips.dev/32/",
             "https://bips.dev/39/"
           ],
-          "type": "active-plain-url"
-        },
-        {
-          "blocking": true,
-          "count": 9,
-          "examples": [
-            {
-              "normalized_reference": "https://developer.bitcoin.org/devguide/wallets.html",
-              "representation": "plain-url",
-              "source_line": 185,
-              "source_order": 1
-            },
-            {
-              "normalized_reference": "https://bips.dev/32/",
-              "representation": "plain-url",
-              "source_line": 191,
-              "source_order": 2
-            },
-            {
-              "normalized_reference": "https://bips.dev/39/",
-              "representation": "plain-url",
-              "source_line": 197,
-              "source_order": 3
-            }
-          ],
-          "type": "unqualified-source-reference"
+          "type": "source-plain-url"
         }
       ]
     },
     {
-      "blocking_incompatibilities": [
-        "Unsupported Markdown construct active-plain-url (11)",
-        "Unsupported Markdown construct unqualified-source-reference (11)"
-      ],
-      "compatibility": "BLOCKED",
+      "blocking_incompatibilities": [],
+      "compatibility": "COMPATIBLE_WITH_ROLE_ADAPTER",
       "h1_agreement": {
         "agrees": true,
         "values": {
@@ -3439,32 +3463,33 @@
         "heading_depths": {
           "1": 1,
           "2": 12,
-          "3": 31
+          "3": 20
         },
         "human_verification_sections": 1,
         "illustration_briefs": 3,
-        "indented_structured_list_lines": 4,
+        "indented_structured_list_lines": 37,
         "inert_fenced_code_blocks": [],
         "inline_code": 0,
         "numbered_destination_sections": 12,
-        "ordered_lists": 20,
+        "ordered_lists": 31,
         "paragraphs": true,
         "role_specific": {
-          "article-subsections": 31
+          "article-subsections": 20
         },
         "semantic_tables": [],
-        "strong_text": 6,
+        "strong_text": 17,
         "structured_key_terms": 0,
-        "structured_sources": 0,
+        "structured_sources": 11,
         "unordered_lists": 94
       },
       "non_blocking_observations": [
-        "Contains 4 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 37 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 11 validated structured source reference(s) (plain-url: 11); the future adapter must preserve them as inert reference data and escape them rather than render active links.",
         "Contains role-specific records requiring the documented page-role adapter.",
         "Registry workflow status remains PLANNED; package and manifest editorial status are COPY_LOCKED."
       ],
       "package_path": "docs/learn/content/guides/MSC-GUIDE-007-send-and-receive-bitcoin.md",
-      "package_sha256": "2099eb721f0a5af7ed727932542450e1de2bc314699c0169e8207ba189047b04",
+      "package_sha256": "cf82c5b70033021e8fceae784810aff42cc5a521981da2eb5bb592979191028f",
       "package_status": "COPY_LOCKED",
       "page_role": "topic-guide",
       "planning_handle_agreement": {
@@ -3536,97 +3561,130 @@
         }
       },
       "source_references_detected": {
-        "structured": [],
-        "unqualified": [
+        "structured": [
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/payment_processing.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-007-send-and-receive-bitcoin.md",
+            "record_number": 1,
+            "record_order": 1,
             "registry_id": "MSC-GUIDE-007",
             "representation": "plain-url",
             "source_line": 231,
             "source_order": 1
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/transactions.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-007-send-and-receive-bitcoin.md",
+            "record_number": 2,
+            "record_order": 2,
             "registry_id": "MSC-GUIDE-007",
             "representation": "plain-url",
             "source_line": 237,
             "source_order": 2
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/p2p_network.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-007-send-and-receive-bitcoin.md",
+            "record_number": 3,
+            "record_order": 3,
             "registry_id": "MSC-GUIDE-007",
             "representation": "plain-url",
             "source_line": 243,
             "source_order": 3
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-007-send-and-receive-bitcoin.md",
+            "record_number": 4,
+            "record_order": 4,
             "registry_id": "MSC-GUIDE-007",
             "representation": "plain-url",
             "source_line": 249,
             "source_order": 4
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/21/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-007-send-and-receive-bitcoin.md",
+            "record_number": 5,
+            "record_order": 5,
             "registry_id": "MSC-GUIDE-007",
             "representation": "plain-url",
             "source_line": 255,
             "source_order": 5
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/173/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-007-send-and-receive-bitcoin.md",
+            "record_number": 6,
+            "record_order": 6,
             "registry_id": "MSC-GUIDE-007",
             "representation": "plain-url",
             "source_line": 261,
             "source_order": 6
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/350/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-007-send-and-receive-bitcoin.md",
+            "record_number": 7,
+            "record_order": 7,
             "registry_id": "MSC-GUIDE-007",
             "representation": "plain-url",
             "source_line": 267,
             "source_order": 7
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/125/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-007-send-and-receive-bitcoin.md",
+            "record_number": 8,
+            "record_order": 8,
             "registry_id": "MSC-GUIDE-007",
             "representation": "plain-url",
             "source_line": 273,
             "source_order": 8
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoinops.org/en/topics/replace-by-fee/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-007-send-and-receive-bitcoin.md",
+            "record_number": 9,
+            "record_order": 9,
             "registry_id": "MSC-GUIDE-007",
             "representation": "plain-url",
             "source_line": 279,
             "source_order": 9
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoinops.org/en/topics/cpfp/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-007-send-and-receive-bitcoin.md",
+            "record_number": 10,
+            "record_order": 10,
             "registry_id": "MSC-GUIDE-007",
             "representation": "plain-url",
             "source_line": 285,
             "source_order": 10
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoincore.org/en/releases/31.0/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-007-send-and-receive-bitcoin.md",
+            "record_number": 11,
+            "record_order": 11,
             "registry_id": "MSC-GUIDE-007",
             "representation": "plain-url",
             "source_line": 291,
             "source_order": 11
           }
-        ]
+        ],
+        "unqualified": []
       },
       "status_agreement": {
         "agrees": true,
@@ -3637,48 +3695,20 @@
       },
       "unsupported_constructs_detected": [
         {
-          "blocking": true,
+          "blocking": false,
           "count": 11,
           "examples": [
             "https://developer.bitcoin.org/devguide/payment_processing.html",
             "https://developer.bitcoin.org/devguide/transactions.html",
             "https://developer.bitcoin.org/devguide/p2p_network.html"
           ],
-          "type": "active-plain-url"
-        },
-        {
-          "blocking": true,
-          "count": 11,
-          "examples": [
-            {
-              "normalized_reference": "https://developer.bitcoin.org/devguide/payment_processing.html",
-              "representation": "plain-url",
-              "source_line": 231,
-              "source_order": 1
-            },
-            {
-              "normalized_reference": "https://developer.bitcoin.org/devguide/transactions.html",
-              "representation": "plain-url",
-              "source_line": 237,
-              "source_order": 2
-            },
-            {
-              "normalized_reference": "https://developer.bitcoin.org/devguide/p2p_network.html",
-              "representation": "plain-url",
-              "source_line": 243,
-              "source_order": 3
-            }
-          ],
-          "type": "unqualified-source-reference"
+          "type": "source-plain-url"
         }
       ]
     },
     {
-      "blocking_incompatibilities": [
-        "Unsupported Markdown construct active-plain-url (12)",
-        "Unsupported Markdown construct unqualified-source-reference (12)"
-      ],
-      "compatibility": "BLOCKED",
+      "blocking_incompatibilities": [],
+      "compatibility": "COMPATIBLE_WITH_ROLE_ADAPTER",
       "h1_agreement": {
         "agrees": true,
         "values": {
@@ -3694,32 +3724,33 @@
         "heading_depths": {
           "1": 1,
           "2": 12,
-          "3": 32
+          "3": 20
         },
         "human_verification_sections": 1,
         "illustration_briefs": 3,
-        "indented_structured_list_lines": 4,
+        "indented_structured_list_lines": 40,
         "inert_fenced_code_blocks": [],
         "inline_code": 0,
         "numbered_destination_sections": 12,
-        "ordered_lists": 0,
+        "ordered_lists": 12,
         "paragraphs": true,
         "role_specific": {
-          "article-subsections": 32
+          "article-subsections": 20
         },
         "semantic_tables": [],
-        "strong_text": 10,
+        "strong_text": 22,
         "structured_key_terms": 0,
-        "structured_sources": 0,
+        "structured_sources": 12,
         "unordered_lists": 102
       },
       "non_blocking_observations": [
-        "Contains 4 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 40 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 12 validated structured source reference(s) (plain-url: 12); the future adapter must preserve them as inert reference data and escape them rather than render active links.",
         "Contains role-specific records requiring the documented page-role adapter.",
         "Registry workflow status remains PLANNED; package and manifest editorial status are COPY_LOCKED."
       ],
       "package_path": "docs/learn/content/guides/MSC-GUIDE-008-bitcoin-transactions-and-fees.md",
-      "package_sha256": "0a858de0eba778a9ee9ceb5316297b1d4fce6f56f1b0f6a516d69f152ec5c45f",
+      "package_sha256": "7fba71e60e016300873c8edad730e4a7ee29efc4997fdf8a7047aefa1962657c",
       "package_status": "COPY_LOCKED",
       "page_role": "topic-guide",
       "planning_handle_agreement": {
@@ -3791,105 +3822,141 @@
         }
       },
       "source_references_detected": {
-        "structured": [],
-        "unqualified": [
+        "structured": [
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoin.org/bitcoin.pdf",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-008-bitcoin-transactions-and-fees.md",
+            "record_number": 1,
+            "record_order": 1,
             "registry_id": "MSC-GUIDE-008",
             "representation": "plain-url",
             "source_line": 247,
             "source_order": 1
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/transactions.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-008-bitcoin-transactions-and-fees.md",
+            "record_number": 2,
+            "record_order": 2,
             "registry_id": "MSC-GUIDE-008",
             "representation": "plain-url",
             "source_line": 253,
             "source_order": 2
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/p2p_network.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-008-bitcoin-transactions-and-fees.md",
+            "record_number": 3,
+            "record_order": 3,
             "registry_id": "MSC-GUIDE-008",
             "representation": "plain-url",
             "source_line": 259,
             "source_order": 3
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/141/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-008-bitcoin-transactions-and-fees.md",
+            "record_number": 4,
+            "record_order": 4,
             "registry_id": "MSC-GUIDE-008",
             "representation": "plain-url",
             "source_line": 265,
             "source_order": 4
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/125/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-008-bitcoin-transactions-and-fees.md",
+            "record_number": 5,
+            "record_order": 5,
             "registry_id": "MSC-GUIDE-008",
             "representation": "plain-url",
             "source_line": 271,
             "source_order": 5
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoincore.org/en/releases/29.0/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-008-bitcoin-transactions-and-fees.md",
+            "record_number": 6,
+            "record_order": 6,
             "registry_id": "MSC-GUIDE-008",
             "representation": "plain-url",
             "source_line": 277,
             "source_order": 6
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoincore.org/en/releases/31.0/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-008-bitcoin-transactions-and-fees.md",
+            "record_number": 7,
+            "record_order": 7,
             "registry_id": "MSC-GUIDE-008",
             "representation": "plain-url",
             "source_line": 283,
             "source_order": 7
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoinops.org/en/topics/fee-estimation/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-008-bitcoin-transactions-and-fees.md",
+            "record_number": 8,
+            "record_order": 8,
             "registry_id": "MSC-GUIDE-008",
             "representation": "plain-url",
             "source_line": 289,
             "source_order": 8
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoinops.org/en/topics/replace-by-fee/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-008-bitcoin-transactions-and-fees.md",
+            "record_number": 9,
+            "record_order": 9,
             "registry_id": "MSC-GUIDE-008",
             "representation": "plain-url",
             "source_line": 295,
             "source_order": 9
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoinops.org/en/topics/cpfp/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-008-bitcoin-transactions-and-fees.md",
+            "record_number": 10,
+            "record_order": 10,
             "registry_id": "MSC-GUIDE-008",
             "representation": "plain-url",
             "source_line": 301,
             "source_order": 10
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoinops.org/en/topics/transaction-pinning/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-008-bitcoin-transactions-and-fees.md",
+            "record_number": 11,
+            "record_order": 11,
             "registry_id": "MSC-GUIDE-008",
             "representation": "plain-url",
             "source_line": 307,
             "source_order": 11
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoinops.org/en/topics/package-relay/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-008-bitcoin-transactions-and-fees.md",
+            "record_number": 12,
+            "record_order": 12,
             "registry_id": "MSC-GUIDE-008",
             "representation": "plain-url",
             "source_line": 313,
             "source_order": 12
           }
-        ]
+        ],
+        "unqualified": []
       },
       "status_agreement": {
         "agrees": true,
@@ -3900,48 +3967,20 @@
       },
       "unsupported_constructs_detected": [
         {
-          "blocking": true,
+          "blocking": false,
           "count": 12,
           "examples": [
             "https://bitcoin.org/bitcoin.pdf",
             "https://developer.bitcoin.org/devguide/transactions.html",
             "https://developer.bitcoin.org/devguide/p2p_network.html"
           ],
-          "type": "active-plain-url"
-        },
-        {
-          "blocking": true,
-          "count": 12,
-          "examples": [
-            {
-              "normalized_reference": "https://bitcoin.org/bitcoin.pdf",
-              "representation": "plain-url",
-              "source_line": 247,
-              "source_order": 1
-            },
-            {
-              "normalized_reference": "https://developer.bitcoin.org/devguide/transactions.html",
-              "representation": "plain-url",
-              "source_line": 253,
-              "source_order": 2
-            },
-            {
-              "normalized_reference": "https://developer.bitcoin.org/devguide/p2p_network.html",
-              "representation": "plain-url",
-              "source_line": 259,
-              "source_order": 3
-            }
-          ],
-          "type": "unqualified-source-reference"
+          "type": "source-plain-url"
         }
       ]
     },
     {
-      "blocking_incompatibilities": [
-        "Unsupported Markdown construct active-plain-url (9)",
-        "Unsupported Markdown construct unqualified-source-reference (9)"
-      ],
-      "compatibility": "BLOCKED",
+      "blocking_incompatibilities": [],
+      "compatibility": "COMPATIBLE_WITH_ROLE_ADAPTER",
       "h1_agreement": {
         "agrees": true,
         "values": {
@@ -3957,32 +3996,33 @@
         "heading_depths": {
           "1": 1,
           "2": 12,
-          "3": 27
+          "3": 18
         },
         "human_verification_sections": 1,
         "illustration_briefs": 3,
-        "indented_structured_list_lines": 4,
+        "indented_structured_list_lines": 31,
         "inert_fenced_code_blocks": [],
         "inline_code": 2,
         "numbered_destination_sections": 12,
-        "ordered_lists": 9,
+        "ordered_lists": 18,
         "paragraphs": true,
         "role_specific": {
-          "article-subsections": 27
+          "article-subsections": 18
         },
         "semantic_tables": [],
-        "strong_text": 6,
+        "strong_text": 15,
         "structured_key_terms": 0,
-        "structured_sources": 0,
+        "structured_sources": 9,
         "unordered_lists": 91
       },
       "non_blocking_observations": [
-        "Contains 4 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 31 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 9 validated structured source reference(s) (plain-url: 9); the future adapter must preserve them as inert reference data and escape them rather than render active links.",
         "Contains role-specific records requiring the documented page-role adapter.",
         "Registry workflow status remains PLANNED; package and manifest editorial status are COPY_LOCKED."
       ],
       "package_path": "docs/learn/content/guides/MSC-GUIDE-009-bitcoin-seed-phrase.md",
-      "package_sha256": "e5089bdef3b6b338e5aeb00c0825bf96ee523081a813af65e8124754eb699ded",
+      "package_sha256": "35ec2ec7f758f7ce6632fc7de1b13def840761ab5c25aefa2f01f878810b05e4",
       "package_status": "COPY_LOCKED",
       "page_role": "topic-guide",
       "planning_handle_agreement": {
@@ -4054,81 +4094,108 @@
         }
       },
       "source_references_detected": {
-        "structured": [],
-        "unqualified": [
+        "structured": [
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/39/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-009-bitcoin-seed-phrase.md",
+            "record_number": 1,
+            "record_order": 1,
             "registry_id": "MSC-GUIDE-009",
             "representation": "plain-url",
             "source_line": 185,
             "source_order": 1
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/32/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-009-bitcoin-seed-phrase.md",
+            "record_number": 2,
+            "record_order": 2,
             "registry_id": "MSC-GUIDE-009",
             "representation": "plain-url",
             "source_line": 191,
             "source_order": 2
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/44/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-009-bitcoin-seed-phrase.md",
+            "record_number": 3,
+            "record_order": 3,
             "registry_id": "MSC-GUIDE-009",
             "representation": "plain-url",
             "source_line": 197,
             "source_order": 3
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/84/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-009-bitcoin-seed-phrase.md",
+            "record_number": 4,
+            "record_order": 4,
             "registry_id": "MSC-GUIDE-009",
             "representation": "plain-url",
             "source_line": 203,
             "source_order": 4
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/86/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-009-bitcoin-seed-phrase.md",
+            "record_number": 5,
+            "record_order": 5,
             "registry_id": "MSC-GUIDE-009",
             "representation": "plain-url",
             "source_line": 209,
             "source_order": 5
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/380/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-009-bitcoin-seed-phrase.md",
+            "record_number": 6,
+            "record_order": 6,
             "registry_id": "MSC-GUIDE-009",
             "representation": "plain-url",
             "source_line": 215,
             "source_order": 6
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/129/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-009-bitcoin-seed-phrase.md",
+            "record_number": 7,
+            "record_order": 7,
             "registry_id": "MSC-GUIDE-009",
             "representation": "plain-url",
             "source_line": 221,
             "source_order": 7
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/wallets.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-009-bitcoin-seed-phrase.md",
+            "record_number": 8,
+            "record_order": 8,
             "registry_id": "MSC-GUIDE-009",
             "representation": "plain-url",
             "source_line": 227,
             "source_order": 8
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/doc/managing-wallets.md",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-009-bitcoin-seed-phrase.md",
+            "record_number": 9,
+            "record_order": 9,
             "registry_id": "MSC-GUIDE-009",
             "representation": "plain-url",
             "source_line": 233,
             "source_order": 9
           }
-        ]
+        ],
+        "unqualified": []
       },
       "status_agreement": {
         "agrees": true,
@@ -4139,48 +4206,20 @@
       },
       "unsupported_constructs_detected": [
         {
-          "blocking": true,
+          "blocking": false,
           "count": 9,
           "examples": [
             "https://bips.dev/39/",
             "https://bips.dev/32/",
             "https://bips.dev/44/"
           ],
-          "type": "active-plain-url"
-        },
-        {
-          "blocking": true,
-          "count": 9,
-          "examples": [
-            {
-              "normalized_reference": "https://bips.dev/39/",
-              "representation": "plain-url",
-              "source_line": 185,
-              "source_order": 1
-            },
-            {
-              "normalized_reference": "https://bips.dev/32/",
-              "representation": "plain-url",
-              "source_line": 191,
-              "source_order": 2
-            },
-            {
-              "normalized_reference": "https://bips.dev/44/",
-              "representation": "plain-url",
-              "source_line": 197,
-              "source_order": 3
-            }
-          ],
-          "type": "unqualified-source-reference"
+          "type": "source-plain-url"
         }
       ]
     },
     {
-      "blocking_incompatibilities": [
-        "Unsupported Markdown construct active-plain-url (11)",
-        "Unsupported Markdown construct unqualified-source-reference (11)"
-      ],
-      "compatibility": "BLOCKED",
+      "blocking_incompatibilities": [],
+      "compatibility": "COMPATIBLE_WITH_ROLE_ADAPTER",
       "h1_agreement": {
         "agrees": true,
         "values": {
@@ -4196,32 +4235,33 @@
         "heading_depths": {
           "1": 1,
           "2": 12,
-          "3": 31
+          "3": 20
         },
         "human_verification_sections": 1,
         "illustration_briefs": 3,
-        "indented_structured_list_lines": 4,
+        "indented_structured_list_lines": 37,
         "inert_fenced_code_blocks": [],
         "inline_code": 0,
         "numbered_destination_sections": 12,
-        "ordered_lists": 0,
+        "ordered_lists": 11,
         "paragraphs": true,
         "role_specific": {
-          "article-subsections": 31
+          "article-subsections": 20
         },
         "semantic_tables": [],
-        "strong_text": 7,
+        "strong_text": 18,
         "structured_key_terms": 0,
-        "structured_sources": 0,
+        "structured_sources": 11,
         "unordered_lists": 95
       },
       "non_blocking_observations": [
-        "Contains 4 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 37 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 11 validated structured source reference(s) (plain-url: 11); the future adapter must preserve them as inert reference data and escape them rather than render active links.",
         "Contains role-specific records requiring the documented page-role adapter.",
         "Registry workflow status remains PLANNED; package and manifest editorial status are COPY_LOCKED."
       ],
       "package_path": "docs/learn/content/guides/MSC-GUIDE-010-bitcoin-public-private-keys.md",
-      "package_sha256": "9396cc0e8d8430a8a6c02b2b9a2b82111e12772ec5ad1c07ce9d6970d4d4284c",
+      "package_sha256": "5606ca904ad3a2021511cfaea573e8a6238c08d5489fd3562920fad726aaeb0c",
       "package_status": "COPY_LOCKED",
       "page_role": "topic-guide",
       "planning_handle_agreement": {
@@ -4293,97 +4333,130 @@
         }
       },
       "source_references_detected": {
-        "structured": [],
-        "unqualified": [
+        "structured": [
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://www.secg.org/sec2-v2.pdf",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-010-bitcoin-public-private-keys.md",
+            "record_number": 1,
+            "record_order": 1,
             "registry_id": "MSC-GUIDE-010",
             "representation": "plain-url",
             "source_line": 213,
             "source_order": 1
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/32/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-010-bitcoin-public-private-keys.md",
+            "record_number": 2,
+            "record_order": 2,
             "registry_id": "MSC-GUIDE-010",
             "representation": "plain-url",
             "source_line": 219,
             "source_order": 2
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/39/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-010-bitcoin-public-private-keys.md",
+            "record_number": 3,
+            "record_order": 3,
             "registry_id": "MSC-GUIDE-010",
             "representation": "plain-url",
             "source_line": 225,
             "source_order": 3
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/transactions.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-010-bitcoin-public-private-keys.md",
+            "record_number": 4,
+            "record_order": 4,
             "registry_id": "MSC-GUIDE-010",
             "representation": "plain-url",
             "source_line": 231,
             "source_order": 4
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/reference/transactions.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-010-bitcoin-public-private-keys.md",
+            "record_number": 5,
+            "record_order": 5,
             "registry_id": "MSC-GUIDE-010",
             "representation": "plain-url",
             "source_line": 237,
             "source_order": 5
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/340/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-010-bitcoin-public-private-keys.md",
+            "record_number": 6,
+            "record_order": 6,
             "registry_id": "MSC-GUIDE-010",
             "representation": "plain-url",
             "source_line": 243,
             "source_order": 6
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/341/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-010-bitcoin-public-private-keys.md",
+            "record_number": 7,
+            "record_order": 7,
             "registry_id": "MSC-GUIDE-010",
             "representation": "plain-url",
             "source_line": 249,
             "source_order": 7
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/342/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-010-bitcoin-public-private-keys.md",
+            "record_number": 8,
+            "record_order": 8,
             "registry_id": "MSC-GUIDE-010",
             "representation": "plain-url",
             "source_line": 255,
             "source_order": 8
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/173/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-010-bitcoin-public-private-keys.md",
+            "record_number": 9,
+            "record_order": 9,
             "registry_id": "MSC-GUIDE-010",
             "representation": "plain-url",
             "source_line": 261,
             "source_order": 9
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/350/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-010-bitcoin-public-private-keys.md",
+            "record_number": 10,
+            "record_order": 10,
             "registry_id": "MSC-GUIDE-010",
             "representation": "plain-url",
             "source_line": 267,
             "source_order": 10
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/380/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-010-bitcoin-public-private-keys.md",
+            "record_number": 11,
+            "record_order": 11,
             "registry_id": "MSC-GUIDE-010",
             "representation": "plain-url",
             "source_line": 273,
             "source_order": 11
           }
-        ]
+        ],
+        "unqualified": []
       },
       "status_agreement": {
         "agrees": true,
@@ -4394,48 +4467,20 @@
       },
       "unsupported_constructs_detected": [
         {
-          "blocking": true,
+          "blocking": false,
           "count": 11,
           "examples": [
             "https://www.secg.org/sec2-v2.pdf",
             "https://bips.dev/32/",
             "https://bips.dev/39/"
           ],
-          "type": "active-plain-url"
-        },
-        {
-          "blocking": true,
-          "count": 11,
-          "examples": [
-            {
-              "normalized_reference": "https://www.secg.org/sec2-v2.pdf",
-              "representation": "plain-url",
-              "source_line": 213,
-              "source_order": 1
-            },
-            {
-              "normalized_reference": "https://bips.dev/32/",
-              "representation": "plain-url",
-              "source_line": 219,
-              "source_order": 2
-            },
-            {
-              "normalized_reference": "https://bips.dev/39/",
-              "representation": "plain-url",
-              "source_line": 225,
-              "source_order": 3
-            }
-          ],
-          "type": "unqualified-source-reference"
+          "type": "source-plain-url"
         }
       ]
     },
     {
-      "blocking_incompatibilities": [
-        "Unsupported Markdown construct active-plain-url (10)",
-        "Unsupported Markdown construct unqualified-source-reference (10)"
-      ],
-      "compatibility": "BLOCKED",
+      "blocking_incompatibilities": [],
+      "compatibility": "COMPATIBLE_WITH_ROLE_ADAPTER",
       "h1_agreement": {
         "agrees": true,
         "values": {
@@ -4451,32 +4496,33 @@
         "heading_depths": {
           "1": 1,
           "2": 12,
-          "3": 30
+          "3": 20
         },
         "human_verification_sections": 1,
         "illustration_briefs": 3,
-        "indented_structured_list_lines": 4,
+        "indented_structured_list_lines": 34,
         "inert_fenced_code_blocks": [],
         "inline_code": 0,
         "numbered_destination_sections": 12,
-        "ordered_lists": 8,
+        "ordered_lists": 18,
         "paragraphs": true,
         "role_specific": {
-          "article-subsections": 30
+          "article-subsections": 20
         },
         "semantic_tables": [],
-        "strong_text": 8,
+        "strong_text": 18,
         "structured_key_terms": 0,
-        "structured_sources": 0,
+        "structured_sources": 10,
         "unordered_lists": 102
       },
       "non_blocking_observations": [
-        "Contains 4 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 34 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 10 validated structured source reference(s) (plain-url: 10); the future adapter must preserve them as inert reference data and escape them rather than render active links.",
         "Contains role-specific records requiring the documented page-role adapter.",
         "Registry workflow status remains PLANNED; package and manifest editorial status are COPY_LOCKED."
       ],
       "package_path": "docs/learn/content/guides/MSC-GUIDE-011-bitcoin-security.md",
-      "package_sha256": "351cb09f1647e3f260e77f52f00239361d90f2b335f78139bae16bb38afa72bc",
+      "package_sha256": "d48745799fc90436ebf96492c8f3c2126f588f8fb351c76d643abb0e915b4108",
       "package_status": "COPY_LOCKED",
       "page_role": "topic-guide",
       "planning_handle_agreement": {
@@ -4548,89 +4594,119 @@
         }
       },
       "source_references_detected": {
-        "structured": [],
-        "unqualified": [
+        "structured": [
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/wallets.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-011-bitcoin-security.md",
+            "record_number": 1,
+            "record_order": 1,
             "registry_id": "MSC-GUIDE-011",
             "representation": "plain-url",
             "source_line": 240,
             "source_order": 1
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/39/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-011-bitcoin-security.md",
+            "record_number": 2,
+            "record_order": 2,
             "registry_id": "MSC-GUIDE-011",
             "representation": "plain-url",
             "source_line": 246,
             "source_order": 2
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/32/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-011-bitcoin-security.md",
+            "record_number": 3,
+            "record_order": 3,
             "registry_id": "MSC-GUIDE-011",
             "representation": "plain-url",
             "source_line": 252,
             "source_order": 3
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/129/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-011-bitcoin-security.md",
+            "record_number": 4,
+            "record_order": 4,
             "registry_id": "MSC-GUIDE-011",
             "representation": "plain-url",
             "source_line": 258,
             "source_order": 4
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/174/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-011-bitcoin-security.md",
+            "record_number": 5,
+            "record_order": 5,
             "registry_id": "MSC-GUIDE-011",
             "representation": "plain-url",
             "source_line": 264,
             "source_order": 5
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/380/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-011-bitcoin-security.md",
+            "record_number": 6,
+            "record_order": 6,
             "registry_id": "MSC-GUIDE-011",
             "representation": "plain-url",
             "source_line": 270,
             "source_order": 6
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/doc/managing-wallets.md",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-011-bitcoin-security.md",
+            "record_number": 7,
+            "record_order": 7,
             "registry_id": "MSC-GUIDE-011",
             "representation": "plain-url",
             "source_line": 276,
             "source_order": 7
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/contrib/verify-binaries/README.md",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-011-bitcoin-security.md",
+            "record_number": 8,
+            "record_order": 8,
             "registry_id": "MSC-GUIDE-011",
             "representation": "plain-url",
             "source_line": 282,
             "source_order": 8
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoincore.org/en/download/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-011-bitcoin-security.md",
+            "record_number": 9,
+            "record_order": 9,
             "registry_id": "MSC-GUIDE-011",
             "representation": "plain-url",
             "source_line": 288,
             "source_order": 9
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/21/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-011-bitcoin-security.md",
+            "record_number": 10,
+            "record_order": 10,
             "registry_id": "MSC-GUIDE-011",
             "representation": "plain-url",
             "source_line": 294,
             "source_order": 10
           }
-        ]
+        ],
+        "unqualified": []
       },
       "status_agreement": {
         "agrees": true,
@@ -4641,48 +4717,20 @@
       },
       "unsupported_constructs_detected": [
         {
-          "blocking": true,
+          "blocking": false,
           "count": 10,
           "examples": [
             "https://developer.bitcoin.org/devguide/wallets.html",
             "https://bips.dev/39/",
             "https://bips.dev/32/"
           ],
-          "type": "active-plain-url"
-        },
-        {
-          "blocking": true,
-          "count": 10,
-          "examples": [
-            {
-              "normalized_reference": "https://developer.bitcoin.org/devguide/wallets.html",
-              "representation": "plain-url",
-              "source_line": 240,
-              "source_order": 1
-            },
-            {
-              "normalized_reference": "https://bips.dev/39/",
-              "representation": "plain-url",
-              "source_line": 246,
-              "source_order": 2
-            },
-            {
-              "normalized_reference": "https://bips.dev/32/",
-              "representation": "plain-url",
-              "source_line": 252,
-              "source_order": 3
-            }
-          ],
-          "type": "unqualified-source-reference"
+          "type": "source-plain-url"
         }
       ]
     },
     {
-      "blocking_incompatibilities": [
-        "Unsupported Markdown construct active-plain-url (16)",
-        "Unsupported Markdown construct unqualified-source-reference (16)"
-      ],
-      "compatibility": "BLOCKED",
+      "blocking_incompatibilities": [],
+      "compatibility": "COMPATIBLE_WITH_ROLE_ADAPTER",
       "h1_agreement": {
         "agrees": true,
         "values": {
@@ -4698,32 +4746,33 @@
         "heading_depths": {
           "1": 1,
           "2": 12,
-          "3": 40
+          "3": 24
         },
         "human_verification_sections": 1,
         "illustration_briefs": 3,
-        "indented_structured_list_lines": 4,
+        "indented_structured_list_lines": 52,
         "inert_fenced_code_blocks": [],
         "inline_code": 0,
         "numbered_destination_sections": 12,
-        "ordered_lists": 6,
+        "ordered_lists": 22,
         "paragraphs": true,
         "role_specific": {
-          "article-subsections": 40
+          "article-subsections": 24
         },
         "semantic_tables": [],
-        "strong_text": 8,
+        "strong_text": 24,
         "structured_key_terms": 0,
-        "structured_sources": 0,
+        "structured_sources": 16,
         "unordered_lists": 118
       },
       "non_blocking_observations": [
-        "Contains 4 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 52 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 16 validated structured source reference(s) (plain-url: 16); the future adapter must preserve them as inert reference data and escape them rather than render active links.",
         "Contains role-specific records requiring the documented page-role adapter.",
         "Registry workflow status remains PLANNED; package and manifest editorial status are COPY_LOCKED."
       ],
       "package_path": "docs/learn/content/guides/MSC-GUIDE-012-bitcoin-privacy.md",
-      "package_sha256": "3326999189473b39c4f1f1ef97859dfe22284b0ff3a95cfe3a62ce07f095e3f7",
+      "package_sha256": "d70b2c14693fec9f31aa7d4034f29eb92d326e0f86adc2d92f47ee5c82162d3d",
       "package_status": "COPY_LOCKED",
       "page_role": "topic-guide",
       "planning_handle_agreement": {
@@ -4795,137 +4844,185 @@
         }
       },
       "source_references_detected": {
-        "structured": [],
-        "unqualified": [
+        "structured": [
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoin.org/bitcoin.pdf",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-012-bitcoin-privacy.md",
+            "record_number": 1,
+            "record_order": 1,
             "registry_id": "MSC-GUIDE-012",
             "representation": "plain-url",
             "source_line": 262,
             "source_order": 1
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/transactions.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-012-bitcoin-privacy.md",
+            "record_number": 2,
+            "record_order": 2,
             "registry_id": "MSC-GUIDE-012",
             "representation": "plain-url",
             "source_line": 268,
             "source_order": 2
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/p2p_network.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-012-bitcoin-privacy.md",
+            "record_number": 3,
+            "record_order": 3,
             "registry_id": "MSC-GUIDE-012",
             "representation": "plain-url",
             "source_line": 274,
             "source_order": 3
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/157/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-012-bitcoin-privacy.md",
+            "record_number": 4,
+            "record_order": 4,
             "registry_id": "MSC-GUIDE-012",
             "representation": "plain-url",
             "source_line": 280,
             "source_order": 4
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/158/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-012-bitcoin-privacy.md",
+            "record_number": 5,
+            "record_order": 5,
             "registry_id": "MSC-GUIDE-012",
             "representation": "plain-url",
             "source_line": 286,
             "source_order": 5
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/78/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-012-bitcoin-privacy.md",
+            "record_number": 6,
+            "record_order": 6,
             "registry_id": "MSC-GUIDE-012",
             "representation": "plain-url",
             "source_line": 292,
             "source_order": 6
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcointalk.org/index.php?topic=279249.0",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-012-bitcoin-privacy.md",
+            "record_number": 7,
+            "record_order": 7,
             "registry_id": "MSC-GUIDE-012",
             "representation": "plain-url",
             "source_line": 298,
             "source_order": 7
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://cseweb.ucsd.edu/~smeiklejohn/files/imc13.pdf",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-012-bitcoin-privacy.md",
+            "record_number": 8,
+            "record_order": 8,
             "registry_id": "MSC-GUIDE-012",
             "representation": "plain-url",
             "source_line": 304,
             "source_order": 8
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://arxiv.org/abs/1107.4524",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-012-bitcoin-privacy.md",
+            "record_number": 9,
+            "record_order": 9,
             "registry_id": "MSC-GUIDE-012",
             "representation": "plain-url",
             "source_line": 310,
             "source_order": 9
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/32/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-012-bitcoin-privacy.md",
+            "record_number": 10,
+            "record_order": 10,
             "registry_id": "MSC-GUIDE-012",
             "representation": "plain-url",
             "source_line": 316,
             "source_order": 10
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoinops.org/en/topics/transaction-origin-privacy/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-012-bitcoin-privacy.md",
+            "record_number": 11,
+            "record_order": 11,
             "registry_id": "MSC-GUIDE-012",
             "representation": "plain-url",
             "source_line": 322,
             "source_order": 11
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoinops.org/en/topics/coin-selection/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-012-bitcoin-privacy.md",
+            "record_number": 12,
+            "record_order": 12,
             "registry_id": "MSC-GUIDE-012",
             "representation": "plain-url",
             "source_line": 328,
             "source_order": 12
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://support.torproject.org/about/what-is-tor/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-012-bitcoin-privacy.md",
+            "record_number": 13,
+            "record_order": 13,
             "registry_id": "MSC-GUIDE-012",
             "representation": "plain-url",
             "source_line": 334,
             "source_order": 13
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/lightning/bolts/blob/master/04-onion-routing.md",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-012-bitcoin-privacy.md",
+            "record_number": 14,
+            "record_order": 14,
             "registry_id": "MSC-GUIDE-012",
             "representation": "plain-url",
             "source_line": 340,
             "source_order": 14
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/lightning/bolts/blob/master/03-transactions.md",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-012-bitcoin-privacy.md",
+            "record_number": 15,
+            "record_order": 15,
             "registry_id": "MSC-GUIDE-012",
             "representation": "plain-url",
             "source_line": 346,
             "source_order": 15
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://arxiv.org/abs/2003.12470",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-012-bitcoin-privacy.md",
+            "record_number": 16,
+            "record_order": 16,
             "registry_id": "MSC-GUIDE-012",
             "representation": "plain-url",
             "source_line": 352,
             "source_order": 16
           }
-        ]
+        ],
+        "unqualified": []
       },
       "status_agreement": {
         "agrees": true,
@@ -4936,48 +5033,20 @@
       },
       "unsupported_constructs_detected": [
         {
-          "blocking": true,
+          "blocking": false,
           "count": 16,
           "examples": [
             "https://bitcoin.org/bitcoin.pdf",
             "https://developer.bitcoin.org/devguide/transactions.html",
             "https://developer.bitcoin.org/devguide/p2p_network.html"
           ],
-          "type": "active-plain-url"
-        },
-        {
-          "blocking": true,
-          "count": 16,
-          "examples": [
-            {
-              "normalized_reference": "https://bitcoin.org/bitcoin.pdf",
-              "representation": "plain-url",
-              "source_line": 262,
-              "source_order": 1
-            },
-            {
-              "normalized_reference": "https://developer.bitcoin.org/devguide/transactions.html",
-              "representation": "plain-url",
-              "source_line": 268,
-              "source_order": 2
-            },
-            {
-              "normalized_reference": "https://developer.bitcoin.org/devguide/p2p_network.html",
-              "representation": "plain-url",
-              "source_line": 274,
-              "source_order": 3
-            }
-          ],
-          "type": "unqualified-source-reference"
+          "type": "source-plain-url"
         }
       ]
     },
     {
-      "blocking_incompatibilities": [
-        "Unsupported Markdown construct active-plain-url (10)",
-        "Unsupported Markdown construct unqualified-source-reference (10)"
-      ],
-      "compatibility": "BLOCKED",
+      "blocking_incompatibilities": [],
+      "compatibility": "COMPATIBLE_WITH_ROLE_ADAPTER",
       "h1_agreement": {
         "agrees": true,
         "values": {
@@ -4993,32 +5062,33 @@
         "heading_depths": {
           "1": 1,
           "2": 12,
-          "3": 29
+          "3": 19
         },
         "human_verification_sections": 1,
         "illustration_briefs": 3,
-        "indented_structured_list_lines": 4,
+        "indented_structured_list_lines": 34,
         "inert_fenced_code_blocks": [],
         "inline_code": 0,
         "numbered_destination_sections": 12,
-        "ordered_lists": 0,
+        "ordered_lists": 10,
         "paragraphs": true,
         "role_specific": {
-          "article-subsections": 29
+          "article-subsections": 19
         },
         "semantic_tables": [],
-        "strong_text": 10,
+        "strong_text": 20,
         "structured_key_terms": 0,
-        "structured_sources": 0,
+        "structured_sources": 10,
         "unordered_lists": 91
       },
       "non_blocking_observations": [
-        "Contains 4 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 34 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 10 validated structured source reference(s) (plain-url: 10); the future adapter must preserve them as inert reference data and escape them rather than render active links.",
         "Contains role-specific records requiring the documented page-role adapter.",
         "Registry workflow status remains PLANNED; package and manifest editorial status are COPY_LOCKED."
       ],
       "package_path": "docs/learn/content/guides/MSC-GUIDE-013-bitcoin-utxos.md",
-      "package_sha256": "571f5da2fff98fb111ba456262685002cc1320941cf69f60eea5adfcf59e67be",
+      "package_sha256": "f51e971ac0e5d39805556015c4ecf4f1d8957a9297fe900e1583a2e272173677",
       "package_status": "COPY_LOCKED",
       "page_role": "topic-guide",
       "planning_handle_agreement": {
@@ -5090,89 +5160,119 @@
         }
       },
       "source_references_detected": {
-        "structured": [],
-        "unqualified": [
+        "structured": [
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoin.org/bitcoin.pdf",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-013-bitcoin-utxos.md",
+            "record_number": 1,
+            "record_order": 1,
             "registry_id": "MSC-GUIDE-013",
             "representation": "plain-url",
             "source_line": 207,
             "source_order": 1
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/transactions.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-013-bitcoin-utxos.md",
+            "record_number": 2,
+            "record_order": 2,
             "registry_id": "MSC-GUIDE-013",
             "representation": "plain-url",
             "source_line": 213,
             "source_order": 2
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/reference/transactions.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-013-bitcoin-utxos.md",
+            "record_number": 3,
+            "record_order": 3,
             "registry_id": "MSC-GUIDE-013",
             "representation": "plain-url",
             "source_line": 219,
             "source_order": 3
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/coins.h",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-013-bitcoin-utxos.md",
+            "record_number": 4,
+            "record_order": 4,
             "registry_id": "MSC-GUIDE-013",
             "representation": "plain-url",
             "source_line": 225,
             "source_order": 4
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/coins.cpp",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-013-bitcoin-utxos.md",
+            "record_number": 5,
+            "record_order": 5,
             "registry_id": "MSC-GUIDE-013",
             "representation": "plain-url",
             "source_line": 231,
             "source_order": 5
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/consensus/consensus.h",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-013-bitcoin-utxos.md",
+            "record_number": 6,
+            "record_order": 6,
             "registry_id": "MSC-GUIDE-013",
             "representation": "plain-url",
             "source_line": 237,
             "source_order": 6
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-013-bitcoin-utxos.md",
+            "record_number": 7,
+            "record_order": 7,
             "registry_id": "MSC-GUIDE-013",
             "representation": "plain-url",
             "source_line": 243,
             "source_order": 7
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/policy/policy.cpp",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-013-bitcoin-utxos.md",
+            "record_number": 8,
+            "record_order": 8,
             "registry_id": "MSC-GUIDE-013",
             "representation": "plain-url",
             "source_line": 249,
             "source_order": 8
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoinops.org/en/topics/coin-selection/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-013-bitcoin-utxos.md",
+            "record_number": 9,
+            "record_order": 9,
             "registry_id": "MSC-GUIDE-013",
             "representation": "plain-url",
             "source_line": 255,
             "source_order": 9
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/block_chain.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-013-bitcoin-utxos.md",
+            "record_number": 10,
+            "record_order": 10,
             "registry_id": "MSC-GUIDE-013",
             "representation": "plain-url",
             "source_line": 261,
             "source_order": 10
           }
-        ]
+        ],
+        "unqualified": []
       },
       "status_agreement": {
         "agrees": true,
@@ -5183,48 +5283,20 @@
       },
       "unsupported_constructs_detected": [
         {
-          "blocking": true,
+          "blocking": false,
           "count": 10,
           "examples": [
             "https://bitcoin.org/bitcoin.pdf",
             "https://developer.bitcoin.org/devguide/transactions.html",
             "https://developer.bitcoin.org/reference/transactions.html"
           ],
-          "type": "active-plain-url"
-        },
-        {
-          "blocking": true,
-          "count": 10,
-          "examples": [
-            {
-              "normalized_reference": "https://bitcoin.org/bitcoin.pdf",
-              "representation": "plain-url",
-              "source_line": 207,
-              "source_order": 1
-            },
-            {
-              "normalized_reference": "https://developer.bitcoin.org/devguide/transactions.html",
-              "representation": "plain-url",
-              "source_line": 213,
-              "source_order": 2
-            },
-            {
-              "normalized_reference": "https://developer.bitcoin.org/reference/transactions.html",
-              "representation": "plain-url",
-              "source_line": 219,
-              "source_order": 3
-            }
-          ],
-          "type": "unqualified-source-reference"
+          "type": "source-plain-url"
         }
       ]
     },
     {
-      "blocking_incompatibilities": [
-        "Unsupported Markdown construct active-plain-url (8)",
-        "Unsupported Markdown construct unqualified-source-reference (8)"
-      ],
-      "compatibility": "BLOCKED",
+      "blocking_incompatibilities": [],
+      "compatibility": "COMPATIBLE_WITH_ROLE_ADAPTER",
       "h1_agreement": {
         "agrees": true,
         "values": {
@@ -5240,32 +5312,33 @@
         "heading_depths": {
           "1": 1,
           "2": 12,
-          "3": 24
+          "3": 16
         },
         "human_verification_sections": 1,
         "illustration_briefs": 3,
-        "indented_structured_list_lines": 4,
+        "indented_structured_list_lines": 28,
         "inert_fenced_code_blocks": [],
         "inline_code": 0,
         "numbered_destination_sections": 12,
-        "ordered_lists": 0,
+        "ordered_lists": 8,
         "paragraphs": true,
         "role_specific": {
-          "article-subsections": 24
+          "article-subsections": 16
         },
         "semantic_tables": [],
-        "strong_text": 12,
+        "strong_text": 20,
         "structured_key_terms": 0,
-        "structured_sources": 0,
+        "structured_sources": 8,
         "unordered_lists": 99
       },
       "non_blocking_observations": [
-        "Contains 4 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 28 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 8 validated structured source reference(s) (plain-url: 8); the future adapter must preserve them as inert reference data and escape them rather than render active links.",
         "Contains role-specific records requiring the documented page-role adapter.",
         "Registry workflow status remains PLANNED; package and manifest editorial status are COPY_LOCKED."
       ],
       "package_path": "docs/learn/content/guides/MSC-GUIDE-014-bitcoin-confirmations.md",
-      "package_sha256": "d0770f04259bbf7610c4ad48d34d56ed66e2d04e2f4f6db0c123c975fd6e0489",
+      "package_sha256": "402a933989088a7627917e1e496b86ef8f7b0863e35e9de1d036ec8094ac0db9",
       "package_status": "COPY_LOCKED",
       "page_role": "topic-guide",
       "planning_handle_agreement": {
@@ -5337,73 +5410,97 @@
         }
       },
       "source_references_detected": {
-        "structured": [],
-        "unqualified": [
+        "structured": [
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoin.org/bitcoin.pdf",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-014-bitcoin-confirmations.md",
+            "record_number": 1,
+            "record_order": 1,
             "registry_id": "MSC-GUIDE-014",
             "representation": "plain-url",
             "source_line": 203,
             "source_order": 1
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/block_chain.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-014-bitcoin-confirmations.md",
+            "record_number": 2,
+            "record_order": 2,
             "registry_id": "MSC-GUIDE-014",
             "representation": "plain-url",
             "source_line": 209,
             "source_order": 2
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/transactions.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-014-bitcoin-confirmations.md",
+            "record_number": 3,
+            "record_order": 3,
             "registry_id": "MSC-GUIDE-014",
             "representation": "plain-url",
             "source_line": 215,
             "source_order": 3
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/p2p_network.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-014-bitcoin-confirmations.md",
+            "record_number": 4,
+            "record_order": 4,
             "registry_id": "MSC-GUIDE-014",
             "representation": "plain-url",
             "source_line": 221,
             "source_order": 4
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/chain.h",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-014-bitcoin-confirmations.md",
+            "record_number": 5,
+            "record_order": 5,
             "registry_id": "MSC-GUIDE-014",
             "representation": "plain-url",
             "source_line": 227,
             "source_order": 5
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-014-bitcoin-confirmations.md",
+            "record_number": 6,
+            "record_order": 6,
             "registry_id": "MSC-GUIDE-014",
             "representation": "plain-url",
             "source_line": 233,
             "source_order": 6
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/txmempool.cpp",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-014-bitcoin-confirmations.md",
+            "record_number": 7,
+            "record_order": 7,
             "registry_id": "MSC-GUIDE-014",
             "representation": "plain-url",
             "source_line": 239,
             "source_order": 7
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/125/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-014-bitcoin-confirmations.md",
+            "record_number": 8,
+            "record_order": 8,
             "registry_id": "MSC-GUIDE-014",
             "representation": "plain-url",
             "source_line": 245,
             "source_order": 8
           }
-        ]
+        ],
+        "unqualified": []
       },
       "status_agreement": {
         "agrees": true,
@@ -5414,48 +5511,20 @@
       },
       "unsupported_constructs_detected": [
         {
-          "blocking": true,
+          "blocking": false,
           "count": 8,
           "examples": [
             "https://bitcoin.org/bitcoin.pdf",
             "https://developer.bitcoin.org/devguide/block_chain.html",
             "https://developer.bitcoin.org/devguide/transactions.html"
           ],
-          "type": "active-plain-url"
-        },
-        {
-          "blocking": true,
-          "count": 8,
-          "examples": [
-            {
-              "normalized_reference": "https://bitcoin.org/bitcoin.pdf",
-              "representation": "plain-url",
-              "source_line": 203,
-              "source_order": 1
-            },
-            {
-              "normalized_reference": "https://developer.bitcoin.org/devguide/block_chain.html",
-              "representation": "plain-url",
-              "source_line": 209,
-              "source_order": 2
-            },
-            {
-              "normalized_reference": "https://developer.bitcoin.org/devguide/transactions.html",
-              "representation": "plain-url",
-              "source_line": 215,
-              "source_order": 3
-            }
-          ],
-          "type": "unqualified-source-reference"
+          "type": "source-plain-url"
         }
       ]
     },
     {
-      "blocking_incompatibilities": [
-        "Unsupported Markdown construct active-plain-url (8)",
-        "Unsupported Markdown construct unqualified-source-reference (8)"
-      ],
-      "compatibility": "BLOCKED",
+      "blocking_incompatibilities": [],
+      "compatibility": "COMPATIBLE_WITH_ROLE_ADAPTER",
       "h1_agreement": {
         "agrees": true,
         "values": {
@@ -5471,32 +5540,33 @@
         "heading_depths": {
           "1": 1,
           "2": 12,
-          "3": 24
+          "3": 16
         },
         "human_verification_sections": 1,
         "illustration_briefs": 3,
-        "indented_structured_list_lines": 4,
+        "indented_structured_list_lines": 28,
         "inert_fenced_code_blocks": [],
         "inline_code": 0,
         "numbered_destination_sections": 12,
-        "ordered_lists": 2,
+        "ordered_lists": 10,
         "paragraphs": true,
         "role_specific": {
-          "article-subsections": 24
+          "article-subsections": 16
         },
         "semantic_tables": [],
-        "strong_text": 9,
+        "strong_text": 17,
         "structured_key_terms": 0,
-        "structured_sources": 0,
+        "structured_sources": 8,
         "unordered_lists": 101
       },
       "non_blocking_observations": [
-        "Contains 4 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 28 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 8 validated structured source reference(s) (plain-url: 8); the future adapter must preserve them as inert reference data and escape them rather than render active links.",
         "Contains role-specific records requiring the documented page-role adapter.",
         "Registry workflow status remains PLANNED; package and manifest editorial status are COPY_LOCKED."
       ],
       "package_path": "docs/learn/content/guides/MSC-GUIDE-015-bitcoin-halving.md",
-      "package_sha256": "ae39acbec8f02b8f8c46540f2bd631977d5ab6c86f5d389fad274736d48904df",
+      "package_sha256": "d155bffaed96539e2bbf14ec6a89b6e8dd0c941bb7d9a3c5daa3d05aac48dba2",
       "package_status": "COPY_LOCKED",
       "page_role": "topic-guide",
       "planning_handle_agreement": {
@@ -5568,73 +5638,97 @@
         }
       },
       "source_references_detected": {
-        "structured": [],
-        "unqualified": [
+        "structured": [
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-015-bitcoin-halving.md",
+            "record_number": 1,
+            "record_order": 1,
             "registry_id": "MSC-GUIDE-015",
             "representation": "plain-url",
             "source_line": 207,
             "source_order": 1
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-015-bitcoin-halving.md",
+            "record_number": 2,
+            "record_order": 2,
             "registry_id": "MSC-GUIDE-015",
             "representation": "plain-url",
             "source_line": 213,
             "source_order": 2
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/block_chain.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-015-bitcoin-halving.md",
+            "record_number": 3,
+            "record_order": 3,
             "registry_id": "MSC-GUIDE-015",
             "representation": "plain-url",
             "source_line": 219,
             "source_order": 3
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/mining.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-015-bitcoin-halving.md",
+            "record_number": 4,
+            "record_order": 4,
             "registry_id": "MSC-GUIDE-015",
             "representation": "plain-url",
             "source_line": 225,
             "source_order": 4
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoin.org/bitcoin.pdf",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-015-bitcoin-halving.md",
+            "record_number": 5,
+            "record_order": 5,
             "registry_id": "MSC-GUIDE-015",
             "representation": "plain-url",
             "source_line": 231,
             "source_order": 5
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/pow.cpp",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-015-bitcoin-halving.md",
+            "record_number": 6,
+            "record_order": 6,
             "registry_id": "MSC-GUIDE-015",
             "representation": "plain-url",
             "source_line": 237,
             "source_order": 6
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/consensus/params.h",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-015-bitcoin-halving.md",
+            "record_number": 7,
+            "record_order": 7,
             "registry_id": "MSC-GUIDE-015",
             "representation": "plain-url",
             "source_line": 243,
             "source_order": 7
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/42/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-015-bitcoin-halving.md",
+            "record_number": 8,
+            "record_order": 8,
             "registry_id": "MSC-GUIDE-015",
             "representation": "plain-url",
             "source_line": 249,
             "source_order": 8
           }
-        ]
+        ],
+        "unqualified": []
       },
       "status_agreement": {
         "agrees": true,
@@ -5645,48 +5739,20 @@
       },
       "unsupported_constructs_detected": [
         {
-          "blocking": true,
+          "blocking": false,
           "count": 8,
           "examples": [
             "https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp",
             "https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp",
             "https://developer.bitcoin.org/devguide/block_chain.html"
           ],
-          "type": "active-plain-url"
-        },
-        {
-          "blocking": true,
-          "count": 8,
-          "examples": [
-            {
-              "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp",
-              "representation": "plain-url",
-              "source_line": 207,
-              "source_order": 1
-            },
-            {
-              "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp",
-              "representation": "plain-url",
-              "source_line": 213,
-              "source_order": 2
-            },
-            {
-              "normalized_reference": "https://developer.bitcoin.org/devguide/block_chain.html",
-              "representation": "plain-url",
-              "source_line": 219,
-              "source_order": 3
-            }
-          ],
-          "type": "unqualified-source-reference"
+          "type": "source-plain-url"
         }
       ]
     },
     {
-      "blocking_incompatibilities": [
-        "Unsupported Markdown construct active-plain-url (16)",
-        "Unsupported Markdown construct unqualified-source-reference (16)"
-      ],
-      "compatibility": "BLOCKED",
+      "blocking_incompatibilities": [],
+      "compatibility": "COMPATIBLE_WITH_ROLE_ADAPTER",
       "h1_agreement": {
         "agrees": true,
         "values": {
@@ -5702,32 +5768,33 @@
         "heading_depths": {
           "1": 1,
           "2": 12,
-          "3": 36
+          "3": 20
         },
         "human_verification_sections": 1,
         "illustration_briefs": 3,
-        "indented_structured_list_lines": 4,
+        "indented_structured_list_lines": 52,
         "inert_fenced_code_blocks": [],
         "inline_code": 0,
         "numbered_destination_sections": 12,
-        "ordered_lists": 5,
+        "ordered_lists": 21,
         "paragraphs": true,
         "role_specific": {
-          "article-subsections": 36
+          "article-subsections": 20
         },
         "semantic_tables": [],
-        "strong_text": 14,
+        "strong_text": 30,
         "structured_key_terms": 0,
-        "structured_sources": 0,
+        "structured_sources": 16,
         "unordered_lists": 147
       },
       "non_blocking_observations": [
-        "Contains 4 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 52 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 16 validated structured source reference(s) (plain-url: 16); the future adapter must preserve them as inert reference data and escape them rather than render active links.",
         "Contains role-specific records requiring the documented page-role adapter.",
         "Registry workflow status remains PLANNED; package and manifest editorial status are COPY_LOCKED."
       ],
       "package_path": "docs/learn/content/guides/MSC-GUIDE-016-bitcoin-best-practices.md",
-      "package_sha256": "56b0440fbf36679efc1004cb39a805b4d52b6e96785669a3192bfccbf09ce6dc",
+      "package_sha256": "64f710ae214b11862da8c32ef5f12b7e74f25214aef144cbcfe86d222ce894d1",
       "package_status": "COPY_LOCKED",
       "page_role": "topic-guide",
       "planning_handle_agreement": {
@@ -5799,137 +5866,185 @@
         }
       },
       "source_references_detected": {
-        "structured": [],
-        "unqualified": [
+        "structured": [
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/wallets.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-016-bitcoin-best-practices.md",
+            "record_number": 1,
+            "record_order": 1,
             "registry_id": "MSC-GUIDE-016",
             "representation": "plain-url",
             "source_line": 282,
             "source_order": 1
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/transactions.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-016-bitcoin-best-practices.md",
+            "record_number": 2,
+            "record_order": 2,
             "registry_id": "MSC-GUIDE-016",
             "representation": "plain-url",
             "source_line": 288,
             "source_order": 2
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/payment_processing.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-016-bitcoin-best-practices.md",
+            "record_number": 3,
+            "record_order": 3,
             "registry_id": "MSC-GUIDE-016",
             "representation": "plain-url",
             "source_line": 294,
             "source_order": 3
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/doc/managing-wallets.md",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-016-bitcoin-best-practices.md",
+            "record_number": 4,
+            "record_order": 4,
             "registry_id": "MSC-GUIDE-016",
             "representation": "plain-url",
             "source_line": 300,
             "source_order": 4
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/contrib/verify-binaries/README.md",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-016-bitcoin-best-practices.md",
+            "record_number": 5,
+            "record_order": 5,
             "registry_id": "MSC-GUIDE-016",
             "representation": "plain-url",
             "source_line": 306,
             "source_order": 5
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoincore.org/en/download/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-016-bitcoin-best-practices.md",
+            "record_number": 6,
+            "record_order": 6,
             "registry_id": "MSC-GUIDE-016",
             "representation": "plain-url",
             "source_line": 312,
             "source_order": 6
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/21/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-016-bitcoin-best-practices.md",
+            "record_number": 7,
+            "record_order": 7,
             "registry_id": "MSC-GUIDE-016",
             "representation": "plain-url",
             "source_line": 318,
             "source_order": 7
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/32/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-016-bitcoin-best-practices.md",
+            "record_number": 8,
+            "record_order": 8,
             "registry_id": "MSC-GUIDE-016",
             "representation": "plain-url",
             "source_line": 324,
             "source_order": 8
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/39/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-016-bitcoin-best-practices.md",
+            "record_number": 9,
+            "record_order": 9,
             "registry_id": "MSC-GUIDE-016",
             "representation": "plain-url",
             "source_line": 330,
             "source_order": 9
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/78/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-016-bitcoin-best-practices.md",
+            "record_number": 10,
+            "record_order": 10,
             "registry_id": "MSC-GUIDE-016",
             "representation": "plain-url",
             "source_line": 336,
             "source_order": 10
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/129/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-016-bitcoin-best-practices.md",
+            "record_number": 11,
+            "record_order": 11,
             "registry_id": "MSC-GUIDE-016",
             "representation": "plain-url",
             "source_line": 342,
             "source_order": 11
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/174/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-016-bitcoin-best-practices.md",
+            "record_number": 12,
+            "record_order": 12,
             "registry_id": "MSC-GUIDE-016",
             "representation": "plain-url",
             "source_line": 348,
             "source_order": 12
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/380/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-016-bitcoin-best-practices.md",
+            "record_number": 13,
+            "record_order": 13,
             "registry_id": "MSC-GUIDE-016",
             "representation": "plain-url",
             "source_line": 354,
             "source_order": 13
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoinops.org/en/topics/coin-selection/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-016-bitcoin-best-practices.md",
+            "record_number": 14,
+            "record_order": 14,
             "registry_id": "MSC-GUIDE-016",
             "representation": "plain-url",
             "source_line": 360,
             "source_order": 14
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://support.torproject.org/about/what-is-tor/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-016-bitcoin-best-practices.md",
+            "record_number": 15,
+            "record_order": 15,
             "registry_id": "MSC-GUIDE-016",
             "representation": "plain-url",
             "source_line": 366,
             "source_order": 15
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/lightning/bolts/blob/master/04-onion-routing.md",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-016-bitcoin-best-practices.md",
+            "record_number": 16,
+            "record_order": 16,
             "registry_id": "MSC-GUIDE-016",
             "representation": "plain-url",
             "source_line": 372,
             "source_order": 16
           }
-        ]
+        ],
+        "unqualified": []
       },
       "status_agreement": {
         "agrees": true,
@@ -5940,48 +6055,20 @@
       },
       "unsupported_constructs_detected": [
         {
-          "blocking": true,
+          "blocking": false,
           "count": 16,
           "examples": [
             "https://developer.bitcoin.org/devguide/wallets.html",
             "https://developer.bitcoin.org/devguide/transactions.html",
             "https://developer.bitcoin.org/devguide/payment_processing.html"
           ],
-          "type": "active-plain-url"
-        },
-        {
-          "blocking": true,
-          "count": 16,
-          "examples": [
-            {
-              "normalized_reference": "https://developer.bitcoin.org/devguide/wallets.html",
-              "representation": "plain-url",
-              "source_line": 282,
-              "source_order": 1
-            },
-            {
-              "normalized_reference": "https://developer.bitcoin.org/devguide/transactions.html",
-              "representation": "plain-url",
-              "source_line": 288,
-              "source_order": 2
-            },
-            {
-              "normalized_reference": "https://developer.bitcoin.org/devguide/payment_processing.html",
-              "representation": "plain-url",
-              "source_line": 294,
-              "source_order": 3
-            }
-          ],
-          "type": "unqualified-source-reference"
+          "type": "source-plain-url"
         }
       ]
     },
     {
-      "blocking_incompatibilities": [
-        "Unsupported Markdown construct active-plain-url (11)",
-        "Unsupported Markdown construct unqualified-source-reference (11)"
-      ],
-      "compatibility": "BLOCKED",
+      "blocking_incompatibilities": [],
+      "compatibility": "COMPATIBLE_WITH_ROLE_ADAPTER",
       "h1_agreement": {
         "agrees": true,
         "values": {
@@ -5997,32 +6084,33 @@
         "heading_depths": {
           "1": 1,
           "2": 12,
-          "3": 29
+          "3": 18
         },
         "human_verification_sections": 1,
         "illustration_briefs": 3,
-        "indented_structured_list_lines": 7,
+        "indented_structured_list_lines": 40,
         "inert_fenced_code_blocks": [],
         "inline_code": 2,
         "numbered_destination_sections": 12,
-        "ordered_lists": 6,
+        "ordered_lists": 17,
         "paragraphs": true,
         "role_specific": {
-          "article-subsections": 29
+          "article-subsections": 18
         },
         "semantic_tables": [],
-        "strong_text": 12,
+        "strong_text": 23,
         "structured_key_terms": 0,
-        "structured_sources": 0,
+        "structured_sources": 11,
         "unordered_lists": 125
       },
       "non_blocking_observations": [
-        "Contains 7 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 40 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 11 validated structured source reference(s) (plain-url: 11); the future adapter must preserve them as inert reference data and escape them rather than render active links.",
         "Contains role-specific records requiring the documented page-role adapter.",
         "Registry workflow status remains PLANNED; package and manifest editorial status are COPY_LOCKED."
       ],
       "package_path": "docs/learn/content/guides/MSC-GUIDE-017-how-bitcoin-mining-works.md",
-      "package_sha256": "a87d1b4b8a0ae6372826163de2db69f0262b02baaddeddc15722871b9442d01d",
+      "package_sha256": "a319f34db6e3f11fa5d34a202a627dfc76897f5d40355e4f5a10065eb9211705",
       "package_status": "COPY_LOCKED",
       "page_role": "topic-guide",
       "planning_handle_agreement": {
@@ -6094,97 +6182,130 @@
         }
       },
       "source_references_detected": {
-        "structured": [],
-        "unqualified": [
+        "structured": [
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoin.org/bitcoin.pdf",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-017-how-bitcoin-mining-works.md",
+            "record_number": 1,
+            "record_order": 1,
             "registry_id": "MSC-GUIDE-017",
             "representation": "plain-url",
             "source_line": 231,
             "source_order": 1
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/mining.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-017-how-bitcoin-mining-works.md",
+            "record_number": 2,
+            "record_order": 2,
             "registry_id": "MSC-GUIDE-017",
             "representation": "plain-url",
             "source_line": 237,
             "source_order": 2
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/block_chain.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-017-how-bitcoin-mining-works.md",
+            "record_number": 3,
+            "record_order": 3,
             "registry_id": "MSC-GUIDE-017",
             "representation": "plain-url",
             "source_line": 243,
             "source_order": 3
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/node/miner.cpp",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-017-how-bitcoin-mining-works.md",
+            "record_number": 4,
+            "record_order": 4,
             "registry_id": "MSC-GUIDE-017",
             "representation": "plain-url",
             "source_line": 249,
             "source_order": 4
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/node/miner.h",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-017-how-bitcoin-mining-works.md",
+            "record_number": 5,
+            "record_order": 5,
             "registry_id": "MSC-GUIDE-017",
             "representation": "plain-url",
             "source_line": 255,
             "source_order": 5
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/rpc/mining.cpp",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-017-how-bitcoin-mining-works.md",
+            "record_number": 6,
+            "record_order": 6,
             "registry_id": "MSC-GUIDE-017",
             "representation": "plain-url",
             "source_line": 261,
             "source_order": 6
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/primitives/block.h",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-017-how-bitcoin-mining-works.md",
+            "record_number": 7,
+            "record_order": 7,
             "registry_id": "MSC-GUIDE-017",
             "representation": "plain-url",
             "source_line": 267,
             "source_order": 7
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/pow.cpp",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-017-how-bitcoin-mining-works.md",
+            "record_number": 8,
+            "record_order": 8,
             "registry_id": "MSC-GUIDE-017",
             "representation": "plain-url",
             "source_line": 273,
             "source_order": 8
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-017-how-bitcoin-mining-works.md",
+            "record_number": 9,
+            "record_order": 9,
             "registry_id": "MSC-GUIDE-017",
             "representation": "plain-url",
             "source_line": 279,
             "source_order": 9
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/consensus/consensus.h",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-017-how-bitcoin-mining-works.md",
+            "record_number": 10,
+            "record_order": 10,
             "registry_id": "MSC-GUIDE-017",
             "representation": "plain-url",
             "source_line": 285,
             "source_order": 10
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://doi.org/10.6028/NIST.FIPS.180-4",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-017-how-bitcoin-mining-works.md",
+            "record_number": 11,
+            "record_order": 11,
             "registry_id": "MSC-GUIDE-017",
             "representation": "plain-url",
             "source_line": 291,
             "source_order": 11
           }
-        ]
+        ],
+        "unqualified": []
       },
       "status_agreement": {
         "agrees": true,
@@ -6195,48 +6316,20 @@
       },
       "unsupported_constructs_detected": [
         {
-          "blocking": true,
+          "blocking": false,
           "count": 11,
           "examples": [
             "https://bitcoin.org/bitcoin.pdf",
             "https://developer.bitcoin.org/devguide/mining.html",
             "https://developer.bitcoin.org/devguide/block_chain.html"
           ],
-          "type": "active-plain-url"
-        },
-        {
-          "blocking": true,
-          "count": 11,
-          "examples": [
-            {
-              "normalized_reference": "https://bitcoin.org/bitcoin.pdf",
-              "representation": "plain-url",
-              "source_line": 231,
-              "source_order": 1
-            },
-            {
-              "normalized_reference": "https://developer.bitcoin.org/devguide/mining.html",
-              "representation": "plain-url",
-              "source_line": 237,
-              "source_order": 2
-            },
-            {
-              "normalized_reference": "https://developer.bitcoin.org/devguide/block_chain.html",
-              "representation": "plain-url",
-              "source_line": 243,
-              "source_order": 3
-            }
-          ],
-          "type": "unqualified-source-reference"
+          "type": "source-plain-url"
         }
       ]
     },
     {
-      "blocking_incompatibilities": [
-        "Unsupported Markdown construct active-plain-url (11)",
-        "Unsupported Markdown construct unqualified-source-reference (11)"
-      ],
-      "compatibility": "BLOCKED",
+      "blocking_incompatibilities": [],
+      "compatibility": "COMPATIBLE_WITH_ROLE_ADAPTER",
       "h1_agreement": {
         "agrees": true,
         "values": {
@@ -6252,32 +6345,33 @@
         "heading_depths": {
           "1": 1,
           "2": 12,
-          "3": 32
+          "3": 21
         },
         "human_verification_sections": 1,
         "illustration_briefs": 3,
-        "indented_structured_list_lines": 10,
+        "indented_structured_list_lines": 43,
         "inert_fenced_code_blocks": [],
         "inline_code": 3,
         "numbered_destination_sections": 12,
-        "ordered_lists": 7,
+        "ordered_lists": 18,
         "paragraphs": true,
         "role_specific": {
-          "article-subsections": 32
+          "article-subsections": 21
         },
         "semantic_tables": [],
-        "strong_text": 10,
+        "strong_text": 21,
         "structured_key_terms": 0,
-        "structured_sources": 0,
+        "structured_sources": 11,
         "unordered_lists": 129
       },
       "non_blocking_observations": [
-        "Contains 10 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 43 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 11 validated structured source reference(s) (plain-url: 11); the future adapter must preserve them as inert reference data and escape them rather than render active links.",
         "Contains role-specific records requiring the documented page-role adapter.",
         "Registry workflow status remains PLANNED; package and manifest editorial status are COPY_LOCKED."
       ],
       "package_path": "docs/learn/content/guides/MSC-GUIDE-018-bitcoin-mining-pools.md",
-      "package_sha256": "428fd8bddd6a8cf50c404b9ff5c027c2b985e28be2201b4c0fcd8f065a3f1097",
+      "package_sha256": "681d8a043c1f5795ad73abcc4a050af80b401ce9a2dbecaf014eed2c96f9c146",
       "package_status": "COPY_LOCKED",
       "page_role": "topic-guide",
       "planning_handle_agreement": {
@@ -6349,97 +6443,130 @@
         }
       },
       "source_references_detected": {
-        "structured": [],
-        "unqualified": [
+        "structured": [
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/22/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-018-bitcoin-mining-pools.md",
+            "record_number": 1,
+            "record_order": 1,
             "registry_id": "MSC-GUIDE-018",
             "representation": "plain-url",
             "source_line": 281,
             "source_order": 1
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bips.dev/23/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-018-bitcoin-mining-pools.md",
+            "record_number": 2,
+            "record_order": 2,
             "registry_id": "MSC-GUIDE-018",
             "representation": "plain-url",
             "source_line": 287,
             "source_order": 2
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/rpc/mining.cpp",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-018-bitcoin-mining-pools.md",
+            "record_number": 3,
+            "record_order": 3,
             "registry_id": "MSC-GUIDE-018",
             "representation": "plain-url",
             "source_line": 293,
             "source_order": 3
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/node/miner.cpp",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-018-bitcoin-mining-pools.md",
+            "record_number": 4,
+            "record_order": 4,
             "registry_id": "MSC-GUIDE-018",
             "representation": "plain-url",
             "source_line": 299,
             "source_order": 4
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://stratumprotocol.org/specification/03-protocol-overview/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-018-bitcoin-mining-pools.md",
+            "record_number": 5,
+            "record_order": 5,
             "registry_id": "MSC-GUIDE-018",
             "representation": "plain-url",
             "source_line": 305,
             "source_order": 5
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://stratumprotocol.org/specification/05-mining-protocol/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-018-bitcoin-mining-pools.md",
+            "record_number": 6,
+            "record_order": 6,
             "registry_id": "MSC-GUIDE-018",
             "representation": "plain-url",
             "source_line": 311,
             "source_order": 6
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://stratumprotocol.org/specification/06-job-declaration-protocol/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-018-bitcoin-mining-pools.md",
+            "record_number": 7,
+            "record_order": 7,
             "registry_id": "MSC-GUIDE-018",
             "representation": "plain-url",
             "source_line": 317,
             "source_order": 7
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://stratumprotocol.org/specification/07-template-distribution-protocol/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-018-bitcoin-mining-pools.md",
+            "record_number": 8,
+            "record_order": 8,
             "registry_id": "MSC-GUIDE-018",
             "representation": "plain-url",
             "source_line": 323,
             "source_order": 8
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://arxiv.org/abs/1112.4980",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-018-bitcoin-mining-pools.md",
+            "record_number": 9,
+            "record_order": 9,
             "registry_id": "MSC-GUIDE-018",
             "representation": "plain-url",
             "source_line": 329,
             "source_order": 9
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/consensus/consensus.h",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-018-bitcoin-mining-pools.md",
+            "record_number": 10,
+            "record_order": 10,
             "registry_id": "MSC-GUIDE-018",
             "representation": "plain-url",
             "source_line": 335,
             "source_order": 10
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoin.org/bitcoin.pdf",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-018-bitcoin-mining-pools.md",
+            "record_number": 11,
+            "record_order": 11,
             "registry_id": "MSC-GUIDE-018",
             "representation": "plain-url",
             "source_line": 341,
             "source_order": 11
           }
-        ]
+        ],
+        "unqualified": []
       },
       "status_agreement": {
         "agrees": true,
@@ -6450,48 +6577,20 @@
       },
       "unsupported_constructs_detected": [
         {
-          "blocking": true,
+          "blocking": false,
           "count": 11,
           "examples": [
             "https://bips.dev/22/",
             "https://bips.dev/23/",
             "https://github.com/bitcoin/bitcoin/blob/master/src/rpc/mining.cpp"
           ],
-          "type": "active-plain-url"
-        },
-        {
-          "blocking": true,
-          "count": 11,
-          "examples": [
-            {
-              "normalized_reference": "https://bips.dev/22/",
-              "representation": "plain-url",
-              "source_line": 281,
-              "source_order": 1
-            },
-            {
-              "normalized_reference": "https://bips.dev/23/",
-              "representation": "plain-url",
-              "source_line": 287,
-              "source_order": 2
-            },
-            {
-              "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/rpc/mining.cpp",
-              "representation": "plain-url",
-              "source_line": 293,
-              "source_order": 3
-            }
-          ],
-          "type": "unqualified-source-reference"
+          "type": "source-plain-url"
         }
       ]
     },
     {
-      "blocking_incompatibilities": [
-        "Unsupported Markdown construct active-plain-url (9)",
-        "Unsupported Markdown construct unqualified-source-reference (9)"
-      ],
-      "compatibility": "BLOCKED",
+      "blocking_incompatibilities": [],
+      "compatibility": "COMPATIBLE_WITH_ROLE_ADAPTER",
       "h1_agreement": {
         "agrees": true,
         "values": {
@@ -6507,32 +6606,33 @@
         "heading_depths": {
           "1": 1,
           "2": 12,
-          "3": 30
+          "3": 21
         },
         "human_verification_sections": 1,
         "illustration_briefs": 3,
-        "indented_structured_list_lines": 9,
+        "indented_structured_list_lines": 36,
         "inert_fenced_code_blocks": [],
         "inline_code": 0,
         "numbered_destination_sections": 12,
-        "ordered_lists": 10,
+        "ordered_lists": 19,
         "paragraphs": true,
         "role_specific": {
-          "article-subsections": 30
+          "article-subsections": 21
         },
         "semantic_tables": [],
-        "strong_text": 8,
+        "strong_text": 17,
         "structured_key_terms": 0,
-        "structured_sources": 0,
+        "structured_sources": 9,
         "unordered_lists": 143
       },
       "non_blocking_observations": [
-        "Contains 9 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 36 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 9 validated structured source reference(s) (plain-url: 9); the future adapter must preserve them as inert reference data and escape them rather than render active links.",
         "Contains role-specific records requiring the documented page-role adapter.",
         "Registry workflow status remains PLANNED; package and manifest editorial status are COPY_LOCKED."
       ],
       "package_path": "docs/learn/content/guides/MSC-GUIDE-019-bitcoin-asic-miners.md",
-      "package_sha256": "8aa2928e1c0543d72a698942d3a759c600b054982dc47be3b44256f843591aee",
+      "package_sha256": "7d51edddc8cb891a2b25bfa26f3cb60969820c054dedbdf620e52a133eddb14d",
       "package_status": "COPY_LOCKED",
       "page_role": "topic-guide",
       "planning_handle_agreement": {
@@ -6604,81 +6704,108 @@
         }
       },
       "source_references_detected": {
-        "structured": [],
-        "unqualified": [
+        "structured": [
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://doi.org/10.6028/NIST.FIPS.180-4",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-019-bitcoin-asic-miners.md",
+            "record_number": 1,
+            "record_order": 1,
             "registry_id": "MSC-GUIDE-019",
             "representation": "plain-url",
             "source_line": 294,
             "source_order": 1
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoin.org/bitcoin.pdf",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-019-bitcoin-asic-miners.md",
+            "record_number": 2,
+            "record_order": 2,
             "registry_id": "MSC-GUIDE-019",
             "representation": "plain-url",
             "source_line": 300,
             "source_order": 2
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/mining.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-019-bitcoin-asic-miners.md",
+            "record_number": 3,
+            "record_order": 3,
             "registry_id": "MSC-GUIDE-019",
             "representation": "plain-url",
             "source_line": 306,
             "source_order": 3
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/primitives/block.h",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-019-bitcoin-asic-miners.md",
+            "record_number": 4,
+            "record_order": 4,
             "registry_id": "MSC-GUIDE-019",
             "representation": "plain-url",
             "source_line": 312,
             "source_order": 4
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/primitives/block.cpp",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-019-bitcoin-asic-miners.md",
+            "record_number": 5,
+            "record_order": 5,
             "registry_id": "MSC-GUIDE-019",
             "representation": "plain-url",
             "source_line": 318,
             "source_order": 5
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/crypto/sha256.h",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-019-bitcoin-asic-miners.md",
+            "record_number": 6,
+            "record_order": 6,
             "registry_id": "MSC-GUIDE-019",
             "representation": "plain-url",
             "source_line": 324,
             "source_order": 6
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://stratumprotocol.org/specification/05-mining-protocol/",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-019-bitcoin-asic-miners.md",
+            "record_number": 7,
+            "record_order": 7,
             "registry_id": "MSC-GUIDE-019",
             "representation": "plain-url",
             "source_line": 330,
             "source_order": 7
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/rpc/mining.cpp",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-019-bitcoin-asic-miners.md",
+            "record_number": 8,
+            "record_order": 8,
             "registry_id": "MSC-GUIDE-019",
             "representation": "plain-url",
             "source_line": 336,
             "source_order": 8
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://www.bipm.org/en/publications/si-brochure",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-019-bitcoin-asic-miners.md",
+            "record_number": 9,
+            "record_order": 9,
             "registry_id": "MSC-GUIDE-019",
             "representation": "plain-url",
             "source_line": 342,
             "source_order": 9
           }
-        ]
+        ],
+        "unqualified": []
       },
       "status_agreement": {
         "agrees": true,
@@ -6689,48 +6816,20 @@
       },
       "unsupported_constructs_detected": [
         {
-          "blocking": true,
+          "blocking": false,
           "count": 9,
           "examples": [
             "https://doi.org/10.6028/NIST.FIPS.180-4",
             "https://bitcoin.org/bitcoin.pdf",
             "https://developer.bitcoin.org/devguide/mining.html"
           ],
-          "type": "active-plain-url"
-        },
-        {
-          "blocking": true,
-          "count": 9,
-          "examples": [
-            {
-              "normalized_reference": "https://doi.org/10.6028/NIST.FIPS.180-4",
-              "representation": "plain-url",
-              "source_line": 294,
-              "source_order": 1
-            },
-            {
-              "normalized_reference": "https://bitcoin.org/bitcoin.pdf",
-              "representation": "plain-url",
-              "source_line": 300,
-              "source_order": 2
-            },
-            {
-              "normalized_reference": "https://developer.bitcoin.org/devguide/mining.html",
-              "representation": "plain-url",
-              "source_line": 306,
-              "source_order": 3
-            }
-          ],
-          "type": "unqualified-source-reference"
+          "type": "source-plain-url"
         }
       ]
     },
     {
-      "blocking_incompatibilities": [
-        "Unsupported Markdown construct active-plain-url (11)",
-        "Unsupported Markdown construct unqualified-source-reference (11)"
-      ],
-      "compatibility": "BLOCKED",
+      "blocking_incompatibilities": [],
+      "compatibility": "COMPATIBLE_WITH_ROLE_ADAPTER",
       "h1_agreement": {
         "agrees": true,
         "values": {
@@ -6746,32 +6845,33 @@
         "heading_depths": {
           "1": 1,
           "2": 12,
-          "3": 34
+          "3": 23
         },
         "human_verification_sections": 1,
         "illustration_briefs": 3,
-        "indented_structured_list_lines": 11,
+        "indented_structured_list_lines": 44,
         "inert_fenced_code_blocks": [],
         "inline_code": 14,
         "numbered_destination_sections": 12,
-        "ordered_lists": 10,
+        "ordered_lists": 21,
         "paragraphs": true,
         "role_specific": {
-          "article-subsections": 34
+          "article-subsections": 23
         },
         "semantic_tables": [],
-        "strong_text": 7,
+        "strong_text": 18,
         "structured_key_terms": 0,
-        "structured_sources": 0,
+        "structured_sources": 11,
         "unordered_lists": 131
       },
       "non_blocking_observations": [
-        "Contains 11 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 44 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
+        "Contains 11 validated structured source reference(s) (plain-url: 11); the future adapter must preserve them as inert reference data and escape them rather than render active links.",
         "Contains role-specific records requiring the documented page-role adapter.",
         "Registry workflow status remains PLANNED; package and manifest editorial status are COPY_LOCKED."
       ],
       "package_path": "docs/learn/content/guides/MSC-GUIDE-020-bitcoin-difficulty-adjustment.md",
-      "package_sha256": "db490da1a3bed4f5b6e3157233c44bbeaa9300eefa0bb78403d8cf30712a75f4",
+      "package_sha256": "5cae423b8922f0ca64e5a1a645142d06c8d1514387eecb6d504ce69cf382d2a6",
       "package_status": "COPY_LOCKED",
       "page_role": "topic-guide",
       "planning_handle_agreement": {
@@ -6843,97 +6943,130 @@
         }
       },
       "source_references_detected": {
-        "structured": [],
-        "unqualified": [
+        "structured": [
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/pow.cpp",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-020-bitcoin-difficulty-adjustment.md",
+            "record_number": 1,
+            "record_order": 1,
             "registry_id": "MSC-GUIDE-020",
             "representation": "plain-url",
             "source_line": 331,
             "source_order": 1
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/pow.h",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-020-bitcoin-difficulty-adjustment.md",
+            "record_number": 2,
+            "record_order": 2,
             "registry_id": "MSC-GUIDE-020",
             "representation": "plain-url",
             "source_line": 337,
             "source_order": 2
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/consensus/params.h",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-020-bitcoin-difficulty-adjustment.md",
+            "record_number": 3,
+            "record_order": 3,
             "registry_id": "MSC-GUIDE-020",
             "representation": "plain-url",
             "source_line": 343,
             "source_order": 3
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-020-bitcoin-difficulty-adjustment.md",
+            "record_number": 4,
+            "record_order": 4,
             "registry_id": "MSC-GUIDE-020",
             "representation": "plain-url",
             "source_line": 349,
             "source_order": 4
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/primitives/block.h",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-020-bitcoin-difficulty-adjustment.md",
+            "record_number": 5,
+            "record_order": 5,
             "registry_id": "MSC-GUIDE-020",
             "representation": "plain-url",
             "source_line": 355,
             "source_order": 5
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/arith_uint256.cpp",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-020-bitcoin-difficulty-adjustment.md",
+            "record_number": 6,
+            "record_order": 6,
             "registry_id": "MSC-GUIDE-020",
             "representation": "plain-url",
             "source_line": 361,
             "source_order": 6
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/chain.cpp",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-020-bitcoin-difficulty-adjustment.md",
+            "record_number": 7,
+            "record_order": 7,
             "registry_id": "MSC-GUIDE-020",
             "representation": "plain-url",
             "source_line": 367,
             "source_order": 7
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/test/pow_tests.cpp",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-020-bitcoin-difficulty-adjustment.md",
+            "record_number": 8,
+            "record_order": 8,
             "registry_id": "MSC-GUIDE-020",
             "representation": "plain-url",
             "source_line": 373,
             "source_order": 8
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-020-bitcoin-difficulty-adjustment.md",
+            "record_number": 9,
+            "record_order": 9,
             "registry_id": "MSC-GUIDE-020",
             "representation": "plain-url",
             "source_line": 379,
             "source_order": 9
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://bitcoin.org/bitcoin.pdf",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-020-bitcoin-difficulty-adjustment.md",
+            "record_number": 10,
+            "record_order": 10,
             "registry_id": "MSC-GUIDE-020",
             "representation": "plain-url",
             "source_line": 385,
             "source_order": 10
           },
           {
+            "field_name": "Direct URL",
             "normalized_reference": "https://developer.bitcoin.org/devguide/block_chain.html",
             "package_path": "docs/learn/content/guides/MSC-GUIDE-020-bitcoin-difficulty-adjustment.md",
+            "record_number": 11,
+            "record_order": 11,
             "registry_id": "MSC-GUIDE-020",
             "representation": "plain-url",
             "source_line": 391,
             "source_order": 11
           }
-        ]
+        ],
+        "unqualified": []
       },
       "status_agreement": {
         "agrees": true,
@@ -6944,39 +7077,14 @@
       },
       "unsupported_constructs_detected": [
         {
-          "blocking": true,
+          "blocking": false,
           "count": 11,
           "examples": [
             "https://github.com/bitcoin/bitcoin/blob/master/src/pow.cpp",
             "https://github.com/bitcoin/bitcoin/blob/master/src/pow.h",
             "https://github.com/bitcoin/bitcoin/blob/master/src/consensus/params.h"
           ],
-          "type": "active-plain-url"
-        },
-        {
-          "blocking": true,
-          "count": 11,
-          "examples": [
-            {
-              "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/pow.cpp",
-              "representation": "plain-url",
-              "source_line": 331,
-              "source_order": 1
-            },
-            {
-              "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/pow.h",
-              "representation": "plain-url",
-              "source_line": 337,
-              "source_order": 2
-            },
-            {
-              "normalized_reference": "https://github.com/bitcoin/bitcoin/blob/master/src/consensus/params.h",
-              "representation": "plain-url",
-              "source_line": 343,
-              "source_order": 3
-            }
-          ],
-          "type": "unqualified-source-reference"
+          "type": "source-plain-url"
         }
       ]
     },
@@ -27029,10 +27137,8 @@
       ]
     },
     {
-      "blocking_incompatibilities": [
-        "Unsupported Markdown construct invalid-source-reference (1)"
-      ],
-      "compatibility": "BLOCKED",
+      "blocking_incompatibilities": [],
+      "compatibility": "COMPATIBLE_WITH_ROLE_ADAPTER",
       "h1_agreement": {
         "agrees": true,
         "values": {
@@ -27054,7 +27160,7 @@
         "illustration_briefs": 0,
         "indented_structured_list_lines": 90,
         "inert_fenced_code_blocks": [],
-        "inline_code": 27,
+        "inline_code": 26,
         "numbered_destination_sections": 14,
         "ordered_lists": 25,
         "paragraphs": true,
@@ -27069,12 +27175,12 @@
       },
       "non_blocking_observations": [
         "Contains 90 indented structured list line(s) inside approved field, source, review, relationship, or illustration records.",
-        "Contains 17 validated structured source reference(s) (markdown-link: 17); the future adapter must preserve them as inert reference data and escape them rather than render active links.",
+        "Contains 18 validated structured source reference(s) (markdown-link: 17, repository-path: 1); the future adapter must preserve them as inert reference data and escape them rather than render active links.",
         "Contains role-specific records requiring the documented page-role adapter.",
         "Registry workflow status remains PLANNED; package and manifest editorial status are COPY_LOCKED."
       ],
       "package_path": "docs/learn/content/guides/MSC-GUIDE-080-bitcoin-open-source-projects.md",
-      "package_sha256": "f1c71b61ee123b9cbf832cc839370045be31709614c41764e1d248a2c9e610aa",
+      "package_sha256": "94ef73214951fd50bf23e261017d0410b2b483ab386d6bf47f920c62c5b0ee8e",
       "package_status": "COPY_LOCKED",
       "page_role": "topic-guide",
       "planning_handle_agreement": {
@@ -27341,6 +27447,17 @@
             "representation": "markdown-link",
             "source_line": 348,
             "source_order": 17
+          },
+          {
+            "field_name": "Reference",
+            "normalized_reference": "docs/learn/content/guides/MSC-GUIDE-066-bitcoin-developers.md",
+            "package_path": "docs/learn/content/guides/MSC-GUIDE-080-bitcoin-open-source-projects.md",
+            "record_number": 18,
+            "record_order": 18,
+            "registry_id": "MSC-GUIDE-080",
+            "representation": "repository-path",
+            "source_line": 355,
+            "source_order": 18
           }
         ],
         "unqualified": []
@@ -27354,19 +27471,6 @@
       },
       "unsupported_constructs_detected": [
         {
-          "blocking": true,
-          "count": 1,
-          "examples": [
-            {
-              "field_name": "URL",
-              "line": 355,
-              "reason": "invalid-or-noncomplete-source-reference",
-              "value": "Repository file"
-            }
-          ],
-          "type": "invalid-source-reference"
-        },
-        {
           "blocking": false,
           "count": 17,
           "examples": [
@@ -27375,6 +27479,14 @@
             "[https://github.com/bitcoin/bitcoin/blob/master/CONTRIBUTING.md](https://github.com/bitcoin/bitcoin/blob/master/CONTRIBUTING.md)"
           ],
           "type": "source-markdown-link"
+        },
+        {
+          "blocking": false,
+          "count": 1,
+          "examples": [
+            "docs/learn/content/guides/MSC-GUIDE-066-bitcoin-developers.md"
+          ],
+          "type": "source-repository-path"
         }
       ]
     }
@@ -27404,9 +27516,9 @@
         "sha256": "c4640f80b7084ab7d5b3d89745fbb1ba64e8bd5d54649a89a9bb12afbd359e8d"
       },
       {
-        "byte_length": 30219,
+        "byte_length": 30346,
         "file": "scripts/learn-runtime/test-contract.mjs",
-        "sha256": "145156c01675deb501fe19238e767c5db849cf99230da7bb2b005f38eeb2c0a3"
+        "sha256": "528fc0e300aa7f628cfe992998024d4f68c38dc08c554586f28e93871dbcf766"
       },
       {
         "byte_length": 27107,
@@ -27424,9 +27536,9 @@
         "sha256": "5bce5d73b190cfef662695199672f4adef03ea8afa20556678d9e4666fbe7ca8"
       },
       {
-        "byte_length": 2771,
+        "byte_length": 3676,
         "file": ".github/workflows/learn-validation.yml",
-        "sha256": "4514f33b8d491120eb50d404f1d94557d8b8f70eea9dcbd86ea7cb4dea686979"
+        "sha256": "b72aae8b74dbf36a9ffb73ab22b6647fd1494cf0b51b14124f5dad6d7f4deaaa"
       }
     ],
     "manifest": {
@@ -27444,30 +27556,9 @@
     }
   },
   "summary": {
-    "affected_package_ids": [
-      "MSC-GUIDE-001",
-      "MSC-GUIDE-002",
-      "MSC-GUIDE-003",
-      "MSC-GUIDE-004",
-      "MSC-GUIDE-005",
-      "MSC-GUIDE-006",
-      "MSC-GUIDE-007",
-      "MSC-GUIDE-008",
-      "MSC-GUIDE-009",
-      "MSC-GUIDE-010",
-      "MSC-GUIDE-011",
-      "MSC-GUIDE-012",
-      "MSC-GUIDE-013",
-      "MSC-GUIDE-014",
-      "MSC-GUIDE-015",
-      "MSC-GUIDE-016",
-      "MSC-GUIDE-017",
-      "MSC-GUIDE-018",
-      "MSC-GUIDE-019",
-      "MSC-GUIDE-020"
-    ],
-    "blocking_incompatibilities": 21,
-    "compatible_with_documented_adapter_handling": 71,
+    "affected_package_ids": [],
+    "blocking_incompatibilities": 0,
+    "compatible_with_documented_adapter_handling": 92,
     "counts_by_role": {
       "category-hub": 5,
       "featured-route": 1,
@@ -27483,20 +27574,20 @@
     "missing_packages": 0,
     "root_records_audited": 0,
     "structured_markdown_https_references": 171,
-    "structured_plain_https_references": 922,
-    "structured_repository_path_references": 0,
+    "structured_plain_https_references": 1138,
+    "structured_repository_path_references": 1,
     "supported_fenced_code_languages": {
       "sh": 9
     },
     "supported_inert_fenced_code_blocks": 9,
     "supported_semantic_tables": 1,
     "total_audited": 92,
-    "total_structured_references": 1093,
-    "total_unqualified_source_references": 216,
+    "total_structured_references": 1310,
+    "total_unqualified_source_references": 0,
     "unqualified_markdown_links": 0,
-    "unqualified_plain_url_references": 216,
+    "unqualified_plain_url_references": 0,
     "unsupported_fenced_code_blocks": 0,
-    "unsupported_markdown_occurrences": 1526,
+    "unsupported_markdown_occurrences": 1310,
     "unsupported_tables": 0
   },
   "target_runtime_schema_version": "2.0.0"
