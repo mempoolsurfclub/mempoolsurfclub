@@ -1,0 +1,87 @@
+/* MSC homepage radar sweep refinement */
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field::before {
+  content: "";
+  display: block;
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: clamp(4.5rem, 8vw, 6.5rem);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border: 0;
+  border-radius: 50%;
+  box-shadow: none;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    rgba(212, 190, 153, .14) 0%,
+    rgba(212, 190, 153, .07) 34%,
+    rgba(212, 190, 153, .025) 52%,
+    transparent 74%
+  );
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field::after {
+  content: "";
+  display: block;
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: min(92%, 27rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform-origin: 50% 50%;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 318deg,
+    rgba(212, 190, 153, .012) 326deg,
+    rgba(212, 190, 153, .04) 338deg,
+    rgba(212, 190, 153, .09) 350deg,
+    rgba(212, 190, 153, .035) 357deg,
+    transparent 360deg
+  );
+  -webkit-mask-image: radial-gradient(
+    circle,
+    #000 0%,
+    #000 58%,
+    rgba(0, 0, 0, .78) 72%,
+    rgba(0, 0, 0, .28) 87%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    circle,
+    #000 0%,
+    #000 58%,
+    rgba(0, 0, 0, .78) 72%,
+    rgba(0, 0, 0, .28) 87%,
+    transparent 100%
+  );
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  animation: mscRadarCenterSweep 36s linear infinite;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar][data-radar-paused="true"] .msc-signal-field::after,
+.msc-signal-card[data-msc-ecosystem-radar][data-radar-transition="true"] .msc-signal-field::after {
+  animation-play-state: paused;
+}
+
+@keyframes mscRadarCenterSweep {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field::after {
+    animation: none !important;
+    opacity: 0;
+  }
+}
