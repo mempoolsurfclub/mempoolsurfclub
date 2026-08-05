@@ -29,10 +29,12 @@
         confirmedTitle: root.querySelector('[data-confirmed-title]'),
         confirmedState: root.querySelector('[data-confirmed-state]'),
         confirmedAge: root.querySelector('[data-confirmed-age]'),
+        confirmedFee: root.querySelector('[data-confirmed-fee]'),
         projectedTile: root.querySelector('[data-projected-tile]'),
         projectedTitle: root.querySelector('[data-projected-title]'),
         projectedState: root.querySelector('[data-projected-state]'),
         projectedTx: root.querySelector('[data-projected-tx]'),
+        projectedFee: root.querySelector('[data-projected-fee]'),
         transitionTile: root.querySelector('[data-transition-tile]'),
         transitionTitle: root.querySelector('[data-transition-title]'),
         transitionState: root.querySelector('[data-transition-state]'),
@@ -153,14 +155,31 @@
       const timestamp = Number(data.timestamp);
       const txCount = Number(data.tx_count);
       if (!Number.isFinite(height) || !Number.isFinite(timestamp) || !Number.isFinite(txCount)) return null;
-      return { hash: data.id, height, timestamp, txCount };
+      return { hash: data.id, height, timestamp, txCount, medianFee: null };
+    }
+
+    normalizeMedianFee(value) {
+      const medianFee = Number(value);
+      if (!Number.isFinite(medianFee) || medianFee < 0) return null;
+      return medianFee;
     }
 
     normalizeProjected(data) {
       const first = Array.isArray(data) ? data[0] : data;
       const nTx = Number(first && first.nTx);
+      const medianFee = this.normalizeMedianFee(first && first.medianFee);
       if (!Number.isFinite(nTx) || nTx < 0) return null;
-      return { nTx: Math.round(nTx) };
+      return { nTx: Math.round(nTx), medianFee };
+    }
+
+    async fetchConfirmedMedianFee(hash, height) {
+      try {
+        const richBlock = await this.request(`/v1/block/${hash}`);
+        if (!richBlock || richBlock.id !== hash || Number(richBlock.height) !== height) return null;
+        return this.normalizeMedianFee(richBlock.extras && richBlock.extras.medianFee);
+      } catch (error) {
+        return null;
+      }
     }
 
     async fetchState() {
@@ -170,7 +189,13 @@
       const projectedData = await this.request('/v1/fees/mempool-blocks');
       const block = this.normalizeBlock(blockData);
       const projected = this.normalizeProjected(projectedData);
-      if (!block || !projected) throw new Error('invalid api payload');
+      if (!block || block.hash !== hash || !projected) throw new Error('invalid api payload');
+      const medianFee = await this.fetchConfirmedMedianFee(hash, block.height);
+      if (Number.isFinite(medianFee)) {
+        block.medianFee = medianFee;
+      } else if (this.block && this.block.hash === block.hash && Number.isFinite(this.block.medianFee)) {
+        block.medianFee = this.block.medianFee;
+      }
       return { block, projected };
     }
 
@@ -309,6 +334,7 @@
       this.nodes.confirmedTitle.textContent = `BLOCK ${this.block.height.toLocaleString()}`;
       this.nodes.confirmedState.textContent = 'CONFIRMED';
       this.renderAge();
+      if (this.nodes.confirmedFee) this.nodes.confirmedFee.textContent = this.feeLabel(this.block.medianFee);
     }
 
     renderProjected() {
@@ -316,11 +342,18 @@
       this.nodes.projectedTitle.textContent = 'NEXT BLOCK';
       this.nodes.projectedState.textContent = 'PROJECTED';
       this.nodes.projectedTx.textContent = `≈ ${this.projected.nTx.toLocaleString()} TX`;
+      if (this.nodes.projectedFee) this.nodes.projectedFee.textContent = this.feeLabel(this.projected.medianFee);
     }
 
     renderAge(target = this.nodes.confirmedAge, block = this.block) {
       if (!block || !target) return;
       target.textContent = this.ageLabel(block.timestamp);
+    }
+
+    feeLabel(medianFee) {
+      if (!Number.isFinite(medianFee)) return '';
+      const rounded = medianFee >= 10 ? Math.round(medianFee) : Math.round(medianFee * 10) / 10;
+      return `MEDIAN ${rounded.toLocaleString()} SAT/VB`;
     }
 
     ageLabel(timestamp) {
@@ -366,11 +399,17 @@
       this.root.style.setProperty('--msc-radar-transition-x', `${distance}px`);
       this.nodes.transitionTitle.textContent = 'NEXT BLOCK';
       this.nodes.transitionState.textContent = 'PROJECTED';
-      this.nodes.transitionMeta.textContent = sourceProjected ? `≈ ${sourceProjected.nTx.toLocaleString()} TX` : '';
+      this.nodes.transitionMeta.textContent = sourceProjected ? [
+        `≈ ${sourceProjected.nTx.toLocaleString()} TX`,
+        this.feeLabel(sourceProjected.medianFee)
+      ].filter(Boolean).join(' · ') : '';
       return () => {
         this.nodes.transitionTitle.textContent = `BLOCK ${destinationBlock.height.toLocaleString()}`;
         this.nodes.transitionState.textContent = 'CONFIRMED';
-        this.nodes.transitionMeta.textContent = this.ageLabel(destinationBlock.timestamp);
+        this.nodes.transitionMeta.textContent = [
+          this.ageLabel(destinationBlock.timestamp),
+          this.feeLabel(destinationBlock.medianFee)
+        ].filter(Boolean).join(' · ');
       };
     }
 
