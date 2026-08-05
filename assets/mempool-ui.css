@@ -2335,3 +2335,306 @@ body { background: var(--msc-paper-soft); }
     display: grid;
   }
 }
+
+/* MSC homepage live ecosystem radar */
+.msc-signal-card[data-msc-ecosystem-radar] {
+  min-height: clamp(43rem, 52vw, 50rem);
+  padding: clamp(1.4rem, 2.2vw, 1.8rem);
+  overflow: hidden;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-card__status {
+  color: var(--msc-sand);
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-strip {
+  position: relative;
+  z-index: 4;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: stretch;
+  gap: clamp(.8rem, 1.6vw, 1.3rem);
+  min-height: 9.6rem;
+  margin: 0 auto 1.4rem;
+  isolation: isolate;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-tile {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
+  gap: .34rem;
+  border-radius: 16px;
+  padding: 1.2rem clamp(1rem, 1.8vw, 1.35rem);
+  color: rgba(251, 248, 239, .72);
+  background: rgba(5, 13, 24, .42);
+  transition: opacity .2s ease, transform .2s ease, border-color .2s ease;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-tile--confirmed {
+  border: 1px solid rgba(212, 190, 153, .44);
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-tile--projected {
+  border: 1px dashed rgba(212, 190, 153, .34);
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-tile--transition {
+  position: absolute;
+  top: 0;
+  left: var(--msc-radar-transition-left, 0);
+  z-index: 5;
+  width: var(--msc-radar-transition-width, 0);
+  height: 100%;
+  border: 1px dashed rgba(212, 190, 153, .34);
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-tile__title,
+.msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-tile__state,
+.msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-tile__meta {
+  display: block;
+  overflow-wrap: anywhere;
+  line-height: 1.1;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-tile__title {
+  color: var(--msc-paper-soft);
+  font-family: var(--font-heading-family, inherit);
+  font-size: clamp(1.32rem, 2vw, 1.72rem);
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-tile__state,
+.msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-tile__meta {
+  font-size: clamp(.92rem, 1.2vw, 1.05rem);
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-tile__meta:empty { display: none; }
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-strip__boundary {
+  position: relative;
+  z-index: 3;
+  align-self: stretch;
+  width: 1px;
+  min-height: 7rem;
+  background: var(--msc-sand);
+  opacity: .38;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-strip__wave {
+  position: absolute;
+  z-index: 1;
+  inset: -1rem -.7rem auto auto;
+  width: 100%;
+  height: calc(100% + 2rem);
+  color: var(--msc-sand);
+  opacity: 0;
+  transform: translateX(36%) translateY(18%);
+  pointer-events: none;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-strip__wave-body { fill: var(--msc-sand); opacity: .11; }
+.msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-strip__wave-crest { fill: none; stroke: var(--msc-sand); stroke-width: 5; stroke-linecap: round; opacity: .24; }
+.msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-strip__wave-line { fill: none; stroke: var(--msc-sand); stroke-width: 2; stroke-linecap: round; opacity: .14; }
+.msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-strip__wave-spray { fill: none; stroke: var(--msc-sand); stroke-width: 2; stroke-linecap: round; opacity: .12; }
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field {
+  position: relative;
+  inset: auto;
+  min-height: clamp(26rem, 31vw, 33rem);
+  border-radius: 24px;
+  background:
+    linear-gradient(rgba(251, 248, 239, .032) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(251, 248, 239, .032) 1px, transparent 1px),
+    radial-gradient(circle at 50% 50%, transparent 0 22%, rgba(212, 190, 153, .12) 22.3% 22.8%, transparent 23.1% 38%, rgba(212, 190, 153, .08) 38.3% 38.8%, transparent 39.1%),
+    linear-gradient(135deg, rgba(255, 255, 255, .055), rgba(255, 255, 255, .018));
+  background-size: 34px 34px, 34px 34px, auto, auto;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field::before {
+  inset: 13%;
+  border-color: rgba(212, 190, 153, .16);
+  box-shadow: 0 0 0 5.8rem rgba(212, 190, 153, .025), 0 0 0 11rem rgba(212, 190, 153, .018);
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field::after {
+  z-index: 1;
+  inset: -42%;
+  background: conic-gradient(from 20deg, transparent 0deg, rgba(212, 190, 153, .075) 22deg, transparent 46deg);
+  animation: mscSweep 36s linear infinite;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__labels {
+  position: absolute;
+  z-index: 4;
+  top: 1.2rem;
+  left: 1.3rem;
+  right: 1.3rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: rgba(251, 248, 239, .58);
+  font-size: .92rem;
+  letter-spacing: .14em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__radar-disc { display: none; }
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  color: rgba(251, 248, 239, .72);
+  text-decoration: none;
+  outline: none;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--explore { left: 10%; top: 25%; }
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--learn { right: 12%; top: 27%; }
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--tools { left: 13%; bottom: 18%; }
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--shop { right: 14%; bottom: 18%; }
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__signal {
+  display: inline-flex;
+  align-items: center;
+  gap: .62rem;
+  animation: mscRadarDriftOne 24s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--learn .msc-signal-field__signal { animation-name: mscRadarDriftTwo; animation-duration: 29s; }
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--tools .msc-signal-field__signal { animation-name: mscRadarDriftThree; animation-duration: 31s; }
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--shop .msc-signal-field__signal { animation-name: mscRadarDriftFour; animation-duration: 26s; }
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__signal i {
+  width: .82rem;
+  height: .82rem;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: var(--msc-sand);
+  opacity: .58;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__signal strong {
+  color: rgba(251, 248, 239, .76);
+  font-size: clamp(1.15rem, 1.4vw, 1.38rem);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone:hover .msc-signal-field__signal,
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone:focus-visible .msc-signal-field__signal,
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone:active .msc-signal-field__signal {
+  animation-play-state: paused;
+  transform: scale(1.02);
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone:hover i,
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone:focus-visible i,
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone:active i { opacity: .78; }
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone:hover strong,
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone:focus-visible strong,
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone:active strong { color: var(--msc-paper-soft); }
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone:focus-visible {
+  outline: 2px solid rgba(212, 190, 153, .74);
+  outline-offset: 6px;
+  border-radius: 10px;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar][data-radar-paused="true"] .msc-signal-field::after,
+.msc-signal-card[data-msc-ecosystem-radar][data-radar-paused="true"] .msc-signal-field__signal,
+.msc-signal-card[data-msc-ecosystem-radar][data-radar-transition="true"] .msc-signal-field::after,
+.msc-signal-card[data-msc-ecosystem-radar][data-radar-transition="true"] .msc-signal-field__signal {
+  animation-play-state: paused;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar][data-radar-transition="true"] .msc-live-block-strip__wave {
+  animation: mscRadarWave 2.25s ease-in-out both;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar][data-radar-transition="true"] .msc-live-block-tile--confirmed { animation: mscRadarConfirmedImpact 2.25s ease-in-out both; }
+.msc-signal-card[data-msc-ecosystem-radar][data-radar-transition="true"] .msc-live-block-tile--projected { animation: mscRadarProjectedFade 2.25s ease-in-out both; }
+.msc-signal-card[data-msc-ecosystem-radar][data-radar-transition="true"] .msc-live-block-tile--transition { animation: mscRadarProjectedCross 2.25s ease-in-out both; visibility: visible; }
+.msc-signal-card[data-msc-ecosystem-radar][data-radar-refresh="true"] .msc-live-block-tile { opacity: .72; }
+
+@keyframes mscRadarDriftOne { from { transform: translate(-8px, -4px); } to { transform: translate(10px, 6px); } }
+@keyframes mscRadarDriftTwo { from { transform: translate(9px, -5px); } to { transform: translate(-7px, 7px); } }
+@keyframes mscRadarDriftThree { from { transform: translate(-6px, 7px); } to { transform: translate(12px, -4px); } }
+@keyframes mscRadarDriftFour { from { transform: translate(8px, 6px); } to { transform: translate(-10px, -6px); } }
+
+@keyframes mscRadarWave {
+  0% { opacity: 0; transform: translateX(36%) translateY(20%); }
+  18% { opacity: 1; transform: translateX(24%) translateY(2%); }
+  52% { opacity: 1; transform: translateX(-24%) translateY(-2%); }
+  78% { opacity: .7; transform: translateX(-42%) translateY(10%); }
+  100% { opacity: 0; transform: translateX(-48%) translateY(28%); }
+}
+
+@keyframes mscRadarConfirmedImpact {
+  0%, 26% { opacity: 1; transform: translateX(0); }
+  44% { opacity: .35; transform: translateX(-12px); }
+  58%, 90% { opacity: 0; transform: translateX(-12px); }
+  98%, 100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes mscRadarProjectedFade {
+  0%, 34% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@keyframes mscRadarProjectedCross {
+  0%, 30% { opacity: 0; transform: translateX(0); }
+  36% { opacity: 1; transform: translateX(0); }
+  66% { opacity: .9; transform: translateX(var(--msc-radar-transition-x, -100%)); }
+  84% { opacity: .9; transform: translateX(var(--msc-radar-transition-x, -100%)); }
+  90%, 100% { opacity: 0; transform: translateX(var(--msc-radar-transition-x, -100%)); }
+}
+
+@media (max-width: 749px) {
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-strip { gap: .65rem; min-height: 8.8rem; }
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-tile { border-radius: 14px; padding: 1rem .82rem; }
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-tile__title { font-size: clamp(1.02rem, 3.7vw, 1.32rem); }
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-tile__state,
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-tile__meta { font-size: clamp(.78rem, 2.8vw, .92rem); letter-spacing: .08em; }
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-strip__boundary { min-height: 6.2rem; }
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field { min-height: 24rem; }
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__labels { top: 1rem; left: 1rem; right: 1rem; font-size: .78rem; letter-spacing: .1em; }
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--explore { left: 7%; top: 26%; }
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--learn { right: 7%; top: 28%; }
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--tools { left: 8%; bottom: 16%; }
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--shop { right: 9%; bottom: 16%; }
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__signal strong { font-size: 1.05rem; }
+  @keyframes mscRadarDriftOne { from { transform: translate(-4px, -2px); } to { transform: translate(5px, 3px); } }
+  @keyframes mscRadarDriftTwo { from { transform: translate(4px, -3px); } to { transform: translate(-5px, 4px); } }
+  @keyframes mscRadarDriftThree { from { transform: translate(-3px, 4px); } to { transform: translate(6px, -2px); } }
+  @keyframes mscRadarDriftFour { from { transform: translate(5px, 3px); } to { transform: translate(-4px, -3px); } }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field::after,
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__signal,
+  .msc-signal-card[data-msc-ecosystem-radar][data-radar-transition="true"] .msc-live-block-strip__wave,
+  .msc-signal-card[data-msc-ecosystem-radar][data-radar-transition="true"] .msc-live-block-tile--confirmed,
+  .msc-signal-card[data-msc-ecosystem-radar][data-radar-transition="true"] .msc-live-block-tile--projected,
+  .msc-signal-card[data-msc-ecosystem-radar][data-radar-transition="true"] .msc-live-block-tile--transition {
+    animation: none !important;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-strip__wave { display: none; }
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-tile { transition: opacity .2s ease; }
+}
