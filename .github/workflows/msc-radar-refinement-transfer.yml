@@ -34,6 +34,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          printf '\n' >> .github/msc-radar-first.patch
+          printf '\n' >> .github/msc-radar-second.patch
           git apply --check .github/msc-radar-first.patch
           git apply .github/msc-radar-first.patch
           git apply --check .github/msc-radar-second.patch
