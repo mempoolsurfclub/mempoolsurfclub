@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - design/homepage-radar-instrument-refinement
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: write
@@ -16,6 +19,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: design/homepage-radar-instrument-refinement
 
       - name: Verify authorized base and staging scope
         shell: bash
@@ -70,5 +74,3 @@ jobs:
           git add assets/mempool-ui.css assets/msc-home-ecosystem-radar.js sections/msc-home-hero.liquid .github/msc-radar-first.patch .github/msc-radar-second.patch .github/workflows/msc-radar-refinement-transfer.yml
           git commit -m "Design: refine homepage ecosystem radar instrument"
           git push origin HEAD:design/homepage-radar-instrument-refinement
-
-# retrigger reviewed transfer
