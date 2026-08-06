@@ -1,0 +1,190 @@
+/* Homepage ecosystem radar market panel. Keeps the approved radar geometry intact and moves it as one layer. */
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field {
+  isolation: isolate;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__radar-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  transform: translateX(17%);
+  pointer-events: none;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__radar-layer .msc-signal-field__zone {
+  pointer-events: auto;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__labels {
+  z-index: 6;
+  right: auto;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-radar-market {
+  position: absolute;
+  z-index: 5;
+  top: 3.25rem;
+  left: 1.3rem;
+  width: min(39%, 15rem);
+  min-width: 0;
+  color: var(--msc-paper-soft);
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-radar-market__btc {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: .35rem .55rem;
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-radar-market__btc-label {
+  color: rgba(251, 248, 239, .68);
+  font-size: .92rem;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-radar-market__btc-value {
+  color: var(--msc-paper-soft);
+  font-size: clamp(1.45rem, 2vw, 1.9rem);
+  font-weight: 760;
+  letter-spacing: -.025em;
+  line-height: 1;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-radar-market__btc-change {
+  color: rgba(251, 248, 239, .48);
+  font-size: .72rem;
+  font-weight: 650;
+  letter-spacing: .06em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-radar-market__heading {
+  margin: 1.45rem 0 .65rem;
+  color: var(--msc-sand);
+  font-size: .78rem;
+  font-weight: 750;
+  letter-spacing: .13em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-radar-market__list {
+  display: grid;
+  gap: .08rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-radar-market__row {
+  display: grid;
+  grid-template-columns: 1.25rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: .42rem;
+  min-height: 2rem;
+  padding: .3rem 0;
+  border-top: 1px solid rgba(212, 190, 153, .11);
+  font-variant-numeric: tabular-nums;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-radar-market__rank {
+  color: rgba(251, 248, 239, .38);
+  font-size: .72rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-radar-market__identity {
+  display: grid;
+  min-width: 0;
+  gap: .08rem;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-radar-market__identity strong {
+  overflow: hidden;
+  color: rgba(251, 248, 239, .82);
+  font-size: .78rem;
+  font-weight: 720;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-radar-market__identity small {
+  color: rgba(212, 190, 153, .54);
+  font-size: .58rem;
+  font-weight: 650;
+  letter-spacing: .08em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-radar-market__volume {
+  color: rgba(251, 248, 239, .62);
+  font-size: .68rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-radar-market__state {
+  margin: .25rem 0 0;
+  color: rgba(251, 248, 239, .44);
+  font-size: .68rem;
+  letter-spacing: .08em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar][data-market-volume-status="delayed"] .msc-radar-market__heading::after {
+  content: " · DELAYED";
+  color: rgba(251, 248, 239, .38);
+  font-size: .62rem;
+  letter-spacing: .07em;
+}
+
+@media screen and (max-width: 740px) {
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field {
+    min-height: 37rem !important;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__radar-layer {
+    inset: auto 0 0;
+    height: 22rem;
+    transform: none;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-market {
+    top: 2.9rem;
+    left: 1rem;
+    right: 1rem;
+    width: auto;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-market__heading {
+    margin-top: 1rem;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-market__row {
+    grid-template-columns: 1.2rem minmax(0, 1fr) auto;
+    min-height: 1.7rem;
+    padding: .22rem 0;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-market__identity {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: .45rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__radar-layer {
+    transition: none !important;
+  }
+}
