@@ -121,39 +121,51 @@
   animation-play-state: paused;
 }
 
-/* Fixed organic positions for the four radar destinations. */
+/* Positions matched to the approved screenshot marks. */
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone {
+  width: 44px;
+  height: 44px;
+  justify-content: center !important;
+}
+
 .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--explore {
-  left: 27%;
-  top: 18%;
+  inset: calc(22% - 22px) auto auto calc(36% - 22px);
 }
 
 .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--learn {
-  right: 22%;
-  top: 43%;
+  inset: calc(29% - 22px) auto auto calc(53% - 22px);
 }
 
 .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--tools {
-  left: 31%;
-  bottom: 15%;
+  inset: calc(69% - 22px) auto auto calc(42% - 22px);
 }
 
 .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--shop {
-  right: 33%;
-  bottom: 30%;
+  inset: calc(86% - 22px) auto auto calc(64% - 22px);
 }
 
-/* Keep labels available on touch devices; reveal them on hover or keyboard focus when a cursor is present. */
-@media (hover: hover) and (pointer: fine) {
-  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__signal {
-    position: relative;
-    gap: 0;
-  }
+/* Keep every label on the right of its dot. */
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__signal {
+  position: relative;
+  gap: 0;
+  flex-direction: row !important;
+}
 
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__signal strong {
+  position: absolute;
+  top: 50%;
+  right: auto;
+  left: calc(100% + .65rem);
+  width: max-content;
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, -50%);
+  pointer-events: none;
+}
+
+/* Hide labels until hover or keyboard focus when a precise cursor is available. */
+@media (hover: hover) and (pointer: fine) {
   .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__signal strong {
-    position: absolute;
-    top: 50%;
-    left: calc(100% + .65rem);
-    width: max-content;
     opacity: 0;
     visibility: hidden;
     transform: translate(.3rem, -50%);
@@ -161,14 +173,6 @@
       opacity .18s ease,
       transform .18s ease,
       visibility 0s linear .18s;
-    pointer-events: none;
-  }
-
-  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--learn .msc-signal-field__signal strong,
-  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--shop .msc-signal-field__signal strong {
-    right: calc(100% + .65rem);
-    left: auto;
-    transform: translate(-.3rem, -50%);
   }
 
   .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone:hover .msc-signal-field__signal strong,
