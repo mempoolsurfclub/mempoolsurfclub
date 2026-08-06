@@ -9,7 +9,7 @@
 {%- assign radar_learn_url = section.settings.radar_learn_url | default: '/pages/learn-bitcoin' -%}
 {%- assign radar_tools_url = section.settings.radar_tools_url | default: '/pages/bitcoin-tools' -%}
 {%- assign radar_shop_url = section.settings.radar_shop_url | default: routes.all_products_collection_url -%}
-{%- assign radar_market_data_url = section.settings.radar_market_data_url | default: blank -%}
+{%- assign radar_market_data_url = section.settings.radar_market_data_url | default: 'https://raw.githubusercontent.com/mempoolsurfclub/mempoolsurfclub/homepage-market-data/data/homepage-market.json' -%}
 
 <section class="msc-shell msc-home-hero" id="MscHomeHero-{{ section.id }}">
   <div class="msc-container">
@@ -86,7 +86,8 @@
             <span class="visually-hidden" data-radar-status>UPDATING</span>
           </div>
 
-          <div class="msc-radar-market" data-radar-market>
+          <div class="msc-radar-market" data-radar-market title="Market data provided by CoinGecko">
+            <span class="visually-hidden">Market data provided by CoinGecko.</span>
             <p class="msc-radar-market__btc">
               <span class="msc-radar-market__btc-label">BTC:</span>
               <strong class="msc-radar-market__btc-value" data-btc-price>—</strong>
