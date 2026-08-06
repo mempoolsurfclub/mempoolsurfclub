@@ -1,86 +1,120 @@
-/* MSC homepage radar sweep refinement */
-.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field::before {
-  content: "";
-  display: block;
-  position: absolute;
-  inset: 50% auto auto 50%;
-  width: clamp(4.5rem, 8vw, 6.5rem);
-  aspect-ratio: 1;
-  transform: translate(-50%, -50%);
-  border: 0;
-  border-radius: 50%;
-  box-shadow: none;
-  z-index: 1;
-  pointer-events: none;
-  background: radial-gradient(
-    circle,
-    rgba(212, 190, 153, .14) 0%,
-    rgba(212, 190, 153, .07) 34%,
-    rgba(212, 190, 153, .025) 52%,
-    transparent 74%
-  );
+/* MSC homepage radar strength and ring correction */
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field::before,
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field::after {
+  content: none;
+  display: none;
 }
 
-.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field::after {
-  content: "";
-  display: block;
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field {
+  background:
+    linear-gradient(rgba(251, 248, 239, .032) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(251, 248, 239, .032) 1px, transparent 1px),
+    linear-gradient(135deg, rgba(5, 13, 24, .18), rgba(255, 255, 255, .026));
+  background-size: 34px 34px, 34px 34px, auto;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__radar-disc {
   position: absolute;
   inset: 50% auto auto 50%;
-  width: min(92%, 27rem);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  transform-origin: 50% 50%;
   z-index: 1;
-  pointer-events: none;
+  isolation: isolate;
+  display: block;
+  width: min(90%, 23rem);
+  height: auto;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
   overflow: hidden;
+  border: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    transparent 0 30%,
+    rgba(212, 190, 153, .16) 30.3% 30.9%,
+    transparent 31.2% 56%,
+    rgba(212, 190, 153, .1) 56.3% 56.9%,
+    transparent 57.2%
+  );
+  box-shadow: none;
+  pointer-events: none;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__radar-disc::before {
+  content: "";
+  position: absolute;
+  inset: 50% auto auto 50%;
+  z-index: 0;
+  width: clamp(5.5rem, 10vw, 7.5rem);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(212, 190, 153, .3) 0%,
+    rgba(212, 190, 153, .14) 32%,
+    rgba(212, 190, 153, .05) 55%,
+    transparent 78%
+  );
+  pointer-events: none;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__radar-disc::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
   background: conic-gradient(
     from 0deg,
     transparent 0deg,
-    transparent 318deg,
-    rgba(212, 190, 153, .012) 326deg,
-    rgba(212, 190, 153, .04) 338deg,
-    rgba(212, 190, 153, .09) 350deg,
-    rgba(212, 190, 153, .035) 357deg,
+    transparent 304deg,
+    rgba(212, 190, 153, .025) 312deg,
+    rgba(212, 190, 153, .1) 326deg,
+    rgba(212, 190, 153, .3) 342deg,
+    rgba(212, 190, 153, .42) 352deg,
+    rgba(212, 190, 153, .14) 358deg,
     transparent 360deg
   );
   -webkit-mask-image: radial-gradient(
     circle,
     #000 0%,
-    #000 58%,
-    rgba(0, 0, 0, .78) 72%,
-    rgba(0, 0, 0, .28) 87%,
+    #000 64%,
+    rgba(0, 0, 0, .78) 80%,
+    rgba(0, 0, 0, .24) 93%,
     transparent 100%
   );
   mask-image: radial-gradient(
     circle,
     #000 0%,
-    #000 58%,
-    rgba(0, 0, 0, .78) 72%,
-    rgba(0, 0, 0, .28) 87%,
+    #000 64%,
+    rgba(0, 0, 0, .78) 80%,
+    rgba(0, 0, 0, .24) 93%,
     transparent 100%
   );
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
-  animation: mscRadarCenterSweep 36s linear infinite;
+  opacity: 1;
+  transform-origin: 50% 50%;
+  animation: mscRadarDiscSweep 18s linear infinite;
+  pointer-events: none;
 }
 
-.msc-signal-card[data-msc-ecosystem-radar][data-radar-paused="true"] .msc-signal-field::after,
-.msc-signal-card[data-msc-ecosystem-radar][data-radar-transition="true"] .msc-signal-field::after {
+.msc-signal-card[data-msc-ecosystem-radar][data-radar-paused="true"] .msc-signal-field__radar-disc::after,
+.msc-signal-card[data-msc-ecosystem-radar][data-radar-transition="true"] .msc-signal-field__radar-disc::after {
   animation-play-state: paused;
 }
 
-@keyframes mscRadarCenterSweep {
+@keyframes mscRadarDiscSweep {
   from {
-    transform: translate(-50%, -50%) rotate(0deg);
+    transform: rotate(0deg);
   }
 
   to {
-    transform: translate(-50%, -50%) rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field::after {
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__radar-disc::after {
     animation: none !important;
     opacity: 0;
   }
