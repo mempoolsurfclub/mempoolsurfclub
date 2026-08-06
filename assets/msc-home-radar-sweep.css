@@ -1,4 +1,4 @@
-/* MSC homepage radar final cascade correction */
+/* MSC homepage radar grid and sweep refinement */
 .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field::before,
 .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field::after {
   content: none !important;
@@ -31,14 +31,29 @@
   overflow: hidden;
   border: 0 !important;
   border-radius: 50%;
-  background: radial-gradient(
-    circle at center,
-    transparent 0 39.5%,
-    rgba(212, 190, 153, .16) 40% 40.7%,
-    transparent 41% 74.5%,
-    rgba(212, 190, 153, .1) 75% 75.7%,
-    transparent 76%
-  ) !important;
+  background:
+    linear-gradient(
+      to right,
+      rgba(212, 190, 153, .13) 0 43%,
+      transparent 43% 57%,
+      rgba(212, 190, 153, .13) 57% 100%
+    ) center / 100% 1px no-repeat,
+    linear-gradient(
+      to bottom,
+      rgba(212, 190, 153, .13) 0 43%,
+      transparent 43% 57%,
+      rgba(212, 190, 153, .13) 57% 100%
+    ) center / 1px 100% no-repeat,
+    radial-gradient(
+      circle at center,
+      transparent 0 24.5%,
+      rgba(212, 190, 153, .17) 25% 25.7%,
+      transparent 26% 49.5%,
+      rgba(212, 190, 153, .14) 50% 50.7%,
+      transparent 51% 74.5%,
+      rgba(212, 190, 153, .1) 75% 75.7%,
+      transparent 76%
+    ) !important;
   box-shadow: none !important;
   pointer-events: none;
 }
