@@ -121,6 +121,65 @@
   animation-play-state: paused;
 }
 
+/* Fixed organic positions for the four radar destinations. */
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--explore {
+  left: 27%;
+  top: 18%;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--learn {
+  right: 22%;
+  top: 43%;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--tools {
+  left: 31%;
+  bottom: 15%;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--shop {
+  right: 33%;
+  bottom: 30%;
+}
+
+/* Keep labels available on touch devices; reveal them on hover or keyboard focus when a cursor is present. */
+@media (hover: hover) and (pointer: fine) {
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__signal {
+    position: relative;
+    gap: 0;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__signal strong {
+    position: absolute;
+    top: 50%;
+    left: calc(100% + .65rem);
+    width: max-content;
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(.3rem, -50%);
+    transition:
+      opacity .18s ease,
+      transform .18s ease,
+      visibility 0s linear .18s;
+    pointer-events: none;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--learn .msc-signal-field__signal strong,
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--shop .msc-signal-field__signal strong {
+    right: calc(100% + .65rem);
+    left: auto;
+    transform: translate(-.3rem, -50%);
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone:hover .msc-signal-field__signal strong,
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone:focus-visible .msc-signal-field__signal strong {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(0, -50%);
+    transition-delay: 0s;
+  }
+}
+
 @keyframes mscRadarDiscSweep {
   from {
     transform: rotate(0deg);
@@ -135,5 +194,9 @@
   .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__radar-disc::after {
     animation: none !important;
     opacity: 0;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__signal strong {
+    transition: none !important;
   }
 }
