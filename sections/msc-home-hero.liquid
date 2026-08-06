@@ -1,5 +1,6 @@
 {{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
 {{ 'msc-home-radar-sweep.css' | asset_url | stylesheet_tag }}
+{{ 'msc-home-market-panel.css' | asset_url | stylesheet_tag }}
 
 {%- assign search_input_id = 'MscHomeSearchInput-' | append: section.id -%}
 {%- assign heading_line_1 = section.settings.heading_line_1 | default: blank -%}
@@ -8,6 +9,7 @@
 {%- assign radar_learn_url = section.settings.radar_learn_url | default: '/pages/learn-bitcoin' -%}
 {%- assign radar_tools_url = section.settings.radar_tools_url | default: '/pages/bitcoin-tools' -%}
 {%- assign radar_shop_url = section.settings.radar_shop_url | default: routes.all_products_collection_url -%}
+{%- assign radar_market_data_url = section.settings.radar_market_data_url | default: blank -%}
 
 <section class="msc-shell msc-home-hero" id="MscHomeHero-{{ section.id }}">
   <div class="msc-container">
@@ -48,7 +50,7 @@
 
       </div>
 
-      <div class="msc-signal-card msc-glass-card" data-msc-ecosystem-radar aria-label="Mempool Surf Club ecosystem radar with live Bitcoin block status and direct links to Explore, Learn, Tools, and Shop destinations.">
+      <div class="msc-signal-card msc-glass-card" data-msc-ecosystem-radar data-market-data-url="{{ radar_market_data_url | escape }}" aria-label="Mempool Surf Club ecosystem radar with live Bitcoin block status, BTC market price, Bitcoin asset volume, and direct links to Explore, Learn, Tools, and Shop destinations.">
         <span class="visually-hidden" aria-live="polite" aria-atomic="true" data-radar-announcer></span>
 
         <div class="msc-live-block-strip" data-radar-strip>
@@ -81,22 +83,36 @@
         <div class="msc-signal-field" data-radar-field>
           <div class="msc-signal-field__labels" aria-hidden="true">
             <span>MSC ECOSYSTEM RADAR</span>
-            <span class="msc-signal-card__status" data-radar-status>UPDATING</span>
+            <span class="visually-hidden" data-radar-status>UPDATING</span>
           </div>
-          <span class="msc-signal-field__radar-disc" aria-hidden="true"></span>
-          <span class="msc-signal-field__bitcoin" aria-hidden="true">₿</span>
-          <a class="msc-signal-field__zone msc-signal-field__zone--explore" href="{{ radar_explore_url }}" data-radar-link>
-            <span class="msc-signal-field__signal"><i aria-hidden="true"></i><strong>Explore</strong></span>
-          </a>
-          <a class="msc-signal-field__zone msc-signal-field__zone--learn" href="{{ radar_learn_url }}" data-radar-link>
-            <span class="msc-signal-field__signal"><i aria-hidden="true"></i><strong>Learn</strong></span>
-          </a>
-          <a class="msc-signal-field__zone msc-signal-field__zone--tools" href="{{ radar_tools_url }}" data-radar-link>
-            <span class="msc-signal-field__signal"><i aria-hidden="true"></i><strong>Tools</strong></span>
-          </a>
-          <a class="msc-signal-field__zone msc-signal-field__zone--shop" href="{{ radar_shop_url }}" data-radar-link>
-            <span class="msc-signal-field__signal"><i aria-hidden="true"></i><strong>Shop</strong></span>
-          </a>
+
+          <div class="msc-radar-market" data-radar-market>
+            <p class="msc-radar-market__btc">
+              <span class="msc-radar-market__btc-label">BTC:</span>
+              <strong class="msc-radar-market__btc-value" data-btc-price>—</strong>
+              <small class="msc-radar-market__btc-change" data-btc-change>UPDATING</small>
+            </p>
+            <h3 class="msc-radar-market__heading">24 HOUR VOLUME</h3>
+            <p class="msc-radar-market__state" data-market-volume-state>LOADING MARKET DATA</p>
+            <ol class="msc-radar-market__list" data-market-volume-list></ol>
+          </div>
+
+          <div class="msc-signal-field__radar-layer">
+            <span class="msc-signal-field__radar-disc" aria-hidden="true"></span>
+            <span class="msc-signal-field__bitcoin" aria-hidden="true">₿</span>
+            <a class="msc-signal-field__zone msc-signal-field__zone--explore" href="{{ radar_explore_url }}" data-radar-link>
+              <span class="msc-signal-field__signal"><i aria-hidden="true"></i><strong>Explore</strong></span>
+            </a>
+            <a class="msc-signal-field__zone msc-signal-field__zone--learn" href="{{ radar_learn_url }}" data-radar-link>
+              <span class="msc-signal-field__signal"><i aria-hidden="true"></i><strong>Learn</strong></span>
+            </a>
+            <a class="msc-signal-field__zone msc-signal-field__zone--tools" href="{{ radar_tools_url }}" data-radar-link>
+              <span class="msc-signal-field__signal"><i aria-hidden="true"></i><strong>Tools</strong></span>
+            </a>
+            <a class="msc-signal-field__zone msc-signal-field__zone--shop" href="{{ radar_shop_url }}" data-radar-link>
+              <span class="msc-signal-field__signal"><i aria-hidden="true"></i><strong>Shop</strong></span>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -104,6 +120,7 @@
 </section>
 
 <script src="{{ 'msc-home-ecosystem-radar.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'msc-home-market-data.js' | asset_url }}" defer="defer"></script>
 
 {% schema %}
 {
@@ -125,7 +142,8 @@
     { "type": "url", "id": "radar_explore_url", "label": "Radar Explore URL" },
     { "type": "url", "id": "radar_learn_url", "label": "Radar Learn URL" },
     { "type": "url", "id": "radar_tools_url", "label": "Radar Tools URL" },
-    { "type": "url", "id": "radar_shop_url", "label": "Radar Shop URL" }
+    { "type": "url", "id": "radar_shop_url", "label": "Radar Shop URL" },
+    { "type": "url", "id": "radar_market_data_url", "label": "Radar market data endpoint" }
   ],
   "presets": [{ "name": "MSC home hero" }]
 }
