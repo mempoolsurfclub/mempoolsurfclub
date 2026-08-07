@@ -1,0 +1,74 @@
+name: Homepage market volume
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/15 * * * *'
+  pull_request:
+    paths:
+      - '.github/workflows/homepage-market-volume.yml'
+      - 'scripts/homepage-market/**'
+      - 'assets/msc-home-volume.js'
+      - 'sections/msc-home-hero.liquid'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: homepage-market-volume-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Build homepage Top 5 snapshot
+        env:
+          SATFLOW_API_KEY: ${{ secrets.SATFLOW_API_KEY }}
+          UNISAT_API_KEY: ${{ secrets.UNISAT_API_KEY }}
+        run: node scripts/homepage-market/build-volume-data.mjs /tmp/homepage-market.json
+
+      - name: Validate snapshot contract
+        run: |
+          node -e "const fs=require('fs');const p=JSON.parse(fs.readFileSync('/tmp/homepage-market.json','utf8'));if(p.schemaVersion!==1||p.window!=='24h'||!['live','preview'].includes(p.mode)||!Array.isArray(p.assets)||p.assets.length!==5)process.exit(1);"
+
+      - name: Show snapshot used for validation
+        run: cat /tmp/homepage-market.json
+
+      - name: Publish data branch
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if git ls-remote --exit-code --heads origin homepage-market-data >/dev/null 2>&1; then
+            git fetch origin homepage-market-data
+            git switch -C homepage-market-data origin/homepage-market-data
+          else
+            git switch --orphan homepage-market-data
+            git rm -rf .
+          fi
+
+          mkdir -p data
+          cp /tmp/homepage-market.json data/homepage-market.json
+          git add data/homepage-market.json
+
+          if git diff --cached --quiet; then
+            echo "No market-data change to publish."
+            exit 0
+          fi
+
+          git commit -m "Update homepage 24h market volume"
+          git push origin homepage-market-data

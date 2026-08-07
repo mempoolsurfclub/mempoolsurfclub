@@ -94,14 +94,14 @@
           </div>
 
           {%- comment -%}
-            Production scaffold for the approved Top 5 by trailing 24-hour volume panel.
-            Ranking methodology: Ordinals collections + Runes from Satflow; BRC-20 tickers from UniSat.
-            Keep hidden until verified market data is connected. Never publish placeholder rankings.
+            Top five individual Bitcoin assets by trailing 24-hour BTC volume.
+            Live mode: Ordinals collections + Runes from Satflow indexed sales including external marketplaces; BRC-20 tickers from UniSat day1 btcVolume.
+            Preview mode is clearly labeled and uses no fabricated market-volume values while provider API keys are pending.
           {%- endcomment -%}
           <section class="msc-radar-volume" data-radar-volume hidden aria-labelledby="MscRadarVolumeTitle-{{ section.id }}">
-            <h2 class="msc-radar-volume__title" id="MscRadarVolumeTitle-{{ section.id }}">24 HOUR VOLUME</h2>
+            <h2 class="msc-radar-volume__title" id="MscRadarVolumeTitle-{{ section.id }}">24 HOUR VOLUME — TOP 5</h2>
             <ol class="msc-radar-volume__list" data-radar-volume-list></ol>
-            <p class="msc-radar-volume__source">Ordinals + Runes: Satflow · BRC-20: UniSat</p>
+            <p class="msc-radar-volume__source" data-radar-volume-source>PREVIEW · SATFLOW + UNISAT API CONNECTION PENDING</p>
           </section>
 
           <template data-radar-volume-row-template>
@@ -137,6 +137,7 @@
 
 <script src="{{ 'msc-home-ecosystem-radar.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'msc-home-btc-price.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'msc-home-volume.js' | asset_url }}" defer="defer"></script>
 
 {% schema %}
 {
