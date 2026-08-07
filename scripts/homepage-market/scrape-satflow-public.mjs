@@ -1,181 +1,75 @@
-import { writeFile } from 'node:fs/promises';
-import { chromium } from 'playwright';
+const PAGE_URL = 'https://www.satflow.com/ordinals';
 
-const outputPath = process.argv[2] || '/tmp/satflow-24h.json';
-const TIMEOUT_MS = 45_000;
-
-function clean(text) {
-  return String(text || '').replace(/\s+/g, ' ').trim();
+function uniq(values) {
+  return [...new Set(values)];
 }
 
-function parseBtc(text) {
-  const normalized = clean(text).replace(/,/g, '');
-  if (!normalized || normalized.startsWith('<')) return null;
-  const value = normalized.match(/([0-9]+(?:\.[0-9]+)?)/);
-  if (!value) return null;
-  const number = Number(value[1]);
-  return Number.isFinite(number) && number > 0 ? number : null;
+function snippets(text, pattern, radius = 1400, limit = 8) {
+  const out = [];
+  let from = 0;
+  while (out.length < limit) {
+    const index = text.indexOf(pattern, from);
+    if (index < 0) break;
+    out.push(text.slice(Math.max(0, index - radius), Math.min(text.length, index + pattern.length + radius)));
+    from = index + pattern.length;
+  }
+  return out;
 }
 
-async function diagnosePublicClient(url) {
+const response = await fetch(PAGE_URL, { headers: { 'user-agent': 'Mozilla/5.0' } });
+const html = await response.text();
+console.log(`SATFLOW_TRACE html status=${response.status} bytes=${html.length}`);
+
+for (const pattern of ['NEXT_PUBLIC_BACKEND_URL', 'preloadedDataByPeriod', 'volume1D', 'volume7D', 'oneDayVolume', 'oneDayChange']) {
+  const hits = snippets(html, pattern, 1200, 4);
+  for (const hit of hits) console.log(`SATFLOW_TRACE HTML ${pattern}\n${hit}\nSATFLOW_TRACE END`);
+}
+
+const scripts = uniq([...html.matchAll(/<script[^>]+src=["']([^"']+)["']/gi)]
+  .map((match) => new URL(match[1], PAGE_URL).href));
+console.log(`SATFLOW_TRACE scripts=${scripts.length}`);
+
+const patterns = [
+  'NEXT_PUBLIC_BACKEND_URL',
+  'preloadedDataByPeriod',
+  'loadFromAPI',
+  'volume1D',
+  'volume1d',
+  'volume7D',
+  'oneDayVolume',
+  'oneDayChange',
+  'sevenDayVolume',
+  'collectionStats.',
+  'collections.getMany',
+  'collections.',
+  'getMany.useQuery',
+  'useQuery({period',
+  'period:',
+  'timePeriod',
+  '1 Day',
+  '1D Volume',
+  '/trpc',
+  'api.satflow.com'
+];
+
+for (const script of scripts) {
+  let js;
   try {
-    const response = await fetch(url, { headers: { 'user-agent': 'Mozilla/5.0' } });
-    const html = await response.text();
-    console.log(`SATFLOW_DIAG html status=${response.status} bytes=${html.length}`);
-    const scripts = [...html.matchAll(/<script[^>]+src=["']([^"']+)["']/gi)]
-      .map((match) => new URL(match[1], url).href)
-      .filter((value, index, array) => array.indexOf(value) === index)
-      .slice(0, 80);
-    console.log(`SATFLOW_DIAG scripts=${scripts.length}`);
-
-    const patterns = ['1D Volume', '7D Volume', 'activity/sales', 'timeRange', 'volume24', 'volume_24', 'oneDay', 'day1', '24h', 'collections'];
-    for (const script of scripts) {
-      try {
-        const jsResponse = await fetch(script, { headers: { 'user-agent': 'Mozilla/5.0' } });
-        if (!jsResponse.ok) continue;
-        const js = await jsResponse.text();
-        for (const pattern of patterns) {
-          const index = js.indexOf(pattern);
-          if (index < 0) continue;
-          const start = Math.max(0, index - 450);
-          const end = Math.min(js.length, index + 900);
-          console.log(`SATFLOW_DIAG MATCH ${pattern} ${script}\n${js.slice(start, end)}\nSATFLOW_DIAG END`);
-        }
-      } catch (error) {
-        // Diagnostic only.
-      }
-    }
+    const jsResponse = await fetch(script, { headers: { 'user-agent': 'Mozilla/5.0' } });
+    if (!jsResponse.ok) continue;
+    js = await jsResponse.text();
   } catch (error) {
-    console.log(`SATFLOW_DIAG failed: ${error.message}`);
+    continue;
   }
-}
 
-async function clickOneDay(page, url) {
-  await page.waitForTimeout(4000);
-
-  const candidates = [
-    page.getByText('1D', { exact: true }),
-    page.locator('button, [role="button"], a').filter({ hasText: /^1D$/ }),
-    page.locator('text="1D"')
-  ];
-
-  let clicked = false;
-  for (const candidate of candidates) {
-    try {
-      if (await candidate.count()) {
-        await candidate.first().click({ timeout: 5000, force: true });
-        clicked = true;
-        break;
-      }
-    } catch (error) {
-      // Try the next rendered form of the control.
+  const matched = patterns.filter((pattern) => js.includes(pattern));
+  if (!matched.length) continue;
+  console.log(`SATFLOW_TRACE SCRIPT ${script} bytes=${js.length} patterns=${matched.join(',')}`);
+  for (const pattern of matched) {
+    for (const hit of snippets(js, pattern, 2200, 6)) {
+      console.log(`SATFLOW_TRACE MATCH ${pattern}\n${hit}\nSATFLOW_TRACE END`);
     }
   }
-
-  if (!clicked) {
-    clicked = await page.evaluate(() => {
-      const nodes = [...document.querySelectorAll('button, [role="button"], a, div, span')];
-      const target = nodes.find((node) => String(node.textContent || '').trim() === '1D');
-      if (!target) return false;
-      target.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
-      return true;
-    });
-  }
-
-  if (!clicked) {
-    const text = clean(await page.locator('body').innerText().catch(() => ''));
-    await diagnosePublicClient(url);
-    throw new Error(`Satflow 1D control not found. Page excerpt: ${text.slice(0, 1600)}`);
-  }
-
-  await page.waitForTimeout(3500);
-  const bodyText = clean(await page.locator('body').innerText());
-  if (!/1D Volume/i.test(bodyText)) {
-    await diagnosePublicClient(url);
-    throw new Error(`Satflow did not switch to 1D data. Page excerpt: ${bodyText.slice(0, 1600)}`);
-  }
 }
 
-async function extractTable(page, type) {
-  return page.evaluate(({ type }) => {
-    const clean = (text) => String(text || '').replace(/\s+/g, ' ').trim();
-    const candidates = [...document.querySelectorAll('table')];
-    const table = candidates.find((node) => /1D Volume/i.test(node.innerText) && (type === 'ORDINAL' ? /Collection/i.test(node.innerText) : /Ticker/i.test(node.innerText)));
-    if (!table) return null;
-
-    const headerCells = [...table.querySelectorAll('thead th')].map((cell) => clean(cell.innerText));
-    const nameIndex = headerCells.findIndex((value) => type === 'ORDINAL' ? /Collection/i.test(value) : /Ticker/i.test(value));
-    const volumeIndex = headerCells.findIndex((value) => /1D Volume/i.test(value));
-    if (nameIndex < 0 || volumeIndex < 0) return null;
-
-    return [...table.querySelectorAll('tbody tr')].map((row) => {
-      const cells = [...row.querySelectorAll('td')].map((cell) => clean(cell.innerText));
-      return { name: cells[nameIndex], volumeText: cells[volumeIndex] };
-    }).filter((row) => row.name && row.volumeText);
-  }, { type });
-}
-
-async function extractRoleRows(page, type) {
-  return page.evaluate(({ type }) => {
-    const clean = (text) => String(text || '').replace(/\s+/g, ' ').trim();
-    const rows = [...document.querySelectorAll('[role="row"]')];
-    const header = rows.find((row) => /1D Volume/i.test(row.innerText) && (type === 'ORDINAL' ? /Collection/i.test(row.innerText) : /Ticker/i.test(row.innerText)));
-    if (!header) return null;
-    const headerCells = [...header.querySelectorAll('[role="columnheader"], [role="cell"], th, td')].map((cell) => clean(cell.innerText));
-    const nameIndex = headerCells.findIndex((value) => type === 'ORDINAL' ? /Collection/i.test(value) : /Ticker/i.test(value));
-    const volumeIndex = headerCells.findIndex((value) => /1D Volume/i.test(value));
-    if (nameIndex < 0 || volumeIndex < 0) return null;
-
-    return rows.slice(rows.indexOf(header) + 1).map((row) => {
-      const cells = [...row.querySelectorAll('[role="cell"], td')].map((cell) => clean(cell.innerText));
-      return { name: cells[nameIndex], volumeText: cells[volumeIndex] };
-    }).filter((row) => row.name && row.volumeText);
-  }, { type });
-}
-
-async function scrapeLeaderboard(page, url, type) {
-  await page.goto(url, { waitUntil: 'domcontentloaded', timeout: TIMEOUT_MS });
-  await clickOneDay(page, url);
-
-  let rows = await extractTable(page, type);
-  if (!rows || rows.length === 0) rows = await extractRoleRows(page, type);
-
-  if (!rows || rows.length === 0) {
-    const text = clean(await page.locator('body').innerText());
-    throw new Error(`Could not parse Satflow ${type} 1D leaderboard. Page excerpt: ${text.slice(0, 1600)}`);
-  }
-
-  const assets = rows.map((row) => ({
-    name: clean(row.name).replace(/^\d+\s+/, ''),
-    type,
-    volumeBtc: parseBtc(row.volumeText),
-    source: 'Satflow'
-  })).filter((row) => row.name && Number.isFinite(row.volumeBtc) && row.volumeBtc > 0);
-
-  if (assets.length === 0) throw new Error(`Satflow ${type} leaderboard contained no positive exact 1D volumes`);
-  return assets;
-}
-
-const browser = await chromium.launch({ headless: true });
-try {
-  const context = await browser.newContext({
-    userAgent: 'Mozilla/5.0 (compatible; MempoolSurfClub/1.0; +https://www.mempoolsurfclub.com)'
-  });
-  const page = await context.newPage();
-
-  const ordinals = await scrapeLeaderboard(page, 'https://www.satflow.com/ordinals', 'ORDINAL');
-  const runes = await scrapeLeaderboard(page, 'https://www.satflow.com/runes', 'RUNE');
-
-  const payload = {
-    generatedAt: new Date().toISOString(),
-    window: '24h',
-    source: 'Satflow public 1D leaderboards',
-    ordinals,
-    runes
-  };
-
-  await writeFile(outputPath, `${JSON.stringify(payload, null, 2)}\n`, 'utf8');
-  console.log(`Scraped ${ordinals.length} Ordinals and ${runes.length} Runes from Satflow 1D leaderboards.`);
-} finally {
-  await browser.close();
-}
+throw new Error('Satflow trace complete; inspect workflow logs for public leaderboard data procedure.');
