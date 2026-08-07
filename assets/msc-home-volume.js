@@ -1,10 +1,102 @@
 (() => {
   'use strict';
 
+  const ROOT = '[data-msc-ecosystem-radar]';
+  const PROTOCOL_WAVE_HEAVY_TX = 2500;
+
+  function parseProtocolCount(node) {
+    const text = node?.textContent || '';
+    const match = text.replace(/,/g, '').match(/\d+/);
+    if (!match) return null;
+    const value = Number(match[0]);
+    return Number.isFinite(value) && value >= 0 ? value : null;
+  }
+
+  function createProtocolWave() {
+    const wave = document.createElement('div');
+    wave.className = 'msc-radar-protocol-wave';
+    wave.dataset.protocolWave = '';
+    wave.dataset.intensity = 'pending';
+    wave.setAttribute('role', 'img');
+    wave.setAttribute('aria-label', 'Combined Ordinals, Runes, and BRC-20 activity wave. Activity data pending.');
+    wave.innerHTML = `
+      <span class="msc-radar-protocol-wave__label">BTC ASSET SURF</span>
+      <svg class="msc-radar-protocol-wave__svg" viewBox="0 0 240 60" aria-hidden="true" focusable="false">
+        <path class="msc-radar-protocol-wave__baseline" d="M0 30H240" />
+        <g class="msc-radar-protocol-wave__motion">
+          <g class="msc-radar-protocol-wave__track">
+            <path class="msc-radar-protocol-wave__line" d="M-80 30 C-70 30 -70 18 -60 18 S-50 42 -40 30 S-30 18 -20 18 S-10 30 0 30 C10 30 10 18 20 18 S30 42 40 30 S50 18 60 18 S70 30 80 30 C90 30 90 18 100 18 S110 42 120 30 S130 18 140 18 S150 30 160 30 C170 30 170 18 180 18 S190 42 200 30 S210 18 220 18 S230 30 240 30 C250 30 250 18 260 18 S270 42 280 30 S290 18 300 18 S310 30 320 30" />
+          </g>
+        </g>
+      </svg>`;
+    return wave;
+  }
+
+  class ProtocolActivityWave {
+    constructor(root) {
+      if (root.dataset.protocolWaveInitialized === 'true') return;
+      root.dataset.protocolWaveInitialized = 'true';
+
+      this.root = root;
+      this.activity = root.querySelector('.msc-radar-block-activity');
+      this.values = Array.from(root.querySelectorAll('.msc-radar-block-activity__value')).slice(0, 3);
+      if (!this.activity || this.values.length !== 3) return;
+
+      this.wave = createProtocolWave();
+      this.activity.insertAdjacentElement('afterend', this.wave);
+
+      this.observer = new MutationObserver(() => this.render());
+      this.values.forEach((value) => this.observer.observe(value, {
+        childList: true,
+        characterData: true,
+        subtree: true
+      }));
+
+      this.render();
+    }
+
+    render() {
+      const counts = this.values.map(parseProtocolCount);
+      if (counts.some((count) => count === null)) {
+        this.wave.dataset.intensity = 'pending';
+        this.wave.style.setProperty('--msc-protocol-wave-scale', '.28');
+        this.wave.style.setProperty('--msc-protocol-wave-duration', '18s');
+        this.wave.style.setProperty('--msc-protocol-wave-opacity', '.46');
+        this.wave.setAttribute('aria-label', 'Combined Ordinals, Runes, and BRC-20 activity wave. Activity data pending.');
+        return;
+      }
+
+      const total = counts.reduce((sum, count) => sum + count, 0);
+      const pressure = Math.min(total / PROTOCOL_WAVE_HEAVY_TX, 1);
+      const scale = 0.34 + pressure * 1.16;
+      const duration = 14 - pressure * 7;
+      const opacity = 0.58 + pressure * 0.34;
+      const intensity = pressure >= .8 ? 'heavy' : pressure >= .48 ? 'active' : pressure >= .18 ? 'rolling' : 'mellow';
+
+      this.wave.dataset.intensity = intensity;
+      this.wave.style.setProperty('--msc-protocol-wave-scale', scale.toFixed(3));
+      this.wave.style.setProperty('--msc-protocol-wave-duration', `${duration.toFixed(2)}s`);
+      this.wave.style.setProperty('--msc-protocol-wave-opacity', opacity.toFixed(3));
+      this.wave.setAttribute(
+        'aria-label',
+        `Combined Ordinals, Runes, and BRC-20 activity wave based on ${total.toLocaleString()} displayed transactions in the latest confirmed block.`
+      );
+    }
+  }
+
+  function initProtocolWaves(scope = document) {
+    const roots = [];
+    if (scope.matches && scope.matches(ROOT)) roots.push(scope);
+    if (scope.querySelectorAll) roots.push(...scope.querySelectorAll(ROOT));
+    roots.forEach((root) => new ProtocolActivityWave(root));
+  }
+
+  initProtocolWaves(document);
+  document.addEventListener('shopify:section:load', (event) => initProtocolWaves(event.target));
+
   // Parked for future placement review. Keep the complete renderer below intact.
   return;
 
-  const ROOT = '[data-msc-ecosystem-radar]';
   const DATA_URL = 'https://raw.githubusercontent.com/mempoolsurfclub/mempoolsurfclub/homepage-market-data/data/homepage-market.json';
   const REFRESH_MS = 5 * 60 * 1000;
   const MAX_AGE_MS = 45 * 60 * 1000;

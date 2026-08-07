@@ -16,6 +16,10 @@
   display: none !important;
 }
 
+.msc-signal-card[data-msc-ecosystem-radar] .msc-radar-protocol-wave {
+  display: none;
+}
+
 @media screen and (min-width: 741px) {
   .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--explore {
     top: calc(26% - 22px) !important;
@@ -80,5 +84,89 @@
     left: -.8rem;
     margin-right: 0 !important;
     font-size: 1.05rem !important;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-protocol-wave {
+    --msc-protocol-wave-scale: .28;
+    --msc-protocol-wave-duration: 18s;
+    --msc-protocol-wave-opacity: .46;
+    position: absolute;
+    z-index: 5;
+    bottom: 1.55rem;
+    left: 1.3rem;
+    display: block;
+    width: min(31%, 11.7rem);
+    min-width: 9.5rem;
+    pointer-events: none;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-protocol-wave__label {
+    display: block;
+    margin: 0 0 .12rem;
+    color: rgba(251, 248, 239, .42);
+    font-size: .62rem;
+    font-weight: 720;
+    letter-spacing: .105em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-protocol-wave__svg {
+    display: block;
+    width: 100%;
+    height: 3.15rem;
+    overflow: hidden;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-protocol-wave__baseline {
+    fill: none;
+    stroke: rgba(212, 190, 153, .09);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-protocol-wave__motion {
+    transform: scaleY(var(--msc-protocol-wave-scale));
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform .75s ease;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-protocol-wave__track {
+    animation: mscProtocolWaveTravel var(--msc-protocol-wave-duration) linear infinite;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-protocol-wave__line {
+    fill: none;
+    stroke: rgba(212, 190, 153, var(--msc-protocol-wave-opacity));
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+    transition: stroke .75s ease;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-protocol-wave[data-intensity="heavy"] .msc-radar-protocol-wave__line {
+    stroke-width: 2.35;
+  }
+}
+
+@keyframes mscProtocolWaveTravel {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-80px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-protocol-wave__motion {
+    transition: none !important;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-protocol-wave__track {
+    animation: none !important;
   }
 }
