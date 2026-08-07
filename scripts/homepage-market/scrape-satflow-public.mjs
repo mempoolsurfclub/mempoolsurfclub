@@ -9,20 +9,56 @@ function clean(text) {
 }
 
 function parseBtc(text) {
-  const value = clean(text).replace(/,/g, '').match(/<?\s*([0-9]+(?:\.[0-9]+)?)/);
+  const normalized = clean(text).replace(/,/g, '');
+  if (!normalized || normalized.startsWith('<')) return null;
+  const value = normalized.match(/([0-9]+(?:\.[0-9]+)?)/);
   if (!value) return null;
   const number = Number(value[1]);
-  if (!Number.isFinite(number) || number < 0) return null;
-  if (clean(text).startsWith('<')) return number / 2;
-  return number;
+  return Number.isFinite(number) && number > 0 ? number : null;
 }
 
 async function clickOneDay(page) {
-  const buttons = page.getByRole('button', { name: '1D', exact: true });
-  await buttons.first().waitFor({ state: 'visible', timeout: TIMEOUT_MS });
-  await buttons.first().click();
-  await page.waitForTimeout(2500);
-  await page.getByText(/1D Volume/i).first().waitFor({ state: 'visible', timeout: TIMEOUT_MS });
+  await page.waitForTimeout(4000);
+
+  const candidates = [
+    page.getByText('1D', { exact: true }),
+    page.locator('button, [role="button"], a').filter({ hasText: /^1D$/ }),
+    page.locator('text="1D"')
+  ];
+
+  let clicked = false;
+  for (const candidate of candidates) {
+    try {
+      if (await candidate.count()) {
+        await candidate.first().click({ timeout: 5000, force: true });
+        clicked = true;
+        break;
+      }
+    } catch (error) {
+      // Try the next rendered form of the control.
+    }
+  }
+
+  if (!clicked) {
+    clicked = await page.evaluate(() => {
+      const nodes = [...document.querySelectorAll('button, [role="button"], a, div, span')];
+      const target = nodes.find((node) => String(node.textContent || '').trim() === '1D');
+      if (!target) return false;
+      target.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+      return true;
+    });
+  }
+
+  if (!clicked) {
+    const text = clean(await page.locator('body').innerText().catch(() => ''));
+    throw new Error(`Satflow 1D control not found. Page excerpt: ${text.slice(0, 1600)}`);
+  }
+
+  await page.waitForTimeout(3500);
+  const bodyText = clean(await page.locator('body').innerText());
+  if (!/1D Volume/i.test(bodyText)) {
+    throw new Error(`Satflow did not switch to 1D data. Page excerpt: ${bodyText.slice(0, 1600)}`);
+  }
 }
 
 async function extractTable(page, type) {
@@ -71,7 +107,7 @@ async function scrapeLeaderboard(page, url, type) {
 
   if (!rows || rows.length === 0) {
     const text = clean(await page.locator('body').innerText());
-    throw new Error(`Could not parse Satflow ${type} 1D leaderboard. Page excerpt: ${text.slice(0, 1200)}`);
+    throw new Error(`Could not parse Satflow ${type} 1D leaderboard. Page excerpt: ${text.slice(0, 1600)}`);
   }
 
   const assets = rows.map((row) => ({
@@ -81,7 +117,7 @@ async function scrapeLeaderboard(page, url, type) {
     source: 'Satflow'
   })).filter((row) => row.name && Number.isFinite(row.volumeBtc) && row.volumeBtc > 0);
 
-  if (assets.length === 0) throw new Error(`Satflow ${type} leaderboard contained no positive 1D volumes`);
+  if (assets.length === 0) throw new Error(`Satflow ${type} leaderboard contained no positive exact 1D volumes`);
   return assets;
 }
 
