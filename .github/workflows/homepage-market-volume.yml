@@ -32,16 +32,8 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install browser tooling
-        run: |
-          npm install --no-save playwright@1.54.2
-          npx playwright install --with-deps chromium
-
-      - name: Read Satflow public 1D leaderboards
-        run: node scripts/homepage-market/scrape-satflow-public.mjs /tmp/satflow-24h.json
-
-      - name: Build verified 24h ranking
-        run: node scripts/homepage-market/build-volume-data.mjs /tmp/homepage-market.json /tmp/satflow-24h.json
+      - name: Build verified BRC-20 24h ranking
+        run: node scripts/homepage-market/build-volume-data.mjs /tmp/homepage-market.json
 
       - name: Show ranking used for validation
         run: cat /tmp/homepage-market.json
