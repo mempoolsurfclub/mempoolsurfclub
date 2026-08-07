@@ -1,0 +1,49 @@
+/* Fresh homepage radar review overrides. Loaded last to avoid stale Shopify/CDN copies of earlier radar stylesheets. */
+@media screen and (min-width: 741px) {
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--explore {
+    inset: calc(26% - 22px) auto auto calc(37% - 22px);
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--learn {
+    inset: calc(34% - 22px) auto auto calc(54% - 22px);
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--tools {
+    inset: calc(67% - 22px) auto auto calc(41% - 22px);
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--shop {
+    inset: calc(82% - 22px) auto auto calc(64% - 22px);
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__labels {
+    font-size: clamp(1.18rem, 1.7vw, 1.48rem);
+    line-height: 1.1;
+    letter-spacing: .12em;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-btc__label {
+    font-size: 1.02rem;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-block-activity__title {
+    font-size: .9rem;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-block-activity__context {
+    font-size: .66rem;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-block-activity__label {
+    font-size: .8rem;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-block-activity__value {
+    margin-right: .7rem;
+    font-size: 1.02rem;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-block-activity__source {
+    font-size: .6rem;
+  }
+}
