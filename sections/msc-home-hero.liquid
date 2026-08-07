@@ -93,6 +93,26 @@
             </p>
           </div>
 
+          <section class="msc-radar-block-activity" aria-labelledby="MscRadarBlockActivityTitle-{{ section.id }}">
+            <h2 class="msc-radar-block-activity__title" id="MscRadarBlockActivityTitle-{{ section.id }}">Block Activity</h2>
+            <p class="msc-radar-block-activity__context">Latest confirmed block</p>
+            <ul class="msc-radar-block-activity__list">
+              <li class="msc-radar-block-activity__row">
+                <span class="msc-radar-block-activity__label">Ordinals</span>
+                <strong class="msc-radar-block-activity__value">— TX</strong>
+              </li>
+              <li class="msc-radar-block-activity__row">
+                <span class="msc-radar-block-activity__label">Runes</span>
+                <strong class="msc-radar-block-activity__value">— TX</strong>
+              </li>
+              <li class="msc-radar-block-activity__row">
+                <span class="msc-radar-block-activity__label">BRC-20</span>
+                <strong class="msc-radar-block-activity__value">— TX</strong>
+              </li>
+            </ul>
+            <p class="msc-radar-block-activity__source">Preview · protocol indexer pending</p>
+          </section>
+
           {%- comment -%}
             Top five individual Bitcoin assets by trailing 24-hour BTC volume.
             Live mode: Ordinals collections + Runes from Satflow indexed sales including external marketplaces; BRC-20 tickers from UniSat day1 btcVolume.
