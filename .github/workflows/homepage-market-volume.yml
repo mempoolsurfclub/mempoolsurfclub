@@ -1,0 +1,61 @@
+name: Homepage market volume
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/15 * * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: homepage-market-volume
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build verified 24h ranking
+        env:
+          SATFLOW_API_KEY: ${{ secrets.SATFLOW_API_KEY }}
+          UNISAT_API_KEY: ${{ secrets.UNISAT_API_KEY }}
+        run: node scripts/homepage-market/build-volume-data.mjs /tmp/homepage-market.json
+
+      - name: Publish data branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if git ls-remote --exit-code --heads origin homepage-market-data >/dev/null 2>&1; then
+            git fetch origin homepage-market-data
+            git switch -C homepage-market-data origin/homepage-market-data
+          else
+            git switch --orphan homepage-market-data
+            git rm -rf .
+          fi
+
+          mkdir -p data
+          cp /tmp/homepage-market.json data/homepage-market.json
+          git add data/homepage-market.json
+
+          if git diff --cached --quiet; then
+            echo "No market-data change to publish."
+            exit 0
+          fi
+
+          git commit -m "Update homepage 24h market volume"
+          git push origin homepage-market-data
