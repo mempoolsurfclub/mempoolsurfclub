@@ -1,6 +1,9 @@
 (() => {
   'use strict';
 
+  // Parked for future placement review. Keep the complete renderer below intact.
+  return;
+
   const ROOT = '[data-msc-ecosystem-radar]';
   const DATA_URL = 'https://raw.githubusercontent.com/mempoolsurfclub/mempoolsurfclub/homepage-market-data/data/homepage-market.json';
   const REFRESH_MS = 5 * 60 * 1000;
