@@ -93,6 +93,26 @@
             </p>
           </div>
 
+          {%- comment -%}
+            Production scaffold for the approved Top 5 by trailing 24-hour volume panel.
+            Ranking methodology: Ordinals collections + Runes from Satflow; BRC-20 tickers from UniSat.
+            Keep hidden until verified market data is connected. Never publish placeholder rankings.
+          {%- endcomment -%}
+          <section class="msc-radar-volume" data-radar-volume hidden aria-labelledby="MscRadarVolumeTitle-{{ section.id }}">
+            <h2 class="msc-radar-volume__title" id="MscRadarVolumeTitle-{{ section.id }}">24 HOUR VOLUME</h2>
+            <ol class="msc-radar-volume__list" data-radar-volume-list></ol>
+            <p class="msc-radar-volume__source">Ordinals + Runes: Satflow · BRC-20: UniSat</p>
+          </section>
+
+          <template data-radar-volume-row-template>
+            <li class="msc-radar-volume__row">
+              <span class="msc-radar-volume__rank" data-volume-rank></span>
+              <span class="msc-radar-volume__asset" data-volume-name></span>
+              <span class="msc-radar-volume__type" data-volume-type></span>
+              <span class="msc-radar-volume__value" data-volume-btc></span>
+            </li>
+          </template>
+
           <div class="msc-signal-field__radar-layer">
             <span class="msc-signal-field__radar-disc" aria-hidden="true"></span>
             <span class="msc-signal-field__bitcoin" aria-hidden="true">₿</span>
