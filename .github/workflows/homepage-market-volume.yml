@@ -4,22 +4,27 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '*/15 * * * *'
+  pull_request:
+    paths:
+      - '.github/workflows/homepage-market-volume.yml'
+      - 'scripts/homepage-market/**'
+      - 'assets/msc-home-volume.js'
+      - 'sections/msc-home-hero.liquid'
 
 permissions:
   contents: write
 
 concurrency:
-  group: homepage-market-volume
+  group: homepage-market-volume-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out main
+      - name: Check out code
         uses: actions/checkout@v4
         with:
-          ref: main
           fetch-depth: 0
 
       - name: Set up Node
@@ -27,13 +32,22 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Install browser tooling
+        run: |
+          npm install --no-save playwright@1.54.2
+          npx playwright install --with-deps chromium
+
+      - name: Read Satflow public 1D leaderboards
+        run: node scripts/homepage-market/scrape-satflow-public.mjs /tmp/satflow-24h.json
+
       - name: Build verified 24h ranking
-        env:
-          SATFLOW_API_KEY: ${{ secrets.SATFLOW_API_KEY }}
-          UNISAT_API_KEY: ${{ secrets.UNISAT_API_KEY }}
-        run: node scripts/homepage-market/build-volume-data.mjs /tmp/homepage-market.json
+        run: node scripts/homepage-market/build-volume-data.mjs /tmp/homepage-market.json /tmp/satflow-24h.json
+
+      - name: Show ranking used for validation
+        run: cat /tmp/homepage-market.json
 
       - name: Publish data branch
+        if: github.event_name != 'pull_request'
         shell: bash
         run: |
           set -euo pipefail
