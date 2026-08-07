@@ -31,19 +31,14 @@
 }
 
 .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-btc__line {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  grid-template-rows: auto auto;
+  display: flex;
   align-items: baseline;
-  column-gap: .55rem;
-  row-gap: .18rem;
+  gap: .55rem;
   margin: 0;
   font-variant-numeric: tabular-nums;
 }
 
 .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-btc__label {
-  grid-column: 1;
-  grid-row: 1;
   color: rgba(251, 248, 239, .68);
   font-size: .92rem;
   font-weight: 700;
@@ -52,8 +47,6 @@
 }
 
 .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-btc__value {
-  grid-column: 2;
-  grid-row: 1;
   color: var(--msc-paper-soft);
   font-size: clamp(1.5rem, 2vw, 1.95rem);
   font-weight: 760;
@@ -62,19 +55,7 @@
 }
 
 .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-btc__change {
-  grid-column: 2;
-  grid-row: 2;
-  color: rgba(212, 190, 153, .7);
-  font-size: .72rem;
-  font-weight: 650;
-  letter-spacing: .055em;
-  line-height: 1;
-  white-space: nowrap;
-}
-
-.msc-signal-card[data-msc-ecosystem-radar][data-btc-price-status="unavailable"] .msc-radar-btc__change,
-.msc-signal-card[data-msc-ecosystem-radar][data-btc-price-status="delayed"] .msc-radar-btc__change {
-  color: rgba(251, 248, 239, .42);
+  display: none;
 }
 
 @media screen and (max-width: 740px) {
