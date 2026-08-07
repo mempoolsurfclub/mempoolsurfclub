@@ -17,7 +17,40 @@ function parseBtc(text) {
   return Number.isFinite(number) && number > 0 ? number : null;
 }
 
-async function clickOneDay(page) {
+async function diagnosePublicClient(url) {
+  try {
+    const response = await fetch(url, { headers: { 'user-agent': 'Mozilla/5.0' } });
+    const html = await response.text();
+    console.log(`SATFLOW_DIAG html status=${response.status} bytes=${html.length}`);
+    const scripts = [...html.matchAll(/<script[^>]+src=["']([^"']+)["']/gi)]
+      .map((match) => new URL(match[1], url).href)
+      .filter((value, index, array) => array.indexOf(value) === index)
+      .slice(0, 80);
+    console.log(`SATFLOW_DIAG scripts=${scripts.length}`);
+
+    const patterns = ['1D Volume', '7D Volume', 'activity/sales', 'timeRange', 'volume24', 'volume_24', 'oneDay', 'day1', '24h', 'collections'];
+    for (const script of scripts) {
+      try {
+        const jsResponse = await fetch(script, { headers: { 'user-agent': 'Mozilla/5.0' } });
+        if (!jsResponse.ok) continue;
+        const js = await jsResponse.text();
+        for (const pattern of patterns) {
+          const index = js.indexOf(pattern);
+          if (index < 0) continue;
+          const start = Math.max(0, index - 450);
+          const end = Math.min(js.length, index + 900);
+          console.log(`SATFLOW_DIAG MATCH ${pattern} ${script}\n${js.slice(start, end)}\nSATFLOW_DIAG END`);
+        }
+      } catch (error) {
+        // Diagnostic only.
+      }
+    }
+  } catch (error) {
+    console.log(`SATFLOW_DIAG failed: ${error.message}`);
+  }
+}
+
+async function clickOneDay(page, url) {
   await page.waitForTimeout(4000);
 
   const candidates = [
@@ -51,12 +84,14 @@ async function clickOneDay(page) {
 
   if (!clicked) {
     const text = clean(await page.locator('body').innerText().catch(() => ''));
+    await diagnosePublicClient(url);
     throw new Error(`Satflow 1D control not found. Page excerpt: ${text.slice(0, 1600)}`);
   }
 
   await page.waitForTimeout(3500);
   const bodyText = clean(await page.locator('body').innerText());
   if (!/1D Volume/i.test(bodyText)) {
+    await diagnosePublicClient(url);
     throw new Error(`Satflow did not switch to 1D data. Page excerpt: ${bodyText.slice(0, 1600)}`);
   }
 }
@@ -100,7 +135,7 @@ async function extractRoleRows(page, type) {
 
 async function scrapeLeaderboard(page, url, type) {
   await page.goto(url, { waitUntil: 'domcontentloaded', timeout: TIMEOUT_MS });
-  await clickOneDay(page);
+  await clickOneDay(page, url);
 
   let rows = await extractTable(page, type);
   if (!rows || rows.length === 0) rows = await extractRoleRows(page, type);
