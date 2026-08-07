@@ -6,7 +6,7 @@
   const REFRESH_MS = 5 * 60 * 1000;
   const MAX_AGE_MS = 45 * 60 * 1000;
   const REQUEST_TIMEOUT_MS = 10000;
-  const TYPES = new Set(['ORDINAL', 'RUNE', 'BRC-20']);
+  const TYPES = new Set(['BRC-20']);
 
   function formatBtc(value) {
     if (value >= 100) return `${value.toFixed(0)} BTC`;
