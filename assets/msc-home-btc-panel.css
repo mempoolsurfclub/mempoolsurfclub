@@ -58,6 +58,86 @@
   display: none;
 }
 
+/* Latest confirmed block protocol-activity preview. Counts stay empty until a verified protocol index is connected. */
+.msc-signal-card[data-msc-ecosystem-radar] .msc-radar-block-activity {
+  position: absolute;
+  z-index: 5;
+  top: 7.15rem;
+  left: 1.3rem;
+  width: min(35%, 16.5rem);
+  min-width: 0;
+  color: var(--msc-paper-soft);
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-radar-block-activity__title {
+  margin: 0 0 .24rem;
+  color: rgba(251, 248, 239, .78);
+  font-size: .78rem;
+  font-weight: 760;
+  letter-spacing: .12em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-radar-block-activity__context {
+  margin: 0 0 .82rem;
+  color: rgba(251, 248, 239, .38);
+  font-size: .58rem;
+  font-weight: 650;
+  letter-spacing: .08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-radar-block-activity__list {
+  display: grid;
+  gap: .55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-radar-block-activity__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: .9rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid rgba(212, 190, 153, .11);
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-radar-block-activity__row:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-radar-block-activity__label {
+  color: rgba(251, 248, 239, .64);
+  font-size: .7rem;
+  font-weight: 720;
+  letter-spacing: .085em;
+  text-transform: uppercase;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-radar-block-activity__value {
+  color: rgba(251, 248, 239, .92);
+  font-size: .92rem;
+  font-weight: 760;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-radar-block-activity__source {
+  margin: .78rem 0 0;
+  color: rgba(251, 248, 239, .3);
+  font-size: .54rem;
+  font-weight: 650;
+  letter-spacing: .055em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
 /*
  * Top 5 production scaffold.
  * Approved sources: Ordinals collections + Runes from Satflow; BRC-20 tickers from UniSat.
@@ -157,6 +237,16 @@
     left: 1rem;
     right: 1rem;
     width: auto;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-block-activity {
+    top: 6.4rem;
+    left: 1rem;
+    width: min(64%, 17rem);
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field:has(.msc-radar-block-activity) {
+    min-height: 43rem !important;
   }
 
   .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-volume {
