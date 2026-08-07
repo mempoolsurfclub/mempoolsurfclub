@@ -94,14 +94,14 @@
           </div>
 
           {%- comment -%}
-            Temporary no-key feed: top five BRC-20 assets by trailing 24-hour CoinGecko trading volume in BTC.
-            Hidden by default and revealed only when a complete, fresh five-row snapshot is verified client-side.
-            Ordinals collections and Runes will be added when an approved production data source is available.
+            Top five individual Bitcoin assets by trailing 24-hour BTC volume.
+            Live mode: Ordinals collections + Runes from Satflow indexed sales including external marketplaces; BRC-20 tickers from UniSat day1 btcVolume.
+            Preview mode is clearly labeled and uses no fabricated market-volume values while provider API keys are pending.
           {%- endcomment -%}
           <section class="msc-radar-volume" data-radar-volume hidden aria-labelledby="MscRadarVolumeTitle-{{ section.id }}">
-            <h2 class="msc-radar-volume__title" id="MscRadarVolumeTitle-{{ section.id }}">BRC-20 — TOP 5 BY 24H VOLUME</h2>
+            <h2 class="msc-radar-volume__title" id="MscRadarVolumeTitle-{{ section.id }}">24 HOUR VOLUME — TOP 5</h2>
             <ol class="msc-radar-volume__list" data-radar-volume-list></ol>
-            <p class="msc-radar-volume__source">Source: CoinGecko Keyless Public API</p>
+            <p class="msc-radar-volume__source" data-radar-volume-source>PREVIEW · SATFLOW + UNISAT API CONNECTION PENDING</p>
           </section>
 
           <template data-radar-volume-row-template>
