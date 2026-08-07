@@ -227,6 +227,40 @@
   line-height: 1.3;
 }
 
+/* Desktop typography refinement from the annotated review. */
+@media screen and (min-width: 741px) {
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__labels {
+    font-size: clamp(1.18rem, 1.7vw, 1.48rem);
+    line-height: 1.1;
+    letter-spacing: .12em;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-btc__label {
+    font-size: 1.02rem;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-block-activity__title {
+    font-size: .9rem;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-block-activity__context {
+    font-size: .66rem;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-block-activity__label {
+    font-size: .8rem;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-block-activity__value {
+    margin-right: .7rem;
+    font-size: 1.02rem;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-block-activity__source {
+    font-size: .6rem;
+  }
+}
+
 @media screen and (max-width: 740px) {
   .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field {
     min-height: 31rem !important;

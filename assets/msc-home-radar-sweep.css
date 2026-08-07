@@ -121,7 +121,7 @@
   animation-play-state: paused;
 }
 
-/* Positions matched to the approved screenshot marks. */
+/* Existing mobile-safe hit targets and fallback positions. */
 .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone {
   width: 44px;
   height: 44px;
@@ -142,6 +142,25 @@
 
 .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--shop {
   inset: calc(86% - 22px) auto auto calc(64% - 22px);
+}
+
+/* Desktop dot centers matched to the latest annotated homepage screenshot. */
+@media screen and (min-width: 741px) {
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--explore {
+    inset: calc(26% - 22px) auto auto calc(37% - 22px);
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--learn {
+    inset: calc(34% - 22px) auto auto calc(54% - 22px);
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--tools {
+    inset: calc(67% - 22px) auto auto calc(41% - 22px);
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--shop {
+    inset: calc(82% - 22px) auto auto calc(64% - 22px);
+  }
 }
 
 /* Keep every label on the right of its dot. */
