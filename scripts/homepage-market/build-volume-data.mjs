@@ -1,252 +1,152 @@
-import { writeFile } from 'node:fs/promises';
-import process from 'node:process';
+import { readFile, writeFile } from 'node:fs/promises';
 
-const SATFLOW_URL = 'https://api.satflow.com/v1/activity/sales';
-const UNISAT_URL = 'https://open-api.unisat.io/v3/market/brc20/auction/brc20_types';
-const SATS_PER_BTC = 100_000_000;
-const PAGE_SIZE = 100;
-const MAX_PAGES = 100;
-const UNISAT_PAGE_SIZE = 100;
-const UNISAT_MAX_PAGES = 50;
-
-const satflowKey = process.env.SATFLOW_API_KEY?.trim();
-const unisatKey = process.env.UNISAT_API_KEY?.trim();
+const API_ROOT = 'https://api.coingecko.com/api/v3';
+const SATFLOW_INPUT = process.argv[3] || '/tmp/satflow-24h.json';
 const outputPath = process.argv[2] || 'data/homepage-market.json';
+const PAGE_SIZE = 250;
+const MAX_PAGES = 10;
+const REQUEST_TIMEOUT_MS = 20_000;
+const REQUEST_SPACING_MS = 3000;
+const MAX_RETRIES = 5;
 
-if (!satflowKey) throw new Error('SATFLOW_API_KEY is required');
-if (!unisatKey) throw new Error('UNISAT_API_KEY is required');
+let lastRequestAt = 0;
 
-function first(value) {
-  return Array.isArray(value) ? value[0] : value;
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function text(...values) {
-  for (const value of values) {
-    if (typeof value === 'string' && value.trim()) return value.trim();
-  }
-  return null;
+function clean(value) {
+  return String(value || '').replace(/\s+/g, ' ').trim();
 }
 
-function positiveNumber(...values) {
-  for (const value of values) {
-    const number = Number(value);
-    if (Number.isFinite(number) && number > 0) return number;
-  }
-  return null;
+function positive(value) {
+  const number = Number(value);
+  return Number.isFinite(number) && number > 0 ? number : null;
 }
 
-function satflowItems(payload) {
-  const data = payload?.data;
-  if (Array.isArray(data?.items)) return data.items;
-  if (Array.isArray(data?.sales)) return data.sales;
-  if (Array.isArray(data?.results)) return data.results;
-  if (Array.isArray(data)) return data;
-  return [];
-}
+async function requestJson(path, attempt = 0) {
+  const elapsed = Date.now() - lastRequestAt;
+  if (elapsed < REQUEST_SPACING_MS) await sleep(REQUEST_SPACING_MS - elapsed);
+  lastRequestAt = Date.now();
 
-function satflowTotalPages(payload) {
-  const value = Number(
-    payload?.data?.pagination?.totalPages ??
-    payload?.data?.totalPages ??
-    payload?.pagination?.totalPages
-  );
-  return Number.isFinite(value) && value > 0 ? value : null;
-}
-
-function normalizeSatflowSale(item) {
-  const runeData = first(
-    item?.runes ??
-    item?.rune ??
-    item?.ask?.runesData?.runes ??
-    item?.ask?.runes ??
-    item?.runesData?.runes ??
-    item?.token?.runes
-  );
-
-  const collection = item?.collection ?? item?.token?.collection ?? item?.ask?.collection;
-  const looksLikeRune = Boolean(
-    runeData ||
-    collection?.rune_divisibility != null ||
-    collection?.runeDivisibility != null ||
-    item?.token?.rune_amount != null ||
-    item?.token?.runeAmount != null
-  );
-
-  const priceSats = positiveNumber(
-    item?.ask?.price,
-    item?.sale?.price,
-    item?.listing?.price,
-    item?.totalPrice,
-    item?.salePrice,
-    item?.price
-  );
-  if (!priceSats) return null;
-
-  if (looksLikeRune) {
-    const name = text(
-      runeData?.spaced_rune,
-      runeData?.spacedRune,
-      runeData?.name,
-      runeData?.rune,
-      runeData?.ticker,
-      collection?.name,
-      collection?.displayName,
-      collection?.slug,
-      item?.collectionName,
-      item?.collectionSlug
-    );
-    const slug = text(
-      collection?.slug,
-      item?.collectionSlug,
-      runeData?.spaced_rune,
-      runeData?.spacedRune,
-      runeData?.name,
-      runeData?.rune,
-      runeData?.ticker,
-      name
-    );
-    if (!name || !slug) return null;
-    return { key: `rune:${slug.toLowerCase()}`, name, type: 'RUNE', volumeSats: priceSats };
-  }
-
-  const name = text(
-    collection?.name,
-    collection?.displayName,
-    item?.collectionName,
-    item?.token?.collection_name,
-    item?.token?.collectionName
-  );
-  const slug = text(
-    collection?.slug,
-    item?.collectionSlug,
-    item?.token?.collection_slug,
-    item?.token?.collectionSlug,
-    name
-  );
-
-  if (!name || !slug) return null;
-  return { key: `ordinal:${slug.toLowerCase()}`, name, type: 'ORDINAL', volumeSats: priceSats };
-}
-
-async function requestJson(url, options = {}, label) {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 20_000);
+  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
   try {
-    const response = await fetch(url, { ...options, signal: controller.signal });
-    if (!response.ok) {
-      const body = await response.text().catch(() => '');
-      throw new Error(`${label} HTTP ${response.status}${body ? `: ${body.slice(0, 240)}` : ''}`);
+    const response = await fetch(`${API_ROOT}${path}`, {
+      headers: {
+        accept: 'application/json',
+        'user-agent': 'Mempool-Surf-Club-homepage-market/1.0'
+      },
+      signal: controller.signal
+    });
+
+    if (response.status === 429 || response.status >= 500) {
+      if (attempt >= MAX_RETRIES) throw new Error(`CoinGecko HTTP ${response.status}`);
+      const retryAfter = Number.parseInt(response.headers.get('retry-after') || '', 10);
+      const delay = Number.isFinite(retryAfter) && retryAfter > 0
+        ? retryAfter * 1000
+        : Math.min(4000 * (2 ** attempt), 60_000);
+      await sleep(delay);
+      return requestJson(path, attempt + 1);
     }
-    return await response.json();
+
+    if (!response.ok) throw new Error(`CoinGecko HTTP ${response.status}`);
+    return response.json();
   } finally {
     clearTimeout(timeout);
   }
 }
 
-async function fetchSatflowVolumes() {
-  const totals = new Map();
-  let page = 1;
-  let observedSales = 0;
+async function readSatflowAssets() {
+  const payload = JSON.parse(await readFile(SATFLOW_INPUT, 'utf8'));
+  if (payload?.window !== '24h') throw new Error('Satflow snapshot is not a 24h snapshot');
 
-  while (page <= MAX_PAGES) {
-    const url = new URL(SATFLOW_URL);
-    url.searchParams.set('external', 'true');
-    url.searchParams.set('timeRange', '24h');
-    url.searchParams.set('page', String(page));
-    url.searchParams.set('pageSize', String(PAGE_SIZE));
-    url.searchParams.set('sortBy', 'createdAt');
-    url.searchParams.set('sortDirection', 'desc');
-
-    const payload = await requestJson(url, {
-      headers: {
-        accept: 'application/json',
-        'x-api-key': satflowKey
-      }
-    }, 'Satflow');
-
-    const items = satflowItems(payload);
-    observedSales += items.length;
-
-    for (const item of items) {
-      const sale = normalizeSatflowSale(item);
-      if (!sale) continue;
-      const current = totals.get(sale.key) || { name: sale.name, type: sale.type, volumeSats: 0 };
-      current.volumeSats += sale.volumeSats;
-      totals.set(sale.key, current);
-    }
-
-    const totalPages = satflowTotalPages(payload);
-    if (items.length === 0 || items.length < PAGE_SIZE || (totalPages && page >= totalPages)) break;
-    page += 1;
+  const generatedAt = Date.parse(payload?.generatedAt || '');
+  if (!Number.isFinite(generatedAt) || Date.now() - generatedAt > 30 * 60 * 1000) {
+    throw new Error('Satflow snapshot is missing or stale');
   }
 
-  if (page > MAX_PAGES) throw new Error('Satflow pagination exceeded safety limit');
+  const rows = [...(payload.ordinals || []), ...(payload.runes || [])];
+  const assets = rows.map((row) => ({
+    name: clean(row?.name),
+    type: row?.type === 'RUNE' ? 'RUNE' : 'ORDINAL',
+    volumeBtc: positive(row?.volumeBtc),
+    source: 'Satflow'
+  })).filter((row) => row.name && row.volumeBtc);
 
-  return {
-    observedSales,
-    assets: [...totals.values()]
-      .filter((asset) => asset.volumeSats > 0)
-      .map((asset) => ({
-        name: asset.name,
-        type: asset.type,
-        volumeBtc: asset.volumeSats / SATS_PER_BTC,
-        source: 'Satflow'
-      }))
-  };
+  if (assets.length < 2) throw new Error('Satflow returned insufficient individual 1D assets');
+  return assets;
 }
 
-async function fetchUnisatVolumes() {
-  const assets = new Map();
-  let start = 0;
-
-  for (let page = 0; page < UNISAT_MAX_PAGES; page += 1) {
-    const payload = await requestJson(UNISAT_URL, {
-      method: 'POST',
-      headers: {
-        accept: 'application/json',
-        'content-type': 'application/json',
-        authorization: `Bearer ${unisatKey}`
-      },
-      body: JSON.stringify({ timeType: 'day1', start, limit: UNISAT_PAGE_SIZE })
-    }, 'UniSat');
-
-    const list = Array.isArray(payload?.data?.list) ? payload.data.list : [];
-    for (const item of list) {
-      const name = text(item?.tick);
-      const volumeBtc = positiveNumber(item?.btcVolume);
-      if (!name || !volumeBtc) continue;
-      assets.set(name.toLowerCase(), { name, type: 'BRC-20', volumeBtc, source: 'UniSat' });
-    }
-
-    if (list.length < UNISAT_PAGE_SIZE) break;
-    start += UNISAT_PAGE_SIZE;
+async function fetchBrc20() {
+  const categories = await requestJson('/coins/categories/list');
+  if (!Array.isArray(categories) || !categories.some((row) => row?.category_id === 'brc-20')) {
+    throw new Error('CoinGecko BRC-20 category is unavailable');
   }
 
-  return [...assets.values()];
+  const assets = [];
+  const seen = new Set();
+  for (let page = 1; page <= MAX_PAGES; page += 1) {
+    const params = new URLSearchParams({
+      vs_currency: 'btc',
+      category: 'brc-20',
+      order: 'volume_desc',
+      per_page: String(PAGE_SIZE),
+      page: String(page),
+      sparkline: 'false',
+      precision: 'full'
+    });
+    const rows = await requestJson(`/coins/markets?${params.toString()}`);
+    if (!Array.isArray(rows)) throw new Error('CoinGecko BRC-20 response is not an array');
+    if (rows.length === 0) break;
+
+    for (const row of rows) {
+      const id = clean(row?.id);
+      const name = clean(row?.symbol || row?.name).toUpperCase();
+      const volumeBtc = positive(row?.total_volume);
+      if (!id || !name || !volumeBtc || seen.has(id)) continue;
+      seen.add(id);
+      assets.push({ name, type: 'BRC-20', volumeBtc, source: 'CoinGecko' });
+    }
+
+    if (rows.length < PAGE_SIZE) break;
+  }
+
+  if (assets.length === 0) throw new Error('CoinGecko returned no BRC-20 assets with 24h volume');
+  return assets;
 }
 
-const [satflow, brc20] = await Promise.all([fetchSatflowVolumes(), fetchUnisatVolumes()]);
-const ranked = [...satflow.assets, ...brc20]
-  .filter((asset) => Number.isFinite(asset.volumeBtc) && asset.volumeBtc > 0)
-  .sort((a, b) => b.volumeBtc - a.volumeBtc)
+function dedupe(rows) {
+  const map = new Map();
+  for (const row of rows) {
+    const key = `${row.type}:${row.name.toLowerCase()}`;
+    const existing = map.get(key);
+    if (!existing || row.volumeBtc > existing.volumeBtc) map.set(key, row);
+  }
+  return [...map.values()];
+}
+
+const [satflow, brc20] = await Promise.all([readSatflowAssets(), fetchBrc20()]);
+const ranked = dedupe([...satflow, ...brc20])
+  .sort((a, b) => b.volumeBtc - a.volumeBtc || a.name.localeCompare(b.name))
   .slice(0, 5)
   .map((asset, index) => ({ rank: index + 1, ...asset }));
 
-if (ranked.length < 5) {
-  throw new Error(`Only ${ranked.length} valid ranked assets were produced; refusing to publish incomplete data`);
-}
+if (ranked.length < 5) throw new Error(`Only ${ranked.length} valid ranked assets were produced`);
 
 const payload = {
   schemaVersion: 1,
   generatedAt: new Date().toISOString(),
   window: '24h',
-  methodology: 'Individual Ordinals collections and Runes from Satflow indexed 24h sales; individual BRC-20 tickers from UniSat day1 btcVolume. Combined and ranked by BTC volume.',
+  unit: 'BTC',
+  methodology: 'Individual Ordinals collections and Runes from Satflow public 1D leaderboards; individual BRC-20 assets from CoinGecko 24h market volume. Combined and ranked by BTC volume.',
   providers: {
-    satflow: { externalMarketplaceData: true, observedSales: satflow.observedSales },
-    unisat: { timeType: 'day1' }
+    satflow: 'public 1D leaderboards',
+    brc20: 'CoinGecko BRC-20 category'
   },
   assets: ranked
 };
 
 await writeFile(outputPath, `${JSON.stringify(payload, null, 2)}\n`, 'utf8');
 console.log(`Wrote ${ranked.length} ranked assets to ${outputPath}`);
+console.log(ranked.map((row) => `${row.rank}. ${row.name} (${row.type}) ${row.volumeBtc.toFixed(8)} BTC`).join('\n'));
