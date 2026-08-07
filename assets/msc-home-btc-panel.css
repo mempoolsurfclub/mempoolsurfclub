@@ -31,15 +31,19 @@
 }
 
 .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-btc__line {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto auto;
   align-items: baseline;
-  flex-wrap: wrap;
-  gap: .35rem .55rem;
+  column-gap: .55rem;
+  row-gap: .18rem;
   margin: 0;
   font-variant-numeric: tabular-nums;
 }
 
 .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-btc__label {
+  grid-column: 1;
+  grid-row: 1;
   color: rgba(251, 248, 239, .68);
   font-size: .92rem;
   font-weight: 700;
@@ -48,6 +52,8 @@
 }
 
 .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-btc__value {
+  grid-column: 2;
+  grid-row: 1;
   color: var(--msc-paper-soft);
   font-size: clamp(1.5rem, 2vw, 1.95rem);
   font-weight: 760;
@@ -56,6 +62,8 @@
 }
 
 .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-btc__change {
+  grid-column: 2;
+  grid-row: 2;
   color: rgba(212, 190, 153, .7);
   font-size: .72rem;
   font-weight: 650;
