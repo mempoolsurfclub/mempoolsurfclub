@@ -1,0 +1,147 @@
+/* MSC Learn — Knowledge Sounder readability pass. Frontend-only review layer. */
+
+.msc-depth-map__profile,
+.msc-depth-map__node,
+.msc-depth-map__arrow {
+  display: none;
+}
+
+.msc-depth-map__contours {
+  opacity: .5;
+}
+
+.msc-depth-map__contour {
+  stroke: rgba(212, 190, 153, .1);
+}
+
+.msc-depth-map__route {
+  stroke: rgba(212, 190, 153, .5);
+  stroke-width: 1.55;
+  stroke-dasharray: 8 11;
+  animation: none;
+  transform: scaleX(.8);
+  transform-origin: 0 50%;
+}
+
+.msc-depth-map__scan {
+  opacity: .34;
+}
+
+.msc-depth-map__region-copy {
+  text-shadow: 0 1px 8px rgba(4, 15, 21, .72);
+}
+
+@media screen and (min-width: 991px) {
+  .msc-depth-map__region {
+    right: auto;
+    width: min(44rem, calc(100% - var(--msc-sounder-indent) - 1.2rem));
+    grid-template-columns: 1rem minmax(0, 1fr);
+    gap: .9rem;
+    padding: .78rem .9rem .82rem .78rem;
+    background: linear-gradient(90deg, rgba(8,25,33,.54) 0%, rgba(8,25,33,.34) 62%, rgba(8,25,33,.04) 100%);
+  }
+
+  .msc-depth-map__region[data-region="basics"] {
+    --msc-sounder-indent: 5%;
+    top: 10%;
+  }
+
+  .msc-depth-map__region[data-region="network"] {
+    --msc-sounder-indent: 18%;
+    top: 28%;
+  }
+
+  .msc-depth-map__region[data-region="building"] {
+    --msc-sounder-indent: 31%;
+    top: 47%;
+  }
+
+  .msc-depth-map__region[data-region="development"] {
+    --msc-sounder-indent: 45%;
+    top: 68%;
+  }
+
+  .msc-depth-map__region[data-region="ecosystem"] {
+    --msc-sounder-indent: 58%;
+    top: 88%;
+  }
+
+  .msc-depth-map__station {
+    width: .82rem;
+    height: .82rem;
+  }
+
+  .msc-depth-map__region-line {
+    gap: .5rem .7rem;
+    margin-bottom: .3rem;
+  }
+
+  .msc-depth-map__depth-name {
+    font-size: .92rem;
+    letter-spacing: .12em;
+  }
+
+  .msc-depth-map__title {
+    font-size: 1.65rem;
+    line-height: 1.08;
+    letter-spacing: 0;
+  }
+
+  .msc-depth-map__meta {
+    min-height: 1.55rem;
+    margin-top: .36rem;
+  }
+
+  .msc-depth-map__subcategories,
+  .msc-depth-map__description {
+    font-size: 1.05rem;
+    line-height: 1.35;
+  }
+
+  .msc-depth-map__scale-mark {
+    font-size: .84rem;
+  }
+}
+
+@media screen and (min-width: 641px) and (max-width: 990px) {
+  .msc-depth-map__region {
+    right: auto;
+    width: min(34rem, calc(100% - var(--msc-sounder-indent) - .8rem));
+    grid-template-columns: .9rem minmax(0, 1fr);
+  }
+
+  .msc-depth-map__region[data-region="basics"] { --msc-sounder-indent: 4%; }
+  .msc-depth-map__region[data-region="network"] { --msc-sounder-indent: 15%; }
+  .msc-depth-map__region[data-region="building"] { --msc-sounder-indent: 27%; }
+  .msc-depth-map__region[data-region="development"] { --msc-sounder-indent: 39%; }
+  .msc-depth-map__region[data-region="ecosystem"] { --msc-sounder-indent: 50%; }
+
+  .msc-depth-map__title {
+    font-size: 1.4rem;
+  }
+
+  .msc-depth-map__subcategories,
+  .msc-depth-map__description {
+    font-size: .92rem;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .msc-depth-map__route {
+    display: none;
+  }
+
+  .msc-depth-map__contours {
+    opacity: .42;
+  }
+
+  .msc-depth-map__region {
+    grid-template-columns: .82rem minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .msc-depth-map__route {
+    animation: none !important;
+  }
+}
