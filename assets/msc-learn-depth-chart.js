@@ -3,9 +3,13 @@
     const script = document.currentScript;
     if (!script?.src || document.querySelector('link[data-msc-learn-hero-wide]')) return;
 
+    const scriptUrl = new URL(script.src);
+    const heroUrl = new URL('msc-learn-hero-wide.css', scriptUrl);
+    heroUrl.search = scriptUrl.search;
+
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = new URL('msc-learn-hero-wide.css', script.src).href;
+    link.href = heroUrl.href;
     link.dataset.mscLearnHeroWide = 'true';
     document.head.appendChild(link);
   };
