@@ -145,7 +145,7 @@
         --collection-card-shadow-visible: {% if settings.collection_card_shadow_opacity > 0 %}1{% else %}0{% endif %};
         --collection-card-shadow-horizontal-offset: {{ settings.collection_card_shadow_horizontal_offset | divided_by: 10.0 }}rem;
         --collection-card-shadow-vertical-offset: {{ settings.collection_card_shadow_vertical_offset | divided_by: 10.0 }}rem;
-        --collection-card-shadow-blur-radius: {{ settings.collection_card_shadow_blur }}px;
+        --collection-card-shadow-blur-radius: {{ settings.collection_card_shadow_blur | divided_by: 10.0 }}rem;
 
         --blog-card-image-padding: {{ settings.blog_card_image_padding | divided_by: 10.0 }}rem;
         --blog-card-corner-radius: {{ settings.blog_card_corner_radius | divided_by: 10.0 }}rem;
@@ -156,7 +156,7 @@
         --blog-card-shadow-visible: {% if settings.blog_card_shadow_opacity > 0 %}1{% else %}0{% endif %};
         --blog-card-shadow-horizontal-offset: {{ settings.blog_card_shadow_horizontal_offset | divided_by: 10.0 }}rem;
         --blog-card-shadow-vertical-offset: {{ settings.blog_card_shadow_vertical_offset | divided_by: 10.0 }}rem;
-        --blog-card-shadow-blur-radius: {{ settings.blog_card_shadow_blur }}px;
+        --blog-card-shadow-blur-radius: {{ settings.blog_card_shadow_blur | divided_by: 10.0 }}rem;
 
         --badge-corner-radius: {{ settings.badge_corner_radius | divided_by: 10.0 }}rem;
 
@@ -214,7 +214,7 @@
         --inputs-radius-outset: {% if settings.inputs_radius > 0 %}{{ settings.inputs_radius | plus: settings.inputs_border_thickness }}{% else %}0{% endif %}px;
 
         --variant-pills-radius: {{ settings.variant_pills_radius }}px;
-        --variant-pills-border-width: {{ settings.variant_pills_border_thickness | divided_by: 10.0 }}rem;
+        --variant-pills-border-width: {{ settings.variant_pills_border_thickness }}px;
         --variant-pills-border-opacity: {{ settings.variant_pills_border_opacity | divided_by: 100.0 }};
         --variant-pills-shadow-opacity: {{ settings.variant_pills_shadow_opacity | divided_by: 100.0 }};
         --variant-pills-shadow-horizontal-offset: {{ settings.variant_pills_shadow_horizontal_offset }}px;
