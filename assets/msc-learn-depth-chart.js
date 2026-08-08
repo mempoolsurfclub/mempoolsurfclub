@@ -81,7 +81,7 @@
       {
         label: 'Deep',
         key: 'development',
-        displayTitle: 'Bitcoin Core & Protocols',
+        displayTitle: 'Bitcoin & Protocols',
         fallbackHref: '/pages/learn-bitcoin-development'
       },
       {
