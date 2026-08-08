@@ -29,8 +29,24 @@
     document.head.appendChild(link);
   };
 
+  const loadSounderSurfaceStyles = () => {
+    const script = document.currentScript;
+    if (!script?.src || document.querySelector('link[data-msc-learn-sounder-surface]')) return;
+
+    const scriptUrl = new URL(script.src);
+    const surfaceUrl = new URL('msc-learn-sounder-surface.css', scriptUrl);
+    surfaceUrl.search = scriptUrl.search;
+
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = surfaceUrl.href;
+    link.dataset.mscLearnSounderSurface = 'true';
+    document.head.appendChild(link);
+  };
+
   loadHeroStyles();
   loadSounderReviewStyles();
+  loadSounderSurfaceStyles();
 
   const init = () => {
     const learn = document.querySelector('.msc-learn');

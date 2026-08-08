@@ -1,0 +1,43 @@
+/* MSC Learn — Knowledge Sounder surface cleanup. Frontend-only review layer. */
+
+.msc-depth-map__contours,
+.msc-depth-map__route,
+.msc-depth-map__meta {
+  display: none !important;
+}
+
+.msc-depth-map::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: 1.35rem;
+  left: 7.2rem;
+  right: 0;
+  height: 2.5rem;
+  pointer-events: none;
+  opacity: .62;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='40' viewBox='0 0 320 40'%3E%3Cpath d='M0 22 C22 22 24 11 48 11 S74 24 98 19 S120 8 146 13 S174 24 198 18 S224 10 248 14 S278 23 320 16' fill='none' stroke='%23d4be99' stroke-opacity='.7' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: 0 50%;
+  background-size: 20rem 2.5rem;
+  animation: mscSounderSurfaceFlow 16s linear infinite;
+}
+
+@keyframes mscSounderSurfaceFlow {
+  to { background-position-x: 20rem; }
+}
+
+@media screen and (max-width: 640px) {
+  .msc-depth-map::after {
+    left: 5.6rem;
+    top: 1rem;
+    height: 2rem;
+    background-size: 16rem 2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .msc-depth-map::after {
+    animation: none !important;
+  }
+}
