@@ -1,0 +1,63 @@
+/* MSC Learn hero reflow — keeps the Learn intro compact and gives the Knowledge Sounder full horizontal space. */
+
+@media screen and (min-width: 991px) {
+  .msc-learn .msc-learn-hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(2.6rem, 3.5vw, 4.4rem);
+    align-items: start;
+  }
+
+  .msc-learn .msc-learn-hero__content {
+    display: grid;
+    grid-template-columns: minmax(0, 1.02fr) minmax(30rem, .88fr);
+    grid-template-areas:
+      "signal signal"
+      "title copy"
+      "title search";
+    column-gap: clamp(3.2rem, 6vw, 7rem);
+    row-gap: 1rem;
+    width: 100%;
+    align-items: start;
+  }
+
+  .msc-learn .msc-learn-hero__content .msc-rotating-signal {
+    grid-area: signal;
+    justify-self: start;
+    margin-bottom: .7rem;
+  }
+
+  .msc-learn .msc-learn-hero__title {
+    grid-area: title;
+    align-self: start;
+    max-width: 8.2ch;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .msc-learn .msc-learn-hero__copy {
+    grid-area: copy;
+    align-self: end;
+    max-width: 58rem;
+    margin: .5rem 0 0;
+  }
+
+  .msc-learn .msc-search-form--learn {
+    grid-area: search;
+    align-self: start;
+    width: 100%;
+    max-width: none;
+    margin-top: 1.15rem;
+  }
+
+  .msc-learn .msc-learn-hero > .msc-depth-chart {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+  }
+}
+
+@media screen and (min-width: 1180px) {
+  .msc-learn .msc-learn-hero__content {
+    grid-template-columns: minmax(0, .96fr) minmax(34rem, .86fr);
+  }
+}
