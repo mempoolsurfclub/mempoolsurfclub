@@ -1,4 +1,17 @@
 (() => {
+  const loadHeroStyles = () => {
+    const script = document.currentScript;
+    if (!script?.src || document.querySelector('link[data-msc-learn-hero-wide]')) return;
+
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = new URL('msc-learn-hero-wide.css', script.src).href;
+    link.dataset.mscLearnHeroWide = 'true';
+    document.head.appendChild(link);
+  };
+
+  loadHeroStyles();
+
   const init = () => {
     const learn = document.querySelector('.msc-learn');
     if (!learn) return;
