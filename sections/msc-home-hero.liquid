@@ -4,6 +4,7 @@
 {{ 'msc-home-radar-review-v1.css' | asset_url | stylesheet_tag }}
 
 {%- assign search_input_id = 'MscHomeSearchInput-' | append: section.id -%}
+{%- assign search_placeholders_id = 'MscHomeSearchPlaceholders-' | append: section.id -%}
 {%- assign heading_line_1 = section.settings.heading_line_1 | default: blank -%}
 {%- assign heading_line_2 = section.settings.heading_line_2 | default: blank -%}
 {%- assign radar_explore_url = section.settings.radar_explore_url | default: '/pages/explore-the-bitcoin-ecosystem' -%}
@@ -47,6 +48,117 @@
           label: section.settings.search_label,
           modifier: 'home'
         %}
+
+        <style>
+          #{{ search_input_id }}::placeholder {
+            opacity: 1;
+            transition: opacity .3s ease;
+          }
+
+          #{{ search_input_id }}.msc-search-form__input--placeholder-fading::placeholder {
+            opacity: 0;
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            #{{ search_input_id }}::placeholder {
+              transition: none;
+            }
+          }
+        </style>
+
+        <script id="{{ search_placeholders_id }}" type="application/json">
+          [
+            {{ section.settings.search_placeholder | json }},
+            {{ section.settings.search_placeholder_2 | json }},
+            {{ section.settings.search_placeholder_3 | json }},
+            {{ section.settings.search_placeholder_4 | json }},
+            {{ section.settings.search_placeholder_5 | json }}
+          ]
+        </script>
+
+        <script>
+          (() => {
+            const input = document.getElementById({{ search_input_id | json }});
+            const config = document.getElementById({{ search_placeholders_id | json }});
+            if (!input || !config || input.dataset.placeholderCycleInitialized === 'true') return;
+
+            let placeholders;
+            try {
+              placeholders = JSON.parse(config.textContent)
+                .filter((value) => typeof value === 'string')
+                .map((value) => value.trim())
+                .filter(Boolean);
+            } catch (error) {
+              return;
+            }
+
+            if (!placeholders.length) return;
+            input.placeholder = placeholders[0];
+            if (placeholders.length < 2) return;
+
+            input.dataset.placeholderCycleInitialized = 'true';
+
+            const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+            const HOLD_MS = 2800;
+            const FADE_MS = 300;
+            let index = 0;
+            let holdTimer = null;
+            let fadeTimer = null;
+
+            const clearTimers = () => {
+              window.clearTimeout(holdTimer);
+              window.clearTimeout(fadeTimer);
+              holdTimer = null;
+              fadeTimer = null;
+            };
+
+            const canRotate = () => (
+              !motionQuery.matches &&
+              document.visibilityState === 'visible' &&
+              document.activeElement !== input &&
+              input.value === ''
+            );
+
+            const schedule = () => {
+              clearTimers();
+              if (!canRotate()) return;
+
+              holdTimer = window.setTimeout(() => {
+                if (!canRotate()) return;
+
+                input.classList.add('msc-search-form__input--placeholder-fading');
+                fadeTimer = window.setTimeout(() => {
+                  index = (index + 1) % placeholders.length;
+                  input.placeholder = placeholders[index];
+                  window.requestAnimationFrame(() => {
+                    input.classList.remove('msc-search-form__input--placeholder-fading');
+                  });
+                  schedule();
+                }, FADE_MS);
+              }, HOLD_MS);
+            };
+
+            input.addEventListener('focus', () => {
+              clearTimers();
+              input.classList.remove('msc-search-form__input--placeholder-fading');
+            });
+
+            input.addEventListener('input', () => {
+              if (input.value !== '') clearTimers();
+            });
+
+            input.addEventListener('blur', schedule);
+
+            const handleMotionChange = () => {
+              clearTimers();
+              input.classList.remove('msc-search-form__input--placeholder-fading');
+              if (!motionQuery.matches) schedule();
+            };
+
+            if (motionQuery.addEventListener) motionQuery.addEventListener('change', handleMotionChange);
+            schedule();
+          })();
+        </script>
 
       </div>
 
@@ -174,7 +286,11 @@
     { "type": "text", "id": "heading", "label": "Legacy heading fallback", "default": "READ THE NETWORK. RIDE THE WAVE." },
     { "type": "richtext", "id": "subheading", "label": "Supporting copy", "default": "<p>Mempool Surf Club is a place to explore Bitcoin culture, understand how the network works, read the conditions shaping it, and discover the people who carry the culture forward.</p>" },
     { "type": "text", "id": "search_label", "label": "Search accessible label", "default": "Search people, projects, ideas, tools, and topics" },
-    { "type": "text", "id": "search_placeholder", "label": "Search placeholder", "default": "Search people, projects, ideas, tools, and topics..." },
+    { "type": "text", "id": "search_placeholder", "label": "Search placeholder 1", "default": "Search people, projects, ideas, tools, and topics..." },
+    { "type": "text", "id": "search_placeholder_2", "label": "Search placeholder 2" },
+    { "type": "text", "id": "search_placeholder_3", "label": "Search placeholder 3" },
+    { "type": "text", "id": "search_placeholder_4", "label": "Search placeholder 4" },
+    { "type": "text", "id": "search_placeholder_5", "label": "Search placeholder 5" },
     { "type": "text", "id": "search_button", "label": "Search button", "default": "Search" },
     { "type": "text", "id": "search_types", "label": "Shopify search types", "default": "article,page,product" },
     { "type": "url", "id": "radar_explore_url", "label": "Radar Explore URL" },
