@@ -2,61 +2,63 @@
 
 @media screen and (min-width: 991px) {
   .msc-learn .msc-learn-hero {
-    grid-template-columns: minmax(0, 1fr);
-    gap: clamp(1.8rem, 2.4vw, 2.8rem);
-    align-items: start;
-  }
-
-  .msc-learn .msc-learn-hero__content {
     display: grid;
-    grid-template-columns: minmax(0, .88fr) minmax(0, 1.12fr);
+    grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr);
     grid-template-areas:
       "signal signal"
       "title copy"
-      "title search";
-    column-gap: clamp(3.4rem, 4.4vw, 5.4rem);
-    row-gap: .9rem;
-    width: 100%;
+      "sounder sounder"
+      "search search";
+    column-gap: clamp(3.2rem, 4vw, 4.8rem);
+    row-gap: 1.35rem;
     align-items: start;
+  }
+
+  /* Flatten the intro wrapper at desktop so the search can sit below the Sounder. */
+  .msc-learn .msc-learn-hero__content {
+    display: contents;
   }
 
   .msc-learn .msc-learn-hero__content .msc-rotating-signal {
     grid-area: signal;
     justify-self: start;
-    margin-bottom: .45rem;
+    margin: 0 0 .25rem;
   }
 
   .msc-learn .msc-learn-hero__title {
     grid-area: title;
     align-self: start;
-    max-width: 14ch;
-    margin-top: 0;
-    margin-bottom: 0;
-    font-size: clamp(5rem, 5.45vw, 6.6rem);
+    max-width: none;
+    margin: 0;
+    font-size: clamp(4.6rem, 4.75vw, 5.8rem);
     line-height: .9;
-    letter-spacing: -.055em;
+    letter-spacing: -.06em;
+    text-wrap: balance;
   }
 
   .msc-learn .msc-learn-hero__copy {
     grid-area: copy;
     align-self: start;
-    max-width: 60rem;
-    margin: .7rem 0 0;
+    max-width: 54rem;
+    margin: .55rem 0 0;
+  }
+
+  .msc-learn .msc-learn-hero > .msc-depth-chart {
+    grid-area: sounder;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    margin-top: .45rem;
   }
 
   .msc-learn .msc-search-form--learn {
     grid-area: search;
+    justify-self: center;
     align-self: start;
-    width: 100%;
-    max-width: none;
+    width: min(100%, 84rem);
+    max-width: 84rem;
     min-width: 0;
-    margin-top: .8rem;
-  }
-
-  .msc-learn .msc-learn-hero > .msc-depth-chart {
-    width: 100%;
-    max-width: none;
-    min-width: 0;
+    margin: .35rem auto 0;
   }
 
   /* Sounder polish: lighter framing, stronger chart lines, and Radar-scale type. */
@@ -138,7 +140,11 @@
 }
 
 @media screen and (min-width: 1180px) {
-  .msc-learn .msc-learn-hero__content {
-    grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  .msc-learn .msc-learn-hero {
+    grid-template-columns: minmax(0, 1.04fr) minmax(0, .96fr);
+  }
+
+  .msc-learn .msc-learn-hero__title {
+    font-size: clamp(5rem, 4.9vw, 6rem);
   }
 }
