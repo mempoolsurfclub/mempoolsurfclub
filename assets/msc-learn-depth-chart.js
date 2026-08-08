@@ -14,7 +14,23 @@
     document.head.appendChild(link);
   };
 
+  const loadSounderReviewStyles = () => {
+    const script = document.currentScript;
+    if (!script?.src || document.querySelector('link[data-msc-learn-sounder-readability]')) return;
+
+    const scriptUrl = new URL(script.src);
+    const reviewUrl = new URL('msc-learn-sounder-readability.css', scriptUrl);
+    reviewUrl.search = scriptUrl.search;
+
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = reviewUrl.href;
+    link.dataset.mscLearnSounderReadability = 'true';
+    document.head.appendChild(link);
+  };
+
   loadHeroStyles();
+  loadSounderReviewStyles();
 
   const init = () => {
     const learn = document.querySelector('.msc-learn');
