@@ -38,9 +38,10 @@
 
   .msc-learn .msc-learn-hero__copy {
     grid-area: copy;
-    align-self: start;
-    max-width: 54rem;
-    margin: .55rem 0 0;
+    align-self: end;
+    width: 100%;
+    max-width: none;
+    margin: 0;
   }
 
   .msc-learn .msc-learn-hero > .msc-depth-chart {
@@ -141,7 +142,7 @@
 
 @media screen and (min-width: 1180px) {
   .msc-learn .msc-learn-hero {
-    grid-template-columns: minmax(0, 1.04fr) minmax(0, .96fr);
+    grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
   }
 
   .msc-learn .msc-learn-hero__title {
