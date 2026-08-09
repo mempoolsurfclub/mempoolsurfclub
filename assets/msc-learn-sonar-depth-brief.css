@@ -1,10 +1,13 @@
 /* MSC Learn — SONAR depth brief panel and station-spacing refinement. Frontend-only. */
 
 .msc-depth-map__scale::before {
-  left: 50%;
-  width: max-content;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  box-sizing: border-box;
   text-align: center;
-  transform: translateX(-50%);
+  transform: none !important;
+  white-space: nowrap;
 }
 
 .msc-depth-map__brief {
@@ -168,6 +171,18 @@
   .msc-depth-map__brief-action:focus-visible {
     color: rgba(251, 248, 239, .98);
     outline: none;
+  }
+}
+
+/* Layout-review mode: keep the brief data and styling in place, but hide the panel and restore the full SONAR field/wave until overlay placement is approved. */
+.msc-depth-map__brief {
+  display: none !important;
+}
+
+@media screen and (min-width: 991px) {
+  .msc-depth-map::after {
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
   }
 }
 
