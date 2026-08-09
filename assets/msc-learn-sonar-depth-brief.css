@@ -1,0 +1,178 @@
+/* MSC Learn — SONAR depth brief panel and station-spacing refinement. Frontend-only. */
+
+.msc-depth-map__scale::before {
+  left: 50%;
+  width: max-content;
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+.msc-depth-map__brief {
+  display: none;
+}
+
+@media screen and (min-width: 991px) {
+  .msc-depth-map {
+    --msc-sonar-depth-brief-width: clamp(18rem, 25%, 22rem);
+  }
+
+  .msc-depth-map__region[data-region="basics"] {
+    --msc-sounder-indent: 4%;
+  }
+
+  .msc-depth-map__region[data-region="network"] {
+    --msc-sounder-indent: 16%;
+  }
+
+  .msc-depth-map__region[data-region="building"] {
+    --msc-sounder-indent: 28%;
+  }
+
+  .msc-depth-map__region[data-region="development"] {
+    --msc-sounder-indent: 40%;
+  }
+
+  .msc-depth-map__region[data-region="ecosystem"] {
+    --msc-sounder-indent: 52%;
+  }
+
+  .msc-depth-map::after {
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      #000 0,
+      #000 calc(100% - var(--msc-sonar-depth-brief-width) - 6rem),
+      transparent calc(100% - var(--msc-sonar-depth-brief-width) - .5rem),
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      90deg,
+      #000 0,
+      #000 calc(100% - var(--msc-sonar-depth-brief-width) - 6rem),
+      transparent calc(100% - var(--msc-sonar-depth-brief-width) - .5rem),
+      transparent 100%
+    );
+  }
+
+  .msc-depth-map__brief {
+    position: absolute;
+    z-index: 6;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: block;
+    width: var(--msc-sonar-depth-brief-width);
+    box-sizing: border-box;
+    padding: 2.35rem 1.55rem 2rem 3.25rem;
+    overflow: hidden;
+    color: rgba(251, 248, 239, .9);
+    background: linear-gradient(
+      90deg,
+      rgba(8, 25, 33, 0) 0,
+      rgba(8, 25, 33, .74) 2.5rem,
+      rgba(8, 25, 33, .91) 5rem,
+      rgba(8, 25, 33, .97) 100%
+    );
+    text-shadow: 0 1px 8px rgba(4, 15, 21, .72);
+  }
+
+  .msc-depth-map__brief::before {
+    content: "";
+    position: absolute;
+    top: 2rem;
+    bottom: 2rem;
+    left: 2.55rem;
+    width: 1px;
+    background: linear-gradient(
+      180deg,
+      transparent,
+      rgba(212, 190, 153, .18) 12%,
+      rgba(212, 190, 153, .18) 88%,
+      transparent
+    );
+    pointer-events: none;
+  }
+
+  .msc-depth-map__brief-eyebrow,
+  .msc-depth-map__brief-depth,
+  .msc-depth-map__brief-count,
+  .msc-depth-map__brief-action {
+    font-weight: 760;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .msc-depth-map__brief-eyebrow {
+    display: block;
+    color: rgba(212, 190, 153, .58);
+    font-size: .72rem;
+    letter-spacing: .18em;
+  }
+
+  .msc-depth-map__brief-depth {
+    display: block;
+    margin-top: 1.65rem;
+    color: rgba(212, 190, 153, .92);
+    font-size: .92rem;
+    letter-spacing: .12em;
+  }
+
+  .msc-depth-map__brief-title {
+    display: block;
+    margin-top: .38rem;
+    color: rgba(251, 248, 239, .96);
+    font-size: 1.65rem;
+    font-weight: 780;
+    letter-spacing: 0;
+    line-height: 1.08;
+  }
+
+  .msc-depth-map__brief-copy {
+    max-width: 20rem;
+    margin: 1rem 0 0;
+    color: rgba(251, 248, 239, .72);
+    font-size: .98rem;
+    line-height: 1.5;
+  }
+
+  .msc-depth-map__brief-footer {
+    display: flex;
+    margin-top: 1.35rem;
+    padding-top: .85rem;
+    border-top: 1px solid rgba(212, 190, 153, .14);
+    align-items: center;
+    justify-content: space-between;
+    gap: .8rem;
+  }
+
+  .msc-depth-map__brief-count {
+    flex: 0 0 auto;
+    color: rgba(212, 190, 153, .62);
+    font-size: .74rem;
+    letter-spacing: .13em;
+  }
+
+  .msc-depth-map__brief-action {
+    min-width: 0;
+    overflow: hidden;
+    color: rgba(212, 190, 153, .92);
+    font-size: .78rem;
+    letter-spacing: .1em;
+    text-align: right;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: color .18s ease;
+  }
+
+  .msc-depth-map__brief-action:hover,
+  .msc-depth-map__brief-action:focus-visible {
+    color: rgba(251, 248, 239, .98);
+    outline: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .msc-depth-map__brief-action {
+    transition: none !important;
+  }
+}

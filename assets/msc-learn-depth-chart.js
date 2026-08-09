@@ -36,7 +36,7 @@
     const scriptUrl = new URL(script.src);
     const surfaceUrl = new URL('msc-learn-sounder-surface.css', scriptUrl);
     surfaceUrl.search = scriptUrl.search;
-    surfaceUrl.searchParams.set('msc_surface_rev', 'sonar-header-align-150');
+    surfaceUrl.searchParams.set('msc_surface_rev', 'sonar-depth-brief-v1');
 
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -45,9 +45,26 @@
     document.head.appendChild(link);
   };
 
+  const loadSonarDepthBriefStyles = () => {
+    const script = document.currentScript;
+    if (!script?.src || document.querySelector('link[data-msc-learn-sonar-depth-brief]')) return;
+
+    const scriptUrl = new URL(script.src);
+    const depthBriefUrl = new URL('msc-learn-sonar-depth-brief.css', scriptUrl);
+    depthBriefUrl.search = scriptUrl.search;
+    depthBriefUrl.searchParams.set('msc_depth_brief_rev', 'v1');
+
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = depthBriefUrl.href;
+    link.dataset.mscLearnSonarDepthBrief = 'true';
+    document.head.appendChild(link);
+  };
+
   loadHeroStyles();
   loadSounderReviewStyles();
   loadSounderSurfaceStyles();
+  loadSonarDepthBriefStyles();
 
   const init = () => {
     const learn = document.querySelector('.msc-learn');
@@ -67,28 +84,37 @@
       {
         label: 'Surface',
         key: 'basics',
-        fallbackHref: '/pages/learn-bitcoin-basics',
-        entryLabel: 'Surface entry'
+        guideCount: 16,
+        brief: 'Start with the foundation: what Bitcoin is, how ownership and transactions work, and the security, privacy, and monetary concepts behind using it.',
+        fallbackHref: '/pages/learn-bitcoin-basics'
       },
       {
         label: 'Shallow',
         key: 'network',
+        guideCount: 16,
+        brief: 'Follow the network itself through mining, nodes, mempools, blocks, chainwork, proof of work, consensus, and network upgrades.',
         fallbackHref: '/pages/learn-bitcoin-network'
       },
       {
         label: 'Middle',
         key: 'building',
+        guideCount: 16,
+        brief: 'Explore systems built around Bitcoin: Layer 2, digital assets, development models, and emerging protocols, including the assumptions and tradeoffs each introduces.',
         fallbackHref: '/pages/learn-building-on-bitcoin'
       },
       {
         label: 'Deep',
         key: 'development',
+        guideCount: 16,
         displayTitle: 'Bitcoin Protocols',
+        brief: 'Go inside Bitcoin’s implementation and protocol machinery: Bitcoin Core, BIPs, Script, cryptography, testing, infrastructure, and the boundary between consensus rules and software policy.',
         fallbackHref: '/pages/learn-bitcoin-development'
       },
       {
         label: 'Trench',
         key: 'ecosystem',
+        guideCount: 16,
+        brief: 'Map the human and organizational layer around Bitcoin: builders, companies, service providers, marketplaces, communities, conferences, history, and open-source projects, without confusing influence with protocol authority.',
         fallbackHref: '/pages/learn-bitcoin-ecosystem'
       }
     ];
@@ -198,20 +224,48 @@
       </div>
       <div class="msc-depth-map__scale" aria-hidden="true"></div>
       <div class="msc-depth-map__regions"></div>
+      <aside class="msc-depth-map__brief" aria-label="Depth brief">
+        <span class="msc-depth-map__brief-eyebrow">Depth brief</span>
+        <span class="msc-depth-map__brief-depth"></span>
+        <strong class="msc-depth-map__brief-title"></strong>
+        <p class="msc-depth-map__brief-copy"></p>
+        <div class="msc-depth-map__brief-footer">
+          <span class="msc-depth-map__brief-count"></span>
+          <a class="msc-depth-map__brief-action"></a>
+        </div>
+      </aside>
     `;
 
     const scale = map.querySelector('.msc-depth-map__scale');
     const regionList = map.querySelector('.msc-depth-map__regions');
+    const brief = map.querySelector('.msc-depth-map__brief');
+    const briefDepth = brief?.querySelector('.msc-depth-map__brief-depth');
+    const briefTitle = brief?.querySelector('.msc-depth-map__brief-title');
+    const briefCopy = brief?.querySelector('.msc-depth-map__brief-copy');
+    const briefCount = brief?.querySelector('.msc-depth-map__brief-count');
+    const briefAction = brief?.querySelector('.msc-depth-map__brief-action');
+
+    const setBrief = (region) => {
+      if (!region || !brief || !briefDepth || !briefTitle || !briefCopy || !briefCount || !briefAction) return;
+      brief.dataset.region = region.key;
+      briefDepth.textContent = region.label;
+      briefTitle.textContent = region.title;
+      briefCopy.textContent = region.brief;
+      briefCount.textContent = `${region.guideCount} guides`;
+      briefAction.href = region.href;
+      briefAction.textContent = `Explore ${region.label} →`;
+      briefAction.setAttribute('aria-label', `Explore ${region.label}: ${region.title}`);
+    };
 
     const activateRegion = (region) => {
       if (!region) return;
       map.dataset.active = region.key;
       setStatus(region);
+      setBrief(region);
     };
 
-    const resetRegion = (region) => {
-      if (!region || map.dataset.active === region.key) delete map.dataset.active;
-      setStatus(regions[0]);
+    const resetRegion = () => {
+      activateRegion(regions[0]);
     };
 
     regions.forEach((region) => {
@@ -235,7 +289,6 @@
         <span class="msc-depth-map__region-copy">
           <span class="msc-depth-map__region-line">
             <span class="msc-depth-map__depth-name"></span>
-            <span class="msc-depth-map__entry"></span>
           </span>
           <strong class="msc-depth-map__title"></strong>
           <span class="msc-depth-map__meta">
@@ -251,17 +304,10 @@
       link.querySelector('.msc-depth-map__subcategories').textContent = subcategoryText;
       link.querySelector('.msc-depth-map__description').textContent = region.description;
 
-      const entry = link.querySelector('.msc-depth-map__entry');
-      if (region.entryLabel) {
-        entry.textContent = region.entryLabel;
-      } else {
-        entry.remove();
-      }
-
       link.addEventListener('pointerenter', () => activateRegion(region));
-      link.addEventListener('pointerleave', () => resetRegion(region));
+      link.addEventListener('pointerleave', resetRegion);
       link.addEventListener('focus', () => activateRegion(region));
-      link.addEventListener('blur', () => resetRegion(region));
+      link.addEventListener('blur', resetRegion);
 
       regionList.appendChild(link);
     });
@@ -270,11 +316,12 @@
       const region = regions.find((item) => item.key === node.dataset.region);
       if (!region) return;
       node.addEventListener('pointerenter', () => activateRegion(region));
-      node.addEventListener('pointerleave', () => resetRegion(region));
+      node.addEventListener('pointerleave', resetRegion);
       node.addEventListener('focus', () => activateRegion(region));
-      node.addEventListener('blur', () => resetRegion(region));
+      node.addEventListener('blur', resetRegion);
     });
 
+    activateRegion(regions[0]);
     field.replaceChildren(map);
     field.removeAttribute('aria-hidden');
     chart.dataset.mscDepthEnhanced = 'true';
