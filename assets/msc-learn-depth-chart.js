@@ -82,7 +82,7 @@
       {
         label: 'Deep',
         key: 'development',
-        displayTitle: 'Bitcoin & Protocols',
+        displayTitle: 'Bitcoin Protocols',
         fallbackHref: '/pages/learn-bitcoin-development'
       },
       {
@@ -114,7 +114,7 @@
 
     const map = document.createElement('nav');
     map.className = 'msc-depth-map';
-    map.setAttribute('aria-label', 'MSC Knowledge Sounder — Bitcoin learning depth map');
+    map.setAttribute('aria-label', 'MSC SONAR — Bitcoin learning depth map');
 
     map.innerHTML = `
       <div class="msc-depth-map__chart" aria-hidden="true">
@@ -204,7 +204,7 @@
     field.replaceChildren(map);
     field.removeAttribute('aria-hidden');
     chart.dataset.mscDepthEnhanced = 'true';
-    if (headerTitle) headerTitle.textContent = 'MSC Knowledge Sounder';
+    if (headerTitle) headerTitle.textContent = 'MSC SONAR';
     if (headerMeta) headerMeta.textContent = 'Learn system';
   };
 
