@@ -45,9 +45,26 @@
     document.head.appendChild(link);
   };
 
+  const loadSonarDepthBriefStyles = () => {
+    const script = document.currentScript;
+    if (!script?.src || document.querySelector('link[data-msc-learn-sonar-depth-brief]')) return;
+
+    const scriptUrl = new URL(script.src);
+    const depthBriefUrl = new URL('msc-learn-sonar-depth-brief.css', scriptUrl);
+    depthBriefUrl.search = scriptUrl.search;
+    depthBriefUrl.searchParams.set('msc_depth_brief_rev', 'v1');
+
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = depthBriefUrl.href;
+    link.dataset.mscLearnSonarDepthBrief = 'true';
+    document.head.appendChild(link);
+  };
+
   loadHeroStyles();
   loadSounderReviewStyles();
   loadSounderSurfaceStyles();
+  loadSonarDepthBriefStyles();
 
   const init = () => {
     const learn = document.querySelector('.msc-learn');
