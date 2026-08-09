@@ -36,7 +36,7 @@
     const scriptUrl = new URL(script.src);
     const surfaceUrl = new URL('msc-learn-sounder-surface.css', scriptUrl);
     surfaceUrl.search = scriptUrl.search;
-    surfaceUrl.searchParams.set('msc_surface_rev', 'sonar-visible-dots-144');
+    surfaceUrl.searchParams.set('msc_surface_rev', 'sonar-header-align-150');
 
     const link = document.createElement('link');
     link.rel = 'stylesheet';
