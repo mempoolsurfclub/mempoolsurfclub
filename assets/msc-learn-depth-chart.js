@@ -36,7 +36,7 @@
     const scriptUrl = new URL(script.src);
     const surfaceUrl = new URL('msc-learn-sounder-surface.css', scriptUrl);
     surfaceUrl.search = scriptUrl.search;
-    surfaceUrl.searchParams.set('msc_surface_rev', 'e3cc360');
+    surfaceUrl.searchParams.set('msc_surface_rev', 'd097e27');
 
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -55,6 +55,7 @@
 
     const chart = learn.querySelector('.msc-depth-chart');
     const field = chart?.querySelector('.msc-depth-chart__field');
+    const header = chart?.querySelector('.msc-depth-chart__header');
     const headerTitle = chart?.querySelector('.msc-depth-chart__header span:first-child');
     const headerMeta = chart?.querySelector('.msc-depth-chart__header span:last-child');
     const groups = Array.from(learn.querySelectorAll('.msc-learn-topic'));
@@ -111,6 +112,29 @@
         ...meta
       };
     });
+
+    const status = document.createElement('div');
+    status.className = 'msc-sonar-status';
+    status.innerHTML = `
+      <span class="msc-sonar-status__eyebrow">Current position</span>
+      <strong class="msc-sonar-status__position"></strong>
+      <span class="msc-sonar-status__track" aria-hidden="true">
+        ${regions.map((region) => `<i class="msc-sonar-status__node" data-region="${region.key}"></i>`).join('')}
+      </span>
+    `;
+
+    const statusPosition = status.querySelector('.msc-sonar-status__position');
+    const setStatus = (region) => {
+      if (!region || !statusPosition) return;
+      status.dataset.region = region.key;
+      statusPosition.textContent = `${region.label} / ${region.title}`;
+      status.setAttribute('aria-label', `Current position: ${region.label}, ${region.title}`);
+    };
+    setStatus(regions[0]);
+
+    if (header && headerMeta) {
+      header.insertBefore(status, headerMeta);
+    }
 
     const map = document.createElement('nav');
     map.className = 'msc-depth-map';
@@ -188,9 +212,11 @@
 
       const activate = () => {
         map.dataset.active = region.key;
+        setStatus(region);
       };
       const deactivate = () => {
         if (map.dataset.active === region.key) delete map.dataset.active;
+        setStatus(regions[0]);
       };
 
       link.addEventListener('pointerenter', activate);
