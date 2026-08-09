@@ -36,7 +36,7 @@
     const scriptUrl = new URL(script.src);
     const surfaceUrl = new URL('msc-learn-sounder-surface.css', scriptUrl);
     surfaceUrl.search = scriptUrl.search;
-    surfaceUrl.searchParams.set('msc_surface_rev', 'sonar-centered-dots-143');
+    surfaceUrl.searchParams.set('msc_surface_rev', 'sonar-visible-dots-144');
 
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -128,7 +128,7 @@
         <strong class="msc-sonar-status__depth"></strong>
       </span>
       <span class="msc-sonar-status__track">
-        ${regions.map((region) => `<a class="msc-sonar-status__node" data-region="${region.key}" href="${region.href}" aria-label="${region.label}: ${region.title}"></a>`).join('')}
+        ${regions.map((region) => `<i class="msc-sonar-status__node" data-region="${region.key}" tabindex="0" role="button" aria-label="${region.label}: ${region.title}"></i>`).join('')}
       </span>
       <strong class="msc-sonar-status__guide"></strong>
     `;
