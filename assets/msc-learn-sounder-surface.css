@@ -70,7 +70,7 @@
   .msc-sonar-status__depth {
     min-width: 0;
     overflow: hidden;
-    color: rgba(251, 248, 239, .96);
+    color: rgba(212, 190, 153, .96);
     font: inherit;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -84,6 +84,7 @@
     grid-column: 2;
     grid-template-columns: repeat(5, 1fr);
     align-items: center;
+    pointer-events: auto;
   }
 
   .msc-sonar-status__track::before {
@@ -95,11 +96,13 @@
     height: 1px;
     background: rgba(212, 190, 153, .24);
     transform: translateY(-50%);
+    pointer-events: none;
   }
 
   .msc-sonar-status__node {
     position: relative;
     z-index: 1;
+    display: block;
     width: .44rem;
     height: .44rem;
     justify-self: center;
@@ -107,7 +110,15 @@
     border-radius: 999px;
     background: rgba(18, 49, 57, .98);
     box-shadow: 0 0 0 2px rgba(18, 49, 57, .86);
-    transition: background-color .18s ease, border-color .18s ease, box-shadow .18s ease;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color .18s ease, border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+  }
+
+  .msc-sonar-status__node:hover,
+  .msc-sonar-status__node:focus-visible {
+    outline: none;
+    transform: scale(1.28);
   }
 
   .msc-sonar-status__guide {
@@ -128,6 +139,91 @@
     border-color: rgba(251, 248, 239, .95);
     background: rgba(212, 190, 153, .94);
     box-shadow: 0 0 0 3px rgba(212, 190, 153, .1), 0 0 10px rgba(212, 190, 153, .34);
+  }
+
+  .msc-sonar-user {
+    position: absolute;
+    z-index: 5;
+    top: 50%;
+    right: 0;
+    display: flex;
+    max-width: 23rem;
+    align-items: center;
+    justify-content: flex-end;
+    gap: .55rem;
+    color: rgba(251, 248, 239, .7);
+    font-size: .76rem;
+    font-weight: 760;
+    letter-spacing: .09em;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transform: translateY(-50%);
+  }
+
+  .msc-sonar-user__action {
+    color: rgba(212, 190, 153, .96);
+    text-decoration: none;
+    transition: color .18s ease, opacity .18s ease;
+  }
+
+  .msc-sonar-user__action:hover,
+  .msc-sonar-user__action:focus-visible {
+    color: rgba(251, 248, 239, .98);
+    outline: none;
+  }
+
+  .msc-sonar-user__label,
+  .msc-sonar-user__count {
+    color: rgba(251, 248, 239, .72);
+  }
+
+  .msc-sonar-user--logged-in .msc-sonar-user__label {
+    color: rgba(251, 248, 239, .92);
+  }
+
+  .msc-sonar-user__meter {
+    display: grid;
+    width: 4.7rem;
+    grid-template-columns: repeat(6, 1fr);
+    gap: .18rem;
+    align-items: center;
+  }
+
+  .msc-sonar-user__meter i {
+    display: block;
+    height: 2px;
+    background: rgba(212, 190, 153, .25);
+  }
+
+  .msc-sonar-user--logged-in .msc-sonar-user__meter i {
+    background: rgba(212, 190, 153, .4);
+  }
+
+  .msc-sonar-user--logged-out .msc-sonar-user__meter {
+    opacity: .72;
+  }
+
+  .msc-depth-map[data-active="basics"] .msc-depth-map__region[data-region="basics"],
+  .msc-depth-map[data-active="network"] .msc-depth-map__region[data-region="network"],
+  .msc-depth-map[data-active="building"] .msc-depth-map__region[data-region="building"],
+  .msc-depth-map[data-active="development"] .msc-depth-map__region[data-region="development"],
+  .msc-depth-map[data-active="ecosystem"] .msc-depth-map__region[data-region="ecosystem"] {
+    z-index: 4;
+    border-color: rgba(212, 190, 153, .34);
+    background: linear-gradient(90deg, rgba(212,190,153,.11), rgba(22,56,64,.72), rgba(8,25,33,.3));
+    box-shadow: 0 12px 30px rgba(4, 17, 23, .26);
+    transform: translate(.28rem, -50%);
+  }
+
+  .msc-depth-map[data-active="basics"] .msc-depth-map__region[data-region="basics"] .msc-depth-map__station,
+  .msc-depth-map[data-active="network"] .msc-depth-map__region[data-region="network"] .msc-depth-map__station,
+  .msc-depth-map[data-active="building"] .msc-depth-map__region[data-region="building"] .msc-depth-map__station,
+  .msc-depth-map[data-active="development"] .msc-depth-map__region[data-region="development"] .msc-depth-map__station,
+  .msc-depth-map[data-active="ecosystem"] .msc-depth-map__region[data-region="ecosystem"] .msc-depth-map__station {
+    border-color: rgba(251,248,239,.96);
+    background: rgba(212, 190, 153, .94);
+    box-shadow: 0 0 0 4px rgba(212,190,153,.12), 0 0 18px rgba(212,190,153,.5);
   }
 }
 
@@ -153,6 +249,21 @@
   to { background-position-x: var(--msc-sounder-wave-period); }
 }
 
+@media screen and (min-width: 641px) and (max-width: 1180px) {
+  .msc-sonar-user {
+    gap: .4rem;
+    font-size: .68rem;
+  }
+
+  .msc-sonar-user__meter {
+    width: 3.6rem;
+  }
+
+  .msc-sonar-user__label {
+    display: none;
+  }
+}
+
 @media screen and (min-width: 641px) and (max-width: 990px) {
   .msc-sonar-brand {
     gap: .5rem;
@@ -168,6 +279,11 @@
   .msc-sonar-status__guide {
     max-width: 11rem;
   }
+
+  .msc-sonar-user__meter,
+  .msc-sonar-user__count {
+    display: none;
+  }
 }
 
 @media screen and (max-width: 640px) {
@@ -177,7 +293,8 @@
     gap: .5rem;
   }
 
-  .msc-sonar-status {
+  .msc-sonar-status,
+  .msc-sonar-user {
     display: none !important;
   }
 
@@ -193,5 +310,9 @@
 @media (prefers-reduced-motion: reduce) {
   .msc-depth-map::after {
     animation: none !important;
+  }
+
+  .msc-sonar-status__node {
+    transition: none !important;
   }
 }
