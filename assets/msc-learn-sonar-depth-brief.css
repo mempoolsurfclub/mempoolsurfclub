@@ -21,23 +21,23 @@
 
   /* Keep the approved vertical positions; only distribute the five stations horizontally. */
   .msc-depth-map__region[data-region="basics"] {
-    --msc-sounder-indent: 5%;
+    --msc-sounder-indent: 4%;
   }
 
   .msc-depth-map__region[data-region="network"] {
-    --msc-sounder-indent: 18%;
+    --msc-sounder-indent: 15%;
   }
 
   .msc-depth-map__region[data-region="building"] {
-    --msc-sounder-indent: 31%;
+    --msc-sounder-indent: 26%;
   }
 
   .msc-depth-map__region[data-region="development"] {
-    --msc-sounder-indent: 44%;
+    --msc-sounder-indent: 37%;
   }
 
   .msc-depth-map__region[data-region="ecosystem"] {
-    --msc-sounder-indent: 57%;
+    --msc-sounder-indent: 48%;
   }
 
   /* Keep the SONAR surface and wave continuous beneath the overlay. */
@@ -57,18 +57,18 @@
     box-sizing: border-box;
     padding: 1.55rem 1.45rem 1.4rem;
     overflow: hidden;
-    border: 1px solid rgba(212, 190, 153, .24);
+    border: 1px solid rgba(212, 190, 153, .28);
     border-radius: 16px;
-    color: rgba(251, 248, 239, .9);
+    color: rgba(251, 248, 239, .92);
     background:
-      linear-gradient(180deg, rgba(13, 39, 47, .9), rgba(7, 24, 31, .92)),
-      rgba(7, 24, 31, .88);
+      linear-gradient(180deg, rgba(38, 82, 89, .66), rgba(16, 50, 59, .72)),
+      rgba(20, 60, 68, .54);
     box-shadow:
-      0 18px 42px rgba(4, 15, 21, .28),
-      inset 0 0 0 1px rgba(251, 248, 239, .018);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
-    text-shadow: 0 1px 8px rgba(4, 15, 21, .72);
+      0 12px 30px rgba(4, 15, 21, .16),
+      inset 0 0 0 1px rgba(251, 248, 239, .022);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    text-shadow: 0 1px 7px rgba(4, 15, 21, .48);
   }
 
   .msc-depth-map__brief::before {
@@ -93,7 +93,7 @@
 
   .msc-depth-map__brief-eyebrow {
     display: block;
-    color: rgba(212, 190, 153, .58);
+    color: rgba(212, 190, 153, .65);
     font-size: .72rem;
     letter-spacing: .18em;
   }
@@ -101,7 +101,7 @@
   .msc-depth-map__brief-depth {
     display: block;
     margin-top: 1.45rem;
-    color: rgba(212, 190, 153, .92);
+    color: rgba(212, 190, 153, .94);
     font-size: .92rem;
     letter-spacing: .12em;
   }
@@ -109,7 +109,7 @@
   .msc-depth-map__brief-title {
     display: block;
     margin-top: .38rem;
-    color: rgba(251, 248, 239, .96);
+    color: rgba(251, 248, 239, .98);
     font-size: 1.65rem;
     font-weight: 780;
     letter-spacing: 0;
@@ -119,7 +119,7 @@
   .msc-depth-map__brief-copy {
     max-width: 19rem;
     margin: 1rem 0 0;
-    color: rgba(251, 248, 239, .72);
+    color: rgba(251, 248, 239, .79);
     font-size: .98rem;
     line-height: 1.5;
   }
@@ -128,7 +128,7 @@
     display: flex;
     margin-top: 1.35rem;
     padding-top: .9rem;
-    border-top: 1px solid rgba(212, 190, 153, .16);
+    border-top: 1px solid rgba(212, 190, 153, .18);
     align-items: center;
     justify-content: space-between;
     gap: .8rem;
@@ -136,7 +136,7 @@
 
   .msc-depth-map__brief-count {
     flex: 0 0 auto;
-    color: rgba(212, 190, 153, .62);
+    color: rgba(212, 190, 153, .68);
     font-size: .74rem;
     letter-spacing: .13em;
   }
@@ -144,7 +144,7 @@
   .msc-depth-map__brief-action {
     min-width: 0;
     overflow: hidden;
-    color: rgba(212, 190, 153, .92);
+    color: rgba(212, 190, 153, .94);
     font-size: .78rem;
     letter-spacing: .1em;
     text-align: right;
