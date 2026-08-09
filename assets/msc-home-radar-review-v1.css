@@ -159,23 +159,23 @@
     letter-spacing: .11em;
     line-height: 1;
     text-transform: uppercase;
+    transform: translateX(-50%);
     transition: color .3s ease, text-shadow .3s ease;
   }
 
   .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-protocol-wave__label::after {
     content: "LOW";
-    left: 0;
+    left: 16.6667%;
   }
 
   .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-protocol-wave::before {
     content: "MED";
     left: 50%;
-    transform: translateX(-50%);
   }
 
   .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-protocol-wave::after {
     content: "HIGH";
-    right: 0;
+    left: 83.3333%;
   }
 
   .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-protocol-wave[data-intensity="mellow"] .msc-radar-protocol-wave__label::after,
