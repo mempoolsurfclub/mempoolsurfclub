@@ -36,7 +36,7 @@
     const scriptUrl = new URL(script.src);
     const surfaceUrl = new URL('msc-learn-sounder-surface.css', scriptUrl);
     surfaceUrl.search = scriptUrl.search;
-    surfaceUrl.searchParams.set('msc_surface_rev', 'sonar-header-141');
+    surfaceUrl.searchParams.set('msc_surface_rev', 'sonar-user-142');
 
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -127,8 +127,8 @@
         <span class="msc-sonar-status__position-label">Current position:</span>
         <strong class="msc-sonar-status__depth"></strong>
       </span>
-      <span class="msc-sonar-status__track" aria-hidden="true">
-        ${regions.map((region) => `<i class="msc-sonar-status__node" data-region="${region.key}"></i>`).join('')}
+      <span class="msc-sonar-status__track">
+        ${regions.map((region) => `<a class="msc-sonar-status__node" data-region="${region.key}" href="${region.href}" aria-label="${region.label}: ${region.title}"></a>`).join('')}
       </span>
       <strong class="msc-sonar-status__guide"></strong>
     `;
@@ -146,6 +146,31 @@
 
     if (header) {
       header.appendChild(status);
+
+      const sourceAccountLink = document.querySelector('.header__icon--account');
+      const accountHref = sourceAccountLink?.getAttribute('href') || '/account/login';
+      const loggedIn = Boolean(sourceAccountLink && !accountHref.includes('/account/login'));
+      const user = document.createElement('div');
+      user.className = `msc-sonar-user msc-sonar-user--${loggedIn ? 'logged-in' : 'logged-out'}`;
+
+      if (loggedIn) {
+        user.innerHTML = `
+          <span class="msc-sonar-user__label">My progress</span>
+          <span class="msc-sonar-user__meter" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+          <span class="msc-sonar-user__count">— / — guides</span>
+          <a class="msc-sonar-user__action" href="${accountHref}">Account</a>
+        `;
+        user.setAttribute('aria-label', 'My Learn progress. Guide completion tracking will appear here.');
+      } else {
+        user.innerHTML = `
+          <a class="msc-sonar-user__action" href="${accountHref}">Login</a>
+          <span class="msc-sonar-user__label">Save progress</span>
+          <span class="msc-sonar-user__meter" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+        `;
+        user.setAttribute('aria-label', 'Log in to save Learn guide progress.');
+      }
+
+      header.appendChild(user);
     }
 
     const map = document.createElement('nav');
@@ -177,6 +202,17 @@
 
     const scale = map.querySelector('.msc-depth-map__scale');
     const regionList = map.querySelector('.msc-depth-map__regions');
+
+    const activateRegion = (region) => {
+      if (!region) return;
+      map.dataset.active = region.key;
+      setStatus(region);
+    };
+
+    const resetRegion = (region) => {
+      if (!region || map.dataset.active === region.key) delete map.dataset.active;
+      setStatus(regions[0]);
+    };
 
     regions.forEach((region) => {
       const scaleMark = document.createElement('span');
@@ -222,21 +258,21 @@
         entry.remove();
       }
 
-      const activate = () => {
-        map.dataset.active = region.key;
-        setStatus(region);
-      };
-      const deactivate = () => {
-        if (map.dataset.active === region.key) delete map.dataset.active;
-        setStatus(regions[0]);
-      };
-
-      link.addEventListener('pointerenter', activate);
-      link.addEventListener('pointerleave', deactivate);
-      link.addEventListener('focus', activate);
-      link.addEventListener('blur', deactivate);
+      link.addEventListener('pointerenter', () => activateRegion(region));
+      link.addEventListener('pointerleave', () => resetRegion(region));
+      link.addEventListener('focus', () => activateRegion(region));
+      link.addEventListener('blur', () => resetRegion(region));
 
       regionList.appendChild(link);
+    });
+
+    status.querySelectorAll('.msc-sonar-status__node').forEach((node) => {
+      const region = regions.find((item) => item.key === node.dataset.region);
+      if (!region) return;
+      node.addEventListener('pointerenter', () => activateRegion(region));
+      node.addEventListener('pointerleave', () => resetRegion(region));
+      node.addEventListener('focus', () => activateRegion(region));
+      node.addEventListener('blur', () => resetRegion(region));
     });
 
     field.replaceChildren(map);
