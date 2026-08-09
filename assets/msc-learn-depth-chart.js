@@ -36,7 +36,7 @@
     const scriptUrl = new URL(script.src);
     const surfaceUrl = new URL('msc-learn-sounder-surface.css', scriptUrl);
     surfaceUrl.search = scriptUrl.search;
-    surfaceUrl.searchParams.set('msc_surface_rev', 'cdc6db2');
+    surfaceUrl.searchParams.set('msc_surface_rev', 'sonar-header-141');
 
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -113,27 +113,39 @@
       };
     });
 
+    if (header && headerTitle && headerMeta) {
+      const brand = document.createElement('div');
+      brand.className = 'msc-sonar-brand';
+      header.insertBefore(brand, headerTitle);
+      brand.append(headerTitle, headerMeta);
+    }
+
     const status = document.createElement('div');
     status.className = 'msc-sonar-status';
     status.innerHTML = `
-      <span class="msc-sonar-status__eyebrow">Current position</span>
-      <strong class="msc-sonar-status__position"></strong>
+      <span class="msc-sonar-status__position">
+        <span class="msc-sonar-status__position-label">Current position:</span>
+        <strong class="msc-sonar-status__depth"></strong>
+      </span>
       <span class="msc-sonar-status__track" aria-hidden="true">
         ${regions.map((region) => `<i class="msc-sonar-status__node" data-region="${region.key}"></i>`).join('')}
       </span>
+      <strong class="msc-sonar-status__guide"></strong>
     `;
 
-    const statusPosition = status.querySelector('.msc-sonar-status__position');
+    const statusDepth = status.querySelector('.msc-sonar-status__depth');
+    const statusGuide = status.querySelector('.msc-sonar-status__guide');
     const setStatus = (region) => {
-      if (!region || !statusPosition) return;
+      if (!region || !statusDepth || !statusGuide) return;
       status.dataset.region = region.key;
-      statusPosition.textContent = `${region.label} / ${region.title}`;
-      status.setAttribute('aria-label', `Current position: ${region.label}, ${region.title}`);
+      statusDepth.textContent = region.label;
+      statusGuide.textContent = region.title;
+      status.setAttribute('aria-label', `Current position: ${region.label}. ${region.title}`);
     };
     setStatus(regions[0]);
 
-    if (header && headerMeta) {
-      header.insertBefore(status, headerMeta);
+    if (header) {
+      header.appendChild(status);
     }
 
     const map = document.createElement('nav');
