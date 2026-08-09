@@ -7,6 +7,7 @@
 }
 
 .msc-depth-map::after {
+  --msc-sounder-wave-period: 20rem;
   content: "";
   position: absolute;
   z-index: 1;
@@ -16,23 +17,24 @@
   height: 2.5rem;
   pointer-events: none;
   opacity: .62;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='40' viewBox='0 0 320 40'%3E%3Cpath d='M0 22 C22 22 24 11 48 11 S74 24 98 19 S120 8 146 13 S174 24 198 18 S224 10 248 14 S278 23 320 16' fill='none' stroke='%23d4be99' stroke-opacity='.7' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='40' viewBox='0 0 320 40'%3E%3Cpath d='M0 20 C26.667 8 53.333 8 80 20 C106.667 32 133.333 32 160 20 C186.667 8 213.333 8 240 20 C266.667 32 293.333 32 320 20' fill='none' stroke='%23d4be99' stroke-opacity='.7' stroke-width='1.6' stroke-linecap='square'/%3E%3C/svg%3E");
   background-repeat: repeat-x;
   background-position: 0 50%;
-  background-size: 20rem 2.5rem;
+  background-size: var(--msc-sounder-wave-period) 2.5rem;
   animation: mscSounderSurfaceFlow 16s linear infinite;
 }
 
 @keyframes mscSounderSurfaceFlow {
-  to { background-position-x: 20rem; }
+  to { background-position-x: var(--msc-sounder-wave-period); }
 }
 
 @media screen and (max-width: 640px) {
   .msc-depth-map::after {
+    --msc-sounder-wave-period: 16rem;
     left: 5.6rem;
     top: 1rem;
     height: 2rem;
-    background-size: 16rem 2rem;
+    background-size: var(--msc-sounder-wave-period) 2rem;
   }
 }
 
