@@ -6,6 +6,88 @@
   display: none !important;
 }
 
+@media screen and (min-width: 641px) {
+  .msc-depth-chart[data-msc-depth-enhanced="true"] .msc-depth-chart__header {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    column-gap: 1.25rem;
+  }
+
+  .msc-sonar-status {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    justify-content: center;
+    gap: .8rem;
+    color: rgba(251, 248, 239, .68);
+    font-size: .68rem;
+    font-weight: 760;
+    letter-spacing: .1em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .msc-sonar-status__eyebrow {
+    flex: 0 0 auto;
+    color: rgba(212, 190, 153, .7);
+    white-space: nowrap;
+  }
+
+  .msc-sonar-status__position {
+    min-width: 0;
+    max-width: 19rem;
+    overflow: hidden;
+    color: rgba(251, 248, 239, .9);
+    font-size: .72rem;
+    letter-spacing: .075em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .msc-sonar-status__track {
+    position: relative;
+    display: grid;
+    width: clamp(8rem, 17vw, 15rem);
+    min-width: 8rem;
+    grid-template-columns: repeat(5, 1fr);
+    align-items: center;
+  }
+
+  .msc-sonar-status__track::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: .25rem;
+    left: .25rem;
+    height: 1px;
+    background: rgba(212, 190, 153, .24);
+    transform: translateY(-50%);
+  }
+
+  .msc-sonar-status__node {
+    position: relative;
+    z-index: 1;
+    width: .44rem;
+    height: .44rem;
+    justify-self: center;
+    border: 1px solid rgba(212, 190, 153, .62);
+    border-radius: 999px;
+    background: rgba(18, 49, 57, .98);
+    box-shadow: 0 0 0 2px rgba(18, 49, 57, .86);
+    transition: background-color .18s ease, border-color .18s ease, box-shadow .18s ease;
+  }
+
+  .msc-sonar-status[data-region="basics"] .msc-sonar-status__node[data-region="basics"],
+  .msc-sonar-status[data-region="network"] .msc-sonar-status__node[data-region="network"],
+  .msc-sonar-status[data-region="building"] .msc-sonar-status__node[data-region="building"],
+  .msc-sonar-status[data-region="development"] .msc-sonar-status__node[data-region="development"],
+  .msc-sonar-status[data-region="ecosystem"] .msc-sonar-status__node[data-region="ecosystem"] {
+    border-color: rgba(251, 248, 239, .95);
+    background: rgba(212, 190, 153, .94);
+    box-shadow: 0 0 0 3px rgba(212, 190, 153, .1), 0 0 10px rgba(212, 190, 153, .34);
+  }
+}
+
 .msc-depth-map::after {
   --msc-sounder-wave-period: 20rem;
   content: "";
@@ -28,7 +110,30 @@
   to { background-position-x: var(--msc-sounder-wave-period); }
 }
 
+@media screen and (min-width: 641px) and (max-width: 990px) {
+  .msc-sonar-status {
+    gap: .55rem;
+  }
+
+  .msc-sonar-status__eyebrow {
+    display: none;
+  }
+
+  .msc-sonar-status__position {
+    max-width: 12rem;
+    font-size: .66rem;
+  }
+
+  .msc-sonar-status__track {
+    width: 8rem;
+  }
+}
+
 @media screen and (max-width: 640px) {
+  .msc-sonar-status {
+    display: none !important;
+  }
+
   .msc-depth-map::after {
     --msc-sounder-wave-period: 16rem;
     left: 5.6rem;
