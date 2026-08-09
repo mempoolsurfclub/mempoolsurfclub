@@ -5,14 +5,28 @@
 }
 
 .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__labels > span:first-child {
+  display: inline-flex;
+  align-items: baseline;
+  gap: .5rem;
   font-size: 0 !important;
   letter-spacing: 0 !important;
+  white-space: nowrap;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__labels > span:first-child::before {
+  content: "MSC RADAR";
+  display: inline-block;
+  color: rgba(251, 248, 239, .92);
+  font-size: .95rem;
+  line-height: 1.1;
+  letter-spacing: .12em;
 }
 
 .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__labels > span:first-child::after {
-  content: "MSC RADAR";
+  content: "ACTIVITY SYSTEM";
   display: inline-block;
-  font-size: .95rem;
+  color: rgba(212, 190, 153, .82);
+  font-size: .72rem;
   line-height: 1.1;
   letter-spacing: .12em;
 }
@@ -60,8 +74,16 @@
     letter-spacing: .12em !important;
   }
 
-  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__labels > span:first-child::after {
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__labels > span:first-child {
+    gap: .75rem;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__labels > span:first-child::before {
     font-size: 1.48rem;
+  }
+
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__labels > span:first-child::after {
+    font-size: .92rem;
   }
 
   .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-btc {
