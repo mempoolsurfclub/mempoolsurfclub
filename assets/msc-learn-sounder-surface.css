@@ -40,9 +40,9 @@
     display: grid;
     width: min(70rem, calc(100% - 20rem));
     min-width: 0;
-    grid-template-columns: minmax(0, 1fr) var(--msc-sonar-status-track-width) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: center;
-    gap: 1rem;
+    column-gap: calc(var(--msc-sonar-status-track-width) + 2rem);
     color: rgba(251, 248, 239, .9);
     font-size: 1.08rem;
     font-weight: 760;
@@ -56,6 +56,7 @@
   .msc-sonar-status__position {
     display: flex;
     min-width: 0;
+    grid-column: 1;
     align-items: center;
     justify-self: end;
     gap: .4rem;
@@ -77,13 +78,16 @@
   }
 
   .msc-sonar-status__track {
-    position: relative;
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
     display: grid;
-    width: 100%;
-    min-width: 0;
-    grid-column: 2;
+    width: var(--msc-sonar-status-track-width);
+    min-width: 8rem;
     grid-template-columns: repeat(5, 1fr);
     align-items: center;
+    transform: translate(-50%, -50%);
     pointer-events: auto;
   }
 
@@ -112,17 +116,17 @@
     box-shadow: 0 0 0 2px rgba(18, 49, 57, .86);
     text-decoration: none;
     cursor: pointer;
-    transition: background-color .18s ease, border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+    transition: background-color .18s ease, border-color .18s ease, box-shadow .18s ease;
   }
 
   .msc-sonar-status__node:hover,
   .msc-sonar-status__node:focus-visible {
     outline: none;
-    transform: scale(1.28);
   }
 
   .msc-sonar-status__guide {
     min-width: 0;
+    grid-column: 2;
     justify-self: start;
     overflow: hidden;
     color: rgba(251, 248, 239, .96);
@@ -272,7 +276,7 @@
   .msc-sonar-status {
     --msc-sonar-status-track-width: 8rem;
     width: calc(100% - 12rem);
-    gap: .55rem;
+    column-gap: calc(var(--msc-sonar-status-track-width) + 1.1rem);
   }
 
   .msc-sonar-status__position,
