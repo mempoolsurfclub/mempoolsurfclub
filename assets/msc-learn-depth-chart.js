@@ -36,7 +36,7 @@
     const scriptUrl = new URL(script.src);
     const surfaceUrl = new URL('msc-learn-sounder-surface.css', scriptUrl);
     surfaceUrl.search = scriptUrl.search;
-    surfaceUrl.searchParams.set('msc_surface_rev', '66fa21d');
+    surfaceUrl.searchParams.set('msc_surface_rev', 'e3cc360');
 
     const link = document.createElement('link');
     link.rel = 'stylesheet';
