@@ -25,11 +25,13 @@
 
   .msc-sonar-brand span:first-child {
     color: rgba(251, 248, 239, .92);
+    line-height: 1;
   }
 
   .msc-sonar-brand span:last-child {
     color: rgba(212, 190, 153, .82);
     font-size: .92rem;
+    line-height: 1;
   }
 
   .msc-sonar-status {
@@ -156,9 +158,9 @@
     justify-content: flex-end;
     gap: .55rem;
     color: rgba(251, 248, 239, .7);
-    font-size: .76rem;
+    font-size: 1.08rem;
     font-weight: 760;
-    letter-spacing: .09em;
+    letter-spacing: .075em;
     line-height: 1;
     text-transform: uppercase;
     white-space: nowrap;
@@ -256,7 +258,7 @@
 @media screen and (min-width: 641px) and (max-width: 1180px) {
   .msc-sonar-user {
     gap: .4rem;
-    font-size: .68rem;
+    font-size: 1.08rem;
   }
 
   .msc-sonar-user__meter {
