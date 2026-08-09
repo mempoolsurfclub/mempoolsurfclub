@@ -1,4 +1,4 @@
-/* MSC Learn — SONAR depth brief panel and station-spacing refinement. Frontend-only. */
+/* MSC Learn — SONAR depth brief overlay and station-spacing refinement. Frontend-only. */
 
 .msc-depth-map__scale::before {
   left: 0 !important;
@@ -16,82 +16,69 @@
 
 @media screen and (min-width: 991px) {
   .msc-depth-map {
-    --msc-sonar-depth-brief-width: clamp(18rem, 25%, 22rem);
+    --msc-sonar-depth-brief-width: clamp(19rem, 23.5%, 21.5rem);
   }
 
+  /* Keep the approved vertical positions; only distribute the five stations horizontally. */
   .msc-depth-map__region[data-region="basics"] {
-    --msc-sounder-indent: 4%;
+    --msc-sounder-indent: 5%;
   }
 
   .msc-depth-map__region[data-region="network"] {
-    --msc-sounder-indent: 16%;
+    --msc-sounder-indent: 18%;
   }
 
   .msc-depth-map__region[data-region="building"] {
-    --msc-sounder-indent: 28%;
+    --msc-sounder-indent: 31%;
   }
 
   .msc-depth-map__region[data-region="development"] {
-    --msc-sounder-indent: 40%;
+    --msc-sounder-indent: 44%;
   }
 
   .msc-depth-map__region[data-region="ecosystem"] {
-    --msc-sounder-indent: 52%;
+    --msc-sounder-indent: 57%;
   }
 
+  /* Keep the SONAR surface and wave continuous beneath the overlay. */
   .msc-depth-map::after {
-    -webkit-mask-image: linear-gradient(
-      90deg,
-      #000 0,
-      #000 calc(100% - var(--msc-sonar-depth-brief-width) - 6rem),
-      transparent calc(100% - var(--msc-sonar-depth-brief-width) - .5rem),
-      transparent 100%
-    );
-    mask-image: linear-gradient(
-      90deg,
-      #000 0,
-      #000 calc(100% - var(--msc-sonar-depth-brief-width) - 6rem),
-      transparent calc(100% - var(--msc-sonar-depth-brief-width) - .5rem),
-      transparent 100%
-    );
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
   }
 
   .msc-depth-map__brief {
     position: absolute;
     z-index: 6;
-    top: 0;
-    right: 0;
-    bottom: 0;
+    top: 1.15rem;
+    right: 1.15rem;
+    bottom: 1.15rem;
     display: block;
     width: var(--msc-sonar-depth-brief-width);
     box-sizing: border-box;
-    padding: 2.35rem 1.55rem 2rem 3.25rem;
+    padding: 1.55rem 1.45rem 1.4rem;
     overflow: hidden;
+    border: 1px solid rgba(212, 190, 153, .24);
+    border-radius: 16px;
     color: rgba(251, 248, 239, .9);
-    background: linear-gradient(
-      90deg,
-      rgba(8, 25, 33, 0) 0,
-      rgba(8, 25, 33, .74) 2.5rem,
-      rgba(8, 25, 33, .91) 5rem,
-      rgba(8, 25, 33, .97) 100%
-    );
+    background:
+      linear-gradient(180deg, rgba(13, 39, 47, .9), rgba(7, 24, 31, .92)),
+      rgba(7, 24, 31, .88);
+    box-shadow:
+      0 18px 42px rgba(4, 15, 21, .28),
+      inset 0 0 0 1px rgba(251, 248, 239, .018);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
     text-shadow: 0 1px 8px rgba(4, 15, 21, .72);
   }
 
   .msc-depth-map__brief::before {
     content: "";
     position: absolute;
-    top: 2rem;
-    bottom: 2rem;
-    left: 2.55rem;
-    width: 1px;
-    background: linear-gradient(
-      180deg,
-      transparent,
-      rgba(212, 190, 153, .18) 12%,
-      rgba(212, 190, 153, .18) 88%,
-      transparent
-    );
+    top: 0;
+    right: 1.35rem;
+    left: 1.35rem;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212, 190, 153, .38), transparent);
     pointer-events: none;
   }
 
@@ -113,7 +100,7 @@
 
   .msc-depth-map__brief-depth {
     display: block;
-    margin-top: 1.65rem;
+    margin-top: 1.45rem;
     color: rgba(212, 190, 153, .92);
     font-size: .92rem;
     letter-spacing: .12em;
@@ -130,7 +117,7 @@
   }
 
   .msc-depth-map__brief-copy {
-    max-width: 20rem;
+    max-width: 19rem;
     margin: 1rem 0 0;
     color: rgba(251, 248, 239, .72);
     font-size: .98rem;
@@ -140,8 +127,8 @@
   .msc-depth-map__brief-footer {
     display: flex;
     margin-top: 1.35rem;
-    padding-top: .85rem;
-    border-top: 1px solid rgba(212, 190, 153, .14);
+    padding-top: .9rem;
+    border-top: 1px solid rgba(212, 190, 153, .16);
     align-items: center;
     justify-content: space-between;
     gap: .8rem;
@@ -171,18 +158,6 @@
   .msc-depth-map__brief-action:focus-visible {
     color: rgba(251, 248, 239, .98);
     outline: none;
-  }
-}
-
-/* Layout-review mode: keep the brief data and styling in place, but hide the panel and restore the full SONAR field/wave until overlay placement is approved. */
-.msc-depth-map__brief {
-  display: none !important;
-}
-
-@media screen and (min-width: 991px) {
-  .msc-depth-map::after {
-    -webkit-mask-image: none !important;
-    mask-image: none !important;
   }
 }
 
