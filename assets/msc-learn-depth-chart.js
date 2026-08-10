@@ -52,7 +52,7 @@
     const scriptUrl = new URL(script.src);
     const depthBriefUrl = new URL('msc-learn-sonar-depth-brief.css', scriptUrl);
     depthBriefUrl.search = scriptUrl.search;
-    depthBriefUrl.searchParams.set('msc_depth_brief_rev', 'v5');
+    depthBriefUrl.searchParams.set('msc_depth_brief_rev', 'v6');
 
     const link = document.createElement('link');
     link.rel = 'stylesheet';
