@@ -19,25 +19,30 @@
     --msc-sonar-depth-brief-width: clamp(19rem, 23.5%, 21.5rem);
   }
 
-  /* Keep the approved vertical positions; only distribute the five stations horizontally. */
+  /* Keep approved vertical positions untouched. Anchor each desktop row start at an equal 7% horizontal step. */
   .msc-depth-map__region[data-region="basics"] {
     --msc-sounder-indent: 0%;
+    left: 0% !important;
   }
 
   .msc-depth-map__region[data-region="network"] {
-    --msc-sounder-indent: 8%;
+    --msc-sounder-indent: 7%;
+    left: 7% !important;
   }
 
   .msc-depth-map__region[data-region="building"] {
-    --msc-sounder-indent: 16%;
+    --msc-sounder-indent: 14%;
+    left: 14% !important;
   }
 
   .msc-depth-map__region[data-region="development"] {
-    --msc-sounder-indent: 24%;
+    --msc-sounder-indent: 21%;
+    left: 21% !important;
   }
 
   .msc-depth-map__region[data-region="ecosystem"] {
-    --msc-sounder-indent: 32%;
+    --msc-sounder-indent: 28%;
+    left: 28% !important;
   }
 
   /* Keep the SONAR surface and wave continuous beneath the overlay. */
