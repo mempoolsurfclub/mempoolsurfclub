@@ -49,15 +49,22 @@ jobs:
           const ordinals = read('/tmp/msc-api/v1/market/ordinals.json');
           const runes = read('/tmp/msc-api/v1/market/runes.json');
           if (manifest.schemaVersion !== 1 || manifest.api !== 'MSC API' || manifest.version !== 'v1') process.exit(1);
-          if (!['live', 'preview'].includes(manifest.mode)) process.exit(1);
+          if (!['live', 'partial', 'preview'].includes(manifest.mode)) process.exit(1);
           for (const snapshot of [homepage, ordinals, runes]) {
             if (snapshot.schemaVersion !== 1 || snapshot.api !== 'MSC API' || snapshot.version !== 'v1' || snapshot.window !== '24h' || !Array.isArray(snapshot.assets)) process.exit(1);
           }
-          if (manifest.mode === 'live') {
-            if (homepage.mode !== 'live' || homepage.assets.length !== 5) process.exit(1);
-            if (ordinals.mode !== 'live' || runes.mode !== 'live') process.exit(1);
-          } else if (homepage.assets.length || ordinals.assets.length || runes.assets.length) {
+          if (homepage.mode === 'live') {
+            if (homepage.assets.length !== 5) process.exit(1);
+          } else if (homepage.mode !== 'preview' || homepage.assets.length !== 0) {
             process.exit(1);
+          }
+          if (manifest.mode === 'live') {
+            if (homepage.mode !== 'live' || ordinals.mode !== 'live' || runes.mode !== 'live') process.exit(1);
+          } else if (manifest.mode === 'partial') {
+            if (homepage.mode !== 'preview' || ordinals.mode !== 'live' || runes.mode !== 'live') process.exit(1);
+          } else {
+            if (homepage.mode !== 'preview' || ordinals.mode !== 'preview' || runes.mode !== 'preview') process.exit(1);
+            if (ordinals.assets.length || runes.assets.length) process.exit(1);
           }
           NODE
 
