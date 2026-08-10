@@ -52,7 +52,7 @@
     const scriptUrl = new URL(script.src);
     const depthBriefUrl = new URL('msc-learn-sonar-depth-brief.css', scriptUrl);
     depthBriefUrl.search = scriptUrl.search;
-    depthBriefUrl.searchParams.set('msc_depth_brief_rev', 'v7');
+    depthBriefUrl.searchParams.set('msc_depth_brief_rev', 'v8');
 
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -79,6 +79,8 @@
 
     if (!chart || !field || groups.length < 5) return;
     if (chart.dataset.mscDepthEnhanced === 'true') return;
+
+    const overviewCopy = 'Explore Bitcoin by depth. MSC SONAR organizes the Learn system from foundational concepts at the surface through network mechanics, systems built on Bitcoin, protocol internals, and the wider ecosystem. Hover over a depth to explore.';
 
     const regionMeta = [
       {
@@ -161,14 +163,23 @@
 
     const statusDepth = status.querySelector('.msc-sonar-status__depth');
     const statusGuide = status.querySelector('.msc-sonar-status__guide');
-    const setStatus = (region) => {
-      if (!region || !statusDepth || !statusGuide) return;
+    const setStatus = (region = null) => {
+      if (!statusDepth || !statusGuide) return;
+
+      if (!region) {
+        status.dataset.region = 'overview';
+        statusDepth.textContent = 'MSC SONAR';
+        statusGuide.textContent = 'LEARN SYSTEM';
+        status.setAttribute('aria-label', 'MSC SONAR Learn System overview');
+        return;
+      }
+
       status.dataset.region = region.key;
       statusDepth.textContent = region.label;
       statusGuide.textContent = region.title;
       status.setAttribute('aria-label', `Current position: ${region.label}. ${region.title}`);
     };
-    setStatus(regions[0]);
+    setStatus();
 
     if (header) {
       header.appendChild(status);
@@ -224,14 +235,108 @@
       </div>
       <div class="msc-depth-map__scale" aria-hidden="true"></div>
       <div class="msc-depth-map__regions"></div>
-      <aside class="msc-depth-map__brief" aria-label="Depth brief">
-        <span class="msc-depth-map__brief-eyebrow">Depth brief</span>
-        <span class="msc-depth-map__brief-depth"></span>
-        <strong class="msc-depth-map__brief-title"></strong>
-        <p class="msc-depth-map__brief-copy"></p>
-        <div class="msc-depth-map__brief-footer">
-          <span class="msc-depth-map__brief-count"></span>
-          <a class="msc-depth-map__brief-action"></a>
+      <aside class="msc-depth-map__brief" data-region="overview" aria-label="MSC SONAR Learn System overview">
+        <div class="msc-depth-map__brief-overview">
+          <strong class="msc-depth-map__brief-system-title">MSC SONAR</strong>
+          <span class="msc-depth-map__brief-system-subtitle">LEARN SYSTEM</span>
+          <p class="msc-depth-map__brief-system-copy">${overviewCopy}</p>
+        </div>
+        <div class="msc-depth-map__brief-detail">
+          <span class="msc-depth-map__brief-eyebrow">Depth brief</span>
+          <span class="msc-depth-map__brief-depth"></span>
+          <strong class="msc-depth-map__brief-title"></strong>
+          <p class="msc-depth-map__brief-copy"></p>
+          <div class="msc-depth-map__brief-footer">
+            <span class="msc-depth-map__brief-count"></span>
+            <a class="msc-depth-map__brief-action"></a>
+          </div>
+        </div>
+        <div class="msc-depth-map__brief-visual" aria-hidden="true">
+          <svg class="msc-sonar-wireframe" data-wireframe="overview" viewBox="0 0 240 190" focusable="false">
+            <ellipse cx="120" cy="52" rx="70" ry="19" />
+            <ellipse class="msc-sonar-wireframe__mid" cx="120" cy="75" rx="60" ry="17" />
+            <ellipse class="msc-sonar-wireframe__mid" cx="120" cy="98" rx="50" ry="15" />
+            <ellipse class="msc-sonar-wireframe__faint" cx="120" cy="121" rx="40" ry="13" />
+            <ellipse class="msc-sonar-wireframe__faint" cx="120" cy="144" rx="30" ry="10" />
+            <line x1="120" y1="33" x2="120" y2="155" />
+            <polygon points="120,76 142,89 120,102 98,89" />
+            <polyline class="msc-sonar-wireframe__mid" points="98,89 98,111 120,124 142,111 142,89" />
+            <line class="msc-sonar-wireframe__mid" x1="120" y1="102" x2="120" y2="124" />
+            <text class="msc-sonar-wireframe__symbol" x="120" y="92">₿</text>
+          </svg>
+
+          <svg class="msc-sonar-wireframe" data-wireframe="basics" viewBox="0 0 240 190" focusable="false">
+            <ellipse cx="120" cy="94" rx="61" ry="66" />
+            <ellipse class="msc-sonar-wireframe__mid" cx="128" cy="94" rx="61" ry="66" />
+            <path class="msc-sonar-wireframe__faint" d="M120 28 C147 48 155 136 120 160" />
+            <path class="msc-sonar-wireframe__faint" d="M120 28 C93 48 85 136 120 160" />
+            <line class="msc-sonar-wireframe__mid" x1="66" y1="64" x2="74" y2="64" />
+            <line class="msc-sonar-wireframe__mid" x1="66" y1="124" x2="74" y2="124" />
+            <text class="msc-sonar-wireframe__symbol" x="122" y="96">₿</text>
+          </svg>
+
+          <svg class="msc-sonar-wireframe" data-wireframe="network" viewBox="0 0 240 190" focusable="false">
+            <polygon points="120,60 148,76 120,92 92,76" />
+            <polyline points="92,76 92,108 120,124 148,108 148,76" />
+            <line x1="120" y1="92" x2="120" y2="124" />
+            <line class="msc-sonar-wireframe__mid" x1="92" y1="76" x2="55" y2="48" />
+            <line class="msc-sonar-wireframe__mid" x1="148" y1="76" x2="188" y2="51" />
+            <line class="msc-sonar-wireframe__mid" x1="92" y1="108" x2="45" y2="128" />
+            <line class="msc-sonar-wireframe__mid" x1="148" y1="108" x2="194" y2="129" />
+            <line class="msc-sonar-wireframe__faint" x1="120" y1="60" x2="120" y2="25" />
+            <line class="msc-sonar-wireframe__faint" x1="120" y1="124" x2="120" y2="163" />
+            <circle class="msc-sonar-wireframe__node" cx="55" cy="48" r="4" />
+            <circle class="msc-sonar-wireframe__node" cx="188" cy="51" r="4" />
+            <circle class="msc-sonar-wireframe__node" cx="45" cy="128" r="4" />
+            <circle class="msc-sonar-wireframe__node" cx="194" cy="129" r="4" />
+            <circle class="msc-sonar-wireframe__node" cx="120" cy="25" r="4" />
+            <circle class="msc-sonar-wireframe__node" cx="120" cy="163" r="4" />
+            <text class="msc-sonar-wireframe__symbol" x="120" y="91">₿</text>
+          </svg>
+
+          <svg class="msc-sonar-wireframe" data-wireframe="building" viewBox="0 0 240 190" focusable="false">
+            <polygon points="120,32 180,54 120,76 60,54" />
+            <polygon class="msc-sonar-wireframe__mid" points="120,62 180,84 120,106 60,84" />
+            <polygon class="msc-sonar-wireframe__mid" points="120,92 180,114 120,136 60,114" />
+            <polygon class="msc-sonar-wireframe__faint" points="120,122 180,144 120,166 60,144" />
+            <line class="msc-sonar-wireframe__faint" x1="60" y1="54" x2="60" y2="144" />
+            <line class="msc-sonar-wireframe__faint" x1="180" y1="54" x2="180" y2="144" />
+            <line class="msc-sonar-wireframe__faint" x1="120" y1="76" x2="120" y2="166" />
+            <text class="msc-sonar-wireframe__symbol" x="120" y="53">₿</text>
+          </svg>
+
+          <svg class="msc-sonar-wireframe" data-wireframe="development" viewBox="0 0 240 190" focusable="false">
+            <polygon points="120,24 183,58 183,128 120,164 57,128 57,58" />
+            <polyline class="msc-sonar-wireframe__mid" points="57,58 120,92 183,58" />
+            <line class="msc-sonar-wireframe__mid" x1="120" y1="92" x2="120" y2="164" />
+            <line class="msc-sonar-wireframe__faint" x1="120" y1="24" x2="120" y2="92" />
+            <line x1="86" y1="62" x2="103" y2="83" />
+            <line x1="154" y1="62" x2="137" y2="83" />
+            <line x1="103" y1="83" x2="120" y2="103" />
+            <line x1="137" y1="83" x2="120" y2="103" />
+            <line x1="120" y1="103" x2="120" y2="132" />
+            <circle class="msc-sonar-wireframe__node" cx="86" cy="62" r="3.5" />
+            <circle class="msc-sonar-wireframe__node" cx="154" cy="62" r="3.5" />
+            <circle class="msc-sonar-wireframe__node" cx="103" cy="83" r="3.5" />
+            <circle class="msc-sonar-wireframe__node" cx="137" cy="83" r="3.5" />
+            <circle class="msc-sonar-wireframe__node" cx="120" cy="103" r="3.5" />
+            <circle class="msc-sonar-wireframe__node" cx="120" cy="132" r="3.5" />
+            <text class="msc-sonar-wireframe__symbol" x="120" y="145">₿</text>
+          </svg>
+
+          <svg class="msc-sonar-wireframe" data-wireframe="ecosystem" viewBox="0 0 240 190" focusable="false">
+            <ellipse cx="120" cy="95" rx="88" ry="38" />
+            <ellipse class="msc-sonar-wireframe__mid" cx="120" cy="95" rx="78" ry="52" transform="rotate(38 120 95)" />
+            <ellipse class="msc-sonar-wireframe__faint" cx="120" cy="95" rx="74" ry="56" transform="rotate(-38 120 95)" />
+            <circle cx="120" cy="95" r="28" />
+            <circle class="msc-sonar-wireframe__node" cx="32" cy="95" r="4" />
+            <circle class="msc-sonar-wireframe__node" cx="208" cy="95" r="4" />
+            <circle class="msc-sonar-wireframe__node" cx="161" cy="45" r="4" />
+            <circle class="msc-sonar-wireframe__node" cx="79" cy="145" r="4" />
+            <circle class="msc-sonar-wireframe__node" cx="72" cy="48" r="4" />
+            <circle class="msc-sonar-wireframe__node" cx="168" cy="142" r="4" />
+            <text class="msc-sonar-wireframe__symbol" x="120" y="97">₿</text>
+          </svg>
         </div>
       </aside>
     `;
@@ -255,6 +360,16 @@
       briefAction.href = region.href;
       briefAction.textContent = `Explore ${region.label} →`;
       briefAction.setAttribute('aria-label', `Explore ${region.label}: ${region.title}`);
+      brief.setAttribute('aria-label', `${region.label} depth brief: ${region.title}`);
+    };
+
+    const setOverview = () => {
+      map.dataset.active = 'overview';
+      setStatus();
+      if (brief) {
+        brief.dataset.region = 'overview';
+        brief.setAttribute('aria-label', 'MSC SONAR Learn System overview');
+      }
     };
 
     const activateRegion = (region) => {
@@ -265,7 +380,7 @@
     };
 
     const resetRegion = () => {
-      activateRegion(regions[0]);
+      setOverview();
     };
 
     regions.forEach((region) => {
@@ -321,7 +436,7 @@
       node.addEventListener('blur', resetRegion);
     });
 
-    activateRegion(regions[0]);
+    setOverview();
     field.replaceChildren(map);
     field.removeAttribute('aria-hidden');
     chart.dataset.mscDepthEnhanced = 'true';
