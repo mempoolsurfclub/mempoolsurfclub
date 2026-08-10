@@ -2,11 +2,20 @@
   "schemaVersion": 1,
   "api": "MSC API",
   "version": "v1",
-  "generatedAt": "2026-08-10T20:29:00.747Z",
+  "generatedAt": "2026-08-10T20:31:01.159Z",
   "window": "24h",
   "unit": "BTC",
-  "mode": "preview",
-  "assets": [],
-  "methodology": "Market data is withheld until the Satflow response passes MSC validation.",
-  "sourceLine": "MSC API · MARKET DATA TEMPORARILY UNAVAILABLE"
+  "mode": "live",
+  "methodology": "MSC aggregates Satflow trailing-24-hour Ordinals and Runes sales, including external marketplace data, then ranks up to five assets by completed-sale BTC volume.",
+  "sourceLine": "MSC API · Satflow · Ordinals + Runes",
+  "assets": [
+    {
+      "rank": 1,
+      "name": "DOG•GO•TO•THE•MOON",
+      "type": "RUNE",
+      "volumeBtc": 0.00977096,
+      "salesCount": 3,
+      "source": "Satflow"
+    }
+  ]
 }
