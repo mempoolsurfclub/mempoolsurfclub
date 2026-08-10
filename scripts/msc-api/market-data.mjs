@@ -1,14 +1,10 @@
 const SATFLOW_API_ROOT = 'https://api.satflow.com/v1';
-const UNISAT_API_ROOT = 'https://open-api.unisat.io';
 const REQUEST_TIMEOUT_MS = 20_000;
 const MAX_RETRIES = 4;
 const SATFLOW_PAGE_SIZE = 100;
-const SATFLOW_MAX_PAGES = 40;
-const UNISAT_PAGE_SIZE = 100;
-const UNISAT_MAX_PAGES = 30;
+const SATFLOW_MAX_PAGES = 100;
 
 const SATFLOW_API_KEY = String(process.env.SATFLOW_API_KEY || '').trim();
-const UNISAT_API_KEY = String(process.env.UNISAT_API_KEY || '').trim();
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -36,6 +32,13 @@ function firstPositive(values) {
   return null;
 }
 
+function firstValue(values) {
+  for (const value of values) {
+    if (value !== undefined && value !== null && clean(value)) return value;
+  }
+  return null;
+}
+
 async function requestJson(url, options = {}, attempt = 0) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
@@ -44,11 +47,9 @@ async function requestJson(url, options = {}, attempt = 0) {
       method: options.method || 'GET',
       headers: {
         accept: 'application/json',
-        'user-agent': 'Mempool-Surf-Club-market-api/1.0',
-        ...(options.body ? { 'content-type': 'application/json' } : {}),
+        'user-agent': 'Mempool-Surf-Club-market-api/1.1',
         ...(options.headers || {})
       },
-      body: options.body ? JSON.stringify(options.body) : undefined,
       signal: controller.signal
     });
 
@@ -76,10 +77,10 @@ async function requestJson(url, options = {}, attempt = 0) {
 function satflowItems(payload) {
   const candidates = [
     payload?.data?.items,
-    payload?.data?.groups,
+    payload?.data?.sales,
     payload?.data?.results,
     payload?.items,
-    payload?.groups,
+    payload?.sales,
     payload?.results
   ];
   return candidates.find(Array.isArray) || [];
@@ -89,27 +90,50 @@ function satflowPagination(payload) {
   return payload?.data?.pagination || payload?.pagination || {};
 }
 
-function satflowName(row) {
-  const rune = row?.rune || row?.collection?.rune || row?.token?.rune;
-  const collection = row?.collection || row?.collectionData;
-  return clean(
-    rune?.spacedName ||
-    rune?.name ||
-    row?.runeName ||
-    row?.rune_name ||
-    collection?.name ||
-    collection?.title ||
-    row?.collectionName ||
-    row?.collection_name ||
-    row?.name ||
-    collection?.slug ||
-    row?.collectionSlug ||
-    row?.collection_slug ||
-    row?.slug
+function firstRune(value) {
+  return Array.isArray(value) ? value[0] : value;
+}
+
+function satflowRune(row) {
+  return firstRune(
+    row?.runes ??
+    row?.sale?.runes ??
+    row?.sale?.runesData?.runes ??
+    row?.ask?.runes ??
+    row?.ask?.runesData?.runes ??
+    row?.rune ??
+    row?.token?.rune ??
+    row?.collection?.rune
   );
 }
 
+function satflowName(row) {
+  const rune = satflowRune(row);
+  const collection = row?.collection || row?.collectionData || row?.sale?.collection || row?.ask?.collection;
+  return clean(firstValue([
+    rune?.spacedName,
+    rune?.spaced_name,
+    rune?.name,
+    rune?.ticker,
+    row?.runeName,
+    row?.rune_name,
+    collection?.name,
+    collection?.title,
+    collection?.slug,
+    row?.collectionName,
+    row?.collection_name,
+    row?.collectionSlug,
+    row?.collection_slug,
+    row?.token?.collection_name,
+    row?.token?.collection_slug,
+    row?.name,
+    row?.slug
+  ]));
+}
+
 function satflowType(row, name) {
+  if (satflowRune(row)) return 'RUNE';
+
   const probe = [
     row?.protocol,
     row?.type,
@@ -117,71 +141,95 @@ function satflowType(row, name) {
     row?.tokenStandard,
     row?.collection?.protocol,
     row?.collection?.type,
-    row?.token?.protocol
+    row?.token?.protocol,
+    row?.sale?.protocol,
+    row?.ask?.protocol
   ].map(clean).join(' ').toLowerCase();
 
   if (probe.includes('rune')) return 'RUNE';
   if (probe.includes('ordinal') || probe.includes('inscription')) return 'ORDINAL';
+  if (name.includes('•')) return 'RUNE';
 
   if (
-    row?.rune || row?.runeName || row?.rune_name || row?.runeId || row?.rune_id ||
-    row?.collection?.rune || row?.collection?.runeId || row?.collection?.rune_id ||
-    row?.token?.rune || row?.token?.runeName || row?.token?.rune_name
-  ) return 'RUNE';
+    row?.collection ||
+    row?.collectionData ||
+    row?.collectionSlug ||
+    row?.collection_slug ||
+    row?.token?.collection_name ||
+    row?.token?.collection_slug
+  ) return 'ORDINAL';
 
-  if (name.includes('•')) return 'RUNE';
-  if (row?.collection || row?.collectionSlug || row?.collection_slug) return 'ORDINAL';
   return null;
 }
 
-function satflowVolumeBtc(row) {
-  const btc = firstPositive([
-    row?.volumeBtc,
-    row?.volumeBTC,
-    row?.btcVolume,
-    row?.totalVolumeBtc,
-    row?.totalVolumeBTC,
-    row?.stats?.volumeBtc,
-    row?.stats?.volumeBTC,
-    row?.stats?.btcVolume,
-    row?.volume?.btc,
-    row?.total?.btc
+function satflowSalePriceSats(row) {
+  return firstPositive([
+    row?.price,
+    row?.salePrice,
+    row?.sale_price,
+    row?.totalPrice,
+    row?.total_price,
+    row?.priceSats,
+    row?.price_sats,
+    row?.sale?.price,
+    row?.sale?.totalPrice,
+    row?.sale?.total_price,
+    row?.fill?.price,
+    row?.fill?.totalPrice,
+    row?.ask?.price,
+    row?.amountSats,
+    row?.amount_sats,
+    row?.valueSats,
+    row?.value_sats
   ]);
-  if (btc) return btc;
-
-  const sats = firstPositive([
-    row?.volumeSats,
-    row?.volume_sats,
-    row?.totalVolumeSats,
-    row?.total_volume_sats,
-    row?.stats?.volumeSats,
-    row?.stats?.volume_sats,
-    row?.stats?.satsVolume,
-    row?.volume?.sats,
-    row?.total?.sats
-  ]);
-  return sats ? sats / 100_000_000 : null;
 }
 
-function normalizeSatflowGroup(row) {
+function normalizeSatflowSale(row) {
   const name = satflowName(row);
   const type = satflowType(row, name);
-  const volumeBtc = satflowVolumeBtc(row);
-  if (!name || !type || !volumeBtc) return null;
-  return { name, type, volumeBtc, source: 'Satflow' };
+  const priceSats = satflowSalePriceSats(row);
+  if (!name || !type || !priceSats) return null;
+  return { name, type, priceSats };
+}
+
+function aggregateSales(rows) {
+  const assets = new Map();
+  for (const row of rows) {
+    const sale = normalizeSatflowSale(row);
+    if (!sale) continue;
+    const key = `${sale.type}:${sale.name.toLowerCase()}`;
+    const existing = assets.get(key) || {
+      name: sale.name,
+      type: sale.type,
+      volumeSats: 0,
+      salesCount: 0,
+      source: 'Satflow'
+    };
+    existing.volumeSats += sale.priceSats;
+    existing.salesCount += 1;
+    assets.set(key, existing);
+  }
+
+  return [...assets.values()].map((asset) => ({
+    name: asset.name,
+    type: asset.type,
+    volumeBtc: asset.volumeSats / 100_000_000,
+    salesCount: asset.salesCount,
+    source: asset.source
+  }));
 }
 
 async function fetchSatflow24h() {
-  const assets = [];
+  const sales = [];
 
   for (let page = 1; page <= SATFLOW_MAX_PAGES; page += 1) {
     const params = new URLSearchParams({
-      group: 'collection',
       external: 'true',
       timeRange: '24h',
+      active: 'false',
       page: String(page),
       pageSize: String(SATFLOW_PAGE_SIZE),
-      sortBy: 'createdAt',
+      sortBy: 'fillCompletedAt',
       sortDirection: 'desc'
     });
 
@@ -189,73 +237,29 @@ async function fetchSatflow24h() {
       headers: { 'x-api-key': SATFLOW_API_KEY }
     });
     const items = satflowItems(payload);
-    assets.push(...items.map(normalizeSatflowGroup).filter(Boolean));
+    sales.push(...items);
 
     const pagination = satflowPagination(payload);
     const totalPages = positiveInteger(pagination?.totalPages);
     if ((totalPages && page >= totalPages) || items.length < SATFLOW_PAGE_SIZE || items.length === 0) break;
   }
 
-  if (assets.length === 0) throw new Error('Satflow returned no parseable Ordinals/Runes 24h market groups');
-  return dedupe(assets);
-}
-
-function unisatList(payload) {
-  const list = payload?.data?.list;
-  return Array.isArray(list) ? list : [];
-}
-
-function normalizeUnisat(row) {
-  const name = clean(row?.tick || row?.ticker || row?.symbol).toUpperCase();
-  const volumeBtc = positive(row?.btcVolume ?? row?.volumeBtc ?? row?.volumeBTC);
-  if (!name || !volumeBtc) return null;
-  return { name, type: 'BRC-20', volumeBtc, source: 'UniSat' };
-}
-
-async function fetchUnisat24h() {
-  const assets = [];
-
-  for (let page = 0; page < UNISAT_MAX_PAGES; page += 1) {
-    const start = page * UNISAT_PAGE_SIZE;
-    const payload = await requestJson(`${UNISAT_API_ROOT}/v3/market/brc20/auction/brc20_types`, {
-      method: 'POST',
-      headers: { authorization: `Bearer ${UNISAT_API_KEY}` },
-      body: { timeType: 'day1', start, limit: UNISAT_PAGE_SIZE }
-    });
-
-    if (payload?.code !== undefined && Number(payload.code) !== 0) {
-      throw new Error(`UniSat API code ${payload.code}: ${clean(payload?.msg) || 'unknown error'}`);
-    }
-
-    const list = unisatList(payload);
-    assets.push(...list.map(normalizeUnisat).filter(Boolean));
-
-    const total = positiveInteger(payload?.data?.total);
-    if ((total && start + list.length >= total) || list.length < UNISAT_PAGE_SIZE || list.length === 0) break;
+  const assets = aggregateSales(sales);
+  if (assets.length === 0) {
+    throw new Error(`Satflow returned ${sales.length} sales but none could be normalized into Ordinals/Runes 24h volume`);
   }
-
-  if (assets.length === 0) throw new Error('UniSat returned no BRC-20 tickers with day1 BTC volume');
-  return dedupe(assets);
-}
-
-function dedupe(rows) {
-  const map = new Map();
-  for (const row of rows) {
-    const key = `${row.type}:${row.name.toLowerCase()}`;
-    const existing = map.get(key);
-    if (!existing || row.volumeBtc > existing.volumeBtc) map.set(key, row);
-  }
-  return [...map.values()];
+  return assets;
 }
 
 function rank(rows, limit) {
-  return dedupe(rows)
+  return [...rows]
+    .filter((asset) => Number.isFinite(asset.volumeBtc) && asset.volumeBtc > 0)
     .sort((a, b) => b.volumeBtc - a.volumeBtc || a.name.localeCompare(b.name))
     .slice(0, limit)
     .map((asset, index) => ({ rank: index + 1, ...asset }));
 }
 
-function endpointSnapshot({ generatedAt, protocol, provider, assets, mode = 'live' }) {
+function endpointSnapshot({ generatedAt, protocol, assets, mode = 'live' }) {
   return {
     schemaVersion: 1,
     api: 'MSC API',
@@ -265,12 +269,17 @@ function endpointSnapshot({ generatedAt, protocol, provider, assets, mode = 'liv
     unit: 'BTC',
     mode,
     protocol,
-    provider,
+    provider: 'Satflow',
+    methodology: 'MSC aggregates Satflow sales records from the trailing 24 hours, including external marketplace data, and sums completed sale prices by Bitcoin asset.',
     assets
   };
 }
 
-function homepagePreview(generatedAt) {
+function previewSnapshot(generatedAt, protocol) {
+  return endpointSnapshot({ generatedAt, protocol, assets: [], mode: 'preview' });
+}
+
+function homepageSnapshot(generatedAt, assets, mode) {
   return {
     schemaVersion: 1,
     api: 'MSC API',
@@ -278,84 +287,70 @@ function homepagePreview(generatedAt) {
     generatedAt,
     window: '24h',
     unit: 'BTC',
-    mode: 'preview',
-    methodology: 'No public ranking is emitted until both Satflow and UniSat credentials are configured and the live data contract validates.',
-    sourceLine: 'MSC API · MARKET DATA UNAVAILABLE',
-    assets: []
+    mode,
+    methodology: mode === 'live'
+      ? 'MSC aggregates Satflow trailing-24-hour Ordinals and Runes sales, including external marketplace data, then ranks assets by completed-sale BTC volume.'
+      : 'No public ranking is emitted until Satflow is configured and the live data contract validates.',
+    sourceLine: mode === 'live' ? 'MSC API · Satflow · Ordinals + Runes' : 'MSC API · MARKET DATA UNAVAILABLE',
+    assets
   };
-}
-
-function protocolPreview(generatedAt, protocol, provider) {
-  return endpointSnapshot({ generatedAt, protocol, provider, assets: [], mode: 'preview' });
 }
 
 export async function buildMarketSnapshots() {
   const generatedAt = new Date().toISOString();
-  let satflow = null;
-  let unisat = null;
 
-  if (SATFLOW_API_KEY) satflow = await fetchSatflow24h();
-  if (SATFLOW_API_KEY && UNISAT_API_KEY) unisat = await fetchUnisat24h();
-
-  const ordinals = satflow
-    ? endpointSnapshot({
+  if (!SATFLOW_API_KEY) {
+    return {
+      manifest: {
+        schemaVersion: 1,
+        api: 'MSC API',
+        version: 'v1',
         generatedAt,
-        protocol: 'ORDINAL',
-        provider: 'Satflow',
-        assets: rank(satflow.filter((asset) => asset.type === 'ORDINAL'), 25)
-      })
-    : protocolPreview(generatedAt, 'ORDINAL', 'Satflow');
-
-  const runes = satflow
-    ? endpointSnapshot({
-        generatedAt,
-        protocol: 'RUNE',
-        provider: 'Satflow',
-        assets: rank(satflow.filter((asset) => asset.type === 'RUNE'), 25)
-      })
-    : protocolPreview(generatedAt, 'RUNE', 'Satflow');
-
-  let homepage = homepagePreview(generatedAt);
-  if (satflow && unisat) {
-    const homepageAssets = rank([...satflow, ...unisat], 5);
-    if (homepageAssets.length !== 5) {
-      throw new Error(`MSC API homepage endpoint produced ${homepageAssets.length} assets; expected 5`);
-    }
-    homepage = {
-      schemaVersion: 1,
-      api: 'MSC API',
-      version: 'v1',
-      generatedAt,
-      window: '24h',
-      unit: 'BTC',
-      mode: 'live',
-      methodology: 'Individual Ordinals collections and Runes from Satflow indexed 24h sales including external marketplace data; individual BRC-20 tickers from UniSat day1 BTC volume. Combined and ranked by BTC volume.',
-      sourceLine: 'MSC API · Satflow + UniSat',
-      assets: homepageAssets
+        mode: 'preview',
+        endpoints: [
+          '/v1/market/homepage.json',
+          '/v1/market/ordinals.json',
+          '/v1/market/runes.json'
+        ],
+        providers: {
+          ordinals: { name: 'Satflow', status: 'unconfigured' },
+          runes: { name: 'Satflow', status: 'unconfigured' }
+        }
+      },
+      homepage: homepageSnapshot(generatedAt, [], 'preview'),
+      ordinals: previewSnapshot(generatedAt, 'ORDINAL'),
+      runes: previewSnapshot(generatedAt, 'RUNE')
     };
   }
 
-  const mode = homepage.mode === 'live' ? 'live' : satflow ? 'partial' : 'preview';
+  const satflow = await fetchSatflow24h();
+  const ordinalsAssets = rank(satflow.filter((asset) => asset.type === 'ORDINAL'), 25);
+  const runesAssets = rank(satflow.filter((asset) => asset.type === 'RUNE'), 25);
+  const homepageAssets = rank(satflow, 5);
+
+  if (homepageAssets.length < 5) {
+    throw new Error(`MSC API homepage endpoint produced ${homepageAssets.length} Satflow assets; expected at least 5`);
+  }
+
   return {
     manifest: {
       schemaVersion: 1,
       api: 'MSC API',
       version: 'v1',
       generatedAt,
-      mode,
+      mode: 'live',
       endpoints: [
         '/v1/market/homepage.json',
         '/v1/market/ordinals.json',
         '/v1/market/runes.json'
       ],
       providers: {
-        ordinals: { name: 'Satflow', status: satflow ? 'live' : 'unconfigured' },
-        runes: { name: 'Satflow', status: satflow ? 'live' : 'unconfigured' },
-        brc20: { name: 'UniSat', status: unisat ? 'live' : UNISAT_API_KEY ? 'waiting_for_satflow' : 'unconfigured' }
+        ordinals: { name: 'Satflow', status: 'live' },
+        runes: { name: 'Satflow', status: 'live' }
       }
     },
-    homepage,
-    ordinals,
-    runes
+    homepage: homepageSnapshot(generatedAt, homepageAssets, 'live'),
+    ordinals: endpointSnapshot({ generatedAt, protocol: 'ORDINAL', assets: ordinalsAssets }),
+    runes: endpointSnapshot({ generatedAt, protocol: 'RUNE', assets: runesAssets })
   };
 }
