@@ -1,4 +1,4 @@
-/* MSC Learn — SONAR depth brief overlay, overview state, and wireframe viewport. Frontend-only. */
+/* MSC Learn — SONAR depth brief overlay, overview state, and technical wireframe viewport. Frontend-only. */
 
 .msc-depth-map__scale::before {
   left: 0 !important;
@@ -19,30 +19,30 @@
     --msc-sonar-depth-brief-width: clamp(19rem, 23.5%, 21.5rem);
   }
 
-  /* Preserve the approved horizontal and vertical station placement exactly. */
+  /* Keep the approved 7.3% rhythm and shift the complete desktop sequence 2% right. Vertical positions stay untouched. */
   .msc-depth-map__region[data-region="basics"] {
-    --msc-sounder-indent: 0%;
-    left: 0% !important;
+    --msc-sounder-indent: 2%;
+    left: 2% !important;
   }
 
   .msc-depth-map__region[data-region="network"] {
-    --msc-sounder-indent: 7.3%;
-    left: 7.3% !important;
+    --msc-sounder-indent: 9.3%;
+    left: 9.3% !important;
   }
 
   .msc-depth-map__region[data-region="building"] {
-    --msc-sounder-indent: 14.6%;
-    left: 14.6% !important;
+    --msc-sounder-indent: 16.6%;
+    left: 16.6% !important;
   }
 
   .msc-depth-map__region[data-region="development"] {
-    --msc-sounder-indent: 21.9%;
-    left: 21.9% !important;
+    --msc-sounder-indent: 23.9%;
+    left: 23.9% !important;
   }
 
   .msc-depth-map__region[data-region="ecosystem"] {
-    --msc-sounder-indent: 29.2%;
-    left: 29.2% !important;
+    --msc-sounder-indent: 31.2%;
+    left: 31.2% !important;
   }
 
   /* Keep the SONAR surface and wave continuous beneath the overlay. */
@@ -218,7 +218,7 @@
     line-height: 1.52;
   }
 
-  /* Dedicated lower visual stage shared by overview + all five depths. */
+  /* Technical object stage: restrained construction grid + single-color schematic linework. */
   .msc-depth-map__brief-visual {
     position: absolute;
     right: 1.05rem;
@@ -228,35 +228,53 @@
     min-height: 10.5rem;
     overflow: hidden;
     border-top: 1px solid rgba(212, 190, 153, .13);
-    color: rgba(212, 190, 153, .82);
-    perspective: 700px;
+    color: rgba(212, 190, 153, .86);
+    perspective: 900px;
     pointer-events: none;
   }
 
   .msc-depth-map__brief-visual::before {
     content: "";
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 72%;
-    height: 58%;
-    border: 1px solid rgba(212, 190, 153, .06);
-    border-radius: 50%;
-    transform: translate(-50%, -45%);
-    box-shadow: 0 0 34px rgba(212, 190, 153, .04);
+    right: -12%;
+    bottom: -42%;
+    left: -12%;
+    height: 82%;
+    opacity: .32;
+    background-image:
+      linear-gradient(rgba(212, 190, 153, .075) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212, 190, 153, .075) 1px, transparent 1px);
+    background-size: 1.8rem 1.8rem;
+    transform: perspective(360px) rotateX(58deg);
+    transform-origin: 50% 100%;
+    -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,.9), transparent 82%);
+    mask-image: linear-gradient(to top, rgba(0,0,0,.9), transparent 82%);
+  }
+
+  .msc-depth-map__brief-visual::after {
+    content: "";
+    position: absolute;
+    top: 49%;
+    right: 5%;
+    left: 5%;
+    height: 1px;
+    opacity: .22;
+    background: linear-gradient(90deg, transparent, currentColor 12%, currentColor 88%, transparent);
   }
 
   .msc-sonar-wireframe {
     position: absolute;
+    z-index: 1;
     top: 50%;
     left: 50%;
-    width: min(92%, 17rem);
-    height: min(92%, 13.5rem);
+    width: min(96%, 18.5rem);
+    height: min(96%, 14.2rem);
     overflow: visible;
     opacity: 0;
     color: currentColor;
-    transform: translate(-50%, -47%);
-    transform-origin: 50% 50%;
+    transform: translate(-50%, -48%) perspective(900px) rotateX(4deg) rotateY(-9deg);
+    transform-origin: 50% 52%;
+    filter: drop-shadow(0 0 8px rgba(212, 190, 153, .055));
     transition: opacity .22s ease;
   }
 
@@ -273,31 +291,43 @@
   .msc-sonar-wireframe rect {
     fill: none;
     stroke: currentColor;
-    stroke-width: 1.2;
+    stroke-width: 1.05;
     stroke-linecap: round;
     stroke-linejoin: round;
   }
 
-  .msc-sonar-wireframe .msc-sonar-wireframe__faint {
-    opacity: .34;
+  .msc-sonar-wireframe .msc-sonar-wireframe__accent {
+    opacity: .98;
+    stroke-width: 1.35;
   }
 
   .msc-sonar-wireframe .msc-sonar-wireframe__mid {
-    opacity: .62;
+    opacity: .58;
+  }
+
+  .msc-sonar-wireframe .msc-sonar-wireframe__faint {
+    opacity: .26;
+  }
+
+  .msc-sonar-wireframe .msc-sonar-wireframe__ghost {
+    opacity: .14;
+    stroke-dasharray: 3 5;
   }
 
   .msc-sonar-wireframe .msc-sonar-wireframe__node {
-    fill: rgba(212, 190, 153, .82);
+    fill: currentColor;
     stroke: none;
   }
 
-  .msc-sonar-wireframe .msc-sonar-wireframe__symbol {
-    fill: currentColor;
-    stroke: none;
-    font-size: 42px;
-    font-weight: 700;
-    text-anchor: middle;
-    dominant-baseline: middle;
+  .msc-sonar-wireframe .msc-sonar-wireframe__pulse {
+    stroke-dasharray: 5 7;
+    animation: mscSonarPulse 4.8s linear infinite;
+  }
+
+  .msc-sonar-wireframe .msc-sonar-wireframe__rotor {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: mscSonarRotor 8s linear infinite;
   }
 
   .msc-depth-map__brief[data-region="overview"] .msc-sonar-wireframe[data-wireframe="overview"],
@@ -307,26 +337,28 @@
   .msc-depth-map__brief[data-region="development"] .msc-sonar-wireframe[data-wireframe="development"],
   .msc-depth-map__brief[data-region="ecosystem"] .msc-sonar-wireframe[data-wireframe="ecosystem"] {
     opacity: 1;
-    animation: mscSonarWireframeSpin 19s linear infinite;
+    animation: mscSonarWireframeTurn 12s ease-in-out infinite alternate;
   }
 }
 
-@keyframes mscSonarWireframeSpin {
+@keyframes mscSonarWireframeTurn {
   0% {
-    transform: translate(-50%, -47%) perspective(700px) rotateX(8deg) rotateY(-14deg) rotateZ(0deg);
-  }
-  25% {
-    transform: translate(-50%, -47%) perspective(700px) rotateX(4deg) rotateY(0deg) rotateZ(90deg);
+    transform: translate(-50%, -48%) perspective(900px) rotateX(5deg) rotateY(-12deg) translateY(1px);
   }
   50% {
-    transform: translate(-50%, -47%) perspective(700px) rotateX(-5deg) rotateY(14deg) rotateZ(180deg);
-  }
-  75% {
-    transform: translate(-50%, -47%) perspective(700px) rotateX(3deg) rotateY(0deg) rotateZ(270deg);
+    transform: translate(-50%, -49%) perspective(900px) rotateX(2deg) rotateY(0deg) translateY(-2px);
   }
   100% {
-    transform: translate(-50%, -47%) perspective(700px) rotateX(8deg) rotateY(-14deg) rotateZ(360deg);
+    transform: translate(-50%, -48%) perspective(900px) rotateX(5deg) rotateY(12deg) translateY(1px);
   }
+}
+
+@keyframes mscSonarPulse {
+  to { stroke-dashoffset: -48; }
+}
+
+@keyframes mscSonarRotor {
+  to { transform: rotate(360deg); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -335,7 +367,9 @@
     transition: none !important;
   }
 
-  .msc-sonar-wireframe {
+  .msc-sonar-wireframe,
+  .msc-sonar-wireframe .msc-sonar-wireframe__pulse,
+  .msc-sonar-wireframe .msc-sonar-wireframe__rotor {
     animation: none !important;
   }
 
@@ -345,6 +379,6 @@
   .msc-depth-map__brief[data-region="building"] .msc-sonar-wireframe[data-wireframe="building"],
   .msc-depth-map__brief[data-region="development"] .msc-sonar-wireframe[data-wireframe="development"],
   .msc-depth-map__brief[data-region="ecosystem"] .msc-sonar-wireframe[data-wireframe="ecosystem"] {
-    transform: translate(-50%, -47%) perspective(700px) rotateX(6deg) rotateY(-10deg);
+    transform: translate(-50%, -48%) perspective(900px) rotateX(4deg) rotateY(-8deg);
   }
 }
