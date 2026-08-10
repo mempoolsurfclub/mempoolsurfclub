@@ -4,6 +4,7 @@
   const ROOT = '[data-msc-ecosystem-radar]';
   const DATA_URL = 'https://raw.githubusercontent.com/mempoolsurfclub/mempoolsurfclub/homepage-market-data/data/api/v1/market/homepage.json';
   const REFRESH_MS = 60 * 60 * 1000;
+  const DATA_CACHE_BUCKET_MS = 5 * 60 * 1000;
   const MAX_AGE_MS = 90 * 60 * 1000;
   const REQUEST_TIMEOUT_MS = 10000;
   const TYPES = new Set(['ORDINAL', 'RUNE']);
@@ -124,7 +125,7 @@
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
     try {
-      const response = await fetch(`${DATA_URL}?v=${Math.floor(Date.now() / REFRESH_MS)}`, {
+      const response = await fetch(`${DATA_URL}?v=${Math.floor(Date.now() / DATA_CACHE_BUCKET_MS)}`, {
         signal: controller.signal,
         cache: 'no-store',
         headers: { accept: 'application/json' }
