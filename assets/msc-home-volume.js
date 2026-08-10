@@ -3,6 +3,11 @@
 
   const ROOT = '[data-msc-ecosystem-radar]';
   const PROTOCOL_WAVE_HEAVY_TX = 2500;
+  const DATA_URL = 'https://raw.githubusercontent.com/mempoolsurfclub/mempoolsurfclub/homepage-market-data/data/api/v1/market/homepage.json';
+  const REFRESH_MS = 5 * 60 * 1000;
+  const MAX_AGE_MS = 45 * 60 * 1000;
+  const REQUEST_TIMEOUT_MS = 10000;
+  const TYPES = new Set(['ORDINAL', 'RUNE', 'BRC-20']);
 
   function parseProtocolCount(node) {
     const text = node?.textContent || '';
@@ -84,27 +89,7 @@
     }
   }
 
-  function initProtocolWaves(scope = document) {
-    const roots = [];
-    if (scope.matches && scope.matches(ROOT)) roots.push(scope);
-    if (scope.querySelectorAll) roots.push(...scope.querySelectorAll(ROOT));
-    roots.forEach((root) => new ProtocolActivityWave(root));
-  }
-
-  initProtocolWaves(document);
-  document.addEventListener('shopify:section:load', (event) => initProtocolWaves(event.target));
-
-  // Parked for future placement review. Keep the complete renderer below intact.
-  return;
-
-  const DATA_URL = 'https://raw.githubusercontent.com/mempoolsurfclub/mempoolsurfclub/homepage-market-data/data/homepage-market.json';
-  const REFRESH_MS = 5 * 60 * 1000;
-  const MAX_AGE_MS = 45 * 60 * 1000;
-  const REQUEST_TIMEOUT_MS = 10000;
-  const TYPES = new Set(['ORDINAL', 'RUNE', 'BRC-20']);
-
-  function formatBtc(value, mode) {
-    if (mode === 'preview') return '— BTC';
+  function formatBtc(value) {
     if (value >= 100) return `${value.toFixed(0)} BTC`;
     if (value >= 10) return `${value.toFixed(1)} BTC`;
     if (value >= 1) return `${value.toFixed(2)} BTC`;
@@ -114,32 +99,35 @@
   }
 
   function normalize(payload) {
-    if (!payload || payload.schemaVersion !== 1 || payload.window !== '24h') return null;
-    const mode = payload.mode === 'live' ? 'live' : payload.mode === 'preview' ? 'preview' : null;
-    if (!mode || !Array.isArray(payload.assets) || payload.assets.length < 5) return null;
+    if (!payload || payload.schemaVersion !== 1 || payload.api !== 'MSC API' || payload.version !== 'v1') return null;
+    if (payload.window !== '24h' || payload.mode !== 'live' || !Array.isArray(payload.assets) || payload.assets.length < 5) return null;
 
-    if (mode === 'live') {
-      const generatedAt = Date.parse(payload.generatedAt);
-      if (!Number.isFinite(generatedAt) || Date.now() - generatedAt > MAX_AGE_MS) return null;
-    }
+    const generatedAt = Date.parse(payload.generatedAt);
+    if (!Number.isFinite(generatedAt) || Date.now() - generatedAt > MAX_AGE_MS) return null;
 
     const assets = payload.assets.slice(0, 5).map((asset, index) => {
       const name = typeof asset?.name === 'string' ? asset.name.trim() : '';
       const type = typeof asset?.type === 'string' ? asset.type.toUpperCase() : '';
-      const volumeBtc = asset?.volumeBtc === null ? null : Number(asset?.volumeBtc);
-      if (!name || !TYPES.has(type)) return null;
-      if (mode === 'live' && (!Number.isFinite(volumeBtc) || volumeBtc <= 0)) return null;
+      const volumeBtc = Number(asset?.volumeBtc);
+      if (!name || !TYPES.has(type) || !Number.isFinite(volumeBtc) || volumeBtc <= 0) return null;
       return { rank: index + 1, name, type, volumeBtc };
     });
 
     if (!assets.every(Boolean)) return null;
     const sourceLine = typeof payload.sourceLine === 'string' && payload.sourceLine.trim()
       ? payload.sourceLine.trim()
-      : mode === 'live'
-        ? 'Ordinals + Runes: Satflow · BRC-20: UniSat'
-        : 'PREVIEW · SATFLOW + UNISAT API CONNECTION PENDING';
+      : 'MSC API · Satflow + UniSat';
 
-    return { mode, assets, sourceLine };
+    return { assets, sourceLine, generatedAt };
+  }
+
+  function updatedLabel(timestamp) {
+    return new Intl.DateTimeFormat('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+      timeZone: 'UTC'
+    }).format(new Date(timestamp));
   }
 
   async function requestData() {
@@ -179,14 +167,14 @@
         row.querySelector('[data-volume-rank]').textContent = `${asset.rank}.`;
         row.querySelector('[data-volume-name]').textContent = asset.name;
         row.querySelector('[data-volume-type]').textContent = asset.type;
-        row.querySelector('[data-volume-btc]').textContent = formatBtc(asset.volumeBtc, snapshot.mode);
+        row.querySelector('[data-volume-btc]').textContent = formatBtc(asset.volumeBtc);
         fragment.appendChild(row);
       }
       this.list.replaceChildren(fragment);
-      if (this.source) this.source.textContent = snapshot.sourceLine;
+      if (this.source) this.source.textContent = `${snapshot.sourceLine} · UPDATED ${updatedLabel(snapshot.generatedAt)} UTC`;
       this.panel.hidden = false;
-      this.panel.dataset.volumeMode = snapshot.mode;
-      this.root.dataset.volumeStatus = snapshot.mode;
+      this.panel.dataset.volumeMode = 'live';
+      this.root.dataset.volumeStatus = 'live';
     }
 
     hide() {
@@ -210,11 +198,18 @@
     }
   }
 
-  function init(scope = document) {
+  function rootsFor(scope) {
     const roots = [];
     if (scope.matches && scope.matches(ROOT)) roots.push(scope);
     if (scope.querySelectorAll) roots.push(...scope.querySelectorAll(ROOT));
-    roots.forEach((root) => new VolumePanel(root));
+    return roots;
+  }
+
+  function init(scope = document) {
+    rootsFor(scope).forEach((root) => {
+      new ProtocolActivityWave(root);
+      new VolumePanel(root);
+    });
   }
 
   init(document);
