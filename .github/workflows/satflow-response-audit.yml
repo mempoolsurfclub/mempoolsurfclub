@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/satflow-response-audit.yml'
       - 'scripts/msc-api/audit-satflow-response.mjs'
+      - 'scripts/msc-api/audit-satflow-corrected-ranking.mjs'
 
 permissions:
   contents: read
@@ -25,3 +26,8 @@ jobs:
         env:
           SATFLOW_API_KEY: ${{ secrets.SATFLOW_API_KEY }}
         run: node scripts/msc-api/audit-satflow-response.mjs
+
+      - name: Preview corrected ranking
+        env:
+          SATFLOW_API_KEY: ${{ secrets.SATFLOW_API_KEY }}
+        run: node scripts/msc-api/audit-satflow-corrected-ranking.mjs
