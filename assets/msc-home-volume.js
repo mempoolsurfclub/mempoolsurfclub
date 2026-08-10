@@ -3,11 +3,12 @@
 
   const ROOT = '[data-msc-ecosystem-radar]';
   const PROTOCOL_WAVE_HEAVY_TX = 2500;
-  const DATA_URL = 'https://raw.githubusercontent.com/mempoolsurfclub/mempoolsurfclub/homepage-market-data/data/api/v1/market/homepage.json';
+  const ORDINALS_URL = 'https://raw.githubusercontent.com/mempoolsurfclub/mempoolsurfclub/homepage-market-data/data/api/v1/market/ordinals.json';
+  const RUNES_URL = 'https://raw.githubusercontent.com/mempoolsurfclub/mempoolsurfclub/homepage-market-data/data/api/v1/market/runes.json';
   const REFRESH_MS = 5 * 60 * 1000;
   const MAX_AGE_MS = 45 * 60 * 1000;
   const REQUEST_TIMEOUT_MS = 10000;
-  const TYPES = new Set(['ORDINAL', 'RUNE', 'BRC-20']);
+  const TYPES = new Set(['ORDINAL', 'RUNE']);
 
   function parseProtocolCount(node) {
     const text = node?.textContent || '';
@@ -98,27 +99,22 @@
     return `${value.toFixed(4)} BTC`;
   }
 
-  function normalize(payload) {
+  function normalizeProtocol(payload, expectedType) {
     if (!payload || payload.schemaVersion !== 1 || payload.api !== 'MSC API' || payload.version !== 'v1') return null;
-    if (payload.window !== '24h' || payload.mode !== 'live' || !Array.isArray(payload.assets) || payload.assets.length < 5) return null;
+    if (payload.window !== '24h' || payload.mode !== 'live' || payload.protocol !== expectedType || !Array.isArray(payload.assets)) return null;
 
     const generatedAt = Date.parse(payload.generatedAt);
     if (!Number.isFinite(generatedAt) || Date.now() - generatedAt > MAX_AGE_MS) return null;
 
-    const assets = payload.assets.slice(0, 5).map((asset, index) => {
+    const assets = payload.assets.map((asset) => {
       const name = typeof asset?.name === 'string' ? asset.name.trim() : '';
-      const type = typeof asset?.type === 'string' ? asset.type.toUpperCase() : '';
+      const type = typeof asset?.type === 'string' ? asset.type.toUpperCase() : expectedType;
       const volumeBtc = Number(asset?.volumeBtc);
-      if (!name || !TYPES.has(type) || !Number.isFinite(volumeBtc) || volumeBtc <= 0) return null;
-      return { rank: index + 1, name, type, volumeBtc };
-    });
+      if (!name || type !== expectedType || !TYPES.has(type) || !Number.isFinite(volumeBtc) || volumeBtc <= 0) return null;
+      return { name, type, volumeBtc };
+    }).filter(Boolean);
 
-    if (!assets.every(Boolean)) return null;
-    const sourceLine = typeof payload.sourceLine === 'string' && payload.sourceLine.trim()
-      ? payload.sourceLine.trim()
-      : 'MSC API · Satflow + UniSat';
-
-    return { assets, sourceLine, generatedAt };
+    return { generatedAt, assets };
   }
 
   function updatedLabel(timestamp) {
@@ -130,17 +126,39 @@
     }).format(new Date(timestamp));
   }
 
+  async function requestUrl(url, signal) {
+    const response = await fetch(`${url}?v=${Math.floor(Date.now() / REFRESH_MS)}`, {
+      signal,
+      cache: 'no-store',
+      headers: { accept: 'application/json' }
+    });
+    if (!response.ok) throw new Error(`http ${response.status}`);
+    return response.json();
+  }
+
   async function requestData() {
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
     try {
-      const response = await fetch(`${DATA_URL}?v=${Math.floor(Date.now() / REFRESH_MS)}`, {
-        signal: controller.signal,
-        cache: 'no-store',
-        headers: { accept: 'application/json' }
-      });
-      if (!response.ok) throw new Error(`http ${response.status}`);
-      return await response.json();
+      const [ordinalsPayload, runesPayload] = await Promise.all([
+        requestUrl(ORDINALS_URL, controller.signal),
+        requestUrl(RUNES_URL, controller.signal)
+      ]);
+      const ordinals = normalizeProtocol(ordinalsPayload, 'ORDINAL');
+      const runes = normalizeProtocol(runesPayload, 'RUNE');
+      if (!ordinals || !runes) return null;
+
+      const assets = [...ordinals.assets, ...runes.assets]
+        .sort((a, b) => b.volumeBtc - a.volumeBtc || a.name.localeCompare(b.name))
+        .slice(0, 5)
+        .map((asset, index) => ({ rank: index + 1, ...asset }));
+      if (assets.length !== 5) return null;
+
+      return {
+        assets,
+        sourceLine: 'MSC API · SATFLOW',
+        generatedAt: Math.min(ordinals.generatedAt, runes.generatedAt)
+      };
     } finally {
       window.clearTimeout(timeout);
     }
@@ -186,7 +204,7 @@
     async refresh() {
       if (document.hidden) return;
       try {
-        const snapshot = normalize(await requestData());
+        const snapshot = await requestData();
         if (!snapshot) {
           this.hide();
           return;
