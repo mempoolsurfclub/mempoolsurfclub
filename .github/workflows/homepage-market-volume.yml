@@ -1,10 +1,13 @@
-name: Homepage market volume
+name: MSC market API
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '*/15 * * * *'
   pull_request:
     paths:
       - '.github/workflows/homepage-market-volume.yml'
+      - 'scripts/msc-api/**'
       - 'scripts/homepage-market/**'
       - 'assets/msc-home-volume.js'
       - 'sections/msc-home-hero.liquid'
@@ -13,7 +16,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: homepage-market-volume-${{ github.ref }}
+  group: msc-market-api-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -30,20 +33,35 @@ jobs:
         with:
           node-version: '24'
 
-      - name: Build homepage Top 5 snapshot
+      - name: Build MSC API market snapshots
         env:
           SATFLOW_API_KEY: ${{ secrets.SATFLOW_API_KEY }}
           UNISAT_API_KEY: ${{ secrets.UNISAT_API_KEY }}
-        run: node scripts/homepage-market/build-volume-data.mjs /tmp/homepage-market.json
+        run: node scripts/msc-api/build-market-api.mjs /tmp/msc-api
 
-      - name: Validate snapshot contract
+      - name: Validate MSC API contracts
         run: |
-          node -e "const fs=require('fs');const p=JSON.parse(fs.readFileSync('/tmp/homepage-market.json','utf8'));if(p.schemaVersion!==1||p.window!=='24h'||!['live','preview'].includes(p.mode)||!Array.isArray(p.assets)||p.assets.length!==5)process.exit(1);"
+          node <<'NODE'
+          const fs = require('fs');
+          const read = (path) => JSON.parse(fs.readFileSync(path, 'utf8'));
+          const manifest = read('/tmp/msc-api/v1/manifest.json');
+          const homepage = read('/tmp/msc-api/v1/market/homepage.json');
+          const ordinals = read('/tmp/msc-api/v1/market/ordinals.json');
+          const runes = read('/tmp/msc-api/v1/market/runes.json');
+          if (manifest.schemaVersion !== 1 || manifest.api !== 'MSC API' || manifest.version !== 'v1') process.exit(1);
+          if (!['live', 'preview'].includes(manifest.mode)) process.exit(1);
+          for (const snapshot of [homepage, ordinals, runes]) {
+            if (snapshot.schemaVersion !== 1 || snapshot.api !== 'MSC API' || snapshot.version !== 'v1' || snapshot.window !== '24h' || !Array.isArray(snapshot.assets)) process.exit(1);
+          }
+          if (manifest.mode === 'live') {
+            if (homepage.mode !== 'live' || homepage.assets.length !== 5) process.exit(1);
+            if (ordinals.mode !== 'live' || runes.mode !== 'live') process.exit(1);
+          } else if (homepage.assets.length || ordinals.assets.length || runes.assets.length) {
+            process.exit(1);
+          }
+          NODE
 
-      - name: Show snapshot used for validation
-        run: cat /tmp/homepage-market.json
-
-      - name: Publish data branch
+      - name: Publish MSC API data branch
         if: github.event_name != 'pull_request'
         shell: bash
         run: |
@@ -59,14 +77,16 @@ jobs:
             git rm -rf .
           fi
 
+          rm -rf data/api
           mkdir -p data
-          cp /tmp/homepage-market.json data/homepage-market.json
-          git add data/homepage-market.json
+          cp -R /tmp/msc-api data/api
+          cp /tmp/msc-api/v1/market/homepage.json data/homepage-market.json
+          git add data/api data/homepage-market.json
 
           if git diff --cached --quiet; then
-            echo "No market-data change to publish."
+            echo "No MSC API market-data change to publish."
             exit 0
           fi
 
-          git commit -m "Update homepage 24h market volume"
+          git commit -m "Update MSC market API snapshots"
           git push origin homepage-market-data
