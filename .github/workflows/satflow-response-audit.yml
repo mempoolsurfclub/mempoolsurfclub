@@ -1,0 +1,27 @@
+name: Satflow response audit
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/satflow-response-audit.yml'
+      - 'scripts/msc-api/audit-satflow-response.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Audit Satflow 24h sales response
+        env:
+          SATFLOW_API_KEY: ${{ secrets.SATFLOW_API_KEY }}
+        run: node scripts/msc-api/audit-satflow-response.mjs
