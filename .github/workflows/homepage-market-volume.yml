@@ -2,6 +2,15 @@ name: MSC market API
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/homepage-market-volume.yml'
+      - 'scripts/msc-api/**'
+      - 'scripts/homepage-market/**'
+      - 'assets/msc-home-volume.js'
+      - 'sections/msc-home-hero.liquid'
   schedule:
     - cron: '*/15 * * * *'
   pull_request:
