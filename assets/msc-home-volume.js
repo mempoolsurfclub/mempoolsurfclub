@@ -2,15 +2,13 @@
   'use strict';
 
   const ROOT = '[data-msc-ecosystem-radar]';
-  const PROTOCOL_WAVE_HEAVY_TX = 2500;
-
-  function parseProtocolCount(node) {
-    const text = node?.textContent || '';
-    const match = text.replace(/,/g, '').match(/\d+/);
-    if (!match) return null;
-    const value = Number(match[0]);
-    return Number.isFinite(value) && value >= 0 ? value : null;
-  }
+  const DATA_URL = 'https://raw.githubusercontent.com/mempoolsurfclub/mempoolsurfclub/homepage-market-data/data/api/v1/market/homepage.json';
+  const REFRESH_MS = 60 * 60 * 1000;
+  const MAX_AGE_MS = 90 * 60 * 1000;
+  const REQUEST_TIMEOUT_MS = 10000;
+  const TYPES = new Set(['ORDINAL', 'RUNE']);
+  const MED_VOLUME_BTC = 0.25;
+  const HIGH_VOLUME_BTC = 1;
 
   function createProtocolWave() {
     const wave = document.createElement('div');
@@ -18,7 +16,7 @@
     wave.dataset.protocolWave = '';
     wave.dataset.intensity = 'pending';
     wave.setAttribute('role', 'img');
-    wave.setAttribute('aria-label', 'Combined Ordinals, Runes, and BRC-20 activity wave. Activity data pending.');
+    wave.setAttribute('aria-label', 'Bitcoin asset surf based on trailing 24-hour Ordinals and Runes volume. Market data pending.');
     wave.innerHTML = `
       <span class="msc-radar-protocol-wave__label">BTC ASSET SURF</span>
       <svg class="msc-radar-protocol-wave__svg" viewBox="0 0 240 60" aria-hidden="true" focusable="false">
@@ -32,79 +30,64 @@
     return wave;
   }
 
-  class ProtocolActivityWave {
+  class AssetSurf {
     constructor(root) {
-      if (root.dataset.protocolWaveInitialized === 'true') return;
-      root.dataset.protocolWaveInitialized = 'true';
-
       this.root = root;
       this.activity = root.querySelector('.msc-radar-block-activity');
-      this.values = Array.from(root.querySelectorAll('.msc-radar-block-activity__value')).slice(0, 3);
-      if (!this.activity || this.values.length !== 3) return;
+      if (!this.activity) return;
 
-      this.wave = createProtocolWave();
-      this.activity.insertAdjacentElement('afterend', this.wave);
-
-      this.observer = new MutationObserver(() => this.render());
-      this.values.forEach((value) => this.observer.observe(value, {
-        childList: true,
-        characterData: true,
-        subtree: true
-      }));
-
-      this.render();
+      this.wave = root.querySelector('[data-protocol-wave]') || createProtocolWave();
+      if (!this.wave.isConnected) this.activity.insertAdjacentElement('afterend', this.wave);
+      this.setPending();
     }
 
-    render() {
-      const counts = this.values.map(parseProtocolCount);
-      if (counts.some((count) => count === null)) {
-        this.wave.dataset.intensity = 'pending';
-        this.wave.style.setProperty('--msc-protocol-wave-scale', '.28');
-        this.wave.style.setProperty('--msc-protocol-wave-duration', '18s');
-        this.wave.style.setProperty('--msc-protocol-wave-opacity', '.46');
-        this.wave.setAttribute('aria-label', 'Combined Ordinals, Runes, and BRC-20 activity wave. Activity data pending.');
+    setPending() {
+      if (!this.wave) return;
+      this.wave.dataset.intensity = 'pending';
+      this.wave.style.setProperty('--msc-protocol-wave-scale', '.28');
+      this.wave.style.setProperty('--msc-protocol-wave-duration', '18s');
+      this.wave.style.setProperty('--msc-protocol-wave-opacity', '.46');
+      this.wave.setAttribute('aria-label', 'Bitcoin asset surf based on trailing 24-hour Ordinals and Runes volume. Market data pending.');
+    }
+
+    render(totalVolumeBtc) {
+      if (!this.wave || !Number.isFinite(totalVolumeBtc) || totalVolumeBtc < 0) {
+        this.setPending();
         return;
       }
 
-      const total = counts.reduce((sum, count) => sum + count, 0);
-      const pressure = Math.min(total / PROTOCOL_WAVE_HEAVY_TX, 1);
-      const scale = 0.34 + pressure * 1.16;
-      const duration = 14 - pressure * 7;
-      const opacity = 0.58 + pressure * 0.34;
-      const intensity = pressure >= .8 ? 'heavy' : pressure >= .48 ? 'active' : pressure >= .18 ? 'rolling' : 'mellow';
+      let intensity = 'mellow';
+      let band = 'LOW';
+      let scale = 0.42;
+      let duration = 15;
+      let opacity = 0.58;
+
+      if (totalVolumeBtc >= HIGH_VOLUME_BTC) {
+        intensity = 'heavy';
+        band = 'HIGH';
+        scale = 1.25;
+        duration = 7;
+        opacity = 0.92;
+      } else if (totalVolumeBtc >= MED_VOLUME_BTC) {
+        intensity = 'active';
+        band = 'MED';
+        scale = 0.8;
+        duration = 10;
+        opacity = 0.76;
+      }
 
       this.wave.dataset.intensity = intensity;
-      this.wave.style.setProperty('--msc-protocol-wave-scale', scale.toFixed(3));
-      this.wave.style.setProperty('--msc-protocol-wave-duration', `${duration.toFixed(2)}s`);
-      this.wave.style.setProperty('--msc-protocol-wave-opacity', opacity.toFixed(3));
+      this.wave.style.setProperty('--msc-protocol-wave-scale', String(scale));
+      this.wave.style.setProperty('--msc-protocol-wave-duration', `${duration}s`);
+      this.wave.style.setProperty('--msc-protocol-wave-opacity', String(opacity));
       this.wave.setAttribute(
         'aria-label',
-        `Combined Ordinals, Runes, and BRC-20 activity wave based on ${total.toLocaleString()} displayed transactions in the latest confirmed block.`
+        `Bitcoin asset surf ${band.toLowerCase()} based on ${formatBtc(totalVolumeBtc)} combined trailing 24-hour volume across the displayed Ordinals and Runes assets.`
       );
     }
   }
 
-  function initProtocolWaves(scope = document) {
-    const roots = [];
-    if (scope.matches && scope.matches(ROOT)) roots.push(scope);
-    if (scope.querySelectorAll) roots.push(...scope.querySelectorAll(ROOT));
-    roots.forEach((root) => new ProtocolActivityWave(root));
-  }
-
-  initProtocolWaves(document);
-  document.addEventListener('shopify:section:load', (event) => initProtocolWaves(event.target));
-
-  // Parked for future placement review. Keep the complete renderer below intact.
-  return;
-
-  const DATA_URL = 'https://raw.githubusercontent.com/mempoolsurfclub/mempoolsurfclub/homepage-market-data/data/homepage-market.json';
-  const REFRESH_MS = 5 * 60 * 1000;
-  const MAX_AGE_MS = 45 * 60 * 1000;
-  const REQUEST_TIMEOUT_MS = 10000;
-  const TYPES = new Set(['ORDINAL', 'RUNE', 'BRC-20']);
-
-  function formatBtc(value, mode) {
-    if (mode === 'preview') return '— BTC';
+  function formatBtc(value) {
     if (value >= 100) return `${value.toFixed(0)} BTC`;
     if (value >= 10) return `${value.toFixed(1)} BTC`;
     if (value >= 1) return `${value.toFixed(2)} BTC`;
@@ -114,32 +97,27 @@
   }
 
   function normalize(payload) {
-    if (!payload || payload.schemaVersion !== 1 || payload.window !== '24h') return null;
-    const mode = payload.mode === 'live' ? 'live' : payload.mode === 'preview' ? 'preview' : null;
-    if (!mode || !Array.isArray(payload.assets) || payload.assets.length < 5) return null;
+    if (!payload || payload.schemaVersion !== 1 || payload.api !== 'MSC API' || payload.version !== 'v1') return null;
+    if (payload.window !== '24h' || payload.mode !== 'live' || !Array.isArray(payload.assets)) return null;
 
-    if (mode === 'live') {
-      const generatedAt = Date.parse(payload.generatedAt);
-      if (!Number.isFinite(generatedAt) || Date.now() - generatedAt > MAX_AGE_MS) return null;
-    }
+    const generatedAt = Date.parse(payload.generatedAt);
+    if (!Number.isFinite(generatedAt) || Date.now() - generatedAt > MAX_AGE_MS) return null;
 
-    const assets = payload.assets.slice(0, 5).map((asset, index) => {
+    const assets = payload.assets.slice(0, 5).map((asset) => {
       const name = typeof asset?.name === 'string' ? asset.name.trim() : '';
       const type = typeof asset?.type === 'string' ? asset.type.toUpperCase() : '';
-      const volumeBtc = asset?.volumeBtc === null ? null : Number(asset?.volumeBtc);
-      if (!name || !TYPES.has(type)) return null;
-      if (mode === 'live' && (!Number.isFinite(volumeBtc) || volumeBtc <= 0)) return null;
-      return { rank: index + 1, name, type, volumeBtc };
-    });
+      const volumeBtc = Number(asset?.volumeBtc);
+      if (!name || !TYPES.has(type) || !Number.isFinite(volumeBtc) || volumeBtc <= 0) return null;
+      return { name, type, volumeBtc };
+    }).filter(Boolean);
 
-    if (!assets.every(Boolean)) return null;
-    const sourceLine = typeof payload.sourceLine === 'string' && payload.sourceLine.trim()
-      ? payload.sourceLine.trim()
-      : mode === 'live'
-        ? 'Ordinals + Runes: Satflow · BRC-20: UniSat'
-        : 'PREVIEW · SATFLOW + UNISAT API CONNECTION PENDING';
+    if (!assets.length) return null;
 
-    return { mode, assets, sourceLine };
+    return {
+      generatedAt,
+      assets,
+      totalVolumeBtc: assets.reduce((sum, asset) => sum + asset.volumeBtc, 0)
+    };
   }
 
   async function requestData() {
@@ -158,41 +136,83 @@
     }
   }
 
-  class VolumePanel {
+  function createMarketRow(asset) {
+    const row = document.createElement('li');
+    row.className = 'msc-radar-block-activity__row';
+    row.style.setProperty('gap', '.45rem');
+    row.style.setProperty('padding-bottom', '.22rem');
+
+    const name = document.createElement('span');
+    name.className = 'msc-radar-block-activity__label';
+    name.textContent = asset.name;
+    name.title = asset.name;
+    name.style.setProperty('min-width', '0');
+    name.style.setProperty('overflow', 'hidden');
+    name.style.setProperty('text-overflow', 'ellipsis');
+    name.style.setProperty('white-space', 'nowrap');
+    name.style.setProperty('font-size', '.7rem', 'important');
+    name.style.setProperty('letter-spacing', '.04em', 'important');
+
+    const volume = document.createElement('strong');
+    volume.className = 'msc-radar-block-activity__value';
+    volume.textContent = formatBtc(asset.volumeBtc);
+    volume.style.setProperty('position', 'static', 'important');
+    volume.style.setProperty('left', 'auto', 'important');
+    volume.style.setProperty('margin-right', '0', 'important');
+    volume.style.setProperty('font-size', '.76rem', 'important');
+
+    row.append(name, volume);
+    return row;
+  }
+
+  class MarketPanel {
     constructor(root) {
-      if (root.dataset.volumePanelInitialized === 'true') return;
-      root.dataset.volumePanelInitialized = 'true';
+      if (root.dataset.marketVolumeInitialized === 'true') return;
+      root.dataset.marketVolumeInitialized = 'true';
+
       this.root = root;
-      this.panel = root.querySelector('[data-radar-volume]');
-      this.list = root.querySelector('[data-radar-volume-list]');
-      this.template = root.querySelector('[data-radar-volume-row-template]');
-      this.source = root.querySelector('[data-radar-volume-source]');
-      if (!this.panel || !this.list || !this.template) return;
+      this.activity = root.querySelector('.msc-radar-block-activity');
+      this.title = this.activity?.querySelector('.msc-radar-block-activity__title');
+      this.context = this.activity?.querySelector('.msc-radar-block-activity__context');
+      this.list = this.activity?.querySelector('.msc-radar-block-activity__list');
+      this.surf = new AssetSurf(root);
+
+      if (!this.activity || !this.title || !this.context || !this.list) return;
+
+      this.original = {
+        title: this.title.textContent,
+        context: this.context.textContent,
+        list: this.list.innerHTML
+      };
+
       this.refresh();
       this.timer = window.setInterval(() => this.refresh(), REFRESH_MS);
     }
 
     render(snapshot) {
+      this.title.textContent = '24H VOLUME';
+      this.context.textContent = 'TOP 5 · ORDINALS + RUNES';
+      this.context.style.setProperty('margin-bottom', '.42rem', 'important');
+      this.list.style.setProperty('gap', '.18rem', 'important');
+
       const fragment = document.createDocumentFragment();
-      for (const asset of snapshot.assets) {
-        const row = this.template.content.firstElementChild.cloneNode(true);
-        row.querySelector('[data-volume-rank]').textContent = `${asset.rank}.`;
-        row.querySelector('[data-volume-name]').textContent = asset.name;
-        row.querySelector('[data-volume-type]').textContent = asset.type;
-        row.querySelector('[data-volume-btc]').textContent = formatBtc(asset.volumeBtc, snapshot.mode);
-        fragment.appendChild(row);
-      }
+      snapshot.assets.forEach((asset) => fragment.appendChild(createMarketRow(asset)));
       this.list.replaceChildren(fragment);
-      if (this.source) this.source.textContent = snapshot.sourceLine;
-      this.panel.hidden = false;
-      this.panel.dataset.volumeMode = snapshot.mode;
-      this.root.dataset.volumeStatus = snapshot.mode;
+
+      this.activity.dataset.marketVolume = 'live';
+      this.root.dataset.volumeStatus = 'live';
+      this.surf.render(snapshot.totalVolumeBtc);
     }
 
-    hide() {
-      this.panel.hidden = true;
-      this.panel.removeAttribute('data-volume-mode');
+    restore() {
+      this.title.textContent = this.original.title;
+      this.context.textContent = this.original.context;
+      this.context.style.removeProperty('margin-bottom');
+      this.list.style.removeProperty('gap');
+      this.list.innerHTML = this.original.list;
+      this.activity.removeAttribute('data-market-volume');
       this.root.dataset.volumeStatus = 'unavailable';
+      this.surf.setPending();
     }
 
     async refresh() {
@@ -200,12 +220,12 @@
       try {
         const snapshot = normalize(await requestData());
         if (!snapshot) {
-          this.hide();
+          this.restore();
           return;
         }
         this.render(snapshot);
       } catch (error) {
-        this.hide();
+        this.restore();
       }
     }
   }
@@ -214,7 +234,7 @@
     const roots = [];
     if (scope.matches && scope.matches(ROOT)) roots.push(scope);
     if (scope.querySelectorAll) roots.push(...scope.querySelectorAll(ROOT));
-    roots.forEach((root) => new VolumePanel(root));
+    roots.forEach((root) => new MarketPanel(root));
   }
 
   init(document);
