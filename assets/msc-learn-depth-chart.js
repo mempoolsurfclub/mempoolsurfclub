@@ -52,7 +52,7 @@
     const scriptUrl = new URL(script.src);
     const depthBriefUrl = new URL('msc-learn-sonar-depth-brief.css', scriptUrl);
     depthBriefUrl.search = scriptUrl.search;
-    depthBriefUrl.searchParams.set('msc_depth_brief_rev', 'v10');
+    depthBriefUrl.searchParams.set('msc_depth_brief_rev', 'v11');
 
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -252,9 +252,7 @@
           </div>
         </div>
         <div class="msc-depth-map__brief-visual" aria-hidden="true">
-          <svg class="msc-sonar-wireframe" data-wireframe="overview" viewBox="0 0 260 190" focusable="false">
-            <line class="msc-sonar-wireframe__faint" x1="130" y1="11" x2="130" y2="28" />
-            <line class="msc-sonar-wireframe__faint" x1="122" y1="16" x2="138" y2="16" />
+          <svg class="msc-sonar-wireframe" data-wireframe="overview" viewBox="0 0 260 190" focusable="false" style="width: 112%; height: 112%;">
             <ellipse class="msc-sonar-wireframe__accent" cx="130" cy="36" rx="31" ry="8" />
             <path class="msc-sonar-wireframe__accent" d="M99 36 L103 61 C112 69 148 69 157 61 L161 36" />
             <ellipse class="msc-sonar-wireframe__mid" cx="130" cy="61" rx="27" ry="7" />
