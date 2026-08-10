@@ -136,7 +136,7 @@
     }
   }
 
-  function createMarketRow(asset) {
+  function createMarketRow(asset, index) {
     const row = document.createElement('li');
     row.className = 'msc-radar-block-activity__row';
     row.style.setProperty('gap', '.45rem');
@@ -144,7 +144,7 @@
 
     const name = document.createElement('span');
     name.className = 'msc-radar-block-activity__label';
-    name.textContent = asset.name;
+    name.textContent = `${index + 1}. ${asset.name}`;
     name.title = asset.name;
     name.style.setProperty('min-width', '0');
     name.style.setProperty('overflow', 'hidden');
@@ -190,13 +190,13 @@
     }
 
     render(snapshot) {
-      this.title.textContent = '24H VOLUME';
-      this.context.textContent = 'TOP 5 · ORDINALS + RUNES';
+      this.title.textContent = 'BTC ASSETS';
+      this.context.textContent = '24 HOUR VOLUME:';
       this.context.style.setProperty('margin-bottom', '.42rem', 'important');
       this.list.style.setProperty('gap', '.18rem', 'important');
 
       const fragment = document.createDocumentFragment();
-      snapshot.assets.forEach((asset) => fragment.appendChild(createMarketRow(asset)));
+      snapshot.assets.forEach((asset, index) => fragment.appendChild(createMarketRow(asset, index)));
       this.list.replaceChildren(fragment);
 
       this.activity.dataset.marketVolume = 'live';
