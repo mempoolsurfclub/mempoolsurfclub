@@ -148,6 +148,7 @@
       header.insertBefore(brand, headerTitle);
       brand.append(headerTitle, headerMeta);
     }
+
     const status = document.createElement('div');
     status.className = 'msc-sonar-status';
     status.innerHTML = `
@@ -497,6 +498,7 @@
 
       regionList.appendChild(link);
     });
+
     status.querySelectorAll('.msc-sonar-status__node').forEach((node) => {
       const region = regions.find((item) => item.key === node.dataset.region);
       if (!region) return;
