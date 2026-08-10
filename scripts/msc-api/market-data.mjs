@@ -255,7 +255,7 @@ function rank(rows, limit) {
     .map((asset, index) => ({ rank: index + 1, ...asset }));
 }
 
-function endpointSnapshot({ generatedAt, protocol, provider, assets }) {
+function endpointSnapshot({ generatedAt, protocol, provider, assets, mode = 'live' }) {
   return {
     schemaVersion: 1,
     api: 'MSC API',
@@ -263,93 +263,65 @@ function endpointSnapshot({ generatedAt, protocol, provider, assets }) {
     generatedAt,
     window: '24h',
     unit: 'BTC',
-    mode: 'live',
+    mode,
     protocol,
     provider,
     assets
   };
 }
 
-function previewSnapshots() {
-  const generatedAt = new Date().toISOString();
+function homepagePreview(generatedAt) {
   return {
-    manifest: {
-      schemaVersion: 1,
-      api: 'MSC API',
-      version: 'v1',
-      generatedAt,
-      mode: 'preview',
-      endpoints: [
-        '/v1/market/homepage.json',
-        '/v1/market/ordinals.json',
-        '/v1/market/runes.json'
-      ]
-    },
-    homepage: {
-      schemaVersion: 1,
-      api: 'MSC API',
-      version: 'v1',
-      generatedAt,
-      window: '24h',
-      unit: 'BTC',
-      mode: 'preview',
-      methodology: 'No public ranking is emitted until both Satflow and UniSat credentials are configured and the live data contract validates.',
-      sourceLine: 'MSC API · MARKET DATA UNAVAILABLE',
-      assets: []
-    },
-    ordinals: {
-      schemaVersion: 1,
-      api: 'MSC API',
-      version: 'v1',
-      generatedAt,
-      window: '24h',
-      unit: 'BTC',
-      mode: 'preview',
-      protocol: 'ORDINAL',
-      provider: 'Satflow',
-      assets: []
-    },
-    runes: {
-      schemaVersion: 1,
-      api: 'MSC API',
-      version: 'v1',
-      generatedAt,
-      window: '24h',
-      unit: 'BTC',
-      mode: 'preview',
-      protocol: 'RUNE',
-      provider: 'Satflow',
-      assets: []
-    }
+    schemaVersion: 1,
+    api: 'MSC API',
+    version: 'v1',
+    generatedAt,
+    window: '24h',
+    unit: 'BTC',
+    mode: 'preview',
+    methodology: 'No public ranking is emitted until both Satflow and UniSat credentials are configured and the live data contract validates.',
+    sourceLine: 'MSC API · MARKET DATA UNAVAILABLE',
+    assets: []
   };
 }
 
+function protocolPreview(generatedAt, protocol, provider) {
+  return endpointSnapshot({ generatedAt, protocol, provider, assets: [], mode: 'preview' });
+}
+
 export async function buildMarketSnapshots() {
-  if (!SATFLOW_API_KEY || !UNISAT_API_KEY) return previewSnapshots();
-
   const generatedAt = new Date().toISOString();
-  const [satflow, unisat] = await Promise.all([fetchSatflow24h(), fetchUnisat24h()]);
-  const ordinals = rank(satflow.filter((asset) => asset.type === 'ORDINAL'), 25);
-  const runes = rank(satflow.filter((asset) => asset.type === 'RUNE'), 25);
-  const homepageAssets = rank([...satflow, ...unisat], 5);
+  let satflow = null;
+  let unisat = null;
 
-  if (homepageAssets.length !== 5) throw new Error(`MSC API homepage endpoint produced ${homepageAssets.length} assets; expected 5`);
+  if (SATFLOW_API_KEY) satflow = await fetchSatflow24h();
+  if (SATFLOW_API_KEY && UNISAT_API_KEY) unisat = await fetchUnisat24h();
 
-  return {
-    manifest: {
-      schemaVersion: 1,
-      api: 'MSC API',
-      version: 'v1',
-      generatedAt,
-      mode: 'live',
-      endpoints: [
-        '/v1/market/homepage.json',
-        '/v1/market/ordinals.json',
-        '/v1/market/runes.json'
-      ],
-      providers: { ordinals: 'Satflow', runes: 'Satflow', brc20: 'UniSat' }
-    },
-    homepage: {
+  const ordinals = satflow
+    ? endpointSnapshot({
+        generatedAt,
+        protocol: 'ORDINAL',
+        provider: 'Satflow',
+        assets: rank(satflow.filter((asset) => asset.type === 'ORDINAL'), 25)
+      })
+    : protocolPreview(generatedAt, 'ORDINAL', 'Satflow');
+
+  const runes = satflow
+    ? endpointSnapshot({
+        generatedAt,
+        protocol: 'RUNE',
+        provider: 'Satflow',
+        assets: rank(satflow.filter((asset) => asset.type === 'RUNE'), 25)
+      })
+    : protocolPreview(generatedAt, 'RUNE', 'Satflow');
+
+  let homepage = homepagePreview(generatedAt);
+  if (satflow && unisat) {
+    const homepageAssets = rank([...satflow, ...unisat], 5);
+    if (homepageAssets.length !== 5) {
+      throw new Error(`MSC API homepage endpoint produced ${homepageAssets.length} assets; expected 5`);
+    }
+    homepage = {
       schemaVersion: 1,
       api: 'MSC API',
       version: 'v1',
@@ -360,8 +332,30 @@ export async function buildMarketSnapshots() {
       methodology: 'Individual Ordinals collections and Runes from Satflow indexed 24h sales including external marketplace data; individual BRC-20 tickers from UniSat day1 BTC volume. Combined and ranked by BTC volume.',
       sourceLine: 'MSC API · Satflow + UniSat',
       assets: homepageAssets
+    };
+  }
+
+  const mode = homepage.mode === 'live' ? 'live' : satflow ? 'partial' : 'preview';
+  return {
+    manifest: {
+      schemaVersion: 1,
+      api: 'MSC API',
+      version: 'v1',
+      generatedAt,
+      mode,
+      endpoints: [
+        '/v1/market/homepage.json',
+        '/v1/market/ordinals.json',
+        '/v1/market/runes.json'
+      ],
+      providers: {
+        ordinals: { name: 'Satflow', status: satflow ? 'live' : 'unconfigured' },
+        runes: { name: 'Satflow', status: satflow ? 'live' : 'unconfigured' },
+        brc20: { name: 'UniSat', status: unisat ? 'live' : UNISAT_API_KEY ? 'waiting_for_satflow' : 'unconfigured' }
+      }
     },
-    ordinals: endpointSnapshot({ generatedAt, protocol: 'ORDINAL', provider: 'Satflow', assets: ordinals }),
-    runes: endpointSnapshot({ generatedAt, protocol: 'RUNE', provider: 'Satflow', assets: runes })
+    homepage,
+    ordinals,
+    runes
   };
 }
