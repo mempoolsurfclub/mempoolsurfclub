@@ -2,7 +2,7 @@
 
 ## Purpose
 
-MSC API is the Mempool Surf Club-owned normalization layer between upstream providers and public MSC surfaces. Frontend code consumes MSC API snapshots rather than calling Satflow or UniSat directly.
+MSC API is the Mempool Surf Club-owned normalization layer between upstream market providers and public MSC surfaces. Frontend code consumes MSC API snapshots rather than calling Satflow directly.
 
 This keeps provider credentials private, gives MSC one stable data contract, and allows upstream providers to change without forcing every page to change with them.
 
@@ -10,9 +10,8 @@ This keeps provider credentials private, gives MSC one stable data contract, and
 
 Implemented in this phase:
 
-- Homepage `24 HOUR VOLUME — TOP 5` consumer reads MSC API data.
-- Satflow is the upstream provider for Ordinals and Runes market data.
-- UniSat remains the upstream provider for BRC-20 market data used by the combined homepage ranking.
+- Homepage `24 HOUR VOLUME — TOP 5` reads the MSC API Ordinals and Runes feeds and ranks them together by BTC volume.
+- Satflow is the upstream provider for both Ordinals and Runes market data.
 - MSC API publishes separate Ordinals and Runes datasets for later phases.
 - Market snapshots are scheduled every 15 minutes.
 - Public homepage output is fail-closed: preview, missing, invalid, or stale data keeps the Top 5 panel hidden.
@@ -22,6 +21,7 @@ Not implemented in this phase:
 - Tools page market instruments.
 - Ordinals hub UI.
 - Runes hub UI.
+- BRC-20 expansion.
 - Trading, wallet connections, signing, bidding, or purchase flows.
 
 ## v1 endpoints
@@ -33,7 +33,7 @@ Published on the `homepage-market-data` branch under `data/api`:
 - `/v1/market/ordinals.json`
 - `/v1/market/runes.json`
 
-A legacy compatibility copy remains at `data/homepage-market.json` during migration.
+The homepage currently consumes the separate Ordinals and Runes endpoints so Satflow alone can power the live ranking.
 
 ## Provider ownership
 
@@ -41,48 +41,42 @@ A legacy compatibility copy remains at `data/homepage-market.json` during migrat
 | --- | --- | --- |
 | Ordinals | Satflow | 24-hour Ordinals collection market activity |
 | Runes | Satflow | 24-hour Runes market activity |
-| BRC-20 contribution | UniSat | 24-hour BRC-20 BTC volume for the combined homepage ranking |
-| Homepage Top 5 | MSC API | Combined ranking derived from normalized upstream datasets |
+| Homepage Top 5 | MSC API | Top five Ordinals + Runes assets ranked by normalized BTC volume |
 
-Satflow and UniSat credentials are server-side GitHub Actions secrets. They must never be committed to theme files, JavaScript, JSON snapshots, or documentation.
+The Satflow credential is a server-side GitHub Actions secret. It must never be committed to theme files, browser JavaScript, JSON snapshots, or documentation.
 
 ## Readiness modes
 
 `preview`
-: The provider required for that endpoint is not configured. Assets must be empty.
+: Satflow is not configured. Assets are empty.
 
 `partial`
-: Manifest-only state. Satflow-backed Ordinals and Runes endpoints are live, but the combined homepage endpoint is still preview because UniSat is not ready.
+: Reserved compatibility state while the older combined homepage snapshot remains in the pipeline.
 
 `live`
-: The endpoint is backed by validated current upstream data.
+: The endpoint is backed by validated current Satflow data.
 
 ## Homepage safety contract
 
-The homepage renderer accepts only a snapshot that:
+The homepage renderer requires both the Ordinals and Runes MSC API snapshots to:
 
-1. identifies itself as `MSC API` `v1`;
-2. has `mode: live`;
-3. has a `24h` window;
-4. contains five valid ranked assets;
-5. uses only `ORDINAL`, `RUNE`, or `BRC-20` types;
-6. contains positive BTC volume values; and
-7. is no more than 45 minutes old.
+1. identify themselves as `MSC API` `v1`;
+2. have `mode: live`;
+3. have a `24h` window;
+4. contain only the expected protocol type;
+5. contain positive BTC volume values; and
+6. be no more than 45 minutes old.
 
-If any condition fails, the market panel remains hidden and the rest of the radar continues operating.
+The two feeds are combined, sorted by BTC volume, and the top five are rendered. If five valid assets cannot be produced, the market panel remains hidden and the rest of the radar continues operating.
 
 ## Refresh and publication
 
-The GitHub Actions workflow builds MSC API market snapshots every 15 minutes and publishes them to the `homepage-market-data` branch. Browser consumers poll the published snapshot every five minutes, but the underlying source snapshot changes only when the scheduled workflow publishes a new valid result.
+The GitHub Actions workflow builds MSC API market snapshots every 15 minutes and publishes them to the `homepage-market-data` branch. Browser consumers poll the published snapshots every five minutes.
 
-## Current credential dependency
+## Credential dependency
 
-Add the rotated Satflow credential to the repository Actions secrets as:
+The only credential required to activate the homepage Ordinals + Runes Top 5 is the Satflow key stored as the repository Actions secret:
 
 `SATFLOW_API_KEY`
 
-The existing combined homepage Top 5 also requires:
-
-`UNISAT_API_KEY`
-
-With only Satflow configured, the Ordinals and Runes MSC API endpoints can be live while the homepage combined ranking remains hidden.
+BRC-20 can be added later as a separate expansion without blocking the Satflow launch.
