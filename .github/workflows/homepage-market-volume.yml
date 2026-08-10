@@ -12,7 +12,7 @@ on:
       - 'assets/msc-home-volume.js'
       - 'sections/msc-home-hero.liquid'
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '7 * * * *'
   pull_request:
     paths:
       - '.github/workflows/homepage-market-volume.yml'
@@ -45,7 +45,6 @@ jobs:
       - name: Build MSC API market snapshots
         env:
           SATFLOW_API_KEY: ${{ secrets.SATFLOW_API_KEY }}
-          UNISAT_API_KEY: ${{ secrets.UNISAT_API_KEY }}
         run: node scripts/msc-api/build-market-api.mjs /tmp/msc-api
 
       - name: Validate MSC API contracts
