@@ -152,7 +152,7 @@
         .sort((a, b) => b.volumeBtc - a.volumeBtc || a.name.localeCompare(b.name))
         .slice(0, 5)
         .map((asset, index) => ({ rank: index + 1, ...asset }));
-      if (assets.length !== 5) return null;
+      if (!assets.length) return null;
 
       return {
         assets,
@@ -170,6 +170,7 @@
       root.dataset.volumePanelInitialized = 'true';
       this.root = root;
       this.panel = root.querySelector('[data-radar-volume]');
+      this.title = this.panel?.querySelector('.msc-radar-volume__title');
       this.list = root.querySelector('[data-radar-volume-list]');
       this.template = root.querySelector('[data-radar-volume-row-template]');
       this.source = root.querySelector('[data-radar-volume-source]');
@@ -189,6 +190,7 @@
         fragment.appendChild(row);
       }
       this.list.replaceChildren(fragment);
+      if (this.title) this.title.textContent = `24 HOUR VOLUME — TOP ${snapshot.assets.length}`;
       if (this.source) this.source.textContent = `${snapshot.sourceLine} · UPDATED ${updatedLabel(snapshot.generatedAt)} UTC`;
       this.panel.hidden = false;
       this.panel.dataset.volumeMode = 'live';
