@@ -41,12 +41,6 @@
   display: none;
 }
 
-/* Real Satflow market data replaces the placeholder activity readouts in this column. */
-.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field:has(.msc-radar-volume:not([hidden])) .msc-radar-block-activity,
-.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field:has(.msc-radar-volume:not([hidden])) .msc-radar-protocol-wave {
-  display: none !important;
-}
-
 @media screen and (min-width: 741px) {
   .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__zone--explore {
     top: calc(26% - 22px) !important;
