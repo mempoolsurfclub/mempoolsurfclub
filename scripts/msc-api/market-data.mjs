@@ -289,7 +289,7 @@ function homepageSnapshot(generatedAt, assets, mode) {
     unit: 'BTC',
     mode,
     methodology: mode === 'live'
-      ? 'MSC aggregates Satflow trailing-24-hour Ordinals and Runes sales, including external marketplace data, then ranks assets by completed-sale BTC volume.'
+      ? 'MSC aggregates Satflow trailing-24-hour Ordinals and Runes sales, including external marketplace data, then ranks up to five assets by completed-sale BTC volume.'
       : 'No public ranking is emitted until Satflow is configured and the live data contract validates.',
     sourceLine: mode === 'live' ? 'MSC API · Satflow · Ordinals + Runes' : 'MSC API · MARKET DATA UNAVAILABLE',
     assets
@@ -328,8 +328,8 @@ export async function buildMarketSnapshots() {
   const runesAssets = rank(satflow.filter((asset) => asset.type === 'RUNE'), 25);
   const homepageAssets = rank(satflow, 5);
 
-  if (homepageAssets.length < 5) {
-    throw new Error(`MSC API homepage endpoint produced ${homepageAssets.length} Satflow assets; expected at least 5`);
+  if (homepageAssets.length === 0) {
+    throw new Error('MSC API homepage endpoint produced no Satflow assets');
   }
 
   return {
