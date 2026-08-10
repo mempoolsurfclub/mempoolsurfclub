@@ -21,6 +21,7 @@
     const scriptUrl = new URL(script.src);
     const reviewUrl = new URL('msc-learn-sounder-readability.css', scriptUrl);
     reviewUrl.search = scriptUrl.search;
+    reviewUrl.searchParams.set('msc_readability_rev', 'v2');
 
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -147,7 +148,6 @@
       header.insertBefore(brand, headerTitle);
       brand.append(headerTitle, headerMeta);
     }
-
     const status = document.createElement('div');
     status.className = 'msc-sonar-status';
     status.innerHTML = `
@@ -168,8 +168,8 @@
 
       if (!region) {
         status.dataset.region = 'overview';
-        statusDepth.textContent = 'MSC SONAR';
-        statusGuide.textContent = 'LEARN SYSTEM';
+        statusDepth.textContent = '';
+        statusGuide.textContent = '';
         status.setAttribute('aria-label', 'MSC SONAR Learn System overview');
         return;
       }
@@ -497,7 +497,6 @@
 
       regionList.appendChild(link);
     });
-
     status.querySelectorAll('.msc-sonar-status__node').forEach((node) => {
       const region = regions.find((item) => item.key === node.dataset.region);
       if (!region) return;
