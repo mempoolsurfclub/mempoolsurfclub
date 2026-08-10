@@ -21,6 +21,7 @@
     const scriptUrl = new URL(script.src);
     const reviewUrl = new URL('msc-learn-sounder-readability.css', scriptUrl);
     reviewUrl.search = scriptUrl.search;
+    reviewUrl.searchParams.set('msc_readability_rev', 'v2');
 
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -168,8 +169,8 @@
 
       if (!region) {
         status.dataset.region = 'overview';
-        statusDepth.textContent = 'MSC SONAR';
-        statusGuide.textContent = 'LEARN SYSTEM';
+        statusDepth.textContent = '';
+        statusGuide.textContent = '';
         status.setAttribute('aria-label', 'MSC SONAR Learn System overview');
         return;
       }
