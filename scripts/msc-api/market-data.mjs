@@ -124,6 +124,8 @@ function satflowName(row) {
     row?.collection_name,
     row?.collectionSlug,
     row?.collection_slug,
+    row?.bid?.collectionSlug,
+    row?.bid?.collection_slug,
     row?.token?.collection_name,
     row?.token?.collection_slug,
     row?.name,
@@ -143,7 +145,8 @@ function satflowType(row, name) {
     row?.collection?.type,
     row?.token?.protocol,
     row?.sale?.protocol,
-    row?.ask?.protocol
+    row?.ask?.protocol,
+    row?.bid?.type
   ].map(clean).join(' ').toLowerCase();
 
   if (probe.includes('rune')) return 'RUNE';
@@ -155,6 +158,10 @@ function satflowType(row, name) {
     row?.collectionData ||
     row?.collectionSlug ||
     row?.collection_slug ||
+    row?.bid?.collectionSlug ||
+    row?.bid?.collection_slug ||
+    row?.bid?.inscriptionId ||
+    row?.bid?.inscription_id ||
     row?.token?.collection_name ||
     row?.token?.collection_slug
   ) return 'ORDINAL';
