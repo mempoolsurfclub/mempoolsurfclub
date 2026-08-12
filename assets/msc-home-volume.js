@@ -5,7 +5,7 @@
   const DATA_URL = 'https://raw.githubusercontent.com/mempoolsurfclub/mempoolsurfclub/homepage-market-data/data/api/v1/market/homepage.json';
   const REFRESH_MS = 60 * 60 * 1000;
   const DATA_CACHE_BUCKET_MS = 5 * 60 * 1000;
-  const MAX_AGE_MS = 90 * 60 * 1000;
+  const MAX_AGE_MS = 6 * 60 * 60 * 1000;
   const REQUEST_TIMEOUT_MS = 10000;
   const TYPES = new Set(['ORDINAL', 'RUNE']);
   const MED_VOLUME_BTC = 0.25;
