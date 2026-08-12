@@ -4,6 +4,22 @@
   top: -0.5px;
 }
 
+.msc-signal-card[data-msc-ecosystem-radar] {
+  display: flex;
+  flex-direction: column;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field {
+  order: 1;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-strip {
+  order: 2;
+  width: 100%;
+  margin: .9rem auto 0;
+  box-sizing: border-box;
+}
+
 .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__labels > span:first-child {
   display: inline-flex;
   align-items: center;
