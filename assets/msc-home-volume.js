@@ -140,8 +140,8 @@
   function createMarketRow(asset, index) {
     const row = document.createElement('li');
     row.className = 'msc-radar-block-activity__row';
-    row.style.setProperty('gap', '.45rem');
-    row.style.setProperty('padding-bottom', '.22rem');
+    row.style.setProperty('gap', '.28rem');
+    row.style.setProperty('padding-bottom', '.26rem');
 
     const name = document.createElement('span');
     name.className = 'msc-radar-block-activity__label';
@@ -151,8 +151,9 @@
     name.style.setProperty('overflow', 'hidden');
     name.style.setProperty('text-overflow', 'ellipsis');
     name.style.setProperty('white-space', 'nowrap');
-    name.style.setProperty('font-size', '.7rem', 'important');
-    name.style.setProperty('letter-spacing', '.04em', 'important');
+    name.style.setProperty('font-size', '.9rem', 'important');
+    name.style.setProperty('letter-spacing', '.02em', 'important');
+    name.style.setProperty('line-height', '1.08', 'important');
 
     const volume = document.createElement('strong');
     volume.className = 'msc-radar-block-activity__value';
@@ -160,7 +161,8 @@
     volume.style.setProperty('position', 'static', 'important');
     volume.style.setProperty('left', 'auto', 'important');
     volume.style.setProperty('margin-right', '0', 'important');
-    volume.style.setProperty('font-size', '.76rem', 'important');
+    volume.style.setProperty('font-size', '.9rem', 'important');
+    volume.style.setProperty('line-height', '1.08', 'important');
 
     row.append(name, volume);
     return row;
@@ -194,7 +196,7 @@
       this.title.textContent = 'BTC ASSETS';
       this.context.textContent = '24 HOUR VOLUME:';
       this.context.style.setProperty('margin-bottom', '.42rem', 'important');
-      this.list.style.setProperty('gap', '.18rem', 'important');
+      this.list.style.setProperty('gap', '.22rem', 'important');
 
       const fragment = document.createDocumentFragment();
       snapshot.assets.forEach((asset, index) => fragment.appendChild(createMarketRow(asset, index)));
