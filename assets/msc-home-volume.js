@@ -141,7 +141,7 @@
     const row = document.createElement('li');
     row.className = 'msc-radar-block-activity__row';
     row.style.setProperty('gap', '.28rem');
-    row.style.setProperty('padding-bottom', '.26rem');
+    row.style.setProperty('padding-bottom', '.30rem');
 
     const name = document.createElement('span');
     name.className = 'msc-radar-block-activity__label';
@@ -196,7 +196,7 @@
       this.title.textContent = 'BTC ASSETS';
       this.context.textContent = '24 HOUR VOLUME:';
       this.context.style.setProperty('margin-bottom', '.42rem', 'important');
-      this.list.style.setProperty('gap', '.22rem', 'important');
+      this.list.style.setProperty('gap', '.42rem', 'important');
 
       const fragment = document.createDocumentFragment();
       snapshot.assets.forEach((asset, index) => fragment.appendChild(createMarketRow(asset, index)));
