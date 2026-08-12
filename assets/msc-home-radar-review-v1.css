@@ -7,6 +7,7 @@
 .msc-signal-card[data-msc-ecosystem-radar] {
   display: flex;
   flex-direction: column;
+  gap: clamp(1.25rem, 2vw, 1.6rem);
 }
 
 .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field {
@@ -15,8 +16,8 @@
 
 .msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-strip {
   order: 2;
-  width: auto;
-  margin: clamp(1.25rem, 2vw, 1.6rem) clamp(1.25rem, 2vw, 1.6rem) 0;
+  width: 100%;
+  margin: 0 auto;
   box-sizing: border-box;
 }
 
