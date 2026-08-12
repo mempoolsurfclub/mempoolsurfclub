@@ -253,20 +253,91 @@
           </div>
         </div>
         <div class="msc-depth-map__brief-visual" aria-hidden="true">
-          <svg class="msc-sonar-wireframe" data-wireframe="overview" viewBox="0 0 260 190" focusable="false" style="width: 112%; height: 112%;">
-            <ellipse class="msc-sonar-wireframe__accent" cx="130" cy="36" rx="31" ry="8" />
-            <path class="msc-sonar-wireframe__accent" d="M99 36 L103 61 C112 69 148 69 157 61 L161 36" />
-            <ellipse class="msc-sonar-wireframe__mid" cx="130" cy="61" rx="27" ry="7" />
-            <path class="msc-sonar-wireframe__mid" d="M116 66 L120 79 M144 66 L140 79" />
-            <ellipse class="msc-sonar-wireframe__accent" cx="130" cy="82" rx="14" ry="4" />
-            <path class="msc-sonar-wireframe__accent" d="M116 82 L122 94 L138 94 L144 82" />
-            <line class="msc-sonar-wireframe__mid" x1="130" y1="94" x2="130" y2="101" />
-            <path class="msc-sonar-wireframe__pulse" d="M107 103 C119 112 141 112 153 103" />
-            <path class="msc-sonar-wireframe__pulse msc-sonar-wireframe__mid" d="M91 116 C111 132 149 132 169 116" />
-            <path class="msc-sonar-wireframe__pulse msc-sonar-wireframe__faint" d="M73 130 C103 153 157 153 187 130" />
-            <path class="msc-sonar-wireframe__ghost" d="M27 159 C55 149 80 166 109 157 S163 147 195 158 S224 164 244 156" />
-            <path class="msc-sonar-wireframe__ghost" d="M23 168 C52 159 81 176 111 167 S166 157 198 168 S226 174 248 166" />
-            <path class="msc-sonar-wireframe__ghost" d="M34 177 C61 170 85 184 114 177 S164 168 190 177 S219 184 238 178" />
+          <svg class="msc-sonar-wireframe" data-wireframe="overview" viewBox="0 0 260 190" focusable="false" style="width: 112%; height: 112%; animation: none;">
+            <style>
+              .msc-sonar-idle__water {
+                animation: mscSonarIdleWater 9s ease-in-out infinite;
+              }
+              .msc-sonar-idle__buoy {
+                transform-box: fill-box;
+                transform-origin: 50% 42%;
+                animation: mscSonarIdleBuoy 8s ease-in-out infinite;
+              }
+              .msc-sonar-idle__pulse {
+                transform-box: view-box;
+                transform-origin: 130px 103px;
+                animation: mscSonarIdlePulse 6s ease-out infinite;
+              }
+              .msc-sonar-idle__pulse--2 { animation-delay: -2s; }
+              .msc-sonar-idle__pulse--3 { animation-delay: -4s; }
+              @keyframes mscSonarIdleWater {
+                0%, 100% { transform: translate(0, 0); }
+                50% { transform: translate(-5px, 1.4px); }
+              }
+              @keyframes mscSonarIdleBuoy {
+                0%, 100% { transform: translateY(0) rotate(-1deg); }
+                50% { transform: translateY(1.5px) rotate(1deg); }
+              }
+              @keyframes mscSonarIdlePulse {
+                0% { opacity: 0; transform: translateY(-2px) scale(.72); }
+                15% { opacity: .56; }
+                72% { opacity: .18; }
+                100% { opacity: 0; transform: translateY(48px) scale(1.72); }
+              }
+              @media (prefers-reduced-motion: reduce) {
+                .msc-sonar-idle__water,
+                .msc-sonar-idle__buoy,
+                .msc-sonar-idle__pulse {
+                  animation: none !important;
+                }
+                .msc-sonar-idle__pulse { opacity: .18; }
+                .msc-sonar-idle__pulse--2,
+                .msc-sonar-idle__pulse--3 { display: none; }
+              }
+            </style>
+
+            <g class="msc-sonar-idle__water">
+              <path class="msc-sonar-wireframe__mid" d="M-14 55 C16 49 43 61 73 55 S126 49 158 55 S215 61 274 54" />
+              <path class="msc-sonar-wireframe__ghost" d="M-12 61 C20 56 47 67 78 61 S132 56 165 61 S220 67 272 60" />
+            </g>
+
+            <g class="msc-sonar-idle__buoy">
+              <ellipse class="msc-sonar-wireframe__mid" cx="130" cy="27" rx="7" ry="2.3" />
+              <path class="msc-sonar-wireframe__mid" d="M130 29 V39 M118 33 L108 44 M142 33 L152 44" />
+              <ellipse class="msc-sonar-wireframe__faint" cx="130" cy="33" rx="13" ry="3.5" />
+              <path class="msc-sonar-wireframe__faint" d="M117 33 L108 44 M143 33 L152 44" />
+
+              <ellipse class="msc-sonar-wireframe__accent" cx="130" cy="47" rx="34" ry="8" />
+              <path class="msc-sonar-wireframe__accent" d="M96 47 C98 56 103 63 112 68 C122 73 138 73 148 68 C157 63 162 56 164 47" />
+              <ellipse class="msc-sonar-wireframe__mid" cx="130" cy="68" rx="22" ry="6" />
+              <path class="msc-sonar-wireframe__mid" d="M108 49 C111 57 116 64 122 68 M152 49 C149 57 144 64 138 68" />
+              <path class="msc-sonar-wireframe__ghost" d="M101 43 C113 37 147 37 159 43 M112 58 C121 62 139 62 148 58" />
+              <path class="msc-sonar-wireframe__faint" d="M130 39 V72" />
+
+              <path class="msc-sonar-wireframe__accent" d="M125 72 L126 88 M135 72 L134 88" />
+              <ellipse class="msc-sonar-wireframe__mid" cx="130" cy="88" rx="5" ry="2" />
+              <ellipse class="msc-sonar-wireframe__accent" cx="130" cy="92" rx="13" ry="3.8" />
+              <path class="msc-sonar-wireframe__accent" d="M117 92 L121 102 C126 105 134 105 139 102 L143 92" />
+              <ellipse class="msc-sonar-wireframe__mid" cx="130" cy="102" rx="9" ry="2.8" />
+              <path class="msc-sonar-wireframe__faint" d="M123 94 L126 101 M137 94 L134 101" />
+              <line class="msc-sonar-wireframe__mid" x1="130" y1="105" x2="130" y2="109" />
+            </g>
+
+            <g class="msc-sonar-idle__pulse msc-sonar-idle__pulse--1" opacity=".18">
+              <path class="msc-sonar-wireframe__mid" d="M112 108 C121 115 139 115 148 108" />
+            </g>
+            <g class="msc-sonar-idle__pulse msc-sonar-idle__pulse--2" opacity=".18">
+              <path class="msc-sonar-wireframe__mid" d="M112 108 C121 115 139 115 148 108" />
+            </g>
+            <g class="msc-sonar-idle__pulse msc-sonar-idle__pulse--3" opacity=".18">
+              <path class="msc-sonar-wireframe__mid" d="M112 108 C121 115 139 115 148 108" />
+            </g>
+
+            <g class="msc-sonar-wireframe__ghost">
+              <path d="M18 170 C48 162 76 176 106 168 S159 160 190 169 S224 176 246 169" />
+              <path d="M29 181 C58 174 83 185 112 179 S162 171 191 179 S220 185 238 181" />
+              <path d="M77 165 l6 -2 M176 169 l7 2 M211 176 l5 -1" />
+            </g>
           </svg>
 
           <svg class="msc-sonar-wireframe" data-wireframe="basics" viewBox="0 0 260 190" focusable="false">
