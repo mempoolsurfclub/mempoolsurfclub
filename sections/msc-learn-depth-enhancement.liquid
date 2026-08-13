@@ -3,26 +3,24 @@
 
 <style>
   @media screen and (min-width: 991px) {
-    .msc-depth-map__brief[data-region="overview"] .msc-depth-map__brief-visual .msc-sonar-wireframe[data-wireframe="overview"] {
-      width: 112% !important;
-      height: 112% !important;
-      max-width: none !important;
-      max-height: none !important;
-      transform: translate(-50%, -48%) perspective(900px) rotateX(4deg) rotateY(-9deg) !important;
+    .msc-depth-map__brief {
+      top: 3rem !important;
+      right: 3rem !important;
+      bottom: 3rem !important;
+    }
+
+    .msc-depth-map__brief-visual {
+      display: none !important;
+    }
+
+    .msc-depth-map__title {
+      font-size: 1.72rem !important;
+      line-height: 1.05 !important;
     }
   }
 </style>
 
 <script src="{{ 'msc-learn-depth-chart.js' | asset_url }}" defer></script>
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const idleSonar = document.querySelector('.msc-depth-map__brief[data-region="overview"] .msc-sonar-wireframe[data-wireframe="overview"]');
-    if (!idleSonar) return;
-
-    idleSonar.setAttribute('viewBox', '32 20 196 150');
-    idleSonar.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-  }, { once: true });
-</script>
 
 {% schema %}
 {
