@@ -39,3 +39,7 @@
     <span class="msc-search-form__arrow" aria-hidden="true">→</span>
   </button>
 </form>
+
+{%- if form_modifier == 'learn' -%}
+  <script src="{{ 'msc-learn-sonar-copy.js' | asset_url }}" defer></script>
+{%- endif -%}
