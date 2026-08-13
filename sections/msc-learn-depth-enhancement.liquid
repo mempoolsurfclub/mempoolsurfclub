@@ -3,11 +3,12 @@
 
 <style>
   @media screen and (min-width: 991px) {
-    .msc-depth-map__brief[data-region="overview"] .msc-sonar-wireframe[data-wireframe="overview"] {
-      width: 150% !important;
-      height: 150% !important;
+    .msc-depth-map__brief[data-region="overview"] .msc-depth-map__brief-visual .msc-sonar-wireframe[data-wireframe="overview"] {
+      width: 112% !important;
+      height: 112% !important;
       max-width: none !important;
       max-height: none !important;
+      transform: translate(-50%, -48%) perspective(900px) rotateX(4deg) rotateY(-9deg) scale(1.35) !important;
     }
   }
 </style>
