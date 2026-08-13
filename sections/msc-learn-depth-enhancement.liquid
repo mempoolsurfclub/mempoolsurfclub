@@ -1,5 +1,15 @@
 {{ 'msc-learn-depth-chart.css' | asset_url | stylesheet_tag }}
 {{ 'msc-learn-hero-wide.css' | asset_url | stylesheet_tag }}
+
+<style>
+  @media screen and (min-width: 991px) {
+    .msc-depth-map__brief[data-region="overview"] .msc-sonar-wireframe[data-wireframe="overview"] {
+      width: 150% !important;
+      height: 150% !important;
+    }
+  }
+</style>
+
 <script src="{{ 'msc-learn-depth-chart.js' | asset_url }}" defer></script>
 
 {% schema %}
