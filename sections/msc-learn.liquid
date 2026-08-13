@@ -3,6 +3,25 @@
 <link rel="stylesheet" href="{{ 'msc-learn-hero-wide.css' | asset_url }}" data-msc-learn-hero-wide>
 <script src="{{ 'msc-learn-depth-chart.js' | asset_url }}" defer></script>
 
+<style>
+  @media screen and (min-width: 991px) {
+    .msc-learn .msc-depth-map__brief {
+      top: 3rem !important;
+      right: 3rem !important;
+      bottom: 3rem !important;
+    }
+
+    .msc-learn .msc-depth-map__brief-visual {
+      display: none !important;
+    }
+
+    .msc-learn .msc-depth-map__title {
+      font-size: 1.72rem !important;
+      line-height: 1.05 !important;
+    }
+  }
+</style>
+
 {%- assign search_input_id = 'MscLearnSearchInput-' | append: section.id -%}
 
 <section class="msc-shell msc-learn" id="MscLearn-{{ section.id }}">
