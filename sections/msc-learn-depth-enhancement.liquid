@@ -8,12 +8,21 @@
       height: 112% !important;
       max-width: none !important;
       max-height: none !important;
-      transform: translate(-50%, -48%) perspective(900px) rotateX(4deg) rotateY(-9deg) scale(1.35) !important;
+      transform: translate(-50%, -48%) perspective(900px) rotateX(4deg) rotateY(-9deg) !important;
     }
   }
 </style>
 
 <script src="{{ 'msc-learn-depth-chart.js' | asset_url }}" defer></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const idleSonar = document.querySelector('.msc-depth-map__brief[data-region="overview"] .msc-sonar-wireframe[data-wireframe="overview"]');
+    if (!idleSonar) return;
+
+    idleSonar.setAttribute('viewBox', '32 20 196 150');
+    idleSonar.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+  }, { once: true });
+</script>
 
 {% schema %}
 {
