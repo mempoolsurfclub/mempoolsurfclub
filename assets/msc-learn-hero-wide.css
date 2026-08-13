@@ -88,6 +88,45 @@
     top: calc(18.5% + 3rem) !important;
   }
 
+  /* Match active depth-panel heading hierarchy to the Idle MSC SONAR panel. */
+  .msc-learn .msc-depth-map__brief:not([data-region="overview"]) .msc-depth-map__brief-detail {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .msc-learn .msc-depth-map__brief:not([data-region="overview"]) .msc-depth-map__brief-eyebrow {
+    display: none !important;
+  }
+
+  .msc-learn .msc-depth-map__brief:not([data-region="overview"]) .msc-depth-map__brief-title {
+    order: 1;
+    margin-top: 0 !important;
+    color: rgba(251, 248, 239, .98);
+    font-size: 1.72rem !important;
+    font-weight: 790;
+    letter-spacing: .015em;
+    line-height: 1.05 !important;
+  }
+
+  .msc-learn .msc-depth-map__brief:not([data-region="overview"]) .msc-depth-map__brief-depth {
+    order: 2;
+    margin-top: .42rem !important;
+    color: rgba(212, 190, 153, .92);
+    font-size: .78rem;
+    font-weight: 760;
+    letter-spacing: .16em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .msc-learn .msc-depth-map__brief:not([data-region="overview"]) .msc-depth-map__brief-copy {
+    order: 3;
+  }
+
+  .msc-learn .msc-depth-map__brief:not([data-region="overview"]) .msc-depth-map__brief-footer {
+    order: 4;
+  }
+
   .msc-learn .msc-depth-map__contours {
     opacity: .96;
   }
