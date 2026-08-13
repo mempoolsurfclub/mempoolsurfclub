@@ -83,6 +83,11 @@
     box-shadow: inset 0 0 0 1px rgba(251, 248, 239, .018), inset 0 -7rem 9rem rgba(4, 15, 21, .14);
   }
 
+  /* Equal 3rem clearance below the surface wave, at right, and at bottom. */
+  .msc-learn .msc-depth-chart .msc-depth-map__brief {
+    top: calc(18.5% + 3rem) !important;
+  }
+
   .msc-learn .msc-depth-map__contours {
     opacity: .96;
   }
