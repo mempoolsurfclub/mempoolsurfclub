@@ -1,0 +1,37 @@
+(() => {
+  const copy = {
+    overview: 'Navigate Bitcoin by depth. Start at the surface with the ideas needed to understand what Bitcoin is and how it is used, then descend through the network, systems built around it, protocol mechanics, and the wider ecosystem. Each depth groups related guides so you can build context progressively or move directly to the part of Bitcoin you want to explore.',
+    basics: 'Build the foundation for everything that follows. Learn what Bitcoin is, how bitcoin is owned and transferred, how transactions work, and why scarcity, verification, security, and privacy matter. Surface guides establish the core concepts and vocabulary needed to understand the network and evaluate deeper technical topics without treating Bitcoin as a black box.',
+    network: 'Follow a transaction through the distributed system that makes Bitcoin work. Explore nodes, mempools, miners, blocks, proof of work, chainwork, consensus, and network upgrades. These guides explain how independent participants communicate, verify the same rules, order transactions, and converge on a shared transaction history without relying on a central operator.',
+    building: 'Explore the systems and protocols built around Bitcoin’s base layer. Learn how Layer 2 networks, digital assets, payment systems, and emerging protocols extend what people can do with Bitcoin. The focus here is not only how these systems work, but also the assumptions, tradeoffs, dependencies, and boundaries introduced when functionality moves beyond the base protocol.',
+    development: 'Go inside the machinery that defines and implements Bitcoin. Study Bitcoin Core, BIPs, Script, cryptography, transaction and block rules, testing, infrastructure, and software policy. These guides separate consensus rules from implementation behavior and show how proposed changes are designed, reviewed, tested, and deployed in a system where compatibility and verification matter.',
+    ecosystem: 'Map the people, organizations, infrastructure, and markets that have formed around Bitcoin. Explore builders, open-source projects, companies, service providers, marketplaces, communities, conferences, and important moments in Bitcoin’s history. This depth provides context for how the ecosystem develops while keeping a critical distinction clear: participation and influence are not the same as authority over the Bitcoin protocol.'
+  };
+
+  const applyCopy = (brief) => {
+    if (!brief) return;
+    const region = brief.dataset.region || 'overview';
+    const target = region === 'overview'
+      ? brief.querySelector('.msc-depth-map__brief-system-copy')
+      : brief.querySelector('.msc-depth-map__brief-copy');
+    if (target && copy[region]) target.textContent = copy[region];
+  };
+
+  const bind = () => {
+    const brief = document.querySelector('.msc-learn .msc-depth-map__brief');
+    if (!brief || brief.dataset.mscCopyBound === 'true') return;
+    brief.dataset.mscCopyBound = 'true';
+    applyCopy(brief);
+    new MutationObserver(() => applyCopy(brief)).observe(brief, {
+      attributes: true,
+      attributeFilter: ['data-region']
+    });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bind, { once: true });
+  } else {
+    bind();
+  }
+  document.addEventListener('shopify:section:load', bind);
+})();
