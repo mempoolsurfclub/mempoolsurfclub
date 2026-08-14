@@ -1,6 +1,10 @@
 /* MSC Learn hero reflow — keeps the Learn intro compact and gives the Knowledge Sounder full horizontal space. */
 
 @media screen and (min-width: 991px) {
+  .msc-learn {
+    padding-top: clamp(3.8rem, 5.8vw, 6.4rem);
+  }
+
   .msc-learn .msc-learn-hero {
     display: grid;
     grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr);
