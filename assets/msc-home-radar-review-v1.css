@@ -15,6 +15,11 @@
   order: 1;
 }
 
+/* Keep the radar graphics intact while blocking the square field grid inside the circular disc. */
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__radar-disc {
+  background-color: var(--msc-deep) !important;
+}
+
 .msc-signal-card[data-msc-ecosystem-radar] .msc-live-block-strip {
   order: 2;
   width: 100%;
@@ -108,6 +113,15 @@
 
   .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-btc {
     top: 3.85rem !important;
+  }
+
+  /* Center the BTC ASSETS content in the open band between BTC price and BTC ASSET SURF. */
+  .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-block-activity {
+    top: 6.25rem !important;
+    bottom: 6.25rem !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .msc-signal-card[data-msc-ecosystem-radar] .msc-radar-btc__label {
