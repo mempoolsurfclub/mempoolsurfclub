@@ -17,6 +17,81 @@
         "padding_bottom": 28
       }
     },
+    "msc_explore_atlas": {
+      "type": "msc-explore-atlas-shell",
+      "blocks": {
+        "region_ordinals": {
+          "type": "region",
+          "settings": {
+            "title": "ORDINALS",
+            "link": ""
+          }
+        },
+        "region_runes": {
+          "type": "region",
+          "settings": {
+            "title": "RUNES",
+            "link": ""
+          }
+        },
+        "region_wallets": {
+          "type": "region",
+          "settings": {
+            "title": "WALLETS",
+            "link": ""
+          }
+        },
+        "region_marketplaces": {
+          "type": "region",
+          "settings": {
+            "title": "MARKETPLACES",
+            "link": ""
+          }
+        },
+        "region_mining": {
+          "type": "region",
+          "settings": {
+            "title": "MINING",
+            "link": ""
+          }
+        },
+        "region_payments": {
+          "type": "region",
+          "settings": {
+            "title": "PAYMENTS",
+            "link": ""
+          }
+        },
+        "region_exchanges": {
+          "type": "region",
+          "settings": {
+            "title": "EXCHANGES",
+            "link": ""
+          }
+        },
+        "region_network": {
+          "type": "region",
+          "settings": {
+            "title": "NETWORK",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "region_ordinals",
+        "region_runes",
+        "region_wallets",
+        "region_marketplaces",
+        "region_mining",
+        "region_payments",
+        "region_exchanges",
+        "region_network"
+      ],
+      "settings": {
+        "heading": "EXPLORE THE BITCOIN OCEAN.",
+        "supporting_copy": "<p>Navigate the Bitcoin ecosystem through eight charted regions. The Atlas will connect each region to the projects, platforms, companies, and infrastructure inside it.</p>"
+      }
+    },
     "msc_explore": {
       "type": "msc-explore",
       "blocks": {
@@ -139,6 +214,7 @@
   },
   "order": [
     "main",
+    "msc_explore_atlas",
     "msc_explore"
   ]
 }
