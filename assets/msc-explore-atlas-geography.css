@@ -151,6 +151,7 @@
   fill: rgba(212, 190, 153, .46);
   font-size: 8.5px;
   letter-spacing: .18em;
+  text-anchor: middle;
 }
 
 .msc-atlas-map__region-label {
@@ -158,7 +159,36 @@
   font-size: 13.5px;
   font-weight: 700;
   letter-spacing: .085em;
+  text-anchor: middle;
 }
+
+/* Center each region name/index in the visual mass of its actual territory.
+ * These transforms intentionally follow the irregular v4 geography rather than
+ * the original pre-redraw label coordinates in the SVG markup.
+ */
+.msc-atlas-map__region[data-atlas-region-shape="mining"] .msc-atlas-map__region-label { transform: translate(110px, -10px); }
+.msc-atlas-map__region[data-atlas-region-shape="mining"] .msc-atlas-map__region-index { transform: translate(110px, -7px); }
+
+.msc-atlas-map__region[data-atlas-region-shape="ordinals"] .msc-atlas-map__region-label { transform: translate(76px, -12px); }
+.msc-atlas-map__region[data-atlas-region-shape="ordinals"] .msc-atlas-map__region-index { transform: translate(76px, -9px); }
+
+.msc-atlas-map__region[data-atlas-region-shape="runes"] .msc-atlas-map__region-label { transform: translate(47px, -15px); }
+.msc-atlas-map__region[data-atlas-region-shape="runes"] .msc-atlas-map__region-index { transform: translate(47px, -12px); }
+
+.msc-atlas-map__region[data-atlas-region-shape="wallets"] .msc-atlas-map__region-label { transform: translate(123px, -37px); }
+.msc-atlas-map__region[data-atlas-region-shape="wallets"] .msc-atlas-map__region-index { transform: translate(123px, -34px); }
+
+.msc-atlas-map__region[data-atlas-region-shape="marketplaces"] .msc-atlas-map__region-label { transform: translate(179px, -13px); }
+.msc-atlas-map__region[data-atlas-region-shape="marketplaces"] .msc-atlas-map__region-index { transform: translate(179px, -10px); }
+
+.msc-atlas-map__region[data-atlas-region-shape="payments"] .msc-atlas-map__region-label { transform: translate(2px, -66px); }
+.msc-atlas-map__region[data-atlas-region-shape="payments"] .msc-atlas-map__region-index { transform: translate(2px, -63px); }
+
+.msc-atlas-map__region[data-atlas-region-shape="exchanges"] .msc-atlas-map__region-label { transform: translate(79px, 43px); }
+.msc-atlas-map__region[data-atlas-region-shape="exchanges"] .msc-atlas-map__region-index { transform: translate(79px, 46px); }
+
+.msc-atlas-map__region[data-atlas-region-shape="network"] .msc-atlas-map__region-label { transform: translate(76px, -6px); }
+.msc-atlas-map__region[data-atlas-region-shape="network"] .msc-atlas-map__region-index { transform: translate(76px, -3px); }
 
 .msc-atlas-map__region:hover .msc-atlas-map__region-shape,
 .msc-atlas-map__region:focus-visible .msc-atlas-map__region-shape,
