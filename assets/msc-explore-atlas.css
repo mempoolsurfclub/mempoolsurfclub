@@ -1,0 +1,497 @@
+/* MSC Explore Atlas — nautical chart viewport and interaction states. */
+
+.msc-explore-atlas-shell {
+  padding: clamp(5.5rem, 7vw, 7.8rem) 0 0;
+}
+
+.msc-explore-atlas-intro {
+  max-width: 98rem;
+}
+
+.msc-explore-atlas-intro__kicker {
+  margin-bottom: 1.8rem;
+}
+
+.msc-explore-atlas-intro__title {
+  max-width: 14ch;
+  margin: 0 0 1.4rem;
+}
+
+.msc-explore-atlas-intro__copy {
+  max-width: 82rem;
+  margin: 0;
+}
+
+.msc-explore-atlas-intro__copy p {
+  margin: 0;
+}
+
+.msc-atlas-window {
+  display: grid;
+  grid-template-rows: 10% 65% 25%;
+  width: 100%;
+  height: clamp(52rem, 58vw, 68rem);
+  margin-top: clamp(2.8rem, 4vw, 4.2rem);
+  overflow: hidden;
+  border: 1px solid rgba(212, 190, 153, .42);
+  border-radius: 20px;
+  background: rgba(16, 40, 45, .58);
+  box-shadow: 0 24px 70px rgba(16, 40, 45, .22);
+  backdrop-filter: blur(18px);
+}
+
+.msc-atlas-window__top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: stretch;
+  border-bottom: 1px solid rgba(212, 190, 153, .32);
+  background: rgba(16, 40, 45, .44);
+}
+
+.msc-atlas-window__identity,
+.msc-atlas-window__readout {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  padding: 1rem 1.6rem;
+}
+
+.msc-atlas-window__readout {
+  min-width: 13.5rem;
+  border-left: 1px solid rgba(212, 190, 153, .24);
+}
+
+.msc-atlas-window__identity span,
+.msc-atlas-window__readout span,
+.msc-atlas-region__index,
+.msc-atlas-region__state,
+.msc-atlas-window__coord,
+.msc-atlas-inspect__kicker,
+.msc-atlas-inspect__meta {
+  color: rgba(212, 190, 153, .72);
+  font-size: .92rem;
+  line-height: 1.2;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.msc-atlas-window__identity strong,
+.msc-atlas-window__readout strong {
+  margin-top: .35rem;
+  color: var(--msc-paper-soft);
+  font-size: 1.15rem;
+  line-height: 1.1;
+  letter-spacing: .08em;
+}
+
+.msc-explore-atlas-shell .msc-atlas-window__viewport {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(212, 190, 153, .32);
+  background:
+    radial-gradient(circle at 50% 46%, rgba(212, 190, 153, .07), transparent 39%),
+    linear-gradient(145deg, rgba(23, 60, 67, .78), rgba(16, 40, 45, .94));
+}
+
+.msc-explore-atlas-shell .msc-atlas-window__viewport::before,
+.msc-explore-atlas-shell .msc-atlas-window__viewport::after {
+  display: none !important;
+}
+
+.msc-atlas-window__coord {
+  position: absolute;
+  z-index: 4;
+  pointer-events: none;
+  opacity: .68;
+}
+
+.msc-atlas-window__coord--nw {
+  top: 1.25rem;
+  left: 1.5rem;
+}
+
+.msc-atlas-window__coord--se {
+  right: 1.5rem;
+  bottom: 1.25rem;
+}
+
+.msc-atlas-map {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.msc-atlas-map__ocean {
+  fill: rgba(16, 40, 45, .16);
+}
+
+.msc-atlas-map__major-grid,
+.msc-atlas-map__minor-grid {
+  pointer-events: none;
+}
+
+.msc-atlas-map__minor-grid {
+  opacity: .38;
+}
+
+.msc-atlas-map__major-grid {
+  opacity: .55;
+}
+
+.msc-atlas-map__contour,
+.msc-atlas-map__route,
+.msc-atlas-map__current {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.msc-atlas-map__contour {
+  stroke: rgba(212, 190, 153, .16);
+  stroke-width: 1;
+}
+
+.msc-atlas-map__route {
+  stroke: rgba(212, 190, 153, .32);
+  stroke-width: 1;
+  stroke-dasharray: 7 8;
+}
+
+.msc-atlas-map__current {
+  stroke: rgba(212, 190, 153, .18);
+  stroke-width: 1.2;
+  stroke-dasharray: 2 8;
+  animation: msc-atlas-current 18s linear infinite;
+}
+
+.msc-atlas-map__region {
+  cursor: pointer;
+  outline: none;
+  opacity: .82;
+  transition: opacity .22s ease, filter .22s ease;
+}
+
+.msc-atlas-map__region-shape {
+  fill: rgba(212, 190, 153, .045);
+  stroke: rgba(212, 190, 153, .72);
+  stroke-width: 1.4;
+  vector-effect: non-scaling-stroke;
+  transition: fill .22s ease, stroke .22s ease;
+}
+
+.msc-atlas-map__region-shape--inner {
+  fill: none;
+  stroke: rgba(212, 190, 153, .25);
+  stroke-width: .8;
+  stroke-dasharray: 4 5;
+  pointer-events: none;
+}
+
+.msc-atlas-map__region-index {
+  fill: rgba(212, 190, 153, .62);
+  font-size: 10px;
+  letter-spacing: .16em;
+  pointer-events: none;
+}
+
+.msc-atlas-map__region-label {
+  fill: var(--msc-paper-soft);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  pointer-events: none;
+}
+
+.msc-atlas-map__region:hover .msc-atlas-map__region-shape,
+.msc-atlas-map__region:focus-visible .msc-atlas-map__region-shape,
+.msc-atlas-map__region.is-active .msc-atlas-map__region-shape {
+  fill: rgba(212, 190, 153, .12);
+  stroke: rgba(251, 248, 239, .92);
+}
+
+.msc-atlas-map__region:focus-visible .msc-atlas-map__region-shape {
+  stroke-width: 2.2;
+}
+
+.msc-atlas-window.has-active-region .msc-atlas-map__region:not(.is-active) {
+  opacity: .16;
+}
+
+.msc-atlas-map__entities {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease;
+}
+
+.msc-atlas-map__region.is-active .msc-atlas-map__entities {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.msc-atlas-map__entity {
+  cursor: pointer;
+  outline: none;
+}
+
+.msc-atlas-map__entity-dot {
+  fill: var(--msc-sand);
+  stroke: rgba(16, 40, 45, .96);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.msc-atlas-map__entity-line {
+  stroke: rgba(212, 190, 153, .54);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.msc-atlas-map__entity-label {
+  fill: var(--msc-paper-soft);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .055em;
+  paint-order: stroke;
+  stroke: rgba(16, 40, 45, .96);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+
+.msc-atlas-map__entity:hover .msc-atlas-map__entity-dot,
+.msc-atlas-map__entity:focus-visible .msc-atlas-map__entity-dot {
+  fill: var(--msc-paper-soft);
+}
+
+.msc-atlas-map__entity:focus-visible .msc-atlas-map__entity-dot {
+  stroke: var(--msc-sand);
+  stroke-width: 3;
+}
+
+.msc-atlas-map__compass {
+  fill: none;
+  stroke: rgba(212, 190, 153, .46);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.msc-atlas-map__compass-text {
+  fill: rgba(212, 190, 153, .64);
+  font-size: 10px;
+  letter-spacing: .12em;
+  pointer-events: none;
+}
+
+.msc-atlas-inspect {
+  position: absolute;
+  right: 1.4rem;
+  bottom: 1.4rem;
+  z-index: 8;
+  width: min(31rem, calc(100% - 2.8rem));
+  padding: 1.35rem 1.4rem 1.3rem;
+  border: 1px solid rgba(212, 190, 153, .48);
+  border-radius: 14px;
+  background: rgba(16, 40, 45, .94);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, .18);
+  backdrop-filter: blur(14px);
+}
+
+.msc-atlas-inspect[hidden] {
+  display: none;
+}
+
+.msc-atlas-inspect__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.msc-atlas-inspect__title {
+  margin: .45rem 0 0;
+  color: var(--msc-paper-soft);
+  font-size: clamp(1.8rem, 2.2vw, 2.5rem);
+  line-height: 1;
+  letter-spacing: -.035em;
+}
+
+.msc-atlas-inspect__meta {
+  display: block;
+  margin-top: .8rem;
+}
+
+.msc-atlas-inspect__close {
+  flex: 0 0 auto;
+  width: 2.7rem;
+  height: 2.7rem;
+  padding: 0;
+  border: 1px solid rgba(212, 190, 153, .35);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--msc-paper-soft);
+  font: inherit;
+  cursor: pointer;
+}
+
+.msc-atlas-inspect__close:hover,
+.msc-atlas-inspect__close:focus-visible {
+  border-color: var(--msc-sand);
+  outline: none;
+}
+
+.msc-atlas-window__nav {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  min-height: 0;
+  background: rgba(16, 40, 45, .38);
+}
+
+button.msc-atlas-region {
+  appearance: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: .6rem;
+  min-width: 0;
+  margin: 0;
+  padding: 1.1rem 1.5rem;
+  border: 0;
+  border-right: 1px solid rgba(212, 190, 153, .22);
+  border-bottom: 1px solid rgba(212, 190, 153, .22);
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color .2s ease, box-shadow .2s ease;
+}
+
+button.msc-atlas-region:nth-child(4n) {
+  border-right: 0;
+}
+
+button.msc-atlas-region:nth-child(n+5) {
+  border-bottom: 0;
+}
+
+button.msc-atlas-region strong {
+  color: var(--msc-paper-soft);
+  font-size: clamp(1.15rem, 1.45vw, 1.55rem);
+  line-height: 1.08;
+  letter-spacing: .06em;
+  overflow-wrap: anywhere;
+}
+
+.msc-atlas-region__state {
+  opacity: .56;
+  transition: opacity .2s ease, color .2s ease;
+}
+
+button.msc-atlas-region:hover,
+button.msc-atlas-region:focus-visible,
+button.msc-atlas-region.is-active {
+  background: rgba(212, 190, 153, .10);
+}
+
+button.msc-atlas-region.is-locked {
+  background: rgba(212, 190, 153, .14);
+  box-shadow: inset 0 0 0 1px rgba(212, 190, 153, .48);
+}
+
+button.msc-atlas-region:hover .msc-atlas-region__state,
+button.msc-atlas-region:focus-visible .msc-atlas-region__state,
+button.msc-atlas-region.is-active .msc-atlas-region__state {
+  color: var(--msc-sand);
+  opacity: 1;
+}
+
+button.msc-atlas-region:focus-visible {
+  outline: 2px solid var(--msc-sand);
+  outline-offset: -3px;
+}
+
+/* The Atlas replaces only the legacy Explore hero/map/category-card area. */
+.msc-explore > .msc-container > .msc-explore-hero,
+.msc-explore > .msc-container > .msc-explore-categories {
+  display: none !important;
+}
+
+.msc-explore {
+  padding-top: 0 !important;
+}
+
+.msc-explore > .msc-container > .msc-block:first-of-type {
+  padding-top: clamp(3.8rem, 6vw, 5.5rem);
+}
+
+@keyframes msc-atlas-current {
+  to { stroke-dashoffset: -80; }
+}
+
+@media screen and (max-width: 760px) {
+  .msc-explore-atlas-shell {
+    padding-top: 4.4rem;
+  }
+
+  .msc-atlas-window {
+    height: auto;
+    grid-template-rows: auto minmax(31rem, 48vh) auto;
+  }
+
+  .msc-atlas-window__top {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .msc-atlas-window__readout:first-of-type {
+    display: none;
+  }
+
+  .msc-atlas-window__readout {
+    min-width: 10.2rem;
+    padding-inline: 1.1rem;
+  }
+
+  .msc-atlas-window__nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(4, minmax(7.2rem, auto));
+  }
+
+  button.msc-atlas-region:nth-child(4n) {
+    border-right: 1px solid rgba(212, 190, 153, .22);
+  }
+
+  button.msc-atlas-region:nth-child(2n) {
+    border-right: 0;
+  }
+
+  button.msc-atlas-region:nth-child(n+5) {
+    border-bottom: 1px solid rgba(212, 190, 153, .22);
+  }
+
+  button.msc-atlas-region:nth-child(n+7) {
+    border-bottom: 0;
+  }
+
+  .msc-atlas-inspect {
+    right: .9rem;
+    bottom: .9rem;
+    width: calc(100% - 1.8rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .msc-atlas-map__current {
+    animation: none;
+  }
+
+  .msc-atlas-map__region,
+  .msc-atlas-map__entities,
+  button.msc-atlas-region {
+    transition: none;
+  }
+}
