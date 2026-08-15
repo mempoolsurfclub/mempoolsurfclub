@@ -21,7 +21,7 @@ PASS  README present.
 PASS  Validation report present.
 PASS  5 canonical record shards present.
 PASS  Shard ranges are complete and non-overlapping: 001–004, 005–008, 009–012, 013–016, 017–018.
-PASS  Manifest record count = shard aggregate count = 18.
+PASS  Manifest counts.total_records = shard aggregate count = 18.
 PASS  Manifest inventory index = 18 canonical entities.
 
 SCHEMA / CONTROLLED VALUES
@@ -31,7 +31,9 @@ PASS  Canonical names are unique (18/18).
 PASS  Recommended slugs are unique (18/18).
 PASS  Every Primary Explore category is MARKETPLACES.
 PASS  Every lifecycle value is controlled.
+PASS  Manifest counts.by_status explicitly includes the complete controlled vocabulary: ACTIVE / HISTORICAL / INACTIVE / UNCERTAIN, including UNCERTAIN: 0.
 PASS  Every source-confidence value is controlled.
+PASS  Manifest counts.by_source_confidence explicitly includes the complete controlled vocabulary: HIGH / MEDIUM / LOW, including LOW: 0.
 PASS  Every source object has label + url + source_type.
 PASS  Every source_type value is controlled.
 PASS  Every Last verified date is ISO-formatted.
