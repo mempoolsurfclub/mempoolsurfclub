@@ -1,5 +1,7 @@
 {{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
 {{ 'msc-explore-atlas-intro-fix.css' | asset_url | stylesheet_tag }}
+{{ 'msc-explore-atlas.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'msc-explore-atlas.js' | asset_url }}" defer></script>
 
 <section class="msc-shell msc-explore-atlas-shell" id="MscExploreAtlas-{{ section.id }}">
   <div class="msc-container">
@@ -9,7 +11,7 @@
       <div class="msc-subtitle msc-explore-atlas-intro__copy rte">{{ section.settings.supporting_copy }}</div>
     </header>
 
-    <div class="msc-atlas-window" aria-label="MSC Atlas Bitcoin ecosystem navigation">
+    <div class="msc-atlas-window" data-atlas aria-label="MSC Atlas Bitcoin ecosystem navigation">
       <div class="msc-atlas-window__top">
         <div class="msc-atlas-window__identity">
           <span>MSC ATLAS</span>
@@ -17,312 +19,319 @@
         </div>
         <div class="msc-atlas-window__readout">
           <span>VIEW</span>
-          <strong>FULL OCEAN</strong>
+          <strong data-atlas-mode>FULL OCEAN</strong>
         </div>
         <div class="msc-atlas-window__readout">
-          <span>REGIONS</span>
-          <strong>{{ section.blocks.size | prepend: '0' | slice: -2, 2 }}</strong>
+          <span>REGION</span>
+          <strong data-atlas-region-label>ALL 08</strong>
         </div>
       </div>
 
-      <div class="msc-atlas-window__viewport" aria-label="Atlas map viewport placeholder">
-        <span class="msc-atlas-window__coord msc-atlas-window__coord--nw">N 00° / W 00°</span>
-        <div class="msc-atlas-window__viewport-label" aria-hidden="true">
-          <span>ATLAS VIEWPORT</span>
-          <strong>FULL OCEAN</strong>
-          <small>BITCOIN ECOSYSTEM</small>
-        </div>
-        <span class="msc-atlas-window__coord msc-atlas-window__coord--se">S 00° / E 00°</span>
+      <div class="msc-atlas-window__viewport" data-atlas-viewport>
+        <p class="visually-hidden" id="AtlasInstructions-{{ section.id }}">
+          Hover or focus a charted region to preview it. Select a region to lock the view. Select a charted entity to inspect it. Press Escape to return to the full ocean.
+        </p>
+        <span class="visually-hidden" aria-live="polite" data-atlas-live>Full Bitcoin Ocean view</span>
+        <span class="msc-atlas-window__coord msc-atlas-window__coord--nw">N 08 / W 21</span>
+        <span class="msc-atlas-window__coord msc-atlas-window__coord--se">S 08 / E 21</span>
+
+        <svg
+          class="msc-atlas-map"
+          data-atlas-map
+          viewBox="0 0 1200 560"
+          preserveAspectRatio="xMidYMid meet"
+          role="img"
+          aria-labelledby="AtlasMapTitle-{{ section.id }} AtlasMapDesc-{{ section.id }}"
+          aria-describedby="AtlasInstructions-{{ section.id }}"
+        >
+          <title id="AtlasMapTitle-{{ section.id }}">Bitcoin Ocean Atlas</title>
+          <desc id="AtlasMapDesc-{{ section.id }}">A nautical chart of eight Bitcoin ecosystem regions: Ordinals, Runes, Wallets, Marketplaces, Mining, Payments, Exchanges, and Network.</desc>
+
+          <defs>
+            <pattern id="AtlasMinorGrid-{{ section.id }}" width="24" height="24" patternUnits="userSpaceOnUse">
+              <path d="M 24 0 L 0 0 0 24" fill="none" stroke="rgba(212,190,153,.12)" stroke-width=".7" />
+            </pattern>
+            <pattern id="AtlasMajorGrid-{{ section.id }}" width="120" height="120" patternUnits="userSpaceOnUse">
+              <rect width="120" height="120" fill="url(#AtlasMinorGrid-{{ section.id }})" />
+              <path d="M 120 0 L 0 0 0 120" fill="none" stroke="rgba(212,190,153,.18)" stroke-width="1" />
+            </pattern>
+          </defs>
+
+          <rect class="msc-atlas-map__ocean" x="0" y="0" width="1200" height="560" />
+          <rect class="msc-atlas-map__minor-grid" x="0" y="0" width="1200" height="560" fill="url(#AtlasMinorGrid-{{ section.id }})" />
+          <rect class="msc-atlas-map__major-grid" x="0" y="0" width="1200" height="560" fill="url(#AtlasMajorGrid-{{ section.id }})" />
+
+          <g aria-hidden="true">
+            <path class="msc-atlas-map__contour" d="M44 126 C180 64 336 72 445 118 S706 177 837 111 S1040 58 1162 108" />
+            <path class="msc-atlas-map__contour" d="M30 452 C163 498 293 484 405 447 S642 382 786 425 S1029 495 1170 438" />
+            <path class="msc-atlas-map__contour" d="M81 271 C198 239 295 253 392 287 S589 330 691 291 S905 220 1127 273" />
+            <path class="msc-atlas-map__route" d="M224 154 C331 128 399 138 478 158 S642 172 718 145 S923 136 1018 170" />
+            <path class="msc-atlas-map__route" d="M220 389 C329 407 402 404 502 397 S691 374 786 396 S941 414 1041 385" />
+            <path class="msc-atlas-map__route" d="M222 157 C260 244 237 310 218 388" />
+            <path class="msc-atlas-map__route" d="M480 160 C514 236 510 310 501 397" />
+            <path class="msc-atlas-map__route" d="M718 145 C735 230 764 315 786 396" />
+            <path class="msc-atlas-map__route" d="M1018 170 C1032 237 1041 311 1041 385" />
+            <path class="msc-atlas-map__current" d="M74 213 C265 175 401 217 548 248 S843 274 1119 209" />
+            <path class="msc-atlas-map__current" d="M97 333 C291 294 427 333 583 362 S890 371 1126 325" />
+          </g>
+
+          <g
+            class="msc-atlas-map__region"
+            data-atlas-region-shape="ordinals"
+            data-atlas-region-label="ORDINALS"
+            data-atlas-viewbox="55 38 360 250"
+            role="button"
+            tabindex="0"
+            aria-pressed="false"
+            aria-label="Preview Ordinals region"
+          >
+            <path class="msc-atlas-map__region-shape" d="M105 91 C137 64 197 60 244 78 C289 94 331 125 326 166 C322 205 280 225 238 218 C194 211 169 229 132 207 C95 184 78 126 105 91 Z" />
+            <path class="msc-atlas-map__region-shape msc-atlas-map__region-shape--inner" d="M132 111 C165 88 215 85 254 101 C286 114 306 139 297 167 C288 194 254 200 225 193 C191 185 166 202 141 182 C117 161 111 130 132 111 Z" />
+            <text class="msc-atlas-map__region-index" x="132" y="134">01 / REGION</text>
+            <text class="msc-atlas-map__region-label" x="132" y="156">ORDINALS</text>
+            <g class="msc-atlas-map__entities">
+              <g class="msc-atlas-map__entity" data-atlas-entity="Ordinal Theory & Inscriptions" data-atlas-entity-region="ordinals" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false">
+                <circle class="msc-atlas-map__entity-dot" cx="161" cy="177" r="4.5" /><line class="msc-atlas-map__entity-line" x1="166" y1="177" x2="185" y2="177" /><text class="msc-atlas-map__entity-label" x="190" y="181">ORDINAL THEORY</text>
+              </g>
+              <g class="msc-atlas-map__entity" data-atlas-entity="Bitcoin Puppets" data-atlas-entity-region="ordinals" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false">
+                <circle class="msc-atlas-map__entity-dot" cx="217" cy="118" r="4.5" /><line class="msc-atlas-map__entity-line" x1="221" y1="118" x2="240" y2="118" /><text class="msc-atlas-map__entity-label" x="245" y="122">BITCOIN PUPPETS</text>
+              </g>
+              <g class="msc-atlas-map__entity" data-atlas-entity="Runestone" data-atlas-entity-region="ordinals" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false">
+                <circle class="msc-atlas-map__entity-dot" cx="254" cy="188" r="4.5" /><line class="msc-atlas-map__entity-line" x1="258" y1="188" x2="274" y2="188" /><text class="msc-atlas-map__entity-label" x="279" y="192">RUNESTONE</text>
+              </g>
+            </g>
+          </g>
+
+          <g
+            class="msc-atlas-map__region"
+            data-atlas-region-shape="runes"
+            data-atlas-region-label="RUNES"
+            data-atlas-viewbox="320 40 340 250"
+            role="button"
+            tabindex="0"
+            aria-pressed="false"
+            aria-label="Preview Runes region"
+          >
+            <path class="msc-atlas-map__region-shape" d="M365 100 C405 73 462 71 509 88 C551 103 591 133 585 170 C579 205 538 227 497 218 C454 208 427 225 393 207 C359 190 335 128 365 100 Z" />
+            <path class="msc-atlas-map__region-shape msc-atlas-map__region-shape--inner" d="M393 116 C426 94 470 96 508 107 C540 117 564 140 556 167 C547 194 517 198 487 192 C452 184 427 200 402 181 C379 164 373 133 393 116 Z" />
+            <text class="msc-atlas-map__region-index" x="394" y="140">02 / REGION</text>
+            <text class="msc-atlas-map__region-label" x="394" y="162">RUNES</text>
+            <g class="msc-atlas-map__entities">
+              <g class="msc-atlas-map__entity" data-atlas-entity="Runes Protocol" data-atlas-entity-region="runes" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false">
+                <circle class="msc-atlas-map__entity-dot" cx="422" cy="181" r="4.5" /><line class="msc-atlas-map__entity-line" x1="427" y1="181" x2="444" y2="181" /><text class="msc-atlas-map__entity-label" x="449" y="185">RUNES PROTOCOL</text>
+              </g>
+              <g class="msc-atlas-map__entity" data-atlas-entity="DOG•GO•TO•THE•MOON" data-atlas-entity-region="runes" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false">
+                <circle class="msc-atlas-map__entity-dot" cx="474" cy="115" r="4.5" /><line class="msc-atlas-map__entity-line" x1="479" y1="115" x2="497" y2="115" /><text class="msc-atlas-map__entity-label" x="502" y="119">DOG•GO•TO•THE•MOON</text>
+              </g>
+              <g class="msc-atlas-map__entity" data-atlas-entity="UNCOMMON•GOODS" data-atlas-entity-region="runes" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false">
+                <circle class="msc-atlas-map__entity-dot" cx="520" cy="192" r="4.5" /><line class="msc-atlas-map__entity-line" x1="525" y1="192" x2="542" y2="192" /><text class="msc-atlas-map__entity-label" x="547" y="196">UNCOMMON•GOODS</text>
+              </g>
+            </g>
+          </g>
+
+          <g
+            class="msc-atlas-map__region"
+            data-atlas-region-shape="wallets"
+            data-atlas-region-label="WALLETS"
+            data-atlas-viewbox="565 20 340 260"
+            role="button"
+            tabindex="0"
+            aria-pressed="false"
+            aria-label="Preview Wallets region"
+          >
+            <path class="msc-atlas-map__region-shape" d="M622 75 C660 51 718 48 759 66 C806 87 841 112 837 151 C833 193 792 215 748 211 C710 207 682 222 648 204 C614 185 593 104 622 75 Z" />
+            <path class="msc-atlas-map__region-shape msc-atlas-map__region-shape--inner" d="M650 93 C683 72 724 73 759 88 C791 102 813 122 806 151 C799 180 770 190 743 184 C709 177 688 194 663 176 C640 158 631 109 650 93 Z" />
+            <text class="msc-atlas-map__region-index" x="650" y="119">03 / REGION</text>
+            <text class="msc-atlas-map__region-label" x="650" y="141">WALLETS</text>
+            <g class="msc-atlas-map__entities">
+              <g class="msc-atlas-map__entity" data-atlas-entity="Sparrow Wallet" data-atlas-entity-region="wallets" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false">
+                <circle class="msc-atlas-map__entity-dot" cx="682" cy="163" r="4.5" /><line class="msc-atlas-map__entity-line" x1="687" y1="163" x2="703" y2="163" /><text class="msc-atlas-map__entity-label" x="708" y="167">SPARROW</text>
+              </g>
+              <g class="msc-atlas-map__entity" data-atlas-entity="Xverse" data-atlas-entity-region="wallets" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false">
+                <circle class="msc-atlas-map__entity-dot" cx="735" cy="91" r="4.5" /><line class="msc-atlas-map__entity-line" x1="740" y1="91" x2="756" y2="91" /><text class="msc-atlas-map__entity-label" x="761" y="95">XVERSE</text>
+              </g>
+              <g class="msc-atlas-map__entity" data-atlas-entity="COLDCARD" data-atlas-entity-region="wallets" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false">
+                <circle class="msc-atlas-map__entity-dot" cx="769" cy="178" r="4.5" /><line class="msc-atlas-map__entity-line" x1="774" y1="178" x2="791" y2="178" /><text class="msc-atlas-map__entity-label" x="796" y="182">COLDCARD</text>
+              </g>
+            </g>
+          </g>
+
+          <g
+            class="msc-atlas-map__region"
+            data-atlas-region-shape="marketplaces"
+            data-atlas-region-label="MARKETPLACES"
+            data-atlas-viewbox="835 45 345 260"
+            role="button"
+            tabindex="0"
+            aria-pressed="false"
+            aria-label="Preview Marketplaces region"
+          >
+            <path class="msc-atlas-map__region-shape" d="M894 99 C935 73 997 71 1045 88 C1092 106 1121 136 1114 174 C1107 211 1066 231 1023 220 C983 210 954 226 920 208 C885 189 863 126 894 99 Z" />
+            <path class="msc-atlas-map__region-shape msc-atlas-map__region-shape--inner" d="M923 116 C955 95 999 95 1038 109 C1070 120 1091 141 1083 169 C1075 197 1044 203 1016 195 C984 187 960 201 934 183 C911 165 903 133 923 116 Z" />
+            <text class="msc-atlas-map__region-index" x="923" y="140">04 / REGION</text>
+            <text class="msc-atlas-map__region-label" x="923" y="162">MARKETPLACES</text>
+            <g class="msc-atlas-map__entities">
+              <g class="msc-atlas-map__entity" data-atlas-entity="ORD.NET" data-atlas-entity-region="marketplaces" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false">
+                <circle class="msc-atlas-map__entity-dot" cx="950" cy="184" r="4.5" /><line class="msc-atlas-map__entity-line" x1="955" y1="184" x2="972" y2="184" /><text class="msc-atlas-map__entity-label" x="977" y="188">ORD.NET</text>
+              </g>
+              <g class="msc-atlas-map__entity" data-atlas-entity="Satflow" data-atlas-entity-region="marketplaces" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false">
+                <circle class="msc-atlas-map__entity-dot" cx="1010" cy="113" r="4.5" /><line class="msc-atlas-map__entity-line" x1="1015" y1="113" x2="1032" y2="113" /><text class="msc-atlas-map__entity-label" x="1037" y="117">SATFLOW</text>
+              </g>
+              <g class="msc-atlas-map__entity" data-atlas-entity="UniSat Marketplace" data-atlas-entity-region="marketplaces" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false">
+                <circle class="msc-atlas-map__entity-dot" cx="1042" cy="195" r="4.5" /><line class="msc-atlas-map__entity-line" x1="1047" y1="195" x2="1064" y2="195" /><text class="msc-atlas-map__entity-label" x="1069" y="199">UNISAT MARKETPLACE</text>
+              </g>
+            </g>
+          </g>
+
+          <g
+            class="msc-atlas-map__region"
+            data-atlas-region-shape="mining"
+            data-atlas-region-label="MINING"
+            data-atlas-viewbox="45 255 380 260"
+            role="button"
+            tabindex="0"
+            aria-pressed="false"
+            aria-label="Preview Mining region"
+          >
+            <path class="msc-atlas-map__region-shape" d="M101 327 C142 297 201 295 249 312 C291 327 327 358 321 398 C315 437 279 461 235 453 C190 445 165 463 130 442 C94 421 70 354 101 327 Z" />
+            <path class="msc-atlas-map__region-shape msc-atlas-map__region-shape--inner" d="M130 345 C162 323 208 321 245 335 C276 346 298 370 290 397 C282 424 251 432 223 425 C189 418 166 436 141 415 C118 396 110 361 130 345 Z" />
+            <text class="msc-atlas-map__region-index" x="130" y="369">05 / REGION</text>
+            <text class="msc-atlas-map__region-label" x="130" y="391">MINING</text>
+            <g class="msc-atlas-map__entities">
+              <g class="msc-atlas-map__entity" data-atlas-entity="Parasite Pool" data-atlas-entity-region="mining" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false">
+                <circle class="msc-atlas-map__entity-dot" cx="160" cy="414" r="4.5" /><line class="msc-atlas-map__entity-line" x1="165" y1="414" x2="181" y2="414" /><text class="msc-atlas-map__entity-label" x="186" y="418">PARASITE POOL</text>
+              </g>
+              <g class="msc-atlas-map__entity" data-atlas-entity="OCEAN" data-atlas-entity-region="mining" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false">
+                <circle class="msc-atlas-map__entity-dot" cx="210" cy="340" r="4.5" /><line class="msc-atlas-map__entity-line" x1="215" y1="340" x2="231" y2="340" /><text class="msc-atlas-map__entity-label" x="236" y="344">OCEAN</text>
+              </g>
+              <g class="msc-atlas-map__entity" data-atlas-entity="Bitaxe" data-atlas-entity-region="mining" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false">
+                <circle class="msc-atlas-map__entity-dot" cx="255" cy="429" r="4.5" /><line class="msc-atlas-map__entity-line" x1="260" y1="429" x2="276" y2="429" /><text class="msc-atlas-map__entity-label" x="281" y="433">BITAXE</text>
+              </g>
+            </g>
+          </g>
+
+          <g
+            class="msc-atlas-map__region"
+            data-atlas-region-shape="payments"
+            data-atlas-region-label="PAYMENTS"
+            data-atlas-viewbox="330 255 365 260"
+            role="button"
+            tabindex="0"
+            aria-pressed="false"
+            aria-label="Preview Payments region"
+          >
+            <path class="msc-atlas-map__region-shape" d="M382 331 C422 303 482 298 530 315 C574 330 612 360 606 398 C601 439 562 462 518 454 C474 447 448 464 414 444 C378 424 352 357 382 331 Z" />
+            <path class="msc-atlas-map__region-shape msc-atlas-map__region-shape--inner" d="M412 348 C444 326 489 325 526 339 C558 351 581 372 573 400 C566 428 535 435 506 428 C473 420 449 438 424 418 C401 399 392 365 412 348 Z" />
+            <text class="msc-atlas-map__region-index" x="412" y="372">06 / REGION</text>
+            <text class="msc-atlas-map__region-label" x="412" y="394">PAYMENTS</text>
+            <g class="msc-atlas-map__entities">
+              <g class="msc-atlas-map__entity" data-atlas-entity="BTCPay Server" data-atlas-entity-region="payments" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false">
+                <circle class="msc-atlas-map__entity-dot" cx="443" cy="416" r="4.5" /><line class="msc-atlas-map__entity-line" x1="448" y1="416" x2="464" y2="416" /><text class="msc-atlas-map__entity-label" x="469" y="420">BTCPAY SERVER</text>
+              </g>
+              <g class="msc-atlas-map__entity" data-atlas-entity="Strike" data-atlas-entity-region="payments" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false">
+                <circle class="msc-atlas-map__entity-dot" cx="493" cy="341" r="4.5" /><line class="msc-atlas-map__entity-line" x1="498" y1="341" x2="514" y2="341" /><text class="msc-atlas-map__entity-label" x="519" y="345">STRIKE</text>
+              </g>
+              <g class="msc-atlas-map__entity" data-atlas-entity="Cashu" data-atlas-entity-region="payments" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false">
+                <circle class="msc-atlas-map__entity-dot" cx="542" cy="431" r="4.5" /><line class="msc-atlas-map__entity-line" x1="547" y1="431" x2="563" y2="431" /><text class="msc-atlas-map__entity-label" x="568" y="435">CASHU</text>
+              </g>
+            </g>
+          </g>
+
+          <g
+            class="msc-atlas-map__region"
+            data-atlas-region-shape="exchanges"
+            data-atlas-region-label="EXCHANGES"
+            data-atlas-viewbox="610 255 365 260"
+            role="button"
+            tabindex="0"
+            aria-pressed="false"
+            aria-label="Preview Exchanges region"
+          >
+            <path class="msc-atlas-map__region-shape" d="M668 329 C708 300 769 299 818 315 C863 331 897 360 892 399 C887 438 849 462 806 453 C762 444 735 465 701 443 C666 423 639 356 668 329 Z" />
+            <path class="msc-atlas-map__region-shape msc-atlas-map__region-shape--inner" d="M698 347 C730 325 775 325 813 338 C845 349 867 372 860 399 C853 427 822 435 793 428 C760 420 736 438 711 417 C688 399 679 364 698 347 Z" />
+            <text class="msc-atlas-map__region-index" x="698" y="371">07 / REGION</text>
+            <text class="msc-atlas-map__region-label" x="698" y="393">EXCHANGES</text>
+            <g class="msc-atlas-map__entities">
+              <g class="msc-atlas-map__entity" data-atlas-entity="River" data-atlas-entity-region="exchanges" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false">
+                <circle class="msc-atlas-map__entity-dot" cx="729" cy="416" r="4.5" /><line class="msc-atlas-map__entity-line" x1="734" y1="416" x2="750" y2="416" /><text class="msc-atlas-map__entity-label" x="755" y="420">RIVER</text>
+              </g>
+              <g class="msc-atlas-map__entity" data-atlas-entity="Bisq" data-atlas-entity-region="exchanges" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false">
+                <circle class="msc-atlas-map__entity-dot" cx="779" cy="341" r="4.5" /><line class="msc-atlas-map__entity-line" x1="784" y1="341" x2="800" y2="341" /><text class="msc-atlas-map__entity-label" x="805" y="345">BISQ</text>
+              </g>
+              <g class="msc-atlas-map__entity" data-atlas-entity="Coinbase" data-atlas-entity-region="exchanges" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false">
+                <circle class="msc-atlas-map__entity-dot" cx="830" cy="430" r="4.5" /><line class="msc-atlas-map__entity-line" x1="835" y1="430" x2="851" y2="430" /><text class="msc-atlas-map__entity-label" x="856" y="434">COINBASE</text>
+              </g>
+            </g>
+          </g>
+
+          <g
+            class="msc-atlas-map__region"
+            data-atlas-region-shape="network"
+            data-atlas-region-label="NETWORK"
+            data-atlas-viewbox="875 245 325 265"
+            role="button"
+            tabindex="0"
+            aria-pressed="false"
+            aria-label="Preview Network region"
+          >
+            <path class="msc-atlas-map__region-shape" d="M925 315 C963 286 1021 286 1068 303 C1112 318 1146 348 1141 387 C1135 428 1099 450 1056 443 C1014 436 988 452 954 432 C919 411 897 342 925 315 Z" />
+            <path class="msc-atlas-map__region-shape msc-atlas-map__region-shape--inner" d="M953 333 C985 312 1028 310 1064 324 C1097 336 1118 357 1111 385 C1104 413 1075 420 1046 413 C1013 405 990 424 965 404 C942 386 934 350 953 333 Z" />
+            <text class="msc-atlas-map__region-index" x="953" y="357">08 / REGION</text>
+            <text class="msc-atlas-map__region-label" x="953" y="379">NETWORK</text>
+            <g class="msc-atlas-map__entities">
+              <g class="msc-atlas-map__entity" data-atlas-entity="Bitcoin Core" data-atlas-entity-region="network" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false">
+                <circle class="msc-atlas-map__entity-dot" cx="982" cy="401" r="4.5" /><line class="msc-atlas-map__entity-line" x1="987" y1="401" x2="1003" y2="401" /><text class="msc-atlas-map__entity-label" x="1008" y="405">BITCOIN CORE</text>
+              </g>
+              <g class="msc-atlas-map__entity" data-atlas-entity="Lightning Network & BOLT Specifications" data-atlas-entity-region="network" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false">
+                <circle class="msc-atlas-map__entity-dot" cx="1032" cy="327" r="4.5" /><line class="msc-atlas-map__entity-line" x1="1037" y1="327" x2="1053" y2="327" /><text class="msc-atlas-map__entity-label" x="1058" y="331">LIGHTNING NETWORK</text>
+              </g>
+              <g class="msc-atlas-map__entity" data-atlas-entity="mempool.space" data-atlas-entity-region="network" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false">
+                <circle class="msc-atlas-map__entity-dot" cx="1074" cy="414" r="4.5" /><line class="msc-atlas-map__entity-line" x1="1079" y1="414" x2="1095" y2="414" /><text class="msc-atlas-map__entity-label" x="1100" y="418">MEMPOOL.SPACE</text>
+              </g>
+            </g>
+          </g>
+
+          <g class="msc-atlas-map__compass" transform="translate(1110 60)" aria-hidden="true">
+            <circle cx="0" cy="0" r="28" />
+            <path d="M0 -34 L0 34 M-34 0 L34 0 M0 -24 L7 0 L0 24 L-7 0 Z" />
+            <circle cx="0" cy="0" r="4" />
+          </g>
+          <text class="msc-atlas-map__compass-text" x="1105" y="19" aria-hidden="true">N</text>
+        </svg>
+
+        <aside class="msc-atlas-inspect" data-atlas-inspect hidden aria-live="polite">
+          <div class="msc-atlas-inspect__top">
+            <div>
+              <span class="msc-atlas-inspect__kicker">ATLAS / INSPECT</span>
+              <h2 class="msc-atlas-inspect__title" data-atlas-inspect-title>CHARTED ENTITY</h2>
+            </div>
+            <button class="msc-atlas-inspect__close" type="button" data-atlas-inspect-close aria-label="Close entity inspection">×</button>
+          </div>
+          <span class="msc-atlas-inspect__meta" data-atlas-inspect-meta>PROFILE ROUTE PENDING</span>
+        </aside>
       </div>
 
       <nav class="msc-atlas-window__nav" aria-label="Explore Atlas regions">
         {%- for block in section.blocks -%}
           {%- if block.type == 'region' -%}
-            {%- if block.settings.link != blank -%}
-              <a class="msc-atlas-region" href="{{ block.settings.link }}" {{ block.shopify_attributes }}>
-            {%- else -%}
-              <span class="msc-atlas-region" {{ block.shopify_attributes }}>
-            {%- endif -%}
-                <span class="msc-atlas-region__index">{%- if forloop.index < 10 -%}0{%- endif -%}{{ forloop.index }}</span>
-                <strong>{{ block.settings.title | escape }}</strong>
-            {%- if block.settings.link != blank -%}
-              </a>
-            {%- else -%}
-              </span>
-            {%- endif -%}
+            {%- assign region_slug = block.settings.title | handleize -%}
+            <button
+              class="msc-atlas-region"
+              type="button"
+              data-atlas-target="{{ region_slug }}"
+              aria-pressed="false"
+              {{ block.shopify_attributes }}
+            >
+              <span class="msc-atlas-region__index">{%- if forloop.index < 10 -%}0{%- endif -%}{{ forloop.index }}</span>
+              <strong>{{ block.settings.title | escape }}</strong>
+              <span class="msc-atlas-region__state" data-atlas-target-state>CHART</span>
+            </button>
           {%- endif -%}
         {%- endfor -%}
       </nav>
     </div>
   </div>
 </section>
-
-<style>
-  .msc-explore-atlas-shell {
-    padding: clamp(5.5rem, 7vw, 7.8rem) 0 0;
-  }
-
-  .msc-explore-atlas-intro {
-    max-width: 98rem;
-  }
-
-  .msc-explore-atlas-intro__kicker {
-    margin-bottom: 1.8rem;
-  }
-
-  .msc-explore-atlas-intro__title {
-    max-width: 14ch;
-    margin: 0 0 1.4rem;
-  }
-
-  .msc-explore-atlas-intro__copy {
-    max-width: 82rem;
-    margin: 0;
-  }
-
-  .msc-explore-atlas-intro__copy p {
-    margin: 0;
-  }
-
-  .msc-atlas-window {
-    display: grid;
-    grid-template-rows: 10% 65% 25%;
-    width: 100%;
-    height: clamp(52rem, 58vw, 68rem);
-    margin-top: clamp(2.8rem, 4vw, 4.2rem);
-    overflow: hidden;
-    border: 1px solid rgba(212, 190, 153, .38);
-    border-radius: 20px;
-    background: rgba(16, 40, 45, .44);
-    box-shadow: 0 24px 70px rgba(16, 40, 45, .22);
-    backdrop-filter: blur(18px);
-  }
-
-  .msc-atlas-window__top {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto auto;
-    align-items: stretch;
-    border-bottom: 1px solid rgba(212, 190, 153, .32);
-    background: rgba(16, 40, 45, .34);
-  }
-
-  .msc-atlas-window__identity,
-  .msc-atlas-window__readout {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-width: 0;
-    padding: 1rem 1.6rem;
-  }
-
-  .msc-atlas-window__readout {
-    min-width: 13.5rem;
-    border-left: 1px solid rgba(212, 190, 153, .24);
-  }
-
-  .msc-atlas-window__identity span,
-  .msc-atlas-window__readout span,
-  .msc-atlas-window__viewport-label span,
-  .msc-atlas-window__viewport-label small,
-  .msc-atlas-region__index,
-  .msc-atlas-window__coord {
-    color: rgba(212, 190, 153, .72);
-    font-size: .92rem;
-    line-height: 1.2;
-    letter-spacing: .16em;
-    text-transform: uppercase;
-  }
-
-  .msc-atlas-window__identity strong,
-  .msc-atlas-window__readout strong {
-    margin-top: .35rem;
-    color: var(--msc-paper-soft);
-    font-size: 1.15rem;
-    line-height: 1.1;
-    letter-spacing: .08em;
-  }
-
-  .msc-atlas-window__viewport {
-    position: relative;
-    overflow: hidden;
-    border-bottom: 1px solid rgba(212, 190, 153, .32);
-    background:
-      radial-gradient(circle at 50% 48%, rgba(212, 190, 153, .10), transparent 31%),
-      linear-gradient(rgba(212, 190, 153, .055) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(212, 190, 153, .055) 1px, transparent 1px),
-      linear-gradient(145deg, rgba(23, 60, 67, .72), rgba(16, 40, 45, .88));
-    background-size: auto, 42px 42px, 42px 42px, auto;
-  }
-
-  .msc-atlas-window__viewport::before,
-  .msc-atlas-window__viewport::after {
-    content: "";
-    position: absolute;
-    pointer-events: none;
-  }
-
-  .msc-atlas-window__viewport::before {
-    inset: 13% 8%;
-    border: 1px solid rgba(212, 190, 153, .12);
-    border-radius: 50%;
-    transform: rotate(-7deg) scaleX(1.35);
-  }
-
-  .msc-atlas-window__viewport::after {
-    left: 50%;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    background: linear-gradient(transparent, rgba(212, 190, 153, .14) 18%, rgba(212, 190, 153, .14) 82%, transparent);
-  }
-
-  .msc-atlas-window__viewport-label {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transform: translate(-50%, -50%);
-    text-align: center;
-  }
-
-  .msc-atlas-window__viewport-label strong {
-    margin-top: .55rem;
-    color: var(--msc-paper-soft);
-    font-size: clamp(2.2rem, 3.4vw, 4.1rem);
-    line-height: 1;
-    letter-spacing: -.035em;
-  }
-
-  .msc-atlas-window__viewport-label small {
-    margin-top: .75rem;
-  }
-
-  .msc-atlas-window__coord {
-    position: absolute;
-    z-index: 1;
-    opacity: .68;
-  }
-
-  .msc-atlas-window__coord--nw {
-    top: 1.4rem;
-    left: 1.6rem;
-  }
-
-  .msc-atlas-window__coord--se {
-    right: 1.6rem;
-    bottom: 1.4rem;
-  }
-
-  .msc-atlas-window__nav {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-template-rows: repeat(2, minmax(0, 1fr));
-    min-height: 0;
-    background: rgba(16, 40, 45, .32);
-  }
-
-  .msc-atlas-region {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: .7rem;
-    min-width: 0;
-    padding: 1.1rem 1.5rem;
-    border-right: 1px solid rgba(212, 190, 153, .22);
-    border-bottom: 1px solid rgba(212, 190, 153, .22);
-    color: inherit;
-    text-decoration: none;
-    transition: background-color .2s ease, color .2s ease;
-  }
-
-  .msc-atlas-region:nth-child(4n) {
-    border-right: 0;
-  }
-
-  .msc-atlas-region:nth-child(n+5) {
-    border-bottom: 0;
-  }
-
-  .msc-atlas-region strong {
-    color: var(--msc-paper-soft);
-    font-size: clamp(1.15rem, 1.45vw, 1.55rem);
-    line-height: 1.08;
-    letter-spacing: .06em;
-    overflow-wrap: anywhere;
-  }
-
-  a.msc-atlas-region:hover,
-  a.msc-atlas-region:focus-visible {
-    background: rgba(212, 190, 153, .10);
-  }
-
-  a.msc-atlas-region:focus-visible {
-    outline: 2px solid var(--msc-sand);
-    outline-offset: -3px;
-  }
-
-  /* The Atlas shell replaces only the existing Explore hero/map/category-card area. */
-  .msc-explore > .msc-container > .msc-explore-hero,
-  .msc-explore > .msc-container > .msc-explore-categories {
-    display: none !important;
-  }
-
-  .msc-explore {
-    padding-top: 0 !important;
-  }
-
-  .msc-explore > .msc-container > .msc-block:first-of-type {
-    padding-top: clamp(3.8rem, 6vw, 5.5rem);
-  }
-
-  @media screen and (max-width: 760px) {
-    .msc-explore-atlas-shell {
-      padding-top: 4.4rem;
-    }
-
-    .msc-atlas-window {
-      height: auto;
-      grid-template-rows: auto minmax(30rem, 44vh) auto;
-    }
-
-    .msc-atlas-window__top {
-      grid-template-columns: minmax(0, 1fr) auto;
-    }
-
-    .msc-atlas-window__readout:first-of-type {
-      display: none;
-    }
-
-    .msc-atlas-window__readout {
-      min-width: 9.4rem;
-      padding-inline: 1.1rem;
-    }
-
-    .msc-atlas-window__nav {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      grid-template-rows: repeat(4, minmax(7.2rem, auto));
-    }
-
-    .msc-atlas-region:nth-child(4n) {
-      border-right: 1px solid rgba(212, 190, 153, .22);
-    }
-
-    .msc-atlas-region:nth-child(2n) {
-      border-right: 0;
-    }
-
-    .msc-atlas-region:nth-child(n+5) {
-      border-bottom: 1px solid rgba(212, 190, 153, .22);
-    }
-
-    .msc-atlas-region:nth-child(n+7) {
-      border-bottom: 0;
-    }
-  }
-</style>
 
 {% schema %}
 {
@@ -341,7 +350,7 @@
       "type": "richtext",
       "id": "supporting_copy",
       "label": "Supporting copy",
-      "default": "<p>Navigate the Bitcoin ecosystem through eight charted regions. The Atlas will connect each region to the projects, platforms, companies, and infrastructure inside it.</p>"
+      "default": "<p>Navigate the Bitcoin ecosystem through eight charted regions. Hover to preview a region, then select it to hold the view and inspect what is charted inside.</p>"
     }
   ],
   "blocks": [
@@ -357,7 +366,7 @@
         {
           "type": "url",
           "id": "link",
-          "label": "Region link"
+          "label": "Future region link"
         }
       ]
     }
