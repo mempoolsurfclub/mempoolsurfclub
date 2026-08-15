@@ -47,8 +47,12 @@
   }
 }
 
-/* Match the approved Learn hero title scale and make the override authoritative in the cascade. */
+/* Match the approved Learn hero vertical start and title scale on desktop. */
 @media screen and (min-width: 991px) {
+  .msc-explore-atlas-shell {
+    padding-top: 5.5rem !important;
+  }
+
   .msc-explore-atlas-intro__title {
     font-size: clamp(4.6rem, 4.75vw, 5.8rem) !important;
     line-height: .9 !important;
@@ -57,11 +61,11 @@
   }
 }
 
-/* Desktop: preserve the approved two-line Explore composition at the same scale as Learn. */
+/* Large desktop: keep the same 40/60 title-to-copy relationship as Learn. */
 @media screen and (min-width: 1180px) {
   .msc-explore-atlas-intro {
-    grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr);
-    column-gap: 3.2rem;
+    grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+    column-gap: clamp(3.2rem, 4vw, 4.8rem);
   }
 
   .msc-explore-atlas-intro__title {
