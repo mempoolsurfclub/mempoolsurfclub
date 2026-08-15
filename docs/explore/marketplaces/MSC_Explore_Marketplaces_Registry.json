@@ -84,10 +84,22 @@
     }
   ],
   "counts": {
-    "records": 18,
-    "by_status": {"ACTIVE": 13, "HISTORICAL": 4, "INACTIVE": 1},
-    "by_topic": {"Protocols & Liquidity Infrastructure": 3, "Trading Venues": 15},
-    "by_source_confidence": {"HIGH": 12, "MEDIUM": 6}
+    "total_records": 18,
+    "by_status": {
+      "ACTIVE": 13,
+      "HISTORICAL": 4,
+      "INACTIVE": 1,
+      "UNCERTAIN": 0
+    },
+    "by_topic": {
+      "Trading Venues": 15,
+      "Protocols & Liquidity Infrastructure": 3
+    },
+    "by_source_confidence": {
+      "HIGH": 12,
+      "MEDIUM": 6,
+      "LOW": 0
+    }
   },
   "required_seed_coverage": {
     "ord.net": {"addressed": true, "decision": "INCLUDED", "record_id": "MSC-EXP-MKT-001", "canonical_name": "ORD.NET"},
