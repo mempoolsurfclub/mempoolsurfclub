@@ -1,0 +1,156 @@
+MSC Explore — MARKETPLACES Registry Validation
+Status: PASS — COMMAND CENTER REVIEW READY
+Validation date: 2026-08-15
+Primary category: MARKETPLACES
+Canonical records: 18
+
+REFERENCE / SCOPE
+PASS  Approved Ordinals reference branch inspected at HEAD 1f4368bdebc572de5aaed6df221460516295c54a.
+PASS  Exact approved 24-field entity contract reused with Marketplaces-specific topic/subtopic fields.
+PASS  Approved lifecycle vocabulary reused exactly: ACTIVE / HISTORICAL / INACTIVE / UNCERTAIN.
+PASS  Approved source-confidence vocabulary reused exactly: HIGH / MEDIUM / LOW.
+PASS  Approved controlled source_type vocabulary reused exactly.
+PASS  Marketplaces taxonomy was independently developed; Ordinals topic taxonomy was not copied.
+PASS  Research output is confined to docs/explore/marketplaces/ in the planned GitHub change.
+PASS  No production code, Atlas, Shopify, Learn, Home, Tools, Ordinals, Runes, Wallets, routes, or public pages are part of this package.
+
+STRUCTURE
+PASS  Registry manifest present: MSC_Explore_Marketplaces_Registry.json.
+PASS  Human companion present: MSC_Explore_Marketplaces_Registry.md.
+PASS  README present.
+PASS  Validation report present.
+PASS  5 canonical record shards present.
+PASS  Shard ranges are complete and non-overlapping: 001–004, 005–008, 009–012, 013–016, 017–018.
+PASS  Manifest record count = shard aggregate count = 18.
+PASS  Manifest inventory index = 18 canonical entities.
+
+SCHEMA / CONTROLLED VALUES
+PASS  Every canonical record has exactly 24 required fields in the approved field order.
+PASS  Registry IDs are unique (18/18).
+PASS  Canonical names are unique (18/18).
+PASS  Recommended slugs are unique (18/18).
+PASS  Every Primary Explore category is MARKETPLACES.
+PASS  Every lifecycle value is controlled.
+PASS  Every source-confidence value is controlled.
+PASS  Every source object has label + url + source_type.
+PASS  Every source_type value is controlled.
+PASS  Every Last verified date is ISO-formatted.
+PASS  Every record topic/subtopic pair exists in the manifest taxonomy.
+PASS  Research notes / uncertainties are explicitly preserved on every record.
+
+REQUIRED SEEDS
+PASS  Exact ord.net seed addressed.
+      INCLUDED: MSC-EXP-MKT-001 — ORD.NET.
+      ord.net was not silently substituted with ord.io / ORD.
+PASS  Satflow seed addressed.
+      INCLUDED: MSC-EXP-MKT-002 — Satflow.
+
+CANON / DEDUP / COMPANY-PRODUCT QA
+PASS  One-entity/one-profile discipline applied.
+PASS  Magic Eden Bitcoin Ordinals + Runes support consolidated into one Bitcoin-marketplace implementation record.
+PASS  UniSat protocol-specific markets consolidated into one UniSat Marketplace record; UniHexa remains relation-only.
+PASS  Ordinals Wallet wallet/marketplace overlap explicitly documented for Master Explore coordination.
+PASS  OKX Web3 Marketplace is separated conceptually from OKX centralized-exchange custody while remaining one scoped product record.
+PASS  Binance's two Bitcoin marketplace phases are consolidated into one HISTORICAL record with product-phase caveat.
+PASS  Gamma launchpad + secondary-market activity is one profile.
+PASS  Trio consumer marketplace + OrdinalsBot marketplace/API infrastructure are consolidated into one profile.
+PASS  Xverse is relation-only as a wallet/aggregation surface, not duplicated as a standalone marketplace.
+PASS  RareSatsMarket.com excluded as a derivative Magisat-powered frontend.
+PASS  ord.io excluded from MARKETPLACES canonical inventory as an explorer/indexer; discontinued Zap relationship is documented in omission research.
+
+SUPPORTED-ASSET / TRADING-MODEL QA
+PASS  Asset-support claims are sourced to current or historically appropriate evidence.
+PASS  PSBT use is not treated as automatic proof of non-custody.
+PASS  ORD.NET wording preserves both legal no-custody/private-key claims and its documented listing-escrow/recovery transaction architecture.
+PASS  Ordinals Wallet settlement description distinguishes seller-signed listing PSBT from buyer completion.
+PASS  OKX Web3 signed-PSBT/Rune API claims are scoped to its wallet marketplace rather than centralized exchange.
+PASS  DotSwap is explicitly described as mixed custody: custodial CPMM pools vs self-custodial Nexus pools.
+PASS  Runes DEX wording preserves documented pool-wallet control rather than repeating unqualified self-custody marketing.
+PASS  Scarce City is not mislabeled as a PSBT order book; collateralized auctions/fixed-price mechanics are distinguished.
+PASS  Horizon Market atomic-swap / signed-listing mechanics are distinguished from Horizon Wallet.
+PASS  Ordinals Market keeps unresolved Emblem Vault/Ethereum vs reported PSBT historical evidence visibly unresolved.
+PASS  Marketplace/indexer/order state and rare-sat / metaprotocol interpretations are not presented as Bitcoin consensus ownership state.
+PASS  No current daily volume, weekly volume, market share, floor price, collection ranking, active-user count, or temporary fee promotion is encoded as a timeless canonical fact.
+
+LIFECYCLE QA
+PASS  Reachable sites and repositories were not accepted alone as proof of ACTIVE.
+PASS  Magic Eden Bitcoin Marketplace classified HISTORICAL after first-party 2026 shutdown documentation.
+PASS  Binance Bitcoin marketplace support classified HISTORICAL after 2026 Binance documentation says new buy/sell orders are no longer available.
+PASS  OpenOrdex classified HISTORICAL despite reachable GitHub repository.
+PASS  Ordswap classified INACTIVE after domain compromise/cessation evidence; unsafe old domain not used as an official website.
+PASS  Historical early-2023 venues were not erased merely because current larger marketplaces replaced them.
+
+SOURCE-QUALITY SPOT CHECKS
+PASS  HIGH-confidence current records spot-checked against first-party sources:
+      ORD.NET; Satflow; UniSat Marketplace; Ordinals Wallet; Gamma; OKX Web3 Marketplace — Bitcoin assets;
+      Magisat; Scarce City; Horizon Market; DotSwap; Trio Marketplace / OrdinalsBot.
+PASS  Magic Eden HISTORICAL lifecycle spot-checked against Magic Eden's own 2026 support documentation.
+PASS  MEDIUM-confidence current/historical records reviewed for explicit caveats:
+      Ordzaar; Binance Bitcoin marketplace support; Ordinals Market; Ordswap; OpenOrdex; Runes DEX.
+PASS  First-party marketing claims are not used as authoritative evidence about competitor lifecycle/support.
+PASS  Market-data/indexer material is supporting evidence only, not sole canonical basis.
+
+MAJOR-OMISSION / DIRECTORY-PADDING REVIEW
+PASS  Broad post-seed review added material candidates beyond the initial brief, including Horizon Market, Magisat, DotSwap, Runes DEX, OpenOrdex, Binance historical support, and Trio / OrdinalsBot.
+PASS  Final omission pass surfaced live Trio Marketplace and caused the OrdinalsBot record to be corrected/consolidated rather than leaving only an infrastructure abstraction.
+PASS  Generative.xyz deliberately excluded after current first-party material failed to establish a durable/current secondary-marketplace role.
+PASS  Tensor excluded because official scope is Solana, not materially Bitcoin.
+PASS  Deezy excluded because current canonical role is treasury/rare-sat hunting/data rather than a multi-sided marketplace.
+PASS  Best in Slot excluded as indexer/aggregator/infrastructure rather than a canonical venue.
+PASS  OrdinalHub excluded as inscription/research/discovery tooling; no durable distinct marketplace role verified.
+PASS  Luminex excluded as mint/launch/management tooling in reviewed scope.
+PASS  Oyl excluded as wallet/aggregation/testnet-adjacent rather than standalone MARKETPLACES canon.
+PASS  Low-evidence/new clones excluded to prevent generic directory padding.
+
+COUNTS
+Lifecycle:
+  ACTIVE: 13
+  HISTORICAL: 4
+  INACTIVE: 1
+  UNCERTAIN: 0
+  TOTAL: 18
+
+Topic:
+  Trading Venues: 15
+  Protocols & Liquidity Infrastructure: 3
+  TOTAL: 18
+
+Source confidence:
+  HIGH: 12
+  MEDIUM: 6
+  LOW: 0
+  TOTAL: 18
+
+PUBLIC-COPY CAUTION QUEUE
+- ORD.NET: custody/escrow wording requires the documented nuance.
+- Ordzaar: do not strengthen "does not store private keys" into an unsupported end-to-end custody claim.
+- Binance Bitcoin marketplace support: distinguish centralized Binance NFT phase from Web3 Wallet Inscriptions Marketplace phase.
+- Ordinals Market: exact Emblem Vault / native-PSBT transition remains unresolved.
+- Ordswap: do not link the compromised/legacy domain as a public official destination.
+- OpenOrdex: historical/open-source, not verified current operation.
+- Runes DEX: pool-wallet control requires qualification before using self-custody language.
+- Trio Marketplace / OrdinalsBot: recheck protocol-specific current depth before making Runes/BRC-20 liquidity claims.
+
+REMAINING RESEARCH UNCERTAINTIES
+- Exact public launch day for ORD.NET was not established from reviewed first-party material.
+- Ordzaar low-level order/settlement architecture remains insufficiently documented.
+- Ordinals Market's exact chronology across Emblem Vault/Ethereum and reported PSBT trading remains unresolved.
+- Runes DEX pool-wallet governance/control deserves deeper architectural clarification before stronger public custody claims.
+- Cross-category master-registry canonical-home decisions remain for UniSat, Ordinals Wallet, OKX, Binance, and Trio/OrdinalsBot.
+- Current platform fees/royalties/promotions must be reverified on publication day if public copy chooses to mention them.
+
+FINAL VALIDATION RESULT
+PASS — 0 structural/schema/count/control errors.
+PASS — required seeds explicitly addressed.
+PASS — no duplicate canonical entities detected.
+PASS — current/historical lifecycle corrections incorporated.
+PASS — custody/trading/indexing distinctions explicitly preserved.
+PASS — research uncertainty remains visible rather than silently resolved.
+PASS — registry is suitable for Command Center approval review.
+
+PUBLICATION LOCK
+DO NOT MERGE.
+DO NOT PUBLISH.
+DO NOT CREATE MARKETPLACE CATEGORY/PUBLIC PROFILE PAGES.
+DO NOT MODIFY SHOPIFY, ATLAS, LEARN, HOME, TOOLS, ORDINALS, RUNES, OR WALLETS.
+DO NOT CONNECT THESE RECORDS TO THE LIVE EXPLORE INTERFACE UNTIL COMMAND CENTER APPROVES THE REGISTRY.
