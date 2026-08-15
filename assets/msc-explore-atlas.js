@@ -4,7 +4,6 @@
 
   const parseBox = (value) => String(value || '').trim().split(/\s+/).map(Number);
   const boxToString = (box) => box.map((n) => Number(n.toFixed(2))).join(' ');
-
   const ease = (t) => 1 - Math.pow(1 - t, 3);
 
   document.querySelectorAll('[data-atlas]').forEach((atlas) => {
@@ -23,12 +22,21 @@
     if (!svg || !navTargets.length || !mapRegions.length) return;
 
     let locked = null;
-    let preview = null;
     let animationFrame = null;
 
     const regionBySlug = new Map(
       mapRegions.map((region) => [region.dataset.atlasRegionShape, region])
     );
+
+    /* Region selection is keyboard-operated through the bottom navigation.
+       Remove source-level button semantics from the SVG region groups so
+       charted entity buttons remain individually exposed to assistive tech. */
+    mapRegions.forEach((region) => {
+      region.removeAttribute('role');
+      region.removeAttribute('tabindex');
+      region.removeAttribute('aria-pressed');
+      region.removeAttribute('aria-label');
+    });
 
     const getCurrentBox = () => parseBox(svg.getAttribute('viewBox'));
 
@@ -85,9 +93,7 @@
       atlas.dataset.atlasMode = mode;
 
       mapRegions.forEach((region) => {
-        const active = region.dataset.atlasRegionShape === slug;
-        region.classList.toggle('is-active', active);
-        region.setAttribute('aria-pressed', locked === region.dataset.atlasRegionShape ? 'true' : 'false');
+        region.classList.toggle('is-active', region.dataset.atlasRegionShape === slug);
       });
 
       navTargets.forEach((target) => {
@@ -112,7 +118,6 @@
 
     const setPreview = (slug) => {
       if (locked) return;
-      preview = slug;
       clearInspect();
       render(slug, slug ? 'preview' : 'overview');
     };
@@ -121,14 +126,17 @@
       clearInspect();
       if (locked === slug) {
         locked = null;
-        preview = null;
         render(null, 'overview');
         return;
       }
 
       locked = slug;
-      preview = slug;
       render(slug, 'locked');
+    };
+
+    const focusFirstEntity = (slug) => {
+      const first = entities.find((entity) => entity.dataset.atlasEntityRegion === slug);
+      if (first) requestAnimationFrame(() => first.focus());
     };
 
     const showEntity = (entity) => {
@@ -137,7 +145,6 @@
 
       if (locked !== slug) {
         locked = slug;
-        preview = slug;
         render(slug, 'locked');
       }
 
@@ -154,20 +161,16 @@
       const slug = target.dataset.atlasTarget;
       target.addEventListener('pointerenter', () => setPreview(slug));
       target.addEventListener('focus', () => setPreview(slug));
-      target.addEventListener('click', () => toggleLock(slug));
+      target.addEventListener('click', (event) => {
+        toggleLock(slug);
+        if (event.detail === 0 && locked === slug) focusFirstEntity(slug);
+      });
     });
 
     mapRegions.forEach((region) => {
       const slug = region.dataset.atlasRegionShape;
       region.addEventListener('pointerenter', () => setPreview(slug));
-      region.addEventListener('focus', () => setPreview(slug));
       region.addEventListener('click', () => toggleLock(slug));
-      region.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          toggleLock(slug);
-        }
-      });
     });
 
     entities.forEach((entity) => {
@@ -195,7 +198,6 @@
     atlas.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') {
         locked = null;
-        preview = null;
         clearInspect();
         render(null, 'overview');
       }
