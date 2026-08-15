@@ -14,6 +14,9 @@ PASS — Canonical names are unique.
 PASS — Recommended slugs are unique.
 PASS — Primary Explore category is WALLETS for every record.
 PASS — Record counts reconcile across manifest and shards.
+PASS — Manifest uses one authoritative count location under counts; counts.total_records = 40 and redundant canonical_record_count is absent.
+PASS — Manifest counts.by_status explicitly contains all controlled status values: ACTIVE / HISTORICAL / INACTIVE / UNCERTAIN.
+PASS — Manifest counts.by_source_confidence explicitly contains all controlled confidence values: HIGH / MEDIUM / LOW, including LOW: 0.
 PASS — 10 record shards cover MSC-EXP-WAL-001 through MSC-EXP-WAL-040.
 
 CONTROLLED VALUES
@@ -67,7 +70,7 @@ PASS — Independent/catalog sources are supporting evidence only and do not est
 PASS — Spot checks covered HIGH-confidence current software, privacy, payment, collaborative-custody and hardware records against first-party 2026 material.
 PASS — MEDIUM-confidence records preserve lifecycle/compatibility uncertainty rather than overstating current status.
 
-COUNTS BY LIFECYCLE STATUS
+COUNTS BY STATUS
 ACTIVE: 36
 HISTORICAL: 1
 INACTIVE: 2
@@ -123,6 +126,7 @@ REMAINING RESEARCH UNCERTAINTIES
 FINAL RESULT
 PASS — Registry is structurally valid and internally reconciled.
 PASS — Xverse requirement is satisfied.
+PASS — Normalized manifest count structure matches the cross-category convention: counts.total_records, counts.by_status, counts.by_topic, counts.by_source_confidence, with full controlled vocabularies represented even when zero.
 PASS — No production/UI/Shopify/Atlas/Learn/Home/Tools/Ordinals/Runes files are part of this research package.
 RECOMMENDATION — Submit WALLETS registry to Explore Command Center for approval, with the publication-caution queue preserved.
 DO NOT MERGE OR PUBLISH FROM THIS RESEARCH PACKAGE WITHOUT COMMAND CENTER APPROVAL.
