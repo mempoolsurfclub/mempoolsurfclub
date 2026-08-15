@@ -1,0 +1,301 @@
+{
+  "title": "Mempool Surf Club Explore — Runes Research Registry",
+  "status": "COMMAND_CENTER_REVIEW",
+  "registry_date": "2026-08-15",
+  "last_verified_date": "2026-08-15",
+  "primary_explore_category": "RUNES",
+  "parent_explore_categories": [
+    "ORDINALS",
+    "RUNES",
+    "WALLETS",
+    "MARKETPLACES",
+    "MINING",
+    "PAYMENTS",
+    "EXCHANGES",
+    "NETWORK"
+  ],
+  "scope": "Research-only registry section for the RUNES category. This file does not publish or activate Explore content.",
+  "source_of_truth": {
+    "canonical_manifest": "docs/explore/runes/MSC_Explore_Runes_Registry.json",
+    "record_shards": [
+      "docs/explore/runes/records/MSC_Explore_Runes_Records_001_006.json",
+      "docs/explore/runes/records/MSC_Explore_Runes_Records_007_012.json",
+      "docs/explore/runes/records/MSC_Explore_Runes_Records_013_018.json"
+    ],
+    "human_companion": "docs/explore/runes/MSC_Explore_Runes_Registry.md",
+    "validation_report": "docs/explore/runes/MSC_Explore_Runes_Validation.txt",
+    "rule": "The manifest plus all listed record shards together are the canonical machine-readable source. Command Center review is required before promotion to a Master Explore Registry."
+  },
+  "registry_wide_rules": {
+    "one_entity_one_profile": "One canonical profile per entity. Distribution artifacts, predecessor token standards, child/receipt Runes, wrapped representations, and cross-category projects are relationships unless they are materially distinct canonical entities.",
+    "status_rule": "Lifecycle status is independent from attribution/supply uncertainty. ACTIVE requires verified current project, protocol, operator, or community operation as of the record verification date. HISTORICAL means the relevant project phase is finite, completed, or legacy and no meaningful current project/community operation was verified. INACTIVE means operation ceased, was abandoned, or the creator/operator explicitly stepped away without a verified active successor operation. UNCERTAIN means the lifecycle/activity status itself cannot be determined from reliable evidence. Secondary-market or indexer activity alone never establishes ACTIVE status.",
+    "protocol_rule": "Distinguish Bitcoin consensus rules from the Runes protocol, the normative `ord` reference implementation, indexer-derived Runes state, wallet/marketplace behavior, project claims, and later tooling. Bitcoin consensus validates the underlying transactions and scripts; Bitcoin Core does not maintain Rune balances.",
+    "publication_rule": "Recommended slugs and descriptions are planning data only. No Shopify page, Atlas widget, template, runtime file, public card, or production route is created by this registry.",
+    "source_rule": "Source hierarchy: (1) official project website/docs; (2) official GitHub, X, blog, or other creator/operator-controlled source; (3) primary protocol/on-chain evidence; (4) reputable independent corroboration; (5) marketplaces, indexers, and market-data providers as supporting evidence only. Marketplace/indexer presence alone is not sufficient for a fully verified profile or ACTIVE status.",
+    "cross_category_rule": "Entities whose canonical home is another Explore category are linked, not duplicated. Runestone, RSIC Metaprotocol, and Based Angels remain ORDINALS entities; DOG•GO•TO•THE•MOON, RSIC•GENESIS•RUNE, and BASED•ANGELS•RUNE are the corresponding canonical RUNES entities.",
+    "source_confidence_rule": "Source confidence is independent from lifecycle status. HIGH means first-party or primary evidence supports identity and core claims, including lifecycle where applicable. MEDIUM means credible evidence exists but one or more core fields rely on archival, independent, indexer, or incomplete/stale first-party evidence. LOW means core attribution, scope, or lifecycle evidence is materially indirect. Allowed values: HIGH, MEDIUM, LOW.",
+    "source_type_rule": "Controlled source_type values: official, official-github, primary, on-chain, independent, indexer, marketplace, market-data. Use source_type to describe evidence provenance, not confidence.",
+    "uncertainty_rule": "Unresolved creator attribution, supply, Rune number, stewardship, or technical interpretation belongs in Verification basis and Research notes / uncertainties. Do not use UNCERTAIN lifecycle merely because a non-lifecycle field remains unresolved.",
+    "market_data_rule": "Price, market cap, trading volume, holder count, and rankings are not timeless registry facts and are not used as the primary inclusion reason. Any future market-statistic use must be dated and sourced."
+  },
+  "topic_architecture": [
+    {
+      "topic": "Protocol & Genesis",
+      "slug": "protocol-genesis",
+      "purpose": "The Runes protocol itself and protocol-defined genesis state that is foundational to understanding all Rune assets.",
+      "subtopics": [
+        "Core protocol",
+        "Protocol-defined genesis rune"
+      ]
+    },
+    {
+      "topic": "Halving-Block Provenance",
+      "slug": "halving-block-provenance",
+      "purpose": "Historically significant Runes etched in or immediately anchored to the block-840,000 activation cohort, included only when provenance or project identity adds durable historical value.",
+      "subtopics": [
+        "Early public etchings",
+        "Project-backed launch runes"
+      ]
+    },
+    {
+      "topic": "Ordinals-Linked Distribution",
+      "slug": "ordinals-linked-distribution",
+      "purpose": "Rune assets whose launch or allocation was materially coordinated through Ordinals collections, airdrops, or pre-Runes distribution experiments.",
+      "subtopics": [
+        "Holder airdrops",
+        "Pre-Runes reward transitions"
+      ]
+    },
+    {
+      "topic": "Cross-Standard Migration",
+      "slug": "cross-standard-migration",
+      "purpose": "Canonical Rune assets that represent a meaningful migration from earlier Bitcoin fungible-token conventions such as BRC-20.",
+      "subtopics": [
+        "BRC-20 to Runes migrations"
+      ]
+    },
+    {
+      "topic": "Community & Cultural Runes",
+      "slug": "community-cultural-runes",
+      "purpose": "Culturally durable community and meme Runes whose significance is supported by launch history, sustained identity, or distinctive provenance rather than short-term market ranking.",
+      "subtopics": [
+        "Launch-era meme culture",
+        "Later community meme projects"
+      ]
+    },
+    {
+      "topic": "Utility & Governance Runes",
+      "slug": "utility-governance-runes",
+      "purpose": "Rune assets with a verified role in an operating Bitcoin application, governance system, or product ecosystem beyond token trading alone.",
+      "subtopics": [
+        "Application governance / utility"
+      ]
+    }
+  ],
+  "record_schema_contract": {
+    "required_record_fields": [
+      "Registry ID",
+      "Canonical name",
+      "Recommended slug",
+      "Primary Explore category",
+      "Runes topic",
+      "Runes subtopic",
+      "Entity / project type",
+      "Status",
+      "Source confidence",
+      "Concise description",
+      "Deeper researched summary",
+      "Creators / founders",
+      "Launch / history",
+      "Why it matters in the Runes ecosystem",
+      "Important technical or cultural characteristics",
+      "Related projects / entities",
+      "Related Explore categories",
+      "Supporting tags",
+      "Official website",
+      "Official sources",
+      "Corroborating sources",
+      "Last verified date",
+      "Verification basis",
+      "Research notes / uncertainties"
+    ],
+    "controlled_values": {
+      "Status": [
+        "ACTIVE",
+        "HISTORICAL",
+        "INACTIVE",
+        "UNCERTAIN"
+      ],
+      "Source confidence": [
+        "HIGH",
+        "MEDIUM",
+        "LOW"
+      ],
+      "Primary Explore category": [
+        "RUNES"
+      ],
+      "Related Explore categories": [
+        "ORDINALS",
+        "RUNES",
+        "WALLETS",
+        "MARKETPLACES",
+        "MINING",
+        "PAYMENTS",
+        "EXCHANGES",
+        "NETWORK"
+      ],
+      "source_type": [
+        "official",
+        "official-github",
+        "primary",
+        "on-chain",
+        "independent",
+        "indexer",
+        "marketplace",
+        "market-data"
+      ]
+    },
+    "field_rules": {
+      "Official website": "Canonical project/entity-controlled website when verified; null is allowed and must not be replaced by a marketplace URL.",
+      "Official sources": "First-party or authoritative primary sources supporting identity, history, technical claims, or lifecycle. May be empty when none can be verified.",
+      "Corroborating sources": "Independent, on-chain, indexer, marketplace, or market-data evidence used to corroborate rather than manufacture project claims.",
+      "Last verified date": "ISO YYYY-MM-DD date of the record's latest substantive verification. Record dates may differ; they must not be future-dated.",
+      "Verification basis": "Concise statement of what evidence supports the record and lifecycle classification.",
+      "Research notes / uncertainties": "Explicit unresolved facts or publication cautions; uncertainty here does not automatically require UNCERTAIN lifecycle status.",
+      "Related projects / entities": "Canonical entity names or clearly named predecessor, child, distribution, or external entities. Use relationships instead of duplicate profiles.",
+      "Related Explore categories": "Cross-category relationship destinations only; do not duplicate the same canonical entity in multiple category registries.",
+      "Runes technical claims": "Separate protocol/reference-implementation semantics from Bitcoin consensus, indexer state, wallet behavior, marketplace behavior, and project claims."
+    }
+  },
+  "counts": {
+    "total_records": 18,
+    "by_status": {
+      "ACTIVE": 10,
+      "HISTORICAL": 4,
+      "UNCERTAIN": 4
+    },
+    "by_topic": {
+      "Protocol & Genesis": 2,
+      "Halving-Block Provenance": 5,
+      "Ordinals-Linked Distribution": 3,
+      "Cross-Standard Migration": 2,
+      "Community & Cultural Runes": 5,
+      "Utility & Governance Runes": 1
+    },
+    "by_source_confidence": {
+      "HIGH": 9,
+      "MEDIUM": 9
+    }
+  },
+  "seed_coverage": {
+    "required_seed_count": 9,
+    "represented_seed_count": 9,
+    "missing": [],
+    "included": [
+      "UNCOMMON•GOODS",
+      "SATOSHI•NAKAMOTO",
+      "DOG•GO•TO•THE•MOON",
+      "MAGIC•INTERNET•MONEY",
+      "PUPS•WORLD•PEACE",
+      "BILLION•DOLLAR•CAT",
+      "WISHY•WASHY•MACHINE",
+      "GIZMO•IMAGINARY•KITTEN",
+      "SAIKO•HAMSTER"
+    ]
+  },
+  "required_cross_category_relationships": [
+    {
+      "rune_entity": "DOG•GO•TO•THE•MOON",
+      "related_entity": "Runestone",
+      "canonical_home_of_related_entity": "ORDINALS",
+      "decision": "DOG is canonical in RUNES; Runestone remains the historical Ordinals distribution artifact and is linked rather than duplicated."
+    },
+    {
+      "rune_entity": "RSIC•GENESIS•RUNE",
+      "related_entity": "RSIC Metaprotocol",
+      "canonical_home_of_related_entity": "ORDINALS",
+      "decision": "The Rune is canonical in RUNES; the pre-Runes distribution/metaprotocol phase remains in ORDINALS."
+    },
+    {
+      "rune_entity": "BASED•ANGELS•RUNE",
+      "related_entity": "Based Angels",
+      "canonical_home_of_related_entity": "ORDINALS",
+      "decision": "The Rune is canonical in RUNES; the Based Angels collection remains in ORDINALS."
+    }
+  ],
+  "command_center_review_queue": [
+    {
+      "entity": "THE•RUNIX•TOKEN",
+      "priority": "HIGH",
+      "issue": "Activation-block identity is verified, but current stewardship of the canonical Bitcoin Rune is not. Do not use wrapped/bridged RUNIX activity to imply ACTIVE lifecycle."
+    },
+    {
+      "entity": "SATOSHI•NAKAMOTO",
+      "priority": "HIGH",
+      "issue": "Core Rune state is verified but creator/operator attribution and current project stewardship remain unresolved. Keep UNCERTAIN / MEDIUM."
+    },
+    {
+      "entity": "GIZMO•IMAGINARY•KITTEN",
+      "priority": "HIGH",
+      "issue": "Launch mechanics are verifiable, but the former official domain is lapsed and current project operation is unresolved. Keep UNCERTAIN / MEDIUM."
+    },
+    {
+      "entity": "SAIKO•HAMSTER",
+      "priority": "HIGH",
+      "issue": "Rune identity is corroborated, but the project site is unavailable and current first-party operation is unresolved. Keep UNCERTAIN / MEDIUM."
+    },
+    {
+      "entity": "BILLION•DOLLAR•CAT",
+      "priority": "MEDIUM",
+      "issue": "ACTIVE lifecycle and launch history are strong, but RuneMine and Ordiscan disagree on Rune-number/current state display. Use Rune ID 845764:84 unless the discrepancy is reconciled."
+    },
+    {
+      "entity": "WISHY•WASHY•MACHINE",
+      "priority": "MEDIUM",
+      "issue": "Current social/brand activity supports ACTIVE, but direct first-party capture is incomplete and team attribution is partial. Keep MEDIUM confidence."
+    }
+  ],
+  "omission_decisions": [
+    {
+      "entity": "Runestone",
+      "decision": "RELATIONSHIP_ONLY",
+      "reason": "Canonical home is ORDINALS. It is the historical distribution artifact linked to DOG•GO•TO•THE•MOON and must not be duplicated in RUNES."
+    },
+    {
+      "entity": "RSIC Metaprotocol",
+      "decision": "RELATIONSHIP_ONLY",
+      "reason": "Canonical home is ORDINALS. RSIC•GENESIS•RUNE receives the RUNES profile; the pre-Runes metaprotocol/distribution phase stays relational."
+    },
+    {
+      "entity": "Based Angels",
+      "decision": "RELATIONSHIP_ONLY",
+      "reason": "Canonical home is ORDINALS. BASED•ANGELS•RUNE is the separate Rune entity."
+    },
+    {
+      "entity": "DOG•DOG•DOG•DOG•DOG",
+      "decision": "EXCLUDE_FOR_NOW",
+      "reason": "Early Rune number and market/indexer persistence alone do not establish enough distinct historical, technical, cultural, or project significance for the initial MSC canon."
+    },
+    {
+      "entity": "MEME•ECONOMICS",
+      "decision": "EXCLUDE_FOR_NOW",
+      "reason": "Activation-block provenance is clear, but this pass did not verify a sufficiently distinctive project identity, stewardship history, or ecosystem role beyond early-number/on-chain and market presence."
+    },
+    {
+      "entity": "EPIC•EPIC•EPIC•EPIC",
+      "decision": "EXCLUDE_FOR_NOW",
+      "reason": "Indexer/market presence was not enough to establish a differentiated, well-sourced historical or ecosystem case for canonical inclusion."
+    },
+    {
+      "entity": "STAKED•LIQUIDIUM",
+      "decision": "RELATIONSHIP_ONLY",
+      "reason": "Official Liquidium child/receipt Rune associated with LIQ staking. It is represented under the canonical LIQUIDIUM•TOKEN profile to avoid child-token expansion."
+    }
+  ],
+  "consolidation_decisions": [
+    "PUPS BRC-20 history and PUPS•WORLD•PEACE are represented by one current canonical Rune profile; the BRC-20 predecessor remains a relationship/history field.",
+    "WZRD/BRC-20 and MAGIC•INTERNET•MONEY are consolidated as lineage under the canonical Rune profile; the predecessor is not a separate RUNES profile.",
+    "Wrapped or bridged representations of Rune assets on other networks are relationships, not separate canonical Rune entities.",
+    "STAKED•LIQUIDIUM is modeled as a child/receipt asset under LIQUIDIUM•TOKEN rather than a separate initial-canon profile."
+  ]
+}
