@@ -1,5 +1,5 @@
-/* MSC Explore Atlas — geography pass v3.
- * Goal: believable coast first, chart detail second.
+/* MSC Explore Atlas — geography pass v4.
+ * Goal: believable geography first: irregular coast, bays, capes, islands and an inland lake.
  * Keeps the existing Atlas frame and interaction engine intact.
  */
 
@@ -17,20 +17,20 @@
 }
 
 .msc-atlas-map__minor-grid {
-  opacity: .13 !important;
+  opacity: .09 !important;
 }
 
 .msc-atlas-map__major-grid {
-  opacity: .22 !important;
+  opacity: .16 !important;
 }
 
 .msc-atlas-map__soundings {
-  opacity: .22;
+  opacity: .14;
 }
 
 .msc-atlas-map__soundings text,
 .msc-atlas-map__chart-note {
-  fill: rgba(212, 190, 153, .38);
+  fill: rgba(212, 190, 153, .34);
   font-size: 7.5px;
   letter-spacing: .08em;
   pointer-events: none;
@@ -45,106 +45,110 @@
   filter: none !important;
 }
 
-/* Redraw the shared Bitcoin landmass as a more geographic silhouette.
- * Deliberately asymmetric: capes, bays, a narrow western shoulder,
- * a long eastern reach, a southern gulf and several smaller inlets.
+/* Rebuilt coastline with short directional changes instead of long balloon-like curves.
+ * The silhouette now includes a rugged northwest shelf, a north-central bay,
+ * an eastern cape, a deep southeast inlet, a southern gulf and an uneven west coast.
  */
 .msc-atlas-map__land-context > .msc-atlas-map__coast-shelf,
 .msc-atlas-map__land-context > .msc-atlas-map__landmass {
-  d: path("M170 104 C190 86 220 72 248 76 L276 68 C306 62 332 76 350 91 L380 105 C405 117 432 114 452 98 C475 78 504 69 530 82 L558 96 C581 110 604 111 626 95 L654 74 C681 55 713 54 741 64 L770 75 C796 86 821 83 846 73 C875 61 904 66 923 87 L946 112 C962 130 979 140 1001 144 L1027 149 C1051 153 1070 169 1074 191 C1077 210 1067 225 1045 238 L1024 250 C1002 265 997 282 1007 299 L1026 320 C1042 338 1048 358 1037 378 C1025 399 1002 407 973 404 L940 399 C913 394 891 400 874 416 L855 435 C836 451 812 457 786 451 L752 441 C728 434 707 438 691 454 L671 476 C654 491 631 495 609 486 L578 470 C554 458 532 458 511 471 L487 485 C462 498 433 493 411 474 L383 452 C361 436 340 433 317 443 L294 453 C267 464 242 456 228 437 L213 415 C198 394 179 384 157 388 L132 392 C107 394 90 379 88 357 C86 337 98 320 118 308 L139 296 C160 284 168 269 161 250 L148 227 C135 207 135 189 149 173 L164 158 C178 144 181 127 170 104 Z");
+  d: path("M182 88 L202 78 L222 80 Q240 69 258 73 L278 67 Q300 62 321 73 L341 87 L362 89 Q382 88 399 74 L419 58 Q439 47 459 54 L479 66 Q499 76 520 69 L544 57 Q567 46 589 55 L612 70 Q633 83 655 78 L682 64 Q711 47 739 56 L764 69 Q788 82 812 75 L838 63 Q864 51 889 62 L912 80 L928 101 L946 120 Q962 135 984 140 L1015 145 Q1042 149 1057 166 L1073 185 Q1082 198 1077 212 L1067 225 L1048 238 L1028 248 L1042 254 L1065 257 Q1085 260 1094 274 Q1102 287 1095 299 L1082 310 L1062 316 L1045 319 Q1030 324 1027 338 L1031 350 Q1036 365 1025 377 Q1013 390 993 390 L969 385 Q947 378 930 386 L912 398 Q895 410 881 426 L865 444 Q849 459 829 460 L807 457 L780 447 Q755 439 737 449 L716 465 L695 483 Q678 498 656 495 L634 486 L612 470 Q591 455 568 462 L543 478 Q519 490 497 484 L476 470 L456 452 Q439 435 419 439 L397 449 Q377 459 358 448 L337 430 L320 409 Q305 389 284 393 L259 401 Q235 408 219 392 L204 374 Q194 360 178 363 L159 367 Q139 371 124 356 L112 340 Q101 325 108 306 L118 290 L132 276 Q145 263 138 248 L126 228 Q115 211 119 194 L130 179 L148 163 Q162 150 158 134 L151 119 Q145 103 158 95 Z");
 }
 
 .msc-atlas-map__coast-shelf {
   fill: none;
-  stroke: rgba(212, 190, 153, .07);
-  stroke-width: 10;
+  stroke: rgba(212, 190, 153, .055);
+  stroke-width: 5;
   vector-effect: non-scaling-stroke;
 }
 
 .msc-atlas-map__landmass {
-  fill: rgba(212, 190, 153, .055);
+  fill: rgba(212, 190, 153, .05);
   stroke: rgba(212, 190, 153, .78);
-  stroke-width: 1.55;
+  stroke-width: 1.45;
   vector-effect: non-scaling-stroke;
 }
 
-/* Replace the old circular offshore marks with small irregular islands. */
+/* Offshore geography: small archipelagos rather than symbol-like circles. */
 .msc-atlas-map__land-context > .msc-atlas-map__island:nth-child(3) {
-  d: path("M76 244 L88 237 L103 239 L113 248 L111 260 L102 270 L88 272 L77 265 L71 255 Z");
+  d: path("M78 245 L87 238 L99 240 L106 248 L103 258 L94 264 L83 261 L76 253 Z M58 272 L64 267 L72 269 L75 276 L70 282 L62 281 L57 276 Z M91 282 L98 278 L106 281 L108 288 L102 294 L94 292 L90 287 Z");
 }
 
 .msc-atlas-map__land-context > .msc-atlas-map__island:nth-child(4) {
-  d: path("M58 323 L72 313 L90 315 L102 326 L99 342 L88 353 L70 351 L59 340 Z");
+  d: path("M72 350 L83 343 L96 345 L104 355 L99 367 L88 373 L76 368 L68 359 Z M110 366 L118 362 L127 366 L129 374 L122 381 L113 379 L108 372 Z");
 }
 
 .msc-atlas-map__land-context > .msc-atlas-map__island:nth-child(5) {
-  d: path("M1092 112 L1105 106 L1118 111 L1126 122 L1121 135 L1109 142 L1095 138 L1087 126 Z");
+  d: path("M1090 119 L1100 112 L1112 114 L1120 122 L1118 133 L1108 140 L1097 137 L1088 129 Z M1127 143 L1134 139 L1142 142 L1144 149 L1138 155 L1130 153 L1126 148 Z");
 }
 
+/* Repurpose the fourth former offshore island as an inland lake. */
 .msc-atlas-map__land-context > .msc-atlas-map__island:nth-child(6) {
-  d: path("M868 482 L882 473 L899 476 L911 487 L909 501 L897 512 L881 510 L870 499 Z");
+  d: path("M435 357 L445 350 L458 352 L468 360 L470 370 L463 379 L450 382 L439 377 L432 368 Z");
+  fill: rgba(16, 40, 45, .92);
+  stroke: rgba(212, 190, 153, .54);
+  stroke-width: 1;
 }
 
 .msc-atlas-map__island {
-  fill: rgba(212, 190, 153, .035);
-  stroke: rgba(212, 190, 153, .62);
-  stroke-width: 1.15;
+  fill: rgba(212, 190, 153, .03);
+  stroke: rgba(212, 190, 153, .58);
+  stroke-width: 1;
   vector-effect: non-scaling-stroke;
 }
 
-/* Region overlays are interaction territories, not eight outlined islands.
- * At idle, labels carry the geography. Borders become clearer only on interaction.
+/* Region overlays are interaction territories, not map outlines.
+ * Borders stay intentionally quiet at idle and strengthen only when selected.
  */
 .msc-atlas-map__region-shape {
-  fill: rgba(212, 190, 153, .006);
-  stroke: rgba(212, 190, 153, .14);
-  stroke-width: .75;
+  fill: rgba(212, 190, 153, .004);
+  stroke: rgba(212, 190, 153, .085);
+  stroke-width: .6;
   vector-effect: non-scaling-stroke;
   transition: fill .22s ease, stroke .22s ease, opacity .22s ease;
 }
 
-/* Mining — northwest highlands. */
+/* Mining — rugged northwest shelf. */
 .msc-atlas-map__region[data-atlas-region-shape="mining"] > .msc-atlas-map__region-shape:first-child {
-  d: path("M170 104 C203 78 250 69 292 75 L350 91 L380 105 C405 117 432 114 452 98 L463 164 L430 199 L371 218 L312 211 L258 219 L205 204 L164 176 L149 153 C163 139 179 124 170 104 Z");
+  d: path("M182 88 L222 80 L258 73 L321 73 L362 89 L399 74 L419 58 L459 54 L470 145 L445 176 L405 201 L359 214 L311 207 L268 214 L226 204 L190 186 L148 163 L158 134 L151 119 L158 95 Z");
 }
 
 /* Ordinals — west coast and central-west peninsula. */
 .msc-atlas-map__region[data-atlas-region-shape="ordinals"] > .msc-atlas-map__region-shape:first-child {
-  d: path("M164 176 L205 204 L258 219 L312 211 L371 218 L383 269 L348 306 L301 333 L248 332 L205 315 L161 289 C168 275 168 263 161 250 L148 227 C138 211 138 194 149 173 Z M76 244 L88 237 L103 239 L113 248 L111 260 L102 270 L88 272 L77 265 L71 255 Z");
+  d: path("M148 163 L190 186 L226 204 L268 214 L311 207 L359 214 L380 264 L349 300 L306 327 L257 329 L214 315 L173 292 L138 248 L126 228 L119 194 L130 179 Z M78 245 L87 238 L99 240 L106 248 L103 258 L94 264 L83 261 L76 253 Z M58 272 L64 267 L72 269 L75 276 L70 282 L62 281 L57 276 Z");
 }
 
-/* Runes — southwest shelf and island chain. */
+/* Runes — southwest coast and archipelago. */
 .msc-atlas-map__region[data-atlas-region-shape="runes"] > .msc-atlas-map__region-shape:first-child {
-  d: path("M161 289 L205 315 L248 332 L301 333 L327 366 L306 405 L276 438 C255 449 238 443 228 427 L213 405 C198 386 179 379 157 383 L132 387 C111 389 94 377 91 358 C88 339 99 323 118 311 L139 298 Z M58 323 L72 313 L90 315 L102 326 L99 342 L88 353 L70 351 L59 340 Z");
+  d: path("M173 292 L214 315 L257 329 L306 327 L331 360 L309 402 L284 393 L259 401 L235 408 L219 392 L204 374 L178 363 L159 367 L124 356 L112 340 L108 306 L132 276 L138 248 Z M72 350 L83 343 L96 345 L104 355 L99 367 L88 373 L76 368 L68 359 Z M110 366 L118 362 L127 366 L129 374 L122 381 L113 379 L108 372 Z");
 }
 
 /* Wallets — north-central passage. */
 .msc-atlas-map__region[data-atlas-region-shape="wallets"] > .msc-atlas-map__region-shape:first-child {
-  d: path("M452 98 C475 78 504 69 530 82 L558 96 C581 110 604 111 626 95 L654 74 C681 55 713 54 741 64 L770 75 L775 159 L736 196 L681 205 L621 190 L564 184 L515 197 L463 164 Z");
+  d: path("M419 58 L459 54 L520 69 L544 57 L589 55 L612 70 L655 78 L682 64 L739 56 L764 69 L771 154 L735 188 L683 198 L626 186 L569 179 L519 192 L470 145 Z");
 }
 
 /* Marketplaces — northeast coast and cape. */
 .msc-atlas-map__region[data-atlas-region-shape="marketplaces"] > .msc-atlas-map__region-shape:first-child {
-  d: path("M770 75 C796 86 821 83 846 73 C875 61 904 66 923 87 L946 112 C962 130 979 140 1001 144 L1027 149 C1051 153 1070 169 1074 191 C1077 210 1067 225 1045 238 L1024 250 L972 251 L925 233 L877 218 L825 219 L775 159 Z M1092 112 L1105 106 L1118 111 L1126 122 L1121 135 L1109 142 L1095 138 L1087 126 Z");
+  d: path("M764 69 L812 75 L838 63 L889 62 L912 80 L946 120 L984 140 L1015 145 L1057 166 L1073 185 L1077 212 L1048 238 L1028 248 L972 247 L925 228 L878 214 L825 214 L771 154 Z M1090 119 L1100 112 L1112 114 L1120 122 L1118 133 L1108 140 L1097 137 L1088 129 Z");
 }
 
 /* Payments — central harbour. */
 .msc-atlas-map__region[data-atlas-region-shape="payments"] > .msc-atlas-map__region-shape:first-child {
-  d: path("M463 164 L515 197 L564 184 L621 190 L681 205 L707 252 L687 307 L638 342 L581 349 L526 329 L479 295 L383 269 L371 218 L430 199 Z");
+  d: path("M470 145 L519 192 L569 179 L626 186 L683 198 L712 246 L690 303 L642 337 L584 345 L530 326 L482 293 L380 264 L359 214 L405 201 L445 176 Z");
 }
 
-/* Network — broad southern backbone. */
+/* Network — broad southern backbone around the inland lake. */
 .msc-atlas-map__region[data-atlas-region-shape="network"] > .msc-atlas-map__region-shape:first-child {
-  d: path("M327 366 L348 306 L383 269 L479 295 L526 329 L581 349 L638 342 L687 307 L733 337 L773 382 L752 441 C728 434 707 438 691 454 L671 476 C654 491 631 495 609 486 L578 470 C554 458 532 458 511 471 L487 485 C462 498 433 493 411 474 L383 452 C361 436 340 433 317 443 L294 453 C286 456 280 457 276 438 L306 405 Z");
+  d: path("M331 360 L349 300 L380 264 L482 293 L530 326 L584 345 L642 337 L690 303 L736 333 L777 378 L780 447 L737 449 L716 465 L695 483 L656 495 L612 470 L568 462 L543 478 L497 484 L456 452 L419 439 L397 449 L358 448 L320 409 L309 402 Z");
 }
 
-/* Exchanges — southeast trading coast. */
+/* Exchanges — southeast trading coast with a pronounced inlet. */
 .msc-atlas-map__region[data-atlas-region-shape="exchanges"] > .msc-atlas-map__region-shape:first-child {
-  d: path("M687 307 L707 252 L768 231 L825 219 L877 218 L925 233 L972 251 L1007 299 L1026 320 C1042 338 1048 358 1037 378 C1025 399 1002 407 973 404 L940 399 C913 394 891 400 874 416 L855 435 C836 451 812 457 786 451 L752 441 L773 382 L733 337 Z M868 482 L882 473 L899 476 L911 487 L909 501 L897 512 L881 510 L870 499 Z");
+  d: path("M690 303 L712 246 L768 229 L825 214 L878 214 L925 228 L972 247 L1028 248 L1042 254 L1065 257 L1094 274 L1095 299 L1062 316 L1045 319 L1027 338 L1031 350 L1025 377 L993 390 L969 385 L930 386 L912 398 L881 426 L865 444 L829 460 L780 447 L777 378 L736 333 Z");
 }
 
 .msc-atlas-map__region-index {
-  fill: rgba(212, 190, 153, .48);
+  fill: rgba(212, 190, 153, .46);
   font-size: 8.5px;
   letter-spacing: .18em;
 }
@@ -154,18 +158,14 @@
   font-size: 13.5px;
   font-weight: 700;
   letter-spacing: .085em;
-  paint-order: stroke;
-  stroke: rgba(16, 40, 45, .86);
-  stroke-width: 3px;
-  stroke-linejoin: round;
 }
 
 .msc-atlas-map__region:hover .msc-atlas-map__region-shape,
 .msc-atlas-map__region:focus-visible .msc-atlas-map__region-shape,
 .msc-atlas-map__region.is-active .msc-atlas-map__region-shape {
-  fill: rgba(212, 190, 153, .095);
-  stroke: rgba(251, 248, 239, .72);
-  stroke-width: 1;
+  fill: rgba(212, 190, 153, .085);
+  stroke: rgba(251, 248, 239, .64);
+  stroke-width: .9;
 }
 
 .msc-atlas-map__region.is-active .msc-atlas-map__region-label {
@@ -173,7 +173,7 @@
 }
 
 .msc-atlas-window.has-active-region .msc-atlas-map__land-context {
-  opacity: .70;
+  opacity: .72;
 }
 
 /* Preserve entity inspection but keep idle geography clean. */
