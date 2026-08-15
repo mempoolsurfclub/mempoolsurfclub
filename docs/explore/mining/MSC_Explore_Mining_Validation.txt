@@ -1,0 +1,174 @@
+MSC Explore — Mining Registry Validation / Final QA
+Verified date: 2026-08-15
+
+REPOSITORY SCOPE
+PASS: QA target is docs/explore/mining/ only.
+PASS: Research branch was created from current main before Mining writes.
+PASS: No Ordinals, Runes, Wallets, Marketplaces, Payments, Exchanges, Network registry, Shopify, Atlas, Learn, Home, Tools, production routing, deployment, or merge action is authorized by this package.
+
+REFERENCE SCHEMA
+PASS: Approved Ordinals QA reference HEAD 1f4368bdebc572de5aaed6df221460516295c54a was inspected before substantive Mining work.
+PASS: Mining reuses the approved 24-field entity contract, lifecycle model, source-confidence model, controlled source provenance, manifest + shards + human companion + validation pattern, and one-entity-one-profile discipline.
+PASS: Mining topic/subtopic architecture was researched independently rather than copied from Ordinals.
+
+STRUCTURE
+PASS: Canonical manifest present.
+PASS: Nine record shards present/planned in the manifest.
+PASS: Combined canonical record count = 37.
+PASS: Required user seed Parasite Pool represented = 1/1.
+PASS: Unique Registry IDs = 37/37.
+PASS: Unique canonical names = 37/37.
+PASS: Unique recommended slugs = 37/37.
+PASS: Every canonical record contains the same 24 required fields.
+PASS: Every primary category is MINING.
+PASS: Every Mining topic/subtopic is defined in manifest topic_architecture.
+PASS: Every status uses ACTIVE / HISTORICAL / INACTIVE / UNCERTAIN.
+PASS: Every source confidence uses HIGH / MEDIUM / LOW.
+PASS: Every source_type uses official / official-github / primary / on-chain / independent / indexer / marketplace / market-data.
+PASS: Record verification dates use ISO YYYY-MM-DD and are 2026-08-15.
+
+MANIFEST COUNT NORMALIZATION
+PASS: counts contains only total_records, by_status, by_topic, and by_source_confidence.
+PASS: by_status contains the complete controlled vocabulary including zero values.
+PASS: by_source_confidence contains the complete controlled vocabulary including zero values.
+PASS: total_records = 37 and reconciles with all shards.
+
+FINAL COUNTS
+Status counts:
+- ACTIVE: 31
+- HISTORICAL: 6
+- INACTIVE: 0
+- UNCERTAIN: 0
+
+Topic counts:
+- Pools & Coordinators: 16
+- Protocols & Template Coordination: 7
+- ASIC Hardware & Manufacturers: 6
+- Firmware & Mining Software: 3
+- Home & Open-Source Mining: 2
+- Industrial & Energy Infrastructure: 3
+
+Source confidence counts:
+- HIGH: 34
+- MEDIUM: 3
+- LOW: 0
+
+POOL / HASHER QA
+PASS: Pool records distinguish independent hashers from pool coordinators and do not imply the pool owns all pointed hashrate.
+PASS: Current pool/network share is not frozen into canonical descriptions.
+PASS: Short-window block share is not treated as permanent hashrate.
+PASS: solo.ckpool is explicitly identified as a hosted solo coordinator rather than a conventional shared-payout pool.
+PASS: MARA Pool is identified as a proprietary operator pool rather than a general public pool.
+PASS: GHash.IO's 2014 concentration episode is qualified as short-window observed pool coordination, not permanent ownership of majority hardware.
+
+PAYOUT QA
+PASS: FPPS descriptions explain pool-side block-variance assumption rather than calling FPPS universally better.
+PASS: PPS+/FPPS references preserve transaction-fee/accounting distinctions at the level supported by operator documentation.
+PASS: PPLNS is treated as recent-work share accounting with greater miner variance, not as consensus behavior.
+PASS: OCEAN TIDES is kept distinct from DATUM protocol behavior.
+PASS: DMND SLICE is identified as PPLNS-derived accounting and kept separate from Stratum V2 consensus/transport claims.
+PASS: Parasite Pool is not described as PPS income; current template structure verifies 1 BTC to the block finder and remainder routing for shared payout infrastructure.
+PASS: Time-sensitive pool fees, payout thresholds, and minimums are not treated as timeless facts.
+
+CONSENSUS / POLICY QA
+PASS: Bitcoin consensus validity is explicitly separated from miner policy, pool policy, node relay/mempool policy, and transaction selection.
+PASS: Pool transaction-selection choices do not imply miners can arbitrarily change consensus rules.
+PASS: MARA Slipstream is framed as transaction submission/template policy for consensus-valid transactions, not consensus relaxation.
+PASS: OCEAN template policy is treated as policy, not consensus.
+PASS: DATUM miner-selected templates remain subject to Bitcoin consensus validity.
+
+STRATUM / TEMPLATE QA
+PASS: Stratum V1 is modeled as an application-layer pool protocol, not Bitcoin consensus.
+PASS: Stratum V2 is modeled as a modular protocol suite with authenticated encrypted transport plus optional Job Declaration/Template Distribution components.
+PASS: No claim of universal Stratum V2 deployment is made.
+PASS: SV2 transport alone is not equated with miner transaction selection.
+PASS: Job Declaration is consolidated under Stratum V2 rather than duplicated as a standalone canonical entity.
+PASS: getblocktemplate BIP 22/23 is represented as a deployed node/mining API-RPC interface, not a consensus rule.
+PASS: BetterHash is classified HISTORICAL and treated as design lineage rather than current production deployment.
+PASS: DATUM is separate from OCEAN because protocol/template construction and pool payout operation are materially distinct.
+PASS: GridPool and Braidpool explicitly preserve beta/development maturity cautions.
+
+ASIC / HARDWARE QA
+PASS: BITMAIN/Antminer, MicroBT/WhatsMiner, Canaan/Avalon, Auradine/Teraflux, Proto, and Bitdeer/SEALMINER are canonicalized at company/platform/family level rather than per SKU.
+PASS: Manufacturer, ASIC chip, complete machine, firmware, pool, control system, and cooling format are not conflated.
+PASS: No manufacturer-wide timeless efficiency figure is published.
+PASS: AntPool is separate from BITMAIN and BITMAIN's own history is used to preserve the May 2021 spin-off distinction.
+PASS: Proto roadmap claims are distinguished from deployed/commercial evidence.
+
+FIRMWARE / SOFTWARE QA
+PASS: Braiins Pool and Braiins OS are separate canonical entities.
+PASS: Luxor Mining Pool and LuxOS are separate canonical entities.
+PASS: Firmware is described as controlling machine tuning/network behavior rather than changing Bitcoin consensus.
+PASS: CGMiner is HISTORICAL because its original repository is archived even though descendants remain influential.
+PASS: VNish and BFGMiner were researched but deliberately excluded to avoid product/software directory padding.
+
+HOME / OPEN-SOURCE MINING QA
+PASS: Bitaxe and FutureBit Apollo preserve home-mining significance despite industrial hashrate dominance.
+PASS: Bitaxe consolidates closely integrated OSMU/AxeOS/board-generation relationships instead of creating gadget/firmware sprawl.
+PASS: FutureBit Apollo is modeled as one integrated miner/node ecosystem rather than one profile per generation.
+PASS: Solo-mining block finds are not presented as predictable expected returns.
+PASS: NerdMiner was researched and excluded because it adds less system-level significance than Bitaxe/FutureBit.
+
+ENERGY / INDUSTRIAL QA
+PASS: Riot is included for a distinctive documented ERCOT curtailment/demand-response mechanism, not public-market size.
+PASS: Gridless is included for a distinct distributed mini-grid/flexible-load architecture.
+PASS: Upstream Data is included for current mining-specific off-grid natural-gas infrastructure.
+PASS: Electricity use, curtailment, demand response, generation mix, flare/vent baselines, and sustainability claims are kept distinct.
+PASS: No universal claim that Bitcoin mining stabilizes grids, uses only stranded energy, wastes energy, or is inherently renewable is made.
+PASS: Crusoe's Bitcoin-mining/DFM business was researched and excluded from the active canon because Crusoe divested it to NYDIG in 2025.
+PASS: CleanSpark, Core Scientific, IREN, TeraWulf, and Hut 8 were researched but excluded so the canon does not become a public-company directory.
+
+PARASITE POOL QA
+PASS: Parasite Pool is included as MSC-EXP-MIN-009.
+PASS: Lifecycle ACTIVE is supported by live first-party service/template/software evidence.
+PASS: Live current template verifies a 1 BTC block-finder output and remainder routing to a Lightning payout deposit.
+PASS: Modified ckpool infrastructure is supported by the project's GitHub repository.
+PASS: Ordinal Maxi Biz / ZK Shark founder attribution is preserved as independently supported rather than silently upgraded to fully first-party attribution.
+PASS: Source confidence remains MEDIUM.
+PASS: Related categories include ORDINALS, NETWORK, and PAYMENTS.
+PASS: No timeless zero-fee claim is locked.
+
+CROSS-CATEGORY / CONSOLIDATION QA
+PASS: Exchange-owned Binance Pool is excluded from duplicate Mining canon and may be represented relationally from EXCHANGES.
+PASS: Pool Lightning payout relationships link PAYMENTS where materially relevant.
+PASS: Mining/template protocols link NETWORK where appropriate.
+PASS: Parasite Pool links ORDINALS without duplicating Ordinals entities.
+PASS: Slush Pool is lineage under Braiins Pool rather than a duplicate active profile.
+PASS: MARA corporate profile is consolidated under the technically distinctive MARA Pool relationship.
+PASS: OCEAN/DATUM, Braiins Pool/Braiins OS, and Luxor Pool/LuxOS remain separate only where products are materially distinct.
+
+SOURCE QUALITY QA
+PASS: 34 HIGH-confidence records rely materially on first-party, primary protocol/BIP, creator-controlled, filing, or official technical sources.
+PASS: The three MEDIUM-confidence records are Parasite Pool, Eligius, and P2Pool (Bitcoin), each with explicit reason for the confidence limitation.
+PASS: No LOW-confidence record is required for the initial canon.
+PASS: Historical entities without surviving official sites use primary/independent archival evidence and remain explicitly historical.
+
+MAJOR OMISSION / DIRECTORY-PADDING REVIEW
+PASS: Important current pool, protocol, hardware, firmware, home-mining, historical, industrial, and energy archetypes are represented.
+PASS: SpiderPool, Binance Pool, BTC.com Pool, VNish, BFGMiner, NerdMiner, CleanSpark, Core Scientific, IREN, TeraWulf, Hut 8, Crusoe Bitcoin mining, and ckpool standalone software were explicitly reviewed and excluded/consolidated with reasons.
+PASS: getblocktemplate and Upstream Data were added beyond the initial candidate set because they materially improve system coverage.
+PASS: GridPool was added as a current beta decentralized reward-sharing architecture, with maturity caveats preserved.
+
+RECORDS REQUIRING QUALIFIED PUBLIC COPY
+- Parasite Pool: founder attribution / exact shared-remainder accounting / fee claims.
+- GridPool: public beta/mainnet soft-launch maturity.
+- Braidpool: active development versus production deployment.
+- Stratum V2: component-specific deployment; do not universalize Job Declaration/Template Distribution.
+- P2Pool (Bitcoin): fragmented historical source lineage and Monero name collision.
+- Riot Platforms: grid-benefit outcomes require qualification.
+- Gridless: site-specific energy/economic outcomes require qualification.
+- Upstream Data: flare/vent baselines and emissions outcomes require site-specific evidence.
+
+REMAINING RESEARCH UNCERTAINTIES
+- Parasite Pool founder/operator attribution is credible but not equally explicit on a project-controlled legal/about page.
+- Parasite Pool exact shared-remainder accounting/window should only be described to the level directly documented.
+- GridPool and Braidpool deployment maturity should be re-verified immediately before public copy.
+- Stratum V2 pool/firmware component support must be re-verified before any deployment percentage or universal feature statement.
+- Historical P2Pool first-party archive continuity remains fragmented.
+- All pool fees, payout thresholds, hashrate/block share, ASIC efficiency, fleet/capacity, and energy metrics remain time-sensitive.
+
+VALIDATION RESULT
+PASS — Approval-ready MINING research registry for Command Center review.
+
+PUBLICATION STATE
+COMMAND CENTER REVIEW ONLY. No merge, Shopify/Atlas change, live Explore integration, public Mining profile/page, production route, Learn/Home/Tools edit, or deployment is authorized.

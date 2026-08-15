@@ -1,0 +1,134 @@
+MSC Explore — Exchanges Registry Validation / Final QA
+Verified date: 2026-08-15
+
+REPOSITORY SCOPE
+PASS: Target is docs/explore/exchanges/ only.
+PASS: Research branch was created from live main SHA 98e3e722bff75922cae7f22f2925c411b8a5d620.
+PASS: Approved Ordinals reference branch/QA HEAD 1f4368bdebc572de5aaed6df221460516295c54a was inspected before construction.
+PASS: No Shopify, Atlas, runtime Explore, Learn, Home, Tools, production route, merge or deployment action is authorized.
+
+STRUCTURE
+PASS: Canonical manifest parsed.
+PASS: Nine record shards parsed.
+PASS: Combined record count = 35.
+PASS: Unique Registry IDs = 35/35.
+PASS: Retired Registry ID MSC-EXP-EXC-003 remains intentionally unused; the other 35 IDs were not renumbered.
+PASS: Unique canonical names = 35/35.
+PASS: Unique recommended slugs = 35/35.
+PASS: Every record contains exactly the same 24 required fields.
+PASS: Every primary category is EXCHANGES.
+PASS: Every Exchanges topic/subtopic exists in manifest topic architecture.
+PASS: Every lifecycle is ACTIVE / HISTORICAL / INACTIVE / UNCERTAIN.
+PASS: Every source confidence is HIGH / MEDIUM / LOW.
+PASS: Every source_type is from official / official-github / primary / on-chain / independent / indexer / marketplace / market-data.
+PASS: Every record verification date is ISO YYYY-MM-DD and equals 2026-08-15 for this research pass.
+
+INVENTORY / CATEGORY BOUNDARY
+PASS: Every included entity has a Bitcoin-specific inclusion rationale beyond merely listing BTC.
+PASS: Inventory spans Bitcoin-focused brokers/on-ramps, global/regional centralized exchanges, P2P systems, institutional/derivatives venues and historically significant infrastructure.
+PASS: Generic altcoin-exchange directory padding was removed.
+PASS: Crypto.com / Gate.io / MEXC / Bittrex were researched but excluded because unique Bitcoin-specific significance did not exceed directory-padding risk.
+PASS: Cash App Bitcoin and Fold were not duplicated into EXCHANGES when their stronger canonical identity is PAYMENTS/WALLETS/rewards.
+PASS: Strike is RELATIONSHIP_ONLY in EXCHANGES; the already-approved PAYMENTS registry (`MSC-EXP-PAY-003`) remains its single canonical home.
+PASS: Strike exchange-specific findings (custodial BTC buy/sell plus on-chain/Lightning movement) are preserved only as relationship/research context.
+PASS: Monero-first Haveno and AgoraDesk/LocalMonero were excluded.
+PASS: FTX was excluded because its failure is historically large but not specifically explanatory enough of Bitcoin exchange infrastructure for the initial canon.
+
+MODEL / CUSTODY QA
+PASS: Brokerage, dealer, custodial order-book, institutional OTC, derivatives and P2P coordinator models are labeled separately.
+PASS: Swan's current technology-provider / third-party-custodian model is explicitly preserved.
+PASS: Direct-to-wallet models (Bull Bitcoin, Bitcoin Well, Relai, Pocket) are not described as order-book exchanges.
+PASS: Centralized exchange-account custody is separated from self-custody wallet products.
+PASS: Bisq describes security deposits/multisig plus mediation/arbitration; no claim of zero counterparty risk.
+PASS: RoboSats describes Lightning hold-invoice escrow and coordinator powers; no claim of fully trustless custody.
+PASS: Hodl Hodl describes 2-of-3 multisig with buyer/seller/platform key roles.
+PASS: Peach describes its seller/Peach multisig and dispute/timeout role rather than copying Hodl Hodl's model.
+PASS: Vexl is correctly described as no-platform-escrow discovery/messaging.
+PASS: CME Bitcoin Futures is correctly described as cash-settled derivatives, not spot BTC custody.
+
+LIGHTNING QA
+PASS: River current wallet supports on-chain and Lightning send/receive.
+PASS: Strike relationship research preserves current first-party findings for custodial Bitcoin plus Lightning/on-chain movement; no canonical Strike record remains in EXCHANGES.
+PASS: Kraken current support material verifies Lightning funding.
+PASS: Binance Lightning integration was verified and current API material still exposes LIGHTNING network support; availability caveat retained.
+PASS: OKX current help material verifies Lightning deposits/withdrawals with customer/region caveat.
+PASS: Bitfinex current support material verifies Lightning deposits/withdrawals.
+PASS: RoboSats is correctly modeled as Lightning-native.
+PASS: No Lightning claim is made for Bybit without sufficient current verification.
+PASS: bitFlyer's product named 'Lightning' is explicitly NOT treated as proof of Bitcoin Lightning Network support.
+
+PROOF-OF-RESERVES QA
+PASS: River record distinguishes proof of assets/liabilities from broader corporate solvency and notes River's separate financial statements.
+PASS: Bybit reserve snapshots are described as exchange disclosures, not proof of total corporate solvency.
+PASS: No MSC security scores were created.
+
+REGULATORY / LEGAL QA
+PASS: Material regulatory statements are tied to a jurisdiction/entity and dated context.
+PASS: Binance company resolution and CZ individual case are distinguished.
+PASS: Gemini exchange/trust history is separated from Gemini Earn / Genesis Global Capital.
+PASS: Genesis Global Trading is separated from Genesis Global Capital.
+PASS: QuadrigaCX fraud conclusions are attributed to OSC Staff, not stated as a court finding.
+PASS: BTC-e record uses DOJ primary guilty-plea/shutdown language.
+PASS: Mt. Gox current rehabilitation portal is not mistaken for active exchange operation.
+PASS: Peach and Bull Bitcoin carry explicit 2026 EU/MiCA re-verification cautions.
+
+LIFECYCLE QA
+PASS: ACTIVE = verified current operation on 2026-08-15.
+PASS: INACTIVE = actual cessation/wind-down for Mt. Gox, BTC-e, LocalBitcoins, Paxful, QuadrigaCX, BitInstant, CampBX, itBit and Genesis Global Trading.
+PASS: Historical topic membership does not override lifecycle semantics.
+PASS: BitMEX remains ACTIVE on 2026-08-15 because its announced closure is 2026-09-23; high-priority recheck is explicit.
+PASS: itBit is INACTIVE because Paxos retired the trading platform effective 2026-08-09; current Paxos brokerage/order routing is related successor functionality.
+PASS: Reachable closure/creditor/withdrawal pages do not convert closed exchanges to ACTIVE.
+
+ONE ENTITY / ONE PROFILE
+PASS: Coinbase Advanced / GDAX / Coinbase Pro consolidated into Coinbase.
+PASS: Kraken Pro consolidated into Kraken.
+PASS: Coinfloor represented as CoinCorner acquisition lineage, not duplicate profile.
+PASS: Bisq v1/Bisq 2 remain one initial-canon entity.
+PASS: Gemini Earn is not a duplicate exchange profile.
+PASS: Binance.US is not conflated with Binance.com/global profile.
+PASS: No duplicate canonical Strike profile remains in EXCHANGES; PAYMENTS owns the single canonical Strike profile.
+
+FINAL COUNTS
+Status counts:
+- ACTIVE: 26
+- HISTORICAL: 0
+- INACTIVE: 9
+- UNCERTAIN: 0
+
+Topic counts:
+- Bitcoin-Focused Brokers & On-Ramps: 7
+- Centralized Spot & Multi-Market Exchanges: 12
+- Peer-to-Peer & Non-Custodial Exchange Systems: 5
+- Institutional & Derivatives Venues: 2
+- Historical Exchange Infrastructure: 9
+
+Source confidence counts:
+- HIGH: 33
+- MEDIUM: 2
+- LOW: 0
+
+MANIFEST COUNT NORMALIZATION
+PASS: counts contains only total_records, by_status, by_topic and by_source_confidence.
+PASS: by_status explicitly includes ACTIVE / HISTORICAL / INACTIVE / UNCERTAIN including zero values.
+PASS: by_source_confidence explicitly includes HIGH / MEDIUM / LOW including zero values.
+PASS: Manifest totals reconcile with all shards.
+PASS: Normalized counts reconcile at 35 total records after removing Strike from the canonical inventory.
+PASS: All controlled zero-value buckets remain explicit: HISTORICAL = 0, UNCERTAIN = 0, LOW = 0.
+
+PUBLICATION-SPECIFIC REVIEW QUEUE
+- BitMEX: recheck lifecycle after announced 2026-09-23 closure; current status is date-bound.
+- Peach Bitcoin: recheck EU/EEA legal/availability posture before public copy.
+- Bull Bitcoin: recheck 2026 European/MiCA entity/authorization details against the competent authority before public copy.
+- BTCC: current operation is clear; corporate/ownership continuity from BTC China requires cautious wording.
+- CampBX: exact closure date unresolved; do not invent one.
+- Pocket Bitcoin: current model is verified; individual founder attribution remains unresolved.
+
+MAJOR OMISSION REVIEW
+PASS: No obvious initial-canon gap remains across Bitcoin-only brokers, major durable CEXs, regional BTC/fiat infrastructure, P2P architectures, institutional/derivatives venues and foundational historical exchanges.
+PASS: Exclusions are documented in the manifest and companion rather than silently dropped.
+PASS: Inventory remains intentionally Bitcoin-centered rather than volume-ranked.
+
+VALIDATION RESULT
+PASS — 35 canonical records are structurally valid and content QA is complete for COMMAND CENTER REVIEW.
+APPROVAL RECOMMENDATION: APPROVE the EXCHANGES registry as the category research source, preserving the review queue and requiring BitMEX lifecycle recheck after its announced closure.
