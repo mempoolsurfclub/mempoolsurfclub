@@ -32,6 +32,8 @@ PASS: Every source confidence is one of HIGH / MEDIUM / LOW.
 PASS: Every source_type uses the controlled vocabulary.
 PASS: All record verification dates are valid non-future ISO dates (2026-08-15).
 PASS: Shard counts and manifest total reconcile.
+PASS: Manifest counts.by_status explicitly contains the full controlled vocabulary ACTIVE / HISTORICAL / INACTIVE / UNCERTAIN, including INACTIVE: 0.
+PASS: Manifest counts.by_source_confidence explicitly contains the full controlled vocabulary HIGH / MEDIUM / LOW, including LOW: 0.
 
 FINAL TOPIC COUNTS
 - Protocol & Genesis: 2
