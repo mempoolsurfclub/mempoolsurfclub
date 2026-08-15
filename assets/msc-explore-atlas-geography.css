@@ -1,0 +1,119 @@
+/* MSC Explore Atlas — geography pass v2.
+ * Keeps the existing Atlas frame/interaction engine and changes only the chart geography.
+ */
+
+.msc-atlas-map__land-context,
+.msc-atlas-map__chart-detail {
+  pointer-events: none;
+}
+
+.msc-atlas-map__coast-shelf {
+  fill: none;
+  stroke: rgba(212, 190, 153, .055);
+  stroke-width: 22;
+  vector-effect: non-scaling-stroke;
+}
+
+.msc-atlas-map__landmass,
+.msc-atlas-map__island {
+  fill: rgba(212, 190, 153, .045);
+  stroke: rgba(212, 190, 153, .72);
+  stroke-width: 1.45;
+  vector-effect: non-scaling-stroke;
+}
+
+.msc-atlas-map__coast-inner {
+  fill: none;
+  stroke: rgba(212, 190, 153, .21);
+  stroke-width: .8;
+  stroke-dasharray: 3 5;
+  vector-effect: non-scaling-stroke;
+}
+
+.msc-atlas-map__land-contour {
+  fill: none;
+  stroke: rgba(212, 190, 153, .13);
+  stroke-width: .85;
+  vector-effect: non-scaling-stroke;
+}
+
+.msc-atlas-map__boundary {
+  fill: none;
+  stroke: rgba(212, 190, 153, .34);
+  stroke-width: 1;
+  stroke-dasharray: 5 5;
+  vector-effect: non-scaling-stroke;
+}
+
+.msc-atlas-map__soundings text,
+.msc-atlas-map__chart-note {
+  fill: rgba(212, 190, 153, .42);
+  font-size: 8px;
+  letter-spacing: .08em;
+  pointer-events: none;
+}
+
+/* The landmass supplies the shared coastline. Region paths now behave as
+ * charted territorial overlays rather than eight independent island outlines. */
+.msc-atlas-map__region-shape {
+  fill: rgba(212, 190, 153, .012);
+  stroke: rgba(212, 190, 153, .30);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  transition: fill .22s ease, stroke .22s ease, opacity .22s ease;
+}
+
+.msc-atlas-map__region-shape--inner {
+  fill: none;
+  stroke: rgba(212, 190, 153, .16);
+  stroke-width: .7;
+  stroke-dasharray: 2 5;
+}
+
+.msc-atlas-map__region-index {
+  fill: rgba(212, 190, 153, .54);
+  font-size: 9px;
+  letter-spacing: .18em;
+}
+
+.msc-atlas-map__region-label {
+  fill: var(--msc-paper-soft);
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: .085em;
+  paint-order: stroke;
+  stroke: rgba(16, 40, 45, .84);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+
+.msc-atlas-map__region:hover .msc-atlas-map__region-shape,
+.msc-atlas-map__region:focus-visible .msc-atlas-map__region-shape,
+.msc-atlas-map__region.is-active .msc-atlas-map__region-shape {
+  fill: rgba(212, 190, 153, .115);
+  stroke: rgba(251, 248, 239, .9);
+}
+
+.msc-atlas-map__region.is-active .msc-atlas-map__region-label {
+  fill: #fffdf7;
+}
+
+.msc-atlas-window.has-active-region .msc-atlas-map__land-context {
+  opacity: .72;
+}
+
+.msc-atlas-window.has-active-region .msc-atlas-map__chart-detail {
+  opacity: .58;
+}
+
+@media (max-width: 760px) {
+  .msc-atlas-map__region-label {
+    font-size: 14px;
+  }
+
+  .msc-atlas-map__region-index,
+  .msc-atlas-map__soundings,
+  .msc-atlas-map__chart-note {
+    display: none;
+  }
+}
