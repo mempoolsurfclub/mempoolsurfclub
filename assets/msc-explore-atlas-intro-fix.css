@@ -1,5 +1,9 @@
 /* Explore Atlas intro alignment — mirrors the approved Learn title/copy relationship without changing Learn. */
 
+.msc-explore-atlas-intro__title {
+  color: var(--msc-sand);
+}
+
 @media screen and (min-width: 761px) {
   .msc-explore-atlas-shell {
     padding-top: 3.5rem !important;
@@ -43,6 +47,16 @@
   }
 }
 
+/* Match the approved Learn hero title scale instead of inheriting the oversized generic page-title clamp. */
+@media screen and (min-width: 991px) {
+  .msc-explore-atlas-intro__title {
+    font-size: clamp(4.6rem, 4.75vw, 5.8rem);
+    line-height: .9;
+    letter-spacing: -.06em;
+    text-wrap: balance;
+  }
+}
+
 /* Desktop: keep the Explore heading confidently large while resolving it to two balanced lines. */
 @media screen and (min-width: 1180px) {
   .msc-explore-atlas-intro {
@@ -51,8 +65,6 @@
   }
 
   .msc-explore-atlas-intro__title {
-    font-size: clamp(4.8rem, 4.9vw, 5.8rem);
-    line-height: .9;
-    text-wrap: balance;
+    font-size: clamp(5rem, 4.9vw, 6rem);
   }
 }
