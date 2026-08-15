@@ -1,5 +1,7 @@
 (() => {
   const OVERVIEW = [0, 0, 1200, 560];
+  const OVERVIEW_RATIO = OVERVIEW[2] / OVERVIEW[3];
+  const MIN_FOCUS_WIDTH = 640;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const parseBox = (value) => String(value || '').trim().split(/\s+/).map(Number);
@@ -40,12 +42,88 @@
 
     const getCurrentBox = () => parseBox(svg.getAttribute('viewBox'));
 
+    const clampBox = (box) => {
+      let [x, y, width, height] = box;
+
+      if (![x, y, width, height].every(Number.isFinite) || width <= 0 || height <= 0) {
+        return [...OVERVIEW];
+      }
+
+      if (width < MIN_FOCUS_WIDTH) {
+        x -= (MIN_FOCUS_WIDTH - width) / 2;
+        width = MIN_FOCUS_WIDTH;
+      }
+
+      const minimumHeight = MIN_FOCUS_WIDTH / OVERVIEW_RATIO;
+      if (height < minimumHeight) {
+        y -= (minimumHeight - height) / 2;
+        height = minimumHeight;
+      }
+
+      const ratio = width / height;
+      if (ratio < OVERVIEW_RATIO) {
+        const expandedWidth = height * OVERVIEW_RATIO;
+        x -= (expandedWidth - width) / 2;
+        width = expandedWidth;
+      } else if (ratio > OVERVIEW_RATIO) {
+        const expandedHeight = width / OVERVIEW_RATIO;
+        y -= (expandedHeight - height) / 2;
+        height = expandedHeight;
+      }
+
+      if (width >= OVERVIEW[2] || height >= OVERVIEW[3]) return [...OVERVIEW];
+
+      x = Math.max(OVERVIEW[0], Math.min(x, OVERVIEW[2] - width));
+      y = Math.max(OVERVIEW[1], Math.min(y, OVERVIEW[3] - height));
+
+      return [x, y, width, height];
+    };
+
+    const getFocusBox = (region) => {
+      if (!region) return [...OVERVIEW];
+
+      const shape = region.querySelector('.msc-atlas-map__region-shape:not(.msc-atlas-map__region-shape--inner)')
+        || region.querySelector('.msc-atlas-map__region-shape');
+
+      if (shape && typeof shape.getBBox === 'function') {
+        try {
+          const bounds = shape.getBBox();
+          if (bounds.width > 0 && bounds.height > 0) {
+            const padX = Math.max(44, bounds.width * .14);
+            const padY = Math.max(32, bounds.height * .18);
+            return clampBox([
+              bounds.x - padX,
+              bounds.y - padY,
+              bounds.width + (padX * 2),
+              bounds.height + (padY * 2)
+            ]);
+          }
+        } catch (error) {
+          /* Fall through to the authored fallback box. */
+        }
+      }
+
+      const fallback = parseBox(region.dataset.atlasViewbox);
+      return fallback.length === 4 ? clampBox(fallback) : [...OVERVIEW];
+    };
+
+    const setViewBox = (box) => {
+      const normalized = clampBox(box);
+      svg.setAttribute('viewBox', boxToString(normalized));
+
+      /* The map geometry may scale, but Atlas UI marks remain screen-readable. */
+      const counterScale = Math.max(.42, Math.min(1, normalized[2] / OVERVIEW[2]));
+      atlas.style.setProperty('--atlas-counter-scale', counterScale.toFixed(4));
+    };
+
     const animateViewBox = (target) => {
       if (!target || target.length !== 4 || target.some(Number.isNaN)) return;
       if (animationFrame) cancelAnimationFrame(animationFrame);
 
+      const normalizedTarget = clampBox(target);
+
       if (reduceMotion) {
-        svg.setAttribute('viewBox', boxToString(target));
+        setViewBox(normalizedTarget);
         return;
       }
 
@@ -56,8 +134,8 @@
       const tick = (now) => {
         const progress = Math.min(1, (now - started) / duration);
         const amount = ease(progress);
-        const next = from.map((value, index) => value + (target[index] - value) * amount);
-        svg.setAttribute('viewBox', boxToString(next));
+        const next = from.map((value, index) => value + (normalizedTarget[index] - value) * amount);
+        setViewBox(next);
 
         if (progress < 1) {
           animationFrame = requestAnimationFrame(tick);
@@ -86,7 +164,7 @@
     const render = (slug, mode) => {
       const activeRegion = slug ? regionBySlug.get(slug) : null;
       const label = activeRegion?.dataset.atlasRegionLabel || 'ALL 08';
-      const targetBox = activeRegion ? parseBox(activeRegion.dataset.atlasViewbox) : OVERVIEW;
+      const targetBox = activeRegion ? getFocusBox(activeRegion) : OVERVIEW;
 
       atlas.classList.toggle('has-active-region', Boolean(slug));
       atlas.dataset.atlasActive = slug || '';
@@ -205,7 +283,7 @@
 
     inspectClose?.addEventListener('click', clearInspect);
 
-    svg.setAttribute('viewBox', boxToString(OVERVIEW));
+    setViewBox(OVERVIEW);
     updateEntityTabStops(null);
     render(null, 'overview');
   });
