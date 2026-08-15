@@ -1,49 +1,105 @@
-MSC Explore — Ordinals Registry Validation
-Verified date: 2026-08-14
+MSC Explore — Ordinals Registry Validation / Final QA
+Verified date: 2026-08-15
 
+REPOSITORY SCOPE
+PASS: QA target is docs/explore/ordinals/ only.
+PASS: Research branch was inspected before edits.
+PASS: No Shopify theme, Atlas, Explore runtime, Learn, Home, Tools, production routing, merge, rebase, or publication action is authorized by this package.
+
+STRUCTURE
 PASS: Canonical manifest parsed.
-PASS: Eleven record shards parsed.
-PASS: Combined record count = 44.
+PASS: Twelve record shards parsed/planned after QA.
+PASS: Combined record count = 47.
 PASS: Required user seeds represented = 25/25.
-PASS: Unique Registry IDs = 44/44.
-PASS: Unique canonical names = 44/44.
-PASS: Unique recommended slugs = 44/44.
+PASS: Unique Registry IDs = 47/47.
+PASS: Unique canonical names = 47/47.
+PASS: Unique recommended slugs = 47/47.
+PASS: Every record contains the same 24 required fields.
 PASS: Every primary category is ORDINALS.
+PASS: Every Ordinals topic/subtopic is present in the manifest topic architecture.
 PASS: Every status is one of ACTIVE / HISTORICAL / INACTIVE / UNCERTAIN.
-PASS: Every record Last verified date = 2026-08-14.
-PASS: Runestone explicitly links DOG•GO•TO•THE•MOON and related Explore category RUNES.
-PASS: Fomojis OG / 2.0 consolidated into one canonical profile.
-PASS: Bitcoin Weirdos / FTW consolidated into one canonical profile.
-PASS: OnChainMonkey / OCM consolidated into one canonical profile.
+PASS: Every source confidence is one of HIGH / MEDIUM / LOW.
+PASS: Every source_type uses the controlled vocabulary: official / official-github / primary / on-chain / independent / indexer / marketplace / market-data.
+PASS: Record verification dates are ISO dates in the current August 2026 research window; newly reverified/changed records use 2026-08-15 and untouched records retain their substantive 2026-08-14 verification date.
 
+SCHEMA QA
+PASS: Lifecycle status is independent from creator/supply/scope uncertainty.
+PASS: Source confidence is independent from lifecycle status.
+PASS: Secondary-market/indexer activity alone cannot establish ACTIVE lifecycle status.
+PASS: Unresolved creator attribution, supply, scope, or technical interpretation is carried in Verification basis and Research notes / uncertainties rather than hidden by status.
+PASS: Source hierarchy is official project/docs -> official creator/operator-controlled -> primary on-chain/protocol -> reputable independent -> marketplace/indexer/market-data supporting evidence.
+PASS: Technical records preserve the distinction between Bitcoin consensus behavior and Ordinals/indexer/metaprotocol conventions.
+
+REQUIRED RELATIONSHIPS / DEDUPLICATION
+PASS: Runestone explicitly links DOG•GO•TO•THE•MOON and related Explore category RUNES.
+PASS: RSIC Metaprotocol explicitly links RSIC•GENESIS•RUNE and related Explore category RUNES.
+PASS: Fomojis OG / 2.0 is consolidated into one canonical Fomojis profile.
+PASS: Bitcoin Weirdos / FTW is consolidated into one canonical Bitcoin Weirdos profile.
+PASS: OnChainMonkey / OCM is consolidated into one canonical OnChainMonkey (OCM) profile.
+PASS: The Wizards of Ord remains the umbrella for OrdRain / Nakamoto Archives.
+PASS: ORDI remains related to BRC-20 instead of creating token-level profile sprawl.
+PASS: BRC-20 2.0 remains protocol evolution inside BRC-20.
+PASS: Cursed Inscriptions remains a supporting technical concept under Ordinal Theory.
+PASS: Based Angels links BASED•ANGELS•RUNE to RUNES rather than duplicating the Rune in ORDINALS.
+PASS: BTC DeGods is scoped narrowly to the 535-piece Bitcoin branch and related to the broader DeGods entity.
+
+FINAL COUNTS
 Status counts:
-- ACTIVE: 24
-- HISTORICAL: 15
+- ACTIVE: 27
+- HISTORICAL: 17
 - INACTIVE: 1
-- UNCERTAIN: 4
+- UNCERTAIN: 2
 
 Topic counts:
-- Collections & Projects: 34
+- Collections & Projects: 37
 - Historical Cohorts & Indexes: 2
 - Protocols & Metaprotocols: 8
 
 Source confidence counts:
-- HIGH: 22
-- MEDIUM: 20
+- HIGH: 26
+- MEDIUM: 19
 - LOW: 2
 
-Command Center review flags:
-- HIGH | Bitcoin Bravocados | Creator attribution, exact Bitcoin Shrooms relationship, and supply require direct first-party/on-chain confirmation.
-- HIGH | Apostles of Greed | Launch-era 104-piece description conflicts with current indexer counts in the thousands; collection scope must be reconciled.
-- HIGH | Goosinals | No authoritative project-controlled source was locked; founder/operator and current activity remain uncertain.
-- MEDIUM | GeneratOrd | Official docs remain online but freshness of the active-development claim is unclear in August 2026.
-- MEDIUM | Ordinookis | Current indexers disagree materially on supply; creator/founder attribution needs first-party confirmation.
-- MEDIUM | Ordinal Maxi Biz | Christie's 2024 body count and current marketplace indexed count differ; define canonical collection scope before publishing supply.
-- MEDIUM | Bitcoin Shrooms | Supply figures differ across first-party/auction/index sources; do not publish a fixed count until reconciled.
-- LOW | Fomojis | Fomojis 2.0 index counts vary slightly; retain one umbrella profile and avoid hard supply until reconciled.
+FLAGGED RECORD QA
+RESOLVED: Bitcoin Bravocados — lifecycle corrected UNCERTAIN -> ACTIVE from current 2026 distribution/use evidence. LOW confidence retained because creator attribution and exact supply remain unresolved.
+RESOLVED: Apostles of Greed — lifecycle corrected UNCERTAIN -> HISTORICAL. Canonical launch scope locked to 104 works from consistent launch-era evidence; larger current indexer scope remains an unresolved indexing/scope discrepancy.
+UNRESOLVED LIFECYCLE: Goosinals — remains UNCERTAIN / LOW; no authoritative project-controlled source verified for founder/operator, canonical scope, or current project activity.
+UNRESOLVED LIFECYCLE: GeneratOrd — remains UNCERTAIN / MEDIUM; official docs verify identity/design but stale maintenance language does not prove August 2026 activity.
+RESOLVED LIFECYCLE: Ordinookis — remains ACTIVE / MEDIUM from current project-controlled 2026 social activity; founder attribution and exact supply remain unresolved.
+RESOLVED: Ordinal Maxi Biz — remains ACTIVE / MEDIUM. Creator/contributors are supported by Christie's; 5,141 is a dated April 2024 scope while later indexes approach 9k, so no timeless fixed supply is asserted.
+RESOLVED: Bitcoin Shrooms — remains INACTIVE and confidence upgraded MEDIUM -> HIGH from first-party/on-chain departure evidence plus Sotheby's primary material; no fixed supply asserted.
+RESOLVED: Fomojis — lifecycle corrected ACTIVE -> HISTORICAL. One OG + 2.0 canonical profile retained; current 2026 project operation was not verified.
 
-Structural issues:
-- NONE
+ADDITIONAL STATUS CORRECTIONS
+RESOLVED: Bitcoin Frogs — HISTORICAL -> ACTIVE because current 2026 project/founder communications are verified despite the finite mint.
+RESOLVED: Honey Badgers — HISTORICAL -> ACTIVE because current 2026 official project/community activity is verified.
+RESOLVED: Ordinal Loops — ACTIVE -> HISTORICAL because current August 2026 project operation was not verified strongly enough; legacy site/social/index presence is insufficient.
+
+OMISSION DECISIONS
+EXCLUDE FOR NOW: Ord Torches — well sourced and active, but too recent/redundant as a retrospective 2026 history tribute to add unique initial-canon coverage.
+INCLUDE: BTC DeGods — adds distinct early-2023 cross-chain/provenance history; canonical record MSC-EXP-ORD-045.
+INCLUDE: Based Angels — adds well-sourced current-era recursive PFP + RUNES relationship; canonical record MSC-EXP-ORD-046.
+INCLUDE: Bitcoin Babbies — adds a distinct early community-inscribed mint model and creator relationship to King/The Royals; canonical record MSC-EXP-ORD-047.
+
+SOURCE-QUALITY SPOT CHECK
+PASS: HIGH-confidence technical/collection sample relies primarily on official or primary sources (Ordinal Theory, Bitcoin Frogs, Honey Badgers, Natcats, Based Angels, BTC DeGods).
+PASS: MEDIUM-confidence sample explicitly retains limitations where first-party evidence is incomplete/stale or collection scope depends on secondary/indexer evidence (Ordinal Maxi Biz, Ordinookis, Fomojis, Apostles of Greed).
+PASS: LOW-confidence records remain explicitly caveated rather than upgraded from marketplace/indexer evidence alone (Bitcoin Bravocados creator/supply; Goosinals lifecycle/attribution).
+
+REMAINING PUBLICATION-SPECIFIC UNRESOLVED ISSUES
+- Bitcoin Bravocados: creator attribution and exact canonical supply remain unresolved; lifecycle is ACTIVE.
+- Goosinals: founder/operator, canonical scope, and current lifecycle remain unresolved; keep UNCERTAIN / LOW.
+- GeneratOrd: August 2026 maintenance/activity remains unresolved; keep UNCERTAIN / MEDIUM.
+- Ordinookis: founder attribution and exact canonical supply remain unresolved; lifecycle is ACTIVE.
+- Bitcoin Babbies: exact supply differs by index; do not publish a fixed total without a project-controlled canonical count.
+- Several historical records intentionally remain fact-light where creator attribution lacks first-party archives; this does not prevent registry/schema approval if those unknowns remain explicit.
+
+STRUCTURAL ISSUES
+- NONE after final QA.
+
+REFERENCE-SCHEMA ASSESSMENT
+PASS: The 24-field record contract, status semantics, source-confidence model, controlled source provenance, relationship rules, verification fields, and explicit unresolved-research handling are internally consistent and suitable as the reference research schema for RUNES, WALLETS, MARKETPLACES, MINING, PAYMENTS, EXCHANGES, and NETWORK.
+NOTE: Category-specific topic/subtopic architecture should still be researched independently for each category; reuse the record contract, not the Ordinals taxonomy.
 
 Publication state:
-- REVIEW ONLY. No public Explore implementation, Shopify content, Atlas change, runtime generation, merge, or deployment is authorized by this registry.
+- COMMAND CENTER REVIEW ONLY. No public Explore implementation, Shopify content, Atlas change, runtime generation, merge, rebase, or deployment is authorized by this registry.

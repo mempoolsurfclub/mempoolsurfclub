@@ -2,7 +2,7 @@
   "title": "Mempool Surf Club Explore — Ordinals Research Registry",
   "status": "COMMAND_CENTER_REVIEW",
   "registry_date": "2026-08-14",
-  "last_verified_date": "2026-08-14",
+  "last_verified_date": "2026-08-15",
   "primary_explore_category": "ORDINALS",
   "parent_explore_categories": [
     "ORDINALS",
@@ -28,7 +28,8 @@
       "docs/explore/ordinals/records/MSC_Explore_Ordinals_Records_029_032.json",
       "docs/explore/ordinals/records/MSC_Explore_Ordinals_Records_033_036.json",
       "docs/explore/ordinals/records/MSC_Explore_Ordinals_Records_037_040.json",
-      "docs/explore/ordinals/records/MSC_Explore_Ordinals_Records_041_044.json"
+      "docs/explore/ordinals/records/MSC_Explore_Ordinals_Records_041_044.json",
+      "docs/explore/ordinals/records/MSC_Explore_Ordinals_Records_045_047.json"
     ],
     "human_companion": "docs/explore/ordinals/MSC_Explore_Ordinals_Registry.md",
     "validation_report": "docs/explore/ordinals/MSC_Explore_Ordinals_Validation.txt",
@@ -36,11 +37,14 @@
   },
   "registry_wide_rules": {
     "one_entity_one_profile": "One canonical profile per entity; child releases, tokens, and cross-category assets should be represented as relationships unless the Master Explore Registry explicitly requires a separate canonical entity.",
-    "status_rule": "ACTIVE requires verified current project/protocol/community operation; HISTORICAL means finite/completed or chiefly historical; INACTIVE means project operation has ceased or creator has explicitly stepped away; UNCERTAIN means current status or core attribution cannot be verified confidently.",
+    "status_rule": "Lifecycle status is independent from attribution/supply uncertainty. ACTIVE requires verified current project, protocol, operator, or community operation as of the record verification date. HISTORICAL means the relevant project phase is finite, completed, or legacy and no meaningful current project/community operation was verified. INACTIVE means operation ceased, was abandoned, or the creator/operator explicitly stepped away without a verified active successor operation. UNCERTAIN means the lifecycle/activity status itself cannot be determined from reliable evidence. Secondary-market or indexer activity alone never establishes ACTIVE status.",
     "protocol_rule": "Distinguish Bitcoin consensus rules from application-layer conventions, indexer-derived state, metaprotocol rules, and project claims.",
     "publication_rule": "Recommended slugs and descriptions are planning data only. No Shopify page, Atlas widget, template, runtime file, public card, or production route is created by this registry.",
-    "source_rule": "Prefer official project/docs/GitHub/social sources, then on-chain/indexers/reputable marketplaces, then independent coverage. Marketplace listings alone are not sufficient for a fully verified profile.",
-    "cross_category_rule": "Entities whose canonical home is another Explore category are linked, not duplicated. Examples: DOG•GO•TO•THE•MOON and RSIC•GENESIS•RUNE belong in RUNES."
+    "source_rule": "Source hierarchy: (1) official project website/docs; (2) official GitHub, X, blog, or other creator/operator-controlled source; (3) primary on-chain or protocol documentation; (4) reputable independent corroboration; (5) marketplaces, indexers, and market-data providers as supporting evidence only. Marketplace/indexer presence alone is not sufficient for a fully verified profile or ACTIVE status.",
+    "cross_category_rule": "Entities whose canonical home is another Explore category are linked, not duplicated. Examples: DOG•GO•TO•THE•MOON and RSIC•GENESIS•RUNE belong in RUNES.",
+    "source_confidence_rule": "Source confidence is independent from lifecycle status. HIGH means first-party or primary evidence supports identity and core claims, including lifecycle where applicable. MEDIUM means credible evidence exists but one or more core fields rely on archival, independent, indexer, or incomplete/stale first-party evidence. LOW means core attribution, scope, or lifecycle evidence is materially indirect. Allowed values: HIGH, MEDIUM, LOW.",
+    "source_type_rule": "Controlled source_type values: official, official-github, primary, on-chain, independent, indexer, marketplace, market-data. Use source_type to describe evidence provenance, not confidence.",
+    "uncertainty_rule": "Unresolved creator attribution, supply, collection scope, or technical interpretation belongs in Verification basis and Research notes / uncertainties. Do not use UNCERTAIN lifecycle status merely because a non-lifecycle field remains unresolved."
   },
   "topic_architecture": [
     {
@@ -82,23 +86,97 @@
       ]
     }
   ],
+  "record_schema_contract": {
+    "required_record_fields": [
+      "Registry ID",
+      "Canonical name",
+      "Recommended slug",
+      "Primary Explore category",
+      "Ordinals topic",
+      "Ordinals subtopic",
+      "Entity / project type",
+      "Status",
+      "Source confidence",
+      "Concise description",
+      "Deeper researched summary",
+      "Creators / founders",
+      "Launch / history",
+      "Why it matters in the Ordinals ecosystem",
+      "Important technical or cultural characteristics",
+      "Related projects / entities",
+      "Related Explore categories",
+      "Supporting tags",
+      "Official website",
+      "Official sources",
+      "Corroborating sources",
+      "Last verified date",
+      "Verification basis",
+      "Research notes / uncertainties"
+    ],
+    "controlled_values": {
+      "Status": [
+        "ACTIVE",
+        "HISTORICAL",
+        "INACTIVE",
+        "UNCERTAIN"
+      ],
+      "Source confidence": [
+        "HIGH",
+        "MEDIUM",
+        "LOW"
+      ],
+      "Primary Explore category": [
+        "ORDINALS"
+      ],
+      "Related Explore categories": [
+        "ORDINALS",
+        "RUNES",
+        "WALLETS",
+        "MARKETPLACES",
+        "MINING",
+        "PAYMENTS",
+        "EXCHANGES",
+        "NETWORK"
+      ],
+      "source_type": [
+        "official",
+        "official-github",
+        "primary",
+        "on-chain",
+        "independent",
+        "indexer",
+        "marketplace",
+        "market-data"
+      ]
+    },
+    "field_rules": {
+      "Official website": "Canonical project/entity-controlled website when verified; null is allowed and must not be replaced by a marketplace URL.",
+      "Official sources": "First-party or authoritative primary sources supporting identity, history, technical claims, or lifecycle. May be empty when none can be verified.",
+      "Corroborating sources": "Independent, on-chain, indexer, marketplace, or market-data evidence used to corroborate rather than manufacture project claims.",
+      "Last verified date": "ISO YYYY-MM-DD date of the record's latest substantive verification. Record dates may differ; they must not be future-dated.",
+      "Verification basis": "Concise statement of what evidence supports the record and lifecycle classification.",
+      "Research notes / uncertainties": "Explicit unresolved facts or publication cautions; uncertainty here does not automatically require UNCERTAIN lifecycle status.",
+      "Related projects / entities": "Canonical entity names or clearly named external/child entities. Use relationships instead of duplicate profiles.",
+      "Related Explore categories": "Cross-category relationship destinations only; do not duplicate the same canonical entity in multiple category registries."
+    }
+  },
   "counts": {
-    "total_records": 44,
+    "total_records": 47,
     "by_status": {
-      "ACTIVE": 24,
-      "HISTORICAL": 15,
+      "ACTIVE": 27,
+      "HISTORICAL": 17,
       "INACTIVE": 1,
-      "UNCERTAIN": 4
+      "UNCERTAIN": 2
     },
     "by_topic": {
-      "Collections & Projects": 34,
+      "Collections & Projects": 37,
       "Historical Cohorts & Indexes": 2,
       "Protocols & Metaprotocols": 8
     },
     "by_source_confidence": {
-      "HIGH": 22,
-      "LOW": 2,
-      "MEDIUM": 20
+      "HIGH": 26,
+      "MEDIUM": 19,
+      "LOW": 2
     }
   },
   "seed_coverage": {
@@ -115,80 +193,73 @@
     {
       "entity": "Bitcoin Bravocados",
       "priority": "HIGH",
-      "issue": "Creator attribution, exact Bitcoin Shrooms relationship, and supply require direct first-party/on-chain confirmation."
-    },
-    {
-      "entity": "Apostles of Greed",
-      "priority": "HIGH",
-      "issue": "Launch-era 104-piece description conflicts with current indexer counts in the thousands; collection scope must be reconciled."
+      "issue": "Lifecycle is now verified ACTIVE, but creator attribution remains provisional and exact canonical supply is unresolved. Publish without creator/supply certainty unless stronger first-party evidence is captured."
     },
     {
       "entity": "Goosinals",
       "priority": "HIGH",
-      "issue": "No authoritative project-controlled source was locked; founder/operator and current activity remain uncertain."
+      "issue": "Founder/operator, canonical scope, and current lifecycle remain insufficiently verified; retain UNCERTAIN / LOW."
     },
     {
       "entity": "GeneratOrd",
       "priority": "MEDIUM",
-      "issue": "Official docs remain online but the freshness of the active-development claim is unclear in August 2026."
+      "issue": "Official documentation verifies identity and design but its stale 'actively developing' language does not establish August 2026 maintenance; retain UNCERTAIN."
     },
     {
       "entity": "Ordinookis",
-      "priority": "MEDIUM",
-      "issue": "Current indexers disagree materially on supply; creator/founder attribution needs first-party confirmation."
-    },
-    {
-      "entity": "Ordinal Maxi Biz",
-      "priority": "MEDIUM",
-      "issue": "Christie's 2024 body count and current marketplace indexed count differ; define canonical collection scope before publishing supply."
-    },
-    {
-      "entity": "Bitcoin Shrooms",
-      "priority": "MEDIUM",
-      "issue": "Supply figures differ across first-party/auction/index sources; do not publish a fixed count until reconciled."
-    },
-    {
-      "entity": "Fomojis",
       "priority": "LOW",
-      "issue": "Fomojis 2.0 index counts vary slightly; retain one umbrella profile and avoid hard supply in public copy until reconciled."
+      "issue": "ACTIVE lifecycle is supported by current project-controlled social activity, but founder attribution and exact supply remain unresolved; do not publish those fields as settled."
+    }
+  ],
+  "omission_decisions": [
+    {
+      "entity": "Ord Torches",
+      "decision": "EXCLUDE_FOR_NOW",
+      "reason": "Strong current sourcing exists and the March 2026 project is active, but it is a very recent retrospective/tribute index of Ordinals history. The initial canon already covers the historical lineages it references; inclusion now would add less unique coverage than the three accepted candidates. Revisit after it has more historical or technical significance."
+    },
+    {
+      "entity": "BTC DeGods",
+      "decision": "INCLUDE",
+      "registry_id": "MSC-EXP-ORD-045",
+      "reason": "The 535-piece Bitcoin subset is a distinct, very early 2023 Ordinals branch with unusual burned-Solana-to-Bitcoin provenance and strong DeGods first-party recognition. Excluding it solely because DeGods originated elsewhere would be inconsistent with the registry's treatment of OCM."
+    },
+    {
+      "entity": "Based Angels",
+      "decision": "INCLUDE",
+      "registry_id": "MSC-EXP-ORD-046",
+      "reason": "A well-sourced 5,555-piece recursive Bitcoin collection with verified creators, current 2026 operation, and a clean related-Rune relationship. It adds meaningful later-era/current ecosystem coverage rather than padding."
+    },
+    {
+      "entity": "Bitcoin Babbies",
+      "decision": "INCLUDE",
+      "registry_id": "MSC-EXP-ORD-047",
+      "reason": "King's first-party artist history identifies a distinct early community-inscribed mint model, and the project remains socially active. It adds a historically different distribution/inscription pattern and a useful creator relationship to The Royals."
     }
   ],
   "future_omission_candidates": [
     {
       "entity": "Ord Torches",
-      "reason": "Potential 2025–2026 historical/on-chain art index worth a separate research pass; not necessary to establish the initial Ordinals canon."
-    },
-    {
-      "entity": "DeGods on Bitcoin",
-      "reason": "Cross-chain migration is notable, but the entity is not primarily Ordinals-native; evaluate once cross-category migration policy is standardized."
-    },
-    {
-      "entity": "Based Angels",
-      "reason": "Current collection relevance may justify inclusion, but the initial registry already covers core historical, technical, and cultural lineages; requires first-party research."
-    },
-    {
-      "entity": "Bitcoin Babbies",
-      "reason": "Historically relevant community-inscribed collection by King; evaluate alongside The Royals/creator relationship rules."
+      "reason": "Excluded from the initial canon after final QA because it is a very recent 2026 retrospective/tribute project; revisit if it develops durable historical or technical significance."
     },
     {
       "entity": "OCM Dimensions",
-      "reason": "Currently modeled as a child release under the canonical OnChainMonkey profile to preserve one-entity-one-profile discipline."
+      "reason": "Modeled as a child release under the canonical OnChainMonkey profile to preserve one-entity-one-profile discipline."
     },
     {
       "entity": "OrdRain / Nakamoto Archives",
-      "reason": "Currently modeled as child releases under The Wizards of Ord."
+      "reason": "Modeled as child releases under The Wizards of Ord."
     },
     {
       "entity": "ORDI",
-      "reason": "Currently represented as a related BRC-20 token. A separate profile would create token-catalog sprawl unless Master Explore introduces token-level entities."
+      "reason": "Represented as a related BRC-20 token. A separate profile would create token-catalog sprawl unless Master Explore introduces token-level entities."
     },
     {
       "entity": "BRC-20 2.0",
-      "reason": "Currently treated as protocol evolution inside BRC-20 rather than a duplicate canonical profile."
+      "reason": "Treated as protocol evolution inside BRC-20 rather than a duplicate canonical profile."
     },
     {
       "entity": "Cursed Inscriptions",
-      "reason": "Important core concept, currently handled as a supporting tag/feature under Ordinal Theory rather than a project profile."
+      "reason": "Important core concept handled as a supporting technical concept under Ordinal Theory rather than a project profile."
     },
     {
       "entity": "Rare Pepes / Counterparty",
@@ -250,6 +321,11 @@
       "path": "records/MSC_Explore_Ordinals_Records_041_044.json",
       "range": "041-044",
       "count": 4
+    },
+    {
+      "path": "records/MSC_Explore_Ordinals_Records_045_047.json",
+      "range": "045-047",
+      "count": 3
     }
   ]
 }
