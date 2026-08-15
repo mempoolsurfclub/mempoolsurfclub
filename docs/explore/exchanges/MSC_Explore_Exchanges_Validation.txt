@@ -10,10 +10,11 @@ PASS: No Shopify, Atlas, runtime Explore, Learn, Home, Tools, production route, 
 STRUCTURE
 PASS: Canonical manifest parsed.
 PASS: Nine record shards parsed.
-PASS: Combined record count = 36.
-PASS: Unique Registry IDs = 36/36.
-PASS: Unique canonical names = 36/36.
-PASS: Unique recommended slugs = 36/36.
+PASS: Combined record count = 35.
+PASS: Unique Registry IDs = 35/35.
+PASS: Retired Registry ID MSC-EXP-EXC-003 remains intentionally unused; the other 35 IDs were not renumbered.
+PASS: Unique canonical names = 35/35.
+PASS: Unique recommended slugs = 35/35.
 PASS: Every record contains exactly the same 24 required fields.
 PASS: Every primary category is EXCHANGES.
 PASS: Every Exchanges topic/subtopic exists in manifest topic architecture.
@@ -28,6 +29,8 @@ PASS: Inventory spans Bitcoin-focused brokers/on-ramps, global/regional centrali
 PASS: Generic altcoin-exchange directory padding was removed.
 PASS: Crypto.com / Gate.io / MEXC / Bittrex were researched but excluded because unique Bitcoin-specific significance did not exceed directory-padding risk.
 PASS: Cash App Bitcoin and Fold were not duplicated into EXCHANGES when their stronger canonical identity is PAYMENTS/WALLETS/rewards.
+PASS: Strike is RELATIONSHIP_ONLY in EXCHANGES; the already-approved PAYMENTS registry (`MSC-EXP-PAY-003`) remains its single canonical home.
+PASS: Strike exchange-specific findings (custodial BTC buy/sell plus on-chain/Lightning movement) are preserved only as relationship/research context.
 PASS: Monero-first Haveno and AgoraDesk/LocalMonero were excluded.
 PASS: FTX was excluded because its failure is historically large but not specifically explanatory enough of Bitcoin exchange infrastructure for the initial canon.
 
@@ -45,7 +48,7 @@ PASS: CME Bitcoin Futures is correctly described as cash-settled derivatives, no
 
 LIGHTNING QA
 PASS: River current wallet supports on-chain and Lightning send/receive.
-PASS: Strike current first-party material supports custodial Bitcoin plus Lightning/on-chain movement.
+PASS: Strike relationship research preserves current first-party findings for custodial Bitcoin plus Lightning/on-chain movement; no canonical Strike record remains in EXCHANGES.
 PASS: Kraken current support material verifies Lightning funding.
 PASS: Binance Lightning integration was verified and current API material still exposes LIGHTNING network support; availability caveat retained.
 PASS: OKX current help material verifies Lightning deposits/withdrawals with customer/region caveat.
@@ -84,23 +87,24 @@ PASS: Coinfloor represented as CoinCorner acquisition lineage, not duplicate pro
 PASS: Bisq v1/Bisq 2 remain one initial-canon entity.
 PASS: Gemini Earn is not a duplicate exchange profile.
 PASS: Binance.US is not conflated with Binance.com/global profile.
+PASS: No duplicate canonical Strike profile remains in EXCHANGES; PAYMENTS owns the single canonical Strike profile.
 
 FINAL COUNTS
 Status counts:
-- ACTIVE: 27
+- ACTIVE: 26
 - HISTORICAL: 0
 - INACTIVE: 9
 - UNCERTAIN: 0
 
 Topic counts:
-- Bitcoin-Focused Brokers & On-Ramps: 8
+- Bitcoin-Focused Brokers & On-Ramps: 7
 - Centralized Spot & Multi-Market Exchanges: 12
 - Peer-to-Peer & Non-Custodial Exchange Systems: 5
 - Institutional & Derivatives Venues: 2
 - Historical Exchange Infrastructure: 9
 
 Source confidence counts:
-- HIGH: 34
+- HIGH: 33
 - MEDIUM: 2
 - LOW: 0
 
@@ -109,6 +113,8 @@ PASS: counts contains only total_records, by_status, by_topic and by_source_conf
 PASS: by_status explicitly includes ACTIVE / HISTORICAL / INACTIVE / UNCERTAIN including zero values.
 PASS: by_source_confidence explicitly includes HIGH / MEDIUM / LOW including zero values.
 PASS: Manifest totals reconcile with all shards.
+PASS: Normalized counts reconcile at 35 total records after removing Strike from the canonical inventory.
+PASS: All controlled zero-value buckets remain explicit: HISTORICAL = 0, UNCERTAIN = 0, LOW = 0.
 
 PUBLICATION-SPECIFIC REVIEW QUEUE
 - BitMEX: recheck lifecycle after announced 2026-09-23 closure; current status is date-bound.
@@ -124,5 +130,5 @@ PASS: Exclusions are documented in the manifest and companion rather than silent
 PASS: Inventory remains intentionally Bitcoin-centered rather than volume-ranked.
 
 VALIDATION RESULT
-PASS — 36 canonical records are structurally valid and content QA is complete for COMMAND CENTER REVIEW.
+PASS — 35 canonical records are structurally valid and content QA is complete for COMMAND CENTER REVIEW.
 APPROVAL RECOMMENDATION: APPROVE the EXCHANGES registry as the category research source, preserving the review queue and requiring BitMEX lifecycle recheck after its announced closure.
