@@ -1,0 +1,213 @@
+{
+  "title": "Mempool Surf Club Explore — Ordinals Research Registry",
+  "status": "COMMAND_CENTER_REVIEW",
+  "registry_date": "2026-08-14",
+  "last_verified_date": "2026-08-14",
+  "primary_explore_category": "ORDINALS",
+  "parent_explore_categories": [
+    "ORDINALS",
+    "RUNES",
+    "WALLETS",
+    "MARKETPLACES",
+    "MINING",
+    "PAYMENTS",
+    "EXCHANGES",
+    "NETWORK"
+  ],
+  "scope": "Research-only registry section for the ORDINALS category. This file does not publish or activate Explore content.",
+  "source_of_truth": {
+    "canonical_manifest": "docs/explore/ordinals/MSC_Explore_Ordinals_Registry.json",
+    "record_shards": [
+      "docs/explore/ordinals/records/MSC_Explore_Ordinals_Records_001_011.json",
+      "docs/explore/ordinals/records/MSC_Explore_Ordinals_Records_012_022.json",
+      "docs/explore/ordinals/records/MSC_Explore_Ordinals_Records_023_033.json",
+      "docs/explore/ordinals/records/MSC_Explore_Ordinals_Records_034_044.json"
+    ],
+    "human_companion": "docs/explore/ordinals/MSC_Explore_Ordinals_Registry.md",
+    "validation_report": "docs/explore/ordinals/MSC_Explore_Ordinals_Validation.txt",
+    "rule": "The manifest plus all listed record shards together are the canonical machine-readable source. Command Center review is required before promotion to a Master Explore Registry."
+  },
+  "registry_wide_rules": {
+    "one_entity_one_profile": "One canonical profile per entity; child releases, tokens, and cross-category assets should be represented as relationships unless the Master Explore Registry explicitly requires a separate canonical entity.",
+    "status_rule": "ACTIVE requires verified current project/protocol/community operation; HISTORICAL means finite/completed or chiefly historical; INACTIVE means project operation has ceased or creator has explicitly stepped away; UNCERTAIN means current status or core attribution cannot be verified confidently.",
+    "protocol_rule": "Distinguish Bitcoin consensus rules from application-layer conventions, indexer-derived state, metaprotocol rules, and project claims.",
+    "publication_rule": "Recommended slugs and descriptions are planning data only. No Shopify page, Atlas widget, template, runtime file, public card, or production route is created by this registry.",
+    "source_rule": "Prefer official project/docs/GitHub/social sources, then on-chain/indexers/reputable marketplaces, then independent coverage. Marketplace listings alone are not sufficient for a fully verified profile.",
+    "cross_category_rule": "Entities whose canonical home is another Explore category are linked, not duplicated. Examples: DOG•GO•TO•THE•MOON and RSIC•GENESIS•RUNE belong in RUNES."
+  },
+  "topic_architecture": [
+    {
+      "topic": "Protocols & Metaprotocols",
+      "slug": "protocols-metaprotocols",
+      "purpose": "Standards, protocols, indexing conventions, and experiments that use Ordinals inscriptions or ordinal-aware infrastructure as a substrate.",
+      "subtopics": [
+        "Core Ordinals",
+        "Fungible-token experiments",
+        "Block-data / spatial standards",
+        "Block-data / non-arbitrary assets",
+        "Programmable inscription metaprotocols",
+        "Recursive collection tooling",
+        "Pre-Runes distribution experiments"
+      ]
+    },
+    {
+      "topic": "Collections & Projects",
+      "slug": "collections-projects",
+      "purpose": "Canonical art, PFP, community, conceptual, generative, recursive, rare-sat, and distribution projects whose identity is materially tied to Ordinals.",
+      "subtopics": [
+        "Early inscription art",
+        "Early large collections",
+        "PFP & community collections",
+        "Generative / recursive / interactive art",
+        "Conceptual / physical-digital art",
+        "Conceptual / rare-sat experiments",
+        "Cultural / meme lineage",
+        "Airdrops / distribution experiments",
+        "Bitcoin-history art"
+      ]
+    },
+    {
+      "topic": "Historical Cohorts & Indexes",
+      "slug": "historical-cohorts-indexes",
+      "purpose": "Historically meaningful inscription-number cohorts and index concepts that are not single coordinated projects.",
+      "subtopics": [
+        "Early inscription cohorts"
+      ]
+    }
+  ],
+  "counts": {
+    "total_records": 44,
+    "by_status": {
+      "ACTIVE": 24,
+      "HISTORICAL": 15,
+      "INACTIVE": 1,
+      "UNCERTAIN": 4
+    },
+    "by_topic": {
+      "Collections & Projects": 34,
+      "Historical Cohorts & Indexes": 2,
+      "Protocols & Metaprotocols": 8
+    },
+    "by_source_confidence": {
+      "HIGH": 22,
+      "LOW": 2,
+      "MEDIUM": 20
+    }
+  },
+  "seed_coverage": {
+    "required_seed_count": 25,
+    "represented_seed_count": 25,
+    "missing": [],
+    "normalizations": [
+      "Fomojis OG / 2.0 is represented by one canonical Fomojis profile with both generations related in the same record.",
+      "Bitcoin Weirdos / FTW is represented by one canonical Bitcoin Weirdos profile with FTW as a relationship.",
+      "OnChainMonkey / OCM is represented by one canonical OnChainMonkey (OCM) umbrella profile."
+    ]
+  },
+  "command_center_review_queue": [
+    {
+      "entity": "Bitcoin Bravocados",
+      "priority": "HIGH",
+      "issue": "Creator attribution, exact Bitcoin Shrooms relationship, and supply require direct first-party/on-chain confirmation."
+    },
+    {
+      "entity": "Apostles of Greed",
+      "priority": "HIGH",
+      "issue": "Launch-era 104-piece description conflicts with current indexer counts in the thousands; collection scope must be reconciled."
+    },
+    {
+      "entity": "Goosinals",
+      "priority": "HIGH",
+      "issue": "No authoritative project-controlled source was locked; founder/operator and current activity remain uncertain."
+    },
+    {
+      "entity": "GeneratOrd",
+      "priority": "MEDIUM",
+      "issue": "Official docs remain online but the freshness of the active-development claim is unclear in August 2026."
+    },
+    {
+      "entity": "Ordinookis",
+      "priority": "MEDIUM",
+      "issue": "Current indexers disagree materially on supply; creator/founder attribution needs first-party confirmation."
+    },
+    {
+      "entity": "Ordinal Maxi Biz",
+      "priority": "MEDIUM",
+      "issue": "Christie's 2024 body count and current marketplace indexed count differ; define canonical collection scope before publishing supply."
+    },
+    {
+      "entity": "Bitcoin Shrooms",
+      "priority": "MEDIUM",
+      "issue": "Supply figures differ across first-party/auction/index sources; do not publish a fixed count until reconciled."
+    },
+    {
+      "entity": "Fomojis",
+      "priority": "LOW",
+      "issue": "Fomojis 2.0 index counts vary slightly; retain one umbrella profile and avoid hard supply in public copy until reconciled."
+    }
+  ],
+  "future_omission_candidates": [
+    {
+      "entity": "Ord Torches",
+      "reason": "Potential 2025–2026 historical/on-chain art index worth a separate research pass; not necessary to establish the initial Ordinals canon."
+    },
+    {
+      "entity": "DeGods on Bitcoin",
+      "reason": "Cross-chain migration is notable, but the entity is not primarily Ordinals-native; evaluate once cross-category migration policy is standardized."
+    },
+    {
+      "entity": "Based Angels",
+      "reason": "Current collection relevance may justify inclusion, but the initial registry already covers core historical, technical, and cultural lineages; requires first-party research."
+    },
+    {
+      "entity": "Bitcoin Babbies",
+      "reason": "Historically relevant community-inscribed collection by King; evaluate alongside The Royals/creator relationship rules."
+    },
+    {
+      "entity": "OCM Dimensions",
+      "reason": "Currently modeled as a child release under the canonical OnChainMonkey profile to preserve one-entity-one-profile discipline."
+    },
+    {
+      "entity": "OrdRain / Nakamoto Archives",
+      "reason": "Currently modeled as child releases under The Wizards of Ord."
+    },
+    {
+      "entity": "ORDI",
+      "reason": "Currently represented as a related BRC-20 token. A separate profile would create token-catalog sprawl unless Master Explore introduces token-level entities."
+    },
+    {
+      "entity": "BRC-20 2.0",
+      "reason": "Currently treated as protocol evolution inside BRC-20 rather than a duplicate canonical profile."
+    },
+    {
+      "entity": "Cursed Inscriptions",
+      "reason": "Important core concept, currently handled as a supporting tag/feature under Ordinal Theory rather than a project profile."
+    },
+    {
+      "entity": "Rare Pepes / Counterparty",
+      "reason": "Critical pre-Ordinals history but not an Ordinals entity; keep as a relationship unless a broader Bitcoin digital-assets history category is created."
+    }
+  ],
+  "record_files": [
+    {
+      "path": "records/MSC_Explore_Ordinals_Records_001_011.json",
+      "range": "001-011",
+      "count": 11
+    },
+    {
+      "path": "records/MSC_Explore_Ordinals_Records_012_022.json",
+      "range": "012-022",
+      "count": 11
+    },
+    {
+      "path": "records/MSC_Explore_Ordinals_Records_023_033.json",
+      "range": "023-033",
+      "count": 11
+    },
+    {
+      "path": "records/MSC_Explore_Ordinals_Records_034_044.json",
+      "range": "034-044",
+      "count": 11
+    }
+  ]
+}
