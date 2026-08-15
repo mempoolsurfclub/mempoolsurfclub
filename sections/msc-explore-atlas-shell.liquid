@@ -1,0 +1,370 @@
+{{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
+
+<section class="msc-shell msc-explore-atlas-shell" id="MscExploreAtlas-{{ section.id }}">
+  <div class="msc-container">
+    <header class="msc-explore-atlas-intro">
+      <div class="msc-eyebrow msc-explore-atlas-intro__kicker">MSC ATLAS / EXPLORE</div>
+      <h1 class="msc-title msc-explore-atlas-intro__title">{{ section.settings.heading | escape }}</h1>
+      <div class="msc-subtitle msc-explore-atlas-intro__copy rte">{{ section.settings.supporting_copy }}</div>
+    </header>
+
+    <div class="msc-atlas-window" aria-label="MSC Atlas Bitcoin ecosystem navigation">
+      <div class="msc-atlas-window__top">
+        <div class="msc-atlas-window__identity">
+          <span>MSC ATLAS</span>
+          <strong>BITCOIN OCEAN</strong>
+        </div>
+        <div class="msc-atlas-window__readout">
+          <span>VIEW</span>
+          <strong>FULL OCEAN</strong>
+        </div>
+        <div class="msc-atlas-window__readout">
+          <span>REGIONS</span>
+          <strong>{{ section.blocks.size | prepend: '0' | slice: -2, 2 }}</strong>
+        </div>
+      </div>
+
+      <div class="msc-atlas-window__viewport" aria-label="Atlas map viewport placeholder">
+        <span class="msc-atlas-window__coord msc-atlas-window__coord--nw">N 00° / W 00°</span>
+        <div class="msc-atlas-window__viewport-label" aria-hidden="true">
+          <span>ATLAS VIEWPORT</span>
+          <strong>FULL OCEAN</strong>
+          <small>BITCOIN ECOSYSTEM</small>
+        </div>
+        <span class="msc-atlas-window__coord msc-atlas-window__coord--se">S 00° / E 00°</span>
+      </div>
+
+      <nav class="msc-atlas-window__nav" aria-label="Explore Atlas regions">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'region' -%}
+            {%- if block.settings.link != blank -%}
+              <a class="msc-atlas-region" href="{{ block.settings.link }}" {{ block.shopify_attributes }}>
+            {%- else -%}
+              <span class="msc-atlas-region" {{ block.shopify_attributes }}>
+            {%- endif -%}
+                <span class="msc-atlas-region__index">{%- if forloop.index < 10 -%}0{%- endif -%}{{ forloop.index }}</span>
+                <strong>{{ block.settings.title | escape }}</strong>
+            {%- if block.settings.link != blank -%}
+              </a>
+            {%- else -%}
+              </span>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </nav>
+    </div>
+  </div>
+</section>
+
+<style>
+  .msc-explore-atlas-shell {
+    padding: clamp(5.5rem, 7vw, 7.8rem) 0 0;
+  }
+
+  .msc-explore-atlas-intro {
+    max-width: 98rem;
+  }
+
+  .msc-explore-atlas-intro__kicker {
+    margin-bottom: 1.8rem;
+  }
+
+  .msc-explore-atlas-intro__title {
+    max-width: 14ch;
+    margin: 0 0 1.4rem;
+  }
+
+  .msc-explore-atlas-intro__copy {
+    max-width: 82rem;
+    margin: 0;
+  }
+
+  .msc-explore-atlas-intro__copy p {
+    margin: 0;
+  }
+
+  .msc-atlas-window {
+    display: grid;
+    grid-template-rows: 10% 65% 25%;
+    width: 100%;
+    height: clamp(52rem, 58vw, 68rem);
+    margin-top: clamp(2.8rem, 4vw, 4.2rem);
+    overflow: hidden;
+    border: 1px solid rgba(212, 190, 153, .38);
+    border-radius: 20px;
+    background: rgba(16, 40, 45, .44);
+    box-shadow: 0 24px 70px rgba(16, 40, 45, .22);
+    backdrop-filter: blur(18px);
+  }
+
+  .msc-atlas-window__top {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: stretch;
+    border-bottom: 1px solid rgba(212, 190, 153, .32);
+    background: rgba(16, 40, 45, .34);
+  }
+
+  .msc-atlas-window__identity,
+  .msc-atlas-window__readout {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    padding: 1rem 1.6rem;
+  }
+
+  .msc-atlas-window__readout {
+    min-width: 13.5rem;
+    border-left: 1px solid rgba(212, 190, 153, .24);
+  }
+
+  .msc-atlas-window__identity span,
+  .msc-atlas-window__readout span,
+  .msc-atlas-window__viewport-label span,
+  .msc-atlas-window__viewport-label small,
+  .msc-atlas-region__index,
+  .msc-atlas-window__coord {
+    color: rgba(212, 190, 153, .72);
+    font-size: .92rem;
+    line-height: 1.2;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+
+  .msc-atlas-window__identity strong,
+  .msc-atlas-window__readout strong {
+    margin-top: .35rem;
+    color: var(--msc-paper-soft);
+    font-size: 1.15rem;
+    line-height: 1.1;
+    letter-spacing: .08em;
+  }
+
+  .msc-atlas-window__viewport {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(212, 190, 153, .32);
+    background:
+      radial-gradient(circle at 50% 48%, rgba(212, 190, 153, .10), transparent 31%),
+      linear-gradient(rgba(212, 190, 153, .055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212, 190, 153, .055) 1px, transparent 1px),
+      linear-gradient(145deg, rgba(23, 60, 67, .72), rgba(16, 40, 45, .88));
+    background-size: auto, 42px 42px, 42px 42px, auto;
+  }
+
+  .msc-atlas-window__viewport::before,
+  .msc-atlas-window__viewport::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .msc-atlas-window__viewport::before {
+    inset: 13% 8%;
+    border: 1px solid rgba(212, 190, 153, .12);
+    border-radius: 50%;
+    transform: rotate(-7deg) scaleX(1.35);
+  }
+
+  .msc-atlas-window__viewport::after {
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(transparent, rgba(212, 190, 153, .14) 18%, rgba(212, 190, 153, .14) 82%, transparent);
+  }
+
+  .msc-atlas-window__viewport-label {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .msc-atlas-window__viewport-label strong {
+    margin-top: .55rem;
+    color: var(--msc-paper-soft);
+    font-size: clamp(2.2rem, 3.4vw, 4.1rem);
+    line-height: 1;
+    letter-spacing: -.035em;
+  }
+
+  .msc-atlas-window__viewport-label small {
+    margin-top: .75rem;
+  }
+
+  .msc-atlas-window__coord {
+    position: absolute;
+    z-index: 1;
+    opacity: .68;
+  }
+
+  .msc-atlas-window__coord--nw {
+    top: 1.4rem;
+    left: 1.6rem;
+  }
+
+  .msc-atlas-window__coord--se {
+    right: 1.6rem;
+    bottom: 1.4rem;
+  }
+
+  .msc-atlas-window__nav {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    min-height: 0;
+    background: rgba(16, 40, 45, .32);
+  }
+
+  .msc-atlas-region {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: .7rem;
+    min-width: 0;
+    padding: 1.1rem 1.5rem;
+    border-right: 1px solid rgba(212, 190, 153, .22);
+    border-bottom: 1px solid rgba(212, 190, 153, .22);
+    color: inherit;
+    text-decoration: none;
+    transition: background-color .2s ease, color .2s ease;
+  }
+
+  .msc-atlas-region:nth-child(4n) {
+    border-right: 0;
+  }
+
+  .msc-atlas-region:nth-child(n+5) {
+    border-bottom: 0;
+  }
+
+  .msc-atlas-region strong {
+    color: var(--msc-paper-soft);
+    font-size: clamp(1.15rem, 1.45vw, 1.55rem);
+    line-height: 1.08;
+    letter-spacing: .06em;
+    overflow-wrap: anywhere;
+  }
+
+  a.msc-atlas-region:hover,
+  a.msc-atlas-region:focus-visible {
+    background: rgba(212, 190, 153, .10);
+  }
+
+  a.msc-atlas-region:focus-visible {
+    outline: 2px solid var(--msc-sand);
+    outline-offset: -3px;
+  }
+
+  /* The Atlas shell replaces only the existing Explore hero/map/category-card area. */
+  .msc-explore > .msc-container > .msc-explore-hero,
+  .msc-explore > .msc-container > .msc-explore-categories {
+    display: none !important;
+  }
+
+  .msc-explore {
+    padding-top: 0 !important;
+  }
+
+  .msc-explore > .msc-container > .msc-block:first-of-type {
+    padding-top: clamp(3.8rem, 6vw, 5.5rem);
+  }
+
+  @media screen and (max-width: 760px) {
+    .msc-explore-atlas-shell {
+      padding-top: 4.4rem;
+    }
+
+    .msc-atlas-window {
+      height: auto;
+      grid-template-rows: auto minmax(30rem, 44vh) auto;
+    }
+
+    .msc-atlas-window__top {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    .msc-atlas-window__readout:first-of-type {
+      display: none;
+    }
+
+    .msc-atlas-window__readout {
+      min-width: 9.4rem;
+      padding-inline: 1.1rem;
+    }
+
+    .msc-atlas-window__nav {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: repeat(4, minmax(7.2rem, auto));
+    }
+
+    .msc-atlas-region:nth-child(4n) {
+      border-right: 1px solid rgba(212, 190, 153, .22);
+    }
+
+    .msc-atlas-region:nth-child(2n) {
+      border-right: 0;
+    }
+
+    .msc-atlas-region:nth-child(n+5) {
+      border-bottom: 1px solid rgba(212, 190, 153, .22);
+    }
+
+    .msc-atlas-region:nth-child(n+7) {
+      border-bottom: 0;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "MSC Explore Atlas Shell",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "EXPLORE THE BITCOIN OCEAN."
+    },
+    {
+      "type": "richtext",
+      "id": "supporting_copy",
+      "label": "Supporting copy",
+      "default": "<p>Navigate the Bitcoin ecosystem through eight charted regions. The Atlas will connect each region to the projects, platforms, companies, and infrastructure inside it.</p>"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "region",
+      "name": "Atlas region",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Region name"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Region link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "MSC Explore Atlas Shell"
+    }
+  ]
+}
+{% endschema %}
