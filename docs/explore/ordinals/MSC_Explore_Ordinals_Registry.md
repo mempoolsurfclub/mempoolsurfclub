@@ -5,7 +5,7 @@
 **Primary Explore category:** ORDINALS  
 **Canonical records:** 44
 
-> The JSON manifest plus its four `records/` shards are the canonical machine-readable source. This Markdown file is the human-readable registry companion. Nothing here publishes or changes the live Explore implementation.
+> The JSON manifest plus its eleven `records/` shards are the canonical machine-readable source. This Markdown file is the human-readable registry companion. Nothing here publishes or changes the live Explore implementation.
 
 ## Proposed topic architecture
 
@@ -133,7 +133,7 @@ Every canonical record in the JSON shards contains: canonical name; recommended 
 
 ## Source-of-truth / publication lock
 
-- The manifest and all four record shards must remain synchronized.
+- The manifest and all eleven record shards must remain synchronized.
 - Recommended slugs are planning handles only.
 - Marketplace activity alone does not prove an ACTIVE project.
 - Cross-category assets are relationships, not duplicate canonical profiles.
