@@ -36,6 +36,15 @@
   pointer-events: none;
 }
 
+/* Keep every Atlas SVG label crisp in idle, preview, locked, and inspected states. */
+.msc-atlas-map text {
+  stroke: none !important;
+  stroke-width: 0 !important;
+  paint-order: normal !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
 /* Redraw the shared Bitcoin landmass as a more geographic silhouette.
  * Deliberately asymmetric: capes, bays, a narrow western shoulder,
  * a long eastern reach, a southern gulf and several smaller inlets.
