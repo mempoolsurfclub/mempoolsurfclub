@@ -3,7 +3,7 @@
 **Status:** COMMAND CENTER REVIEW  
 **Last verified:** 2026-08-15  
 **Primary Explore category:** EXCHANGES  
-**Canonical records:** 36
+**Canonical records:** 35
 
 > The JSON manifest plus its nine `records/` shards are the canonical machine-readable source. This Markdown file is the human-readable registry companion. Nothing here publishes or changes the live Explore implementation.
 
@@ -58,7 +58,6 @@ Defunct venues and early on-ramp infrastructure whose operation materially expla
 
 - **River** — `ACTIVE` — `river` — Bitcoin-only custodial brokerage — U.S. Bitcoin-focused brokerage combining BTC execution, custodial balances, withdrawals, and Bitcoin wallet functionality.
 - **Swan Bitcoin** — `ACTIVE` — `swan-bitcoin` — Bitcoin-focused brokerage interface with third-party custody — Bitcoin-focused purchase and savings platform whose current terms position Swan as a technology interface to third-party trading and custody providers.
-- **Strike** — `ACTIVE` — `strike` — Bitcoin-focused custodial payments-and-trading app — Bitcoin and payments app that lets users buy, hold, send, receive, and withdraw BTC over on-chain Bitcoin and Lightning.
 - **Bull Bitcoin** — `ACTIVE` — `bull-bitcoin` — Bitcoin-only direct-to-wallet broker/dealer — Bitcoin-only brokerage and payment service built around direct settlement to or from user-controlled Bitcoin wallets rather than exchange-account custody.
 - **Bitcoin Well** — `ACTIVE` — `bitcoin-well` — Bitcoin-focused regional exchange — Canadian-founded Bitcoin company offering online buy/sell flows that deliver BTC to user-controlled wallets, plus ATM and OTC infrastructure.
 - **Relai** — `ACTIVE` — `relai` — Bitcoin-only direct-to-wallet broker/dealer — European Bitcoin-only app that brokers BTC purchases and sends bitcoin to user-controlled wallet infrastructure rather than operating a conventional custodial order book.
@@ -107,14 +106,14 @@ Defunct venues and early on-ramp infrastructure whose operation materially expla
 
 ## Status summary
 
-- **ACTIVE:** 27
+- **ACTIVE:** 26
 - **HISTORICAL:** 0
 - **INACTIVE:** 9
 - **UNCERTAIN:** 0
 
 ## Source-confidence summary
 
-- **HIGH:** 34
+- **HIGH:** 33
 - **MEDIUM:** 2
 - **LOW:** 0
 
@@ -131,7 +130,7 @@ Defunct venues and early on-ramp infrastructure whose operation materially expla
 
 | Entity | Canonical home | Relationships / decision |
 | --- | --- | --- |
-| Strike | EXCHANGES | PAYMENTS, WALLETS, NETWORK relationships; one profile only. |
+| Strike | PAYMENTS | `RELATIONSHIP_ONLY` in EXCHANGES. The approved PAYMENTS registry owns the single canonical Strike profile; retain EXCHANGES, WALLETS and NETWORK roles as relationships. |
 | Bull Bitcoin | EXCHANGES | PAYMENTS and WALLETS relationships; direct-to-wallet exchange/payment functions stay in one entity profile. |
 | Swan Bitcoin | EXCHANGES | WALLETS relationship for custody/self-custody products. |
 | River | EXCHANGES | WALLETS/PAYMENTS/NETWORK features remain relationships. |
@@ -152,7 +151,8 @@ Defunct venues and early on-ramp infrastructure whose operation materially expla
 ## Important custody distinctions
 
 - **Swan:** current terms say Swan is the technology interface; ordinary trading/custody is performed through authorized third-party custodians.
-- **Strike / River / Coinbase / Kraken / Binance / OKX / Bybit / Bitstamp / Bitfinex / Gemini / Bitso / Mercado Bitcoin / bitFlyer:** platform balances are custodial until withdrawal; do not describe the exchange account itself as self-custody.
+- **River / Coinbase / Kraken / Binance / OKX / Bybit / Bitstamp / Bitfinex / Gemini / Bitso / Mercado Bitcoin / bitFlyer:** platform balances are custodial until withdrawal; do not describe the exchange account itself as self-custody.
+- **Strike (relationship-only):** EXCHANGES research verified custodial BTC buy/sell plus on-chain and Lightning movement, but the approved PAYMENTS registry owns the single canonical profile; retain those findings only as relationship context here.
 - **Bull Bitcoin / Bitcoin Well / Relai / Pocket:** direct-to-wallet models reduce or avoid an ongoing exchange-custody balance, but execution/payment counterparties still exist.
 - **Bisq:** on-chain multisig/security-deposit and dispute system; fiat still settles between peers.
 - **RoboSats:** Lightning hold-invoice escrow; coordinator can settle/cancel and has a real trust/dispute role.
@@ -189,6 +189,7 @@ Defunct venues and early on-ramp infrastructure whose operation materially expla
 | MEXC | EXCLUDE_FOR_NOW | Current BTC markets alone do not justify a canonical Bitcoin-exchange profile; no unique Bitcoin-specific infrastructure role was established. |
 | NDAX | EXCLUDE_FOR_NOW | Credible Canadian exchange, but its distinct Bitcoin significance is weaker than the covered Canadian Bitcoin-focused/on-ramp and global order-book profiles. |
 | Cash App Bitcoin | RELATIONSHIP_ONLY | Bitcoin buy/sell is material, but Cash App's canonical identity is a payments/wallet product. Keep its exchange functionality relational to PAYMENTS/WALLETS unless Command Center changes canonical-home policy. |
+| Strike | RELATIONSHIP_ONLY | Canonical home is PAYMENTS (`MSC-EXP-PAY-003`). The approved PAYMENTS registry owns the single Strike profile; EXCHANGES retains only exchange/brokerage, custodial and Lightning relationship context. |
 | Fold | EXCLUDE_FOR_NOW | Rewards/payments identity is primary; exchange/brokerage functionality is not sufficiently material for EXCHANGES canonical home. |
 | Haveno | EXCLUDE_FOR_NOW | Monero-first exchange system; BTC pairing does not make Bitcoin the primary ecosystem role. |
 | AgoraDesk / LocalMonero | EXCLUDE_FOR_NOW | Monero-first lineage and largely redundant for Bitcoin P2P history once LocalBitcoins, Bisq, Hodl Hodl, RoboSats, Peach and Vexl are covered. |
@@ -203,6 +204,6 @@ Defunct venues and early on-ramp infrastructure whose operation materially expla
 
 ## Final research judgment
 
-The 36-record inventory covers Bitcoin-first brokers, durable global/regional centralized exchanges, meaningfully different P2P architectures, institutional/derivatives infrastructure, and historically important failures/on-ramps. It intentionally omits large multiasset venues whose inclusion case is only scale or a BTC listing.
+The 35-record inventory covers Bitcoin-first brokers, durable global/regional centralized exchanges, meaningfully different P2P architectures, institutional/derivatives infrastructure, and historically important failures/on-ramps. It intentionally omits large multiasset venues whose inclusion case is only scale or a BTC listing.
 
 Approval recommendation: **APPROVE AS EXCHANGES REFERENCE REGISTRY**, with the review-queue cautions preserved and BitMEX lifecycle rechecked after its announced September 2026 closure.
