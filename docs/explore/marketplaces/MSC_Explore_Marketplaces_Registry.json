@@ -1,0 +1,159 @@
+{
+  "registry": "Mempool Surf Club Explore — Marketplaces Research Registry",
+  "primary_explore_category": "MARKETPLACES",
+  "status": "COMMAND_CENTER_REVIEW",
+  "last_verified_date": "2026-08-15",
+  "scope": "Research and registry data only; no public Explore implementation, route, Shopify, Atlas, Learn, Home or Tools changes are authorized.",
+  "reference_schema": {
+    "branch": "explore/ordinals-registry-research",
+    "approved_head": "1f4368bdebc572de5aaed6df221460516295c54a",
+    "note": "Marketplaces reuses the approved 24-field contract and validation semantics, not the Ordinals topic taxonomy."
+  },
+  "_schema": {
+    "required_fields": [
+      "Registry ID",
+      "Canonical name",
+      "Recommended slug",
+      "Primary Explore category",
+      "Marketplaces topic",
+      "Marketplaces subtopic",
+      "Entity / project type",
+      "Status",
+      "Source confidence",
+      "Concise description",
+      "Deeper researched summary",
+      "Creators / founders",
+      "Launch / history",
+      "Why it matters in the Bitcoin marketplace ecosystem",
+      "Important technical or cultural characteristics",
+      "Related projects / entities",
+      "Related Explore categories",
+      "Supporting tags",
+      "Official website",
+      "Official sources",
+      "Corroborating sources",
+      "Last verified date",
+      "Verification basis",
+      "Research notes / uncertainties"
+    ],
+    "field_count": 24,
+    "status_values": ["ACTIVE", "HISTORICAL", "INACTIVE", "UNCERTAIN"],
+    "status_definitions": {
+      "ACTIVE": "Current marketplace, protocol, operator, or materially relevant service operation was verified as of the record verification date.",
+      "HISTORICAL": "The relevant marketplace/product phase is finite, completed, legacy, or no longer currently offered, but remains ecosystem-significant.",
+      "INACTIVE": "Operation ceased, was abandoned, or became unsafe/unavailable without a verified active successor operation.",
+      "UNCERTAIN": "Lifecycle/activity status itself cannot be determined from reliable evidence."
+    },
+    "source_confidence_values": ["HIGH", "MEDIUM", "LOW"],
+    "source_confidence_definitions": {
+      "HIGH": "First-party or primary evidence supports identity and core claims, including lifecycle where applicable.",
+      "MEDIUM": "Credible evidence exists, but one or more core fields rely on archival, independent, incomplete, stale, or technically ambiguous first-party evidence.",
+      "LOW": "Core attribution, scope, mechanics, or lifecycle evidence remains materially indirect."
+    },
+    "source_type_values": ["official", "official-github", "primary", "on-chain", "independent", "indexer", "marketplace", "market-data"],
+    "source_hierarchy": [
+      "Official marketplace website/docs",
+      "Official GitHub, blog, support center, changelog, or official social account",
+      "Primary transaction/protocol documentation where marketplace mechanics depend on it",
+      "Reputable independent reporting/interviews",
+      "Market-data/indexer sources as supporting evidence only"
+    ],
+    "one_entity_one_profile": "One canonical entity = one canonical profile. Asset types, protocol support, wallet integrations, child products and collection listings are modeled as characteristics/relationships unless materially distinct canonical products require Command Center approval.",
+    "custody_rule": "Do not infer non-custody from PSBT use, wallet-side signing, or absence of stored private keys alone. Describe exactly what users, scripts, pool wallets, platform services, and transaction builders control.",
+    "consensus_rule": "Marketplace listings, order state, collection labels, rare-sat labels, BRC-20/Runes interpretation and metadata are not automatically Bitcoin consensus state."
+  },
+  "topic_architecture": [
+    {
+      "topic": "Trading Venues",
+      "purpose": "Canonical end-user venues where Bitcoin-native or Bitcoin-relevant assets are listed, auctioned, bid on, or purchased.",
+      "subtopics": [
+        "Ordinals-focused marketplaces",
+        "Multi-asset Bitcoin marketplaces",
+        "Art & launchpad marketplaces",
+        "Rare-sat marketplaces",
+        "Curated Bitcoin auctions",
+        "Multi-protocol Bitcoin collectibles",
+        "Multi-chain Bitcoin marketplace integrations",
+        "Cross-chain / vaulted Ordinals markets"
+      ]
+    },
+    {
+      "topic": "Protocols & Liquidity Infrastructure",
+      "purpose": "Trading protocols and marketplace infrastructure whose mechanics materially shape Bitcoin asset liquidity without fitting a conventional listing venue.",
+      "subtopics": ["Bitcoin token AMMs", "Marketplace APIs & white-label infrastructure"]
+    }
+  ],
+  "counts": {
+    "records": 18,
+    "by_status": {"ACTIVE": 13, "HISTORICAL": 4, "INACTIVE": 1},
+    "by_topic": {"Protocols & Liquidity Infrastructure": 3, "Trading Venues": 15},
+    "by_source_confidence": {"HIGH": 12, "MEDIUM": 6}
+  },
+  "required_seed_coverage": {
+    "ord.net": {"addressed": true, "decision": "INCLUDED", "record_id": "MSC-EXP-MKT-001", "canonical_name": "ORD.NET"},
+    "satflow.com": {"addressed": true, "decision": "INCLUDED", "record_id": "MSC-EXP-MKT-002", "canonical_name": "Satflow"}
+  },
+  "record_index": [
+    {"Registry ID": "MSC-EXP-MKT-001", "Canonical name": "ORD.NET", "Recommended slug": "ord-net", "Marketplaces topic": "Trading Venues", "Marketplaces subtopic": "Ordinals-focused marketplaces", "Status": "ACTIVE", "Source confidence": "HIGH"},
+    {"Registry ID": "MSC-EXP-MKT-002", "Canonical name": "Satflow", "Recommended slug": "satflow", "Marketplaces topic": "Trading Venues", "Marketplaces subtopic": "Multi-asset Bitcoin marketplaces", "Status": "ACTIVE", "Source confidence": "HIGH"},
+    {"Registry ID": "MSC-EXP-MKT-003", "Canonical name": "UniSat Marketplace", "Recommended slug": "unisat-marketplace", "Marketplaces topic": "Trading Venues", "Marketplaces subtopic": "Multi-asset Bitcoin marketplaces", "Status": "ACTIVE", "Source confidence": "HIGH"},
+    {"Registry ID": "MSC-EXP-MKT-004", "Canonical name": "Ordinals Wallet", "Recommended slug": "ordinals-wallet", "Marketplaces topic": "Trading Venues", "Marketplaces subtopic": "Multi-asset Bitcoin marketplaces", "Status": "ACTIVE", "Source confidence": "HIGH"},
+    {"Registry ID": "MSC-EXP-MKT-005", "Canonical name": "Gamma", "Recommended slug": "gamma", "Marketplaces topic": "Trading Venues", "Marketplaces subtopic": "Art & launchpad marketplaces", "Status": "ACTIVE", "Source confidence": "HIGH"},
+    {"Registry ID": "MSC-EXP-MKT-006", "Canonical name": "OKX Web3 Marketplace — Bitcoin assets", "Recommended slug": "okx-web3-bitcoin-marketplace", "Marketplaces topic": "Trading Venues", "Marketplaces subtopic": "Multi-asset Bitcoin marketplaces", "Status": "ACTIVE", "Source confidence": "HIGH"},
+    {"Registry ID": "MSC-EXP-MKT-007", "Canonical name": "Magisat", "Recommended slug": "magisat", "Marketplaces topic": "Trading Venues", "Marketplaces subtopic": "Rare-sat marketplaces", "Status": "ACTIVE", "Source confidence": "HIGH"},
+    {"Registry ID": "MSC-EXP-MKT-008", "Canonical name": "Ordzaar", "Recommended slug": "ordzaar", "Marketplaces topic": "Trading Venues", "Marketplaces subtopic": "Art & launchpad marketplaces", "Status": "ACTIVE", "Source confidence": "MEDIUM"},
+    {"Registry ID": "MSC-EXP-MKT-009", "Canonical name": "Scarce City", "Recommended slug": "scarce-city", "Marketplaces topic": "Trading Venues", "Marketplaces subtopic": "Curated Bitcoin auctions", "Status": "ACTIVE", "Source confidence": "HIGH"},
+    {"Registry ID": "MSC-EXP-MKT-010", "Canonical name": "Horizon Market", "Recommended slug": "horizon-market", "Marketplaces topic": "Trading Venues", "Marketplaces subtopic": "Multi-protocol Bitcoin collectibles", "Status": "ACTIVE", "Source confidence": "HIGH"},
+    {"Registry ID": "MSC-EXP-MKT-011", "Canonical name": "Magic Eden Bitcoin Marketplace", "Recommended slug": "magic-eden-bitcoin-marketplace", "Marketplaces topic": "Trading Venues", "Marketplaces subtopic": "Multi-chain Bitcoin marketplace integrations", "Status": "HISTORICAL", "Source confidence": "HIGH"},
+    {"Registry ID": "MSC-EXP-MKT-012", "Canonical name": "Binance Bitcoin marketplace support", "Recommended slug": "binance-bitcoin-marketplace-support", "Marketplaces topic": "Trading Venues", "Marketplaces subtopic": "Multi-chain Bitcoin marketplace integrations", "Status": "HISTORICAL", "Source confidence": "MEDIUM"},
+    {"Registry ID": "MSC-EXP-MKT-013", "Canonical name": "Ordinals Market", "Recommended slug": "ordinals-market", "Marketplaces topic": "Trading Venues", "Marketplaces subtopic": "Cross-chain / vaulted Ordinals markets", "Status": "HISTORICAL", "Source confidence": "MEDIUM"},
+    {"Registry ID": "MSC-EXP-MKT-014", "Canonical name": "Ordswap", "Recommended slug": "ordswap", "Marketplaces topic": "Trading Venues", "Marketplaces subtopic": "Ordinals-focused marketplaces", "Status": "INACTIVE", "Source confidence": "MEDIUM"},
+    {"Registry ID": "MSC-EXP-MKT-015", "Canonical name": "OpenOrdex", "Recommended slug": "openordex", "Marketplaces topic": "Trading Venues", "Marketplaces subtopic": "Ordinals-focused marketplaces", "Status": "HISTORICAL", "Source confidence": "MEDIUM"},
+    {"Registry ID": "MSC-EXP-MKT-016", "Canonical name": "DotSwap", "Recommended slug": "dotswap", "Marketplaces topic": "Protocols & Liquidity Infrastructure", "Marketplaces subtopic": "Bitcoin token AMMs", "Status": "ACTIVE", "Source confidence": "HIGH"},
+    {"Registry ID": "MSC-EXP-MKT-017", "Canonical name": "Runes DEX", "Recommended slug": "runes-dex", "Marketplaces topic": "Protocols & Liquidity Infrastructure", "Marketplaces subtopic": "Bitcoin token AMMs", "Status": "ACTIVE", "Source confidence": "MEDIUM"},
+    {"Registry ID": "MSC-EXP-MKT-018", "Canonical name": "Trio Marketplace / OrdinalsBot", "Recommended slug": "trio-marketplace-ordinalsbot", "Marketplaces topic": "Protocols & Liquidity Infrastructure", "Marketplaces subtopic": "Marketplace APIs & white-label infrastructure", "Status": "ACTIVE", "Source confidence": "HIGH"}
+  ],
+  "shards": [
+    "records/MSC_Explore_Marketplaces_Records_001_004.json",
+    "records/MSC_Explore_Marketplaces_Records_005_008.json",
+    "records/MSC_Explore_Marketplaces_Records_009_012.json",
+    "records/MSC_Explore_Marketplaces_Records_013_016.json",
+    "records/MSC_Explore_Marketplaces_Records_017_018.json"
+  ],
+  "company_product_consolidation_decisions": [
+    "Magic Eden: one MARKETPLACES record for the Bitcoin implementation; Ordinals and Runes are not split into separate profiles. Status is HISTORICAL for the Bitcoin implementation, not for Magic Eden as a company.",
+    "UniSat: one Marketplace product record with explicit WALLETS relationship; do not create separate profiles for each supported protocol or for UniHexa without Command Center approval.",
+    "Ordinals Wallet: one combined wallet/marketplace entity record here because the marketplace is a substantial canonical product; Master Explore must coordinate canonical-home/dedup behavior with WALLETS.",
+    "OKX: record is scoped to the Web3 Wallet Bitcoin marketplace, not the centralized exchange order book; link to EXCHANGES and WALLETS rather than conflating custody models.",
+    "Binance: one historical corporate/product record consolidates the 2023 Binance NFT Bitcoin phase and later Web3 Wallet Inscriptions Marketplace while explicitly preserving their different mechanics.",
+    "Gamma: one profile for its Bitcoin art marketplace/creator platform; no separate launchpad versus secondary-market profile.",
+    "Trio / OrdinalsBot: one combined profile covers the live Trio consumer marketplace and directly underlying OrdinalsBot marketplace/API infrastructure; do not create separate company and marketplace profiles without a master-registry canonical-home decision."
+  ],
+  "researched_omission_decisions": [
+    {"candidate": "ord.io / ORD", "decision": "EXCLUDE", "reason": "Ord.io is canonically an Ordinals explorer/indexer rather than a marketplace. Its associated Zap trading product and Ord.io shut down on June 1, 2026; a marketplace record would mis-home the explorer and duplicate a discontinued adjacent product."},
+    {"candidate": "Deezy", "decision": "EXCLUDE", "reason": "Current first-party positioning is a Bitcoin treasury/rare-sat hunting and data/API business rather than a multi-sided marketplace. Selling its own sourced sats does not establish a canonical marketplace venue."},
+    {"candidate": "Generative.xyz", "decision": "EXCLUDE", "reason": "First-party docs verify an early Bitcoin on-chain art and launch platform launched February 10, 2023, but the reviewed current material does not establish a durable secondary-marketplace role or verifiable 2026 trading operation."},
+    {"candidate": "Tensor", "decision": "EXCLUDE", "reason": "Official product documentation is Solana-focused; no materially significant Bitcoin marketplace implementation was verified."},
+    {"candidate": "Xverse", "decision": "EXCLUDE_AS_STANDALONE_MARKETPLACE", "reason": "Xverse is canonically a wallet/aggregation surface. Its Rune swap flow routes quotes to providers such as UniSat, OKX and DotSwap; those venues are represented directly and Xverse is modeled relationally under WALLETS."},
+    {"candidate": "RareSatsMarket.com", "decision": "EXCLUDE", "reason": "The site states that it is powered by Magisat API. Magisat is the underlying canonical rare-sat marketplace/infrastructure entity, so a second profile would be derivative duplication."},
+    {"candidate": "Emblem Vault", "decision": "EXCLUDE_AS_STANDALONE_MARKETPLACE", "reason": "Emblem Vault is cross-chain vault/wrapping infrastructure rather than the canonical end-user Ordinals venue in this registry. Its material marketplace role is preserved in the Ordinals Market record and related-entity notes."},
+    {"candidate": "Ord.Exchange", "decision": "EXCLUDE", "reason": "Marketplace aggregation/routing does not add a distinct canonical trading venue where underlying marketplace entities are already represented."},
+    {"candidate": "Best in Slot", "decision": "EXCLUDE", "reason": "Canonically an indexer/data/analytics layer rather than a marketplace. Listing/market data should not create a duplicate MARKETPLACES profile."},
+    {"candidate": "Luminex", "decision": "EXCLUDE", "reason": "Primarily a mint/launch/issuance tool in the reviewed scope; insufficient evidence for a distinct secondary-marketplace canonical profile."},
+    {"candidate": "Oyl", "decision": "EXCLUDE", "reason": "Primarily wallet/trading aggregation infrastructure rather than a standalone marketplace venue in the reviewed scope."},
+    {"candidate": "UniHexa", "decision": "RELATION_ONLY", "reason": "UniSat describes UniHexa as a newer/beta trading engine. It remains under the UniSat canonical entity until Command Center determines it is a materially distinct product deserving a separate profile."},
+    {"candidate": "RunesFi", "decision": "EXCLUDE", "reason": "Testnet/incomplete evidence did not meet the canon threshold for current operational significance."},
+    {"candidate": "Saturn BTC / SatsX / low-volume clones", "decision": "EXCLUDE", "reason": "Insufficient first-party architecture, durable significance, or distinct historical role; including them would turn the registry into directory padding."},
+    {"candidate": "OrdinalHub", "decision": "EXCLUDE", "reason": "Reviewed current/historical material supports an inscription tool, ecosystem map, research and discovery role; a distinct durable marketplace/trading venue was not verified."}
+  ],
+  "public_copy_caution_queue": [
+    {"record": "ORD.NET", "reason": "Do not reduce its custody model to a single adjective. Terms disclaim custody/private-key access, while current listing APIs use a scripted listing escrow output, service-built PSBTs and pre-signed recovery."},
+    {"record": "Ordzaar", "reason": "First-party sources confirm marketplace/launchpad operation and no private-key storage, but low-level transaction/custody architecture was not sufficiently documented."},
+    {"record": "Binance Bitcoin marketplace support", "reason": "One record spans two Binance product phases with materially different custody/user-flow assumptions."},
+    {"record": "Ordinals Market", "reason": "Contemporary sources establish both Emblem Vault/Ethereum trading and reported PSBT adoption; exact transition/parallel-path chronology remains unresolved."},
+    {"record": "Ordswap", "reason": "Historical domain compromise creates link-safety concerns; do not publish the old domain as an official call-to-action."},
+    {"record": "OpenOrdex", "reason": "Repository reachability is not evidence of current operation; classify as HISTORICAL."},
+    {"record": "Runes DEX", "reason": "Marketing language around decentralization/self-custody must be qualified by documented pool-wallet control and fee-wallet mechanics."}
+  ],
+  "publication_state": "COMMAND CENTER REVIEW ONLY — do not merge, publish, generate public Marketplace pages, or connect this registry to the live Explore interface."
+}
