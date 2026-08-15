@@ -1,0 +1,134 @@
+MSC Explore — Runes Registry Validation / Final Research QA
+Verified date: 2026-08-15
+
+REPOSITORY SCOPE
+PASS: Target package is docs/explore/runes/ only.
+PASS: Current main was inspected before branch creation.
+PASS: Branch explore/runes-registry-research was created from main SHA 98e3e722bff75922cae7f22f2925c411b8a5d620.
+PASS: Approved Ordinals reference branch was inspected at QA HEAD 1f4368bdebc572de5aaed6df221460516295c54a.
+PASS: No Ordinals registry, Shopify theme, Atlas, Explore runtime, Learn, Home, Tools, production routing, merge, or publication action is authorized by this package.
+
+REFERENCE SCHEMA
+PASS: Uses the approved 24-field entity contract with category-specific Runes topic/subtopic labels only.
+PASS: Lifecycle vocabulary is exactly ACTIVE / HISTORICAL / INACTIVE / UNCERTAIN.
+PASS: Source-confidence vocabulary is exactly HIGH / MEDIUM / LOW.
+PASS: Source provenance is restricted to official / official-github / primary / on-chain / independent / indexer / marketplace / market-data.
+PASS: Lifecycle, source confidence, source provenance, and research uncertainty remain separate.
+PASS: One canonical entity = one canonical profile discipline is enforced.
+
+STRUCTURE
+PASS: Canonical manifest parsed.
+PASS: Three record shards parsed.
+PASS: Combined record count = 18.
+PASS: Required user seeds represented = 9/9.
+PASS: Unique Registry IDs = 18/18.
+PASS: Unique canonical names = 18/18.
+PASS: Unique recommended slugs = 18/18.
+PASS: Every record contains the same 24 required fields.
+PASS: Every primary category is RUNES.
+PASS: Every Runes topic/subtopic is present in the manifest taxonomy.
+PASS: Every status is one of ACTIVE / HISTORICAL / INACTIVE / UNCERTAIN.
+PASS: Every source confidence is one of HIGH / MEDIUM / LOW.
+PASS: Every source_type uses the controlled vocabulary.
+PASS: All record verification dates are valid non-future ISO dates (2026-08-15).
+PASS: Shard counts and manifest total reconcile.
+
+FINAL TOPIC COUNTS
+- Protocol & Genesis: 2
+- Halving-Block Provenance: 5
+- Ordinals-Linked Distribution: 3
+- Cross-Standard Migration: 2
+- Community & Cultural Runes: 5
+- Utility & Governance Runes: 1
+
+FINAL STATUS COUNTS
+- ACTIVE: 10
+- HISTORICAL: 4
+- INACTIVE: 0
+- UNCERTAIN: 4
+
+FINAL SOURCE-CONFIDENCE COUNTS
+- HIGH: 9
+- MEDIUM: 9
+- LOW: 0
+
+REQUIRED USER SEEDS
+PASS: UNCOMMON•GOODS — included.
+PASS: SATOSHI•NAKAMOTO — included.
+PASS: DOG•GO•TO•THE•MOON — included.
+PASS: MAGIC•INTERNET•MONEY — included.
+PASS: PUPS•WORLD•PEACE — included.
+PASS: BILLION•DOLLAR•CAT — included.
+PASS: WISHY•WASHY•MACHINE — included.
+PASS: GIZMO•IMAGINARY•KITTEN — included.
+PASS: SAIKO•HAMSTER — included.
+
+REQUIRED CROSS-CATEGORY RELATIONSHIPS / DEDUPLICATION
+PASS: DOG•GO•TO•THE•MOON is canonical in RUNES and links Runestone; Runestone remains canonical in ORDINALS.
+PASS: RSIC•GENESIS•RUNE is canonical in RUNES and links RSIC Metaprotocol; RSIC Metaprotocol remains canonical in ORDINALS.
+PASS: BASED•ANGELS•RUNE is canonical in RUNES and links Based Angels; Based Angels remains canonical in ORDINALS.
+PASS: No canonical ORDINALS entity name is duplicated as a RUNES record.
+PASS: PUPS BRC-20 history is lineage under PUPS•WORLD•PEACE rather than a duplicate RUNES record.
+PASS: WZRD/BRC-20 history is lineage under MAGIC•INTERNET•MONEY rather than a duplicate RUNES record.
+PASS: Wrapped/bridged representations are treated relationally, not as duplicate canonical Runes.
+PASS: STAKED•LIQUIDIUM remains a child/receipt relationship under LIQUIDIUM•TOKEN for the initial canon.
+
+TECHNICAL / PROTOCOL QA
+PASS: Core protocol copy states that `ord` is the normative Runes specification/reference implementation.
+PASS: Protocol activation is block 840,000.
+PASS: Runestones are identified via OP_RETURN OP_13 and interpreted by Runes-aware software.
+PASS: Rune IDs use BLOCK:TX.
+PASS: Etching, mint terms, divisibility, premine, spacers, symbols, edicts, pointers, burning, and cenotaph behavior are represented as Runes protocol concepts.
+PASS: Spacer bullets are treated as display/readability metadata; name uniqueness does not depend on spacers.
+PASS: The registry explicitly states that Bitcoin Core does not maintain Rune balances.
+PASS: Bitcoin consensus is distinguished from Runes protocol state, indexer-derived state, wallet behavior, marketplace behavior, and project claims.
+PASS: BRC-20 is treated as a separate application-layer inscription/JSON convention; migration does not imply consensus-level equivalence.
+PASS: Current market price, market cap, volume, holder count, and rankings are not used as timeless profile facts.
+
+SOURCE-QUALITY SPOT CHECK
+PASS: HIGH-confidence protocol/genesis sample uses current Ordinals Handbook, current `ord` repository, and ordinals.com state (Runes Protocol; UNCOMMON•GOODS).
+PASS: HIGH-confidence project sample has current first-party operation plus Rune-state corroboration (LOBO•THE•WOLF•PUP; DOG•GO•TO•THE•MOON; BASED•ANGELS•RUNE; PUPS•WORLD•PEACE; MAGIC•INTERNET•MONEY; BILLION•DOLLAR•CAT; LIQUIDIUM•TOKEN).
+PASS: MEDIUM-confidence activation-block sample keeps creator/stewardship limitations explicit instead of manufacturing ACTIVE status (Z•Z•Z•Z•Z•FEHU•Z•Z•Z•Z•Z; DECENTRALIZED; THE•RUNIX•TOKEN; SATOSHI•NAKAMOTO).
+PASS: MEDIUM-confidence later-community sample preserves current-source limitations (WISHY•WASHY•MACHINE; GIZMO•IMAGINARY•KITTEN; SAIKO•HAMSTER).
+PASS: RSIC•GENESIS•RUNE uses on-chain/indexed state plus explicitly non-affiliated community documentation; the community source is not mislabeled as official.
+PASS: Secondary-market or indexer persistence is never used alone to establish ACTIVE lifecycle.
+
+INVENTORY / PADDING REVIEW
+PASS: Initial canon is 18 records, not a broad ticker catalog.
+PASS: Each included record has a durable protocol, provenance, distribution, migration, cultural, sustained-operation, or application-utility rationale.
+PASS: DOG•DOG•DOG•DOG•DOG excluded for now: early-number/market presence alone did not establish enough distinct canonical significance.
+PASS: MEME•ECONOMICS excluded for now: early provenance was not enough without a sufficiently differentiated project/stewardship case.
+PASS: EPIC•EPIC•EPIC•EPIC excluded for now: indexer/market persistence did not establish a differentiated research-grade profile.
+PASS: Relationship-only entities are not inflated into duplicate profiles.
+
+RECORDS REQUIRING QUALIFIED PUBLIC COPY
+- THE•RUNIX•TOKEN — current stewardship of the canonical Bitcoin Rune remains unresolved; do not infer ACTIVE status from wrapped/bridged activity.
+- SATOSHI•NAKAMOTO — creator/operator and current stewardship remain unresolved; keep UNCERTAIN / MEDIUM.
+- GIZMO•IMAGINARY•KITTEN — former official domain is lapsed; current lifecycle remains unresolved; keep UNCERTAIN / MEDIUM.
+- SAIKO•HAMSTER — project site is unavailable and current first-party operation is unresolved; keep UNCERTAIN / MEDIUM.
+- BILLION•DOLLAR•CAT — project is ACTIVE / HIGH, but RuneMine and Ordiscan disagree on Rune-number/current state display; use Rune ID 845764:84 unless reconciled.
+- WISHY•WASHY•MACHINE — ACTIVE current community operation is supported, but direct first-party capture/team attribution is incomplete; keep MEDIUM confidence.
+- WANKO•MANKO•RUNES — launch/cultural provenance is legitimate, but the source story contains explicit adult material; public MSC copy should not reproduce that content without editorial need.
+
+REMAINING RESEARCH UNCERTAINTIES
+- Individual creator/operator attribution is incomplete for several community Runes; records say so explicitly.
+- THE•RUNIX•TOKEN current canonical-Rune stewardship remains unresolved.
+- SATOSHI•NAKAMOTO current project lifecycle remains unresolved.
+- GIZMO•IMAGINARY•KITTEN current operator/community lifecycle remains unresolved after its former project domain lapsed.
+- SAIKO•HAMSTER current project operation remains unresolved while its dedicated site is unavailable.
+- BILLION•DOLLAR•CAT indexers disagree on Rune number/current state display despite agreeing on Rune ID 845764:84.
+- WISHY•WASHY•MACHINE current activity is strong, but first-party archival capture should be strengthened before unqualified team/history copy.
+- Any operational migration, staking, bridge, or market guidance must be reverified at publication time.
+
+VALIDATION RESULT
+PASS: 24/24 structural and policy checks passed in the local materialized registry build.
+PASS: Counts reconcile across manifest and shards.
+PASS: All nine required seeds are accounted for.
+PASS: Required cross-category relationships are represented without duplicate ORDINALS profiles.
+PASS: Protocol-vs-consensus framing is explicit.
+PASS: Unresolved claims remain visibly unresolved.
+PASS: No token-catalog padding was introduced.
+
+REFERENCE / PUBLICATION STATE
+- COMMAND CENTER REVIEW ONLY.
+- No public Explore implementation, Shopify content, Atlas change, runtime generation, route creation, merge, rebase, or deployment is authorized by this registry.
