@@ -1,0 +1,201 @@
+{
+  "registry": "Mempool Surf Club Explore — Wallets Research Registry",
+  "primary_explore_category": "WALLETS",
+  "status": "COMMAND_CENTER_REVIEW",
+  "last_verified_date": "2026-08-15",
+  "reference_schema": {
+    "category": "ORDINALS",
+    "branch": "explore/ordinals-registry-research",
+    "approved_qa_head": "1f4368bdebc572de5aaed6df221460516295c54a",
+    "rule": "Wallets uses the approved Ordinals 24-field entity contract, lifecycle model, source-confidence model, provenance vocabulary, uncertainty handling, one-entity-one-profile discipline, and manifest + shards + human companion + validation pattern. Wallets taxonomy is independently researched."
+  },
+  "source_of_truth": {
+    "canonical_manifest": "docs/explore/wallets/MSC_Explore_Wallets_Registry.json",
+    "record_shards": [
+      "docs/explore/wallets/records/MSC_Explore_Wallets_Records_001_004.json",
+      "docs/explore/wallets/records/MSC_Explore_Wallets_Records_005_008.json",
+      "docs/explore/wallets/records/MSC_Explore_Wallets_Records_009_012.json",
+      "docs/explore/wallets/records/MSC_Explore_Wallets_Records_013_016.json",
+      "docs/explore/wallets/records/MSC_Explore_Wallets_Records_017_020.json",
+      "docs/explore/wallets/records/MSC_Explore_Wallets_Records_021_024.json",
+      "docs/explore/wallets/records/MSC_Explore_Wallets_Records_025_028.json",
+      "docs/explore/wallets/records/MSC_Explore_Wallets_Records_029_032.json",
+      "docs/explore/wallets/records/MSC_Explore_Wallets_Records_033_036.json",
+      "docs/explore/wallets/records/MSC_Explore_Wallets_Records_037_040.json"
+    ],
+    "human_companion": "docs/explore/wallets/MSC_Explore_Wallets_Registry.md",
+    "validation_report": "docs/explore/wallets/MSC_Explore_Wallets_Validation.txt",
+    "rule": "The manifest plus record shards are the canonical machine-readable research source. Markdown is a human companion. Nothing in this package publishes or changes the live Explore interface."
+  },
+  "registry_wide_rules": {
+    "one_entity_one_profile": "One canonical wallet/project/product family receives one WALLETS profile. Secondary capabilities and other Explore-category relevance are represented through tags and relationships rather than duplicate profiles.",
+    "status_rule": "Lifecycle status describes verified current project/product operation, not app-store visibility, old GitHub presence, market use, or uncertainty about a single feature.",
+    "publication_rule": "Registry entries are research records, not automatically approved public copy. Records in command_center_review_queue require qualification or re-verification before publication.",
+    "source_rule": "Prefer official wallet website/docs, official GitHub/release notes/blog/support docs, app-store listings for current platform availability, primary Bitcoin/BIP documentation for protocol claims, and reputable independent sources for corroboration. Directories/marketplaces are supporting evidence only.",
+    "cross_category_rule": "Wallet entities remain canonical in WALLETS even when they support Ordinals, Runes, marketplaces, payments or network tooling; relate rather than duplicate.",
+    "source_confidence_rule": "Source confidence is independent from lifecycle. HIGH means core identity/status/claims are supported primarily by strong first-party or primary sources; MEDIUM means the record is useful but important details rely on incomplete/stale first-party evidence or independent corroboration; LOW means major canonical facts remain weakly sourced.",
+    "source_type_rule": "Only controlled provenance values official, official-github, primary, on-chain, independent, indexer, marketplace, market-data are allowed.",
+    "uncertainty_rule": "Unknown or time-sensitive facts remain explicit in Research notes / uncertainties. Uncertainty about one fact does not automatically make lifecycle UNCERTAIN.",
+    "custody_rule": "Custody language describes who can authorize spending in the relevant configuration. Minority recovery/co-signing keys are not automatically custody; hybrid products must be described by mode. Hardware devices protect/sign with private keys; they do not store bitcoin itself.",
+    "feature_rule": "Features are recorded only when sufficiently supported for the relevant current product/version or explicitly labeled historical/experimental. Reputation or old reviews are not treated as current feature evidence."
+  },
+  "topic_architecture": [
+    {
+      "topic": "Software Wallets",
+      "slug": "software-wallets",
+      "purpose": "Bitcoin wallet software whose canonical role is direct key management, transaction construction, node integration, or privacy-oriented on-chain use.",
+      "subtopics": [
+        "Full-node / reference wallet",
+        "Desktop power-user wallet",
+        "Mobile self-custody wallet",
+        "Privacy-focused wallet",
+        "Legacy security wallet"
+      ]
+    },
+    {
+      "topic": "Bitcoin Asset Wallets",
+      "slug": "bitcoin-asset-wallets",
+      "purpose": "Wallet applications whose distinctive Bitcoin role includes Ordinals, Runes, BRC-20, Stacks-connected assets, or Liquid-based assets beyond ordinary BTC transaction management.",
+      "subtopics": [
+        "Bitcoin-native asset application wallet",
+        "Bitcoin + Liquid wallet"
+      ]
+    },
+    {
+      "topic": "Lightning & Payment Wallets",
+      "slug": "lightning-payment-wallets",
+      "purpose": "Wallets and wallet ecosystems whose canonical role is frequent Bitcoin payments, Lightning, or application-to-wallet payment connectivity.",
+      "subtopics": [
+        "Self-managed Lightning wallet",
+        "Unified on-chain / Lightning wallet",
+        "Wallet connectivity / embedded payments",
+        "Hybrid custody payment wallet"
+      ]
+    },
+    {
+      "topic": "Multisig & Collaborative Custody",
+      "slug": "multisig-collaborative-custody",
+      "purpose": "Wallet systems centered on multi-key policy, assisted recovery, inheritance, or collaborative custody while preserving a user-controlled spending path.",
+      "subtopics": [
+        "Multisig coordinator",
+        "Collaborative custody service",
+        "Assisted multisig vault"
+      ]
+    },
+    {
+      "topic": "Hardware & Signing Devices",
+      "slug": "hardware-signing-devices",
+      "purpose": "Dedicated hardware or DIY signing systems that protect or use Bitcoin private keys and sign transactions; these devices do not store bitcoin itself.",
+      "subtopics": [
+        "Commercial hardware signer family",
+        "DIY / stateless air-gapped signer",
+        "Integrated multisig hardware system"
+      ]
+    }
+  ],
+  "record_schema_contract": {
+    "field_count": 24,
+    "required_record_fields": [
+      "Registry ID",
+      "Canonical name",
+      "Recommended slug",
+      "Primary Explore category",
+      "Wallets topic",
+      "Wallets subtopic",
+      "Entity / project type",
+      "Status",
+      "Source confidence",
+      "Concise description",
+      "Deeper researched summary",
+      "Creators / founders",
+      "Launch / history",
+      "Why it matters in the Bitcoin wallet ecosystem",
+      "Important technical or cultural characteristics",
+      "Related projects / entities",
+      "Related Explore categories",
+      "Supporting tags",
+      "Official website",
+      "Official sources",
+      "Corroborating sources",
+      "Last verified date",
+      "Verification basis",
+      "Research notes / uncertainties"
+    ],
+    "controlled_values": {
+      "Status": ["ACTIVE","HISTORICAL","INACTIVE","UNCERTAIN"],
+      "Source confidence": ["HIGH","MEDIUM","LOW"],
+      "source_type": ["official","official-github","primary","on-chain","independent","indexer","marketplace","market-data"]
+    },
+    "field_rules": {
+      "Registry ID": "Unique MSC-EXP-WAL-NNN identifier.",
+      "Canonical name": "Unique canonical entity or product-family name.",
+      "Recommended slug": "Unique lower-case URL-safe slug.",
+      "Primary Explore category": "Always WALLETS.",
+      "Wallets topic / subtopic": "Must match the registry taxonomy. One primary home only.",
+      "Status": "Lifecycle only; separate from source confidence and feature uncertainty.",
+      "Source confidence": "Evidence quality/completeness only; separate from lifecycle.",
+      "Official sources / Corroborating sources": "Arrays of source objects with label, URL and controlled source_type.",
+      "Last verified date": "ISO YYYY-MM-DD.",
+      "Research notes / uncertainties": "Preserve unresolved facts, mode-specific custody caveats, deprecated features and publication cautions."
+    }
+  },
+  "canonical_record_count": 40,
+  "counts": {
+    "by_lifecycle_status": {"ACTIVE":36,"UNCERTAIN":1,"INACTIVE":2,"HISTORICAL":1},
+    "by_topic": {"Software Wallets":13,"Bitcoin Asset Wallets":5,"Lightning & Payment Wallets":9,"Multisig & Collaborative Custody":4,"Hardware & Signing Devices":9},
+    "by_source_confidence": {"HIGH":38,"MEDIUM":2}
+  },
+  "seed_coverage": {
+    "required_seed": "Xverse",
+    "addressed": true,
+    "canonical_record": "MSC-EXP-WAL-014",
+    "note": "Xverse is researched as a broader Bitcoin wallet spanning BTC, Ordinals, Runes, BRC-20 and hardware integrations, not merely as an Ordinals wallet."
+  },
+  "product_family_consolidations": [
+    "Blockstream Green and GreenAddress history are consolidated into Blockstream App.",
+    "Ledger device models are consolidated into one Ledger family profile.",
+    "Trezor device models are consolidated into one Trezor family profile.",
+    "COLDCARD Mk-series and Q are consolidated into one COLDCARD family profile.",
+    "Foundation Passport generations/current Passport Core are consolidated into one Foundation Passport profile.",
+    "BitBox01/BitBox02/BitBox02 Nova lineage is consolidated into one BitBox profile.",
+    "Blockstream Jade Classic/Jade Plus/Jade Core are consolidated into one Blockstream Jade profile.",
+    "Breez consumer-wallet lineage and current Breez SDK platform are consolidated into one Breez ecosystem profile.",
+    "Alby Extension, Alby Hub and Alby Go are consolidated into one Alby ecosystem profile.",
+    "Bitkey app, hardware device and server-key recovery service are one integrated Bitkey wallet system.",
+    "Nunchuk plan/service variants remain one Nunchuk profile; Casa and Unchained plan variants likewise remain one entity each.",
+    "Magic Eden Wallet remains separate from the Magic Eden marketplace entity because it was a distinct wallet product, but cross-category duplication is prohibited."
+  ],
+  "omission_decisions": [
+    {"candidate":"ND Wallet / ND Labs","decision":"EXCLUDE","reason":"Current first-party material positions ND Wallet as white-label multi-chain wallet infrastructure for businesses, supporting Bitcoin among many networks. It is not a sufficiently Bitcoin-specific canonical wallet entity for the initial MSC Wallets canon."},
+    {"candidate":"OKX Wallet","decision":"EXCLUDE","reason":"OKX Wallet is a broad multi-chain wallet tied to the OKX ecosystem. Bitcoin/Ordinals support is real, but Bitcoin is not central enough to justify a WALLETS canonical profile; OKX itself belongs more naturally under EXCHANGES if canonized."},
+    {"candidate":"LNDg","decision":"EXCLUDE","reason":"LNDg is an LND analytics/automation and node-management interface rather than an independent wallet/key-custody entity. Canonical home, if needed, is NETWORK tooling."},
+    {"candidate":"Ride The Lightning (RTL)","decision":"EXCLUDE","reason":"RTL can send/receive through the attached Lightning node, but its canonical identity is a web node/channel-management interface that requires an existing node. It belongs under NETWORK tooling rather than as a duplicate wallet."},
+    {"candidate":"Bitcoin Safe","decision":"EXCLUDE_FOR_NOW","reason":"Active and technically credible Bitcoin-only desktop wallet with hardware-wallet, single-sig/multisig and PSBT support, but it is a newer entrant whose current role overlaps Sparrow/Specter/Bitcoin Keeper. Monitor for greater ecosystem significance rather than pad the initial canon."},
+    {"candidate":"Cove","decision":"EXCLUDE_FOR_NOW","reason":"Promising current Bitcoin-only iPhone wallet with BDK, PSBT, hardware-wallet, QR/NFC and UTXO-management support, but still a newer entrant. Monitor for adoption and cross-platform maturity before adding to the canonical registry."},
+    {"candidate":"Keystone","decision":"EXCLUDE","reason":"Keystone supports Bitcoin-only firmware, PSBT/multisig and strong Bitcoin wallet integrations, but its canonical commercial identity remains a very broad multi-chain hardware-wallet family. The initial Bitcoin canon already covers the most historically/technically distinctive signer architectures; retain Keystone as a relationship where integrations matter."},
+    {"candidate":"Bitcoin Knots wallet","decision":"EXCLUDE","reason":"Wallet functionality is part of the Bitcoin Knots node implementation rather than a separate canonical wallet product; if MSC profiles Bitcoin Knots, NETWORK is the more natural canonical category."}
+  ],
+  "command_center_review_queue": [
+    {"entity":"Bitcoin Wallet for Android","issue":"Lifecycle is UNCERTAIN; current downloadability exists but meaningful 2026 maintainer/release activity was not verified."},
+    {"entity":"Blockstream App","issue":"Lightning claims require implementation-specific wording; current flows include swap-based interoperability while native Lightning work has been evolving."},
+    {"entity":"Wasabi Wallet","issue":"Do not imply zkSNACKs still runs the default CoinJoin coordinator after June 2024."},
+    {"entity":"Ginger Wallet","issue":"Privacy/CoinJoin copy must avoid promising anonymity and should distinguish its coordinator/operator from Wasabi."},
+    {"entity":"Samourai Wallet","issue":"INACTIVE. Legal history and software/service status require dated, neutral wording; code availability is not active service availability."},
+    {"entity":"Mycelium","issue":"Android is clearly active; iOS source repository was archived in May 2026, so platform claims must be qualified."},
+    {"entity":"Leather","issue":"Direct Runes support ended April 16, 2026; do not publish current Runes-management claims."},
+    {"entity":"Magic Eden Wallet","issue":"INACTIVE/deprecated. Do not present as currently supported even if an old local installation can still expose migration/export functions."},
+    {"entity":"ZEUS","issue":"Cashu onboarding and embedded/remote Lightning-node paths have different custody/trust models."},
+    {"entity":"Breez","issue":"Trust/custody assumptions vary across Spark, Liquid and other SDK deployments; no single backend description covers every integration."},
+    {"entity":"Wallet of Satoshi","issue":"Custodial and self-custodial modes coexist; jurisdiction and user mode must be specified."},
+    {"entity":"Blink","issue":"Custodial and Spark-based non-custodial modes coexist; regional hosted-service wind-downs are time-sensitive."},
+    {"entity":"Nunchuk","issue":"Taproot/MuSig2 multisig has been described as beta/experimental; reverify before unqualified public feature claims."},
+    {"entity":"Foundation Passport","issue":"Do not publish Miniscript support from stale roadmap text without fresh verification."}
+  ],
+  "inventory_review": {
+    "principle": "Meaningful Bitcoin canon, not an app-store directory.",
+    "added_beyond_user_candidate_list": ["UniSat Wallet","Blixt Wallet","Alby","Blink","Bitcoin Keeper","Mycelium","Ginger Wallet","Bitkey","Proton Wallet","Bull Bitcoin Wallet","Krux"],
+    "major_candidate_dispositions": {
+      "Xverse":"INCLUDE","Sparrow Wallet":"INCLUDE","Electrum":"INCLUDE","BlueWallet":"INCLUDE","Phoenix":"INCLUDE","ZEUS":"INCLUDE","Breez":"INCLUDE","Muun":"INCLUDE","Nunchuk":"INCLUDE","Unchained":"INCLUDE","Casa":"INCLUDE","ND Wallet / ND-related":"EXCLUDE","Bitcoin Core wallet":"INCLUDE","Wasabi Wallet":"INCLUDE","Samourai Wallet":"INCLUDE","Blockstream Green":"CONSOLIDATE INTO BLOCKSTREAM APP","AQUA":"INCLUDE","Leather":"INCLUDE","Magic Eden Wallet":"INCLUDE AS INACTIVE","OKX Wallet":"EXCLUDE","Ledger":"INCLUDE","Trezor":"INCLUDE","COLDCARD":"INCLUDE","Foundation Passport":"INCLUDE","BitBox02":"CONSOLIDATE INTO BITBOX","Jade":"CONSOLIDATE INTO BLOCKSTREAM JADE","SeedSigner":"INCLUDE","Specter Desktop / Specter ecosystem":"INCLUDE AS SPECTER DESKTOP; DIY SIGNER RELATIONSHIP ONLY","LNDg / RTL-style interfaces":"EXCLUDE AS NODE TOOLS"
+    }
+  }
+}
