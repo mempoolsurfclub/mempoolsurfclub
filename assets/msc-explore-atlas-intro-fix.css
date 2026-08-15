@@ -47,24 +47,20 @@
   }
 }
 
-/* Match the approved Learn hero title scale instead of inheriting the oversized generic page-title clamp. */
+/* Keep Explore in the same visual hero-title range as the approved Home/Learn pages, without the oversized generic clamp. */
 @media screen and (min-width: 991px) {
   .msc-explore-atlas-intro__title {
-    font-size: clamp(4.6rem, 4.75vw, 5.8rem);
+    font-size: clamp(4.4rem, 4.5vw, 5.4rem);
     line-height: .9;
     letter-spacing: -.06em;
     text-wrap: balance;
   }
 }
 
-/* Desktop: keep the Explore heading confidently large while resolving it to two balanced lines. */
+/* Desktop: preserve the approved two-line Explore composition. */
 @media screen and (min-width: 1180px) {
   .msc-explore-atlas-intro {
     grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr);
     column-gap: 3.2rem;
-  }
-
-  .msc-explore-atlas-intro__title {
-    font-size: clamp(5rem, 4.9vw, 6rem);
   }
 }
