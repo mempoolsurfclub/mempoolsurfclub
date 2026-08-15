@@ -1,5 +1,19 @@
 {{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
 
+<style>
+  #SurfReport-{{ section.id }} > .msc-block:first-child .msc-title {
+    color: var(--msc-sand);
+  }
+
+  @media screen and (min-width: 991px) {
+    #SurfReport-{{ section.id }} > .msc-block:first-child .msc-title {
+      font-size: clamp(4.4rem, 4.5vw, 5.4rem);
+      line-height: .9;
+      letter-spacing: -.06em;
+    }
+  }
+</style>
+
 <section class="msc-shell" id="SurfReport-{{ section.id }}">
   <div class="msc-block">
     <div class="msc-container msc-center">
