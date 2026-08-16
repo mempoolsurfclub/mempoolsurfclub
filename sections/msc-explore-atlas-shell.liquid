@@ -57,6 +57,12 @@
           </defs>
 
           <rect class="msc-atlas-map__ocean" x="0" y="0" width="1200" height="560" />
+
+          <g class="msc-atlas-map__bitcoin-block" aria-hidden="true" pointer-events="none">
+            <path class="msc-atlas-map__bitcoin-block-edge msc-atlas-map__bitcoin-block-edge--top" d="M600 -88 L72 142 L600 560 L1128 142 Z" />
+            <path class="msc-atlas-map__bitcoin-block-edge msc-atlas-map__bitcoin-block-edge--depth" d="M72 142 L72 378 L600 760 L1128 378 L1128 142 M600 560 L600 760" />
+          </g>
+
           <rect class="msc-atlas-map__minor-grid" x="0" y="0" width="1200" height="560" fill="url(#AtlasMinorGrid-{{ section.id }})" />
           <rect class="msc-atlas-map__major-grid" x="0" y="0" width="1200" height="560" fill="url(#AtlasMajorGrid-{{ section.id }})" />
 
@@ -185,13 +191,6 @@
               <g class="msc-atlas-map__entity" data-atlas-entity="mempool.space" data-atlas-entity-region="network" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false"><circle class="msc-atlas-map__entity-dot" cx="648" cy="407" r="4.5" /><line class="msc-atlas-map__entity-line" x1="653" y1="407" x2="670" y2="407" /><text class="msc-atlas-map__entity-label" x="675" y="411">MEMPOOL.SPACE</text></g>
               <g class="msc-atlas-map__entity" data-atlas-entity="Lightning Network" data-atlas-entity-region="network" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false"><circle class="msc-atlas-map__entity-dot" cx="776" cy="418" r="4.5" /><line class="msc-atlas-map__entity-line" x1="781" y1="418" x2="798" y2="418" /><text class="msc-atlas-map__entity-label" x="803" y="422">LIGHTNING NETWORK</text></g>
             </g>
-          </g>
-
-          <g aria-hidden="true">
-            <circle class="msc-atlas-map__compass" cx="1124" cy="64" r="27" />
-            <circle class="msc-atlas-map__compass" cx="1124" cy="64" r="5" />
-            <path class="msc-atlas-map__compass" d="M1124 30 L1124 98 M1090 64 L1158 64 M1124 36 L1131 64 L1124 92 L1117 64 Z" />
-            <text class="msc-atlas-map__compass-text" x="1120" y="25">N</text>
           </g>
         </svg>
 
