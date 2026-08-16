@@ -1,7 +1,7 @@
 (() => {
   const SVG_NS = 'http://www.w3.org/2000/svg';
 
-  /* User-approved selected-region perimeters, traced from the eight locked Atlas
+  /* User-marked selected-region perimeters, traced from the eight locked Atlas
      views. Coordinates are local to each rendered region label so the paths stay
      aligned with the existing focus camera without using interaction polygons,
      clipping, or proximity masks. */
