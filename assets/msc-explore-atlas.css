@@ -42,7 +42,7 @@
 
 .msc-atlas-window__top {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: stretch;
   border-bottom: 1px solid rgba(212, 190, 153, .32);
   background: rgba(16, 40, 45, .44);
@@ -447,10 +447,6 @@ button.msc-atlas-region:focus-visible {
     grid-template-columns: minmax(0, 1fr) auto;
   }
 
-  .msc-atlas-window__readout:first-of-type {
-    display: none;
-  }
-
   .msc-atlas-window__readout {
     min-width: 10.2rem;
     padding-inline: 1.1rem;
@@ -513,7 +509,7 @@ button.msc-atlas-region:focus-visible {
 
 .msc-atlas-window__top {
   min-height: 2.8rem;
-  grid-template-columns: minmax(0, 1fr) auto auto !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
   align-items: center !important;
   column-gap: clamp(1.2rem, 2.2vw, 2.4rem);
   padding: 0 .15rem;
@@ -737,10 +733,6 @@ button.msc-atlas-region.is-locked {
 
   .msc-atlas-window__identity strong {
     font-size: .72rem !important;
-  }
-
-  .msc-atlas-window__readout:first-of-type {
-    display: none !important;
   }
 
   .msc-atlas-window__readout strong {
