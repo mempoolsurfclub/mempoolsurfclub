@@ -5,8 +5,11 @@
    * MSC Explore Atlas selected-region edge registry.
    *
    * IMPORTANT:
-   * - Every path below is copied from the currently approved rendered Atlas
-   *   coastline or approved shared-boundary geometry.
+   * - Every coast path below is copied from the currently approved rendered Atlas
+   *   coastline.
+   * - Shared-border interiors preserve the approved boundary geometry. Tiny
+   *   endpoint stitches connect those borders to their canonical coastline
+   *   junctions so focused perimeters close cleanly.
    * - Region ownership is explicit. No hit-area masks, screenshot strokes,
    *   label anchoring, nearest-neighbor matching, or distance thresholds are
    *   used to decide what illuminates.
@@ -26,13 +29,15 @@
     "coast_payments_north": "M753.1 205.6 C744.8 208.7 727.8 215.2 719.5 218.3 C711.7 217.5 699.8 216.1 692 215.3",
     "coast_mining_east": "M692 215.3 C695.6 204.5 701.4 187.3 705 176.5",
     "coast_wallets": "M705 176.5 C722.7 174.5 749.9 171.3 767.6 169.3 C767.2 165 766.5 158.5 766.1 154.2 C777 148.8 794.2 140.2 805.1 134.8 C806.2 129 807.8 121.2 808.9 115.4 C800.8 115.1 784.1 114.4 776 114.1 C774.3 107.9 771.6 97.5 769.9 91.3 C759.9 88.4 738.7 82 728.7 79.1 C727.2 75.8 724.8 70.6 723.3 67.3 C695.8 67.1 649.3 66.6 621.8 66.4",
-    "border_mining_wallets": "M621 64 C638 86 654 111 676 137 C690 153 702 165 711 174",
-    "border_mining_runes": "M441 207 C492 203 537 205 579 202 C620 199 654 209 691 214",
-    "border_runes_payments": "M691 214 L689 239",
-    "border_marketplaces_payments": "M755 205 C805 219 855 236 907 242",
-    "border_ordinals_runes": "M420 222 C427 252 435 292 447 340",
-    "border_payments_network": "M594 356 C629 369 673 382 708 403 C737 421 761 437 788 438",
-    "border_payments_exchanges": "M788 438 C812 420 831 393 848 367 C871 329 893 289 910 259",
+
+    // Shared-border interiors are unchanged; only their tiny endpoint gaps are stitched.
+    "border_mining_wallets": "M621.8 66.4 L621 64 C638 86 654 111 676 137 C690 153 702 165 711 174 L705 176.5",
+    "border_mining_runes": "M442.3 209 L441 207 C492 203 537 205 579 202 C620 199 654 209 691 214 L692 215.3",
+    "border_runes_payments": "M692 215.3 L691 214 L689 239 L687.4 242.7",
+    "border_marketplaces_payments": "M753.1 205.6 L755 205 C805 219 855 236 907 242 L907.77 241.762",
+    "border_ordinals_runes": "M421.7 224.6 L420 222 C427 252 435 292 447 340 L449.2 343.1",
+    "border_payments_network": "M594.3 360.4 L594 356 C629 369 673 382 708 403 C737 421 761 437 788 438 L790.5 439.6",
+    "border_payments_exchanges": "M790.5 439.6 L788 438 C812 420 831 393 848 367 C871 329 893 289 910 259 L912.432 258.315",
   };
 
   const REGION_EDGES = {
