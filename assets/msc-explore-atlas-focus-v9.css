@@ -225,3 +225,120 @@
     transition: none !important;
   }
 }
+
+/* v11 — user-marked Atlas geography refinement.
+ * Visible state lines follow the annotated boundaries and stay deliberately
+ * lighter than the outer coastline. Existing region paths remain invisible hit
+ * geometry only, so interaction is preserved while the chart reads cleanly. */
+.msc-explore-atlas-shell .msc-atlas-map__region-shape--inner {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+/* State boundaries: one compound path, no arrows, no synthetic region fills. */
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="mining"] > .msc-atlas-map__region-shape--inner {
+  display: block !important;
+  d: path("M621 64 C638 86 654 111 676 137 C690 153 702 165 711 174 M441 207 C492 203 537 205 579 202 C620 199 654 209 691 214 L689 239 M755 205 C805 219 855 236 907 242 M420 222 C427 252 435 292 447 340 M594 356 C629 369 673 382 708 403 C737 421 761 437 788 438 C812 420 831 393 848 367 C871 329 893 289 910 259");
+  fill: none !important;
+  stroke: rgba(212, 190, 153, .34) !important;
+  stroke-width: .82 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  vector-effect: non-scaling-stroke;
+  opacity: 1 !important;
+}
+
+/* Remove the marked lower-left island by painting only that tiny chart area
+ * back to the dedicated ocean tone. */
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="payments"] > .msc-atlas-map__region-shape--inner {
+  display: block !important;
+  d: path("M404 348 L435 348 L435 364 L404 364 Z");
+  fill: #0e3337 !important;
+  stroke: none !important;
+  opacity: 1 !important;
+}
+
+/* Carve away the old lower-left coastline segment beneath the yellow markup. */
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="wallets"] > .msc-atlas-map__region-shape--inner {
+  display: block !important;
+  d: path("M411 458 L464 433 L529 500 L516 508 L439 489 L438 472 Z");
+  fill: #0e3337 !important;
+  stroke: none !important;
+  opacity: 1 !important;
+}
+
+/* Redraw that coastline as the stronger outer-boundary treatment. */
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="marketplaces"] > .msc-atlas-map__region-shape--inner {
+  display: block !important;
+  d: path("M412 460 L464 435 L527 501");
+  fill: none !important;
+  stroke: rgba(212, 190, 153, .88) !important;
+  stroke-width: 1.35 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  vector-effect: non-scaling-stroke;
+  opacity: 1 !important;
+}
+
+/* Keep every correction visible in preview/locked states; the generic focus
+ * rule above must never recolor these chart-geometry helpers. */
+.msc-explore-atlas-shell .msc-atlas-map__region:hover > .msc-atlas-map__region-shape--inner,
+.msc-explore-atlas-shell .msc-atlas-map__region:focus-visible > .msc-atlas-map__region-shape--inner,
+.msc-explore-atlas-shell .msc-atlas-map__region.is-active > .msc-atlas-map__region-shape--inner {
+  opacity: 1 !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="mining"]:hover > .msc-atlas-map__region-shape--inner,
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="mining"].is-active > .msc-atlas-map__region-shape--inner {
+  fill: none !important;
+  stroke: rgba(212, 190, 153, .34) !important;
+  stroke-width: .82 !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="payments"]:hover > .msc-atlas-map__region-shape--inner,
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="payments"].is-active > .msc-atlas-map__region-shape--inner,
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="wallets"]:hover > .msc-atlas-map__region-shape--inner,
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="wallets"].is-active > .msc-atlas-map__region-shape--inner {
+  fill: #0e3337 !important;
+  stroke: none !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="marketplaces"]:hover > .msc-atlas-map__region-shape--inner,
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="marketplaces"].is-active > .msc-atlas-map__region-shape--inner {
+  fill: none !important;
+  stroke: rgba(212, 190, 153, .88) !important;
+  stroke-width: 1.35 !important;
+}
+
+/* Label relocations from the annotated design pass. */
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="mining"] .msc-atlas-map__region-label {
+  transform: translate(315px, -27px) !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="wallets"] .msc-atlas-map__region-label {
+  transform: translate(247px, -45px) !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="marketplaces"] .msc-atlas-map__region-label {
+  transform: translate(149px, 38px) !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="ordinals"] .msc-atlas-map__region-label {
+  transform: translate(203px, 12px) !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="runes"] .msc-atlas-map__region-label {
+  transform: translate(317px, -89px) !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="payments"] .msc-atlas-map__region-label {
+  transform: translate(199px, 7px) !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="exchanges"] .msc-atlas-map__region-label {
+  transform: translate(102px, 63px) !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="network"] .msc-atlas-map__region-label {
+  transform: translate(95px, 3px) !important;
+}
