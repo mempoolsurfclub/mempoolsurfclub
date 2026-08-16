@@ -127,3 +127,8 @@
 .msc-shell.msc-explore-atlas-shell .msc-atlas-window .msc-atlas-map .msc-atlas-map__region[data-atlas-region-shape="marketplaces"].is-active > .msc-atlas-map__region-shape--inner {
   display: none !important;
 }
+
+/* v18 — keep MARKETPLACES at its approved x/y anchor while centering the text vertically on that anchor. */
+.msc-shell.msc-explore-atlas-shell .msc-atlas-window .msc-atlas-map .msc-atlas-map__region[data-atlas-region-shape="marketplaces"] .msc-atlas-map__region-label {
+  dominant-baseline: central;
+}
