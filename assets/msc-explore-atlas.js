@@ -8,6 +8,35 @@
   const XLINK_NS = 'http://www.w3.org/1999/xlink';
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  const ensureFocusStyles = () => {
+    if (document.querySelector('link[data-msc-atlas-focus-v9]')) return;
+
+    const stylesheets = [...document.querySelectorAll('link[rel="stylesheet"]')];
+    const anchor = stylesheets.find((link) => link.href.includes('msc-explore-atlas-geography.css'))
+      || stylesheets.find((link) => link.href.includes('msc-explore-atlas.css'));
+
+    if (!anchor) return;
+
+    try {
+      const url = new URL(anchor.href, document.baseURI);
+      url.pathname = url.pathname.replace(
+        /(?:msc-explore-atlas-geography|msc-explore-atlas)\.css$/,
+        'msc-explore-atlas-focus-v9.css'
+      );
+      url.searchParams.set('msc_focus', '9');
+
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = url.toString();
+      link.dataset.mscAtlasFocusV9 = 'true';
+      anchor.insertAdjacentElement('afterend', link);
+    } catch (error) {
+      /* Atlas remains usable with the base styles if the asset URL is unusual. */
+    }
+  };
+
+  ensureFocusStyles();
+
   const parseBox = (value) => String(value || '').trim().split(/\s+/).map(Number);
   const boxToString = (box) => box.map((n) => Number(n.toFixed(2))).join(' ');
   const ease = (t) => 1 - Math.pow(1 - t, 3);
@@ -72,6 +101,18 @@
       region.removeAttribute('tabindex');
       region.removeAttribute('aria-pressed');
       region.removeAttribute('aria-label');
+    });
+
+    /* Prevent the legacy interaction polygons from flashing before the v9
+       stylesheet finishes loading. They remain painted only as transparent
+       hit targets for pointer interaction. */
+    mapRegions.forEach((region) => {
+      const shape = region.querySelector('.msc-atlas-map__region-shape:not(.msc-atlas-map__region-shape--inner)');
+      if (!shape) return;
+      shape.style.fill = 'rgba(212, 190, 153, .001)';
+      shape.style.stroke = 'transparent';
+      shape.style.strokeWidth = '0';
+      shape.style.pointerEvents = 'all';
     });
 
     const getOuterShape = (region) => (
