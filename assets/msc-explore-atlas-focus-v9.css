@@ -441,3 +441,22 @@
   stroke: none !important;
   opacity: 1 !important;
 }
+
+/* v15 — restore restrained Atlas instrument depth to match the hero system.
+ * Geography and interaction geometry stay unchanged. The existing Atlas
+ * lighter-center fade returns beneath a mostly opaque ocean tone so coastline
+ * correction masks continue to blend cleanly. */
+.msc-explore-atlas-shell .msc-atlas-window__viewport {
+  background:
+    radial-gradient(circle at 50% 46%, rgba(212, 190, 153, .07), transparent 39%),
+    linear-gradient(145deg, rgba(23, 60, 67, .78), rgba(16, 40, 45, .94)) !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map {
+  background: transparent !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__ocean {
+  fill: rgba(14, 51, 55, .78) !important;
+  opacity: 1 !important;
+}
