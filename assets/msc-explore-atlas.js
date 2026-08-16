@@ -69,8 +69,11 @@
 
   document.querySelectorAll('[data-atlas]').forEach((atlas, atlasIndex) => {
     const svg = atlas.querySelector('[data-atlas-map]');
-    const modeReadout = atlas.querySelector('[data-atlas-mode]');
+    const identitySystem = atlas.querySelector('.msc-atlas-window__identity strong');
+    const modeReadoutGroup = atlas.querySelector('[data-atlas-mode]')?.closest('.msc-atlas-window__readout');
     const regionReadout = atlas.querySelector('[data-atlas-region-label]');
+    const regionPrefix = regionReadout?.parentElement?.querySelector('span');
+    const topBar = atlas.querySelector('.msc-atlas-window__top');
     const live = atlas.querySelector('[data-atlas-live]');
     const inspect = atlas.querySelector('[data-atlas-inspect]');
     const inspectTitle = atlas.querySelector('[data-atlas-inspect-title]');
@@ -81,6 +84,13 @@
     const entities = [...atlas.querySelectorAll('[data-atlas-entity]')];
 
     if (!svg || !navTargets.length || !mapRegions.length) return;
+
+    if (identitySystem) identitySystem.textContent = 'EXPLORE SYSTEM';
+    if (modeReadoutGroup) {
+      modeReadoutGroup.style.setProperty('display', 'none', 'important');
+      modeReadoutGroup.setAttribute('aria-hidden', 'true');
+    }
+    topBar?.style.setProperty('grid-template-columns', 'minmax(0, 1fr) auto', 'important');
 
     let locked = null;
     let animationFrame = null;
@@ -332,7 +342,7 @@
 
     const render = (slug, mode) => {
       const activeRegion = slug ? regionBySlug.get(slug) : null;
-      const label = activeRegion?.dataset.atlasRegionLabel || 'ALL 08';
+      const label = activeRegion?.dataset.atlasRegionLabel || 'ALL';
       const targetBox = activeRegion ? getFocusBox(activeRegion) : OVERVIEW;
 
       atlas.classList.toggle('has-active-region', Boolean(slug));
@@ -357,20 +367,12 @@
       updateEntityTabStops(slug);
       if (!slug) clearInspect();
 
-      if (modeReadout) {
-        modeReadout.textContent = (
-          mode === 'locked'
-            ? 'LOCKED VIEW'
-            : mode === 'preview'
-              ? 'REGION PREVIEW'
-              : 'FULL OCEAN'
-        );
-      }
+      if (regionPrefix) regionPrefix.hidden = !slug;
       if (regionReadout) regionReadout.textContent = label;
       if (live) {
         live.textContent = slug
           ? `${label} ${mode === 'locked' ? 'locked' : 'preview'}`
-          : 'Full Bitcoin Ocean view';
+          : 'All Explore regions';
       }
 
       animateViewBox(targetBox);
