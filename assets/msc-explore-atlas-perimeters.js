@@ -1,11 +1,17 @@
 (() => {
   const SVG_NS = 'http://www.w3.org/2000/svg';
+  const SOURCE_STEP = 1.5;
+  const REFERENCE_STEP = 1.5;
+  const COAST_THRESHOLD = 7;
+  const BOUNDARY_THRESHOLD = 5.5;
+  const MIN_INTERVAL = 3;
+  const MERGE_GAP = 4;
+  const GRID_SIZE = 10;
 
-  /* User-marked selected-region perimeters, traced from the eight locked Atlas
-     views. Coordinates are local to each rendered region label so the paths stay
-     aligned with the existing focus camera without using interaction polygons,
-     clipping, or proximity masks. */
-  const PERIMETERS = {
+  /* These traces are selection guides only. They are never rendered. Their sole
+     purpose is to identify which portions of the already-rendered Atlas coast
+     and shared-border paths belong to each selected region. */
+  const REFERENCE_TRACES = {
     ordinals: 'M 75.4 64.4 L 72.2 42.2 L 66.2 21.8 L 61.1 -8.6 L 51.0 -26.5 L 49.1 -32.7 L 48.7 -49.0 L 50.4 -50.8 L 48.4 -52.1 L 46.9 -50.7 L 4.7 -49.9 L -5.3 -66.7 L -8.7 -78.4 L -19.4 -77.5 L -33.4 -72.9 L -47.6 -71.1 L -60.5 -67.4 L -83.6 -57.2 L -103.1 -39.5 L -104.5 -35.7 L -104.1 -19.6 L -103.0 -18.0 L -64.8 -16.2 L -59.9 -14.2 L -68.8 0.9 L -86.3 -4.6 L -115.7 -6.9 L -139.4 -13.4 L -181.0 -5.5 L -188.8 0.0 L -194.5 6.7 L -197.3 28.4 L -192.0 34.6 L -180.5 40.6 L -158.7 39.7 L -139.2 30.0 L -120.6 30.0 L -117.6 31.0 L -97.4 50.3 L -89.1 55.8 L -64.8 57.2 L -43.4 61.8 L -35.0 62.3 L -11.0 50.7 L 3.2 40.6 L 8.1 39.7 L 33.7 54.0 L 45.7 55.4 L 48.7 58.9 L 49.6 68.1 L 51.7 70.1 Z',
     runes: 'M -122.6 -48.0 L -120.9 -46.2 L -119.1 -24.7 L -101.5 0.8 L -102.0 5.7 L -109.4 27.0 L -109.8 38.1 L -106.1 44.6 L -97.0 52.7 L -92.8 58.9 L -92.3 76.0 L -84.7 80.7 L -72.7 84.9 L -52.4 89.5 L -49.6 89.1 L -39.5 79.0 L -32.4 74.7 L -12.8 76.6 L -5.3 79.0 L 4.0 84.9 L 5.1 83.3 L 3.2 76.8 L -6.0 58.8 L -9.7 54.6 L -6.4 47.3 L -3.1 43.9 L 2.3 42.4 L 18.7 42.9 L 34.4 39.7 L 35.1 33.0 L 31.4 23.6 L 33.1 21.7 L 55.0 22.6 L 67.1 25.8 L 84.7 24.0 L 94.2 -3.4 L 98.9 -10.0 L 127.3 -18.5 L 150.7 -19.9 L 152.7 -23.7 L 154.6 -45.5 L 153.0 -46.6 L 144.4 -46.1 L 133.2 -49.4 L 99.5 -54.9 L 75.2 -54.9 L 46.4 -58.1 L -1.6 -55.8 L -21.0 -53.5 L -40.2 -49.4 L -59.6 -49.8 L -75.0 -54.4 L -101.3 -54.4 L -112.0 -48.0 Z',
     wallets: 'M -93.0 -53.3 L -89.3 -40.8 L -84.7 -33.4 L -59.9 -9.5 L -48.7 7.2 L -29.4 30.7 L -21.4 44.1 L -13.9 51.7 L 27.0 52.1 L 39.2 54.9 L 49.4 54.4 L 51.4 51.0 L 51.4 44.5 L 48.8 34.8 L 50.8 32.8 L 60.5 29.5 L 75.7 19.4 L 87.9 9.0 L 89.6 -6.0 L 65.7 -6.0 L 58.2 -8.8 L 55.6 -11.4 L 51.7 -26.7 L 34.7 -31.9 L 23.1 -38.3 L 6.5 -44.3 L 4.8 -46.1 L 4.8 -52.4 L 2.3 -54.9 L -14.0 -52.6 L -29.4 -53.1 L -41.4 -54.9 L -68.7 -62.7 L -78.5 -62.7 L -83.1 -60.9 L -90.9 -51.8 Z',
@@ -21,6 +27,7 @@
     try {
       const box = node.getBBox();
       if (![box.x, box.y, box.width, box.height].every(Number.isFinite)) return null;
+      if (box.width <= 0 || box.height <= 0) return null;
       return box;
     } catch (error) {
       return null;
@@ -30,7 +37,6 @@
   const getVisualCenter = (node) => {
     const box = safeBBox(node);
     if (!box) return null;
-
     let x = box.x + (box.width / 2);
     let y = box.y + (box.height / 2);
 
@@ -38,69 +44,288 @@
       const transform = window.getComputedStyle(node).transform;
       if (transform && transform !== 'none' && typeof DOMMatrixReadOnly !== 'undefined') {
         const matrix = new DOMMatrixReadOnly(transform);
-        if (typeof DOMPoint !== 'undefined') {
-          const point = new DOMPoint(x, y).matrixTransform(matrix);
-          x = point.x;
-          y = point.y;
-        } else {
-          x += matrix.e;
-          y += matrix.f;
-        }
+        const point = typeof DOMPoint !== 'undefined'
+          ? new DOMPoint(x, y).matrixTransform(matrix)
+          : { x: x + matrix.e, y: y + matrix.f };
+        x = point.x;
+        y = point.y;
       }
     } catch (error) {
-      /* The untransformed center is a safe fallback. */
+      /* Keep the untransformed center as a safe fallback. */
+    }
+    return { x, y };
+  };
+
+  const parseCssPath = (value) => {
+    const raw = String(value || '').trim();
+    const match = raw.match(/^path\((['"]?)(.*)\1\)$/);
+    return match?.[2] || '';
+  };
+
+  const getRenderedPathData = (path) => {
+    if (!path) return '';
+    try {
+      const computed = parseCssPath(window.getComputedStyle(path).getPropertyValue('d'));
+      if (computed) return computed;
+    } catch (error) {
+      /* Fall through to the source d. */
+    }
+    return path.getAttribute('d') || '';
+  };
+
+  const splitSubpaths = (pathData) => String(pathData || '')
+    .trim()
+    .split(/(?=[Mm])/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+
+  const transformPointToParent = (path, point) => {
+    try {
+      const transform = path.transform?.baseVal?.consolidate?.();
+      const matrix = transform?.matrix;
+      if (!matrix) return { x: point.x, y: point.y };
+      return {
+        x: (matrix.a * point.x) + (matrix.c * point.y) + matrix.e,
+        y: (matrix.b * point.x) + (matrix.d * point.y) + matrix.f
+      };
+    } catch (error) {
+      return { x: point.x, y: point.y };
+    }
+  };
+
+  const samplePath = (path, step) => {
+    let total = 0;
+    try {
+      total = path.getTotalLength();
+    } catch (error) {
+      return { total: 0, points: [] };
+    }
+    if (!Number.isFinite(total) || total <= 0) return { total: 0, points: [] };
+
+    const count = Math.max(1, Math.ceil(total / step));
+    const points = [];
+    for (let index = 0; index <= count; index += 1) {
+      const length = Math.min(total, index * step);
+      const local = path.getPointAtLength(length);
+      const point = transformPointToParent(path, local);
+      points.push({ x: point.x, y: point.y, length });
+    }
+    return { total, points };
+  };
+
+  const buildGrid = (points) => {
+    const grid = new Map();
+    points.forEach((point) => {
+      const cellX = Math.floor(point.x / GRID_SIZE);
+      const cellY = Math.floor(point.y / GRID_SIZE);
+      const key = `${cellX}:${cellY}`;
+      const bucket = grid.get(key) || [];
+      bucket.push(point);
+      grid.set(key, bucket);
+    });
+    return grid;
+  };
+
+  const isNearReference = (point, grid, threshold) => {
+    const radius = Math.ceil(threshold / GRID_SIZE);
+    const cellX = Math.floor(point.x / GRID_SIZE);
+    const cellY = Math.floor(point.y / GRID_SIZE);
+    const maxDistanceSquared = threshold * threshold;
+
+    for (let offsetX = -radius; offsetX <= radius; offsetX += 1) {
+      for (let offsetY = -radius; offsetY <= radius; offsetY += 1) {
+        const bucket = grid.get(`${cellX + offsetX}:${cellY + offsetY}`);
+        if (!bucket) continue;
+        for (const reference of bucket) {
+          const dx = point.x - reference.x;
+          const dy = point.y - reference.y;
+          if ((dx * dx) + (dy * dy) <= maxDistanceSquared) return true;
+        }
+      }
+    }
+    return false;
+  };
+
+  const mergeIntervals = (intervals, total) => {
+    if (!intervals.length) return [];
+    const ordered = intervals
+      .map(([start, end]) => [Math.max(0, start), Math.min(total, end)])
+      .filter(([start, end]) => end > start)
+      .sort((a, b) => a[0] - b[0]);
+
+    const merged = [];
+    ordered.forEach(([start, end]) => {
+      const previous = merged[merged.length - 1];
+      if (previous && start - previous[1] <= MERGE_GAP) {
+        previous[1] = Math.max(previous[1], end);
+      } else {
+        merged.push([start, end]);
+      }
+    });
+    return merged.filter(([start, end]) => end - start >= MIN_INTERVAL);
+  };
+
+  const findIntervals = (sourcePath, referenceGrid, threshold) => {
+    const sampled = samplePath(sourcePath, SOURCE_STEP);
+    if (!sampled.points.length) return { total: 0, intervals: [] };
+
+    const intervals = [];
+    let runStart = null;
+    let previousLength = 0;
+
+    sampled.points.forEach((point) => {
+      const near = isNearReference(point, referenceGrid, threshold);
+      if (near && runStart === null) runStart = Math.max(0, point.length - SOURCE_STEP);
+      if (!near && runStart !== null) {
+        intervals.push([runStart, Math.min(sampled.total, previousLength + SOURCE_STEP)]);
+        runStart = null;
+      }
+      previousLength = point.length;
+    });
+
+    if (runStart !== null) intervals.push([runStart, sampled.total]);
+    return { total: sampled.total, intervals: mergeIntervals(intervals, sampled.total) };
+  };
+
+  const buildDashArray = (total, intervals) => {
+    if (!total || !intervals.length) return '';
+    const parts = [];
+    const first = intervals[0];
+
+    if (first[0] > 0) parts.push(0, first[0]);
+    parts.push(first[1] - first[0]);
+
+    for (let index = 1; index < intervals.length; index += 1) {
+      const previous = intervals[index - 1];
+      const current = intervals[index];
+      parts.push(Math.max(0, current[0] - previous[1]));
+      parts.push(current[1] - current[0]);
     }
 
-    return { x, y };
+    parts.push(Math.max(0, total - intervals[intervals.length - 1][1]));
+    return parts.map((value) => Number(value.toFixed(2))).join(' ');
+  };
+
+  const makePath = (parent, pathData, hidden = false) => {
+    const path = document.createElementNS(SVG_NS, 'path');
+    path.setAttribute('d', pathData);
+    path.setAttribute('fill', 'none');
+    path.setAttribute('pointer-events', 'none');
+    if (hidden) {
+      path.setAttribute('stroke', 'none');
+      path.setAttribute('visibility', 'hidden');
+    }
+    parent.appendChild(path);
+    return path;
   };
 
   document.querySelectorAll('[data-atlas]').forEach((atlas) => {
     const svg = atlas.querySelector('[data-atlas-map]');
     const landContext = svg?.querySelector('.msc-atlas-map__land-context');
-    if (!svg || !landContext) return;
+    const landmass = landContext?.querySelector('.msc-atlas-map__landmass');
+    const boundarySource = atlas.querySelector('[data-atlas-region-shape="mining"] > .msc-atlas-map__region-shape--inner');
+    const replacementCoast = atlas.querySelector('[data-atlas-region-shape="marketplaces"] > .msc-atlas-map__region-shape--inner');
+    if (!svg || !landContext || !landmass) return;
 
-    /* Retire the mask-based focus copies without touching base geography or the
-       generous interaction hit areas that own hover/click behavior. */
-    landContext.querySelectorAll('.msc-atlas-map__focus-coast, .msc-atlas-map__focus-boundaries').forEach((node) => node.remove());
+    /* Remove the two earlier derived-focus systems. Neither one is allowed to
+       render selected geometry; this pass only brightens exact existing lines. */
+    landContext.querySelectorAll('.msc-atlas-map__focus-coast, .msc-atlas-map__focus-boundaries, .msc-atlas-map__focus-perimeter-explicit').forEach((node) => node.remove());
 
-    const perimeter = document.createElementNS(SVG_NS, 'path');
-    perimeter.classList.add('msc-atlas-map__focus-perimeter-explicit');
-    perimeter.setAttribute('fill', 'none');
-    perimeter.setAttribute('stroke-linecap', 'round');
-    perimeter.setAttribute('stroke-linejoin', 'round');
-    perimeter.setAttribute('vector-effect', 'non-scaling-stroke');
-    perimeter.setAttribute('pointer-events', 'none');
-    perimeter.setAttribute('aria-hidden', 'true');
-    perimeter.style.display = 'none';
-    landContext.appendChild(perimeter);
+    const guide = makePath(landContext, 'M0 0', true);
+    guide.classList.add('msc-atlas-map__focus-guide');
+    guide.setAttribute('aria-hidden', 'true');
+
+    const exactGroup = document.createElementNS(SVG_NS, 'g');
+    exactGroup.classList.add('msc-atlas-map__focus-perimeter-exact');
+    exactGroup.setAttribute('aria-hidden', 'true');
+    exactGroup.setAttribute('pointer-events', 'none');
+    exactGroup.style.display = 'none';
+    landContext.appendChild(exactGroup);
+
+    const regionBySlug = new Map(
+      [...atlas.querySelectorAll('[data-atlas-region-shape]')]
+        .map((region) => [region.dataset.atlasRegionShape, region])
+    );
+    const cachedBySlug = new Map();
+
+    const buildSourceSpecs = () => {
+      const specs = [];
+      const landmassData = getRenderedPathData(landmass);
+      if (landmassData) specs.push({ pathData: landmassData, threshold: COAST_THRESHOLD });
+
+      const replacementData = getRenderedPathData(replacementCoast);
+      if (replacementData) {
+        splitSubpaths(replacementData).forEach((pathData) => specs.push({ pathData, threshold: COAST_THRESHOLD }));
+      }
+
+      const boundaryData = getRenderedPathData(boundarySource);
+      if (boundaryData) {
+        splitSubpaths(boundaryData).forEach((pathData) => specs.push({ pathData, threshold: BOUNDARY_THRESHOLD }));
+      }
+      return specs;
+    };
+
+    const computeSegments = (slug, center) => {
+      if (cachedBySlug.has(slug)) return cachedBySlug.get(slug);
+      const referenceData = REFERENCE_TRACES[slug];
+      if (!referenceData || !center) return [];
+
+      guide.setAttribute('d', referenceData);
+      guide.setAttribute('transform', `translate(${center.x} ${center.y})`);
+      const referenceSample = samplePath(guide, REFERENCE_STEP);
+      if (!referenceSample.points.length) return [];
+
+      const referenceGrid = buildGrid(referenceSample.points);
+      const results = [];
+      buildSourceSpecs().forEach((spec) => {
+        const sourcePath = makePath(landContext, spec.pathData, true);
+        const match = findIntervals(sourcePath, referenceGrid, spec.threshold);
+        sourcePath.remove();
+        if (!match.intervals.length) return;
+
+        const dashArray = buildDashArray(match.total, match.intervals);
+        if (dashArray) results.push({ pathData: spec.pathData, dashArray });
+      });
+
+      cachedBySlug.set(slug, results);
+      return results;
+    };
+
+    const renderExactPerimeter = (slug, mode) => {
+      exactGroup.replaceChildren();
+      if (!slug) {
+        exactGroup.style.display = 'none';
+        return;
+      }
+
+      const region = regionBySlug.get(slug);
+      const label = region?.querySelector('.msc-atlas-map__region-label');
+      const center = getVisualCenter(label);
+      const segments = computeSegments(slug, center);
+      if (!segments.length) {
+        exactGroup.style.display = 'none';
+        return;
+      }
+
+      const locked = mode === 'locked';
+      segments.forEach(({ pathData, dashArray }) => {
+        const path = makePath(exactGroup, pathData);
+        path.classList.add('msc-atlas-map__focus-segment-exact');
+        path.setAttribute('stroke', locked ? 'rgba(251, 248, 239, .94)' : 'rgba(251, 248, 239, .86)');
+        path.setAttribute('stroke-width', locked ? '1.7' : '1.55');
+        path.setAttribute('stroke-linecap', 'round');
+        path.setAttribute('stroke-linejoin', 'round');
+        path.setAttribute('stroke-dasharray', dashArray);
+        path.setAttribute('vector-effect', 'non-scaling-stroke');
+      });
+      exactGroup.style.display = 'block';
+    };
 
     let frame = null;
     const refresh = () => {
       frame = null;
-      const slug = atlas.dataset.atlasActive || '';
-      const pathData = PERIMETERS[slug];
-      const region = slug
-        ? atlas.querySelector(`[data-atlas-region-shape="${slug}"]`)
-        : null;
-      const label = region?.querySelector('.msc-atlas-map__region-label');
-      const center = getVisualCenter(label);
-
-      if (!pathData || !center) {
-        perimeter.style.display = 'none';
-        perimeter.removeAttribute('d');
-        perimeter.removeAttribute('transform');
-        return;
-      }
-
-      const locked = atlas.dataset.atlasMode === 'locked';
-      perimeter.setAttribute('d', pathData);
-      perimeter.setAttribute('transform', `translate(${center.x} ${center.y})`);
-      perimeter.setAttribute('stroke', locked ? 'rgba(251, 248, 239, .94)' : 'rgba(251, 248, 239, .86)');
-      perimeter.setAttribute('stroke-width', locked ? '1.7' : '1.55');
-      perimeter.setAttribute('opacity', locked ? '1' : '.86');
-      perimeter.style.display = 'block';
+      renderExactPerimeter(atlas.dataset.atlasActive || '', atlas.dataset.atlasMode || 'overview');
     };
-
     const scheduleRefresh = () => {
       if (frame !== null) return;
       frame = requestAnimationFrame(refresh);
@@ -108,9 +333,8 @@
 
     const observer = new MutationObserver(scheduleRefresh);
     observer.observe(atlas, {
-      subtree: true,
       attributes: true,
-      attributeFilter: ['class', 'data-atlas-active', 'data-atlas-mode']
+      attributeFilter: ['data-atlas-active', 'data-atlas-mode']
     });
 
     refresh();
