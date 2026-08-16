@@ -4,9 +4,8 @@
   const MIN_FOCUS_WIDTH = 560;
   const MAX_FOCUS_WIDTH = 720;
   const VIEWBOX_OVERSCAN = 180;
+  const FOCUS_MASK_STROKE = 180;
   const SVG_NS = 'http://www.w3.org/2000/svg';
-  const XLINK_NS = 'http://www.w3.org/1999/xlink';
-  const INTERNAL_BOUNDARY_PATH = 'M621 64 C638 86 654 111 676 137 C690 153 702 165 711 174 M441 207 C492 203 537 205 579 202 C620 199 654 209 691 214 L689 239 M755 205 C805 219 855 236 907 242 M420 222 C427 252 435 292 447 340 M594 356 C629 369 673 382 708 403 C737 421 761 437 788 438 C812 420 831 393 848 367 C871 329 893 289 910 259';
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const parseBox = (value) => String(value || '').trim().split(/\s+/).map(Number);
@@ -54,6 +53,20 @@
     return { x, y };
   };
 
+  const getRenderedPathData = (path) => {
+    if (!path) return '';
+
+    try {
+      const cssPath = window.getComputedStyle(path).getPropertyValue('d').trim();
+      const match = cssPath.match(/^path\((['"]?)(.*)\1\)$/);
+      if (match?.[2]) return match[2];
+    } catch (error) {
+      /* Source d remains a safe fallback if computed SVG path data is unavailable. */
+    }
+
+    return path.getAttribute('d') || '';
+  };
+
   document.querySelectorAll('[data-atlas]').forEach((atlas, atlasIndex) => {
     const svg = atlas.querySelector('[data-atlas-map]');
     const modeReadout = atlas.querySelector('[data-atlas-mode]');
@@ -92,13 +105,15 @@
       || null
     );
 
-    /* Build focus copies from the visible geography rather than drawing the
-       synthetic interaction polygon. The real coastline plus the current
-       internal state-boundary path are both clipped to the selected region. */
+    /* Focus only real chart geography. The region polygons are interaction
+       geometry, so they are converted into invisible buffered masks rather
+       than drawn as outlines. The buffer captures coastline/shared-border
+       strokes on both sides of the generous hit target and prevents the
+       selected perimeter from being clipped into partial fragments. */
     const defs = svg.querySelector('defs');
     const landContext = svg.querySelector('.msc-atlas-map__land-context');
     const baseLandmass = landContext?.querySelector('.msc-atlas-map__landmass');
-    const focusClipBySlug = new Map();
+    const focusMaskBySlug = new Map();
     let focusCoast = null;
     let focusBoundaries = null;
 
@@ -109,63 +124,76 @@
       focusCoast.removeAttribute('id');
       landContext.appendChild(focusCoast);
 
-      focusBoundaries = document.createElementNS(SVG_NS, 'path');
-      focusBoundaries.classList.add('msc-atlas-map__focus-boundaries');
-      focusBoundaries.setAttribute('d', INTERNAL_BOUNDARY_PATH);
-      focusBoundaries.setAttribute('fill', 'none');
-      focusBoundaries.setAttribute('stroke-linecap', 'round');
-      focusBoundaries.setAttribute('stroke-linejoin', 'round');
-      focusBoundaries.setAttribute('vector-effect', 'non-scaling-stroke');
-      focusBoundaries.setAttribute('pointer-events', 'none');
-      focusBoundaries.setAttribute('aria-hidden', 'true');
-      focusBoundaries.style.display = 'none';
-      landContext.appendChild(focusBoundaries);
+      const stateBoundarySource = regionBySlug
+        .get('mining')
+        ?.querySelector('.msc-atlas-map__region-shape--inner');
+      const renderedBoundaryPath = getRenderedPathData(stateBoundarySource);
+
+      if (renderedBoundaryPath) {
+        focusBoundaries = document.createElementNS(SVG_NS, 'path');
+        focusBoundaries.classList.add('msc-atlas-map__focus-boundaries');
+        focusBoundaries.setAttribute('d', renderedBoundaryPath);
+        focusBoundaries.setAttribute('fill', 'none');
+        focusBoundaries.setAttribute('stroke-linecap', 'round');
+        focusBoundaries.setAttribute('stroke-linejoin', 'round');
+        focusBoundaries.setAttribute('vector-effect', 'non-scaling-stroke');
+        focusBoundaries.setAttribute('pointer-events', 'none');
+        focusBoundaries.setAttribute('aria-hidden', 'true');
+        focusBoundaries.style.display = 'none';
+        landContext.appendChild(focusBoundaries);
+      }
 
       mapRegions.forEach((region, regionIndex) => {
         const slug = region.dataset.atlasRegionShape;
         const shape = getOuterShape(region);
-        if (!slug || !shape) return;
+        const renderedShapePath = getRenderedPathData(shape);
+        if (!slug || !renderedShapePath) return;
 
-        const shapeId = `MscAtlasRegionHit-${atlasIndex}-${regionIndex}-${slug}`;
-        const clipId = `MscAtlasRegionClip-${atlasIndex}-${regionIndex}-${slug}`;
+        const maskId = `MscAtlasRegionFocusMask-${atlasIndex}-${regionIndex}-${slug}`;
+        const mask = document.createElementNS(SVG_NS, 'mask');
+        mask.id = maskId;
+        mask.setAttribute('maskUnits', 'userSpaceOnUse');
+        mask.setAttribute('maskContentUnits', 'userSpaceOnUse');
+        mask.setAttribute('x', String(OVERVIEW[0] - VIEWBOX_OVERSCAN));
+        mask.setAttribute('y', String(OVERVIEW[1] - VIEWBOX_OVERSCAN));
+        mask.setAttribute('width', String(OVERVIEW[2] + (VIEWBOX_OVERSCAN * 2)));
+        mask.setAttribute('height', String(OVERVIEW[3] + (VIEWBOX_OVERSCAN * 2)));
 
-        shape.id = shapeId;
+        const perimeterZone = document.createElementNS(SVG_NS, 'path');
+        perimeterZone.setAttribute('d', renderedShapePath);
+        perimeterZone.setAttribute('fill', 'white');
+        perimeterZone.setAttribute('stroke', 'white');
+        perimeterZone.setAttribute('stroke-width', String(FOCUS_MASK_STROKE));
+        perimeterZone.setAttribute('stroke-linecap', 'round');
+        perimeterZone.setAttribute('stroke-linejoin', 'round');
 
-        const clip = document.createElementNS(SVG_NS, 'clipPath');
-        clip.id = clipId;
-        clip.setAttribute('clipPathUnits', 'userSpaceOnUse');
-
-        const use = document.createElementNS(SVG_NS, 'use');
-        use.setAttribute('href', `#${shapeId}`);
-        use.setAttributeNS(XLINK_NS, 'href', `#${shapeId}`);
-
-        clip.appendChild(use);
-        defs.appendChild(clip);
-        focusClipBySlug.set(slug, clipId);
+        mask.appendChild(perimeterZone);
+        defs.appendChild(mask);
+        focusMaskBySlug.set(slug, maskId);
       });
     }
 
     const updateFocusCoast = (slug, mode = 'overview') => {
-      const clipId = slug ? focusClipBySlug.get(slug) : null;
+      const maskId = slug ? focusMaskBySlug.get(slug) : null;
 
       if (focusCoast) {
-        if (clipId) {
-          focusCoast.setAttribute('clip-path', `url(#${clipId})`);
+        if (maskId) {
+          focusCoast.setAttribute('mask', `url(#${maskId})`);
         } else {
-          focusCoast.removeAttribute('clip-path');
+          focusCoast.removeAttribute('mask');
         }
       }
 
       if (focusBoundaries) {
-        if (clipId) {
+        if (maskId) {
           const lockedMode = mode === 'locked';
-          focusBoundaries.setAttribute('clip-path', `url(#${clipId})`);
+          focusBoundaries.setAttribute('mask', `url(#${maskId})`);
           focusBoundaries.setAttribute('stroke', lockedMode ? 'rgba(251, 248, 239, .94)' : 'rgba(251, 248, 239, .86)');
           focusBoundaries.setAttribute('stroke-width', lockedMode ? '1.7' : '1.55');
           focusBoundaries.setAttribute('opacity', lockedMode ? '1' : '.86');
           focusBoundaries.style.display = 'block';
         } else {
-          focusBoundaries.removeAttribute('clip-path');
+          focusBoundaries.removeAttribute('mask');
           focusBoundaries.style.display = 'none';
         }
       }
