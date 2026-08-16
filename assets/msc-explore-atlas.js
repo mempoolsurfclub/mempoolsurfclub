@@ -53,23 +53,6 @@
     return { x, y };
   };
 
-  const unionBoxes = (...boxes) => {
-    const valid = boxes.filter(Boolean);
-    if (!valid.length) return null;
-
-    const left = Math.min(...valid.map((box) => box.x));
-    const top = Math.min(...valid.map((box) => box.y));
-    const right = Math.max(...valid.map((box) => box.x + box.width));
-    const bottom = Math.max(...valid.map((box) => box.y + box.height));
-
-    return {
-      x: left,
-      y: top,
-      width: right - left,
-      height: bottom - top
-    };
-  };
-
   document.querySelectorAll('[data-atlas]').forEach((atlas, atlasIndex) => {
     const svg = atlas.querySelector('[data-atlas-map]');
     const modeReadout = atlas.querySelector('[data-atlas-mode]');
