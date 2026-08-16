@@ -557,6 +557,10 @@ button.msc-atlas-region:focus-visible {
   white-space: nowrap;
 }
 
+.msc-atlas-window:not(.has-active-region) .msc-atlas-window__readout {
+  display: none !important;
+}
+
 .msc-atlas-window__readout span {
   color: rgba(212, 190, 153, .66) !important;
   font-size: .72rem !important;
