@@ -408,3 +408,23 @@
   vector-effect: non-scaling-stroke;
   opacity: 1 !important;
 }
+
+/* v13 — close the remaining lower-left coastline seam and fine-tune the
+ * MARKETPLACES label from the latest live review. */
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="marketplaces"] > .msc-atlas-map__region-shape--inner,
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="marketplaces"]:hover > .msc-atlas-map__region-shape--inner,
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="marketplaces"].is-active > .msc-atlas-map__region-shape--inner {
+  d: path("M414.2 447.2 L412.5 460.3 L468 445 L554.6 489") !important;
+  fill: none !important;
+  stroke: rgba(212, 190, 153, .88) !important;
+  stroke-width: 1.35 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  stroke-dasharray: none !important;
+  vector-effect: non-scaling-stroke;
+  opacity: 1 !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="marketplaces"] .msc-atlas-map__region-label {
+  transform: translate(191px, 54px) !important;
+}
