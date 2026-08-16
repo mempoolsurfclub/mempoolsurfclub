@@ -1,342 +1,144 @@
 (() => {
   const SVG_NS = 'http://www.w3.org/2000/svg';
-  const SOURCE_STEP = 1.5;
-  const REFERENCE_STEP = 1.5;
-  const COAST_THRESHOLD = 7;
-  const BOUNDARY_THRESHOLD = 5.5;
-  const MIN_INTERVAL = 3;
-  const MERGE_GAP = 4;
-  const GRID_SIZE = 10;
 
-  /* User-marked traces are matching guides only and are never rendered.
-     They are authored relative to each label's SVG x/y anchor, not the
-     visual text bounding-box center. */
-  const REFERENCE_TRACES = {
-    ordinals: 'M 75.4 64.4 L 72.2 42.2 L 66.2 21.8 L 61.1 -8.6 L 51.0 -26.5 L 49.1 -32.7 L 48.7 -49.0 L 50.4 -50.8 L 48.4 -52.1 L 46.9 -50.7 L 4.7 -49.9 L -5.3 -66.7 L -8.7 -78.4 L -19.4 -77.5 L -33.4 -72.9 L -47.6 -71.1 L -60.5 -67.4 L -83.6 -57.2 L -103.1 -39.5 L -104.5 -35.7 L -104.1 -19.6 L -103.0 -18.0 L -64.8 -16.2 L -59.9 -14.2 L -68.8 0.9 L -86.3 -4.6 L -115.7 -6.9 L -139.4 -13.4 L -181.0 -5.5 L -188.8 0.0 L -194.5 6.7 L -197.3 28.4 L -192.0 34.6 L -180.5 40.6 L -158.7 39.7 L -139.2 30.0 L -120.6 30.0 L -117.6 31.0 L -97.4 50.3 L -89.1 55.8 L -64.8 57.2 L -43.4 61.8 L -35.0 62.3 L -11.0 50.7 L 3.2 40.6 L 8.1 39.7 L 33.7 54.0 L 45.7 55.4 L 48.7 58.9 L 49.6 68.1 L 51.7 70.1 Z',
-    runes: 'M -122.6 -48.0 L -120.9 -46.2 L -119.1 -24.7 L -101.5 0.8 L -102.0 5.7 L -109.4 27.0 L -109.8 38.1 L -106.1 44.6 L -97.0 52.7 L -92.8 58.9 L -92.3 76.0 L -84.7 80.7 L -72.7 84.9 L -52.4 89.5 L -49.6 89.1 L -39.5 79.0 L -32.4 74.7 L -12.8 76.6 L -5.3 79.0 L 4.0 84.9 L 5.1 83.3 L 3.2 76.8 L -6.0 58.8 L -9.7 54.6 L -6.4 47.3 L -3.1 43.9 L 2.3 42.4 L 18.7 42.9 L 34.4 39.7 L 35.1 33.0 L 31.4 23.6 L 33.1 21.7 L 55.0 22.6 L 67.1 25.8 L 84.7 24.0 L 94.2 -3.4 L 98.9 -10.0 L 127.3 -18.5 L 150.7 -19.9 L 152.7 -23.7 L 154.6 -45.5 L 153.0 -46.6 L 144.4 -46.1 L 133.2 -49.4 L 99.5 -54.9 L 75.2 -54.9 L 46.4 -58.1 L -1.6 -55.8 L -21.0 -53.5 L -40.2 -49.4 L -59.6 -49.8 L -75.0 -54.4 L -101.3 -54.4 L -112.0 -48.0 Z',
-    wallets: 'M -93.0 -53.3 L -89.3 -40.8 L -84.7 -33.4 L -59.9 -9.5 L -48.7 7.2 L -29.4 30.7 L -21.4 44.1 L -13.9 51.7 L 27.0 52.1 L 39.2 54.9 L 49.4 54.4 L 51.4 51.0 L 51.4 44.5 L 48.8 34.8 L 50.8 32.8 L 60.5 29.5 L 75.7 19.4 L 87.9 9.0 L 89.6 -6.0 L 65.7 -6.0 L 58.2 -8.8 L 55.6 -11.4 L 51.7 -26.7 L 34.7 -31.9 L 23.1 -38.3 L 6.5 -44.3 L 4.8 -46.1 L 4.8 -52.4 L 2.3 -54.9 L -14.0 -52.6 L -29.4 -53.1 L -41.4 -54.9 L -68.7 -62.7 L -78.5 -62.7 L -83.1 -60.9 L -90.9 -51.8 Z',
-    marketplaces: 'M -161.3 -25.6 L -157.6 -16.7 L -158.1 -12.7 L -141.3 -0.9 L -120.0 4.6 L -98.4 6.5 L -74.3 16.1 L -23.7 17.1 L -6.5 20.3 L 8.3 20.3 L 23.7 17.5 L 35.0 17.6 L 38.1 21.0 L 38.6 27.0 L 40.1 29.5 L 58.5 32.8 L 63.4 36.2 L 63.5 45.8 L 58.4 53.8 L 66.0 59.1 L 78.2 59.8 L 73.1 49.9 L 74.8 45.7 L 97.1 38.3 L 108.0 37.8 L 109.1 35.8 L 110.5 22.8 L 94.6 12.0 L 83.6 8.8 L 81.1 6.8 L 75.4 -16.4 L 73.4 -18.9 L 55.5 -24.0 L 39.7 -30.9 L 13.4 -28.1 L -10.3 -20.3 L -42.8 -20.8 L -52.4 -34.4 L -63.2 -43.4 L -84.0 -48.9 L -89.7 -53.3 L -89.7 -54.8 L -81.7 -61.3 L -59.4 -71.6 L -7.2 -71.7 L -29.5 -93.2 L -53.9 -93.2 L -61.9 -96.1 L -65.3 -101.3 L -64.8 -93.6 L -66.5 -91.9 L -72.8 -91.8 L -81.3 -94.1 L -85.6 -80.1 L -87.7 -78.1 L -99.3 -76.6 L -110.5 -72.7 L -113.3 -67.2 L -115.2 -49.7 L -118.0 -42.7 L -120.4 -40.2 L -136.2 -32.3 L -150.6 -28.1 L -160.2 -27.2 Z',
-    mining: 'M -14.1 -61.4 L -3.9 -46.2 L -5.8 -42.5 L -34.8 -42.0 L -55.2 -46.2 L -76.4 -46.2 L -111.5 -42.0 L -132.7 -41.5 L -143.8 -31.4 L -154.4 -16.6 L -175.6 -16.6 L -176.5 -14.3 L -170.1 -5.1 L -165.9 4.6 L -165.9 17.1 L -180.2 36.0 L -194.5 48.5 L -185.3 49.8 L -170.1 45.2 L -165.9 45.2 L -156.7 48.5 L -151.2 54.0 L -140.5 58.6 L -126.7 58.6 L -117.9 56.8 L -105.9 78.0 L -89.3 77.5 L -78.2 73.8 L -16.4 73.8 L 0.2 75.2 L 11.3 78.9 L 24.2 78.9 L 37.6 74.8 L 53.8 74.3 L 64.4 76.6 L 75.5 81.2 L 103.2 82.2 L 135.0 90.0 L 139.6 90.0 L 141.5 88.6 L 151.2 68.8 L 157.2 48.0 L 161.8 47.1 L 162.2 42.9 L 154.4 33.7 L 147.0 29.5 L 138.2 21.7 L 127.2 7.8 L 123.9 -2.8 L 115.2 -14.3 L 98.1 -29.5 L 71.8 -58.6 L 60.7 -64.6 L 46.8 -78.9 L 35.3 -77.5 L 22.8 -73.4 L -3.0 -69.7 L -15.9 -64.6 Z',
-    payments: 'M -98.6 -98.6 L -107.3 -67.6 L -108.2 -58.4 L -99.7 -53.1 L -85.1 -52.2 L -78.3 -49.7 L -76.4 -47.6 L -76.9 -28.8 L -99.0 -18.9 L -116.2 -18.9 L -135.3 -25.4 L -144.6 -10.1 L -160.2 -13.4 L -171.0 -10.1 L -193.4 -11.5 L -198.5 -10.1 L -201.4 -7.2 L -207.9 14.5 L -208.4 37.6 L -204.5 42.4 L -198.5 45.7 L -185.7 47.1 L -165.7 53.5 L -146.4 55.8 L -125.6 61.4 L -103.4 74.7 L -80.4 81.7 L -69.7 86.8 L -35.6 114.0 L -13.0 123.7 L 1.0 122.3 L 7.6 117.0 L 34.5 81.4 L 50.1 68.1 L 78.7 31.6 L 97.6 2.6 L 105.9 -29.3 L 116.1 -47.7 L 119.3 -60.2 L 118.8 -68.6 L 116.8 -70.1 L 90.2 -69.7 L 81.8 -71.1 L 61.4 -78.0 L 53.3 -78.0 L 42.6 -80.3 L 14.8 -90.4 L 2.3 -93.2 L -8.7 -92.8 L -18.4 -95.6 L -26.7 -100.6 L -34.1 -102.9 L -44.8 -102.9 L -56.4 -96.9 L -72.6 -93.7 L -96.3 -96.0 Z',
-    exchanges: 'M -145.1 72.0 L -121.4 71.1 L -107.5 67.8 L -101.0 64.6 L -93.5 63.7 L -45.9 64.1 L -39.1 67.5 L -29.3 82.0 L -21.7 87.7 L 26.1 52.4 L 28.8 48.3 L 31.6 32.6 L 35.0 29.2 L 42.5 25.8 L 55.4 16.6 L 70.4 11.5 L 69.9 3.9 L 58.4 -17.9 L 57.3 -29.1 L 40.8 -30.9 L 21.7 -35.1 L 3.7 -48.9 L -9.6 -53.6 L -11.7 -55.6 L -11.8 -71.1 L -10.1 -72.9 L 8.3 -69.7 L 21.7 -69.3 L 23.3 -70.8 L 22.4 -75.5 L 18.0 -81.7 L 1.9 -85.4 L -1.6 -88.3 L -2.1 -94.2 L 0.5 -102.4 L -17.9 -102.9 L -28.4 -111.4 L -28.0 -108.2 L -43.7 -82.8 L -54.7 -68.6 L -65.3 -46.4 L -74.5 -32.1 L -110.1 38.1 L -124.1 53.0 L -136.2 60.0 Z',
-    network: 'M -166.4 33.0 L -164.3 34.1 L -150.4 30.9 L -137.5 24.5 L -123.1 19.8 L -104.4 18.9 L -64.2 36.5 L -32.3 59.1 L -22.6 63.2 L -17.3 58.0 L -13.1 49.5 L -8.8 45.8 L 3.3 40.2 L 22.3 34.6 L 42.2 31.8 L 53.1 31.8 L 63.4 26.3 L 85.4 32.7 L 94.2 33.7 L 122.0 26.3 L 144.3 25.4 L 176.8 41.6 L 192.4 52.6 L 213.1 55.8 L 227.3 60.3 L 225.9 49.6 L 218.5 27.3 L 217.6 14.0 L 216.0 10.2 L 193.9 9.7 L 168.0 -2.7 L 146.4 -7.4 L 123.7 -20.8 L 111.7 -32.7 L 96.5 -42.0 L 77.1 -46.6 L 65.1 -54.4 L 50.8 -60.4 L 35.3 -60.9 L 25.0 -63.2 L 18.5 -69.2 L 15.1 -67.4 L 4.6 -66.0 L -7.5 -60.0 L -22.6 -58.1 L -23.3 -54.7 L -17.9 -49.7 L -14.5 -43.8 L -16.5 -39.8 L -21.8 -37.4 L -74.3 -32.3 L -93.0 -23.1 L -98.6 -23.1 L -122.7 -31.4 L -156.7 -10.4 L -158.1 2.9 L -163.6 18.2 Z'
+  /*
+   * MSC Explore Atlas selected-region edge registry.
+   *
+   * IMPORTANT:
+   * - Every path below is copied from the currently approved rendered Atlas
+   *   coastline or approved shared-boundary geometry.
+   * - Region ownership is explicit. No hit-area masks, screenshot strokes,
+   *   label anchoring, nearest-neighbor matching, or distance thresholds are
+   *   used to decide what illuminates.
+   * - Shared borders are single reusable edge definitions referenced by both
+   *   neighboring regions.
+   */
+  const EDGE_PATHS = {
+    "coast_mining_west": "M621.8 66.4 C615.6 62.6 603.5 53.8 597.3 50 C590.4 51.3 552.5 61.2 530.9 62.7 C533.9 68.5 541.1 80.2 542.3 85.4 C528.3 85.6 429.6 86.9 415.6 87.1 C410.6 92.3 395.2 107.9 390.4 112.8 C383.4 113.1 372.8 113.4 365.9 113.7 C369.2 119.8 380.2 139.9 383.5 146.1 C378.5 151.3 358.5 172.2 353.7 177.3 C360.5 178.1 424.6 185.4 431.6 186.2 C434.5 192.4 439.3 202.6 442.3 209",
+    "coast_runes_nw": "M442.3 209 C435.7 210.5 422.9 213.7 416.3 215.3 C417.8 218.1 420.2 222 421.7 224.6",
+    "coast_ordinals": "M421.7 224.6 C414.8 225.2 383.6 227.8 376.6 228.4 C372.6 222.6 363.1 208.9 359.1 203.1 C352.1 203.7 324 206.3 317 206.9 C311.1 210.6 270.3 236.1 264.4 239.8 C266.9 246.3 271 256.9 273.5 263.4 C280.5 263.4 304.7 263.4 311.7 263.4 C310.4 268 308.4 275.2 307.1 279.8 C300.2 278.5 238.4 266.8 231.5 265.5 C224.8 267.6 183.4 280.4 177.3 282.3 C176.7 288.7 175.6 298.7 175 305.1 C180.6 308.3 193.3 315.5 199.4 319 C206.2 317.6 246.1 309.1 252.9 307.7 C258.4 312 281 329.5 286.5 333.8 C293.5 334.4 322.3 336.6 329.3 337.2 C335.8 334.6 371.6 320.4 378.1 317.8 C384.6 320.4 412.9 330.8 419.4 333.4 C421.5 338.2 424.2 344.2 426.3 349 C431.5 347.5 444 344.6 449.2 343.1",
+    "coast_runes_se": "M449.2 343.1 C455.9 345.1 472.3 349.9 479 351.9 C485.4 349 500.8 342.2 507.2 339.3 C512.5 341.6 538.6 345 543.9 347.3 C539.3 341.9 532.4 333.7 527.8 328.3 C530 322 533.3 312.3 535.5 306 C542.3 304.8 555.4 302.5 562.2 301.3 C562.4 297.5 562.8 292.5 563 288.7 C576.9 288.5 604 287.9 617.9 287.8 C622.1 279.3 629.8 263.9 634 255.4 C647.6 252.2 673.8 245.9 687.4 242.7",
+    "coast_payments_sw": "M687.4 242.7 C685.5 245.2 682.5 249.1 680.6 251.6 C688.8 254.2 706 259.5 714.2 262.1 C714.6 268.5 715.4 277.6 715.7 284 C710.1 287.4 700.7 292.9 695.1 296.3 C682.9 294.6 663.7 292.1 651.5 290.4 C650.4 294.6 648.8 300.9 647.7 305.1 C637.3 303.1 621.5 300 611.1 298 C604.5 299.8 594.8 302.5 588.2 304.3 C585.9 314.7 582.1 333.9 579.8 344.3 C583.3 348.2 590.8 356.5 594.3 360.4",
+    "coast_network": "M594.3 360.4 C583.3 362.8 565.6 366.8 554.6 369.2 C556.5 373.4 559.5 379.8 561.4 384 C541.8 387.8 503.9 395 484.3 398.7 C476.7 397.6 462.1 395.6 454.5 394.5 C445.4 399.6 427.7 409.7 418.6 414.8 C417.2 425.7 413.9 449.4 412.5 460.3 L468 445 L554.6 489 C556.2 485.1 559.1 478.1 560.7 474.2 C577.1 469.2 626.7 454.3 643.1 449.3 C651.3 451.8 665.5 456.1 673.7 458.6 C686.1 457.2 710.9 454.5 723.3 453.1 C734 460.2 755.4 474.3 766.1 481.4 C775 483.4 793.1 487.4 802 489.4 C799.1 476.9 793.4 452.1 790.5 439.6",
+    "coast_exchanges": "M790.5 439.6 C806.4 437.2 838 432.3 853.9 429.9 C865.6 432.3 888.8 437.7 900.5 440.1 C903.6 444 909.6 451.3 912.7 455.2 C924.8 447 948.7 431 960.8 422.8 C962.4 416.4 965.4 404.7 967 398.3 C977.2 394.1 997.2 385.6 1007.4 381.4 C1005 371.1 1000.7 350.4 998.3 340.1 C979.8 333.3 942.7 319.9 924.2 313.1 C923.8 307.8 923.1 300.3 922.7 295 C931.1 296.2 947.9 298.9 956.3 300.1 C955.9 296.4 955.1 291.1 954.7 287.4 C949.2 286 941.1 283.7 935.6 282.3 C936.5 277.2 937.8 269.3 938.7 264.2 C931.9 264.3 921.1 264.5 914.3 264.6 C913.757 262.942 913.115 260.744 912.432 258.315",
+    "coast_payments_east": "M912.432 258.315 C910.875 252.78 909.099 246.045 907.77 241.762",
+    "coast_marketplaces": "M907.77 241.762 C907.642 241.351 907.519 240.963 907.4 240.6 C917.1 239.5 938.2 237.1 947.9 236 C948.6 240.1 949.5 246.2 950.2 250.3 C957.8 251.2 968.5 252.4 976.1 253.3 C972.4 259.4 966.1 269.9 962.4 276 C968.3 276.5 978.6 277.3 984.5 277.7 C983.7 274.7 982.3 269.7 981.5 266.7 C990.2 264.1 1007.9 259.2 1016.6 256.6 C1018.6 252.7 1022.2 246.2 1024.2 242.3 C1016.6 238.1 1000.5 229.2 992.9 225 C991.7 218.4 989.5 205.5 988.3 198.9 C977.7 195.2 959.2 188.6 948.6 184.9 C939.7 188.2 920.9 195.1 912 198.4 C901.6 197.9 885.7 197.2 875.3 196.7 C861.2 187 833.7 168.1 819.6 158.4 C827.3 154.2 839.4 147.4 847.1 143.2 C863.4 145.2 896.4 149.2 912.7 151.2 C907.7 145 899.4 134.6 894.4 128.4 C881.3 125.5 859.4 120.8 846.3 117.9 C848.1 120.3 850.6 123.9 852.4 126.3 C846.4 125 836.3 122.9 830.3 121.7 C829.9 126.6 829.1 134.5 828.7 139.4 C820 141.9 804.6 146.2 795.9 148.7 C796.3 156.6 797 168.6 797.4 176.5 C784.1 180.5 763.4 186.8 750.1 190.8 C750.9 194.8 752.3 201.6 753.1 205.6",
+    "coast_payments_north": "M753.1 205.6 C744.8 208.7 727.8 215.2 719.5 218.3 C711.7 217.5 699.8 216.1 692 215.3",
+    "coast_mining_east": "M692 215.3 C695.6 204.5 701.4 187.3 705 176.5",
+    "coast_wallets": "M705 176.5 C722.7 174.5 749.9 171.3 767.6 169.3 C767.2 165 766.5 158.5 766.1 154.2 C777 148.8 794.2 140.2 805.1 134.8 C806.2 129 807.8 121.2 808.9 115.4 C800.8 115.1 784.1 114.4 776 114.1 C774.3 107.9 771.6 97.5 769.9 91.3 C759.9 88.4 738.7 82 728.7 79.1 C727.2 75.8 724.8 70.6 723.3 67.3 C695.8 67.1 649.3 66.6 621.8 66.4",
+    "border_mining_wallets": "M621 64 C638 86 654 111 676 137 C690 153 702 165 711 174",
+    "border_mining_runes": "M441 207 C492 203 537 205 579 202 C620 199 654 209 691 214",
+    "border_runes_payments": "M691 214 L689 239",
+    "border_marketplaces_payments": "M755 205 C805 219 855 236 907 242",
+    "border_ordinals_runes": "M420 222 C427 252 435 292 447 340",
+    "border_payments_network": "M594 356 C629 369 673 382 708 403 C737 421 761 437 788 438",
+    "border_payments_exchanges": "M788 438 C812 420 831 393 848 367 C871 329 893 289 910 259",
   };
 
-  const parseCssPath = (value) => {
-    const raw = String(value || '').trim();
-    const match = raw.match(/^path\((['"]?)(.*)\1\)$/);
-    return match?.[2] || '';
+  const REGION_EDGES = {
+    "ordinals": ["coast_ordinals", "border_ordinals_runes"],
+    "runes": ["coast_runes_nw", "border_mining_runes", "border_runes_payments", "coast_runes_se", "border_ordinals_runes"],
+    "wallets": ["coast_wallets", "border_mining_wallets"],
+    "marketplaces": ["coast_marketplaces", "border_marketplaces_payments"],
+    "mining": ["coast_mining_west", "border_mining_wallets", "coast_mining_east", "border_mining_runes"],
+    "payments": ["coast_payments_north", "border_marketplaces_payments", "coast_payments_east", "border_payments_exchanges", "border_payments_network", "coast_payments_sw", "border_runes_payments"],
+    "exchanges": ["coast_exchanges", "border_payments_exchanges"],
+    "network": ["coast_network", "border_payments_network"],
   };
 
-  const getRenderedPathData = (path) => {
-    if (!path) return '';
-    try {
-      const computed = parseCssPath(window.getComputedStyle(path).getPropertyValue('d'));
-      if (computed) return computed;
-    } catch (error) {
-      /* Fall through to source path data. */
-    }
-    return path.getAttribute('d') || '';
+  const removeLegacyFocusGeometry = (landContext) => {
+    landContext.querySelectorAll(
+      '.msc-atlas-map__focus-coast, ' +
+      '.msc-atlas-map__focus-boundaries, ' +
+      '.msc-atlas-map__focus-perimeter-explicit, ' +
+      '.msc-atlas-map__focus-perimeter-exact, ' +
+      '.msc-atlas-map__focus-guide, ' +
+      '.msc-atlas-map__focus-edge-registry'
+    ).forEach((node) => node.remove());
   };
 
-  const splitSubpaths = (pathData) => String(pathData || '')
-    .trim()
-    .split(/(?=[Mm])/)
-    .map((part) => part.trim())
-    .filter(Boolean);
+  const makeEdgePath = (edgeId, mode) => {
+    const pathData = EDGE_PATHS[edgeId];
+    if (!pathData) return null;
 
-  const getLabelAnchor = (label) => {
-    if (!label) return null;
-    let x = Number.parseFloat(label.getAttribute('x'));
-    let y = Number.parseFloat(label.getAttribute('y'));
-    if (!Number.isFinite(x) || !Number.isFinite(y)) return null;
-
-    try {
-      const transform = window.getComputedStyle(label).transform;
-      if (transform && transform !== 'none' && typeof DOMMatrixReadOnly !== 'undefined') {
-        const matrix = new DOMMatrixReadOnly(transform);
-        if (typeof DOMPoint !== 'undefined') {
-          const point = new DOMPoint(x, y).matrixTransform(matrix);
-          x = point.x;
-          y = point.y;
-        } else {
-          x += matrix.e;
-          y += matrix.f;
-        }
-      }
-    } catch (error) {
-      /* The source x/y anchor remains the safe fallback. */
-    }
-
-    return { x, y };
-  };
-
-  const transformPointToParent = (path, point) => {
-    try {
-      const transform = path.transform?.baseVal?.consolidate?.();
-      const matrix = transform?.matrix;
-      if (!matrix) return { x: point.x, y: point.y };
-      return {
-        x: (matrix.a * point.x) + (matrix.c * point.y) + matrix.e,
-        y: (matrix.b * point.x) + (matrix.d * point.y) + matrix.f
-      };
-    } catch (error) {
-      return { x: point.x, y: point.y };
-    }
-  };
-
-  const samplePath = (path, step) => {
-    let total = 0;
-    try {
-      total = path.getTotalLength();
-    } catch (error) {
-      return { total: 0, points: [] };
-    }
-    if (!Number.isFinite(total) || total <= 0) return { total: 0, points: [] };
-
-    const count = Math.max(1, Math.ceil(total / step));
-    const points = [];
-    for (let index = 0; index <= count; index += 1) {
-      const length = Math.min(total, index * step);
-      const local = path.getPointAtLength(length);
-      const point = transformPointToParent(path, local);
-      points.push({ x: point.x, y: point.y, length });
-    }
-    return { total, points };
-  };
-
-  const buildGrid = (points) => {
-    const grid = new Map();
-    points.forEach((point) => {
-      const key = `${Math.floor(point.x / GRID_SIZE)}:${Math.floor(point.y / GRID_SIZE)}`;
-      const bucket = grid.get(key) || [];
-      bucket.push(point);
-      grid.set(key, bucket);
-    });
-    return grid;
-  };
-
-  const isNearReference = (point, grid, threshold) => {
-    const radius = Math.ceil(threshold / GRID_SIZE);
-    const cellX = Math.floor(point.x / GRID_SIZE);
-    const cellY = Math.floor(point.y / GRID_SIZE);
-    const maxDistanceSquared = threshold * threshold;
-
-    for (let offsetX = -radius; offsetX <= radius; offsetX += 1) {
-      for (let offsetY = -radius; offsetY <= radius; offsetY += 1) {
-        const bucket = grid.get(`${cellX + offsetX}:${cellY + offsetY}`);
-        if (!bucket) continue;
-        for (const reference of bucket) {
-          const dx = point.x - reference.x;
-          const dy = point.y - reference.y;
-          if ((dx * dx) + (dy * dy) <= maxDistanceSquared) return true;
-        }
-      }
-    }
-    return false;
-  };
-
-  const mergeIntervals = (intervals, total) => {
-    if (!intervals.length) return [];
-    const ordered = intervals
-      .map(([start, end]) => [Math.max(0, start), Math.min(total, end)])
-      .filter(([start, end]) => end > start)
-      .sort((a, b) => a[0] - b[0]);
-
-    const merged = [];
-    ordered.forEach(([start, end]) => {
-      const previous = merged[merged.length - 1];
-      if (previous && start - previous[1] <= MERGE_GAP) {
-        previous[1] = Math.max(previous[1], end);
-      } else {
-        merged.push([start, end]);
-      }
-    });
-    return merged.filter(([start, end]) => end - start >= MIN_INTERVAL);
-  };
-
-  const findIntervals = (sourcePath, referenceGrid, threshold) => {
-    const sampled = samplePath(sourcePath, SOURCE_STEP);
-    if (!sampled.points.length) return { total: 0, intervals: [] };
-
-    const intervals = [];
-    let runStart = null;
-    let previousLength = 0;
-
-    sampled.points.forEach((point) => {
-      const near = isNearReference(point, referenceGrid, threshold);
-      if (near && runStart === null) runStart = Math.max(0, point.length - SOURCE_STEP);
-      if (!near && runStart !== null) {
-        intervals.push([runStart, Math.min(sampled.total, previousLength + SOURCE_STEP)]);
-        runStart = null;
-      }
-      previousLength = point.length;
-    });
-
-    if (runStart !== null) intervals.push([runStart, sampled.total]);
-    return { total: sampled.total, intervals: mergeIntervals(intervals, sampled.total) };
-  };
-
-  const buildDashArray = (total, intervals) => {
-    if (!total || !intervals.length) return '';
-    const parts = [];
-    const first = intervals[0];
-
-    if (first[0] > 0) parts.push(0, first[0]);
-    parts.push(first[1] - first[0]);
-
-    for (let index = 1; index < intervals.length; index += 1) {
-      const previous = intervals[index - 1];
-      const current = intervals[index];
-      parts.push(Math.max(0, current[0] - previous[1]));
-      parts.push(current[1] - current[0]);
-    }
-
-    parts.push(Math.max(0, total - intervals[intervals.length - 1][1]));
-    return parts.map((value) => Number(value.toFixed(2))).join(' ');
-  };
-
-  const makePath = (parent, pathData, hidden = false) => {
+    const locked = mode === 'locked';
     const path = document.createElementNS(SVG_NS, 'path');
+    path.classList.add('msc-atlas-map__focus-edge');
+    path.dataset.atlasFocusEdge = edgeId;
     path.setAttribute('d', pathData);
     path.setAttribute('fill', 'none');
+    path.setAttribute(
+      'stroke',
+      locked ? 'rgba(251, 248, 239, .94)' : 'rgba(251, 248, 239, .86)'
+    );
+    path.setAttribute('stroke-width', locked ? '1.7' : '1.55');
+    path.setAttribute('stroke-linecap', 'round');
+    path.setAttribute('stroke-linejoin', 'round');
+    path.setAttribute('vector-effect', 'non-scaling-stroke');
     path.setAttribute('pointer-events', 'none');
-    if (hidden) {
-      path.setAttribute('stroke', 'none');
-      path.setAttribute('visibility', 'hidden');
-    }
-    parent.appendChild(path);
+    path.setAttribute('aria-hidden', 'true');
     return path;
   };
 
-  document.querySelectorAll('[data-atlas]').forEach((atlas) => {
+  const installAtlasEdgeRegistry = (atlas) => {
     const svg = atlas.querySelector('[data-atlas-map]');
     const landContext = svg?.querySelector('.msc-atlas-map__land-context');
-    const landmass = landContext?.querySelector('.msc-atlas-map__landmass');
-    const boundarySource = atlas.querySelector('[data-atlas-region-shape="mining"] > .msc-atlas-map__region-shape--inner');
-    const replacementCoast = atlas.querySelector('[data-atlas-region-shape="marketplaces"] > .msc-atlas-map__region-shape--inner');
-    if (!svg || !landContext || !landmass) return;
+    if (!svg || !landContext) return;
 
-    /* Remove all previous generated focus geometry. */
-    landContext.querySelectorAll(
-      '.msc-atlas-map__focus-coast, .msc-atlas-map__focus-boundaries, .msc-atlas-map__focus-perimeter-explicit, .msc-atlas-map__focus-perimeter-exact, .msc-atlas-map__focus-guide'
-    ).forEach((node) => node.remove());
+    removeLegacyFocusGeometry(landContext);
 
-    const guide = makePath(landContext, 'M0 0', true);
-    guide.classList.add('msc-atlas-map__focus-guide');
-    guide.setAttribute('aria-hidden', 'true');
+    const focusGroup = document.createElementNS(SVG_NS, 'g');
+    focusGroup.classList.add('msc-atlas-map__focus-edge-registry');
+    focusGroup.setAttribute('aria-hidden', 'true');
+    focusGroup.setAttribute('pointer-events', 'none');
+    focusGroup.style.display = 'none';
+    landContext.appendChild(focusGroup);
 
-    const exactGroup = document.createElementNS(SVG_NS, 'g');
-    exactGroup.classList.add('msc-atlas-map__focus-perimeter-exact');
-    exactGroup.setAttribute('aria-hidden', 'true');
-    exactGroup.setAttribute('pointer-events', 'none');
-    exactGroup.style.display = 'none';
-    landContext.appendChild(exactGroup);
+    const render = () => {
+      const slug = atlas.dataset.atlasActive || '';
+      const mode = atlas.dataset.atlasMode || 'overview';
+      const edges = REGION_EDGES[slug] || [];
 
-    const regionBySlug = new Map(
-      [...atlas.querySelectorAll('[data-atlas-region-shape]')]
-        .map((region) => [region.dataset.atlasRegionShape, region])
-    );
+      focusGroup.replaceChildren();
 
-    const sourceSpecs = [];
-    const landmassData = getRenderedPathData(landmass);
-    if (landmassData) sourceSpecs.push({ pathData: landmassData, threshold: COAST_THRESHOLD });
-
-    const replacementData = getRenderedPathData(replacementCoast);
-    if (replacementData) {
-      splitSubpaths(replacementData).forEach((pathData) => {
-        sourceSpecs.push({ pathData, threshold: COAST_THRESHOLD });
-      });
-    }
-
-    const boundaryData = getRenderedPathData(boundarySource);
-    if (boundaryData) {
-      splitSubpaths(boundaryData).forEach((pathData) => {
-        sourceSpecs.push({ pathData, threshold: BOUNDARY_THRESHOLD });
-      });
-    }
-
-    const cachedBySlug = new Map();
-
-    const computeSegments = (slug, anchor) => {
-      if (cachedBySlug.has(slug)) return cachedBySlug.get(slug);
-      const referenceData = REFERENCE_TRACES[slug];
-      if (!referenceData || !anchor) return [];
-
-      guide.setAttribute('d', referenceData);
-      guide.setAttribute('transform', `translate(${anchor.x} ${anchor.y})`);
-      const referenceSample = samplePath(guide, REFERENCE_STEP);
-      if (!referenceSample.points.length) return [];
-
-      const referenceGrid = buildGrid(referenceSample.points);
-      const results = [];
-
-      sourceSpecs.forEach((spec) => {
-        const sourcePath = makePath(landContext, spec.pathData, true);
-        const match = findIntervals(sourcePath, referenceGrid, spec.threshold);
-        sourcePath.remove();
-        if (!match.intervals.length) return;
-
-        const dashArray = buildDashArray(match.total, match.intervals);
-        if (dashArray) results.push({ pathData: spec.pathData, dashArray });
-      });
-
-      cachedBySlug.set(slug, results);
-      return results;
-    };
-
-    const renderExactPerimeter = (slug, mode) => {
-      exactGroup.replaceChildren();
-      if (!slug) {
-        exactGroup.style.display = 'none';
+      if (!slug || !edges.length) {
+        focusGroup.style.display = 'none';
         return;
       }
 
-      const region = regionBySlug.get(slug);
-      const label = region?.querySelector('.msc-atlas-map__region-label');
-      const anchor = getLabelAnchor(label);
-      const segments = computeSegments(slug, anchor);
-
-      if (!segments.length) {
-        exactGroup.style.display = 'none';
-        return;
-      }
-
-      const locked = mode === 'locked';
-      segments.forEach(({ pathData, dashArray }) => {
-        const path = makePath(exactGroup, pathData);
-        path.classList.add('msc-atlas-map__focus-segment-exact');
-        path.setAttribute('stroke', locked ? 'rgba(251, 248, 239, .94)' : 'rgba(251, 248, 239, .86)');
-        path.setAttribute('stroke-width', locked ? '1.7' : '1.55');
-        path.setAttribute('stroke-linecap', 'round');
-        path.setAttribute('stroke-linejoin', 'round');
-        path.setAttribute('stroke-dasharray', dashArray);
-        path.setAttribute('vector-effect', 'non-scaling-stroke');
+      edges.forEach((edgeId) => {
+        const path = makeEdgePath(edgeId, mode);
+        if (path) focusGroup.appendChild(path);
       });
 
-      exactGroup.style.display = 'block';
+      focusGroup.style.display = focusGroup.childElementCount ? 'block' : 'none';
     };
 
     let frame = null;
-    const refresh = () => {
-      frame = null;
-      renderExactPerimeter(
-        atlas.dataset.atlasActive || '',
-        atlas.dataset.atlasMode || 'overview'
-      );
-    };
-
-    const scheduleRefresh = () => {
+    const scheduleRender = () => {
       if (frame !== null) return;
-      frame = requestAnimationFrame(refresh);
+      frame = requestAnimationFrame(() => {
+        frame = null;
+        render();
+      });
     };
 
-    const observer = new MutationObserver(scheduleRefresh);
+    const observer = new MutationObserver((records) => {
+      if (records.some((record) => (
+        record.attributeName === 'data-atlas-active'
+        || record.attributeName === 'data-atlas-mode'
+      ))) {
+        scheduleRender();
+      }
+    });
+
     observer.observe(atlas, {
       attributes: true,
       attributeFilter: ['data-atlas-active', 'data-atlas-mode']
     });
 
-    refresh();
-  });
+    render();
+  };
+
+  document.querySelectorAll('[data-atlas]').forEach(installAtlasEdgeRegistry);
 })();
