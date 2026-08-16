@@ -4,6 +4,7 @@
 {{ 'msc-explore-atlas-geography.css' | asset_url | stylesheet_tag }}
 {{ 'msc-explore-atlas-focus-v9.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'msc-explore-atlas.js' | asset_url }}" defer></script>
+<script src="{{ 'msc-explore-atlas-perimeters.js' | asset_url }}" defer></script>
 
 <section class="msc-shell msc-explore-atlas-shell" id="MscExploreAtlas-{{ section.id }}">
   <div class="msc-container">
@@ -177,7 +178,6 @@
               <g class="msc-atlas-map__entity" data-atlas-entity="Coinbase" data-atlas-entity-region="exchanges" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false"><circle class="msc-atlas-map__entity-dot" cx="971" cy="362" r="4.5" /><line class="msc-atlas-map__entity-line" x1="976" y1="362" x2="993" y2="362" /><text class="msc-atlas-map__entity-label" x="998" y="366">COINBASE</text></g>
             </g>
           </g>
-
           <g class="msc-atlas-map__region" data-atlas-region-shape="network" data-atlas-region-label="NETWORK" data-atlas-viewbox="318 288 715 230" role="button" tabindex="0" aria-pressed="false" aria-label="Preview Network region">
             <path class="msc-atlas-map__region-shape" d="M289 366 L365 302 L486 330 L535 357 L610 383 L688 360 L742 318 L820 357 L880 391 L965 420 C918 418 886 401 849 412 C811 423 789 449 744 449 C703 449 677 429 643 441 C610 452 593 479 550 481 C505 484 472 454 430 454 C392 454 361 471 329 452 C296 429 286 397 289 366 Z M873 484 C890 473 912 477 920 492 C925 507 913 521 896 520 C878 516 867 500 873 484 Z" />
             <path class="msc-atlas-map__region-shape msc-atlas-map__region-shape--inner" d="M373 354 C443 364 505 390 564 413 C623 436 687 421 751 403 C798 390 840 391 874 405" />
