@@ -1,0 +1,150 @@
+/* MSC Explore Atlas — focused interaction cleanup v9.
+ * The reference-led coastline is the only visible geography. Region polygons
+ * remain generous interaction targets but never render as synthetic borders.
+ */
+
+/* Interaction geometry must stay invisible in overview, preview, and lock. */
+.msc-explore-atlas-shell .msc-atlas-map__region-shape:not(.msc-atlas-map__region-shape--inner) {
+  fill: rgba(212, 190, 153, .001) !important;
+  stroke: transparent !important;
+  stroke-width: 0 !important;
+  filter: none !important;
+  pointer-events: all;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__region:hover .msc-atlas-map__region-shape,
+.msc-explore-atlas-shell .msc-atlas-map__region:focus-visible .msc-atlas-map__region-shape,
+.msc-explore-atlas-shell .msc-atlas-map__region.is-active .msc-atlas-map__region-shape {
+  fill: rgba(212, 190, 153, .001) !important;
+  stroke: transparent !important;
+  stroke-width: 0 !important;
+}
+
+/* During focus, the base chart recedes and a clipped copy of the real coastline
+ * identifies the selected territory without exposing the hit polygon. */
+.msc-explore-atlas-shell .msc-atlas-map__focus-coast {
+  display: none;
+  fill: none !important;
+  stroke: rgba(251, 248, 239, .86) !important;
+  stroke-width: 1.55 !important;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.msc-explore-atlas-shell .msc-atlas-window.has-active-region .msc-atlas-map__focus-coast {
+  display: block;
+  opacity: .86;
+}
+
+.msc-explore-atlas-shell .msc-atlas-window[data-atlas-mode="locked"] .msc-atlas-map__focus-coast {
+  stroke: rgba(251, 248, 239, .94) !important;
+  stroke-width: 1.7 !important;
+  opacity: 1;
+}
+
+.msc-explore-atlas-shell .msc-atlas-window.has-active-region .msc-atlas-map__land-context > .msc-atlas-map__landmass:not(.msc-atlas-map__focus-coast) {
+  fill: rgba(212, 190, 153, .035) !important;
+  stroke: rgba(212, 190, 153, .24) !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-window.has-active-region .msc-atlas-map__coast-shelf {
+  stroke: rgba(212, 190, 153, .035) !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-window.has-active-region .msc-atlas-map__island {
+  fill: rgba(212, 190, 153, .022) !important;
+  stroke: rgba(212, 190, 153, .18) !important;
+}
+
+/* Focused states should read like a local chart, not a magnified overview. */
+.msc-explore-atlas-shell .msc-atlas-window.has-active-region .msc-atlas-map__minor-grid {
+  opacity: .025 !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-window.has-active-region .msc-atlas-map__major-grid {
+  opacity: .045 !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-window.has-active-region .msc-atlas-map__soundings {
+  opacity: .035 !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-window.has-active-region .msc-atlas-map__compass,
+.msc-explore-atlas-shell .msc-atlas-window.has-active-region .msc-atlas-map__compass-text {
+  opacity: .32;
+}
+
+.msc-explore-atlas-shell .msc-atlas-window.has-active-region .msc-atlas-window__coord {
+  opacity: .56;
+}
+
+/* Only the selected region's map typography survives the focus transition. */
+.msc-explore-atlas-shell .msc-atlas-window.has-active-region .msc-atlas-map__region:not(.is-active) .msc-atlas-map__region-label,
+.msc-explore-atlas-shell .msc-atlas-window.has-active-region .msc-atlas-map__region:not(.is-active) .msc-atlas-map__region-index,
+.msc-explore-atlas-shell .msc-atlas-window.has-active-region .msc-atlas-map__region:not(.is-active) .msc-atlas-map__entities {
+  opacity: 0 !important;
+  visibility: hidden;
+  pointer-events: none !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-window.has-active-region .msc-atlas-map__region:not(.is-active) {
+  opacity: 1 !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-window.has-active-region .msc-atlas-map__region.is-active .msc-atlas-map__region-index {
+  fill: rgba(212, 190, 153, .76) !important;
+  font-size: calc(9.5px * var(--atlas-counter-scale, 1)) !important;
+  font-weight: 700;
+}
+
+.msc-explore-atlas-shell .msc-atlas-window.has-active-region .msc-atlas-map__region.is-active .msc-atlas-map__region-label {
+  fill: rgba(251, 248, 239, .96) !important;
+  font-size: calc(16px * var(--atlas-counter-scale, 1)) !important;
+  font-weight: 760 !important;
+  letter-spacing: .075em !important;
+}
+
+/* Entity marks stay secondary to the selected region label, but remain clear
+ * and consistent from preview through inspect. */
+.msc-explore-atlas-shell .msc-atlas-map__region.is-active .msc-atlas-map__entities {
+  opacity: 1 !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__entity-dot {
+  fill: rgba(212, 190, 153, .9) !important;
+  stroke: rgba(14, 51, 55, .98) !important;
+  stroke-width: 1.5 !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__entity-line {
+  stroke: rgba(212, 190, 153, .42) !important;
+  stroke-width: .9 !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__entity-label {
+  fill: rgba(251, 248, 239, .8) !important;
+  font-weight: 650 !important;
+  letter-spacing: .05em !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__entity:hover .msc-atlas-map__entity-dot,
+.msc-explore-atlas-shell .msc-atlas-map__entity:focus-visible .msc-atlas-map__entity-dot,
+.msc-explore-atlas-shell .msc-atlas-map__entity[aria-pressed="true"] .msc-atlas-map__entity-dot {
+  fill: rgba(251, 248, 239, .98) !important;
+  stroke: rgba(212, 190, 153, .98) !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__entity:hover .msc-atlas-map__entity-label,
+.msc-explore-atlas-shell .msc-atlas-map__entity:focus-visible .msc-atlas-map__entity-label,
+.msc-explore-atlas-shell .msc-atlas-map__entity[aria-pressed="true"] .msc-atlas-map__entity-label {
+  fill: rgba(251, 248, 239, .98) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .msc-explore-atlas-shell .msc-atlas-map__focus-coast {
+    transition: none !important;
+  }
+}

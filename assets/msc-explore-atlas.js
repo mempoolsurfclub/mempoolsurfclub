@@ -1,14 +1,48 @@
 (() => {
   const OVERVIEW = [0, 0, 1200, 560];
   const OVERVIEW_RATIO = OVERVIEW[2] / OVERVIEW[3];
-  const MIN_FOCUS_WIDTH = 640;
+  const MIN_FOCUS_WIDTH = 560;
+  const MAX_FOCUS_WIDTH = 720;
+  const VIEWBOX_OVERSCAN = 40;
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const XLINK_NS = 'http://www.w3.org/1999/xlink';
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const parseBox = (value) => String(value || '').trim().split(/\s+/).map(Number);
   const boxToString = (box) => box.map((n) => Number(n.toFixed(2))).join(' ');
   const ease = (t) => 1 - Math.pow(1 - t, 3);
 
-  document.querySelectorAll('[data-atlas]').forEach((atlas) => {
+  const safeBBox = (node) => {
+    if (!node || typeof node.getBBox !== 'function') return null;
+
+    try {
+      const box = node.getBBox();
+      if (![box.x, box.y, box.width, box.height].every(Number.isFinite)) return null;
+      if (box.width <= 0 || box.height <= 0) return null;
+      return box;
+    } catch (error) {
+      return null;
+    }
+  };
+
+  const unionBoxes = (...boxes) => {
+    const valid = boxes.filter(Boolean);
+    if (!valid.length) return null;
+
+    const left = Math.min(...valid.map((box) => box.x));
+    const top = Math.min(...valid.map((box) => box.y));
+    const right = Math.max(...valid.map((box) => box.x + box.width));
+    const bottom = Math.max(...valid.map((box) => box.y + box.height));
+
+    return {
+      x: left,
+      y: top,
+      width: right - left,
+      height: bottom - top
+    };
+  };
+
+  document.querySelectorAll('[data-atlas]').forEach((atlas, atlasIndex) => {
     const svg = atlas.querySelector('[data-atlas-map]');
     const modeReadout = atlas.querySelector('[data-atlas-mode]');
     const regionReadout = atlas.querySelector('[data-atlas-region-label]');
@@ -31,7 +65,7 @@
     );
 
     /* Region selection is keyboard-operated through the bottom navigation.
-       Remove source-level button semantics from the SVG region groups so
+       Remove source-level button semantics from SVG region groups so the
        charted entity buttons remain individually exposed to assistive tech. */
     mapRegions.forEach((region) => {
       region.removeAttribute('role');
@@ -40,41 +74,86 @@
       region.removeAttribute('aria-label');
     });
 
+    const getOuterShape = (region) => (
+      region?.querySelector('.msc-atlas-map__region-shape:not(.msc-atlas-map__region-shape--inner)')
+      || region?.querySelector('.msc-atlas-map__region-shape')
+      || null
+    );
+
+    /* Build one highlight copy of the real coastline. It is clipped by the
+       selected region's invisible interaction geometry, so focus states never
+       expose synthetic internal borders. */
+    const defs = svg.querySelector('defs');
+    const landContext = svg.querySelector('.msc-atlas-map__land-context');
+    const baseLandmass = landContext?.querySelector('.msc-atlas-map__landmass');
+    const focusClipBySlug = new Map();
+    let focusCoast = null;
+
+    if (defs && landContext && baseLandmass) {
+      focusCoast = baseLandmass.cloneNode(false);
+      focusCoast.classList.add('msc-atlas-map__focus-coast');
+      focusCoast.setAttribute('aria-hidden', 'true');
+      focusCoast.removeAttribute('id');
+      landContext.appendChild(focusCoast);
+
+      mapRegions.forEach((region, regionIndex) => {
+        const slug = region.dataset.atlasRegionShape;
+        const shape = getOuterShape(region);
+        if (!slug || !shape) return;
+
+        const shapeId = `MscAtlasRegionHit-${atlasIndex}-${regionIndex}-${slug}`;
+        const clipId = `MscAtlasRegionClip-${atlasIndex}-${regionIndex}-${slug}`;
+
+        shape.id = shapeId;
+
+        const clip = document.createElementNS(SVG_NS, 'clipPath');
+        clip.id = clipId;
+        clip.setAttribute('clipPathUnits', 'userSpaceOnUse');
+
+        const use = document.createElementNS(SVG_NS, 'use');
+        use.setAttribute('href', `#${shapeId}`);
+        use.setAttributeNS(XLINK_NS, 'href', `#${shapeId}`);
+
+        clip.appendChild(use);
+        defs.appendChild(clip);
+        focusClipBySlug.set(slug, clipId);
+      });
+    }
+
+    const updateFocusCoast = (slug) => {
+      if (!focusCoast) return;
+
+      const clipId = slug ? focusClipBySlug.get(slug) : null;
+      if (clipId) {
+        focusCoast.setAttribute('clip-path', `url(#${clipId})`);
+      } else {
+        focusCoast.removeAttribute('clip-path');
+      }
+    };
+
     const getCurrentBox = () => parseBox(svg.getAttribute('viewBox'));
 
-    const clampBox = (box) => {
+    const normalizeBox = (box) => {
       let [x, y, width, height] = box;
 
       if (![x, y, width, height].every(Number.isFinite) || width <= 0 || height <= 0) {
         return [...OVERVIEW];
       }
 
-      if (width < MIN_FOCUS_WIDTH) {
-        x -= (MIN_FOCUS_WIDTH - width) / 2;
-        width = MIN_FOCUS_WIDTH;
+      if (Math.abs(width - OVERVIEW[2]) < .01 && Math.abs(height - OVERVIEW[3]) < .01) {
+        return [...OVERVIEW];
       }
 
-      const minimumHeight = MIN_FOCUS_WIDTH / OVERVIEW_RATIO;
-      if (height < minimumHeight) {
-        y -= (minimumHeight - height) / 2;
-        height = minimumHeight;
-      }
+      width = Math.max(MIN_FOCUS_WIDTH, Math.min(MAX_FOCUS_WIDTH, width));
+      height = width / OVERVIEW_RATIO;
 
-      const ratio = width / height;
-      if (ratio < OVERVIEW_RATIO) {
-        const expandedWidth = height * OVERVIEW_RATIO;
-        x -= (expandedWidth - width) / 2;
-        width = expandedWidth;
-      } else if (ratio > OVERVIEW_RATIO) {
-        const expandedHeight = width / OVERVIEW_RATIO;
-        y -= (expandedHeight - height) / 2;
-        height = expandedHeight;
-      }
+      const minX = OVERVIEW[0] - VIEWBOX_OVERSCAN;
+      const maxX = OVERVIEW[0] + OVERVIEW[2] - width + VIEWBOX_OVERSCAN;
+      const minY = OVERVIEW[1] - VIEWBOX_OVERSCAN;
+      const maxY = OVERVIEW[1] + OVERVIEW[3] - height + VIEWBOX_OVERSCAN;
 
-      if (width >= OVERVIEW[2] || height >= OVERVIEW[3]) return [...OVERVIEW];
-
-      x = Math.max(OVERVIEW[0], Math.min(x, OVERVIEW[2] - width));
-      y = Math.max(OVERVIEW[1], Math.min(y, OVERVIEW[3] - height));
+      x = Math.max(minX, Math.min(x, maxX));
+      y = Math.max(minY, Math.min(y, maxY));
 
       return [x, y, width, height];
     };
@@ -82,37 +161,59 @@
     const getFocusBox = (region) => {
       if (!region) return [...OVERVIEW];
 
-      const shape = region.querySelector('.msc-atlas-map__region-shape:not(.msc-atlas-map__region-shape--inner)')
-        || region.querySelector('.msc-atlas-map__region-shape');
+      const shape = getOuterShape(region);
+      const shapeBounds = safeBBox(shape);
 
-      if (shape && typeof shape.getBBox === 'function') {
-        try {
-          const bounds = shape.getBBox();
-          if (bounds.width > 0 && bounds.height > 0) {
-            const padX = Math.max(44, bounds.width * .14);
-            const padY = Math.max(32, bounds.height * .18);
-            return clampBox([
-              bounds.x - padX,
-              bounds.y - padY,
-              bounds.width + (padX * 2),
-              bounds.height + (padY * 2)
-            ]);
-          }
-        } catch (error) {
-          /* Fall through to the authored fallback box. */
-        }
+      if (shapeBounds) {
+        const labelBounds = safeBBox(region.querySelector('.msc-atlas-map__region-label'));
+        const indexBounds = safeBBox(region.querySelector('.msc-atlas-map__region-index'));
+        const entityBounds = safeBBox(region.querySelector('.msc-atlas-map__entities'));
+        const contentBounds = unionBoxes(labelBounds, indexBounds, entityBounds);
+
+        const shapeCenterX = shapeBounds.x + (shapeBounds.width / 2);
+        const shapeCenterY = shapeBounds.y + (shapeBounds.height / 2);
+        const contentCenterX = contentBounds
+          ? contentBounds.x + (contentBounds.width / 2)
+          : shapeCenterX;
+        const contentCenterY = contentBounds
+          ? contentBounds.y + (contentBounds.height / 2)
+          : shapeCenterY;
+
+        /* Keep the territory dominant while nudging the camera toward the
+           label/entity cluster so the focused composition feels authored. */
+        const centerX = (shapeCenterX * .68) + (contentCenterX * .32);
+        const centerY = (shapeCenterY * .62) + (contentCenterY * .38);
+
+        const widthFromShape = shapeBounds.width * 1.06;
+        const widthFromHeight = shapeBounds.height * OVERVIEW_RATIO * 1.08;
+        const widthFromContent = contentBounds ? contentBounds.width * 1.24 : 0;
+        const width = Math.max(
+          MIN_FOCUS_WIDTH,
+          Math.min(MAX_FOCUS_WIDTH, Math.max(widthFromShape, widthFromHeight, widthFromContent))
+        );
+        const height = width / OVERVIEW_RATIO;
+
+        return normalizeBox([
+          centerX - (width / 2),
+          centerY - (height / 2),
+          width,
+          height
+        ]);
       }
 
       const fallback = parseBox(region.dataset.atlasViewbox);
-      return fallback.length === 4 ? clampBox(fallback) : [...OVERVIEW];
+      return fallback.length === 4 ? normalizeBox(fallback) : [...OVERVIEW];
     };
 
     const setViewBox = (box) => {
-      const normalized = clampBox(box);
+      const normalized = (
+        box[2] >= OVERVIEW[2] - .01 && box[3] >= OVERVIEW[3] - .01
+      ) ? [...OVERVIEW] : normalizeBox(box);
+
       svg.setAttribute('viewBox', boxToString(normalized));
 
-      /* The map geometry may scale, but Atlas UI marks remain screen-readable. */
-      const counterScale = Math.max(.42, Math.min(1, normalized[2] / OVERVIEW[2]));
+      /* Geography may zoom; labels and entity marks remain screen-readable. */
+      const counterScale = Math.max(.44, Math.min(1, normalized[2] / OVERVIEW[2]));
       atlas.style.setProperty('--atlas-counter-scale', counterScale.toFixed(4));
     };
 
@@ -120,7 +221,9 @@
       if (!target || target.length !== 4 || target.some(Number.isNaN)) return;
       if (animationFrame) cancelAnimationFrame(animationFrame);
 
-      const normalizedTarget = clampBox(target);
+      const normalizedTarget = (
+        target[2] >= OVERVIEW[2] - .01 && target[3] >= OVERVIEW[3] - .01
+      ) ? [...OVERVIEW] : normalizeBox(target);
 
       if (reduceMotion) {
         setViewBox(normalizedTarget);
@@ -129,17 +232,24 @@
 
       const from = getCurrentBox();
       const started = performance.now();
-      const duration = 360;
+      const duration = 420;
 
       const tick = (now) => {
         const progress = Math.min(1, (now - started) / duration);
         const amount = ease(progress);
-        const next = from.map((value, index) => value + (normalizedTarget[index] - value) * amount);
-        setViewBox(next);
+        const next = from.map((value, index) => (
+          value + ((normalizedTarget[index] - value) * amount)
+        ));
 
         if (progress < 1) {
+          /* Do not normalize intermediate frames: preserving the interpolated
+             aspect ratio prevents visible snapping during overview/focus moves. */
+          svg.setAttribute('viewBox', boxToString(next));
+          const counterScale = Math.max(.44, Math.min(1, next[2] / OVERVIEW[2]));
+          atlas.style.setProperty('--atlas-counter-scale', counterScale.toFixed(4));
           animationFrame = requestAnimationFrame(tick);
         } else {
+          setViewBox(normalizedTarget);
           animationFrame = null;
         }
       };
@@ -184,12 +294,25 @@
         if (state) state.textContent = isLocked ? 'LOCKED' : active ? 'PREVIEW' : 'CHART';
       });
 
+      updateFocusCoast(slug);
       updateEntityTabStops(slug);
       if (!slug) clearInspect();
 
-      if (modeReadout) modeReadout.textContent = mode === 'locked' ? 'LOCKED VIEW' : mode === 'preview' ? 'REGION PREVIEW' : 'FULL OCEAN';
+      if (modeReadout) {
+        modeReadout.textContent = (
+          mode === 'locked'
+            ? 'LOCKED VIEW'
+            : mode === 'preview'
+              ? 'REGION PREVIEW'
+              : 'FULL OCEAN'
+        );
+      }
       if (regionReadout) regionReadout.textContent = label;
-      if (live) live.textContent = slug ? `${label} ${mode === 'locked' ? 'locked' : 'preview'}` : 'Full Bitcoin Ocean view';
+      if (live) {
+        live.textContent = slug
+          ? `${label} ${mode === 'locked' ? 'locked' : 'preview'}`
+          : 'Full Bitcoin Ocean view';
+      }
 
       animateViewBox(targetBox);
     };
@@ -202,6 +325,7 @@
 
     const toggleLock = (slug) => {
       clearInspect();
+
       if (locked === slug) {
         locked = null;
         render(null, 'overview');
@@ -226,7 +350,9 @@
         render(slug, 'locked');
       }
 
-      entities.forEach((item) => item.setAttribute('aria-pressed', item === entity ? 'true' : 'false'));
+      entities.forEach((item) => {
+        item.setAttribute('aria-pressed', item === entity ? 'true' : 'false');
+      });
 
       if (inspect && inspectTitle && inspectMeta) {
         inspectTitle.textContent = entity.dataset.atlasEntity;
@@ -237,6 +363,7 @@
 
     navTargets.forEach((target) => {
       const slug = target.dataset.atlasTarget;
+
       target.addEventListener('pointerenter', () => setPreview(slug));
       target.addEventListener('focus', () => setPreview(slug));
       target.addEventListener('click', (event) => {
@@ -247,6 +374,7 @@
 
     mapRegions.forEach((region) => {
       const slug = region.dataset.atlasRegionShape;
+
       region.addEventListener('pointerenter', () => setPreview(slug));
       region.addEventListener('click', () => toggleLock(slug));
     });
@@ -256,6 +384,7 @@
         event.stopPropagation();
         showEntity(entity);
       });
+
       entity.addEventListener('keydown', (event) => {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
@@ -284,6 +413,7 @@
     inspectClose?.addEventListener('click', clearInspect);
 
     setViewBox(OVERVIEW);
+    updateFocusCoast(null);
     updateEntityTabStops(null);
     render(null, 'overview');
   });
