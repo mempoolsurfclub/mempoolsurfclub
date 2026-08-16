@@ -3,7 +3,7 @@
   const OVERVIEW_RATIO = OVERVIEW[2] / OVERVIEW[3];
   const MIN_FOCUS_WIDTH = 560;
   const MAX_FOCUS_WIDTH = 720;
-  const VIEWBOX_OVERSCAN = 40;
+  const VIEWBOX_OVERSCAN = 180;
   const SVG_NS = 'http://www.w3.org/2000/svg';
   const XLINK_NS = 'http://www.w3.org/1999/xlink';
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -25,21 +25,32 @@
     }
   };
 
-  const unionBoxes = (...boxes) => {
-    const valid = boxes.filter(Boolean);
-    if (!valid.length) return null;
+  const getVisualCenter = (node) => {
+    const box = safeBBox(node);
+    if (!box) return null;
 
-    const left = Math.min(...valid.map((box) => box.x));
-    const top = Math.min(...valid.map((box) => box.y));
-    const right = Math.max(...valid.map((box) => box.x + box.width));
-    const bottom = Math.max(...valid.map((box) => box.y + box.height));
+    let x = box.x + (box.width / 2);
+    let y = box.y + (box.height / 2);
 
-    return {
-      x: left,
-      y: top,
-      width: right - left,
-      height: bottom - top
-    };
+    /* Region labels are positioned with CSS translate transforms. getBBox()
+       does not reliably include that rendered translation across browsers, so
+       apply the computed SVG/CSS matrix before using the label as camera focus. */
+    try {
+      const transform = window.getComputedStyle(node).transform;
+      if (transform && transform !== 'none' && typeof DOMMatrixReadOnly !== 'undefined') {
+        const matrix = new DOMMatrixReadOnly(transform);
+        const point = typeof DOMPoint !== 'undefined'
+          ? new DOMPoint(x, y).matrixTransform(matrix)
+          : { x: x + matrix.e, y: y + matrix.f };
+        x = point.x;
+        y = point.y;
+      }
+    } catch (error) {
+      /* Falling back to the untransformed label center is safer than failing
+         the interaction if a browser exposes an unusual SVG transform value. */
+    }
+
+    return { x, y };
   };
 
   document.querySelectorAll('[data-atlas]').forEach((atlas, atlasIndex) => {
@@ -165,31 +176,22 @@
       const shapeBounds = safeBBox(shape);
 
       if (shapeBounds) {
-        const labelBounds = safeBBox(region.querySelector('.msc-atlas-map__region-label'));
-        const indexBounds = safeBBox(region.querySelector('.msc-atlas-map__region-index'));
-        const entityBounds = safeBBox(region.querySelector('.msc-atlas-map__entities'));
-        const contentBounds = unionBoxes(labelBounds, indexBounds, entityBounds);
-
+        const label = region.querySelector('.msc-atlas-map__region-label');
+        const labelCenter = getVisualCenter(label);
         const shapeCenterX = shapeBounds.x + (shapeBounds.width / 2);
         const shapeCenterY = shapeBounds.y + (shapeBounds.height / 2);
-        const contentCenterX = contentBounds
-          ? contentBounds.x + (contentBounds.width / 2)
-          : shapeCenterX;
-        const contentCenterY = contentBounds
-          ? contentBounds.y + (contentBounds.height / 2)
-          : shapeCenterY;
 
-        /* Keep the territory dominant while nudging the camera toward the
-           label/entity cluster so the focused composition feels authored. */
-        const centerX = (shapeCenterX * .68) + (contentCenterX * .32);
-        const centerY = (shapeCenterY * .62) + (contentCenterY * .38);
+        /* Design-review behavior: the selected region title is the camera
+           target. Every preview/lock lands with that title at viewport center,
+           while the territory bounds determine only how far the map zooms. */
+        const centerX = labelCenter?.x ?? shapeCenterX;
+        const centerY = labelCenter?.y ?? shapeCenterY;
 
         const widthFromShape = shapeBounds.width * 1.06;
         const widthFromHeight = shapeBounds.height * OVERVIEW_RATIO * 1.08;
-        const widthFromContent = contentBounds ? contentBounds.width * 1.24 : 0;
         const width = Math.max(
           MIN_FOCUS_WIDTH,
-          Math.min(MAX_FOCUS_WIDTH, Math.max(widthFromShape, widthFromHeight, widthFromContent))
+          Math.min(MAX_FOCUS_WIDTH, Math.max(widthFromShape, widthFromHeight))
         );
         const height = width / OVERVIEW_RATIO;
 
