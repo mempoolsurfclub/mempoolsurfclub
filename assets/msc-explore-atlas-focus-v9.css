@@ -460,3 +460,35 @@
   fill: rgba(14, 51, 55, .78) !important;
   opacity: 1 !important;
 }
+
+/* v16 — match the continuous depth treatment used by the other MSC hero instruments.
+ * Keep one uninterrupted ocean tone underneath so SVG letterboxing cannot create
+ * different far-edge colors, then layer the restrained Sounder-style fade across
+ * the entire viewport as a single visual surface. */
+.msc-explore-atlas-shell .msc-atlas-window__viewport {
+  background: #0e3337 !important;
+  box-shadow: inset 0 -7rem 9rem rgba(4, 15, 21, .14);
+}
+
+.msc-explore-atlas-shell .msc-atlas-map {
+  background: #0e3337 !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__ocean {
+  fill: #0e3337 !important;
+  opacity: 1 !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-window__viewport::after {
+  content: "";
+  display: block !important;
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background:
+    radial-gradient(circle at 24% 14%, rgba(212, 190, 153, .065), transparent 33%),
+    radial-gradient(circle at 78% 72%, rgba(78, 107, 113, .12), transparent 44%),
+    linear-gradient(180deg, rgba(30, 68, 76, .10) 0%, rgba(19, 49, 57, .045) 46%, rgba(8, 25, 33, .18) 100%);
+  box-shadow: inset 0 -7rem 9rem rgba(4, 15, 21, .10);
+  pointer-events: none;
+}
