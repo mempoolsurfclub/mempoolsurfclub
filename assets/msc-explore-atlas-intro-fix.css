@@ -128,7 +128,7 @@
   display: none !important;
 }
 
-/* v18 — keep MARKETPLACES at its approved x/y anchor while centering the text vertically on that anchor. */
-.msc-shell.msc-explore-atlas-shell .msc-atlas-window .msc-atlas-map .msc-atlas-map__region[data-atlas-region-shape="marketplaces"] .msc-atlas-map__region-label {
+/* v18 — MARKETPLACES title vertical centering only. Horizontal placement remains unchanged. */
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="marketplaces"] .msc-atlas-map__region-label {
   dominant-baseline: central;
 }
