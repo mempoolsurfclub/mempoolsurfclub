@@ -428,3 +428,16 @@
 .msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="marketplaces"] .msc-atlas-map__region-label {
   transform: translate(191px, 54px) !important;
 }
+
+/* v14 — shading continuity fix from live review.
+ * The ocean carve now shares the exact visible coastline vertices so there is
+ * no exposed dark wedge between the shaded landmass and the replacement coast.
+ */
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="wallets"] > .msc-atlas-map__region-shape--inner,
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="wallets"]:hover > .msc-atlas-map__region-shape--inner,
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="wallets"].is-active > .msc-atlas-map__region-shape--inner {
+  d: path("M414.2 447.2 L412.5 460.3 L468 445 L554.6 489 L566 518 L540 526 L493 520 L445 505 L407 483 Z") !important;
+  fill: #0e3337 !important;
+  stroke: none !important;
+  opacity: 1 !important;
+}
