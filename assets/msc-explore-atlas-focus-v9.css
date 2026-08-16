@@ -143,6 +143,83 @@
   fill: rgba(251, 248, 239, .98) !important;
 }
 
+/* v10 design-first review mode.
+ * Restore the earlier 4x2 navigation proportion, remove numbering, and keep
+ * entity-level content hidden until the Atlas visual system is approved. */
+.msc-explore-atlas-shell .msc-atlas-window__nav {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  grid-template-rows: repeat(2, minmax(5.6rem, 1fr)) !important;
+  min-height: 11.8rem !important;
+  border-radius: 16px !important;
+  background: rgba(8, 25, 33, .34) !important;
+}
+
+.msc-explore-atlas-shell button.msc-atlas-region {
+  justify-content: center !important;
+  align-items: flex-start !important;
+  gap: .45rem !important;
+  padding: .9rem 1.25rem !important;
+  border-right: 1px solid rgba(212, 190, 153, .18) !important;
+  border-bottom: 1px solid rgba(212, 190, 153, .18) !important;
+}
+
+.msc-explore-atlas-shell button.msc-atlas-region:nth-child(4n) {
+  border-right: 0 !important;
+}
+
+.msc-explore-atlas-shell button.msc-atlas-region:nth-child(n+5) {
+  border-bottom: 0 !important;
+}
+
+.msc-explore-atlas-shell button.msc-atlas-region strong {
+  font-size: clamp(1rem, 1.18vw, 1.28rem) !important;
+  line-height: 1.08 !important;
+  letter-spacing: .055em !important;
+  white-space: normal !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-region__index,
+.msc-explore-atlas-shell .msc-atlas-map__region-index {
+  display: none !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-region__state {
+  font-size: .68rem !important;
+  letter-spacing: .13em !important;
+  opacity: .5 !important;
+}
+
+/* Keep the entity dataset in the SVG for later reactivation, but remove every
+ * entity label, dot, leader and inspect panel from this design-review phase. */
+.msc-explore-atlas-shell .msc-atlas-map__entities,
+.msc-explore-atlas-shell .msc-atlas-inspect {
+  display: none !important;
+}
+
+@media screen and (max-width: 760px) {
+  .msc-explore-atlas-shell .msc-atlas-window__nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-rows: repeat(4, minmax(4.6rem, auto)) !important;
+    min-height: 18.4rem !important;
+  }
+
+  .msc-explore-atlas-shell button.msc-atlas-region:nth-child(4n) {
+    border-right: 1px solid rgba(212, 190, 153, .18) !important;
+  }
+
+  .msc-explore-atlas-shell button.msc-atlas-region:nth-child(2n) {
+    border-right: 0 !important;
+  }
+
+  .msc-explore-atlas-shell button.msc-atlas-region:nth-child(n+5) {
+    border-bottom: 1px solid rgba(212, 190, 153, .18) !important;
+  }
+
+  .msc-explore-atlas-shell button.msc-atlas-region:nth-child(n+7) {
+    border-bottom: 0 !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .msc-explore-atlas-shell .msc-atlas-map__focus-coast {
     transition: none !important;
