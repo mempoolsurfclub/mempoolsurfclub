@@ -342,3 +342,69 @@
 .msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="network"] .msc-atlas-map__region-label {
   transform: translate(95px, 3px) !important;
 }
+
+/* v12 — latest annotated screenshot.
+ * Keep ORDINALS and WALLETS where they are, move the six boxed labels, remove
+ * the full lower-left peninsula, and replace it with the user's yellow coast.
+ */
+
+/* State divisions should read like quiet internal borders, never coastlines. */
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="mining"] > .msc-atlas-map__region-shape--inner,
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="mining"]:hover > .msc-atlas-map__region-shape--inner,
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="mining"].is-active > .msc-atlas-map__region-shape--inner {
+  stroke: rgba(212, 190, 153, .34) !important;
+  stroke-width: .82 !important;
+  stroke-dasharray: none !important;
+}
+
+/* Label centers mapped directly from the user's blue boxes. */
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="mining"] .msc-atlas-map__region-label {
+  transform: translate(352px, -31px) !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="runes"] .msc-atlas-map__region-label {
+  transform: translate(369px, -101px) !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="marketplaces"] .msc-atlas-map__region-label {
+  transform: translate(203px, 54px) !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="payments"] .msc-atlas-map__region-label {
+  transform: translate(242px, -7px) !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="exchanges"] .msc-atlas-map__region-label {
+  transform: translate(115px, 83px) !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="network"] .msc-atlas-map__region-label {
+  transform: translate(86px, 16px) !important;
+}
+
+/* Remove the entire red-outlined lower-left protrusion, not just its edge. */
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="wallets"] > .msc-atlas-map__region-shape--inner,
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="wallets"]:hover > .msc-atlas-map__region-shape--inner,
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="wallets"].is-active > .msc-atlas-map__region-shape--inner {
+  display: block !important;
+  d: path("M404 452 L468 438 L562 485 L566 518 L540 526 L493 520 L445 505 L407 483 Z") !important;
+  fill: #0e3337 !important;
+  stroke: none !important;
+  opacity: 1 !important;
+}
+
+/* New outer coast: short rise to the marked point, then diagonal reconnect. */
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="marketplaces"] > .msc-atlas-map__region-shape--inner,
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="marketplaces"]:hover > .msc-atlas-map__region-shape--inner,
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="marketplaces"].is-active > .msc-atlas-map__region-shape--inner {
+  display: block !important;
+  d: path("M412.5 460.3 L468 445 L554.6 489") !important;
+  fill: none !important;
+  stroke: rgba(212, 190, 153, .88) !important;
+  stroke-width: 1.35 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  stroke-dasharray: none !important;
+  vector-effect: non-scaling-stroke;
+  opacity: 1 !important;
+}
