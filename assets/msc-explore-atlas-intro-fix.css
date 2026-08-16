@@ -72,3 +72,31 @@
     font-size: clamp(5rem, 4.9vw, 6rem) !important;
   }
 }
+
+/* v15 — cleanup from live Atlas markup review.
+ * These high-specificity corrections intentionally load before the geography
+ * styles but outrank the older helper rules so only the marked artifacts change.
+ */
+
+/* Remove the tiny faint island without covering the nearby main coastline. */
+.msc-shell.msc-explore-atlas-shell .msc-atlas-window .msc-atlas-map .msc-atlas-map__region[data-atlas-region-shape="payments"] > .msc-atlas-map__region-shape--inner,
+.msc-shell.msc-explore-atlas-shell .msc-atlas-window .msc-atlas-map .msc-atlas-map__region[data-atlas-region-shape="payments"]:hover > .msc-atlas-map__region-shape--inner,
+.msc-shell.msc-explore-atlas-shell .msc-atlas-window .msc-atlas-map .msc-atlas-map__region[data-atlas-region-shape="payments"].is-active > .msc-atlas-map__region-shape--inner {
+  display: block !important;
+  d: path("M405.5 350.8 L433.5 350.8 L433.5 362.4 L405.5 362.4 Z") !important;
+  fill: #0e3337 !important;
+  stroke: none !important;
+  opacity: 1 !important;
+}
+
+/* Extend the lower-left ocean carve out of the landmass so its own polygon edge
+ * can no longer appear as a faint second coastline below the approved coast. */
+.msc-shell.msc-explore-atlas-shell .msc-atlas-window .msc-atlas-map .msc-atlas-map__region[data-atlas-region-shape="wallets"] > .msc-atlas-map__region-shape--inner,
+.msc-shell.msc-explore-atlas-shell .msc-atlas-window .msc-atlas-map .msc-atlas-map__region[data-atlas-region-shape="wallets"]:hover > .msc-atlas-map__region-shape--inner,
+.msc-shell.msc-explore-atlas-shell .msc-atlas-window .msc-atlas-map .msc-atlas-map__region[data-atlas-region-shape="wallets"].is-active > .msc-atlas-map__region-shape--inner {
+  display: block !important;
+  d: path("M414.2 447.2 L412.5 460.3 L468 445 L554.6 489 L618 560 L404 560 L404 466 Z") !important;
+  fill: #0e3337 !important;
+  stroke: none !important;
+  opacity: 1 !important;
+}
