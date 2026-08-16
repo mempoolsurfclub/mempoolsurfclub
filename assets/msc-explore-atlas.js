@@ -6,6 +6,7 @@
   const VIEWBOX_OVERSCAN = 180;
   const SVG_NS = 'http://www.w3.org/2000/svg';
   const XLINK_NS = 'http://www.w3.org/1999/xlink';
+  const INTERNAL_BOUNDARY_PATH = 'M621 64 C638 86 654 111 676 137 C690 153 702 165 711 174 M441 207 C492 203 537 205 579 202 C620 199 654 209 691 214 L689 239 M755 205 C805 219 855 236 907 242 M420 222 C427 252 435 292 447 340 M594 356 C629 369 673 382 708 403 C737 421 761 437 788 438 C812 420 831 393 848 367 C871 329 893 289 910 259';
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const parseBox = (value) => String(value || '').trim().split(/\s+/).map(Number);
@@ -91,14 +92,15 @@
       || null
     );
 
-    /* Build one highlight copy of the real coastline. It is clipped by the
-       selected region's invisible interaction geometry, so focus states never
-       expose synthetic internal borders. */
+    /* Build focus copies from the visible geography rather than drawing the
+       synthetic interaction polygon. The real coastline plus the current
+       internal state-boundary path are both clipped to the selected region. */
     const defs = svg.querySelector('defs');
     const landContext = svg.querySelector('.msc-atlas-map__land-context');
     const baseLandmass = landContext?.querySelector('.msc-atlas-map__landmass');
     const focusClipBySlug = new Map();
     let focusCoast = null;
+    let focusBoundaries = null;
 
     if (defs && landContext && baseLandmass) {
       focusCoast = baseLandmass.cloneNode(false);
@@ -106,6 +108,18 @@
       focusCoast.setAttribute('aria-hidden', 'true');
       focusCoast.removeAttribute('id');
       landContext.appendChild(focusCoast);
+
+      focusBoundaries = document.createElementNS(SVG_NS, 'path');
+      focusBoundaries.classList.add('msc-atlas-map__focus-boundaries');
+      focusBoundaries.setAttribute('d', INTERNAL_BOUNDARY_PATH);
+      focusBoundaries.setAttribute('fill', 'none');
+      focusBoundaries.setAttribute('stroke-linecap', 'round');
+      focusBoundaries.setAttribute('stroke-linejoin', 'round');
+      focusBoundaries.setAttribute('vector-effect', 'non-scaling-stroke');
+      focusBoundaries.setAttribute('pointer-events', 'none');
+      focusBoundaries.setAttribute('aria-hidden', 'true');
+      focusBoundaries.style.display = 'none';
+      landContext.appendChild(focusBoundaries);
 
       mapRegions.forEach((region, regionIndex) => {
         const slug = region.dataset.atlasRegionShape;
@@ -131,14 +145,29 @@
       });
     }
 
-    const updateFocusCoast = (slug) => {
-      if (!focusCoast) return;
-
+    const updateFocusCoast = (slug, mode = 'overview') => {
       const clipId = slug ? focusClipBySlug.get(slug) : null;
-      if (clipId) {
-        focusCoast.setAttribute('clip-path', `url(#${clipId})`);
-      } else {
-        focusCoast.removeAttribute('clip-path');
+
+      if (focusCoast) {
+        if (clipId) {
+          focusCoast.setAttribute('clip-path', `url(#${clipId})`);
+        } else {
+          focusCoast.removeAttribute('clip-path');
+        }
+      }
+
+      if (focusBoundaries) {
+        if (clipId) {
+          const lockedMode = mode === 'locked';
+          focusBoundaries.setAttribute('clip-path', `url(#${clipId})`);
+          focusBoundaries.setAttribute('stroke', lockedMode ? 'rgba(251, 248, 239, .94)' : 'rgba(251, 248, 239, .86)');
+          focusBoundaries.setAttribute('stroke-width', lockedMode ? '1.7' : '1.55');
+          focusBoundaries.setAttribute('opacity', lockedMode ? '1' : '.86');
+          focusBoundaries.style.display = 'block';
+        } else {
+          focusBoundaries.removeAttribute('clip-path');
+          focusBoundaries.style.display = 'none';
+        }
       }
     };
 
@@ -296,7 +325,7 @@
         if (state) state.textContent = isLocked ? 'LOCKED' : active ? 'PREVIEW' : 'CHART';
       });
 
-      updateFocusCoast(slug);
+      updateFocusCoast(slug, mode);
       updateEntityTabStops(slug);
       if (!slug) clearInspect();
 
@@ -415,7 +444,7 @@
     inspectClose?.addEventListener('click', clearInspect);
 
     setViewBox(OVERVIEW);
-    updateFocusCoast(null);
+    updateFocusCoast(null, 'overview');
     updateEntityTabStops(null);
     render(null, 'overview');
   });
