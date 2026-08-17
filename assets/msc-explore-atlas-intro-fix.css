@@ -1,9 +1,19 @@
 @import url("./msc-explore-atlas-intro-fix-base.css");
 
-/* v24 — literal BTC ASSET SURF clones in Atlas map coordinates.
- * This layer uses one canonical homepage waveform only. Individual Atlas waves
- * differ only by viewport length, map position, and uniformly lower opacity.
+/* v25 — force the canonical BTC ASSET SURF source path itself to remain open.
+ * The referenced SVG path was inheriting the browser's default black fill inside
+ * <use> instances. Styling the source path prevents filled scallops while keeping
+ * the approved Atlas placement and homepage motion unchanged.
  */
+.msc-explore-atlas-shell .msc-atlas-map path[id^="AtlasBtcSurfCycle-"] {
+  fill: none !important;
+  stroke: rgba(212, 190, 153, .18) !important;
+  stroke-width: 2.1 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  vector-effect: non-scaling-stroke;
+}
+
 .msc-explore-atlas-shell .msc-atlas-map__btc-surf-window {
   overflow: hidden;
   pointer-events: none;
