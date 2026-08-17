@@ -6,6 +6,8 @@
 <script src="{{ 'msc-explore-atlas.js' | asset_url }}" defer></script>
 <script src="{{ 'msc-explore-atlas-perimeters.js' | asset_url }}" defer></script>
 
+{%- assign atlas_surf_runs = '535,-28.5,170|487,0.9,269|669,18.7,123|435,33.4,75|760,40.3,63|796,64.9,73|874,81.3,32|334,98.5,25|281,126.5,67|943,137.9,44|237,162.4,74|709,165.2,30|376,170.1,28|1007,172.5,32|217,188.8,45|175,202.2,66|1048,208.2,40|128,225.9,38|642,246.2,47|1013,249.2,128|125,268.9,29|1061,278.5,50|954,283,44|543,295.4,31|210,319.9,43|348,320.3,41|1017,322.1,50|371,343.9,108|229,357.5,53|979,379.8,26|305,387.2,85|351,418.3,35|833,429,54|424,447.6,60|605,453.1,45|694,453.5,39|604,484.5,169|423,486.4,104|743,507.5,81|488,511.5,143|652,515.4,84' | split: '|' -%}
+
 <section class="msc-shell msc-explore-atlas-shell" id="MscExploreAtlas-{{ section.id }}">
   <div class="msc-container">
     <header class="msc-explore-atlas-intro">
@@ -54,87 +56,34 @@
               <rect width="120" height="120" fill="url(#AtlasMinorGrid-{{ section.id }})" />
               <path d="M 120 0 L 0 0 0 120" fill="none" stroke="rgba(212,190,153,.18)" stroke-width="1" />
             </pattern>
-
-            <path id="AtlasSurfCycleA-{{ section.id }}" d="M0 22 C10 22 10 10 20 10 S30 38 40 22 S50 12 60 12 S70 22 80 22" />
-            <path id="AtlasSurfCycleB-{{ section.id }}" d="M0 22 C8 22 12 14 24 14 C35 14 37 30 48 30 C59 30 61 16 70 16 C75 16 78 20 80 22" />
-            <path id="AtlasSurfCycleC-{{ section.id }}" d="M0 22 C7 22 11 8 22 8 C34 8 36 24 45 24 C56 24 58 35 68 35 C75 35 78 27 80 22" />
-            <path id="AtlasSurfCycleD-{{ section.id }}" d="M0 22 C9 22 12 17 20 17 C29 17 31 30 40 30 C50 30 52 11 61 11 C70 11 73 27 80 22" />
-            <path id="AtlasSurfCycleE-{{ section.id }}" d="M0 22 C12 22 15 9 30 9 C42 9 43 31 54 31 C66 31 69 18 80 22" />
-
-            <g id="AtlasSurfTrackA-{{ section.id }}"><use href="#AtlasSurfCycleA-{{ section.id }}" x="-80" /><use href="#AtlasSurfCycleA-{{ section.id }}" x="0" /><use href="#AtlasSurfCycleA-{{ section.id }}" x="80" /><use href="#AtlasSurfCycleA-{{ section.id }}" x="160" /><use href="#AtlasSurfCycleA-{{ section.id }}" x="240" /><use href="#AtlasSurfCycleA-{{ section.id }}" x="320" /><use href="#AtlasSurfCycleA-{{ section.id }}" x="400" /></g>
-            <g id="AtlasSurfTrackB-{{ section.id }}"><use href="#AtlasSurfCycleB-{{ section.id }}" x="-80" /><use href="#AtlasSurfCycleB-{{ section.id }}" x="0" /><use href="#AtlasSurfCycleB-{{ section.id }}" x="80" /><use href="#AtlasSurfCycleB-{{ section.id }}" x="160" /><use href="#AtlasSurfCycleB-{{ section.id }}" x="240" /><use href="#AtlasSurfCycleB-{{ section.id }}" x="320" /><use href="#AtlasSurfCycleB-{{ section.id }}" x="400" /></g>
-            <g id="AtlasSurfTrackC-{{ section.id }}"><use href="#AtlasSurfCycleC-{{ section.id }}" x="-80" /><use href="#AtlasSurfCycleC-{{ section.id }}" x="0" /><use href="#AtlasSurfCycleC-{{ section.id }}" x="80" /><use href="#AtlasSurfCycleC-{{ section.id }}" x="160" /><use href="#AtlasSurfCycleC-{{ section.id }}" x="240" /><use href="#AtlasSurfCycleC-{{ section.id }}" x="320" /><use href="#AtlasSurfCycleC-{{ section.id }}" x="400" /></g>
-            <g id="AtlasSurfTrackD-{{ section.id }}"><use href="#AtlasSurfCycleD-{{ section.id }}" x="-80" /><use href="#AtlasSurfCycleD-{{ section.id }}" x="0" /><use href="#AtlasSurfCycleD-{{ section.id }}" x="80" /><use href="#AtlasSurfCycleD-{{ section.id }}" x="160" /><use href="#AtlasSurfCycleD-{{ section.id }}" x="240" /><use href="#AtlasSurfCycleD-{{ section.id }}" x="320" /><use href="#AtlasSurfCycleD-{{ section.id }}" x="400" /></g>
-            <g id="AtlasSurfTrackE-{{ section.id }}"><use href="#AtlasSurfCycleE-{{ section.id }}" x="-80" /><use href="#AtlasSurfCycleE-{{ section.id }}" x="0" /><use href="#AtlasSurfCycleE-{{ section.id }}" x="80" /><use href="#AtlasSurfCycleE-{{ section.id }}" x="160" /><use href="#AtlasSurfCycleE-{{ section.id }}" x="240" /><use href="#AtlasSurfCycleE-{{ section.id }}" x="320" /><use href="#AtlasSurfCycleE-{{ section.id }}" x="400" /></g>
-
-            <style>
-              .msc-atlas-map__surf-window { overflow: hidden; }
-              .msc-atlas-map__surf-track {
-                animation: mscAtlasSurfTravel var(--msc-surf-duration, 20s) linear infinite;
-                animation-delay: var(--msc-surf-delay, 0s);
-              }
-              .msc-atlas-map__surf-line {
-                fill: none;
-                stroke: rgba(212,190,153,.34);
-                stroke-width: 1.25;
-                stroke-linecap: round;
-                stroke-linejoin: round;
-                opacity: var(--msc-surf-opacity, .56);
-                vector-effect: non-scaling-stroke;
-              }
-              @keyframes mscAtlasSurfTravel {
-                from { transform: translateX(0); }
-                to { transform: translateX(-80px); }
-              }
-              @media (prefers-reduced-motion: reduce) {
-                .msc-atlas-map__surf-track { animation: none !important; }
-              }
-            </style>
+            <clipPath id="AtlasTopPlaneSurfClip-{{ section.id }}">
+              <path d="M600 -88 L72 142 L600 560 L1128 142 Z" />
+            </clipPath>
+            <path id="AtlasBtcSurfCycle-{{ section.id }}" d="M0 30 C10 30 10 18 20 18 S30 42 40 30 S50 18 60 18 S70 30 80 30" />
+            <g id="AtlasBtcSurfTrack-{{ section.id }}">
+              <use class="msc-atlas-map__btc-surf-line" href="#AtlasBtcSurfCycle-{{ section.id }}" x="-80" />
+              <use class="msc-atlas-map__btc-surf-line" href="#AtlasBtcSurfCycle-{{ section.id }}" x="0" />
+              <use class="msc-atlas-map__btc-surf-line" href="#AtlasBtcSurfCycle-{{ section.id }}" x="80" />
+              <use class="msc-atlas-map__btc-surf-line" href="#AtlasBtcSurfCycle-{{ section.id }}" x="160" />
+              <use class="msc-atlas-map__btc-surf-line" href="#AtlasBtcSurfCycle-{{ section.id }}" x="240" />
+              <use class="msc-atlas-map__btc-surf-line" href="#AtlasBtcSurfCycle-{{ section.id }}" x="320" />
+              <use class="msc-atlas-map__btc-surf-line" href="#AtlasBtcSurfCycle-{{ section.id }}" x="400" />
+            </g>
           </defs>
 
           <rect class="msc-atlas-map__ocean" x="0" y="0" width="1200" height="560" />
 
-          <g class="msc-atlas-map__surf-field" aria-hidden="true" pointer-events="none">
-            <svg class="msc-atlas-map__surf-window" x="535" y="-8" width="190" height="32" viewBox="0 0 190 44" preserveAspectRatio="none" style="--msc-surf-duration:18s;--msc-surf-delay:-7s;--msc-surf-opacity:.70"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackE-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="490" y="18" width="270" height="34" viewBox="0 0 270 44" preserveAspectRatio="none" style="--msc-surf-duration:19s;--msc-surf-delay:-12s;--msc-surf-opacity:.68"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackA-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="435" y="49" width="92" height="28" viewBox="0 0 92 44" preserveAspectRatio="none" style="--msc-surf-duration:22s;--msc-surf-delay:-4s;--msc-surf-opacity:.62"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackC-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="665" y="18" width="145" height="32" viewBox="0 0 145 44" preserveAspectRatio="none" style="--msc-surf-duration:20s;--msc-surf-delay:-3s;--msc-surf-opacity:.66"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackB-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="760" y="58" width="78" height="25" viewBox="0 0 78 44" preserveAspectRatio="none" style="--msc-surf-duration:21s;--msc-surf-delay:-10s;--msc-surf-opacity:.62"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackD-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="800" y="84" width="84" height="25" viewBox="0 0 84 44" preserveAspectRatio="none" style="--msc-surf-duration:18s;--msc-surf-delay:-2s;--msc-surf-opacity:.58"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackE-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="875" y="102" width="42" height="20" viewBox="0 0 42 44" preserveAspectRatio="none" style="--msc-surf-duration:23s;--msc-surf-delay:-8s;--msc-surf-opacity:.54"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackB-{{ section.id }}" /></g></svg>
-
-            <svg class="msc-atlas-map__surf-window" x="330" y="108" width="42" height="22" viewBox="0 0 42 44" preserveAspectRatio="none" style="--msc-surf-duration:22s;--msc-surf-delay:-14s;--msc-surf-opacity:.52"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackC-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="278" y="137" width="82" height="27" viewBox="0 0 82 44" preserveAspectRatio="none" style="--msc-surf-duration:20s;--msc-surf-delay:-6s;--msc-surf-opacity:.60"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackD-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="230" y="171" width="96" height="28" viewBox="0 0 96 44" preserveAspectRatio="none" style="--msc-surf-duration:19s;--msc-surf-delay:-11s;--msc-surf-opacity:.60"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackB-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="168" y="205" width="102" height="30" viewBox="0 0 102 44" preserveAspectRatio="none" style="--msc-surf-duration:18s;--msc-surf-delay:-5s;--msc-surf-opacity:.64"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackA-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="124" y="237" width="72" height="26" viewBox="0 0 72 44" preserveAspectRatio="none" style="--msc-surf-duration:23s;--msc-surf-delay:-16s;--msc-surf-opacity:.55"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackE-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="121" y="280" width="45" height="22" viewBox="0 0 45 44" preserveAspectRatio="none" style="--msc-surf-duration:21s;--msc-surf-delay:-7s;--msc-surf-opacity:.50"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackC-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="205" y="331" width="64" height="26" viewBox="0 0 64 44" preserveAspectRatio="none" style="--msc-surf-duration:20s;--msc-surf-delay:-13s;--msc-surf-opacity:.58"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackB-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="223" y="360" width="75" height="27" viewBox="0 0 75 44" preserveAspectRatio="none" style="--msc-surf-duration:22s;--msc-surf-delay:-2s;--msc-surf-opacity:.58"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackD-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="300" y="395" width="100" height="28" viewBox="0 0 100 44" preserveAspectRatio="none" style="--msc-surf-duration:18s;--msc-surf-delay:-9s;--msc-surf-opacity:.62"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackA-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="348" y="430" width="50" height="23" viewBox="0 0 50 44" preserveAspectRatio="none" style="--msc-surf-duration:23s;--msc-surf-delay:-4s;--msc-surf-opacity:.52"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackC-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="415" y="456" width="75" height="26" viewBox="0 0 75 44" preserveAspectRatio="none" style="--msc-surf-duration:19s;--msc-surf-delay:-15s;--msc-surf-opacity:.58"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackE-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="415" y="492" width="118" height="30" viewBox="0 0 118 44" preserveAspectRatio="none" style="--msc-surf-duration:20s;--msc-surf-delay:-8s;--msc-surf-opacity:.62"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackB-{{ section.id }}" /></g></svg>
-
-            <svg class="msc-atlas-map__surf-window" x="485" y="522" width="170" height="32" viewBox="0 0 170 44" preserveAspectRatio="none" style="--msc-surf-duration:18s;--msc-surf-delay:-3s;--msc-surf-opacity:.66"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackA-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="598" y="493" width="98" height="26" viewBox="0 0 98 44" preserveAspectRatio="none" style="--msc-surf-duration:22s;--msc-surf-delay:-12s;--msc-surf-opacity:.57"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackD-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="604" y="523" width="160" height="31" viewBox="0 0 160 44" preserveAspectRatio="none" style="--msc-surf-duration:19s;--msc-surf-delay:-6s;--msc-surf-opacity:.64"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackE-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="690" y="520" width="145" height="32" viewBox="0 0 145 44" preserveAspectRatio="none" style="--msc-surf-duration:21s;--msc-surf-delay:-17s;--msc-surf-opacity:.62"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackC-{{ section.id }}" /></g></svg>
-
-            <svg class="msc-atlas-map__surf-window" x="940" y="147" width="62" height="26" viewBox="0 0 62 44" preserveAspectRatio="none" style="--msc-surf-duration:20s;--msc-surf-delay:-5s;--msc-surf-opacity:.58"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackB-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="1005" y="180" width="56" height="24" viewBox="0 0 56 44" preserveAspectRatio="none" style="--msc-surf-duration:23s;--msc-surf-delay:-10s;--msc-surf-opacity:.54"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackD-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="1038" y="216" width="64" height="25" viewBox="0 0 64 44" preserveAspectRatio="none" style="--msc-surf-duration:22s;--msc-surf-delay:-3s;--msc-surf-opacity:.54"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackC-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="1040" y="256" width="112" height="28" viewBox="0 0 112 44" preserveAspectRatio="none" style="--msc-surf-duration:18s;--msc-surf-delay:-14s;--msc-surf-opacity:.62"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackA-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="1010" y="292" width="105" height="27" viewBox="0 0 105 44" preserveAspectRatio="none" style="--msc-surf-duration:19s;--msc-surf-delay:-7s;--msc-surf-opacity:.60"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackE-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="950" y="329" width="84" height="27" viewBox="0 0 84 44" preserveAspectRatio="none" style="--msc-surf-duration:21s;--msc-surf-delay:-11s;--msc-surf-opacity:.58"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackB-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="1017" y="334" width="68" height="23" viewBox="0 0 68 44" preserveAspectRatio="none" style="--msc-surf-duration:23s;--msc-surf-delay:-2s;--msc-surf-opacity:.54"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackD-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="968" y="384" width="58" height="23" viewBox="0 0 58 44" preserveAspectRatio="none" style="--msc-surf-duration:22s;--msc-surf-delay:-9s;--msc-surf-opacity:.53"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackC-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="830" y="437" width="72" height="27" viewBox="0 0 72 44" preserveAspectRatio="none" style="--msc-surf-duration:20s;--msc-surf-delay:-15s;--msc-surf-opacity:.56"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackE-{{ section.id }}" /></g></svg>
-
-            <svg class="msc-atlas-map__surf-window" x="635" y="257" width="58" height="23" viewBox="0 0 58 44" preserveAspectRatio="none" style="--msc-surf-duration:21s;--msc-surf-delay:-4s;--msc-surf-opacity:.54"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackD-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="535" y="306" width="50" height="22" viewBox="0 0 50 44" preserveAspectRatio="none" style="--msc-surf-duration:23s;--msc-surf-delay:-13s;--msc-surf-opacity:.52"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackC-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="600" y="462" width="66" height="23" viewBox="0 0 66 44" preserveAspectRatio="none" style="--msc-surf-duration:19s;--msc-surf-delay:-5s;--msc-surf-opacity:.52"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackB-{{ section.id }}" /></g></svg>
-            <svg class="msc-atlas-map__surf-window" x="687" y="463" width="54" height="22" viewBox="0 0 54 44" preserveAspectRatio="none" style="--msc-surf-duration:22s;--msc-surf-delay:-16s;--msc-surf-opacity:.50"><g class="msc-atlas-map__surf-track"><use class="msc-atlas-map__surf-line" href="#AtlasSurfTrackD-{{ section.id }}" /></g></svg>
+          <g class="msc-atlas-map__btc-surf-field" clip-path="url(#AtlasTopPlaneSurfClip-{{ section.id }})" aria-hidden="true" pointer-events="none">
+            {%- for surf_run in atlas_surf_runs -%}
+              {%- assign surf = surf_run | split: ',' -%}
+              <svg class="msc-atlas-map__btc-surf-window" x="{{ surf[0] }}" y="{{ surf[1] }}" width="{{ surf[2] }}" height="60" viewBox="0 0 {{ surf[2] }} 60" overflow="hidden" aria-hidden="true">
+                <g class="msc-atlas-map__btc-surf-motion">
+                  <g class="msc-atlas-map__btc-surf-track">
+                    <use href="#AtlasBtcSurfTrack-{{ section.id }}" />
+                  </g>
+                </g>
+              </svg>
+            {%- endfor -%}
           </g>
 
           <g class="msc-atlas-map__bitcoin-block" aria-hidden="true" pointer-events="none">
