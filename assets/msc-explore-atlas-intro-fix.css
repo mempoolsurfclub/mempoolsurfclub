@@ -1,236 +1,40 @@
 @import url("./msc-explore-atlas-intro-fix-base.css");
 
-/* v23 — literal BTC ASSET SURF placement from the annotated Atlas screenshot.
- * The homepage surf treatment is locked:
- * - exact 80-unit BTC ASSET SURF cycle
- * - scaleY(.28)
- * - 18s linear horizontal travel by -80px
- * - 2.1px rounded non-scaling stroke
- *
- * Atlas-only differences:
- * - uniformly fainter stroke
- * - visible crop length
- * - placement in map coordinates
- *
- * No inherited Atlas placement offsets are used. The 36 available SVG windows
- * are mapped directly to 36 of the 41 marked wave runs; the five smallest marks
- * are intentionally omitted rather than inventing new geometry.
+/* v24 — literal BTC ASSET SURF clones in Atlas map coordinates.
+ * This layer uses one canonical homepage waveform only. Individual Atlas waves
+ * differ only by viewport length, map position, and uniformly lower opacity.
  */
-.msc-explore-atlas-shell .msc-atlas-map path[id^="AtlasSurfCycle"] {
-  d: path("M0 30 C10 30 10 18 20 18 S30 42 40 30 S50 18 60 18 S70 30 80 30") !important;
+.msc-explore-atlas-shell .msc-atlas-map__btc-surf-window {
+  overflow: hidden;
+  pointer-events: none;
 }
 
-.msc-explore-atlas-shell .msc-atlas-map__surf-track {
-  animation-name: mscAtlasSurfTravel !important;
-  animation-duration: 18s !important;
-  animation-delay: 0s !important;
-  animation-timing-function: linear !important;
-  animation-iteration-count: infinite !important;
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-line {
-  fill: none !important;
-  stroke: rgba(212, 190, 153, .18) !important;
-  stroke-width: 2.1 !important;
-  stroke-linecap: round !important;
-  stroke-linejoin: round !important;
-  opacity: 1 !important;
-  vector-effect: non-scaling-stroke;
-  transform: scaleY(.28) !important;
+.msc-explore-atlas-shell .msc-atlas-map__btc-surf-motion {
+  transform: scaleY(.28);
   transform-box: fill-box;
   transform-origin: center;
-  transition: none !important;
 }
 
-.msc-explore-atlas-shell .msc-atlas-map__surf-window {
-  display: block !important;
-  height: 44px !important;
-  overflow: hidden;
-  transform-origin: 0 0;
+.msc-explore-atlas-shell .msc-atlas-map__btc-surf-track {
+  animation: mscAtlasBtcSurfTravel 18s linear infinite;
 }
 
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="535"][y="-8"] {
-  transform: translate(-0.2px, -24.3px) !important;
-  clip-path: inset(0 21.0px 0 0);
+.msc-explore-atlas-shell .msc-atlas-map__btc-surf-line {
+  fill: none;
+  stroke: rgba(212, 190, 153, .18);
+  stroke-width: 2.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
 }
 
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="490"][y="18"] {
-  transform: translate(-2.9px, -21.0px) !important;
-  clip-path: inset(0 2.7px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="435"][y="49"] {
-  transform: translate(0.4px, -19.2px) !important;
-  clip-path: inset(0 17.5px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="665"][y="18"] {
-  transform: translate(3.0px, -5.1px) !important;
-  clip-path: inset(0 22.8px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="760"][y="58"] {
-  transform: translate(-1.6px, -20.7px) !important;
-  clip-path: inset(0 15.4px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="800"][y="84"] {
-  transform: translate(-5.8px, -21.4px) !important;
-  clip-path: inset(0 11.4px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="875"][y="102"] {
-  transform: translate(-3.3px, -24.0px) !important;
-  clip-path: inset(0 10.2px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="330"][y="108"] {
-  transform: translate(18.9px, 207.6px) !important;
-  clip-path: inset(0 1.3px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="278"][y="137"] {
-  transform: translate(4.3px, -14.2px) !important;
-  clip-path: inset(0 15.4px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="230"][y="171"] {
-  transform: translate(8.6px, -13.0px) !important;
-  clip-path: inset(0 22.5px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="168"][y="205"] {
-  transform: translate(50.7px, -20.6px) !important;
-  clip-path: inset(0 57.3px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="124"][y="237"] {
-  transform: translate(53.0px, -39.2px) !important;
-  clip-path: inset(0 6.4px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="121"][y="280"] {
-  transform: translate(9.3px, -58.4px) !important;
-  clip-path: inset(0 7.2px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="205"][y="331"] {
-  transform: translate(6.8px, -15.4px) !important;
-  clip-path: inset(0 21.3px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="223"][y="360"] {
-  transform: translate(7.7px, -6.7px) !important;
-  clip-path: inset(0 22.3px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="300"][y="395"] {
-  transform: translate(6.2px, -12.4px) !important;
-  clip-path: inset(0 15.5px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="348"][y="430"] {
-  transform: translate(3.9px, -17.0px) !important;
-  clip-path: inset(0 15.2px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="415"][y="456"] {
-  transform: translate(9.5px, -13.2px) !important;
-  clip-path: inset(0 15.4px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="415"][y="492"] {
-  transform: translate(8.5px, -12.5px) !important;
-  clip-path: inset(0 14.6px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="485"][y="522"] {
-  transform: translate(118.4px, -43.9px) !important;
-  clip-path: inset(0 2.0px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="598"][y="493"] {
-  transform: translate(53.1px, 16.4px) !important;
-  clip-path: inset(0 14.5px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="604"][y="523"] {
-  transform: translate(-115.9px, -18.1px) !important;
-  clip-path: inset(0 17.9px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="690"][y="520"] {
-  transform: translate(319.8px, -275.5px) !important;
-  clip-path: inset(0 17.8px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="940"][y="147"] {
-  transform: translate(0.3px, -13.3px) !important;
-  clip-path: inset(0 18.3px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="1005"][y="180"] {
-  transform: translate(-1.1px, -11.5px) !important;
-  clip-path: inset(0 24.2px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="1038"][y="216"] {
-  transform: translate(6.6px, -12.2px) !important;
-  clip-path: inset(0 24.2px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="1040"][y="256"] {
-  transform: translate(-668.2px, 82.9px) !important;
-  clip-path: inset(0 4.7px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="1010"][y="292"] {
-  transform: translate(47.5px, -19.2px) !important;
-  clip-path: inset(0 55.3px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="950"][y="329"] {
-  transform: translate(-208.5px, 171.4px) !important;
-  clip-path: inset(0 3.5px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="1017"][y="334"] {
-  transform: translate(-3.2px, -16.5px) !important;
-  clip-path: inset(0 18.3px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="968"][y="384"] {
-  transform: translate(-16.8px, -105.7px) !important;
-  clip-path: inset(0 14.3px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="830"][y="437"] {
-  transform: translate(0.9px, -13.1px) !important;
-  clip-path: inset(0 18.3px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="635"][y="257"] {
-  transform: translate(6.1px, -15.5px) !important;
-  clip-path: inset(0 11.3px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="535"][y="306"] {
-  transform: translate(7.7px, -16.3px) !important;
-  clip-path: inset(0 19.2px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="600"][y="462"] {
-  transform: translate(4.4px, -15.3px) !important;
-  clip-path: inset(0 21.3px 0 0);
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="687"][y="463"] {
-  transform: translate(5.8px, -15.3px) !important;
-  clip-path: inset(0 15.2px 0 0);
+@keyframes mscAtlasBtcSurfTravel {
+  from { transform: translateX(0); }
+  to { transform: translateX(-80px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .msc-explore-atlas-shell .msc-atlas-map__surf-track {
+  .msc-explore-atlas-shell .msc-atlas-map__btc-surf-track {
     animation: none !important;
   }
 }
