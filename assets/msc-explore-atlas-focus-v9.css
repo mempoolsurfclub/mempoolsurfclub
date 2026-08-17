@@ -547,3 +547,47 @@
 .msc-explore-atlas-shell .msc-atlas-map__surf-window[x="1040"][y="256"] { transform: translate(-11px, 0); }
 .msc-explore-atlas-shell .msc-atlas-map__surf-window[x="1010"][y="292"] { transform: translate(-2px, 0); }
 .msc-explore-atlas-shell .msc-atlas-map__surf-window[x="968"][y="384"] { transform: translate(-14px, 0); }
+
+/* v20 — reuse the exact homepage BTC ASSET SURF cycle and keep it in deliberate open-water corridors. */
+.msc-explore-atlas-shell .msc-atlas-map path[id^="AtlasSurfCycle"] {
+  d: path("M0 30 C10 30 10 18 20 18 S30 42 40 30 S50 18 60 18 S70 30 80 30") !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-track {
+  animation-duration: 18s !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-line {
+  stroke: rgba(212, 190, 153, .34) !important;
+  stroke-width: 1.25 !important;
+  opacity: .48 !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window {
+  display: none !important;
+  height: 24px !important;
+  transform: none !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="490"][y="18"] { display: block !important; transform: translate(2px, 25px) !important; }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="435"][y="49"] { display: block !important; transform: translate(18px, 16px) !important; }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="760"][y="58"] { display: block !important; transform: translate(-14px, 7px) !important; }
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="330"][y="108"] { display: block !important; transform: translate(30px, 8px) !important; }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="278"][y="137"] { display: block !important; transform: translate(34px, 6px) !important; }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="230"][y="171"] { display: block !important; transform: translate(32px, 6px) !important; }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="168"][y="205"] { display: block !important; transform: translate(45px, 5px) !important; }
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="940"][y="147"] { display: block !important; transform: translate(-48px, 4px) !important; }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="1005"][y="180"] { display: block !important; transform: translate(-50px, 5px) !important; }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="1038"][y="216"] { display: block !important; transform: translate(-35px, 6px) !important; }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="1040"][y="256"] { display: block !important; transform: translate(-14px, 7px) !important; }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="1010"][y="292"] { display: block !important; transform: translate(-2px, 10px) !important; }
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="415"][y="456"] { display: block !important; transform: translate(10px, 14px) !important; }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="415"][y="492"] { display: block !important; }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="485"][y="522"] { display: block !important; transform: translate(0, -2px) !important; }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="598"][y="493"] { display: block !important; transform: translate(4px, 0) !important; }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="690"][y="520"] { display: block !important; transform: translate(-4px, -2px) !important; }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="600"][y="462"] { display: block !important; transform: translate(0, 18px) !important; }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="687"][y="463"] { display: block !important; transform: translate(0, 18px) !important; }
