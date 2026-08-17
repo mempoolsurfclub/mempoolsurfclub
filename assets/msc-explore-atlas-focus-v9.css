@@ -521,3 +521,29 @@
   background-size: contain;
   pointer-events: none;
 }
+
+/* v19 — keep animated surf runs inside the approved block face and prevent rows from colliding. */
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="665"][y="18"],
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="604"][y="523"],
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="1017"][y="334"] {
+  display: none !important;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="535"][y="-8"] { transform: translate(0, -7px); }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="490"][y="18"] { transform: translate(2px, 0); }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="435"][y="49"] { transform: translate(9px, 5px); }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="760"][y="58"] { transform: translate(-11px, 0); }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="800"][y="84"] { transform: translate(-16px, 0); }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="875"][y="102"] { transform: translate(-20px, 10px); }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="330"][y="108"] { transform: translate(21px, 0); }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="278"][y="137"] { transform: translate(27px, 0); }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="230"][y="171"] { transform: translate(22px, 0); }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="168"][y="205"] { transform: translate(31px, 0); }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="124"][y="237"] { transform: translate(24px, 0); }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="223"][y="360"] { transform: translate(7px, 0); }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="940"][y="147"] { transform: translate(-34px, 0); }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="1005"][y="180"] { transform: translate(-40px, 0); }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="1038"][y="216"] { transform: translate(-24px, 0); }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="1040"][y="256"] { transform: translate(-11px, 0); }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="1010"][y="292"] { transform: translate(-2px, 0); }
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="968"][y="384"] { transform: translate(-14px, 0); }
