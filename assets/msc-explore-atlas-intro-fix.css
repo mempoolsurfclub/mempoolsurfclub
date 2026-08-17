@@ -1,17 +1,20 @@
 @import url("./msc-explore-atlas-intro-fix-base.css");
 
-/* v22 — safe-water recovery pass.
- * The BTC ASSET SURF rendering remains locked to the homepage treatment:
- * - exact 80-unit waveform cycle
+/* v23 — literal BTC ASSET SURF placement from the annotated Atlas screenshot.
+ * The homepage surf treatment is locked:
+ * - exact 80-unit BTC ASSET SURF cycle
  * - scaleY(.28)
  * - 18s linear horizontal travel by -80px
  * - 2.1px rounded non-scaling stroke
- * Atlas-only differences remain lower opacity, cropped visible length, and placement.
  *
- * Placement is rebuilt from the current approved top-plane/coast geometry.
- * All inherited surf placements are disabled. Only perimeter-water corridors
- * with explicit clearance from coastline, islands, state lines, labels, and
- * the top-plane edge are re-enabled below.
+ * Atlas-only differences:
+ * - uniformly fainter stroke
+ * - visible crop length
+ * - placement in map coordinates
+ *
+ * No inherited Atlas placement offsets are used. The 36 available SVG windows
+ * are mapped directly to 36 of the 41 marked wave runs; the five smallest marks
+ * are intentionally omitted rather than inventing new geometry.
  */
 .msc-explore-atlas-shell .msc-atlas-map path[id^="AtlasSurfCycle"] {
   d: path("M0 30 C10 30 10 18 20 18 S30 42 40 30 S50 18 60 18 S70 30 80 30") !important;
@@ -39,134 +42,191 @@
   transition: none !important;
 }
 
-/* Keep each crop 1:1 with its local SVG viewBox so the waveform is never
- * stretched or compressed. Every inherited placement starts disabled.
- */
 .msc-explore-atlas-shell .msc-atlas-map__surf-window {
-  display: none !important;
+  display: block !important;
   height: 44px !important;
   overflow: hidden;
-  --msc-surf-x: 0px;
-  --msc-surf-y: 0px;
-  transform: translate(var(--msc-surf-x), var(--msc-surf-y)) !important;
+  transform-origin: 0 0;
 }
 
-/* Measured safe-water set. These windows live only in the water ring around
- * the approved landmass. No internal-land windows are enabled.
- */
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="535"][y="-8"],
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="687"][y="463"],
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="600"][y="462"],
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="875"][y="102"],
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="348"][y="430"],
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="1005"][y="180"],
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="330"][y="108"],
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="968"][y="384"],
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="124"][y="237"],
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="635"][y="257"],
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="535"][y="306"],
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="940"][y="147"],
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="205"][y="331"],
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="223"][y="360"],
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="415"][y="456"],
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="598"][y="493"],
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="300"][y="395"],
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="830"][y="437"] {
-  display: block !important;
-}
-
-/* TOP WATER — above the north coast and inside the sloped top-plane edges. */
 .msc-explore-atlas-shell .msc-atlas-map__surf-window[x="535"][y="-8"] {
-  --msc-surf-x: -10px;
-  --msc-surf-y: -7px;
+  transform: translate(-0.2px, -24.3px) !important;
+  clip-path: inset(0 21.0px 0 0);
 }
 
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="687"][y="463"] {
-  --msc-surf-x: 43px;
-  --msc-surf-y: -451px;
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="490"][y="18"] {
+  transform: translate(-2.9px, -21.0px) !important;
+  clip-path: inset(0 2.7px 0 0);
 }
 
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="600"][y="462"] {
-  --msc-surf-x: -155px;
-  --msc-surf-y: -427px;
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="435"][y="49"] {
+  transform: translate(0.4px, -19.2px) !important;
+  clip-path: inset(0 17.5px 0 0);
 }
 
-/* WEST WATER — measured gaps between the left top-plane edge and approved coast. */
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="665"][y="18"] {
+  transform: translate(3.0px, -5.1px) !important;
+  clip-path: inset(0 22.8px 0 0);
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="760"][y="58"] {
+  transform: translate(-1.6px, -20.7px) !important;
+  clip-path: inset(0 15.4px 0 0);
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="800"][y="84"] {
+  transform: translate(-5.8px, -21.4px) !important;
+  clip-path: inset(0 11.4px 0 0);
+}
+
 .msc-explore-atlas-shell .msc-atlas-map__surf-window[x="875"][y="102"] {
-  --msc-surf-x: -575px;
-  --msc-surf-y: 18px;
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="348"][y="430"] {
-  --msc-surf-x: -78px;
-  --msc-surf-y: -280px;
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="1005"][y="180"] {
-  --msc-surf-x: -795px;
-  --msc-surf-y: 5px;
+  transform: translate(-3.3px, -24.0px) !important;
+  clip-path: inset(0 10.2px 0 0);
 }
 
 .msc-explore-atlas-shell .msc-atlas-map__surf-window[x="330"][y="108"] {
-  --msc-surf-x: -178px;
-  --msc-surf-y: 182px;
+  transform: translate(18.9px, 207.6px) !important;
+  clip-path: inset(0 1.3px 0 0);
 }
 
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="968"][y="384"] {
-  --msc-surf-x: -773px;
-  --msc-surf-y: -64px;
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="278"][y="137"] {
+  transform: translate(4.3px, -14.2px) !important;
+  clip-path: inset(0 15.4px 0 0);
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="230"][y="171"] {
+  transform: translate(8.6px, -13.0px) !important;
+  clip-path: inset(0 22.5px 0 0);
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="168"][y="205"] {
+  transform: translate(50.7px, -20.6px) !important;
+  clip-path: inset(0 57.3px 0 0);
 }
 
 .msc-explore-atlas-shell .msc-atlas-map__surf-window[x="124"][y="237"] {
-  --msc-surf-x: 146px;
-  --msc-surf-y: 133px;
+  transform: translate(53.0px, -39.2px) !important;
+  clip-path: inset(0 6.4px 0 0);
 }
 
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="635"][y="257"] {
-  --msc-surf-x: -305px;
-  --msc-surf-y: 168px;
-}
-
-/* EAST WATER — only the broad mid-right gaps remain enabled. */
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="535"][y="306"] {
-  --msc-surf-x: 505px;
-  --msc-surf-y: -106px;
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="940"][y="147"] {
-  --msc-surf-x: 120px;
-  --msc-surf-y: 108px;
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="121"][y="280"] {
+  transform: translate(9.3px, -58.4px) !important;
+  clip-path: inset(0 7.2px 0 0);
 }
 
 .msc-explore-atlas-shell .msc-atlas-map__surf-window[x="205"][y="331"] {
-  --msc-surf-x: 810px;
-  --msc-surf-y: -21px;
+  transform: translate(6.8px, -15.4px) !important;
+  clip-path: inset(0 21.3px 0 0);
 }
 
-/* SOUTH WATER — below the approved coast, still inside the top-plane diamond. */
 .msc-explore-atlas-shell .msc-atlas-map__surf-window[x="223"][y="360"] {
-  --msc-surf-x: 187px;
-  --msc-surf-y: 130px;
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="415"][y="456"] {
-  --msc-surf-x: 30px;
-  --msc-surf-y: 59px;
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="598"][y="493"] {
-  --msc-surf-x: -58px;
-  --msc-surf-y: 2px;
+  transform: translate(7.7px, -6.7px) !important;
+  clip-path: inset(0 22.3px 0 0);
 }
 
 .msc-explore-atlas-shell .msc-atlas-map__surf-window[x="300"][y="395"] {
-  --msc-surf-x: 360px;
-  --msc-surf-y: 120px;
+  transform: translate(6.2px, -12.4px) !important;
+  clip-path: inset(0 15.5px 0 0);
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="348"][y="430"] {
+  transform: translate(3.9px, -17.0px) !important;
+  clip-path: inset(0 15.2px 0 0);
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="415"][y="456"] {
+  transform: translate(9.5px, -13.2px) !important;
+  clip-path: inset(0 15.4px 0 0);
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="415"][y="492"] {
+  transform: translate(8.5px, -12.5px) !important;
+  clip-path: inset(0 14.6px 0 0);
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="485"][y="522"] {
+  transform: translate(118.4px, -43.9px) !important;
+  clip-path: inset(0 2.0px 0 0);
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="598"][y="493"] {
+  transform: translate(53.1px, 16.4px) !important;
+  clip-path: inset(0 14.5px 0 0);
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="604"][y="523"] {
+  transform: translate(-115.9px, -18.1px) !important;
+  clip-path: inset(0 17.9px 0 0);
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="690"][y="520"] {
+  transform: translate(319.8px, -275.5px) !important;
+  clip-path: inset(0 17.8px 0 0);
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="940"][y="147"] {
+  transform: translate(0.3px, -13.3px) !important;
+  clip-path: inset(0 18.3px 0 0);
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="1005"][y="180"] {
+  transform: translate(-1.1px, -11.5px) !important;
+  clip-path: inset(0 24.2px 0 0);
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="1038"][y="216"] {
+  transform: translate(6.6px, -12.2px) !important;
+  clip-path: inset(0 24.2px 0 0);
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="1040"][y="256"] {
+  transform: translate(-668.2px, 82.9px) !important;
+  clip-path: inset(0 4.7px 0 0);
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="1010"][y="292"] {
+  transform: translate(47.5px, -19.2px) !important;
+  clip-path: inset(0 55.3px 0 0);
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="950"][y="329"] {
+  transform: translate(-208.5px, 171.4px) !important;
+  clip-path: inset(0 3.5px 0 0);
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="1017"][y="334"] {
+  transform: translate(-3.2px, -16.5px) !important;
+  clip-path: inset(0 18.3px 0 0);
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="968"][y="384"] {
+  transform: translate(-16.8px, -105.7px) !important;
+  clip-path: inset(0 14.3px 0 0);
 }
 
 .msc-explore-atlas-shell .msc-atlas-map__surf-window[x="830"][y="437"] {
-  --msc-surf-x: -40px;
-  --msc-surf-y: 58px;
+  transform: translate(0.9px, -13.1px) !important;
+  clip-path: inset(0 18.3px 0 0);
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="635"][y="257"] {
+  transform: translate(6.1px, -15.5px) !important;
+  clip-path: inset(0 11.3px 0 0);
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="535"][y="306"] {
+  transform: translate(7.7px, -16.3px) !important;
+  clip-path: inset(0 19.2px 0 0);
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="600"][y="462"] {
+  transform: translate(4.4px, -15.3px) !important;
+  clip-path: inset(0 21.3px 0 0);
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__surf-window[x="687"][y="463"] {
+  transform: translate(5.8px, -15.3px) !important;
+  clip-path: inset(0 15.2px 0 0);
 }
 
 @media (prefers-reduced-motion: reduce) {
