@@ -132,3 +132,8 @@
 .msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="marketplaces"] .msc-atlas-map__region-label {
   dominant-baseline: central;
 }
+
+/* v19 — Bitcoin block face shading belongs to the idle overview only. */
+.msc-shell.msc-explore-atlas-shell .msc-atlas-window.has-active-region .msc-atlas-window__viewport::before {
+  display: none !important;
+}
