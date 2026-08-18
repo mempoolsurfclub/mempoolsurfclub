@@ -7,18 +7,21 @@
 <script src="{{ 'msc-explore-atlas-perimeters.js' | asset_url }}" defer></script>
 
 <style>
-  #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--ordinals {
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--ordinals,
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--runes {
     display: none;
     opacity: 0;
     pointer-events: none;
   }
 
-  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="ordinals"] .msc-atlas-map__destinations--ordinals {
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="ordinals"] .msc-atlas-map__destinations--ordinals,
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="runes"] .msc-atlas-map__destinations--runes {
     display: block;
     opacity: 1;
   }
 
-  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="ordinals"] .msc-atlas-map__region[data-atlas-region-shape="ordinals"] > .msc-atlas-map__region-label {
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="ordinals"] .msc-atlas-map__region[data-atlas-region-shape="ordinals"] > .msc-atlas-map__region-label,
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="runes"] .msc-atlas-map__region[data-atlas-region-shape="runes"] > .msc-atlas-map__region-label {
     display: none !important;
   }
 
@@ -242,6 +245,17 @@
             <g class="msc-atlas-map__destination" role="group" aria-label="Rare Satoshis">
               <circle class="msc-atlas-map__destination-dot" cx="284" cy="318" r="2.4" />
               <text class="msc-atlas-map__destination-label" x="289" y="318" dy=".5">RARE SATOSHIS</text>
+            </g>
+          </g>
+
+          <g class="msc-atlas-map__destinations msc-atlas-map__destinations--runes" role="group" aria-label="Runes destinations">
+            <g class="msc-atlas-map__destination" role="group" aria-label="Runes Protocol">
+              <circle class="msc-atlas-map__destination-dot" cx="175" cy="373" r="2.4" />
+              <text class="msc-atlas-map__destination-label" x="180" y="373" dy=".5">RUNES PROTOCOL</text>
+            </g>
+            <g class="msc-atlas-map__destination" role="group" aria-label="Rune Directory">
+              <circle class="msc-atlas-map__destination-dot" cx="230" cy="385" r="2.4" />
+              <text class="msc-atlas-map__destination-label" x="235" y="385" dy=".5">RUNE DIRECTORY</text>
             </g>
           </g>
         </svg>
