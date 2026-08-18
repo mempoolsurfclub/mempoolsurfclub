@@ -1,50 +1,139 @@
-@import url("./msc-explore-atlas-intro-fix-base.css");
+/* Explore Atlas intro alignment — mirrors the approved Learn title/copy relationship without changing Learn. */
 
-/* v25 — force the canonical BTC ASSET SURF source path itself to remain open.
- * The referenced SVG path was inheriting the browser's default black fill inside
- * <use> instances. Styling the source path prevents filled scallops while keeping
- * the approved Atlas placement and homepage motion unchanged.
- */
-.msc-explore-atlas-shell .msc-atlas-map path[id^="AtlasBtcSurfCycle-"] {
-  fill: none !important;
-  stroke: rgba(212, 190, 153, .18) !important;
-  stroke-width: 2.1 !important;
-  stroke-linecap: round !important;
-  stroke-linejoin: round !important;
-  vector-effect: non-scaling-stroke;
+.msc-explore-atlas-intro__title {
+  color: var(--msc-sand) !important;
 }
 
-.msc-explore-atlas-shell .msc-atlas-map__btc-surf-window {
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__btc-surf-motion {
-  transform: scaleY(.28);
-  transform-box: fill-box;
-  transform-origin: center;
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__btc-surf-track {
-  animation: mscAtlasBtcSurfTravel 18s linear infinite;
-}
-
-.msc-explore-atlas-shell .msc-atlas-map__btc-surf-line {
-  fill: none;
-  stroke: rgba(212, 190, 153, .18);
-  stroke-width: 2.1;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  vector-effect: non-scaling-stroke;
-}
-
-@keyframes mscAtlasBtcSurfTravel {
-  from { transform: translateX(0); }
-  to { transform: translateX(-80px); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .msc-explore-atlas-shell .msc-atlas-map__btc-surf-track {
-    animation: none !important;
+@media screen and (min-width: 761px) {
+  .msc-explore-atlas-shell {
+    padding-top: 3.5rem !important;
   }
+
+  .msc-explore-atlas-intro {
+    display: grid;
+    grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+    grid-template-areas:
+      "kicker kicker"
+      "title copy";
+    column-gap: clamp(3.2rem, 4vw, 4.8rem);
+    row-gap: 1.35rem;
+    align-items: start;
+    max-width: none !important;
+  }
+
+  .msc-explore-atlas-intro__kicker {
+    grid-area: kicker;
+    justify-self: start;
+    margin: 0 0 .25rem !important;
+  }
+
+  .msc-explore-atlas-intro__title {
+    grid-area: title;
+    align-self: start;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  .msc-explore-atlas-intro__copy {
+    grid-area: copy;
+    align-self: end;
+    width: 100%;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  .msc-atlas-window {
+    margin-top: clamp(2.4rem, 3vw, 3.2rem) !important;
+  }
+}
+
+/* Match the approved Learn hero vertical start and title scale on desktop. */
+@media screen and (min-width: 991px) {
+  .msc-explore-atlas-shell {
+    padding-top: 5.5rem !important;
+  }
+
+  .msc-explore-atlas-intro__title {
+    font-size: clamp(4.6rem, 4.75vw, 5.8rem) !important;
+    line-height: .9 !important;
+    letter-spacing: -.06em !important;
+    text-wrap: balance;
+  }
+}
+
+/* Large desktop: keep the same 40/60 title-to-copy relationship as Learn. */
+@media screen and (min-width: 1180px) {
+  .msc-explore-atlas-intro {
+    grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+    column-gap: clamp(3.2rem, 4vw, 4.8rem);
+  }
+
+  .msc-explore-atlas-intro__title {
+    font-size: clamp(5rem, 4.9vw, 6rem) !important;
+  }
+}
+
+/* v15 — cleanup from live Atlas markup review. */
+.msc-shell.msc-explore-atlas-shell .msc-atlas-window .msc-atlas-map .msc-atlas-map__region[data-atlas-region-shape="payments"] > .msc-atlas-map__region-shape--inner,
+.msc-shell.msc-explore-atlas-shell .msc-atlas-window .msc-atlas-map .msc-atlas-map__region[data-atlas-region-shape="payments"]:hover > .msc-atlas-map__region-shape--inner,
+.msc-shell.msc-explore-atlas-shell .msc-atlas-window .msc-atlas-map .msc-atlas-map__region[data-atlas-region-shape="payments"].is-active > .msc-atlas-map__region-shape--inner {
+  display: block !important;
+  d: path("M405.5 350.8 L433.5 350.8 L433.5 362.4 L405.5 362.4 Z") !important;
+  fill: #0e3337 !important;
+  stroke: none !important;
+  opacity: 1 !important;
+}
+
+.msc-shell.msc-explore-atlas-shell .msc-atlas-window .msc-atlas-map .msc-atlas-map__region[data-atlas-region-shape="wallets"] > .msc-atlas-map__region-shape--inner,
+.msc-shell.msc-explore-atlas-shell .msc-atlas-window .msc-atlas-map .msc-atlas-map__region[data-atlas-region-shape="wallets"]:hover > .msc-atlas-map__region-shape--inner,
+.msc-shell.msc-explore-atlas-shell .msc-atlas-window .msc-atlas-map .msc-atlas-map__region[data-atlas-region-shape="wallets"].is-active > .msc-atlas-map__region-shape--inner {
+  display: block !important;
+  d: path("M414.2 447.2 L412.5 460.3 L468 445 L554.6 489 L618 560 L404 560 L404 466 Z") !important;
+  fill: #0e3337 !important;
+  stroke: none !important;
+  opacity: 1 !important;
+}
+
+/* v16 — remove the actual tiny island and the secondary coast-shelf. */
+.msc-shell.msc-explore-atlas-shell .msc-atlas-window .msc-atlas-map .msc-atlas-map__land-context > .msc-atlas-map__coast-shelf {
+  display: none !important;
+}
+
+.msc-shell.msc-explore-atlas-shell .msc-atlas-window .msc-atlas-map .msc-atlas-map__land-context > .msc-atlas-map__island:nth-child(3) {
+  d: path("M271.2 344.8 C273.2 348.2 271.0 353.8 269.7 357.0 C270.6 358.0 275.7 359.1 276.6 359.5 C276.0 361.0 274.7 363.5 274.3 365.0 C275.6 365.6 278.1 365.4 279.6 365.8 C280.4 367.2 280.0 369.9 280.4 371.3 C281.7 371.7 284.0 373.1 285.0 373.4 C288.0 373.0 293.4 371.8 296.4 371.3 C301.2 373.9 317.6 378.8 322.4 381.4 C321.2 378.0 319.7 371.4 318.6 368.0 C315.2 367.4 308.3 366.4 304.8 365.8 C303.8 363.5 302.8 360.1 301.8 357.8 C299.7 357.2 293.9 355.3 291.8 354.9 C291.4 353.4 290.0 350.1 289.6 348.6 C285.9 347.5 274.9 345.9 271.2 344.8 Z M233.0 253.3 C230.6 252.3 228.0 250.0 225.4 249.0 C221.9 249.0 215.2 249.4 211.7 249.0 C210.4 247.6 209.1 245.6 207.8 244.4 C205.2 244.1 200.6 243.8 197.9 243.6 C196.6 244.4 195.4 245.7 194.1 246.5 C191.7 246.5 188.1 246.5 185.7 246.5 C183.8 248.5 183.4 253.9 181.9 255.8 C179.0 256.7 173.3 257.4 170.4 258.3 C169.5 260.2 168.8 263.2 168.1 265.1 C169.6 265.9 172.7 266.4 174.2 266.3 C177.1 265.5 181.3 263.9 184.2 263.0 C188.1 262.8 196.1 262.6 200.2 262.1 C200.8 260.8 200.6 258.3 201.0 257.5 C207.2 257.0 220.7 257.4 226.9 257.0 C228.4 256.0 231.4 254.1 233.0 253.3 Z M369.7 92.2 C367.4 91.7 364.5 91.2 362.1 90.9 C359.9 91.8 357.5 94.6 355.2 95.5 C351.7 95.4 343.5 94.8 340.0 94.7 C339.3 93.8 338.5 92.5 337.7 91.7 C335.7 91.7 331.4 91.6 329.3 91.7 C327.0 93.0 323.9 95.8 321.6 96.8 C326.8 97.4 334.0 97.5 339.2 98.1 C340.4 99.1 341.8 100.5 343.0 101.0 C344.3 100.8 347.0 100.4 348.4 100.2 C348.9 99.5 349.4 98.8 349.9 98.1 C353.6 98.5 358.4 99.4 362.1 99.8 C364.2 97.4 367.6 94.6 369.7 92.2 Z M503.4 360.8 C504.0 361.2 503.8 362.2 504.2 362.5 C506.6 362.7 510.2 362.2 512.6 362.5 C513.4 363.0 514.0 363.4 514.8 363.7 C517.5 364.2 521.9 364.1 522.5 364.6 C523.2 365.1 524.4 366.3 524.8 366.7 C526.1 366.7 526.8 366.7 527.8 366.7 C528.9 366.1 530.6 365.5 531.6 365.0 C531.6 364.2 531.7 363.1 531.6 362.5 C530.8 361.7 529.4 360.6 528.6 359.9 C523.8 359.6 514.3 359.4 509.5 359.1 C507.8 359.5 505.1 360.5 503.4 360.8 Z M156.7 272.7 C155.4 272.7 154.2 272.7 152.9 272.7 C152.4 273.0 151.8 273.3 151.3 273.5 C150.4 273.5 149.9 273.5 149.0 273.5 C148.5 274.0 148.7 274.7 148.3 275.2 C147.4 275.5 146.1 275.7 145.2 276.0 C145.5 277.8 145.5 279.8 146.0 281.5 C147.2 281.6 148.5 281.6 149.8 281.5 C150.8 281.0 151.9 280.4 152.9 279.8 C153.0 279.1 152.8 278.4 152.9 277.7 C153.3 277.0 154.1 276.3 154.4 275.6 C155.3 275.2 156.2 274.9 156.7 274.8 C156.7 274.1 156.7 273.4 156.7 272.7 Z") !important;
+}
+
+.msc-shell.msc-explore-atlas-shell .msc-atlas-window .msc-atlas-map .msc-atlas-map__region[data-atlas-region-shape="payments"] > .msc-atlas-map__region-shape--inner,
+.msc-shell.msc-explore-atlas-shell .msc-atlas-window .msc-atlas-map .msc-atlas-map__region[data-atlas-region-shape="payments"]:hover > .msc-atlas-map__region-shape--inner,
+.msc-shell.msc-explore-atlas-shell .msc-atlas-window .msc-atlas-map .msc-atlas-map__region[data-atlas-region-shape="payments"].is-active > .msc-atlas-map__region-shape--inner {
+  display: none !important;
+}
+
+/* v17 — delete the old lower-left coast itself rather than masking it.
+ * This updates the rendered landmass path to use the approved replacement coast
+ * from the NETWORK lower-left point directly to the reconnect point.
+ */
+.msc-shell.msc-explore-atlas-shell .msc-atlas-window .msc-atlas-map .msc-atlas-map__land-context > .msc-atlas-map__landmass {
+  d: path("M597.3 50.0 C590.4 51.3 552.5 61.2 530.9 62.7 C533.9 68.5 541.1 80.2 542.3 85.4 C528.3 85.6 429.6 86.9 415.6 87.1 C410.6 92.3 395.2 107.9 390.4 112.8 C383.4 113.1 372.8 113.4 365.9 113.7 C369.2 119.8 380.2 139.9 383.5 146.1 C378.5 151.3 358.5 172.2 353.7 177.3 C360.5 178.1 424.6 185.4 431.6 186.2 C434.5 192.4 439.3 202.6 442.3 209.0 C435.7 210.5 422.9 213.7 416.3 215.3 C417.8 218.1 420.2 222.0 421.7 224.6 C414.8 225.2 383.6 227.8 376.6 228.4 C372.6 222.6 363.1 208.9 359.1 203.1 C352.1 203.7 324.0 206.3 317.0 206.9 C311.1 210.6 270.3 236.1 264.4 239.8 C266.9 246.3 271.0 256.9 273.5 263.4 C280.5 263.4 304.7 263.4 311.7 263.4 C310.4 268.0 308.4 275.2 307.1 279.8 C300.2 278.5 238.4 266.8 231.5 265.5 C224.8 267.6 183.4 280.4 177.3 282.3 C176.7 288.7 175.6 298.7 175.0 305.1 C180.6 308.3 193.3 315.5 199.4 319.0 C206.2 317.6 246.1 309.1 252.9 307.7 C258.4 312.0 281.0 329.5 286.5 333.8 C293.5 334.4 322.3 336.6 329.3 337.2 C335.8 334.6 371.6 320.4 378.1 317.8 C384.6 320.4 412.9 330.8 419.4 333.4 C421.5 338.2 424.2 344.2 426.3 349.0 C431.5 347.5 444.0 344.6 449.2 343.1 C455.9 345.1 472.3 349.9 479.0 351.9 C485.4 349.0 500.8 342.2 507.2 339.3 C512.5 341.6 538.6 345.0 543.9 347.3 C539.3 341.9 532.4 333.7 527.8 328.3 C530.0 322.0 533.3 312.3 535.5 306.0 C542.3 304.8 555.4 302.5 562.2 301.3 C562.4 297.5 562.8 292.5 563.0 288.7 C576.9 288.5 604.0 287.9 617.9 287.8 C622.1 279.3 629.8 263.9 634.0 255.4 C647.6 252.2 673.8 245.9 687.4 242.7 C685.5 245.2 682.5 249.1 680.6 251.6 C688.8 254.2 706.0 259.5 714.2 262.1 C714.6 268.5 715.4 277.6 715.7 284.0 C710.1 287.4 700.7 292.9 695.1 296.3 C682.9 294.6 663.7 292.1 651.5 290.4 C650.4 294.6 648.8 300.9 647.7 305.1 C637.3 303.1 621.5 300.0 611.1 298.0 C604.5 299.8 594.8 302.5 588.2 304.3 C585.9 314.7 582.1 333.9 579.8 344.3 C583.3 348.2 590.8 356.5 594.3 360.4 C583.3 362.8 565.6 366.8 554.6 369.2 C556.5 373.4 559.5 379.8 561.4 384.0 C541.8 387.8 503.9 395.0 484.3 398.7 C476.7 397.6 462.1 395.6 454.5 394.5 C445.4 399.6 427.7 409.7 418.6 414.8 C417.2 425.7 413.9 449.4 412.5 460.3 L468 445 L554.6 489.0 C556.2 485.1 559.1 478.1 560.7 474.2 C577.1 469.2 626.7 454.3 643.1 449.3 C651.3 451.8 665.5 456.1 673.7 458.6 C686.1 457.2 710.9 454.5 723.3 453.1 C734.0 460.2 755.4 474.3 766.1 481.4 C775.0 483.4 793.1 487.4 802.0 489.4 C799.1 476.9 793.4 452.1 790.5 439.6 C806.4 437.2 838.0 432.3 853.9 429.9 C865.6 432.3 888.8 437.7 900.5 440.1 C903.6 444.0 909.6 451.3 912.7 455.2 C924.8 447.0 948.7 431.0 960.8 422.8 C962.4 416.4 965.4 404.7 967.0 398.3 C977.2 394.1 997.2 385.6 1007.4 381.4 C1005.0 371.1 1000.7 350.4 998.3 340.1 C979.8 333.3 942.7 319.9 924.2 313.1 C923.8 307.8 923.1 300.3 922.7 295.0 C931.1 296.2 947.9 298.9 956.3 300.1 C955.9 296.4 955.1 291.1 954.7 287.4 C949.2 286.0 941.1 283.7 935.6 282.3 C936.5 277.2 937.8 269.3 938.7 264.2 C931.9 264.3 921.1 264.5 914.3 264.6 C912.4 258.8 909.3 246.4 907.4 240.6 C917.1 239.5 938.2 237.1 947.9 236.0 C948.6 240.1 949.5 246.2 950.2 250.3 C957.8 251.2 968.5 252.4 976.1 253.3 C972.4 259.4 966.1 269.9 962.4 276.0 C968.3 276.5 978.6 277.3 984.5 277.7 C983.7 274.7 982.3 269.7 981.5 266.7 C990.2 264.1 1007.9 259.2 1016.6 256.6 C1018.6 252.7 1022.2 246.2 1024.2 242.3 C1016.6 238.1 1000.5 229.2 992.9 225.0 C991.7 218.4 989.5 205.5 988.3 198.9 C977.7 195.2 959.2 188.6 948.6 184.9 C939.7 188.2 920.9 195.1 912.0 198.4 C901.6 197.9 885.7 197.2 875.3 196.7 C861.2 187.0 833.7 168.1 819.6 158.4 C827.3 154.2 839.4 147.4 847.1 143.2 C863.4 145.2 896.4 149.2 912.7 151.2 C907.7 145.0 899.4 134.6 894.4 128.4 C881.3 125.5 859.4 120.8 846.3 117.9 C848.1 120.3 850.6 123.9 852.4 126.3 C846.4 125.0 836.3 122.9 830.3 121.7 C829.9 126.6 829.1 134.5 828.7 139.4 C820.0 141.9 804.6 146.2 795.9 148.7 C796.3 156.6 797.0 168.6 797.4 176.5 C784.1 180.5 763.4 186.8 750.1 190.8 C750.9 194.8 752.3 201.6 753.1 205.6 C744.8 208.7 727.8 215.2 719.5 218.3 C711.7 217.5 699.8 216.1 692.0 215.3 C695.6 204.5 701.4 187.3 705.0 176.5 C722.7 174.5 749.9 171.3 767.6 169.3 C767.2 165.0 766.5 158.5 766.1 154.2 C777.0 148.8 794.2 140.2 805.1 134.8 C806.2 129.0 807.8 121.2 808.9 115.4 C800.8 115.1 784.1 114.4 776.0 114.1 C774.3 107.9 771.6 97.5 769.9 91.3 C759.9 88.4 738.7 82.0 728.7 79.1 C727.2 75.8 724.8 70.6 723.3 67.3 C695.8 67.1 649.3 66.6 621.8 66.4 C615.6 62.6 603.5 53.8 597.3 50.0 Z") !important;
+}
+
+/* The corrected path is now authoritative. Remove the temporary lower-left mask
+ * and redraw helpers so no second legacy coast remains underneath it. */
+.msc-shell.msc-explore-atlas-shell .msc-atlas-window .msc-atlas-map .msc-atlas-map__region[data-atlas-region-shape="wallets"] > .msc-atlas-map__region-shape--inner,
+.msc-shell.msc-explore-atlas-shell .msc-atlas-window .msc-atlas-map .msc-atlas-map__region[data-atlas-region-shape="wallets"]:hover > .msc-atlas-map__region-shape--inner,
+.msc-shell.msc-explore-atlas-shell .msc-atlas-window .msc-atlas-map .msc-atlas-map__region[data-atlas-region-shape="wallets"].is-active > .msc-atlas-map__region-shape--inner,
+.msc-shell.msc-explore-atlas-shell .msc-atlas-window .msc-atlas-map .msc-atlas-map__region[data-atlas-region-shape="marketplaces"] > .msc-atlas-map__region-shape--inner,
+.msc-shell.msc-explore-atlas-shell .msc-atlas-window .msc-atlas-map .msc-atlas-map__region[data-atlas-region-shape="marketplaces"]:hover > .msc-atlas-map__region-shape--inner,
+.msc-shell.msc-explore-atlas-shell .msc-atlas-window .msc-atlas-map .msc-atlas-map__region[data-atlas-region-shape="marketplaces"].is-active > .msc-atlas-map__region-shape--inner {
+  display: none !important;
+}
+
+/* v18 — MARKETPLACES title vertical centering only. Horizontal placement remains unchanged. */
+.msc-explore-atlas-shell .msc-atlas-map__region[data-atlas-region-shape="marketplaces"] .msc-atlas-map__region-label {
+  dominant-baseline: central;
+}
+
+/* v19 — Bitcoin block face shading belongs to the idle overview only. */
+.msc-shell.msc-explore-atlas-shell .msc-atlas-window.has-active-region .msc-atlas-window__viewport::before {
+  display: none !important;
 }
