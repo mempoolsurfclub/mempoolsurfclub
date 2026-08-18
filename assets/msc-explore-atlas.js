@@ -247,12 +247,15 @@
         const labelCenter = getVisualCenter(label);
         const shapeCenterX = shapeBounds.x + (shapeBounds.width / 2);
         const shapeCenterY = shapeBounds.y + (shapeBounds.height / 2);
+        const runesPerimeterCenter = region.dataset.atlasRegionShape === 'runes'
+          ? { x: 554, y: 275 }
+          : null;
 
-        /* Design-review behavior: the selected region title is the camera
-           target. Every preview/lock lands with that title at viewport center,
-           while the territory bounds determine only how far the map zooms. */
-        const centerX = labelCenter?.x ?? shapeCenterX;
-        const centerY = labelCenter?.y ?? shapeCenterY;
+        /* RUNES no longer shares the legacy source-label center used by the
+           interaction polygon, so its camera follows the authoritative focused
+           perimeter. Other regions retain the approved title-centered behavior. */
+        const centerX = runesPerimeterCenter?.x ?? labelCenter?.x ?? shapeCenterX;
+        const centerY = runesPerimeterCenter?.y ?? labelCenter?.y ?? shapeCenterY;
 
         const widthFromShape = shapeBounds.width * 1.06;
         const widthFromHeight = shapeBounds.height * OVERVIEW_RATIO * 1.08;
