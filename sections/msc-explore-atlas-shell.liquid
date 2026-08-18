@@ -6,8 +6,6 @@
 <script src="{{ 'msc-explore-atlas.js' | asset_url }}" defer></script>
 <script src="{{ 'msc-explore-atlas-perimeters.js' | asset_url }}" defer></script>
 
-{%- assign atlas_surf_runs = '535,-28.5,170|487,0.9,269|669,18.7,123|435,33.4,75|760,40.3,63|796,64.9,73|874,81.3,32|334,98.5,25|281,126.5,67|943,137.9,44|237,162.4,74|709,165.2,30|376,170.1,28|1007,172.5,32|217,188.8,45|175,202.2,66|1048,208.2,40|128,225.9,38|642,246.2,47|1013,249.2,128|125,268.9,29|1061,278.5,50|954,283,44|543,295.4,31|210,319.9,43|348,320.3,41|1017,322.1,50|371,343.9,108|229,357.5,53|979,379.8,26|305,387.2,85|351,418.3,35|833,429,54|424,447.6,60|605,453.1,45|694,453.5,39|604,484.5,169|423,486.4,104|743,507.5,81|488,511.5,143|652,515.4,84' | split: '|' -%}
-
 <section class="msc-shell msc-explore-atlas-shell" id="MscExploreAtlas-{{ section.id }}">
   <div class="msc-container">
     <header class="msc-explore-atlas-intro">
@@ -56,35 +54,9 @@
               <rect width="120" height="120" fill="url(#AtlasMinorGrid-{{ section.id }})" />
               <path d="M 120 0 L 0 0 0 120" fill="none" stroke="rgba(212,190,153,.18)" stroke-width="1" />
             </pattern>
-            <clipPath id="AtlasTopPlaneSurfClip-{{ section.id }}">
-              <path d="M600 -88 L72 142 L600 560 L1128 142 Z" />
-            </clipPath>
-            <path id="AtlasBtcSurfCycle-{{ section.id }}" d="M0 30 C10 30 10 18 20 18 S30 42 40 30 S50 18 60 18 S70 30 80 30" />
-            <g id="AtlasBtcSurfTrack-{{ section.id }}">
-              <use class="msc-atlas-map__btc-surf-line" href="#AtlasBtcSurfCycle-{{ section.id }}" x="-80" />
-              <use class="msc-atlas-map__btc-surf-line" href="#AtlasBtcSurfCycle-{{ section.id }}" x="0" />
-              <use class="msc-atlas-map__btc-surf-line" href="#AtlasBtcSurfCycle-{{ section.id }}" x="80" />
-              <use class="msc-atlas-map__btc-surf-line" href="#AtlasBtcSurfCycle-{{ section.id }}" x="160" />
-              <use class="msc-atlas-map__btc-surf-line" href="#AtlasBtcSurfCycle-{{ section.id }}" x="240" />
-              <use class="msc-atlas-map__btc-surf-line" href="#AtlasBtcSurfCycle-{{ section.id }}" x="320" />
-              <use class="msc-atlas-map__btc-surf-line" href="#AtlasBtcSurfCycle-{{ section.id }}" x="400" />
-            </g>
           </defs>
 
           <rect class="msc-atlas-map__ocean" x="0" y="0" width="1200" height="560" />
-
-          <g class="msc-atlas-map__btc-surf-field" clip-path="url(#AtlasTopPlaneSurfClip-{{ section.id }})" aria-hidden="true" pointer-events="none">
-            {%- for surf_run in atlas_surf_runs -%}
-              {%- assign surf = surf_run | split: ',' -%}
-              <svg class="msc-atlas-map__btc-surf-window" x="{{ surf[0] }}" y="{{ surf[1] }}" width="{{ surf[2] }}" height="60" viewBox="0 0 {{ surf[2] }} 60" overflow="hidden" aria-hidden="true">
-                <g class="msc-atlas-map__btc-surf-motion">
-                  <g class="msc-atlas-map__btc-surf-track">
-                    <use href="#AtlasBtcSurfTrack-{{ section.id }}" />
-                  </g>
-                </g>
-              </svg>
-            {%- endfor -%}
-          </g>
 
           <g class="msc-atlas-map__bitcoin-block" aria-hidden="true" pointer-events="none">
             <path class="msc-atlas-map__bitcoin-block-edge msc-atlas-map__bitcoin-block-edge--top" d="M600 -88 L72 142 L600 560 L1128 142 Z" fill="none" stroke="rgba(212,190,153,.22)" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" />
