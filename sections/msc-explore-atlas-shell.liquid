@@ -6,6 +6,40 @@
 <script src="{{ 'msc-explore-atlas.js' | asset_url }}" defer></script>
 <script src="{{ 'msc-explore-atlas-perimeters.js' | asset_url }}" defer></script>
 
+<style>
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--ordinals {
+    display: none;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="ordinals"] .msc-atlas-map__destinations--ordinals {
+    display: block;
+    opacity: 1;
+  }
+
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destination-dot {
+    fill: rgba(212, 190, 153, .92);
+    stroke: rgba(14, 51, 55, .98);
+    stroke-width: 1.1;
+    vector-effect: non-scaling-stroke;
+  }
+
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destination-leader {
+    stroke: rgba(212, 190, 153, .42);
+    stroke-width: .8;
+    vector-effect: non-scaling-stroke;
+  }
+
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destination-label {
+    fill: rgba(251, 248, 239, .78);
+    font-size: calc(10px * var(--atlas-counter-scale, 1));
+    font-weight: 650;
+    letter-spacing: .05em;
+    pointer-events: none;
+  }
+</style>
+
 <section class="msc-shell msc-explore-atlas-shell" id="MscExploreAtlas-{{ section.id }}">
   <div class="msc-container">
     <header class="msc-explore-atlas-intro">
@@ -190,6 +224,29 @@
               <g class="msc-atlas-map__entity" data-atlas-entity="Bitcoin Core" data-atlas-entity-region="network" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false"><circle class="msc-atlas-map__entity-dot" cx="523" cy="438" r="4.5" /><line class="msc-atlas-map__entity-line" x1="528" y1="438" x2="545" y2="438" /><text class="msc-atlas-map__entity-label" x="550" y="442">BITCOIN CORE</text></g>
               <g class="msc-atlas-map__entity" data-atlas-entity="mempool.space" data-atlas-entity-region="network" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false"><circle class="msc-atlas-map__entity-dot" cx="648" cy="407" r="4.5" /><line class="msc-atlas-map__entity-line" x1="653" y1="407" x2="670" y2="407" /><text class="msc-atlas-map__entity-label" x="675" y="411">MEMPOOL.SPACE</text></g>
               <g class="msc-atlas-map__entity" data-atlas-entity="Lightning Network" data-atlas-entity-region="network" role="button" tabindex="-1" aria-hidden="true" aria-pressed="false"><circle class="msc-atlas-map__entity-dot" cx="776" cy="418" r="4.5" /><line class="msc-atlas-map__entity-line" x1="781" y1="418" x2="798" y2="418" /><text class="msc-atlas-map__entity-label" x="803" y="422">LIGHTNING NETWORK</text></g>
+            </g>
+          </g>
+
+          <g class="msc-atlas-map__destinations msc-atlas-map__destinations--ordinals" role="group" aria-label="Ordinals destinations">
+            <g class="msc-atlas-map__destination" role="group" aria-label="Ordinal Theory">
+              <circle class="msc-atlas-map__destination-dot" cx="170" cy="246" r="2.4" />
+              <line class="msc-atlas-map__destination-leader" x1="174" y1="246" x2="182" y2="246" />
+              <text class="msc-atlas-map__destination-label" x="186" y="249">ORDINAL THEORY</text>
+            </g>
+            <g class="msc-atlas-map__destination" role="group" aria-label="Projects">
+              <circle class="msc-atlas-map__destination-dot" cx="270" cy="238" r="2.4" />
+              <line class="msc-atlas-map__destination-leader" x1="274" y1="238" x2="282" y2="238" />
+              <text class="msc-atlas-map__destination-label" x="286" y="241">PROJECTS</text>
+            </g>
+            <g class="msc-atlas-map__destination" role="group" aria-label="Artists">
+              <circle class="msc-atlas-map__destination-dot" cx="185" cy="322" r="2.4" />
+              <line class="msc-atlas-map__destination-leader" x1="189" y1="322" x2="197" y2="322" />
+              <text class="msc-atlas-map__destination-label" x="201" y="325">ARTISTS</text>
+            </g>
+            <g class="msc-atlas-map__destination" role="group" aria-label="Rare Satoshis">
+              <circle class="msc-atlas-map__destination-dot" cx="270" cy="335" r="2.4" />
+              <line class="msc-atlas-map__destination-leader" x1="274" y1="335" x2="282" y2="335" />
+              <text class="msc-atlas-map__destination-label" x="286" y="338">RARE SATOSHIS</text>
             </g>
           </g>
         </svg>
