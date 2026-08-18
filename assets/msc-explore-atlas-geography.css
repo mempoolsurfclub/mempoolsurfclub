@@ -119,9 +119,16 @@
 
 .msc-atlas-map__island {
   fill: rgba(212, 190, 153, .045);
-  stroke: rgba(212, 190, 153, .60);
-  stroke-width: .85;
+  stroke: rgba(212, 190, 153, .88);
+  stroke-width: 1.35;
   vector-effect: non-scaling-stroke;
+}
+
+/* Keep detached island boundaries aligned with the receded coastline in preview/lock. */
+.msc-explore-atlas-shell .msc-atlas-window.has-active-region .msc-atlas-map__land-context > .msc-atlas-map__island:nth-child(3),
+.msc-explore-atlas-shell .msc-atlas-window.has-active-region .msc-atlas-map__land-context > .msc-atlas-map__island:nth-child(4),
+.msc-explore-atlas-shell .msc-atlas-window.has-active-region .msc-atlas-map__land-context > .msc-atlas-map__island:nth-child(5) {
+  stroke: rgba(212, 190, 153, .24) !important;
 }
 
 /* Interaction geometry stays forgiving but visually subordinate.
