@@ -147,3 +147,104 @@
 
   document.querySelectorAll('[data-atlas]').forEach(installAtlasEdgeRegistry);
 })();
+
+(() => {
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const SURF_CYCLE = 'M0 30 C10 30 10 18 20 18 S30 42 40 30 S50 18 60 18 S70 30 80 30';
+  const TOP_PLANE = 'M626.9 -67.9 L86.6 276 L653.6 717 L1167.9 272.4 Z';
+  const SURF_RUNS = [
+    [535, -28.5, 170], [487, 0.9, 269], [669, 18.7, 123], [435, 33.4, 75], [760, 40.3, 63],
+    [796, 64.9, 73], [874, 81.3, 32], [334, 98.5, 25], [281, 126.5, 67], [943, 137.9, 44],
+    [237, 162.4, 74], [709, 165.2, 30], [376, 170.1, 28], [1007, 172.5, 32], [217, 188.8, 45],
+    [175, 202.2, 66], [1048, 208.2, 40], [128, 225.9, 38], [642, 246.2, 47], [1013, 249.2, 128],
+    [125, 268.9, 29], [1061, 278.5, 50], [954, 283, 44], [543, 295.4, 31], [210, 319.9, 43],
+    [348, 320.3, 41], [1017, 322.1, 50], [371, 343.9, 108], [229, 357.5, 53], [979, 379.8, 26],
+    [305, 387.2, 85], [351, 418.3, 35], [833, 429, 54], [424, 447.6, 60], [605, 453.1, 45],
+    [694, 453.5, 39], [604, 484.5, 169], [423, 486.4, 104], [743, 507.5, 81], [488, 511.5, 143],
+    [652, 515.4, 84]
+  ];
+
+  const makeSvgNode = (name, attrs = {}) => {
+    const node = document.createElementNS(SVG_NS, name);
+    Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, String(value)));
+    return node;
+  };
+
+  const makeSurfPath = (offset) => makeSvgNode('path', {
+    d: SURF_CYCLE,
+    transform: `translate(${offset} 0)`,
+    fill: 'none',
+    stroke: '#d4be99',
+    'stroke-opacity': '.18',
+    'stroke-width': '2.1',
+    'stroke-linecap': 'round',
+    'stroke-linejoin': 'round',
+    'vector-effect': 'non-scaling-stroke'
+  });
+
+  const installAtlasSurf = (atlas, index) => {
+    const svg = atlas.querySelector('[data-atlas-map]');
+    const block = svg?.querySelector('.msc-atlas-map__bitcoin-block');
+    if (!svg || !block || svg.querySelector('.msc-atlas-map__btc-surf-field')) return;
+
+    let defs = svg.querySelector('defs');
+    if (!defs) {
+      defs = makeSvgNode('defs');
+      svg.insertBefore(defs, svg.firstChild);
+    }
+
+    const clipId = `MscAtlasSurfClip-${index}`;
+    const clip = makeSvgNode('clipPath', { id: clipId });
+    clip.appendChild(makeSvgNode('path', { d: TOP_PLANE }));
+    defs.appendChild(clip);
+
+    const field = makeSvgNode('g', {
+      class: 'msc-atlas-map__btc-surf-field',
+      'clip-path': `url(#${clipId})`,
+      'aria-hidden': 'true',
+      'pointer-events': 'none'
+    });
+
+    const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+    SURF_RUNS.forEach(([x, y, width]) => {
+      const windowSvg = makeSvgNode('svg', {
+        x,
+        y,
+        width,
+        height: 60,
+        viewBox: `0 0 ${width} 60`,
+        overflow: 'hidden',
+        'aria-hidden': 'true'
+      });
+
+      const motion = makeSvgNode('g', {
+        transform: 'translate(0 21.6) scale(1 .28)'
+      });
+      const track = makeSvgNode('g');
+
+      for (let offset = -80; offset <= width + 80; offset += 80) {
+        track.appendChild(makeSurfPath(offset));
+      }
+
+      if (!reducedMotion) {
+        track.appendChild(makeSvgNode('animateTransform', {
+          attributeName: 'transform',
+          type: 'translate',
+          from: '0 0',
+          to: '-80 0',
+          dur: '18s',
+          repeatCount: 'indefinite'
+        }));
+      }
+
+      motion.appendChild(track);
+      windowSvg.appendChild(motion);
+      field.appendChild(windowSvg);
+    });
+
+    block.before(field);
+  };
+
+  document.querySelectorAll('[data-atlas]').forEach(installAtlasSurf);
+})();
