@@ -37,9 +37,11 @@
 
   #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destination-label {
     fill: rgba(251, 248, 239, .78);
-    font-size: calc(10px * var(--atlas-counter-scale, 1));
+    font-size: calc(11px * var(--atlas-counter-scale, 1));
     font-weight: 650;
     letter-spacing: .05em;
+    dominant-baseline: middle;
+    transform: translateY(-3px);
     pointer-events: none;
   }
 </style>
