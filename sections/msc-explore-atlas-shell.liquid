@@ -10,7 +10,8 @@
   #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--ordinals,
   #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--runes,
   #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--wallets,
-  #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--marketplaces {
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--marketplaces,
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--mining {
     display: none;
     opacity: 0;
     pointer-events: none;
@@ -19,7 +20,8 @@
   #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="ordinals"] .msc-atlas-map__destinations--ordinals,
   #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="runes"] .msc-atlas-map__destinations--runes,
   #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="wallets"] .msc-atlas-map__destinations--wallets,
-  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="marketplaces"] .msc-atlas-map__destinations--marketplaces {
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="marketplaces"] .msc-atlas-map__destinations--marketplaces,
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="mining"] .msc-atlas-map__destinations--mining {
     display: block;
     opacity: 1;
   }
@@ -30,7 +32,8 @@
   }
 
   #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="wallets"] .msc-atlas-map__region[data-atlas-region-shape="wallets"] > .msc-atlas-map__region-label,
-  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="marketplaces"] .msc-atlas-map__region[data-atlas-region-shape="marketplaces"] > .msc-atlas-map__region-label {
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="marketplaces"] .msc-atlas-map__region[data-atlas-region-shape="marketplaces"] > .msc-atlas-map__region-label,
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="mining"] .msc-atlas-map__region[data-atlas-region-shape="mining"] > .msc-atlas-map__region-label {
     opacity: 0 !important;
     visibility: hidden;
   }
@@ -304,6 +307,25 @@
             <g class="msc-atlas-map__destination" role="group" aria-label="Rare Sats Marketplaces">
               <circle class="msc-atlas-map__destination-dot" cx="1019" cy="252" r="2.4" />
               <text class="msc-atlas-map__destination-label" x="1024" y="252" dy=".5">RARE SATS MARKETPLACES</text>
+            </g>
+          </g>
+
+          <g class="msc-atlas-map__destinations msc-atlas-map__destinations--mining" role="group" aria-label="Mining destinations">
+            <g class="msc-atlas-map__destination" role="group" aria-label="Mining Companies">
+              <circle class="msc-atlas-map__destination-dot" cx="323" cy="129" r="2.4" />
+              <text class="msc-atlas-map__destination-label" x="328" y="129" dy=".5">MINING COMPANIES</text>
+            </g>
+            <g class="msc-atlas-map__destination" role="group" aria-label="Mining Pools">
+              <circle class="msc-atlas-map__destination-dot" cx="291" cy="175" r="2.4" />
+              <text class="msc-atlas-map__destination-label" x="296" y="175" dy=".5">MINING POOLS</text>
+            </g>
+            <g class="msc-atlas-map__destination" role="group" aria-label="ASIC Manufacturers">
+              <circle class="msc-atlas-map__destination-dot" cx="445" cy="177" r="2.4" />
+              <text class="msc-atlas-map__destination-label" x="450" y="177" dy=".5">ASIC MANUFACTURERS</text>
+            </g>
+            <g class="msc-atlas-map__destination" role="group" aria-label="Mining Software">
+              <circle class="msc-atlas-map__destination-dot" cx="347" cy="218" r="2.4" />
+              <text class="msc-atlas-map__destination-label" x="352" y="218" dy=".5">MINING SOFTWARE</text>
             </g>
           </g>
         </svg>
