@@ -13,7 +13,8 @@
   #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--marketplaces,
   #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--mining,
   #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--payments,
-  #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--exchanges {
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--exchanges,
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--network {
     display: none;
     opacity: 0;
     pointer-events: none;
@@ -25,7 +26,8 @@
   #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="marketplaces"] .msc-atlas-map__destinations--marketplaces,
   #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="mining"] .msc-atlas-map__destinations--mining,
   #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="payments"] .msc-atlas-map__destinations--payments,
-  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="exchanges"] .msc-atlas-map__destinations--exchanges {
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="exchanges"] .msc-atlas-map__destinations--exchanges,
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="network"] .msc-atlas-map__destinations--network {
     display: block;
     opacity: 1;
   }
@@ -39,7 +41,8 @@
   #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="marketplaces"] .msc-atlas-map__region[data-atlas-region-shape="marketplaces"] > .msc-atlas-map__region-label,
   #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="mining"] .msc-atlas-map__region[data-atlas-region-shape="mining"] > .msc-atlas-map__region-label,
   #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="payments"] .msc-atlas-map__region[data-atlas-region-shape="payments"] > .msc-atlas-map__region-label,
-  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="exchanges"] .msc-atlas-map__region[data-atlas-region-shape="exchanges"] > .msc-atlas-map__region-label {
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="exchanges"] .msc-atlas-map__region[data-atlas-region-shape="exchanges"] > .msc-atlas-map__region-label,
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="network"] .msc-atlas-map__region[data-atlas-region-shape="network"] > .msc-atlas-map__region-label {
     opacity: 0 !important;
     visibility: hidden;
   }
@@ -366,6 +369,21 @@
             <g class="msc-atlas-map__destination" role="group" aria-label="Bitcoin Brokerages">
               <circle class="msc-atlas-map__destination-dot" cx="821" cy="368" r="2.4" />
               <text class="msc-atlas-map__destination-label" x="826" y="368" dy=".5">BITCOIN BROKERAGES</text>
+            </g>
+          </g>
+
+          <g class="msc-atlas-map__destinations msc-atlas-map__destinations--network" role="group" aria-label="Network destinations">
+            <g class="msc-atlas-map__destination" role="group" aria-label="Node Software">
+              <circle class="msc-atlas-map__destination-dot" cx="549" cy="397" r="2.4" />
+              <text class="msc-atlas-map__destination-label" x="554" y="397" dy=".5">NODE SOFTWARE</text>
+            </g>
+            <g class="msc-atlas-map__destination" role="group" aria-label="Block Explorers">
+              <circle class="msc-atlas-map__destination-dot" cx="429" cy="427" r="2.4" />
+              <text class="msc-atlas-map__destination-label" x="434" y="427" dy=".5">BLOCK EXPLORERS</text>
+            </g>
+            <g class="msc-atlas-map__destination" role="group" aria-label="Network Infrastructure">
+              <circle class="msc-atlas-map__destination-dot" cx="633" cy="440" r="2.4" />
+              <text class="msc-atlas-map__destination-label" x="638" y="440" dy=".5">NETWORK INFRASTRUCTURE</text>
             </g>
           </g>
         </svg>
