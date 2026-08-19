@@ -9,7 +9,8 @@
 <style>
   #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--ordinals,
   #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--runes,
-  #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--wallets {
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--wallets,
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--marketplaces {
     display: none;
     opacity: 0;
     pointer-events: none;
@@ -17,7 +18,8 @@
 
   #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="ordinals"] .msc-atlas-map__destinations--ordinals,
   #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="runes"] .msc-atlas-map__destinations--runes,
-  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="wallets"] .msc-atlas-map__destinations--wallets {
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="wallets"] .msc-atlas-map__destinations--wallets,
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="marketplaces"] .msc-atlas-map__destinations--marketplaces {
     display: block;
     opacity: 1;
   }
@@ -27,7 +29,8 @@
     display: none !important;
   }
 
-  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="wallets"] .msc-atlas-map__region[data-atlas-region-shape="wallets"] > .msc-atlas-map__region-label {
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="wallets"] .msc-atlas-map__region[data-atlas-region-shape="wallets"] > .msc-atlas-map__region-label,
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="marketplaces"] .msc-atlas-map__region[data-atlas-region-shape="marketplaces"] > .msc-atlas-map__region-label {
     opacity: 0 !important;
     visibility: hidden;
   }
@@ -282,6 +285,25 @@
             <g class="msc-atlas-map__destination" role="group" aria-label="Multisig Wallets">
               <circle class="msc-atlas-map__destination-dot" cx="666" cy="190" r="2.4" />
               <text class="msc-atlas-map__destination-label" x="671" y="190" dy=".5">MULTISIG WALLETS</text>
+            </g>
+          </g>
+
+          <g class="msc-atlas-map__destinations msc-atlas-map__destinations--marketplaces" role="group" aria-label="Marketplaces destinations">
+            <g class="msc-atlas-map__destination" role="group" aria-label="Marketplace Directory">
+              <circle class="msc-atlas-map__destination-dot" cx="880" cy="131" r="2.4" />
+              <text class="msc-atlas-map__destination-label" x="875" y="131" dy=".5" text-anchor="end">MARKETPLACE DIRECTORY</text>
+            </g>
+            <g class="msc-atlas-map__destination" role="group" aria-label="Ordinal Marketplaces">
+              <circle class="msc-atlas-map__destination-dot" cx="773" cy="195" r="2.4" />
+              <text class="msc-atlas-map__destination-label" x="778" y="195" dy=".5">ORDINAL MARKETPLACES</text>
+            </g>
+            <g class="msc-atlas-map__destination" role="group" aria-label="Runes Marketplaces">
+              <circle class="msc-atlas-map__destination-dot" cx="966" cy="207" r="2.4" />
+              <text class="msc-atlas-map__destination-label" x="961" y="207" dy=".5" text-anchor="end">RUNES MARKETPLACES</text>
+            </g>
+            <g class="msc-atlas-map__destination" role="group" aria-label="Rare Sats Marketplaces">
+              <circle class="msc-atlas-map__destination-dot" cx="1006" cy="242" r="2.4" />
+              <text class="msc-atlas-map__destination-label" x="1001" y="242" dy=".5" text-anchor="end">RARE SATS MARKETPLACES</text>
             </g>
           </g>
         </svg>
