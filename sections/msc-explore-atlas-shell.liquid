@@ -10,7 +10,8 @@
   #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--ordinals,
   #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--runes,
   #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--wallets,
-  #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--marketplaces {
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--marketplaces,
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--mining {
     display: none;
     opacity: 0;
     pointer-events: none;
@@ -19,7 +20,8 @@
   #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="ordinals"] .msc-atlas-map__destinations--ordinals,
   #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="runes"] .msc-atlas-map__destinations--runes,
   #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="wallets"] .msc-atlas-map__destinations--wallets,
-  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="marketplaces"] .msc-atlas-map__destinations--marketplaces {
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="marketplaces"] .msc-atlas-map__destinations--marketplaces,
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="mining"] .msc-atlas-map__destinations--mining {
     display: block;
     opacity: 1;
   }
@@ -30,7 +32,8 @@
   }
 
   #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="wallets"] .msc-atlas-map__region[data-atlas-region-shape="wallets"] > .msc-atlas-map__region-label,
-  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="marketplaces"] .msc-atlas-map__region[data-atlas-region-shape="marketplaces"] > .msc-atlas-map__region-label {
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="marketplaces"] .msc-atlas-map__region[data-atlas-region-shape="marketplaces"] > .msc-atlas-map__region-label,
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="mining"] .msc-atlas-map__region[data-atlas-region-shape="mining"] > .msc-atlas-map__region-label {
     opacity: 0 !important;
     visibility: hidden;
   }
@@ -124,7 +127,7 @@
 
           <g class="msc-atlas-map__land-context" aria-hidden="true">
             <path class="msc-atlas-map__coast-shelf" d="M156 118 C190 78 247 63 306 75 C350 84 383 108 426 105 C466 101 497 80 542 91 C586 101 610 125 653 121 C702 116 733 83 789 77 C846 70 895 89 927 121 C951 145 973 157 1008 164 C1051 174 1070 202 1059 233 C1050 260 1013 275 1016 301 C1018 329 1058 342 1050 374 C1043 405 1007 421 965 420 C918 418 886 401 849 412 C811 423 789 449 744 449 C703 449 677 429 643 441 C610 452 593 479 550 481 C505 484 472 454 430 454 C392 454 361 471 329 452 C295 431 290 399 254 395 C218 391 184 409 156 386 C129 364 133 330 148 302 C162 276 142 253 119 231 C94 206 103 177 124 157 C136 145 146 132 156 118 Z" />
-            <path class="msc-atlas-map__landmass" d="M156 118 C190 78 247 63 306 75 C350 84 383 108 426 105 C466 101 497 80 542 91 C586 101 610 125 653 121 C702 116 733 83 789 77 C846 70 895 89 927 121 C951 145 973 157 1008 164 C1051 174 1070 202 1059 233 C1050 260 1013 275 1016 301 C1018 329 1058 342 1050 374 C1043 405 1007 421 965 420 C918 418 886 401 849 412 C811 423 789 449 744 449 C703 449 677 429 643 441 C610 452 593 479 550 481 C505 484 472 454 430 454 C392 454 361 471 329 452 C295 431 290 399 254 395 C218 391 184 409 156 386 C129 364 133 330 148 302 C162 276 142 253 119 231 C94 206 103 177 124 157 C136 145 146 132 156 118 Z" />
+            <path class="msc-atlas-map__landmass" d="M156 118 C190 78 247 63 306 75 C350 84 383 108 426 105 C466 101 497 80 542 91 C586 101 610 125 653 121 C702 116 733 83 789 77 C846 70 895 89 927 121 C951 145 973 157 1008 164 C1051 174 1070 202 1059 233 C1050 260 1013 275 1016 301 C1018 329 1058 342 1050 374 C1043 405 1007 421 965 420 C918 418 886 401 849 412 C811 423 789 449 744 449 C703 449 677 429 643 441 C610 452 593 479 L550 481 C505 484 472 454 430 454 C392 454 361 471 329 452 C295 431 290 399 254 395 C218 391 184 409 156 386 C129 364 133 330 148 302 C162 276 142 253 119 231 C94 206 103 177 124 157 C136 145 146 132 156 118 Z" />
             <path class="msc-atlas-map__island" d="M78 250 C91 240 108 242 116 253 C121 264 114 278 100 282 C87 282 75 270 78 250 Z" />
             <path class="msc-atlas-map__island" d="M69 332 C83 319 104 320 112 335 C118 349 107 364 90 365 C75 362 64 348 69 332 Z" />
             <path class="msc-atlas-map__island" d="M1086 126 C1100 116 1119 120 1126 134 C1130 148 1118 159 1103 157 C1089 153 1080 140 1086 126 Z" />
@@ -228,7 +231,7 @@
           </g>
 
           <g class="msc-atlas-map__region" data-atlas-region-shape="network" data-atlas-region-label="NETWORK" data-atlas-viewbox="318 288 715 230" role="button" tabindex="0" aria-pressed="false" aria-label="Preview Network region">
-            <path class="msc-atlas-map__region-shape" d="M289 366 L365 302 L486 330 L535 357 L610 383 L688 360 L742 318 L820 357 L880 391 L965 420 C918 418 886 401 849 412 C811 423 789 449 744 449 C703 449 677 429 643 441 C610 452 593 479 550 481 C505 484 472 454 430 454 C392 454 361 471 329 452 C296 429 286 397 289 366 Z M873 484 C890 473 912 477 920 492 C925 507 913 521 896 520 C878 516 867 500 873 484 Z" />
+            <path class="msc-atlas-map__region-shape" d="M289 366 L365 302 L486 330 L535 357 L610 383 L688 360 L742 318 L820 357 L880 391 L965 420 C918 418 886 401 849 412 C811 423 789 449 744 449 C703 449 677 429 643 441 C610 452 593 479 L550 481 C505 484 472 454 430 454 C392 454 361 471 329 452 C296 429 286 397 289 366 Z M873 484 C890 473 912 477 920 492 C925 507 913 521 896 520 C878 516 867 500 873 484 Z" />
             <path class="msc-atlas-map__region-shape msc-atlas-map__region-shape--inner" d="M373 354 C443 364 505 390 564 413 C623 436 687 421 751 403 C798 390 840 391 874 405" />
             <text class="msc-atlas-map__region-index" x="489" y="390">08</text>
             <text class="msc-atlas-map__region-label" x="489" y="411">NETWORK</text>
@@ -304,6 +307,25 @@
             <g class="msc-atlas-map__destination" role="group" aria-label="Rare Sats Marketplaces">
               <circle class="msc-atlas-map__destination-dot" cx="1019" cy="252" r="2.4" />
               <text class="msc-atlas-map__destination-label" x="1024" y="252" dy=".5">RARE SATS MARKETPLACES</text>
+            </g>
+          </g>
+
+          <g class="msc-atlas-map__destinations msc-atlas-map__destinations--mining" role="group" aria-label="Mining destinations">
+            <g class="msc-atlas-map__destination" role="group" aria-label="Mining Companies">
+              <circle class="msc-atlas-map__destination-dot" cx="323" cy="129" r="2.4" />
+              <text class="msc-atlas-map__destination-label" x="328" y="129" dy=".5">MINING COMPANIES</text>
+            </g>
+            <g class="msc-atlas-map__destination" role="group" aria-label="Mining Pools">
+              <circle class="msc-atlas-map__destination-dot" cx="291" cy="175" r="2.4" />
+              <text class="msc-atlas-map__destination-label" x="296" y="175" dy=".5">MINING POOLS</text>
+            </g>
+            <g class="msc-atlas-map__destination" role="group" aria-label="ASIC Manufacturers">
+              <circle class="msc-atlas-map__destination-dot" cx="445" cy="177" r="2.4" />
+              <text class="msc-atlas-map__destination-label" x="450" y="177" dy=".5">ASIC MANUFACTURERS</text>
+            </g>
+            <g class="msc-atlas-map__destination" role="group" aria-label="Mining Software">
+              <circle class="msc-atlas-map__destination-dot" cx="347" cy="218" r="2.4" />
+              <text class="msc-atlas-map__destination-label" x="352" y="218" dy=".5">MINING SOFTWARE</text>
             </g>
           </g>
         </svg>
