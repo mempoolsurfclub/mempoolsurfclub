@@ -11,7 +11,8 @@
   #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--runes,
   #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--wallets,
   #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--marketplaces,
-  #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--mining {
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--mining,
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-map__destinations--payments {
     display: none;
     opacity: 0;
     pointer-events: none;
@@ -21,7 +22,8 @@
   #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="runes"] .msc-atlas-map__destinations--runes,
   #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="wallets"] .msc-atlas-map__destinations--wallets,
   #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="marketplaces"] .msc-atlas-map__destinations--marketplaces,
-  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="mining"] .msc-atlas-map__destinations--mining {
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="mining"] .msc-atlas-map__destinations--mining,
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="payments"] .msc-atlas-map__destinations--payments {
     display: block;
     opacity: 1;
   }
@@ -33,7 +35,8 @@
 
   #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="wallets"] .msc-atlas-map__region[data-atlas-region-shape="wallets"] > .msc-atlas-map__region-label,
   #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="marketplaces"] .msc-atlas-map__region[data-atlas-region-shape="marketplaces"] > .msc-atlas-map__region-label,
-  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="mining"] .msc-atlas-map__region[data-atlas-region-shape="mining"] > .msc-atlas-map__region-label {
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="mining"] .msc-atlas-map__region[data-atlas-region-shape="mining"] > .msc-atlas-map__region-label,
+  #MscExploreAtlas-{{ section.id }} .msc-atlas-window[data-atlas-active="payments"] .msc-atlas-map__region[data-atlas-region-shape="payments"] > .msc-atlas-map__region-label {
     opacity: 0 !important;
     visibility: hidden;
   }
@@ -326,6 +329,21 @@
             <g class="msc-atlas-map__destination" role="group" aria-label="Mining Software">
               <circle class="msc-atlas-map__destination-dot" cx="347" cy="218" r="2.4" />
               <text class="msc-atlas-map__destination-label" x="352" y="218" dy=".5">MINING SOFTWARE</text>
+            </g>
+          </g>
+
+          <g class="msc-atlas-map__destinations msc-atlas-map__destinations--payments" role="group" aria-label="Payments destinations">
+            <g class="msc-atlas-map__destination" role="group" aria-label="Payment Services">
+              <circle class="msc-atlas-map__destination-dot" cx="484" cy="244" r="2.4" />
+              <text class="msc-atlas-map__destination-label" x="489" y="244" dy=".5">PAYMENT SERVICES</text>
+            </g>
+            <g class="msc-atlas-map__destination" role="group" aria-label="Merchant Tools">
+              <circle class="msc-atlas-map__destination-dot" cx="519" cy="294" r="2.4" />
+              <text class="msc-atlas-map__destination-label" x="524" y="294" dy=".5">MERCHANT TOOLS</text>
+            </g>
+            <g class="msc-atlas-map__destination" role="group" aria-label="Payment Apps">
+              <circle class="msc-atlas-map__destination-dot" cx="381" cy="336" r="2.4" />
+              <text class="msc-atlas-map__destination-label" x="386" y="336" dy=".5">PAYMENT APPS</text>
             </g>
           </g>
         </svg>
