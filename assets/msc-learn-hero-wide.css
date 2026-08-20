@@ -209,19 +209,29 @@
 
   .msc-learn .msc-learn-hero > .msc-depth-chart {
     box-sizing: border-box;
-    padding-bottom: 8.4rem;
+    padding-bottom: 6.8rem;
   }
 
+  /* Treat the lower frame as a compact search/navigation strip, not a floating card. */
   .msc-learn .msc-search-form--learn {
     position: absolute;
     z-index: 8;
-    right: 1.6rem;
-    bottom: 1.2rem;
-    left: 1.6rem;
+    right: 2.25rem !important;
+    bottom: .65rem;
+    left: 2.25rem !important;
     grid-area: auto;
-    width: auto;
-    max-width: none;
-    margin: 0;
+    width: calc(100% - 4.5rem) !important;
+    max-width: none !important;
+    min-width: 0;
+    margin: 0 !important;
+    padding: .35rem 0 0;
+    gap: .8rem;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 
   /* Match the restrained Explore header inset rather than hugging the SONAR frame edges. */
