@@ -1,4 +1,5 @@
 {{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
+{%- assign msc_search_input_id = 'MscSiteSearch-' | append: section.id -%}
 
 <section class="msc-shell msc-site-search-results" aria-labelledby="MscSiteSearchTitle-{{ section.id }}">
   <div class="msc-container">
@@ -7,7 +8,7 @@
       <h1 class="msc-section-title" id="MscSiteSearchTitle-{{ section.id }}">SEARCH MEMPOOL SURF CLUB</h1>
 
       {% render 'msc-search-form',
-        input_id: 'MscSiteSearch-' | append: section.id,
+        input_id: msc_search_input_id,
         placeholder: 'Search Mempool Surf Club',
         button_label: 'Search',
         search_types: 'article,page,product',
