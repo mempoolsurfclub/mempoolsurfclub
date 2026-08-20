@@ -23,7 +23,7 @@
   }
 
   .msc-atlas-window__top.msc-atlas-window__top--site-search {
-    --msc-atlas-header-columns: minmax(0, 1fr) minmax(18rem, 31rem) minmax(0, 1fr);
+    --msc-atlas-header-columns: minmax(0, 1fr) minmax(28rem, 48rem) minmax(0, 1fr);
     grid-template-columns: var(--msc-atlas-header-columns) !important;
     align-items: center !important;
     column-gap: clamp(.8rem, 1.8vw, 1.5rem) !important;
@@ -38,31 +38,31 @@
     grid-column: 2;
     justify-self: center;
     width: 100%;
-    max-width: 31rem;
+    max-width: 48rem;
     min-width: 0;
     margin: 0 !important;
-    padding: .28rem !important;
-    gap: .38rem !important;
-    border-radius: 10px !important;
+    padding: .38rem !important;
+    gap: .5rem !important;
+    border-radius: 12px !important;
     background: rgba(255, 255, 255, .055) !important;
     box-shadow: none !important;
     backdrop-filter: none !important;
   }
 
   .msc-atlas-header-search .msc-search-form__input {
-    height: 2.2rem;
+    height: 2.8rem;
     min-height: 0;
-    padding: .5rem .72rem !important;
-    border-radius: 8px !important;
-    font-size: .82rem !important;
+    padding: .68rem 1rem !important;
+    border-radius: 10px !important;
+    font-size: .92rem !important;
     line-height: 1 !important;
   }
 
   .msc-atlas-header-search .msc-search-form__button {
-    min-height: 2.2rem;
-    padding: .5rem .78rem !important;
-    border-radius: 8px !important;
-    font-size: .72rem !important;
+    min-height: 2.8rem;
+    padding: .68rem 1rem !important;
+    border-radius: 10px !important;
+    font-size: .78rem !important;
     line-height: 1 !important;
     letter-spacing: .08em;
     text-transform: uppercase;
@@ -80,7 +80,7 @@
     transform: none !important;
     display: flex !important;
     min-width: 0 !important;
-    padding: 0 !important;
+    padding: 0 1.6rem 0 0 !important;
     border: 0 !important;
     justify-content: flex-end !important;
     text-align: right !important;
@@ -121,7 +121,7 @@
     .msc-atlas-header-search {
       grid-column: 1 / -1;
       grid-row: 2;
-      width: min(100%, 32rem);
+      width: min(100%, 40rem);
     }
   }
 
