@@ -1,0 +1,62 @@
+<style>
+  .section--msc-atlas-right-hud-tune {
+    display: contents;
+  }
+
+  /* Right-side Atlas HUD alignment pass: compact the text stack beside the ruler. */
+  .msc-atlas-navhud__right-status {
+    left: auto !important;
+    right: 4.85rem !important;
+    width: 6.4rem !important;
+  }
+
+  .msc-atlas-navhud__right-status > div:first-child .msc-atlas-navhud__label {
+    font-size: 0 !important;
+  }
+
+  .msc-atlas-navhud__right-status > div:first-child .msc-atlas-navhud__label::before {
+    content: 'CHART\A CURRENT';
+    display: block;
+    white-space: pre-line;
+    color: rgba(212, 190, 153, .78);
+    font-size: clamp(.58rem, .58vw, .72rem);
+    font-weight: 650;
+    line-height: 1.35;
+    letter-spacing: .14em;
+  }
+
+  .msc-atlas-navhud__current-line {
+    width: 4.8rem !important;
+    margin-top: .56rem !important;
+  }
+
+  .msc-atlas-navhud__scale > .msc-atlas-navhud__micro {
+    display: none !important;
+  }
+
+  .msc-atlas-navhud__right-status::after {
+    content: 'GRID SCALE';
+    display: block;
+    margin-top: 1.1rem;
+    color: rgba(212, 190, 153, .58);
+    font-size: clamp(.58rem, .58vw, .72rem);
+    font-weight: 650;
+    line-height: 1.15;
+    letter-spacing: .14em;
+  }
+
+  .msc-atlas-navhud__grid-ref {
+    left: auto !important;
+    right: 4.85rem !important;
+    width: 6.4rem !important;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "MSC Atlas right HUD tune",
+  "tag": "section",
+  "class": "section section--msc-atlas-right-hud-tune",
+  "settings": []
+}
+{% endschema %}
