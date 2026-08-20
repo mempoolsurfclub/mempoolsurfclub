@@ -2,11 +2,52 @@
   "schemaVersion": 1,
   "api": "MSC API",
   "version": "v1",
-  "generatedAt": "2026-08-20T07:50:19.060Z",
+  "generatedAt": "2026-08-20T08:37:42.138Z",
   "window": "24h",
   "unit": "BTC",
-  "mode": "preview",
-  "assets": [],
-  "methodology": "Market data is withheld until the Satflow response passes MSC validation.",
-  "sourceLine": "MSC API · MARKET DATA TEMPORARILY UNAVAILABLE"
+  "mode": "live",
+  "methodology": "MSC aggregates Satflow trailing-24-hour Ordinals and Runes sales, including external marketplace data, then ranks up to five assets by completed-sale BTC volume.",
+  "sourceLine": "MSC API · Satflow · Ordinals + Runes",
+  "assets": [
+    {
+      "rank": 1,
+      "name": "sub10k",
+      "type": "ORDINAL",
+      "volumeBtc": 0.2125,
+      "salesCount": 4,
+      "source": "Satflow"
+    },
+    {
+      "rank": 2,
+      "name": "bitcoin-puppets",
+      "type": "ORDINAL",
+      "volumeBtc": 0.05128,
+      "salesCount": 5,
+      "source": "Satflow"
+    },
+    {
+      "rank": 3,
+      "name": "omb",
+      "type": "ORDINAL",
+      "volumeBtc": 0.0425,
+      "salesCount": 2,
+      "source": "Satflow"
+    },
+    {
+      "rank": 4,
+      "name": "MAGIC•INIERNET•MONEY",
+      "type": "RUNE",
+      "volumeBtc": 0.039,
+      "salesCount": 2,
+      "source": "Satflow"
+    },
+    {
+      "rank": 5,
+      "name": "RSIC•GENESIS•RUNE",
+      "type": "RUNE",
+      "volumeBtc": 0.01349848,
+      "salesCount": 4,
+      "source": "Satflow"
+    }
+  ]
 }
