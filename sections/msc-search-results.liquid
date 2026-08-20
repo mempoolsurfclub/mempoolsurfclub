@@ -1,0 +1,217 @@
+{{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
+
+<section class="msc-shell msc-site-search-results" aria-labelledby="MscSiteSearchTitle-{{ section.id }}">
+  <div class="msc-container">
+    <header class="msc-site-search-results__header">
+      <div class="msc-section-kicker">MSC SEARCH / SITE INDEX</div>
+      <h1 class="msc-section-title" id="MscSiteSearchTitle-{{ section.id }}">SEARCH MEMPOOL SURF CLUB</h1>
+
+      {% render 'msc-search-form',
+        input_id: 'MscSiteSearch-' | append: section.id,
+        placeholder: 'Search Mempool Surf Club',
+        button_label: 'Search',
+        search_types: 'article,page,product',
+        label: 'Search Mempool Surf Club',
+        modifier: 'results'
+      %}
+
+      {%- if search.performed -%}
+        <p class="msc-site-search-results__summary" role="status">
+          {{ search.results_count }} result{% unless search.results_count == 1 %}s{% endunless %} for “{{ search.terms | escape }}”
+        </p>
+      {%- else -%}
+        <p class="msc-site-search-results__summary">Search across Learn, Explore, tools, editorial, pages, and Shop.</p>
+      {%- endif -%}
+    </header>
+
+    {%- if search.performed -%}
+      {% paginate search.results by 20 %}
+        {%- if search.results_count > 0 -%}
+          <ol class="msc-site-search-results__list" role="list">
+            {%- for item in search.results -%}
+              {%- liquid
+                assign result_label = item.object_type | upcase
+                assign result_preview = blank
+
+                case item.object_type
+                  when 'article'
+                    assign result_label = 'ARTICLE'
+                    assign result_preview = item.excerpt_or_content | strip_html | strip
+                  when 'page'
+                    assign result_label = 'PAGE'
+                    assign result_preview = item.content | strip_html | strip
+                  when 'product'
+                    assign result_label = 'SHOP'
+                    assign result_preview = item.description | strip_html | strip
+                endcase
+              -%}
+              <li class="msc-site-search-results__item">
+                <a class="msc-site-search-results__link" href="{{ item.url }}">
+                  <span class="msc-site-search-results__type">{{ result_label }}</span>
+                  <strong class="msc-site-search-results__title">{{ item.title | escape }}</strong>
+                  {%- if result_preview != blank -%}
+                    <span class="msc-site-search-results__preview">{{ result_preview | truncate: 260 }}</span>
+                  {%- else -%}
+                    <span class="msc-site-search-results__preview">Open this result to continue reading.</span>
+                  {%- endif -%}
+                  <span class="msc-site-search-results__action">OPEN RESULT <span aria-hidden="true">→</span></span>
+                </a>
+              </li>
+            {%- endfor -%}
+          </ol>
+
+          {%- if paginate.pages > 1 -%}
+            <div class="msc-site-search-results__pagination">
+              {% render 'pagination', paginate: paginate %}
+            </div>
+          {%- endif -%}
+        {%- else -%}
+          <div class="msc-site-search-results__empty msc-glass-card">
+            <strong>NO MATCHING SIGNALS</strong>
+            <p>Try a broader Bitcoin topic, protocol, person, project, tool, or product name.</p>
+          </div>
+        {%- endif -%}
+      {% endpaginate %}
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+  .msc-site-search-results {
+    min-height: 72vh;
+    padding: clamp(5rem, 8vw, 8rem) 0 clamp(6rem, 9vw, 9rem);
+  }
+
+  .msc-site-search-results__header {
+    max-width: 82rem;
+  }
+
+  .msc-site-search-results__header .msc-section-title {
+    margin-bottom: 1.6rem;
+  }
+
+  .msc-site-search-results__header .msc-search-form--results {
+    max-width: 72rem;
+    margin: 0;
+  }
+
+  .msc-site-search-results__summary {
+    margin: 1.4rem 0 0;
+    color: rgba(251, 248, 239, .68);
+    font-size: 1.3rem;
+    line-height: 1.5;
+  }
+
+  .msc-site-search-results__list {
+    display: grid;
+    gap: 1rem;
+    max-width: 92rem;
+    margin: clamp(3rem, 5vw, 4.8rem) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .msc-site-search-results__item {
+    margin: 0;
+  }
+
+  .msc-site-search-results__link {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: .6rem 1.4rem;
+    padding: 1.7rem 1.8rem;
+    border: 1px solid rgba(212, 190, 153, .24);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, .055);
+    color: inherit;
+    text-decoration: none;
+    transition: border-color .2s ease, background-color .2s ease, transform .2s ease;
+  }
+
+  .msc-site-search-results__link:hover,
+  .msc-site-search-results__link:focus-visible {
+    border-color: rgba(212, 190, 153, .5);
+    background: rgba(255, 255, 255, .085);
+    transform: translateY(-1px);
+    outline: none;
+  }
+
+  .msc-site-search-results__type {
+    grid-column: 1;
+    color: var(--msc-sand);
+    font-size: .95rem;
+    font-weight: 750;
+    line-height: 1;
+    letter-spacing: .14em;
+  }
+
+  .msc-site-search-results__title {
+    grid-column: 1;
+    color: var(--msc-paper-soft);
+    font-size: clamp(1.7rem, 2vw, 2.25rem);
+    line-height: 1.15;
+    letter-spacing: -.02em;
+  }
+
+  .msc-site-search-results__preview {
+    grid-column: 1;
+    max-width: 74rem;
+    color: rgba(251, 248, 239, .68);
+    font-size: 1.25rem;
+    line-height: 1.55;
+  }
+
+  .msc-site-search-results__action {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    align-self: center;
+    color: rgba(212, 190, 153, .86);
+    font-size: .92rem;
+    font-weight: 750;
+    letter-spacing: .1em;
+    white-space: nowrap;
+  }
+
+  .msc-site-search-results__empty {
+    max-width: 72rem;
+    margin-top: 3.2rem;
+    padding: 2rem;
+  }
+
+  .msc-site-search-results__empty strong {
+    color: var(--msc-sand);
+    font-size: 1rem;
+    letter-spacing: .14em;
+  }
+
+  .msc-site-search-results__empty p {
+    margin: .8rem 0 0;
+    color: rgba(251, 248, 239, .7);
+  }
+
+  .msc-site-search-results__pagination {
+    max-width: 92rem;
+    margin-top: 2.5rem;
+  }
+
+  @media screen and (max-width: 700px) {
+    .msc-site-search-results__link {
+      grid-template-columns: 1fr;
+    }
+
+    .msc-site-search-results__action {
+      grid-column: 1;
+      grid-row: auto;
+      margin-top: .4rem;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "MSC search results",
+  "tag": "section",
+  "class": "section",
+  "settings": []
+}
+{% endschema %}
