@@ -69,9 +69,11 @@
 
   document.querySelectorAll('[data-atlas]').forEach((atlas, atlasIndex) => {
     const svg = atlas.querySelector('[data-atlas-map]');
+    const identityLabel = atlas.querySelector('.msc-atlas-window__identity span');
     const identitySystem = atlas.querySelector('.msc-atlas-window__identity strong');
     const modeReadoutGroup = atlas.querySelector('[data-atlas-mode]')?.closest('.msc-atlas-window__readout');
     const regionReadout = atlas.querySelector('[data-atlas-region-label]');
+    const regionReadoutGroup = regionReadout?.closest('.msc-atlas-window__readout');
     const regionPrefix = regionReadout?.parentElement?.querySelector('span');
     const topBar = atlas.querySelector('.msc-atlas-window__top');
     const live = atlas.querySelector('[data-atlas-live]');
@@ -91,6 +93,32 @@
       modeReadoutGroup.setAttribute('aria-hidden', 'true');
     }
     topBar?.style.setProperty('grid-template-columns', 'minmax(0, 1fr) auto', 'important');
+
+    /* The existing region readout becomes the focused Atlas title. Keep it in
+       the interface chrome, centered independently of the zoomed geography. */
+    if (topBar && regionReadoutGroup) {
+      topBar.style.setProperty('position', 'relative', 'important');
+      regionReadoutGroup.style.setProperty('position', 'absolute', 'important');
+      regionReadoutGroup.style.setProperty('left', '50%', 'important');
+      regionReadoutGroup.style.setProperty('top', '50%', 'important');
+      regionReadoutGroup.style.setProperty('transform', 'translate(-50%, -50%)', 'important');
+      regionReadoutGroup.style.setProperty('justify-content', 'center', 'important');
+      regionReadoutGroup.style.setProperty('text-align', 'center', 'important');
+      regionReadoutGroup.style.setProperty('pointer-events', 'none', 'important');
+    }
+    if (regionPrefix) regionPrefix.style.setProperty('display', 'none', 'important');
+
+    const syncRegionReadoutType = () => {
+      if (!identityLabel || !regionReadout) return;
+      const identityStyle = window.getComputedStyle(identityLabel);
+      regionReadout.style.setProperty('font-size', identityStyle.fontSize, 'important');
+      regionReadout.style.setProperty('font-weight', identityStyle.fontWeight, 'important');
+      regionReadout.style.setProperty('line-height', identityStyle.lineHeight, 'important');
+      regionReadout.style.setProperty('letter-spacing', identityStyle.letterSpacing, 'important');
+      regionReadout.style.setProperty('color', identityStyle.color, 'important');
+    };
+    syncRegionReadoutType();
+    window.addEventListener('resize', syncRegionReadoutType, { passive: true });
 
     let locked = null;
     let animationFrame = null;
@@ -114,78 +142,6 @@
       || region?.querySelector('.msc-atlas-map__region-shape')
       || null
     );
-
-    /* Active-region names reuse the approved Atlas label centers, but live in a
-       dedicated lower SVG layer so destinations and local detail always render
-       above them. RUNES keeps its authoritative perimeter center. */
-    const REGION_WATERMARK_SIZES = Object.freeze({
-      ordinals: 56,
-      runes: 60,
-      wallets: 56,
-      marketplaces: 44,
-      mining: 56,
-      payments: 52,
-      exchanges: 50,
-      network: 52
-    });
-    const regionWatermarks = new Map();
-    const watermarkLayer = document.createElementNS(SVG_NS, 'g');
-    watermarkLayer.classList.add('msc-atlas-map__region-watermarks');
-    watermarkLayer.setAttribute('aria-hidden', 'true');
-    watermarkLayer.setAttribute('pointer-events', 'none');
-
-    mapRegions.forEach((region) => {
-      const slug = region.dataset.atlasRegionShape;
-      const sourceLabel = region.querySelector('.msc-atlas-map__region-label');
-      const sourceCenter = getVisualCenter(sourceLabel);
-      const shapeBounds = safeBBox(getOuterShape(region));
-      const fallbackCenter = shapeBounds
-        ? {
-            x: shapeBounds.x + (shapeBounds.width / 2),
-            y: shapeBounds.y + (shapeBounds.height / 2)
-          }
-        : null;
-      const center = slug === 'runes'
-        ? { x: 554, y: 275 }
-        : sourceCenter || fallbackCenter;
-
-      if (!slug || !center) return;
-
-      const watermark = document.createElementNS(SVG_NS, 'text');
-      watermark.classList.add('msc-atlas-map__region-label', 'msc-atlas-map__region-watermark');
-      watermark.textContent = region.dataset.atlasRegionLabel || slug.toUpperCase();
-      watermark.setAttribute('x', String(Number(center.x.toFixed(2))));
-      watermark.setAttribute('y', String(Number(center.y.toFixed(2))));
-      watermark.setAttribute('text-anchor', 'middle');
-      watermark.setAttribute('dominant-baseline', 'middle');
-      watermark.style.setProperty('display', 'none', 'important');
-      watermark.style.setProperty('fill', 'rgba(212, 190, 153, .18)', 'important');
-      watermark.style.setProperty(
-        'font-size',
-        `calc(${REGION_WATERMARK_SIZES[slug] || 52}px * var(--atlas-counter-scale, 1))`,
-        'important'
-      );
-      watermark.style.setProperty('font-weight', '760', 'important');
-      watermark.style.setProperty('letter-spacing', '.075em', 'important');
-      watermark.style.setProperty('pointer-events', 'none', 'important');
-
-      regionWatermarks.set(slug, watermark);
-      watermarkLayer.appendChild(watermark);
-    });
-
-    if (regionWatermarks.size) {
-      svg.insertBefore(watermarkLayer, mapRegions[0]);
-    }
-
-    const updateRegionWatermark = (activeSlug) => {
-      regionWatermarks.forEach((watermark, slug) => {
-        watermark.style.setProperty(
-          'display',
-          slug === activeSlug ? 'block' : 'none',
-          'important'
-        );
-      });
-    };
 
     /* Focus only real chart geography. The region polygons are interaction
        geometry, so they are converted into invisible buffered masks rather
@@ -427,7 +383,6 @@
       mapRegions.forEach((region) => {
         region.classList.toggle('is-active', region.dataset.atlasRegionShape === slug);
       });
-      updateRegionWatermark(slug);
 
       navTargets.forEach((target) => {
         const active = target.dataset.atlasTarget === slug;
