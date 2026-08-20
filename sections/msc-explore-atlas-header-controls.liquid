@@ -220,6 +220,822 @@
   })();
 </script>
 
+<style>
+  .msc-atlas-window.has-msc-atlas-navhud .msc-atlas-window__coord {
+    opacity: 0;
+  }
+
+  .msc-atlas-navhud {
+    position: absolute;
+    inset: 0;
+    z-index: 6;
+    overflow: hidden;
+    pointer-events: none;
+    color: rgba(212, 190, 153, .78);
+    font-family: var(--font-body-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace);
+    text-transform: uppercase;
+  }
+
+  .msc-atlas-navhud__label,
+  .msc-atlas-navhud__micro,
+  .msc-atlas-navhud__telemetry-label {
+    font-size: clamp(.58rem, .58vw, .72rem);
+    font-weight: 650;
+    line-height: 1.15;
+    letter-spacing: .14em;
+  }
+
+  .msc-atlas-navhud__micro {
+    color: rgba(212, 190, 153, .58);
+  }
+
+  .msc-atlas-navhud__left,
+  .msc-atlas-navhud__right {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: clamp(10.5rem, 17vw, 15.5rem);
+  }
+
+  .msc-atlas-navhud__left {
+    left: 0;
+  }
+
+  .msc-atlas-navhud__right {
+    right: 0;
+  }
+
+  .msc-atlas-navhud__rail {
+    position: absolute;
+    top: 7%;
+    bottom: 21%;
+    left: 1.45rem;
+    width: 1px;
+    border-left: 1px dashed rgba(212, 190, 153, .34);
+  }
+
+  .msc-atlas-navhud__rail::before,
+  .msc-atlas-navhud__rail::after {
+    content: '';
+    position: absolute;
+    left: -4px;
+    width: 8px;
+    height: 1px;
+    background: rgba(212, 190, 153, .5);
+  }
+
+  .msc-atlas-navhud__rail::before {
+    top: 24%;
+  }
+
+  .msc-atlas-navhud__rail::after {
+    top: 66%;
+  }
+
+  .msc-atlas-navhud__surf {
+    position: absolute;
+    top: 9%;
+    left: clamp(2.5rem, 3.6vw, 3.7rem);
+    width: min(74%, 13.2rem);
+  }
+
+  .msc-atlas-navhud__surf-head {
+    display: flex;
+    align-items: center;
+    gap: .72rem;
+    margin-bottom: .78rem;
+  }
+
+  .msc-atlas-navhud__surf-dots {
+    flex: 0 0 auto;
+    width: 1.55rem;
+    height: 3px;
+    background:
+      radial-gradient(circle, rgba(212, 190, 153, .85) 0 1.2px, transparent 1.4px) 0 50% / .52rem 3px repeat-x;
+    opacity: .74;
+  }
+
+  .msc-atlas-navhud__surf-scale {
+    position: relative;
+    height: 1rem;
+    border-top: 1px solid rgba(212, 190, 153, .58);
+    background:
+      repeating-linear-gradient(90deg, rgba(212, 190, 153, .44) 0 1px, transparent 1px 10%);
+    background-size: 100% .42rem;
+    background-repeat: no-repeat;
+  }
+
+  .msc-atlas-navhud__surf-scale::before,
+  .msc-atlas-navhud__surf-scale::after {
+    content: '';
+    position: absolute;
+    top: -.26rem;
+    width: 1px;
+    height: .56rem;
+    background: rgba(212, 190, 153, .68);
+  }
+
+  .msc-atlas-navhud__surf-scale::before {
+    left: 0;
+  }
+
+  .msc-atlas-navhud__surf-scale::after {
+    right: 0;
+  }
+
+  .msc-atlas-navhud__surf-marker {
+    position: absolute;
+    top: .24rem;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-left: .22rem solid transparent;
+    border-right: .22rem solid transparent;
+    border-bottom: .34rem solid rgba(251, 248, 239, .78);
+    transform: translateX(-50%);
+    transition: left 90ms linear;
+  }
+
+  .msc-atlas-navhud__telemetry {
+    position: absolute;
+    top: 31%;
+    left: clamp(2.8rem, 4vw, 4.1rem);
+    width: min(72%, 12.8rem);
+    padding: 1.15rem .45rem 1.05rem;
+  }
+
+  .msc-atlas-navhud__corner {
+    position: absolute;
+    width: .9rem;
+    height: .9rem;
+    opacity: .78;
+  }
+
+  .msc-atlas-navhud__corner--tl {
+    top: 0;
+    left: 0;
+    border-top: 1px solid rgba(212, 190, 153, .84);
+    border-left: 1px solid rgba(212, 190, 153, .84);
+  }
+
+  .msc-atlas-navhud__corner--tr {
+    top: 0;
+    right: 0;
+    border-top: 1px solid rgba(212, 190, 153, .84);
+    border-right: 1px solid rgba(212, 190, 153, .84);
+  }
+
+  .msc-atlas-navhud__corner--bl {
+    bottom: 0;
+    left: 0;
+    border-bottom: 1px solid rgba(212, 190, 153, .84);
+    border-left: 1px solid rgba(212, 190, 153, .84);
+  }
+
+  .msc-atlas-navhud__corner--br {
+    right: 0;
+    bottom: 0;
+    border-right: 1px solid rgba(212, 190, 153, .84);
+    border-bottom: 1px solid rgba(212, 190, 153, .84);
+  }
+
+  .msc-atlas-navhud__telemetry-row + .msc-atlas-navhud__telemetry-row {
+    margin-top: .88rem;
+    padding-top: .76rem;
+    border-top: 1px solid rgba(212, 190, 153, .24);
+  }
+
+  .msc-atlas-navhud__telemetry-label {
+    display: block;
+    margin-bottom: .4rem;
+    color: rgba(212, 190, 153, .72);
+  }
+
+  .msc-atlas-navhud__telemetry-value {
+    display: block;
+    color: rgba(251, 248, 239, .86);
+    font-size: clamp(.78rem, .9vw, 1.03rem);
+    font-weight: 650;
+    line-height: 1.12;
+    letter-spacing: .12em;
+    white-space: nowrap;
+  }
+
+  .msc-atlas-navhud__telemetry-value--coordinates {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: .14em;
+  }
+
+  .msc-atlas-navhud__lock {
+    margin-top: .92rem;
+    padding-top: .72rem;
+    border-top: 1px solid rgba(212, 190, 153, .24);
+  }
+
+  .msc-atlas-navhud__bearing {
+    position: absolute;
+    left: clamp(2.4rem, 3.7vw, 3.8rem);
+    bottom: 7.5%;
+    width: min(77%, 13.4rem);
+  }
+
+  .msc-atlas-navhud__bearing-body {
+    display: grid;
+    grid-template-columns: 4.7rem 1fr;
+    align-items: end;
+    gap: .85rem;
+    margin-top: .7rem;
+  }
+
+  .msc-atlas-navhud__compass {
+    width: 4.7rem;
+    height: 4.7rem;
+    overflow: visible;
+  }
+
+  .msc-atlas-navhud__compass circle,
+  .msc-atlas-navhud__compass path,
+  .msc-atlas-navhud__compass line {
+    fill: none;
+    stroke: rgba(212, 190, 153, .46);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .msc-atlas-navhud__compass .msc-atlas-navhud__needle {
+    transform-origin: 37px 37px;
+    transition: transform 120ms ease-out;
+  }
+
+  .msc-atlas-navhud__compass .msc-atlas-navhud__needle path {
+    fill: rgba(212, 190, 153, .08);
+    stroke: rgba(251, 248, 239, .78);
+  }
+
+  .msc-atlas-navhud__trace {
+    width: 100%;
+    height: 3.6rem;
+    border-left: 1px solid rgba(212, 190, 153, .32);
+    border-bottom: 1px solid rgba(212, 190, 153, .25);
+    background:
+      linear-gradient(rgba(212, 190, 153, .11) 1px, transparent 1px) 0 0 / 100% 50%,
+      linear-gradient(90deg, rgba(212, 190, 153, .09) 1px, transparent 1px) 0 0 / 25% 100%;
+  }
+
+  .msc-atlas-navhud__trace path {
+    fill: none;
+    stroke: rgba(212, 190, 153, .42);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .msc-atlas-navhud__right-status {
+    position: absolute;
+    top: 9%;
+    left: 12%;
+    width: 58%;
+  }
+
+  .msc-atlas-navhud__current-line {
+    position: relative;
+    width: 5.4rem;
+    height: .85rem;
+    margin-top: .64rem;
+    border-top: 1px solid rgba(212, 190, 153, .48);
+  }
+
+  .msc-atlas-navhud__current-line::before,
+  .msc-atlas-navhud__current-line::after {
+    content: '';
+    position: absolute;
+    top: -.18rem;
+    width: .32rem;
+    height: .32rem;
+    border-radius: 50%;
+    background: rgba(212, 190, 153, .72);
+  }
+
+  .msc-atlas-navhud__current-line::before {
+    left: 38%;
+    animation: msc-atlas-navhud-current 5s ease-in-out infinite;
+  }
+
+  .msc-atlas-navhud__current-line::after {
+    left: 72%;
+    opacity: .58;
+    animation: msc-atlas-navhud-current 5s 1.2s ease-in-out infinite;
+  }
+
+  .msc-atlas-navhud__status-block {
+    margin-top: 1.1rem;
+  }
+
+  .msc-atlas-navhud__status-value {
+    display: block;
+    margin-top: .28rem;
+    color: rgba(251, 248, 239, .72);
+    font-size: clamp(.6rem, .6vw, .74rem);
+    font-weight: 650;
+    letter-spacing: .12em;
+  }
+
+  .msc-atlas-navhud__scale {
+    position: absolute;
+    top: 10%;
+    right: 1.8rem;
+    bottom: 23%;
+    width: 3.1rem;
+  }
+
+  .msc-atlas-navhud__scale-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 1.85rem;
+    width: 1px;
+    background: rgba(212, 190, 153, .52);
+  }
+
+  .msc-atlas-navhud__scale-line::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 0 -1.8rem;
+    background:
+      repeating-linear-gradient(to bottom, rgba(212, 190, 153, .46) 0 1px, transparent 1px 5%),
+      repeating-linear-gradient(to bottom, rgba(212, 190, 153, .2) 0 1px, transparent 1px 2.5%);
+    background-size: 1.8rem 100%, 1rem 100%;
+    background-position: right top, right top;
+    background-repeat: no-repeat;
+  }
+
+  .msc-atlas-navhud__scale-label {
+    position: absolute;
+    right: 0;
+    color: rgba(251, 248, 239, .76);
+    font-size: .72rem;
+    font-weight: 650;
+    letter-spacing: .06em;
+    transform: translateY(-50%);
+  }
+
+  .msc-atlas-navhud__scale-label--75 {
+    top: 18%;
+  }
+
+  .msc-atlas-navhud__scale-label--50 {
+    top: 50%;
+  }
+
+  .msc-atlas-navhud__scale-label--25 {
+    top: 82%;
+  }
+
+  .msc-atlas-navhud__scale-marker {
+    position: absolute;
+    top: 50%;
+    right: 1.45rem;
+    width: 2rem;
+    height: 1px;
+    background: rgba(251, 248, 239, .88);
+    transform: translateY(-50%);
+    transition: top 90ms linear;
+  }
+
+  .msc-atlas-navhud__scale-marker::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    right: 0;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(251, 248, 239, .8);
+  }
+
+  .msc-atlas-navhud__grid-ref {
+    position: absolute;
+    top: 55%;
+    left: 15%;
+  }
+
+  .msc-atlas-navhud__route-plot {
+    position: absolute;
+    right: 2.8rem;
+    bottom: 1.2rem;
+    width: min(100%, 15rem);
+    height: 8.4rem;
+    overflow: visible;
+    opacity: .62;
+  }
+
+  .msc-atlas-navhud__route-plot path,
+  .msc-atlas-navhud__route-plot line,
+  .msc-atlas-navhud__route-plot circle {
+    fill: none;
+    stroke: rgba(212, 190, 153, .48);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .msc-atlas-navhud__route-plot .msc-atlas-navhud__route-main {
+    stroke: rgba(212, 190, 153, .64);
+    stroke-dasharray: 2 5;
+  }
+
+  .msc-atlas-navhud__route-plot circle {
+    fill: rgba(16, 40, 45, .88);
+  }
+
+  .msc-atlas-navhud__route-pulse {
+    fill: rgba(251, 248, 239, .76) !important;
+    stroke: none !important;
+    offset-path: path('M10 108 C52 86 91 82 119 60 C145 40 164 31 202 16');
+    animation: msc-atlas-navhud-route 7s linear infinite;
+  }
+
+  .msc-atlas-navhud__radar {
+    position: absolute;
+    right: -5.8rem;
+    bottom: -5.2rem;
+    width: 15rem;
+    height: 15rem;
+    border: 1px solid rgba(212, 190, 153, .27);
+    border-radius: 50%;
+    opacity: .6;
+  }
+
+  .msc-atlas-navhud__radar::before,
+  .msc-atlas-navhud__radar::after {
+    content: '';
+    position: absolute;
+    border: 1px solid rgba(212, 190, 153, .23);
+    border-radius: 50%;
+  }
+
+  .msc-atlas-navhud__radar::before {
+    inset: 2.2rem;
+    border-style: dashed;
+  }
+
+  .msc-atlas-navhud__radar::after {
+    inset: 5.1rem;
+  }
+
+  .msc-atlas-navhud__radar-tick {
+    position: absolute;
+    top: 1.5rem;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-left: .28rem solid transparent;
+    border-right: .28rem solid transparent;
+    border-bottom: .48rem solid rgba(212, 190, 153, .52);
+    transform: translateX(-50%);
+  }
+
+  @keyframes msc-atlas-navhud-current {
+    0%, 100% { transform: translateX(-.25rem); opacity: .34; }
+    50% { transform: translateX(.45rem); opacity: .9; }
+  }
+
+  @keyframes msc-atlas-navhud-route {
+    0% { offset-distance: 0%; opacity: 0; }
+    12% { opacity: .82; }
+    88% { opacity: .82; }
+    100% { offset-distance: 100%; opacity: 0; }
+  }
+
+  @media screen and (max-width: 1180px) {
+    .msc-atlas-navhud__left,
+    .msc-atlas-navhud__right {
+      width: 13.2rem;
+    }
+
+    .msc-atlas-navhud__route-plot {
+      width: 12rem;
+    }
+  }
+
+  @media screen and (max-width: 1000px) {
+    .msc-atlas-navhud {
+      display: none;
+    }
+
+    .msc-atlas-window.has-msc-atlas-navhud .msc-atlas-window__coord {
+      opacity: .68;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .msc-atlas-navhud__current-line::before,
+    .msc-atlas-navhud__current-line::after,
+    .msc-atlas-navhud__route-pulse {
+      animation: none !important;
+    }
+
+    .msc-atlas-navhud__surf-marker,
+    .msc-atlas-navhud__scale-marker,
+    .msc-atlas-navhud__needle {
+      transition: none !important;
+    }
+  }
+</style>
+
+<script>
+  (() => {
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+    const GRID_COLUMNS = 'ABCDEFGH';
+
+    const pad4 = (value) => String(Math.max(0, Math.min(9999, value))).padStart(4, '0');
+    const clamp01 = (value) => Math.max(0, Math.min(1, value));
+
+    const regionLabel = (atlas, slug) => {
+      if (!slug) return '';
+      const region = [...atlas.querySelectorAll('[data-atlas-region-shape]')]
+        .find((item) => item.dataset.atlasRegionShape === slug);
+      return region?.dataset.atlasRegionLabel || slug.toUpperCase();
+    };
+
+    const navHudMarkup = () => `
+      <div class="msc-atlas-navhud__left">
+        <span class="msc-atlas-navhud__rail" aria-hidden="true"></span>
+
+        <div class="msc-atlas-navhud__surf">
+          <div class="msc-atlas-navhud__surf-head">
+            <span class="msc-atlas-navhud__label">SURF VECTOR</span>
+            <span class="msc-atlas-navhud__surf-dots"></span>
+          </div>
+          <div class="msc-atlas-navhud__surf-scale">
+            <span class="msc-atlas-navhud__surf-marker" data-atlas-hud-surf></span>
+          </div>
+        </div>
+
+        <div class="msc-atlas-navhud__telemetry">
+          <span class="msc-atlas-navhud__corner msc-atlas-navhud__corner--tl"></span>
+          <span class="msc-atlas-navhud__corner msc-atlas-navhud__corner--tr"></span>
+          <span class="msc-atlas-navhud__corner msc-atlas-navhud__corner--bl"></span>
+          <span class="msc-atlas-navhud__corner msc-atlas-navhud__corner--br"></span>
+
+          <div class="msc-atlas-navhud__telemetry-row">
+            <span class="msc-atlas-navhud__telemetry-label">COORDINATES //</span>
+            <strong class="msc-atlas-navhud__telemetry-value msc-atlas-navhud__telemetry-value--coordinates" data-atlas-hud-coords>----X ----Y</strong>
+          </div>
+          <div class="msc-atlas-navhud__telemetry-row">
+            <span class="msc-atlas-navhud__telemetry-label">SECTOR //</span>
+            <strong class="msc-atlas-navhud__telemetry-value" data-atlas-hud-sector>OPEN WATER</strong>
+          </div>
+          <div class="msc-atlas-navhud__telemetry-row">
+            <span class="msc-atlas-navhud__telemetry-label">SIGNAL //</span>
+            <strong class="msc-atlas-navhud__telemetry-value" data-atlas-hud-signal>STANDBY</strong>
+          </div>
+          <div class="msc-atlas-navhud__lock">
+            <span class="msc-atlas-navhud__micro">GRID LOCK // <b data-atlas-hud-lock>STANDBY</b></span>
+          </div>
+        </div>
+
+        <div class="msc-atlas-navhud__bearing">
+          <span class="msc-atlas-navhud__label">ATLAS BEARING</span>
+          <div class="msc-atlas-navhud__bearing-body">
+            <svg class="msc-atlas-navhud__compass" viewBox="0 0 74 74" aria-hidden="true">
+              <circle cx="37" cy="37" r="29"></circle>
+              <circle cx="37" cy="37" r="24" stroke-dasharray="2 4"></circle>
+              <line x1="37" y1="4" x2="37" y2="14"></line>
+              <line x1="37" y1="60" x2="37" y2="70"></line>
+              <line x1="4" y1="37" x2="14" y2="37"></line>
+              <line x1="60" y1="37" x2="70" y2="37"></line>
+              <path d="M16 16 L22 22 M52 52 L58 58 M58 16 L52 22 M22 52 L16 58"></path>
+              <g class="msc-atlas-navhud__needle" data-atlas-hud-needle>
+                <path d="M37 9 L41 37 L37 44 L33 37 Z"></path>
+              </g>
+              <circle cx="37" cy="37" r="2.2"></circle>
+            </svg>
+            <svg class="msc-atlas-navhud__trace" viewBox="0 0 180 42" preserveAspectRatio="none" aria-hidden="true">
+              <path data-atlas-hud-trace d="M0 22 L24 22 L48 22 L72 22 L96 22 L120 22 L144 22 L180 22"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="msc-atlas-navhud__right">
+        <div class="msc-atlas-navhud__right-status">
+          <div>
+            <span class="msc-atlas-navhud__label">CHART CURRENT</span>
+            <div class="msc-atlas-navhud__current-line"></div>
+          </div>
+          <div class="msc-atlas-navhud__status-block">
+            <span class="msc-atlas-navhud__micro">CHART MODE</span>
+            <strong class="msc-atlas-navhud__status-value">NAV</strong>
+          </div>
+          <div class="msc-atlas-navhud__status-block">
+            <span class="msc-atlas-navhud__micro">ATLAS ROUTE</span>
+            <strong class="msc-atlas-navhud__status-value" data-atlas-hud-route>STANDBY</strong>
+          </div>
+        </div>
+
+        <div class="msc-atlas-navhud__scale">
+          <span class="msc-atlas-navhud__micro" style="position:absolute; right:0; top:-1.35rem;">GRID SCALE</span>
+          <span class="msc-atlas-navhud__scale-line"></span>
+          <span class="msc-atlas-navhud__scale-label msc-atlas-navhud__scale-label--75">75</span>
+          <span class="msc-atlas-navhud__scale-label msc-atlas-navhud__scale-label--50">50</span>
+          <span class="msc-atlas-navhud__scale-label msc-atlas-navhud__scale-label--25">25</span>
+          <span class="msc-atlas-navhud__scale-marker" data-atlas-hud-scale></span>
+        </div>
+
+        <div class="msc-atlas-navhud__grid-ref">
+          <span class="msc-atlas-navhud__micro">GRID REF</span>
+          <strong class="msc-atlas-navhud__status-value" data-atlas-hud-grid>--</strong>
+        </div>
+
+        <svg class="msc-atlas-navhud__route-plot" viewBox="0 0 220 126" aria-hidden="true">
+          <path class="msc-atlas-navhud__route-main" d="M10 108 C52 86 91 82 119 60 C145 40 164 31 202 16"></path>
+          <path d="M18 112 C62 106 80 92 105 74 M118 117 C128 83 146 65 164 43" stroke-dasharray="2 7"></path>
+          <line x1="35" y1="97" x2="49" y2="91"></line>
+          <line x1="89" y1="83" x2="101" y2="76"></line>
+          <line x1="145" y1="43" x2="157" y2="36"></line>
+          <circle cx="10" cy="108" r="3.2"></circle>
+          <circle cx="56" cy="87" r="2.7"></circle>
+          <circle cx="101" cy="74" r="3.2"></circle>
+          <circle cx="145" cy="43" r="2.7"></circle>
+          <circle cx="202" cy="16" r="3.2"></circle>
+          <circle class="msc-atlas-navhud__route-pulse" cx="0" cy="0" r="2.2"></circle>
+        </svg>
+
+        <div class="msc-atlas-navhud__radar" aria-hidden="true">
+          <span class="msc-atlas-navhud__radar-tick"></span>
+        </div>
+      </div>
+    `;
+
+    const initAtlasNavHud = () => {
+      document.querySelectorAll('[data-atlas]').forEach((atlas) => {
+        const viewport = atlas.querySelector('[data-atlas-viewport]');
+        if (!viewport || viewport.querySelector('[data-atlas-navhud]')) return;
+
+        const hud = document.createElement('div');
+        hud.className = 'msc-atlas-navhud';
+        hud.dataset.atlasNavhud = '';
+        hud.setAttribute('aria-hidden', 'true');
+        hud.innerHTML = navHudMarkup();
+        viewport.appendChild(hud);
+        atlas.classList.add('has-msc-atlas-navhud');
+
+        const coords = hud.querySelector('[data-atlas-hud-coords]');
+        const sector = hud.querySelector('[data-atlas-hud-sector]');
+        const signal = hud.querySelector('[data-atlas-hud-signal]');
+        const lock = hud.querySelector('[data-atlas-hud-lock]');
+        const route = hud.querySelector('[data-atlas-hud-route]');
+        const grid = hud.querySelector('[data-atlas-hud-grid]');
+        const surf = hud.querySelector('[data-atlas-hud-surf]');
+        const scale = hud.querySelector('[data-atlas-hud-scale]');
+        const needle = hud.querySelector('[data-atlas-hud-needle]');
+        const trace = hud.querySelector('[data-atlas-hud-trace]');
+
+        let inside = false;
+        let pendingPoint = null;
+        let frame = null;
+        let lastPoint = null;
+        let lastTime = 0;
+        let tracePhase = 0;
+
+        const setInteractionState = (hoverSlug = '') => {
+          const mode = atlas.dataset.atlasMode || 'overview';
+          const lockedSlug = mode === 'locked' ? (atlas.dataset.atlasActive || '') : '';
+          const effectiveSlug = lockedSlug || hoverSlug;
+
+          if (sector) {
+            sector.textContent = effectiveSlug
+              ? regionLabel(atlas, effectiveSlug)
+              : 'OPEN WATER';
+          }
+
+          if (mode === 'locked' && lockedSlug) {
+            if (signal) signal.textContent = 'LOCKED';
+            if (lock) lock.textContent = 'LOCKED';
+            if (route) route.textContent = 'ACTIVE';
+          } else if (inside && hoverSlug) {
+            if (signal) signal.textContent = 'ACQUIRED';
+            if (lock) lock.textContent = 'ENGAGED';
+            if (route) route.textContent = 'ACTIVE';
+          } else if (inside) {
+            if (signal) signal.textContent = 'SEARCHING';
+            if (lock) lock.textContent = 'STANDBY';
+            if (route) route.textContent = 'ACTIVE';
+          } else {
+            if (signal) signal.textContent = 'STANDBY';
+            if (lock) lock.textContent = lockedSlug ? 'LOCKED' : 'STANDBY';
+            if (route) route.textContent = lockedSlug ? 'ACTIVE' : 'STANDBY';
+          }
+        };
+
+        const updateTrace = (speed) => {
+          if (!trace) return;
+          tracePhase += .38;
+          const amplitude = Math.max(1.5, Math.min(10, 1.5 + (speed * 18)));
+          const points = [];
+          const count = 8;
+          for (let i = 0; i < count; i += 1) {
+            const x = (180 / (count - 1)) * i;
+            const wave = Math.sin((i * 1.65) + tracePhase) * amplitude;
+            const taper = i === 0 || i === count - 1 ? .28 : 1;
+            points.push(`${i === 0 ? 'M' : 'L'}${x.toFixed(1)} ${(22 + (wave * taper)).toFixed(1)}`);
+          }
+          trace.setAttribute('d', points.join(' '));
+        };
+
+        const updatePoint = (clientX, clientY) => {
+          const rect = viewport.getBoundingClientRect();
+          if (!rect.width || !rect.height) return;
+
+          const x = clamp01((clientX - rect.left) / rect.width);
+          const y = clamp01((clientY - rect.top) / rect.height);
+          const xValue = Math.round(x * 9999);
+          const yValue = Math.round((1 - y) * 9999);
+
+          if (coords) coords.textContent = `${pad4(xValue)}X ${pad4(yValue)}Y`;
+          if (surf) surf.style.left = `${(x * 100).toFixed(2)}%`;
+          if (scale) scale.style.top = `${(y * 100).toFixed(2)}%`;
+
+          const columnIndex = Math.min(GRID_COLUMNS.length - 1, Math.floor(x * GRID_COLUMNS.length));
+          const rowIndex = Math.min(7, Math.floor(y * 8));
+          if (grid) grid.textContent = `${GRID_COLUMNS[columnIndex]}-${String(rowIndex + 1).padStart(2, '0')}`;
+
+          if (needle) {
+            const dx = clientX - (rect.left + (rect.width / 2));
+            const dy = clientY - (rect.top + (rect.height / 2));
+            const bearing = (Math.atan2(dy, dx) * 180 / Math.PI) + 90;
+            needle.style.transform = `rotate(${bearing.toFixed(1)}deg)`;
+          }
+
+          const hit = document.elementFromPoint(clientX, clientY);
+          const region = hit?.closest?.('[data-atlas-region-shape]');
+          const hoverSlug = region && atlas.contains(region)
+            ? (region.dataset.atlasRegionShape || '')
+            : '';
+          setInteractionState(hoverSlug);
+
+          const now = performance.now();
+          let speed = 0;
+          if (lastPoint && lastTime) {
+            const distance = Math.hypot(clientX - lastPoint.x, clientY - lastPoint.y);
+            const elapsed = Math.max(1, now - lastTime);
+            speed = Math.min(1, distance / elapsed / 1.8);
+          }
+          lastPoint = { x: clientX, y: clientY };
+          lastTime = now;
+          updateTrace(speed);
+        };
+
+        const flushPoint = () => {
+          frame = null;
+          if (!pendingPoint) return;
+          updatePoint(pendingPoint.x, pendingPoint.y);
+          pendingPoint = null;
+        };
+
+        viewport.addEventListener('pointerenter', (event) => {
+          inside = true;
+          pendingPoint = { x: event.clientX, y: event.clientY };
+          if (!frame) frame = requestAnimationFrame(flushPoint);
+        }, { passive: true });
+
+        viewport.addEventListener('pointermove', (event) => {
+          inside = true;
+          pendingPoint = { x: event.clientX, y: event.clientY };
+          if (!frame) frame = requestAnimationFrame(flushPoint);
+        }, { passive: true });
+
+        viewport.addEventListener('pointerleave', () => {
+          inside = false;
+          pendingPoint = null;
+          lastPoint = null;
+          lastTime = 0;
+          if (coords) coords.textContent = '----X ----Y';
+          if (grid) grid.textContent = '--';
+          if (surf) surf.style.left = '50%';
+          if (scale) scale.style.top = '50%';
+          if (needle) needle.style.transform = 'rotate(0deg)';
+          updateTrace(0);
+          setInteractionState('');
+        }, { passive: true });
+
+        const syncAtlasState = () => setInteractionState('');
+        new MutationObserver(syncAtlasState).observe(atlas, {
+          attributes: true,
+          attributeFilter: ['data-atlas-active', 'data-atlas-mode']
+        });
+
+        setInteractionState('');
+      });
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initAtlasNavHud, { once: true });
+    } else {
+      window.requestAnimationFrame(initAtlasNavHud);
+    }
+  })();
+</script>
+
 {% schema %}
 {
   "name": "MSC Atlas header controls",
