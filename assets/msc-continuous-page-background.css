@@ -45,3 +45,14 @@
 #MainContent:has(.msc-home-hero) .msc-home-gateway {
   border-top: 0 !important;
 }
+
+/* Dawn inserts a global margin between adjacent Shopify sections. Learn is a
+ * single section, while Home and Explore are split across two MSC sections.
+ * Remove only those two wrapper gaps so the shared page canvas stays visually
+ * uninterrupted; each MSC section retains its own internal padding. */
+#MainContent > .shopify-section.section:has(.msc-home-hero)
+  + .shopify-section.section:has(.msc-home-gateway),
+#MainContent > .shopify-section.section:has(.msc-explore-atlas-shell)
+  + .shopify-section.section:has(.msc-explore) {
+  margin-top: 0 !important;
+}
