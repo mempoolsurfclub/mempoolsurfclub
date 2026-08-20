@@ -2,76 +2,538 @@
 {{ 'msc-continuous-page-background.css' | asset_url | stylesheet_tag }}
 
 <style>
-  #SurfReport-{{ section.id }} > .msc-block:first-child .msc-title {
+  #SurfReport-{{ section.id }} .msc-tools-hero {
+    padding-top: clamp(4.6rem, 7vw, 7.8rem);
+    padding-bottom: clamp(4.8rem, 7vw, 7.2rem);
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-hero__identity {
+    max-width: 82rem;
+    margin: 0 auto clamp(2.8rem, 4vw, 4.2rem);
+    text-align: center;
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-hero__identity .msc-title {
+    margin-top: 1.45rem;
     color: var(--msc-sand);
   }
 
+  #SurfReport-{{ section.id }} .msc-tools-cockpit {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(1.2rem, 2vw, 2rem);
+    border: 1px solid rgba(212, 190, 153, .36);
+    border-radius: 30px;
+    background:
+      linear-gradient(rgba(212,190,153,.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212,190,153,.035) 1px, transparent 1px),
+      radial-gradient(circle at 50% 45%, rgba(212,190,153,.12), transparent 38%),
+      linear-gradient(145deg, rgba(7, 31, 36, .92), rgba(20, 54, 61, .86));
+    background-size: 34px 34px, 34px 34px, auto, auto;
+    box-shadow: 0 26px 80px rgba(5, 20, 24, .34), inset 0 1px 0 rgba(255,255,255,.05);
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-cockpit::before,
+  #SurfReport-{{ section.id }} .msc-tools-cockpit::after {
+    content: "";
+    position: absolute;
+    width: 8rem;
+    height: 8rem;
+    pointer-events: none;
+    opacity: .72;
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-cockpit::before {
+    top: 1rem;
+    left: 1rem;
+    border-top: 1px solid rgba(212,190,153,.5);
+    border-left: 1px solid rgba(212,190,153,.5);
+    border-radius: 20px 0 0 0;
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-cockpit::after {
+    right: 1rem;
+    bottom: 1rem;
+    border-right: 1px solid rgba(212,190,153,.5);
+    border-bottom: 1px solid rgba(212,190,153,.5);
+    border-radius: 0 0 20px 0;
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-cockpit__topline {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.2rem;
+    padding: .35rem .6rem 1.4rem;
+    border-bottom: 1px solid rgba(212,190,153,.18);
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-cockpit__system,
+  #SurfReport-{{ section.id }} .msc-tools-cockpit__status {
+    margin: 0;
+    font-size: 1rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-cockpit__system { color: rgba(251,248,239,.58); }
+  #SurfReport-{{ section.id }} .msc-tools-cockpit__status {
+    display: inline-flex;
+    align-items: center;
+    gap: .65rem;
+    color: var(--msc-sand);
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-cockpit__status::before {
+    content: "";
+    width: .55rem;
+    height: .55rem;
+    border-radius: 999px;
+    background: var(--msc-sand);
+    box-shadow: 0 0 12px rgba(212,190,153,.65);
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-cockpit__deck {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(15rem, .62fr) minmax(0, 1.7fr) minmax(15rem, .62fr);
+    gap: clamp(1rem, 2vw, 2rem);
+    align-items: stretch;
+    padding-top: clamp(1.2rem, 2vw, 2rem);
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-cockpit__rail {
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    gap: .8rem;
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-readout {
+    min-height: 8.8rem;
+    padding: 1.25rem 1.35rem;
+    border: 1px solid rgba(212,190,153,.16);
+    border-radius: 16px;
+    background: rgba(255,255,255,.035);
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-readout__label,
+  #SurfReport-{{ section.id }} .msc-tools-price__label,
+  #SurfReport-{{ section.id }} .msc-tools-price__meta-label {
+    margin: 0;
+    color: rgba(251,248,239,.48);
+    font-size: .94rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-readout__value {
+    margin: .72rem 0 .3rem;
+    color: var(--msc-paper-soft);
+    font-size: clamp(1.45rem, 1.6vw, 2rem);
+    line-height: 1;
+    letter-spacing: -.025em;
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-readout__note {
+    margin: 0;
+    color: var(--msc-sand);
+    font-size: 1.05rem;
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-price {
+    position: relative;
+    display: flex;
+    min-height: 33rem;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    padding: clamp(1.8rem, 3vw, 3rem);
+    border: 1px solid rgba(212,190,153,.28);
+    border-radius: 22px;
+    background:
+      radial-gradient(circle at 50% 42%, rgba(212,190,153,.095), transparent 46%),
+      linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.015));
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-price::before {
+    content: "";
+    position: absolute;
+    inset: 9% 8%;
+    border: 1px solid rgba(212,190,153,.08);
+    border-radius: 999px 999px 24px 24px;
+    transform: perspective(800px) rotateX(62deg) translateY(-10%);
+    transform-origin: 50% 100%;
+    pointer-events: none;
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-price__heading {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-price__pair {
+    text-align: right;
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-price__display {
+    position: relative;
+    z-index: 2;
+    margin: clamp(2.6rem, 4vw, 4.2rem) 0 0;
+    text-align: center;
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-price__value {
+    color: var(--msc-paper-soft);
+    font-size: clamp(4.3rem, 7vw, 8rem);
+    line-height: .86;
+    letter-spacing: -.065em;
+    text-shadow: 0 12px 34px rgba(3,18,22,.34);
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-price__change {
+    display: block;
+    min-height: 1.8rem;
+    margin-top: 1.25rem;
+    color: var(--msc-sand);
+    font-size: 1.25rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-trace {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 11rem;
+    margin: 1rem 0 .6rem;
+    overflow: visible;
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-trace__grid {
+    stroke: rgba(212,190,153,.08);
+    stroke-width: 1;
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-trace__path {
+    fill: none;
+    stroke: rgba(212,190,153,.92);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 7 8;
+    animation: mscToolsTrace 18s linear infinite;
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-trace__ghost {
+    fill: none;
+    stroke: rgba(251,248,239,.16);
+    stroke-width: 7;
+    filter: blur(5px);
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-price__meta {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .75rem;
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-price__meta-item {
+    padding-top: 1rem;
+    border-top: 1px solid rgba(212,190,153,.16);
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-price__meta-value {
+    display: block;
+    margin-top: .45rem;
+    color: rgba(251,248,239,.78);
+    font-size: 1.05rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-cockpit__search {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: .85rem;
+    align-items: center;
+    margin-top: 1.1rem;
+    padding: .75rem .8rem .75rem 1.15rem;
+    border: 1px solid rgba(212,190,153,.18);
+    border-radius: 17px;
+    background: rgba(3,18,22,.28);
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-cockpit__search-label {
+    color: var(--msc-sand);
+    font-size: .95rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-cockpit__search input {
+    min-width: 0;
+    width: 100%;
+    border: 0;
+    outline: 0;
+    padding: 1rem 1.1rem;
+    color: var(--msc-paper-soft);
+    background: transparent;
+    font: inherit;
+    font-size: 1.25rem;
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-cockpit__search input::placeholder { color: rgba(251,248,239,.42); }
+
+  #SurfReport-{{ section.id }} .msc-tools-cockpit__search button {
+    border: 1px solid rgba(212,190,153,.34);
+    border-radius: 12px;
+    padding: .95rem 1.25rem;
+    color: var(--msc-ink);
+    background: var(--msc-sand);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-launches {
+    margin-top: 1.2rem;
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-launches__label {
+    margin: 0 0 .8rem;
+    color: rgba(251,248,239,.45);
+    font-size: .94rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-launches__row {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: .7rem;
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-launch {
+    display: flex;
+    min-height: 5.5rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: .8rem;
+    padding: 1rem 1.15rem;
+    border: 1px solid rgba(212,190,153,.18);
+    border-radius: 14px;
+    color: rgba(251,248,239,.76);
+    background: rgba(255,255,255,.035);
+    text-decoration: none;
+    font-size: 1.08rem;
+    line-height: 1.25;
+    transition: transform .2s ease, border-color .2s ease, background .2s ease;
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-launch:hover {
+    transform: translateY(-2px);
+    border-color: rgba(212,190,153,.46);
+    background: rgba(255,255,255,.07);
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-launch--inscriber {
+    border-color: rgba(212,190,153,.42);
+    color: var(--msc-paper-soft);
+    background: linear-gradient(180deg, rgba(212,190,153,.12), rgba(255,255,255,.035));
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-launch__arrow { color: var(--msc-sand); }
+
+  @keyframes mscToolsTrace {
+    to { stroke-dashoffset: -90; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #SurfReport-{{ section.id }} .msc-tools-trace__path { animation: none; }
+  }
+
   @media screen and (min-width: 991px) {
-    #SurfReport-{{ section.id }} > .msc-block:first-child .msc-title {
-      font-size: clamp(4.4rem, 4.5vw, 5.4rem);
+    #SurfReport-{{ section.id }} .msc-tools-hero__identity .msc-title {
+      font-size: clamp(4.5rem, 5vw, 6.2rem);
       line-height: .9;
       letter-spacing: -.06em;
     }
   }
+
+  @media screen and (max-width: 990px) {
+    #SurfReport-{{ section.id }} .msc-tools-cockpit__deck {
+      grid-template-columns: 1fr 1.6fr;
+    }
+
+    #SurfReport-{{ section.id }} .msc-tools-cockpit__rail--right {
+      grid-column: 1 / -1;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-rows: none;
+    }
+
+    #SurfReport-{{ section.id }} .msc-tools-launches__row {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media screen and (max-width: 700px) {
+    #SurfReport-{{ section.id }} .msc-tools-hero__identity { text-align: left; }
+    #SurfReport-{{ section.id }} .msc-tools-hero__identity .msc-subtitle { margin-left: 0; }
+
+    #SurfReport-{{ section.id }} .msc-tools-cockpit__deck {
+      grid-template-columns: 1fr;
+    }
+
+    #SurfReport-{{ section.id }} .msc-tools-cockpit__rail,
+    #SurfReport-{{ section.id }} .msc-tools-cockpit__rail--right {
+      grid-column: auto;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: none;
+    }
+
+    #SurfReport-{{ section.id }} .msc-tools-price { order: -1; min-height: 29rem; }
+    #SurfReport-{{ section.id }} .msc-tools-price__value { font-size: clamp(4rem, 15vw, 6.2rem); }
+
+    #SurfReport-{{ section.id }} .msc-tools-cockpit__search {
+      grid-template-columns: 1fr auto;
+    }
+
+    #SurfReport-{{ section.id }} .msc-tools-cockpit__search-label { display: none; }
+  }
+
+  @media screen and (max-width: 520px) {
+    #SurfReport-{{ section.id }} .msc-tools-cockpit { border-radius: 22px; }
+    #SurfReport-{{ section.id }} .msc-tools-cockpit__topline { align-items: flex-start; }
+    #SurfReport-{{ section.id }} .msc-tools-cockpit__rail,
+    #SurfReport-{{ section.id }} .msc-tools-cockpit__rail--right,
+    #SurfReport-{{ section.id }} .msc-tools-launches__row { grid-template-columns: 1fr; }
+    #SurfReport-{{ section.id }} .msc-tools-price__meta { grid-template-columns: 1fr; }
+    #SurfReport-{{ section.id }} .msc-tools-price__meta-item { display: flex; justify-content: space-between; gap: 1rem; }
+    #SurfReport-{{ section.id }} .msc-tools-price__meta-value { margin-top: 0; text-align: right; }
+    #SurfReport-{{ section.id }} .msc-tools-cockpit__search { grid-template-columns: 1fr; }
+  }
 </style>
 
 <section class="msc-shell" id="SurfReport-{{ section.id }}">
-  <div class="msc-block">
-    <div class="msc-container msc-center">
-      <div class="msc-eyebrow">{{ section.settings.kicker }}</div>
-      <h1 class="msc-title">{{ section.settings.heading }}</h1>
-      <p class="msc-subtitle">{{ section.settings.subheading }}</p>
-
-      <form class="msc-search msc-glass-card" action="{{ routes.search_url }}" method="get" role="search">
-        <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ section.settings.search_placeholder }}" aria-label="Search tools">
-        <input type="hidden" name="type" value="article,page,product">
-        <button type="submit">{{ section.settings.search_button }}</button>
-      </form>
-    </div>
-
+  <div class="msc-block msc-tools-hero">
     <div class="msc-container">
-      <div class="msc-status-grid" aria-label="Live Bitcoin dashboard placeholders">
-        <article class="msc-metric msc-glass-card">
-          <p class="msc-metric-label">BTC Price</p>
-          <p class="msc-metric-value">$--,---</p>
-          <p class="msc-metric-note">API ready</p>
-        </article>
-        <article class="msc-metric msc-glass-card">
-          <p class="msc-metric-label">Fees</p>
-          <p class="msc-metric-value">-- sat/vB</p>
-          <p class="msc-metric-note">Fastest fee</p>
-        </article>
-        <article class="msc-metric msc-glass-card">
-          <p class="msc-metric-label">Mempool</p>
-          <p class="msc-metric-value">-- MB</p>
-          <p class="msc-metric-note">Pending flow</p>
-        </article>
-        <article class="msc-metric msc-glass-card">
-          <p class="msc-metric-label">Difficulty</p>
-          <p class="msc-metric-value">-- T</p>
-          <p class="msc-metric-note">Next adjustment</p>
-        </article>
-        <article class="msc-metric msc-glass-card">
-          <p class="msc-metric-label">Hashrate</p>
-          <p class="msc-metric-value">-- EH/s</p>
-          <p class="msc-metric-note">Network power</p>
-        </article>
-        <article class="msc-metric msc-glass-card">
-          <p class="msc-metric-label">Halving</p>
-          <p class="msc-metric-value">-- days</p>
-          <p class="msc-metric-note">Forecast</p>
-        </article>
+      <div class="msc-tools-hero__identity">
+        <div class="msc-eyebrow">{{ section.settings.kicker }}</div>
+        <h1 class="msc-title">{{ section.settings.heading }}</h1>
+        <p class="msc-subtitle">{{ section.settings.subheading }}</p>
       </div>
 
-      <div class="msc-dashboard-panel msc-glass-card">
-        <div class="msc-radar" aria-hidden="true"></div>
-        <div class="msc-panel-list">
-          <div class="msc-panel-row"><span>Conditions</span><span>Monitoring</span></div>
-          <div class="msc-panel-row"><span>Swell</span><span>Mempool flow</span></div>
-          <div class="msc-panel-row"><span>Tide</span><span>Market movement</span></div>
-          <div class="msc-panel-row"><span>Forecast</span><span>Halving / difficulty</span></div>
-          <div class="msc-panel-row"><span>Signal</span><span>Live APIs pending</span></div>
+      <div class="msc-tools-cockpit" data-msc-ecosystem-radar>
+        <div class="msc-tools-cockpit__topline">
+          <p class="msc-tools-cockpit__system">MSC NAV CONSOLE / BTC-01</p>
+          <p class="msc-tools-cockpit__status">BTC SURF REPORT</p>
         </div>
+
+        <div class="msc-tools-cockpit__deck">
+          <div class="msc-tools-cockpit__rail" aria-label="Network conditions">
+            <article class="msc-tools-readout">
+              <p class="msc-tools-readout__label">Fee Environment</p>
+              <p class="msc-tools-readout__value">— sat/vB</p>
+              <p class="msc-tools-readout__note">Fastest fee · API pending</p>
+            </article>
+            <article class="msc-tools-readout">
+              <p class="msc-tools-readout__label">Mempool Congestion</p>
+              <p class="msc-tools-readout__value">— MB</p>
+              <p class="msc-tools-readout__note">Pending flow</p>
+            </article>
+            <article class="msc-tools-readout">
+              <p class="msc-tools-readout__label">Latest Block</p>
+              <p class="msc-tools-readout__value">—</p>
+              <p class="msc-tools-readout__note">Network tip · API pending</p>
+            </article>
+          </div>
+
+          <article class="msc-tools-price" aria-label="Live Bitcoin price instrument">
+            <div class="msc-tools-price__heading">
+              <div>
+                <p class="msc-tools-price__label">Price Current</p>
+              </div>
+              <div class="msc-tools-price__pair">
+                <p class="msc-tools-price__label">Market Tide</p>
+                <span class="msc-tools-price__meta-value">Reading live</span>
+              </div>
+            </div>
+
+            <div class="msc-tools-price__display" aria-live="polite">
+              <div class="msc-tools-price__value" data-btc-price>—</div>
+              <span class="msc-tools-price__change" data-btc-change>Connecting</span>
+            </div>
+
+            <svg class="msc-tools-trace" viewBox="0 0 720 150" preserveAspectRatio="none" aria-hidden="true">
+              <path class="msc-tools-trace__grid" d="M0 30H720 M0 75H720 M0 120H720 M120 0V150 M240 0V150 M360 0V150 M480 0V150 M600 0V150" />
+              <path class="msc-tools-trace__ghost" d="M0 112 C55 104 80 84 122 92 S196 119 232 95 S292 44 338 67 S405 108 448 79 S516 55 554 64 S625 99 720 34" />
+              <path class="msc-tools-trace__path" d="M0 112 C55 104 80 84 122 92 S196 119 232 95 S292 44 338 67 S405 108 448 79 S516 55 554 64 S625 99 720 34" />
+            </svg>
+
+            <div class="msc-tools-price__meta">
+              <div class="msc-tools-price__meta-item">
+                <p class="msc-tools-price__meta-label">24H Drift</p>
+                <span class="msc-tools-price__meta-value">Live market change</span>
+              </div>
+              <div class="msc-tools-price__meta-item">
+                <p class="msc-tools-price__meta-label">Trend Vector</p>
+                <span class="msc-tools-price__meta-value">Route trace</span>
+              </div>
+              <div class="msc-tools-price__meta-item">
+                <p class="msc-tools-price__meta-label">Signal</p>
+                <span class="msc-tools-price__meta-value">BTC / USD</span>
+              </div>
+            </div>
+          </article>
+
+          <div class="msc-tools-cockpit__rail msc-tools-cockpit__rail--right" aria-label="Bitcoin network instrumentation">
+            <article class="msc-tools-readout">
+              <p class="msc-tools-readout__label">Hashrate</p>
+              <p class="msc-tools-readout__value">— EH/s</p>
+              <p class="msc-tools-readout__note">Network power</p>
+            </article>
+            <article class="msc-tools-readout">
+              <p class="msc-tools-readout__label">Difficulty</p>
+              <p class="msc-tools-readout__value">— T</p>
+              <p class="msc-tools-readout__note">Adjustment cycle</p>
+            </article>
+            <article class="msc-tools-readout">
+              <p class="msc-tools-readout__label">Halving Countdown</p>
+              <p class="msc-tools-readout__value">— days</p>
+              <p class="msc-tools-readout__note">Forecast · API pending</p>
+            </article>
+          </div>
+        </div>
+
+        <form class="msc-tools-cockpit__search" action="{{ routes.search_url }}" method="get" role="search">
+          <span class="msc-tools-cockpit__search-label">Tool Search</span>
+          <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ section.settings.search_placeholder }}" aria-label="Search tools, transactions, addresses, blocks, scripts, or wallets">
+          <input type="hidden" name="type" value="article,page,product">
+          <button type="submit">{{ section.settings.search_button }}</button>
+        </form>
+
+        <nav class="msc-tools-launches" aria-label="Quick launch tools">
+          <p class="msc-tools-launches__label">Quick Launch</p>
+          <div class="msc-tools-launches__row">
+            <a class="msc-tools-launch" href="{{ routes.search_url }}?q=Mempool%20Fee%20Navigator&amp;type=page"><span>Mempool / Fee Navigator</span><span class="msc-tools-launch__arrow">↗</span></a>
+            <a class="msc-tools-launch msc-tools-launch--inscriber" href="{{ routes.search_url }}?q=MSC%20Inscriber&amp;type=page"><span>MSC Inscriber</span><span class="msc-tools-launch__arrow">↗</span></a>
+            <a class="msc-tools-launch" href="{{ routes.search_url }}?q=Transaction%20Analyzer&amp;type=page"><span>Transaction Analyzer</span><span class="msc-tools-launch__arrow">↗</span></a>
+            <a class="msc-tools-launch" href="{{ routes.search_url }}?q=Block%20Explorer&amp;type=page"><span>Block Explorer</span><span class="msc-tools-launch__arrow">↗</span></a>
+            <a class="msc-tools-launch" href="{{ routes.search_url }}?q=UTXO%20Planner&amp;type=page"><span>UTXO Planner</span><span class="msc-tools-launch__arrow">↗</span></a>
+          </div>
+        </nav>
       </div>
     </div>
   </div>
@@ -118,6 +580,8 @@
   </div>
 </section>
 
+{{ 'msc-home-btc-price.js' | asset_url | script_tag }}
+
 {% schema %}
 {
   "name": "MSC Surf Report",
@@ -128,25 +592,25 @@
       "type": "text",
       "id": "kicker",
       "label": "Kicker",
-      "default": "The Surf Report"
+      "default": "Bitcoin Tool System"
     },
     {
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Bitcoin Tools"
+      "default": "MSC Tools"
     },
     {
       "type": "textarea",
       "id": "subheading",
       "label": "Subheading",
-      "default": "Live dashboards, trusted tools, and resources for watching the conditions across Bitcoin."
+      "default": "Practical Bitcoin tools for navigating the network, analyzing transactions, estimating fees, and using Bitcoin infrastructure."
     },
     {
       "type": "text",
       "id": "search_placeholder",
       "label": "Search placeholder",
-      "default": "Search wallets, explorers, APIs, calculators..."
+      "default": "Search tools, txids, addresses, blocks, scripts, wallets..."
     },
     {
       "type": "text",
