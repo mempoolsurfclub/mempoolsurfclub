@@ -34,32 +34,6 @@
     box-shadow: 0 26px 80px rgba(5, 20, 24, .34), inset 0 1px 0 rgba(255,255,255,.05);
   }
 
-  #SurfReport-{{ section.id }} .msc-tools-cockpit::before,
-  #SurfReport-{{ section.id }} .msc-tools-cockpit::after {
-    content: "";
-    position: absolute;
-    width: 8rem;
-    height: 8rem;
-    pointer-events: none;
-    opacity: .72;
-  }
-
-  #SurfReport-{{ section.id }} .msc-tools-cockpit::before {
-    top: 1rem;
-    left: 1rem;
-    border-top: 1px solid rgba(212,190,153,.5);
-    border-left: 1px solid rgba(212,190,153,.5);
-    border-radius: 20px 0 0 0;
-  }
-
-  #SurfReport-{{ section.id }} .msc-tools-cockpit::after {
-    right: 1rem;
-    bottom: 1rem;
-    border-right: 1px solid rgba(212,190,153,.5);
-    border-bottom: 1px solid rgba(212,190,153,.5);
-    border-radius: 0 0 20px 0;
-  }
-
   #SurfReport-{{ section.id }} .msc-tools-cockpit__topline {
     position: relative;
     z-index: 2;
@@ -312,14 +286,6 @@
     margin-top: var(--msc-tools-space);
   }
 
-  #SurfReport-{{ section.id }} .msc-tools-launches__label {
-    margin: 0 0 var(--msc-tools-space);
-    color: rgba(251,248,239,.45);
-    font-size: .94rem;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-  }
-
   #SurfReport-{{ section.id }} .msc-tools-launches__row {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -519,7 +485,6 @@
         </div>
 
         <nav class="msc-tools-launches" aria-label="Quick launch tools">
-          <p class="msc-tools-launches__label">Quick Launch</p>
           <div class="msc-tools-launches__row">
             <a class="msc-tools-launch" href="{{ routes.search_url }}?q=Mempool%20Fee%20Navigator&amp;type=page"><span>Mempool / Fee Navigator</span><span class="msc-tools-launch__arrow">↗</span></a>
             <a class="msc-tools-launch msc-tools-launch--inscriber" href="{{ routes.search_url }}?q=MSC%20Inscriber&amp;type=page"><span>MSC Inscriber</span><span class="msc-tools-launch__arrow">↗</span></a>
