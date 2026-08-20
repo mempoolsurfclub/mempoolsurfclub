@@ -71,3 +71,22 @@
 #MainContent:has(.msc-explore-atlas-shell) .msc-explore .msc-block:nth-of-type(even) {
   background: transparent !important;
 }
+
+/* Approved Atlas control cleanup: keep the eight-button grid and all interaction
+ * logic intact while reducing each control to one centered region title. */
+#MainContent:has(.msc-explore-atlas-shell) .msc-atlas-window__coord,
+#MainContent:has(.msc-explore-atlas-shell) .msc-atlas-region__state {
+  display: none !important;
+}
+
+#MainContent:has(.msc-explore-atlas-shell) .msc-explore-atlas-shell button.msc-atlas-region {
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0 !important;
+  text-align: center !important;
+}
+
+#MainContent:has(.msc-explore-atlas-shell) .msc-explore-atlas-shell button.msc-atlas-region strong {
+  width: 100%;
+  text-align: center !important;
+}
