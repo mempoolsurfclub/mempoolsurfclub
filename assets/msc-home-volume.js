@@ -6,6 +6,8 @@
   const REFRESH_MS = 60 * 60 * 1000;
   const DATA_CACHE_BUCKET_MS = 5 * 60 * 1000;
   const MAX_AGE_MS = 6 * 60 * 60 * 1000;
+  const LAST_GOOD_CACHE_KEY = 'msc-home-market-last-good-v1';
+  const LAST_GOOD_CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
   const REQUEST_TIMEOUT_MS = 10000;
   const TYPES = new Set(['ORDINAL', 'RUNE']);
   const MED_VOLUME_BTC = 0.25;
@@ -51,7 +53,7 @@
       this.wave.setAttribute('aria-label', 'Bitcoin asset surf based on trailing 24-hour Ordinals and Runes volume. Market data pending.');
     }
 
-    render(totalVolumeBtc) {
+    render(totalVolumeBtc, delayed = false) {
       if (!this.wave || !Number.isFinite(totalVolumeBtc) || totalVolumeBtc < 0) {
         this.setPending();
         return;
@@ -83,7 +85,7 @@
       this.wave.style.setProperty('--msc-protocol-wave-opacity', String(opacity));
       this.wave.setAttribute(
         'aria-label',
-        `Bitcoin asset surf ${band.toLowerCase()} based on ${formatBtc(totalVolumeBtc)} combined trailing 24-hour volume across the displayed Ordinals and Runes assets.`
+        `Bitcoin asset surf ${band.toLowerCase()} based on ${delayed ? 'the last available' : 'the current'} ${formatBtc(totalVolumeBtc)} combined trailing 24-hour volume across the displayed Ordinals and Runes assets${delayed ? '. Live market data is delayed.' : '.'}`
       );
     }
   }
@@ -97,6 +99,17 @@
     return `${value.toFixed(4)} BTC`;
   }
 
+  function normalizeAssets(rawAssets) {
+    if (!Array.isArray(rawAssets)) return [];
+    return rawAssets.slice(0, 5).map((asset) => {
+      const name = typeof asset?.name === 'string' ? asset.name.trim() : '';
+      const type = typeof asset?.type === 'string' ? asset.type.toUpperCase() : '';
+      const volumeBtc = Number(asset?.volumeBtc);
+      if (!name || !TYPES.has(type) || !Number.isFinite(volumeBtc) || volumeBtc <= 0) return null;
+      return { name, type, volumeBtc };
+    }).filter(Boolean);
+  }
+
   function normalize(payload) {
     if (!payload || payload.schemaVersion !== 1 || payload.api !== 'MSC API' || payload.version !== 'v1') return null;
     if (payload.window !== '24h' || payload.mode !== 'live' || !Array.isArray(payload.assets)) return null;
@@ -104,14 +117,7 @@
     const generatedAt = Date.parse(payload.generatedAt);
     if (!Number.isFinite(generatedAt) || Date.now() - generatedAt > MAX_AGE_MS) return null;
 
-    const assets = payload.assets.slice(0, 5).map((asset) => {
-      const name = typeof asset?.name === 'string' ? asset.name.trim() : '';
-      const type = typeof asset?.type === 'string' ? asset.type.toUpperCase() : '';
-      const volumeBtc = Number(asset?.volumeBtc);
-      if (!name || !TYPES.has(type) || !Number.isFinite(volumeBtc) || volumeBtc <= 0) return null;
-      return { name, type, volumeBtc };
-    }).filter(Boolean);
-
+    const assets = normalizeAssets(payload.assets);
     if (!assets.length) return null;
 
     return {
@@ -119,6 +125,36 @@
       assets,
       totalVolumeBtc: assets.reduce((sum, asset) => sum + asset.volumeBtc, 0)
     };
+  }
+
+  function readLastGoodSnapshot() {
+    try {
+      const cached = JSON.parse(window.localStorage.getItem(LAST_GOOD_CACHE_KEY) || 'null');
+      const generatedAt = Number(cached?.generatedAt);
+      if (!Number.isFinite(generatedAt) || Date.now() - generatedAt > LAST_GOOD_CACHE_MAX_AGE_MS) return null;
+
+      const assets = normalizeAssets(cached?.assets);
+      if (!assets.length) return null;
+
+      return {
+        generatedAt,
+        assets,
+        totalVolumeBtc: assets.reduce((sum, asset) => sum + asset.volumeBtc, 0)
+      };
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function writeLastGoodSnapshot(snapshot) {
+    try {
+      window.localStorage.setItem(LAST_GOOD_CACHE_KEY, JSON.stringify({
+        generatedAt: snapshot.generatedAt,
+        assets: snapshot.assets
+      }));
+    } catch (error) {
+      // Storage may be unavailable in private or restricted browsing contexts.
+    }
   }
 
   async function requestData() {
@@ -137,16 +173,12 @@
     }
   }
 
-  function createMarketRow(asset, index) {
-    const row = document.createElement('li');
+  function styleMarketRow(row, name, value) {
     row.className = 'msc-radar-block-activity__row';
     row.style.setProperty('gap', '.28rem');
     row.style.setProperty('padding-bottom', '.30rem');
 
-    const name = document.createElement('span');
     name.className = 'msc-radar-block-activity__label';
-    name.textContent = `${index + 1}. ${asset.name}`;
-    name.title = asset.name;
     name.style.setProperty('min-width', '0');
     name.style.setProperty('overflow', 'hidden');
     name.style.setProperty('text-overflow', 'ellipsis');
@@ -155,16 +187,38 @@
     name.style.setProperty('letter-spacing', '.02em', 'important');
     name.style.setProperty('line-height', '1.08', 'important');
 
+    value.className = 'msc-radar-block-activity__value';
+    value.style.setProperty('position', 'static', 'important');
+    value.style.setProperty('left', 'auto', 'important');
+    value.style.setProperty('margin-right', '0', 'important');
+    value.style.setProperty('font-size', '.9rem', 'important');
+    value.style.setProperty('line-height', '1.08', 'important');
+  }
+
+  function createMarketRow(asset, index) {
+    const row = document.createElement('li');
+    const name = document.createElement('span');
     const volume = document.createElement('strong');
-    volume.className = 'msc-radar-block-activity__value';
+
+    styleMarketRow(row, name, volume);
+    name.textContent = `${index + 1}. ${asset.name}`;
+    name.title = asset.name;
     volume.textContent = formatBtc(asset.volumeBtc);
-    volume.style.setProperty('position', 'static', 'important');
-    volume.style.setProperty('left', 'auto', 'important');
-    volume.style.setProperty('margin-right', '0', 'important');
-    volume.style.setProperty('font-size', '.9rem', 'important');
-    volume.style.setProperty('line-height', '1.08', 'important');
 
     row.append(name, volume);
+    return row;
+  }
+
+  function createDelayedRow() {
+    const row = document.createElement('li');
+    const name = document.createElement('span');
+    const status = document.createElement('strong');
+
+    styleMarketRow(row, name, status);
+    name.textContent = 'LIVE 24H FEED';
+    status.textContent = 'RECONNECTING';
+
+    row.append(name, status);
     return row;
   }
 
@@ -182,19 +236,17 @@
 
       if (!this.activity || !this.title || !this.context || !this.list) return;
 
-      this.original = {
-        title: this.title.textContent,
-        context: this.context.textContent,
-        list: this.list.innerHTML
-      };
+      this.lastGood = readLastGoodSnapshot();
+      if (this.lastGood) this.render(this.lastGood, true);
+      else this.renderUnavailable();
 
       this.refresh();
       this.timer = window.setInterval(() => this.refresh(), REFRESH_MS);
     }
 
-    render(snapshot) {
+    render(snapshot, delayed = false) {
       this.title.textContent = 'BTC ASSETS';
-      this.context.textContent = '24 HOUR VOLUME:';
+      this.context.textContent = delayed ? '24 HOUR VOLUME · DATA DELAYED' : '24 HOUR VOLUME:';
       this.context.style.setProperty('margin-bottom', '.42rem', 'important');
       this.list.style.setProperty('gap', '.42rem', 'important');
 
@@ -202,20 +254,32 @@
       snapshot.assets.forEach((asset, index) => fragment.appendChild(createMarketRow(asset, index)));
       this.list.replaceChildren(fragment);
 
-      this.activity.dataset.marketVolume = 'live';
-      this.root.dataset.volumeStatus = 'live';
-      this.surf.render(snapshot.totalVolumeBtc);
+      const status = delayed ? 'delayed' : 'live';
+      this.activity.dataset.marketVolume = status;
+      this.root.dataset.volumeStatus = status;
+      this.surf.render(snapshot.totalVolumeBtc, delayed);
+
+      if (!delayed) {
+        this.lastGood = snapshot;
+        writeLastGoodSnapshot(snapshot);
+      }
     }
 
-    restore() {
-      this.title.textContent = this.original.title;
-      this.context.textContent = this.original.context;
-      this.context.style.removeProperty('margin-bottom');
-      this.list.style.removeProperty('gap');
-      this.list.innerHTML = this.original.list;
-      this.activity.removeAttribute('data-market-volume');
-      this.root.dataset.volumeStatus = 'unavailable';
+    renderUnavailable() {
+      this.title.textContent = 'BTC ASSETS';
+      this.context.textContent = 'MARKET DATA · TEMPORARILY DELAYED';
+      this.context.style.setProperty('margin-bottom', '.42rem', 'important');
+      this.list.style.setProperty('gap', '.42rem', 'important');
+      this.list.replaceChildren(createDelayedRow());
+      this.activity.dataset.marketVolume = 'delayed';
+      this.root.dataset.volumeStatus = 'delayed';
       this.surf.setPending();
+    }
+
+    renderFallback() {
+      const snapshot = this.lastGood || readLastGoodSnapshot();
+      if (snapshot) this.render(snapshot, true);
+      else this.renderUnavailable();
     }
 
     async refresh() {
@@ -223,12 +287,12 @@
       try {
         const snapshot = normalize(await requestData());
         if (!snapshot) {
-          this.restore();
+          this.renderFallback();
           return;
         }
         this.render(snapshot);
       } catch (error) {
-        this.restore();
+        this.renderFallback();
       }
     }
   }
