@@ -1,0 +1,229 @@
+<div class="msc-atlas-header-controls-source" data-msc-atlas-search-source hidden>
+  <form class="msc-search-form msc-search-form--atlas msc-glass-card" action="{{ routes.search_url }}" method="get" role="search">
+    <label class="visually-hidden" for="MscAtlasSiteSearch-{{ section.id }}">Search Mempool Surf Club</label>
+    <input
+      id="MscAtlasSiteSearch-{{ section.id }}"
+      class="msc-search-form__input"
+      type="search"
+      name="q"
+      placeholder="Search Mempool Surf Club"
+      autocomplete="off"
+    >
+    <input type="hidden" name="type" value="article,page,product">
+    <button class="msc-search-form__button" type="submit">
+      <span>SEARCH</span>
+      <span class="msc-search-form__arrow" aria-hidden="true">→</span>
+    </button>
+  </form>
+</div>
+
+<style>
+  .msc-atlas-window__top.msc-atlas-window__top--site-search {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 31rem) minmax(0, 1fr) !important;
+    align-items: center !important;
+    column-gap: clamp(.8rem, 1.8vw, 1.5rem) !important;
+  }
+
+  .msc-atlas-window__top--site-search .msc-atlas-window__identity {
+    grid-column: 1;
+    justify-self: start;
+  }
+
+  .msc-atlas-header-search {
+    grid-column: 2;
+    justify-self: center;
+    width: 100%;
+    max-width: 31rem;
+    min-width: 0;
+    margin: 0 !important;
+    padding: .28rem !important;
+    gap: .38rem !important;
+    border-radius: 10px !important;
+    background: rgba(255, 255, 255, .055) !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+
+  .msc-atlas-header-search .msc-search-form__input {
+    height: 2.2rem;
+    min-height: 0;
+    padding: .5rem .72rem !important;
+    border-radius: 8px !important;
+    font-size: .82rem !important;
+    line-height: 1 !important;
+  }
+
+  .msc-atlas-header-search .msc-search-form__button {
+    min-height: 2.2rem;
+    padding: .5rem .78rem !important;
+    border-radius: 8px !important;
+    font-size: .72rem !important;
+    line-height: 1 !important;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .msc-atlas-window__top--site-search .msc-atlas-window__location {
+    grid-column: 3;
+    justify-self: end;
+    position: static !important;
+    inset: auto !important;
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    display: flex !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    justify-content: flex-end !important;
+    text-align: right !important;
+    pointer-events: none !important;
+  }
+
+  .msc-atlas-window__top--site-search .msc-atlas-window__location span {
+    display: none !important;
+  }
+
+  .msc-atlas-window__top--site-search .msc-atlas-window__location strong {
+    margin: 0 !important;
+    color: rgba(251, 248, 239, .92) !important;
+    font-size: 1.08rem !important;
+    font-weight: 760 !important;
+    line-height: 1 !important;
+    letter-spacing: .12em !important;
+    white-space: nowrap;
+  }
+
+  @media screen and (max-width: 900px) {
+    .msc-atlas-window__top.msc-atlas-window__top--site-search {
+      grid-template-columns: minmax(0, 1fr) auto !important;
+      row-gap: .55rem;
+      padding-block: .25rem;
+    }
+
+    .msc-atlas-window__top--site-search .msc-atlas-window__identity {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .msc-atlas-window__top--site-search .msc-atlas-window__location {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    .msc-atlas-header-search {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      width: min(100%, 32rem);
+    }
+  }
+
+  @media screen and (max-width: 560px) {
+    .msc-atlas-window__top--site-search .msc-atlas-window__location strong {
+      font-size: .78rem !important;
+      letter-spacing: .08em !important;
+    }
+
+    .msc-atlas-header-search {
+      max-width: none;
+    }
+  }
+</style>
+
+<script>
+  (() => {
+    const initAtlasHeaderControls = () => {
+      const source = document.querySelector('[data-msc-atlas-search-source]');
+      const prototypeForm = source?.querySelector('form');
+      const atlases = [...document.querySelectorAll('[data-atlas]')];
+
+      if (!prototypeForm || !atlases.length) {
+        source?.remove();
+        return;
+      }
+
+      atlases.forEach((atlas, index) => {
+        const topBar = atlas.querySelector('.msc-atlas-window__top');
+        const locationLabel = atlas.querySelector('[data-atlas-region-label]');
+        const locationGroup = locationLabel?.closest('.msc-atlas-window__readout');
+        const locationPrefix = locationGroup?.querySelector('span');
+
+        if (!topBar || !locationGroup || !locationLabel) return;
+
+        topBar.classList.add('msc-atlas-window__top--site-search');
+        topBar.style.setProperty(
+          'grid-template-columns',
+          'minmax(0, 1fr) minmax(18rem, 31rem) minmax(0, 1fr)',
+          'important'
+        );
+
+        locationGroup.classList.add('msc-atlas-window__location');
+        locationGroup.style.setProperty('position', 'static', 'important');
+        locationGroup.style.setProperty('left', 'auto', 'important');
+        locationGroup.style.setProperty('top', 'auto', 'important');
+        locationGroup.style.setProperty('transform', 'none', 'important');
+        locationGroup.style.setProperty('display', 'flex', 'important');
+        locationGroup.style.setProperty('justify-content', 'flex-end', 'important');
+        locationGroup.style.setProperty('text-align', 'right', 'important');
+        if (locationPrefix) locationPrefix.style.setProperty('display', 'none', 'important');
+
+        if (!topBar.querySelector('.msc-atlas-header-search')) {
+          const form = index === 0 ? prototypeForm : prototypeForm.cloneNode(true);
+          const input = form.querySelector('input[type="search"]');
+          const label = form.querySelector('label');
+
+          form.classList.add('msc-atlas-header-search');
+          if (input) {
+            const inputId = `MscAtlasSiteSearch-${index + 1}`;
+            input.id = inputId;
+            if (label) label.htmlFor = inputId;
+          }
+
+          form.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') event.stopPropagation();
+          });
+
+          topBar.insertBefore(form, locationGroup);
+        }
+
+        const updateLocation = () => {
+          const slug = atlas.dataset.atlasActive || '';
+          const region = slug
+            ? [...atlas.querySelectorAll('[data-atlas-region-shape]')]
+                .find((item) => item.dataset.atlasRegionShape === slug)
+            : null;
+          const label = slug
+            ? (region?.dataset.atlasRegionLabel || slug.toUpperCase())
+            : 'BITCOIN NETWORK';
+
+          if (locationLabel.textContent !== label) locationLabel.textContent = label;
+        };
+
+        updateLocation();
+        new MutationObserver(updateLocation).observe(atlas, {
+          attributes: true,
+          attributeFilter: ['data-atlas-active']
+        });
+      });
+
+      source.remove();
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initAtlasHeaderControls, { once: true });
+    } else {
+      window.requestAnimationFrame(initAtlasHeaderControls);
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "MSC Atlas header controls",
+  "tag": "section",
+  "class": "section section--msc-atlas-header-controls",
+  "settings": []
+}
+{% endschema %}
