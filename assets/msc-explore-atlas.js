@@ -115,6 +115,78 @@
       || null
     );
 
+    /* Active-region names reuse the approved Atlas label centers, but live in a
+       dedicated lower SVG layer so destinations and local detail always render
+       above them. RUNES keeps its authoritative perimeter center. */
+    const REGION_WATERMARK_SIZES = Object.freeze({
+      ordinals: 56,
+      runes: 60,
+      wallets: 56,
+      marketplaces: 44,
+      mining: 56,
+      payments: 52,
+      exchanges: 50,
+      network: 52
+    });
+    const regionWatermarks = new Map();
+    const watermarkLayer = document.createElementNS(SVG_NS, 'g');
+    watermarkLayer.classList.add('msc-atlas-map__region-watermarks');
+    watermarkLayer.setAttribute('aria-hidden', 'true');
+    watermarkLayer.setAttribute('pointer-events', 'none');
+
+    mapRegions.forEach((region) => {
+      const slug = region.dataset.atlasRegionShape;
+      const sourceLabel = region.querySelector('.msc-atlas-map__region-label');
+      const sourceCenter = getVisualCenter(sourceLabel);
+      const shapeBounds = safeBBox(getOuterShape(region));
+      const fallbackCenter = shapeBounds
+        ? {
+            x: shapeBounds.x + (shapeBounds.width / 2),
+            y: shapeBounds.y + (shapeBounds.height / 2)
+          }
+        : null;
+      const center = slug === 'runes'
+        ? { x: 554, y: 275 }
+        : sourceCenter || fallbackCenter;
+
+      if (!slug || !center) return;
+
+      const watermark = document.createElementNS(SVG_NS, 'text');
+      watermark.classList.add('msc-atlas-map__region-label', 'msc-atlas-map__region-watermark');
+      watermark.textContent = region.dataset.atlasRegionLabel || slug.toUpperCase();
+      watermark.setAttribute('x', String(Number(center.x.toFixed(2))));
+      watermark.setAttribute('y', String(Number(center.y.toFixed(2))));
+      watermark.setAttribute('text-anchor', 'middle');
+      watermark.setAttribute('dominant-baseline', 'middle');
+      watermark.style.setProperty('display', 'none', 'important');
+      watermark.style.setProperty('fill', 'rgba(212, 190, 153, .18)', 'important');
+      watermark.style.setProperty(
+        'font-size',
+        `calc(${REGION_WATERMARK_SIZES[slug] || 52}px * var(--atlas-counter-scale, 1))`,
+        'important'
+      );
+      watermark.style.setProperty('font-weight', '760', 'important');
+      watermark.style.setProperty('letter-spacing', '.075em', 'important');
+      watermark.style.setProperty('pointer-events', 'none', 'important');
+
+      regionWatermarks.set(slug, watermark);
+      watermarkLayer.appendChild(watermark);
+    });
+
+    if (regionWatermarks.size) {
+      svg.insertBefore(watermarkLayer, mapRegions[0]);
+    }
+
+    const updateRegionWatermark = (activeSlug) => {
+      regionWatermarks.forEach((watermark, slug) => {
+        watermark.style.setProperty(
+          'display',
+          slug === activeSlug ? 'block' : 'none',
+          'important'
+        );
+      });
+    };
+
     /* Focus only real chart geography. The region polygons are interaction
        geometry, so they are converted into invisible buffered masks rather
        than drawn as outlines. The buffer captures coastline/shared-border
@@ -355,6 +427,7 @@
       mapRegions.forEach((region) => {
         region.classList.toggle('is-active', region.dataset.atlasRegionShape === slug);
       });
+      updateRegionWatermark(slug);
 
       navTargets.forEach((target) => {
         const active = target.dataset.atlasTarget === slug;
