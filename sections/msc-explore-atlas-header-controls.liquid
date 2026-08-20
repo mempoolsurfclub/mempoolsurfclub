@@ -18,8 +18,13 @@
 </div>
 
 <style>
+  .section--msc-atlas-header-controls {
+    display: contents;
+  }
+
   .msc-atlas-window__top.msc-atlas-window__top--site-search {
-    grid-template-columns: minmax(0, 1fr) minmax(18rem, 31rem) minmax(0, 1fr) !important;
+    --msc-atlas-header-columns: minmax(0, 1fr) minmax(18rem, 31rem) minmax(0, 1fr);
+    grid-template-columns: var(--msc-atlas-header-columns) !important;
     align-items: center !important;
     column-gap: clamp(.8rem, 1.8vw, 1.5rem) !important;
   }
@@ -98,7 +103,7 @@
 
   @media screen and (max-width: 900px) {
     .msc-atlas-window__top.msc-atlas-window__top--site-search {
-      grid-template-columns: minmax(0, 1fr) auto !important;
+      --msc-atlas-header-columns: minmax(0, 1fr) auto;
       row-gap: .55rem;
       padding-block: .25rem;
     }
@@ -153,11 +158,7 @@
         if (!topBar || !locationGroup || !locationLabel) return;
 
         topBar.classList.add('msc-atlas-window__top--site-search');
-        topBar.style.setProperty(
-          'grid-template-columns',
-          'minmax(0, 1fr) minmax(18rem, 31rem) minmax(0, 1fr)',
-          'important'
-        );
+        topBar.style.setProperty('grid-template-columns', 'var(--msc-atlas-header-columns)', 'important');
 
         locationGroup.classList.add('msc-atlas-window__location');
         locationGroup.style.setProperty('position', 'static', 'important');
