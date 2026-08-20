@@ -197,6 +197,41 @@
   .msc-learn .msc-depth-map__region[data-region="ecosystem"] {
     --msc-sounder-indent: 62%;
   }
+
+  /* Integrated SONAR frame: keep the approved chart intact and extend its frame around search. */
+  .msc-learn .msc-learn-hero {
+    position: relative;
+    grid-template-areas:
+      "signal signal"
+      "title copy"
+      "sounder sounder";
+  }
+
+  .msc-learn .msc-learn-hero > .msc-depth-chart {
+    box-sizing: border-box;
+    padding-bottom: 8.4rem;
+  }
+
+  .msc-learn .msc-search-form--learn {
+    position: absolute;
+    z-index: 8;
+    right: 1.6rem;
+    bottom: 1.2rem;
+    left: 1.6rem;
+    grid-area: auto;
+    width: auto;
+    max-width: none;
+    margin: 0;
+  }
+
+  /* Match the restrained Explore header inset rather than hugging the SONAR frame edges. */
+  .msc-learn .msc-depth-chart[data-msc-depth-enhanced="true"] .msc-sonar-brand {
+    margin-left: 1.35rem;
+  }
+
+  .msc-learn .msc-depth-chart[data-msc-depth-enhanced="true"] .msc-sonar-user {
+    right: 1.35rem;
+  }
 }
 
 @media screen and (min-width: 1180px) {
