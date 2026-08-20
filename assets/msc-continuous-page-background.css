@@ -90,3 +90,8 @@
   width: 100%;
   text-align: center !important;
 }
+
+/* Slightly nudge the Atlas identity right without affecting top-bar layout. */
+#MainContent:has(.msc-explore-atlas-shell) .msc-atlas-window__identity {
+  transform: translateX(6px);
+}
