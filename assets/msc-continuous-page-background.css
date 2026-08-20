@@ -41,9 +41,13 @@
   display: none !important;
 }
 
-/* Home previously forced a section divider and a second background at Gateway. */
+/* Home previously forced section dividers around the Gateway transition. */
 #MainContent:has(.msc-home-hero) .msc-home-gateway {
   border-top: 0 !important;
+}
+
+#MainContent:has(.msc-home-hero) .msc-home-hero {
+  border-bottom: 0 !important;
 }
 
 /* Dawn inserts a global margin between adjacent Shopify sections. Learn is a
@@ -55,4 +59,15 @@
 #MainContent > .shopify-section.section:has(.msc-explore-atlas-shell)
   + .shopify-section.section:has(.msc-explore) {
   margin-top: 0 !important;
+}
+
+/* Explore previously used full-width chapter separators and alternating
+ * section tints. Keep all chapter spacing and content geometry, but remove
+ * those page-level bands so the underlying MSC canvas reads continuously. */
+#MainContent:has(.msc-explore-atlas-shell) .msc-explore .msc-block + .msc-block::before {
+  display: none !important;
+}
+
+#MainContent:has(.msc-explore-atlas-shell) .msc-explore .msc-block:nth-of-type(even) {
+  background: transparent !important;
 }
