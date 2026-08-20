@@ -45,29 +45,40 @@
     border-bottom: 1px solid rgba(212,190,153,.18);
   }
 
-  #SurfReport-{{ section.id }} .msc-tools-cockpit__system,
   #SurfReport-{{ section.id }} .msc-tools-cockpit__status {
+    display: grid;
+    gap: .28rem;
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-cockpit__status-title,
+  #SurfReport-{{ section.id }} .msc-tools-cockpit__status-subtitle,
+  #SurfReport-{{ section.id }} .msc-tools-cockpit__system {
     margin: 0;
-    font-size: 1rem;
-    letter-spacing: .16em;
     text-transform: uppercase;
   }
 
-  #SurfReport-{{ section.id }} .msc-tools-cockpit__system { color: rgba(251,248,239,.58); }
-  #SurfReport-{{ section.id }} .msc-tools-cockpit__status {
-    display: inline-flex;
-    align-items: center;
-    gap: .65rem;
-    color: var(--msc-sand);
+  #SurfReport-{{ section.id }} .msc-tools-cockpit__status-title {
+    color: var(--msc-paper-soft);
+    font-size: 1.3rem;
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: .09em;
   }
 
-  #SurfReport-{{ section.id }} .msc-tools-cockpit__status::before {
-    content: "";
-    width: .55rem;
-    height: .55rem;
-    border-radius: 999px;
-    background: var(--msc-sand);
-    box-shadow: 0 0 12px rgba(212,190,153,.65);
+  #SurfReport-{{ section.id }} .msc-tools-cockpit__status-subtitle {
+    color: var(--msc-sand);
+    font-size: .94rem;
+    line-height: 1.1;
+    letter-spacing: .14em;
+  }
+
+  #SurfReport-{{ section.id }} .msc-tools-cockpit__system {
+    color: var(--msc-paper-soft);
+    font-size: 1rem;
+    line-height: 1.1;
+    letter-spacing: .16em;
+    text-align: right;
+    white-space: nowrap;
   }
 
   #SurfReport-{{ section.id }} .msc-tools-cockpit__deck {
@@ -404,8 +415,11 @@
 
       <div class="msc-tools-cockpit" data-msc-ecosystem-radar>
         <div class="msc-tools-cockpit__topline">
+          <div class="msc-tools-cockpit__status">
+            <p class="msc-tools-cockpit__status-title">BTC SURF REPORT</p>
+            <p class="msc-tools-cockpit__status-subtitle">TOOLS SYSTEM</p>
+          </div>
           <p class="msc-tools-cockpit__system">MSC NAV CONSOLE / BTC-01</p>
-          <p class="msc-tools-cockpit__status">BTC SURF REPORT</p>
         </div>
 
         <div class="msc-tools-cockpit__deck">
