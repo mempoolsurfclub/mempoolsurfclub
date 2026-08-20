@@ -769,3 +769,25 @@ button.msc-atlas-region.is-locked {
     border-bottom: 0 !important;
   }
 }
+
+/* v22 — let the overview navigation HUD move with the Atlas camera transition. */
+.msc-explore-atlas-shell .msc-atlas-navhud {
+  transform: scale(1);
+  transform-origin: 50% 50%;
+  opacity: 1;
+  transition:
+    transform 420ms cubic-bezier(.33, 1, .68, 1),
+    opacity 420ms cubic-bezier(.33, 1, .68, 1);
+  will-change: transform, opacity;
+}
+
+.msc-explore-atlas-shell .msc-atlas-window.has-active-region .msc-atlas-navhud {
+  transform: scale(1.32);
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .msc-explore-atlas-shell .msc-atlas-navhud {
+    transition: none;
+  }
+}
