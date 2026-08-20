@@ -285,38 +285,3 @@
     animation: none !important;
   }
 }
-
-/* Continuous Home canvas: preserve all section/widget content while preventing the shared MSC background from restarting between Hero and Gateway. */
-#MainContent:has(.msc-home-hero) {
-  position: relative;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at top left, rgba(212, 190, 153, 0.24), transparent 36rem),
-    radial-gradient(circle at bottom right, rgba(78, 107, 113, 0.32), transparent 44rem),
-    linear-gradient(135deg, #10282d 0%, #173c43 42%, #4e6b71 100%);
-  color: var(--msc-paper-soft);
-}
-
-#MainContent:has(.msc-home-hero)::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
-  background-size: 42px 42px;
-  mask-image: linear-gradient(to bottom, rgba(0,0,0,.85), transparent 92%);
-  pointer-events: none;
-}
-
-#MainContent:has(.msc-home-hero) .msc-shell {
-  background: transparent !important;
-}
-
-#MainContent:has(.msc-home-hero) .msc-shell::before {
-  display: none !important;
-}
-
-#MainContent:has(.msc-home-hero) .msc-home-gateway {
-  border-top: 0 !important;
-}
