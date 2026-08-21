@@ -95,3 +95,19 @@
 #MainContent:has(.msc-explore-atlas-shell) .msc-atlas-window__identity {
   transform: translateX(6px);
 }
+
+/* Tools top-line identity: keep BTC SURF REPORT and TOOLS SYSTEM together as
+ * one title line. Presentation belongs in CSS so it remains correct even when
+ * live network JavaScript is unavailable. */
+#MainContent:has([id^="SurfReport-"].msc-shell) .msc-tools-cockpit__status {
+  display: inline-flex;
+  align-items: baseline;
+  gap: .65rem;
+  white-space: nowrap;
+}
+
+@media screen and (max-width: 700px) {
+  #MainContent:has([id^="SurfReport-"].msc-shell) .msc-tools-cockpit__topline {
+    flex-wrap: wrap;
+  }
+}
