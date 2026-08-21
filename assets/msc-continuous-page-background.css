@@ -111,3 +111,16 @@
     flex-wrap: wrap;
   }
 }
+
+/* Match the Tools hero vertical rhythm to the approved Learn hero on desktop:
+ * 5.5rem from section start to intro, then 1.35rem grid gap + .45rem widget
+ * offset = 1.8rem from the title/copy row to the cockpit. */
+@media screen and (min-width: 991px) {
+  #MainContent:has([id^="SurfReport-"].msc-shell) .msc-tools-hero {
+    padding-block-start: 5.5rem !important;
+  }
+
+  #MainContent:has([id^="SurfReport-"].msc-shell) .msc-tools-hero__identity {
+    margin-bottom: 1.8rem !important;
+  }
+}
