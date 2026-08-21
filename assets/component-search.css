@@ -72,3 +72,27 @@ input::-webkit-search-decoration {
 .template-search__results {
   position: relative;
 }
+
+/* MSC search-field tone standard.
+ * Tools established the approved muted search prompt on a dark instrument
+ * surface. Apply that same treatment only to active search controls; do not
+ * affect newsletter, contact, account, product, or other form fields. */
+body .msc-search-form__input {
+  color: #fbf8ef;
+  background: rgba(3, 18, 22, 0.28);
+}
+
+body .msc-search-form__input::placeholder {
+  color: rgba(251, 248, 239, 0.42);
+}
+
+/* Dawn's header search renders its visible hint as a floating label while the
+ * native placeholder is intentionally hidden. Match that visible hint to the
+ * MSC muted search-prompt tone without changing the modal interaction model. */
+.search-modal .field__label {
+  color: rgba(251, 248, 239, 0.42);
+}
+
+.search-modal .search__input.field__input {
+  color: #fbf8ef;
+}
