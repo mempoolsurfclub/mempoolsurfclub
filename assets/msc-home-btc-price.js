@@ -195,6 +195,7 @@
   }
 
   function safeNumber(value) {
+    if (value === null || value === undefined || value === '') return null;
     const number = Number(value);
     return Number.isFinite(number) ? number : null;
   }
@@ -271,7 +272,6 @@
 
       this.root = root;
       this.tipHeight = null;
-      this.blockTimeMs = TARGET_BLOCK_MS;
       this.fastSuccess = false;
       this.miningSuccess = false;
       this.chartSuccess = false;
@@ -307,11 +307,8 @@
       if (!Number.isFinite(this.tipHeight) || this.tipHeight < 0) return;
       const nextHalvingHeight = (Math.floor(this.tipHeight / HALVING_INTERVAL) + 1) * HALVING_INTERVAL;
       const remainingBlocks = Math.max(0, nextHalvingHeight - this.tipHeight);
-      const pace = Number.isFinite(this.blockTimeMs) && this.blockTimeMs >= 300000 && this.blockTimeMs <= 900000
-        ? this.blockTimeMs
-        : TARGET_BLOCK_MS;
-      const days = Math.max(0, Math.round((remainingBlocks * pace) / 86400000));
-      this.setReadout('Halving Countdown', `${integerFormatter.format(days)} days`, `Est. to block ${integerFormatter.format(nextHalvingHeight)}`);
+      const days = Math.max(0, Math.round((remainingBlocks * TARGET_BLOCK_MS) / 86400000));
+      this.setReadout('Halving Countdown', `${integerFormatter.format(days)} days`, `Target pace · block ${integerFormatter.format(nextHalvingHeight)}`);
     }
 
     renderFastNetwork(fees, mempool, tipHeight, difficultyAdjustment) {
@@ -335,10 +332,6 @@
         this.tipHeight = tipHeight;
         this.setReadout('Latest Block', integerFormatter.format(tipHeight), 'Network tip · live');
       }
-
-      const adjustedTimeAvg = safeNumber(difficultyAdjustment && difficultyAdjustment.adjustedTimeAvg);
-      const timeAvg = safeNumber(difficultyAdjustment && difficultyAdjustment.timeAvg);
-      this.blockTimeMs = adjustedTimeAvg || timeAvg || TARGET_BLOCK_MS;
 
       const nextChange = safeNumber(difficultyAdjustment && difficultyAdjustment.difficultyChange);
       if (nextChange !== null) {
@@ -384,7 +377,7 @@
       const hashrateLabel = formatHashrate(currentHashrate);
       const difficultyLabel = formatDifficulty(currentDifficulty);
 
-      if (hashrateLabel) this.setReadout('Hashrate', hashrateLabel, 'Network estimate · 1m');
+      if (hashrateLabel) this.setReadout('Hashrate', hashrateLabel, 'Network estimate · live');
       if (difficultyLabel) {
         const card = this.findReadout('Difficulty');
         const valueNode = card && card.querySelector('.msc-tools-readout__value');
