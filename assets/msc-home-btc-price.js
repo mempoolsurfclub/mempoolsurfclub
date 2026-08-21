@@ -4,31 +4,54 @@
   const ROOT = '[data-msc-ecosystem-radar]';
   const ADVANCED_URL = 'https://api.coinbase.com/api/v3/brokerage/market/products/BTC-USD';
   const EXCHANGE_URL = 'https://api.exchange.coinbase.com/products/BTC-USD/stats';
-  const MEMPOOL_URL = 'https://mempool.space/api/v1/prices';
-  const REFRESH_MS = 60000;
+  const CANDLES_URL = 'https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=900';
+  const MEMPOOL_PRICE_URL = 'https://mempool.space/api/v1/prices';
+  const FEES_URL = 'https://mempool.space/api/v1/fees/recommended';
+  const MEMPOOL_STATS_URL = 'https://mempool.space/api/mempool';
+  const TIP_HEIGHT_URL = 'https://mempool.space/api/blocks/tip/height';
+  const DIFFICULTY_ADJUSTMENT_URL = 'https://mempool.space/api/v1/difficulty-adjustment';
+  const HASHRATE_URL = 'https://mempool.space/api/v1/mining/hashrate/1m';
+  const PRICE_REFRESH_MS = 60000;
+  const NETWORK_REFRESH_MS = 120000;
+  const MINING_REFRESH_MS = 600000;
+  const CHART_REFRESH_MS = 300000;
   const STALE_MS = 300000;
   const REQUEST_TIMEOUT_MS = 10000;
+  const HALVING_INTERVAL = 210000;
+  const TARGET_BLOCK_MS = 600000;
 
   const usdFormatter = new Intl.NumberFormat('en-US', {
     maximumFractionDigits: 0
   });
+  const integerFormatter = new Intl.NumberFormat('en-US', {
+    maximumFractionDigits: 0
+  });
 
-  async function requestJson(url) {
+  async function request(url, mode = 'json') {
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
     try {
       const response = await fetch(url, {
         signal: controller.signal,
         cache: 'no-store',
-        headers: { accept: 'application/json' }
+        headers: { accept: mode === 'json' ? 'application/json' : 'text/plain,*/*' }
       });
       if (!response.ok) throw new Error(`http ${response.status}`);
+      if (mode === 'text') return response.text();
       const type = response.headers.get('content-type') || '';
       if (!type.includes('json')) throw new Error('unexpected content type');
       return response.json();
     } finally {
       window.clearTimeout(timeout);
     }
+  }
+
+  function requestJson(url) {
+    return request(url, 'json');
+  }
+
+  function requestText(url) {
+    return request(url, 'text');
   }
 
   function normalizeAdvanced(payload) {
@@ -66,9 +89,32 @@
       // Fall through to mempool.space current-price data.
     }
 
-    const data = normalizeMempool(await requestJson(MEMPOOL_URL));
+    const data = normalizeMempool(await requestJson(MEMPOOL_PRICE_URL));
     if (!data) throw new Error('invalid BTC price payload');
     return data;
+  }
+
+  function getMarketDirection(change) {
+    if (!Number.isFinite(change)) return 'READING LIVE';
+    if (change > 0.25) return 'RISING';
+    if (change < -0.25) return 'FALLING';
+    return 'STEADY';
+  }
+
+  function updatePriceMeta(root, data) {
+    const marketTide = root.querySelector('.msc-tools-price__pair .msc-tools-price__meta-value');
+    if (marketTide) marketTide.textContent = getMarketDirection(data.change);
+
+    if (!Number.isFinite(data.change)) return;
+    const driftItem = Array.from(root.querySelectorAll('.msc-tools-price__meta-item')).find((item) => {
+      const label = item.querySelector('.msc-tools-price__meta-label');
+      return label && label.textContent.trim().toLowerCase() === '24h drift';
+    });
+    const driftValue = driftItem && driftItem.querySelector('.msc-tools-price__meta-value');
+    if (driftValue) {
+      const prefix = data.change >= 0 ? '+' : '';
+      driftValue.textContent = `${prefix}${data.change.toFixed(2)}%`;
+    }
   }
 
   class BtcPricePanel {
@@ -85,7 +131,7 @@
       if (!this.value || !this.change) return;
 
       this.refresh();
-      this.timer = window.setInterval(() => this.refresh(), REFRESH_MS);
+      this.timer = window.setInterval(() => this.refresh(), PRICE_REFRESH_MS);
     }
 
     render(data) {
@@ -98,6 +144,7 @@
         this.change.textContent = '24H N/A';
         this.root.dataset.btcPriceStatus = 'partial';
       }
+      updatePriceMeta(this.root, data);
       this.lastSuccess = Date.now();
       this.hasData = true;
     }
@@ -127,11 +174,274 @@
     }
   }
 
+  function injectToolsStyle() {
+    if (document.getElementById('msc-tools-live-instrument-style')) return;
+    const style = document.createElement('style');
+    style.id = 'msc-tools-live-instrument-style';
+    style.textContent = `
+      .msc-tools-cockpit .msc-tools-cockpit__status {
+        display: inline-flex !important;
+        align-items: baseline;
+        gap: .65rem;
+        white-space: nowrap;
+      }
+      @media screen and (max-width: 700px) {
+        .msc-tools-cockpit .msc-tools-cockpit__topline {
+          flex-wrap: wrap;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function safeNumber(value) {
+    const number = Number(value);
+    return Number.isFinite(number) ? number : null;
+  }
+
+  function latestFinite(items, key) {
+    if (!Array.isArray(items)) return null;
+    for (let index = items.length - 1; index >= 0; index -= 1) {
+      const value = safeNumber(items[index] && items[index][key]);
+      if (value !== null) return value;
+    }
+    return null;
+  }
+
+  function formatHashrate(hashrate) {
+    if (!Number.isFinite(hashrate) || hashrate <= 0) return null;
+    const eh = hashrate / 1e18;
+    if (eh >= 100) return `${eh.toFixed(0)} EH/s`;
+    if (eh >= 10) return `${eh.toFixed(1)} EH/s`;
+    return `${eh.toFixed(2)} EH/s`;
+  }
+
+  function formatDifficulty(difficulty) {
+    if (!Number.isFinite(difficulty) || difficulty <= 0) return null;
+    return `${(difficulty / 1e12).toFixed(2)} T`;
+  }
+
+  function normalizeCandles(payload) {
+    if (!Array.isArray(payload)) return [];
+    return payload
+      .map((candle) => {
+        if (!Array.isArray(candle) || candle.length < 5) return null;
+        const time = safeNumber(candle[0]);
+        const close = safeNumber(candle[4]);
+        if (time === null || close === null || close <= 0) return null;
+        return { time, close };
+      })
+      .filter(Boolean)
+      .sort((a, b) => a.time - b.time)
+      .slice(-97);
+  }
+
+  function buildTracePath(candles, width = 720, height = 150) {
+    if (!Array.isArray(candles) || candles.length < 2) return null;
+    const prices = candles.map((candle) => candle.close);
+    const min = Math.min(...prices);
+    const max = Math.max(...prices);
+    const range = max - min;
+    const pad = 4;
+    const usableHeight = height - (pad * 2);
+    return candles.map((candle, index) => {
+      const x = (index / (candles.length - 1)) * width;
+      const ratio = range > 0 ? (candle.close - min) / range : 0.5;
+      const y = pad + ((1 - ratio) * usableHeight);
+      return `${index === 0 ? 'M' : 'L'}${x.toFixed(2)} ${y.toFixed(2)}`;
+    }).join(' ');
+  }
+
+  function getTrendLabel(candles) {
+    if (!Array.isArray(candles) || candles.length < 2) return 'LIVE 24H';
+    const start = candles[0].close;
+    const end = candles[candles.length - 1].close;
+    if (!Number.isFinite(start) || start <= 0 || !Number.isFinite(end)) return 'LIVE 24H';
+    const change = ((end - start) / start) * 100;
+    if (change > 0.15) return 'UPTREND';
+    if (change < -0.15) return 'DOWNTREND';
+    return 'SIDEWAYS';
+  }
+
+  class ToolsSurfReport {
+    constructor(root) {
+      if (root.dataset.toolsSurfReportInitialized === 'true') return;
+      if (!root.querySelector('.msc-tools-cockpit__deck')) return;
+      root.dataset.toolsSurfReportInitialized = 'true';
+
+      this.root = root;
+      this.tipHeight = null;
+      this.blockTimeMs = TARGET_BLOCK_MS;
+      this.fastSuccess = false;
+      this.miningSuccess = false;
+      this.chartSuccess = false;
+
+      injectToolsStyle();
+      this.refreshFastNetwork();
+      this.refreshMining();
+      this.refreshChart();
+
+      this.networkTimer = window.setInterval(() => this.refreshFastNetwork(), NETWORK_REFRESH_MS);
+      this.miningTimer = window.setInterval(() => this.refreshMining(), MINING_REFRESH_MS);
+      this.chartTimer = window.setInterval(() => this.refreshChart(), CHART_REFRESH_MS);
+    }
+
+    findReadout(labelText) {
+      const target = labelText.toLowerCase();
+      return Array.from(this.root.querySelectorAll('.msc-tools-readout')).find((card) => {
+        const label = card.querySelector('.msc-tools-readout__label');
+        return label && label.textContent.trim().toLowerCase() === target;
+      }) || null;
+    }
+
+    setReadout(labelText, value, note) {
+      const card = this.findReadout(labelText);
+      if (!card) return;
+      const valueNode = card.querySelector('.msc-tools-readout__value');
+      const noteNode = card.querySelector('.msc-tools-readout__note');
+      if (valueNode && value) valueNode.textContent = value;
+      if (noteNode && note) noteNode.textContent = note;
+    }
+
+    renderHalving() {
+      if (!Number.isFinite(this.tipHeight) || this.tipHeight < 0) return;
+      const nextHalvingHeight = (Math.floor(this.tipHeight / HALVING_INTERVAL) + 1) * HALVING_INTERVAL;
+      const remainingBlocks = Math.max(0, nextHalvingHeight - this.tipHeight);
+      const pace = Number.isFinite(this.blockTimeMs) && this.blockTimeMs >= 300000 && this.blockTimeMs <= 900000
+        ? this.blockTimeMs
+        : TARGET_BLOCK_MS;
+      const days = Math.max(0, Math.round((remainingBlocks * pace) / 86400000));
+      this.setReadout('Halving Countdown', `${integerFormatter.format(days)} days`, `Est. to block ${integerFormatter.format(nextHalvingHeight)}`);
+    }
+
+    renderFastNetwork(fees, mempool, tipHeight, difficultyAdjustment) {
+      const fastestFee = safeNumber(fees && fees.fastestFee);
+      const halfHourFee = safeNumber(fees && fees.halfHourFee);
+      if (fastestFee !== null) {
+        const feeNote = halfHourFee !== null
+          ? `High priority · 30m ${halfHourFee.toFixed(0)} sat/vB`
+          : 'High priority · mempool.space';
+        this.setReadout('Fee Environment', `${fastestFee.toFixed(0)} sat/vB`, feeNote);
+      }
+
+      const vsize = safeNumber(mempool && mempool.vsize);
+      const count = safeNumber(mempool && mempool.count);
+      if (vsize !== null) {
+        const note = count !== null ? `${integerFormatter.format(count)} tx pending` : 'Unconfirmed transaction backlog';
+        this.setReadout('Mempool Congestion', `${(vsize / 1e6).toFixed(1)} MB`, note);
+      }
+
+      if (Number.isFinite(tipHeight)) {
+        this.tipHeight = tipHeight;
+        this.setReadout('Latest Block', integerFormatter.format(tipHeight), 'Network tip · live');
+      }
+
+      const adjustedTimeAvg = safeNumber(difficultyAdjustment && difficultyAdjustment.adjustedTimeAvg);
+      const timeAvg = safeNumber(difficultyAdjustment && difficultyAdjustment.timeAvg);
+      this.blockTimeMs = adjustedTimeAvg || timeAvg || TARGET_BLOCK_MS;
+
+      const nextChange = safeNumber(difficultyAdjustment && difficultyAdjustment.difficultyChange);
+      if (nextChange !== null) {
+        const card = this.findReadout('Difficulty');
+        const noteNode = card && card.querySelector('.msc-tools-readout__note');
+        if (noteNode) {
+          const prefix = nextChange >= 0 ? '+' : '';
+          noteNode.textContent = `${prefix}${nextChange.toFixed(2)}% next retarget`;
+        }
+      }
+
+      this.renderHalving();
+      this.fastSuccess = true;
+      this.root.dataset.toolsNetworkStatus = 'live';
+    }
+
+    async refreshFastNetwork() {
+      if (document.hidden) return;
+      const results = await Promise.allSettled([
+        requestJson(FEES_URL),
+        requestJson(MEMPOOL_STATS_URL),
+        requestText(TIP_HEIGHT_URL),
+        requestJson(DIFFICULTY_ADJUSTMENT_URL)
+      ]);
+
+      const fees = results[0].status === 'fulfilled' ? results[0].value : null;
+      const mempool = results[1].status === 'fulfilled' ? results[1].value : null;
+      const tipText = results[2].status === 'fulfilled' ? results[2].value : null;
+      const difficultyAdjustment = results[3].status === 'fulfilled' ? results[3].value : null;
+      const tipHeight = Number.parseInt(String(tipText || '').trim(), 10);
+
+      if (!fees && !mempool && !Number.isFinite(tipHeight) && !difficultyAdjustment) {
+        if (!this.fastSuccess) this.root.dataset.toolsNetworkStatus = 'unavailable';
+        return;
+      }
+
+      this.renderFastNetwork(fees, mempool, Number.isFinite(tipHeight) ? tipHeight : null, difficultyAdjustment);
+    }
+
+    renderMining(payload) {
+      const currentHashrate = safeNumber(payload && payload.currentHashrate) || latestFinite(payload && payload.hashrates, 'avgHashrate');
+      const currentDifficulty = safeNumber(payload && payload.currentDifficulty) || latestFinite(payload && payload.difficulty, 'difficulty');
+      const hashrateLabel = formatHashrate(currentHashrate);
+      const difficultyLabel = formatDifficulty(currentDifficulty);
+
+      if (hashrateLabel) this.setReadout('Hashrate', hashrateLabel, 'Network estimate · 1m');
+      if (difficultyLabel) {
+        const card = this.findReadout('Difficulty');
+        const valueNode = card && card.querySelector('.msc-tools-readout__value');
+        if (valueNode) valueNode.textContent = difficultyLabel;
+      }
+      if (hashrateLabel || difficultyLabel) this.miningSuccess = true;
+    }
+
+    async refreshMining() {
+      if (document.hidden) return;
+      try {
+        this.renderMining(await requestJson(HASHRATE_URL));
+      } catch (error) {
+        if (!this.miningSuccess) {
+          this.setReadout('Hashrate', '— EH/s', 'Network data unavailable');
+        }
+      }
+    }
+
+    renderChart(candles) {
+      const path = buildTracePath(candles);
+      if (!path) throw new Error('insufficient BTC candle data');
+      const trace = this.root.querySelector('.msc-tools-trace__path');
+      const ghost = this.root.querySelector('.msc-tools-trace__ghost');
+      if (trace) trace.setAttribute('d', path);
+      if (ghost) ghost.setAttribute('d', path);
+
+      const trendItem = Array.from(this.root.querySelectorAll('.msc-tools-price__meta-item')).find((item) => {
+        const label = item.querySelector('.msc-tools-price__meta-label');
+        return label && label.textContent.trim().toLowerCase() === 'trend vector';
+      });
+      const trendValue = trendItem && trendItem.querySelector('.msc-tools-price__meta-value');
+      if (trendValue) trendValue.textContent = getTrendLabel(candles);
+
+      this.chartSuccess = true;
+      this.root.dataset.toolsTraceStatus = 'live';
+    }
+
+    async refreshChart() {
+      if (document.hidden) return;
+      try {
+        const candles = normalizeCandles(await requestJson(CANDLES_URL));
+        this.renderChart(candles);
+      } catch (error) {
+        if (!this.chartSuccess) this.root.dataset.toolsTraceStatus = 'unavailable';
+      }
+    }
+  }
+
   function init(scope = document) {
     const roots = [];
     if (scope.matches && scope.matches(ROOT)) roots.push(scope);
     if (scope.querySelectorAll) roots.push(...scope.querySelectorAll(ROOT));
-    roots.forEach((root) => new BtcPricePanel(root));
+    roots.forEach((root) => {
+      new BtcPricePanel(root);
+      new ToolsSurfReport(root);
+    });
   }
 
   init(document);
