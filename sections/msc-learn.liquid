@@ -73,14 +73,14 @@
       chart.dataset.mscBriefConsistency = 'v2';
 
       const briefCopyByRegion = {
-        basics: 'Start with the foundations of Bitcoin. Learn how wallets, ownership, transactions, fees, security, and privacy work. Build the core knowledge you need before moving deeper.',
-        network: 'Follow how the Bitcoin network operates. Learn how nodes, mining, mempools, blocks, proof of work, and consensus fit together. See how the network coordinates without a central operator.',
-        building: 'Explore systems built around Bitcoin. Learn about Layer 2 networks, digital assets, developer tools, and emerging protocols. Understand the assumptions and tradeoffs these systems introduce.',
-        development: 'Go inside Bitcoin’s protocol machinery. Learn about Bitcoin Core, BIPs, Script, cryptography, testing, and infrastructure. Understand the difference between consensus rules and software policy.',
-        ecosystem: 'Explore the wider Bitcoin ecosystem. Learn about builders, companies, services, marketplaces, communities, conferences, history, and open-source projects. See how these groups support Bitcoin without controlling the protocol.'
+        basics: 'Start with Bitcoin’s foundations. Learn how wallets, transactions, fees, security, and privacy work.',
+        network: 'See how the Bitcoin network operates. Learn how nodes, mining, mempools, blocks, proof of work, and consensus fit together.',
+        building: 'Explore systems built around Bitcoin. Learn how Layer 2 networks, digital assets, developer tools, and emerging protocols extend Bitcoin.',
+        development: 'Go inside Bitcoin’s protocol machinery. Learn about Bitcoin Core, BIPs, Script, cryptography, testing, and infrastructure.',
+        ecosystem: 'Explore the wider Bitcoin ecosystem. Learn how builders, companies, services, marketplaces, communities, and open-source projects support Bitcoin.'
       };
 
-      const overviewCopy = 'Use MSC SONAR to explore Bitcoin by depth. Start with the fundamentals, then move into the network, systems, protocols, and ecosystem. Choose a depth to begin.';
+      const overviewCopy = 'Use MSC SONAR to explore Bitcoin by depth. Choose a level to move from fundamentals into the network, protocols, and ecosystem.';
 
       const originalRegionLinks = Array.from(map.querySelectorAll('.msc-depth-map__region[data-region]'));
       const regionLinks = originalRegionLinks.map((link) => {
