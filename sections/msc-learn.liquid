@@ -19,8 +19,211 @@
       font-size: 1.72rem !important;
       line-height: 1.05 !important;
     }
+
+    .msc-learn .msc-depth-map__brief[data-region="overview"] .msc-depth-map__brief-overview,
+    .msc-learn .msc-depth-map__brief:not([data-region="overview"]) .msc-depth-map__brief-detail {
+      display: flex !important;
+      flex-direction: column;
+      height: 100%;
+      min-height: 0;
+    }
+
+    .msc-learn .msc-depth-map__brief[data-region="overview"] .msc-depth-map__brief-detail,
+    .msc-learn .msc-depth-map__brief:not([data-region="overview"]) .msc-depth-map__brief-overview {
+      display: none !important;
+    }
+
+    .msc-learn .msc-depth-map__brief-copy,
+    .msc-learn .msc-depth-map__brief-system-copy {
+      width: 100%;
+      max-width: none;
+    }
+
+    .msc-learn .msc-depth-map__brief-footer {
+      flex: 0 0 auto;
+      width: 100%;
+      margin-top: auto;
+    }
+
+    .msc-learn .msc-depth-map__brief-action {
+      flex: 0 0 auto;
+      overflow: visible;
+      text-overflow: clip;
+      white-space: nowrap;
+    }
   }
 </style>
+
+<script>
+  (() => {
+    const initSonarBriefConsistency = () => {
+      const learn = document.getElementById('MscLearn-{{ section.id }}');
+      const chart = learn?.querySelector('.msc-depth-chart');
+      const map = chart?.querySelector('.msc-depth-map');
+      const brief = map?.querySelector('.msc-depth-map__brief');
+      const status = chart?.querySelector('.msc-sonar-status');
+
+      if (!learn || !chart || !map || !brief || !status) return;
+      if (chart.dataset.mscBriefConsistency === 'true') return;
+      chart.dataset.mscBriefConsistency = 'true';
+
+      const briefCopyByRegion = {
+        basics: 'Start with Bitcoin’s foundations: ownership, wallets, transactions, fees, security, privacy, and the monetary concepts that explain how the system works.',
+        network: 'Follow Bitcoin’s network through mining, nodes, mempools, blocks, proof of work, consensus, chainwork, and the upgrade process that coordinates change.',
+        building: 'Explore systems built around Bitcoin, including Layer 2 networks, digital assets, developer tools, and emerging protocols, with their assumptions and tradeoffs.',
+        development: 'Go inside Bitcoin’s protocol machinery: Bitcoin Core, BIPs, Script, cryptography, testing, infrastructure, and the line between consensus rules and software policy.',
+        ecosystem: 'Map Bitcoin’s wider ecosystem: builders, companies, service providers, marketplaces, communities, conferences, history, and open-source projects, without confusing influence with protocol authority.'
+      };
+
+      const overviewCopy = 'Use MSC SONAR to move from Bitcoin fundamentals into network mechanics, systems built on Bitcoin, protocol internals, and the wider ecosystem. Hover over a depth to explore.';
+      const regionLinks = Array.from(map.querySelectorAll('.msc-depth-map__region[data-region]'));
+      const regions = new Map();
+
+      regionLinks.forEach((link) => {
+        const key = link.dataset.region;
+        if (!key) return;
+
+        const label = link.querySelector('.msc-depth-map__depth-name')?.textContent?.trim() || key;
+        const title = link.querySelector('.msc-depth-map__title')?.textContent?.trim() || label;
+
+        regions.set(key, {
+          key,
+          label,
+          title,
+          href: link.getAttribute('href') || '#',
+          brief: briefCopyByRegion[key] || ''
+        });
+      });
+
+      const statusDepth = status.querySelector('.msc-sonar-status__depth');
+      const statusGuide = status.querySelector('.msc-sonar-status__guide');
+      const briefOverview = brief.querySelector('.msc-depth-map__brief-overview');
+      const briefSystemCopy = brief.querySelector('.msc-depth-map__brief-system-copy');
+      const briefDepth = brief.querySelector('.msc-depth-map__brief-depth');
+      const briefTitle = brief.querySelector('.msc-depth-map__brief-title');
+      const briefCopy = brief.querySelector('.msc-depth-map__brief-copy');
+      const briefCount = brief.querySelector('.msc-depth-map__brief-count');
+      const briefAction = brief.querySelector('.msc-depth-map__brief-action');
+
+      if (!statusDepth || !statusGuide || !briefOverview || !briefSystemCopy || !briefDepth || !briefTitle || !briefCopy || !briefCount || !briefAction) return;
+
+      briefSystemCopy.textContent = overviewCopy;
+
+      let overviewFooter = briefOverview.querySelector('.msc-depth-map__brief-footer--overview');
+      if (!overviewFooter) {
+        overviewFooter = document.createElement('div');
+        overviewFooter.className = 'msc-depth-map__brief-footer msc-depth-map__brief-footer--overview';
+        overviewFooter.innerHTML = `
+          <span class="msc-depth-map__brief-count">${regions.size * 16} guides</span>
+          <a class="msc-depth-map__brief-action" href="#MscLearnIndex-{{ section.id }}">View all →</a>
+        `;
+        briefOverview.appendChild(overviewFooter);
+      }
+
+      const renderRegion = (key) => {
+        const region = regions.get(key);
+        if (!region) return;
+
+        map.dataset.active = key;
+        status.dataset.region = key;
+        statusDepth.textContent = region.label;
+        statusGuide.textContent = region.title;
+        status.setAttribute('aria-label', `Current position: ${region.label}. ${region.title}`);
+
+        brief.dataset.region = key;
+        briefDepth.textContent = region.label;
+        briefTitle.textContent = region.title;
+        briefCopy.textContent = region.brief;
+        briefCount.textContent = '16 guides';
+        briefAction.href = region.href;
+        briefAction.textContent = 'View guide →';
+        briefAction.setAttribute('aria-label', `View ${region.title} guide`);
+        brief.setAttribute('aria-label', `${region.label} depth brief: ${region.title}`);
+      };
+
+      const renderOverview = () => {
+        map.dataset.active = 'overview';
+        status.dataset.region = 'overview';
+        statusDepth.textContent = '';
+        statusGuide.textContent = '';
+        status.setAttribute('aria-label', 'MSC SONAR Learn System overview');
+        brief.dataset.region = 'overview';
+        briefSystemCopy.textContent = overviewCopy;
+        brief.setAttribute('aria-label', 'MSC SONAR Learn System overview');
+      };
+
+      let activeKey = null;
+      let pointerInsideChart = false;
+      let restoring = false;
+
+      const activate = (key) => {
+        if (!regions.has(key)) return;
+        activeKey = key;
+        renderRegion(key);
+      };
+
+      regionLinks.forEach((link) => {
+        const key = link.dataset.region;
+        link.addEventListener('pointerenter', () => activate(key));
+        link.addEventListener('focus', () => activate(key));
+      });
+
+      status.querySelectorAll('.msc-sonar-status__node[data-region]').forEach((node) => {
+        const key = node.dataset.region;
+        node.addEventListener('pointerenter', () => activate(key));
+        node.addEventListener('focus', () => activate(key));
+      });
+
+      chart.addEventListener('pointerenter', () => {
+        pointerInsideChart = true;
+      });
+
+      chart.addEventListener('pointerleave', () => {
+        pointerInsideChart = false;
+        activeKey = null;
+        renderOverview();
+      });
+
+      chart.addEventListener('focusout', (event) => {
+        if (activeKey && event.relatedTarget && chart.contains(event.relatedTarget)) {
+          queueMicrotask(() => renderRegion(activeKey));
+          return;
+        }
+
+        requestAnimationFrame(() => {
+          if (!pointerInsideChart && !chart.contains(document.activeElement)) {
+            activeKey = null;
+            renderOverview();
+          }
+        });
+      });
+
+      const maintainActiveRegion = () => {
+        if (restoring || !activeKey) return;
+        if (!pointerInsideChart && !chart.contains(document.activeElement)) return;
+
+        if (map.dataset.active !== activeKey || brief.dataset.region !== activeKey || status.dataset.region !== activeKey) {
+          restoring = true;
+          renderRegion(activeKey);
+          restoring = false;
+        }
+      };
+
+      const observer = new MutationObserver(maintainActiveRegion);
+      observer.observe(map, { attributes: true, attributeFilter: ['data-active'] });
+      observer.observe(brief, { attributes: true, attributeFilter: ['data-region'] });
+      observer.observe(status, { attributes: true, attributeFilter: ['data-region'] });
+
+      renderOverview();
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initSonarBriefConsistency, { once: true });
+    } else {
+      initSonarBriefConsistency();
+    }
+  })();
+</script>
 
 {%- assign search_input_id = 'MscLearnSearchInput-' | append: section.id -%}
 
