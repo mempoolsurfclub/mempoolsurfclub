@@ -26,6 +26,7 @@
       flex-direction: column;
       height: 100%;
       min-height: 0;
+      box-sizing: border-box;
     }
 
     .msc-learn .msc-depth-map__brief[data-region="overview"] .msc-depth-map__brief-detail,
@@ -37,12 +38,16 @@
     .msc-learn .msc-depth-map__brief-system-copy {
       width: 100%;
       max-width: none;
+      min-height: 6.8rem;
     }
 
     .msc-learn .msc-depth-map__brief-footer {
+      display: flex !important;
       flex: 0 0 auto;
       width: 100%;
       margin-top: auto;
+      visibility: visible;
+      opacity: 1;
     }
 
     .msc-learn .msc-depth-map__brief-action {
@@ -64,21 +69,34 @@
       const status = chart?.querySelector('.msc-sonar-status');
 
       if (!learn || !chart || !map || !brief || !status) return;
-      if (chart.dataset.mscBriefConsistency === 'true') return;
-      chart.dataset.mscBriefConsistency = 'true';
+      if (chart.dataset.mscBriefConsistency === 'v2') return;
+      chart.dataset.mscBriefConsistency = 'v2';
 
       const briefCopyByRegion = {
-        basics: 'Start with Bitcoin’s foundations: ownership, wallets, transactions, fees, security, privacy, and the monetary concepts that explain how the system works.',
+        basics: 'Start with Bitcoin’s foundations: ownership, wallets, transactions, fees, security, privacy, and the monetary ideas that shape how the system is used.',
         network: 'Follow Bitcoin’s network through mining, nodes, mempools, blocks, proof of work, consensus, chainwork, and the upgrade process that coordinates change.',
-        building: 'Explore systems built around Bitcoin, including Layer 2 networks, digital assets, developer tools, and emerging protocols, with their assumptions and tradeoffs.',
-        development: 'Go inside Bitcoin’s protocol machinery: Bitcoin Core, BIPs, Script, cryptography, testing, infrastructure, and the line between consensus rules and software policy.',
-        ecosystem: 'Map Bitcoin’s wider ecosystem: builders, companies, service providers, marketplaces, communities, conferences, history, and open-source projects, without confusing influence with protocol authority.'
+        building: 'Explore systems built around Bitcoin, including Layer 2 networks, digital assets, developer tools, and emerging protocols, plus their assumptions and tradeoffs.',
+        development: 'Go inside Bitcoin’s protocol machinery: Bitcoin Core, BIPs, Script, cryptography, testing, infrastructure, consensus rules, and software policy.',
+        ecosystem: 'Map Bitcoin’s wider ecosystem through builders, companies, service providers, marketplaces, communities, conferences, history, and open-source projects.'
       };
 
-      const overviewCopy = 'Use MSC SONAR to move from Bitcoin fundamentals into network mechanics, systems built on Bitcoin, protocol internals, and the wider ecosystem. Hover over a depth to explore.';
-      const regionLinks = Array.from(map.querySelectorAll('.msc-depth-map__region[data-region]'));
-      const regions = new Map();
+      const overviewCopy = 'Use MSC SONAR to move from Bitcoin fundamentals into network mechanics, systems built on Bitcoin, protocol internals, and the wider ecosystem. Choose a depth to explore.';
 
+      const originalRegionLinks = Array.from(map.querySelectorAll('.msc-depth-map__region[data-region]'));
+      const regionLinks = originalRegionLinks.map((link) => {
+        const cleanLink = link.cloneNode(true);
+        link.replaceWith(cleanLink);
+        return cleanLink;
+      });
+
+      const originalStatusNodes = Array.from(status.querySelectorAll('.msc-sonar-status__node[data-region]'));
+      const statusNodes = originalStatusNodes.map((node) => {
+        const cleanNode = node.cloneNode(true);
+        node.replaceWith(cleanNode);
+        return cleanNode;
+      });
+
+      const regions = new Map();
       regionLinks.forEach((link) => {
         const key = link.dataset.region;
         if (!key) return;
@@ -152,14 +170,8 @@
         brief.setAttribute('aria-label', 'MSC SONAR Learn System overview');
       };
 
-      let activeKey = null;
-      let pointerInsideChart = false;
-      let restoring = false;
-
       const activate = (key) => {
-        if (!regions.has(key)) return;
-        activeKey = key;
-        renderRegion(key);
+        if (regions.has(key)) renderRegion(key);
       };
 
       regionLinks.forEach((link) => {
@@ -168,51 +180,17 @@
         link.addEventListener('focus', () => activate(key));
       });
 
-      status.querySelectorAll('.msc-sonar-status__node[data-region]').forEach((node) => {
+      statusNodes.forEach((node) => {
         const key = node.dataset.region;
         node.addEventListener('pointerenter', () => activate(key));
         node.addEventListener('focus', () => activate(key));
       });
 
-      chart.addEventListener('pointerenter', () => {
-        pointerInsideChart = true;
-      });
-
-      chart.addEventListener('pointerleave', () => {
-        pointerInsideChart = false;
-        activeKey = null;
+      chart.addEventListener('pointerleave', renderOverview);
+      chart.addEventListener('focusout', (event) => {
+        if (event.relatedTarget && chart.contains(event.relatedTarget)) return;
         renderOverview();
       });
-
-      chart.addEventListener('focusout', (event) => {
-        if (activeKey && event.relatedTarget && chart.contains(event.relatedTarget)) {
-          queueMicrotask(() => renderRegion(activeKey));
-          return;
-        }
-
-        requestAnimationFrame(() => {
-          if (!pointerInsideChart && !chart.contains(document.activeElement)) {
-            activeKey = null;
-            renderOverview();
-          }
-        });
-      });
-
-      const maintainActiveRegion = () => {
-        if (restoring || !activeKey) return;
-        if (!pointerInsideChart && !chart.contains(document.activeElement)) return;
-
-        if (map.dataset.active !== activeKey || brief.dataset.region !== activeKey || status.dataset.region !== activeKey) {
-          restoring = true;
-          renderRegion(activeKey);
-          restoring = false;
-        }
-      };
-
-      const observer = new MutationObserver(maintainActiveRegion);
-      observer.observe(map, { attributes: true, attributeFilter: ['data-active'] });
-      observer.observe(brief, { attributes: true, attributeFilter: ['data-region'] });
-      observer.observe(status, { attributes: true, attributeFilter: ['data-region'] });
 
       renderOverview();
     };
