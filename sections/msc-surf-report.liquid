@@ -397,6 +397,79 @@
       line-height: .9;
       letter-spacing: -.06em;
     }
+
+    #SurfReport-{{ section.id }} .msc-tools-price {
+      justify-content: flex-start;
+    }
+
+    #SurfReport-{{ section.id }} .msc-tools-price__heading {
+      position: absolute;
+      inset: var(--msc-tools-inset) 0 auto;
+      z-index: 3;
+      display: block;
+      pointer-events: none;
+    }
+
+    #SurfReport-{{ section.id }} .msc-tools-price__heading > div:first-child {
+      position: absolute;
+      top: 3.15rem;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    #SurfReport-{{ section.id }} .msc-tools-price__pair {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: max-content;
+      transform: translateX(-50%);
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    #SurfReport-{{ section.id }} .msc-tools-price__display {
+      flex: 0 0 auto;
+      margin: 5.2rem 0 .1rem;
+    }
+
+    #SurfReport-{{ section.id }} .msc-tools-price__change {
+      margin-top: .72rem;
+    }
+
+    #SurfReport-{{ section.id }} .msc-tools-trace {
+      flex: 1 1 12.5rem;
+      min-height: 12.5rem;
+      height: auto;
+      max-height: 14.25rem;
+      margin: .2rem 0 .7rem;
+    }
+
+    #SurfReport-{{ section.id }} .msc-tools-trace__path,
+    #SurfReport-{{ section.id }} .msc-tools-trace__ghost {
+      vector-effect: non-scaling-stroke;
+    }
+
+    #SurfReport-{{ section.id }} .msc-tools-trace__axis-label--price {
+      font-size: 6.4px;
+    }
+
+    #SurfReport-{{ section.id }} .msc-tools-trace__axis-label--time {
+      font-size: 5.9px;
+    }
+
+    #SurfReport-{{ section.id }} .msc-tools-price__meta {
+      flex: 0 0 auto;
+      margin-top: auto;
+      padding-top: .85rem;
+      border-top: 1px solid rgba(212,190,153,.18);
+    }
+
+    #SurfReport-{{ section.id }} .msc-tools-price__meta-item {
+      padding-top: 0;
+      border-top: 0;
+    }
   }
 
   @media screen and (max-width: 990px) {
