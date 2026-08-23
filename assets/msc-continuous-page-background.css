@@ -106,6 +106,12 @@
   white-space: nowrap;
 }
 
+/* Normalize the small tan supporting copy inside the Tools cockpit. */
+#MainContent:has([id^="SurfReport-"].msc-shell) .msc-tools-readout__note,
+#MainContent:has([id^="SurfReport-"].msc-shell) .msc-tools-price__change {
+  text-transform: uppercase;
+}
+
 @media screen and (max-width: 700px) {
   #MainContent:has([id^="SurfReport-"].msc-shell) .msc-tools-cockpit__topline {
     flex-wrap: wrap;
