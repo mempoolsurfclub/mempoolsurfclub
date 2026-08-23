@@ -89,6 +89,58 @@
       max-height: none !important;
       margin: 0 !important;
       overflow: visible !important;
+      background: linear-gradient(180deg, #173c43 0%, #10282d 100%) !important;
+    }
+
+    body [data-msc-ecosystem-radar] .msc-tools-axis-overlay {
+      position: absolute !important;
+      z-index: 3 !important;
+      top: 8.35rem !important;
+      left: var(--msc-tools-inset) !important;
+      width: calc(100% - (2 * var(--msc-tools-inset))) !important;
+      height: calc(100% - 10rem) !important;
+      pointer-events: none !important;
+      overflow: visible !important;
+    }
+
+    body [data-msc-ecosystem-radar] .msc-tools-axis-overlay__label {
+      position: absolute;
+      margin: 0;
+      font-family: inherit;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 1;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+      text-shadow: 0 1px 1px rgba(3, 18, 22, .72);
+    }
+
+    body [data-msc-ecosystem-radar] .msc-tools-axis-overlay__label--price {
+      color: rgba(251, 248, 239, .78);
+      font-size: .94rem;
+      font-weight: 650;
+      letter-spacing: .01em;
+      transform: translate(-100%, -50%);
+    }
+
+    body [data-msc-ecosystem-radar] .msc-tools-axis-overlay__label--time {
+      color: rgba(212, 190, 153, .7);
+      font-size: .88rem;
+      font-weight: 600;
+      letter-spacing: .02em;
+      transform: translate(-50%, -50%);
+    }
+
+    body [data-msc-ecosystem-radar] .msc-tools-axis-overlay__label--time[data-axis-anchor="start"] {
+      transform: translate(0, -50%);
+    }
+
+    body [data-msc-ecosystem-radar] .msc-tools-axis-overlay__label--time[data-axis-anchor="end"] {
+      transform: translate(-100%, -50%);
+    }
+
+    body [data-msc-ecosystem-radar] .msc-tools-price[data-axis-html-labels="true"] .msc-tools-trace__axis-label {
+      opacity: 0 !important;
     }
 
     body [data-msc-ecosystem-radar] .msc-tools-price__meta {
@@ -106,18 +158,6 @@
     body [data-msc-ecosystem-radar] .msc-tools-trace__axis-domain {
       stroke: rgba(212, 190, 153, .26) !important;
     }
-
-    body [data-msc-ecosystem-radar] .msc-tools-trace__axis-label--price {
-      fill: rgba(251, 248, 239, .78) !important;
-      font-size: 5.8px !important;
-      font-weight: 700 !important;
-    }
-
-    body [data-msc-ecosystem-radar] .msc-tools-trace__axis-label--time {
-      fill: rgba(212, 190, 153, .64) !important;
-      font-size: 5.2px !important;
-      font-weight: 700 !important;
-    }
   }
 </style>
 
@@ -133,6 +173,56 @@
     if (meta) meta.remove();
   }
 
+  function renderAxisOverlay(root, svg) {
+    const pricePanel = root && root.querySelector('.msc-tools-price');
+    if (!pricePanel || !svg || !svg.viewBox || !svg.viewBox.baseVal) return;
+
+    const viewBox = svg.viewBox.baseVal;
+    const width = viewBox.width || 720;
+    const height = viewBox.height || 150;
+    if (!width || !height) return;
+
+    let overlay = pricePanel.querySelector('[data-msc-tools-axis-overlay]');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.className = 'msc-tools-axis-overlay';
+      overlay.setAttribute('data-msc-tools-axis-overlay', '');
+      overlay.setAttribute('aria-hidden', 'true');
+      pricePanel.appendChild(overlay);
+    }
+
+    overlay.replaceChildren();
+
+    svg.querySelectorAll('.msc-tools-trace__axis-label--price').forEach((label) => {
+      const x = Number(label.getAttribute('x'));
+      const y = Number(label.getAttribute('y'));
+      if (!Number.isFinite(x) || !Number.isFinite(y)) return;
+
+      const item = document.createElement('span');
+      item.className = 'msc-tools-axis-overlay__label msc-tools-axis-overlay__label--price';
+      item.textContent = label.textContent || '';
+      item.style.left = `${(x / width) * 100}%`;
+      item.style.top = `${(y / height) * 100}%`;
+      overlay.appendChild(item);
+    });
+
+    svg.querySelectorAll('.msc-tools-trace__axis-label--time').forEach((label) => {
+      const x = Number(label.getAttribute('x'));
+      const y = Number(label.getAttribute('y'));
+      if (!Number.isFinite(x) || !Number.isFinite(y)) return;
+
+      const item = document.createElement('span');
+      item.className = 'msc-tools-axis-overlay__label msc-tools-axis-overlay__label--time';
+      item.textContent = label.textContent || '';
+      item.dataset.axisAnchor = label.getAttribute('text-anchor') || 'middle';
+      item.style.left = `${(x / width) * 100}%`;
+      item.style.top = `${(y / height) * 100}%`;
+      overlay.appendChild(item);
+    });
+
+    pricePanel.dataset.axisHtmlLabels = 'true';
+  }
+
   function refineAxisLabels(root) {
     const svg = root && root.querySelector('.msc-tools-trace');
     if (!svg) return;
@@ -145,6 +235,8 @@
     svg.querySelectorAll('.msc-tools-trace__axis-label--time').forEach((label) => {
       label.setAttribute('y', '143');
     });
+
+    renderAxisOverlay(root, svg);
   }
 
   function install(root) {
