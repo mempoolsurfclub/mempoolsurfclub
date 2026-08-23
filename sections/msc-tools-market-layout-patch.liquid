@@ -233,6 +233,60 @@
     pricePanel.style.setProperty('--msc-tools-price-value-top', `${valueTop}px`);
   }
 
+  function removeCrowdedDateNeighbor(svg) {
+    const axisGroup = svg && svg.querySelector('[data-btc-trace-axes]');
+    if (!axisGroup) return;
+
+    const ticks = Array.from(axisGroup.querySelectorAll('.msc-tools-trace__axis-label--time'))
+      .map((label) => ({
+        label,
+        x: Number(label.getAttribute('x')),
+        text: (label.textContent || '').trim()
+      }))
+      .filter((tick) => Number.isFinite(tick.x) && tick.text)
+      .sort((a, b) => a.x - b.x);
+
+    if (ticks.length < 4) return;
+
+    const dateIndex = ticks.findIndex((tick) => !tick.text.includes(':'));
+    if (dateIndex < 0) return;
+
+    const gaps = [];
+    for (let index = 1; index < ticks.length; index += 1) {
+      const gap = ticks[index].x - ticks[index - 1].x;
+      if (gap > 0) gaps.push(gap);
+    }
+    if (!gaps.length) return;
+
+    const sortedGaps = gaps.slice().sort((a, b) => a - b);
+    const medianGap = sortedGaps[Math.floor(sortedGaps.length / 2)];
+    const neighbors = [];
+
+    if (dateIndex > 0) {
+      neighbors.push({ tick: ticks[dateIndex - 1], distance: ticks[dateIndex].x - ticks[dateIndex - 1].x });
+    }
+    if (dateIndex < ticks.length - 1) {
+      neighbors.push({ tick: ticks[dateIndex + 1], distance: ticks[dateIndex + 1].x - ticks[dateIndex].x });
+    }
+
+    neighbors.sort((a, b) => a.distance - b.distance);
+    const crowded = neighbors[0];
+    if (!crowded || crowded.distance >= medianGap * .72) return;
+
+    const removedX = crowded.tick.x;
+    crowded.tick.label.remove();
+
+    axisGroup.querySelectorAll('.msc-tools-trace__axis-grid--time').forEach((line) => {
+      const x1 = Number(line.getAttribute('x1'));
+      const x2 = Number(line.getAttribute('x2'));
+      if (Number.isFinite(x1) && Number.isFinite(x2)
+        && Math.abs(x1 - removedX) < .5
+        && Math.abs(x2 - removedX) < .5) {
+        line.remove();
+      }
+    });
+  }
+
   function renderAxisOverlay(root, svg) {
     const pricePanel = root && root.querySelector('.msc-tools-price');
     if (!pricePanel || !svg || !svg.viewBox || !svg.viewBox.baseVal) return;
@@ -287,13 +341,15 @@
     const svg = root && root.querySelector('.msc-tools-trace');
     if (!svg) return;
 
+    removeCrowdedDateNeighbor(svg);
+
     svg.querySelectorAll('.msc-tools-trace__axis-label--price').forEach((label) => {
       label.setAttribute('x', '698');
       label.setAttribute('text-anchor', 'end');
     });
 
     svg.querySelectorAll('.msc-tools-trace__axis-label--time').forEach((label) => {
-      label.setAttribute('y', '143');
+      label.setAttribute('y', '139');
     });
 
     renderAxisOverlay(root, svg);
