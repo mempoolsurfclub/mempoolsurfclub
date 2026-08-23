@@ -19,6 +19,7 @@
   const REQUEST_TIMEOUT_MS = 10000;
   const HALVING_INTERVAL = 210000;
   const TARGET_BLOCK_MS = 600000;
+  const SVG_NS = 'http://www.w3.org/2000/svg';
 
   const usdFormatter = new Intl.NumberFormat('en-US', {
     maximumFractionDigits: 0
@@ -185,9 +186,71 @@
         gap: .65rem;
         white-space: nowrap;
       }
+      .msc-tools-cockpit .msc-tools-launch {
+        position: relative;
+        justify-content: center !important;
+        padding-inline: 2.4rem;
+        text-align: center;
+      }
+      .msc-tools-cockpit .msc-tools-launch > span:first-child {
+        display: block;
+        width: 100%;
+        text-align: center;
+      }
+      .msc-tools-cockpit .msc-tools-launch__arrow {
+        position: absolute;
+        top: 50%;
+        right: 1rem;
+        transform: translateY(-50%);
+      }
+      .msc-tools-cockpit .msc-tools-trace__guide-line {
+        stroke: rgba(212, 190, 153, .22);
+        stroke-width: 1;
+        stroke-dasharray: 2 6;
+        vector-effect: non-scaling-stroke;
+      }
+      .msc-tools-cockpit .msc-tools-trace__guide-dot {
+        fill: rgba(212, 190, 153, .94);
+        stroke: rgba(10, 38, 43, .96);
+        stroke-width: 2;
+        vector-effect: non-scaling-stroke;
+      }
+      .msc-tools-cockpit .msc-tools-trace__guide-price,
+      .msc-tools-cockpit .msc-tools-trace__guide-time {
+        paint-order: stroke;
+        stroke: rgba(10, 38, 43, .96);
+        stroke-linejoin: round;
+        pointer-events: none;
+      }
+      .msc-tools-cockpit .msc-tools-trace__guide-price {
+        fill: rgba(251, 248, 239, .78);
+        stroke-width: 3px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: .02em;
+      }
+      .msc-tools-cockpit .msc-tools-trace__guide-time {
+        fill: rgba(212, 190, 153, .56);
+        stroke-width: 2.5px;
+        font-size: 8px;
+        font-weight: 650;
+        letter-spacing: .08em;
+      }
+      .msc-tools-cockpit .msc-tools-trace__guide--latest .msc-tools-trace__guide-line {
+        stroke: rgba(251, 248, 239, .34);
+      }
+      .msc-tools-cockpit .msc-tools-trace__guide--latest .msc-tools-trace__guide-dot {
+        fill: rgba(251, 248, 239, .98);
+      }
       @media screen and (max-width: 700px) {
         .msc-tools-cockpit .msc-tools-cockpit__topline {
           flex-wrap: wrap;
+        }
+        .msc-tools-cockpit .msc-tools-trace__guide-price {
+          font-size: 9px;
+        }
+        .msc-tools-cockpit .msc-tools-trace__guide-time {
+          font-size: 7px;
         }
       }
     `;
@@ -222,6 +285,12 @@
     return `${(difficulty / 1e12).toFixed(2)} T`;
   }
 
+  function formatGuidePrice(price) {
+    if (!Number.isFinite(price) || price <= 0) return '';
+    if (price >= 10000) return `$${(price / 1000).toFixed(1)}K`;
+    return `$${usdFormatter.format(price)}`;
+  }
+
   function normalizeCandles(payload) {
     if (!Array.isArray(payload)) return [];
     return payload
@@ -237,7 +306,7 @@
       .slice(-97);
   }
 
-  function buildTracePath(candles, width = 720, height = 150) {
+  function buildTraceGeometry(candles, width = 720, height = 150) {
     if (!Array.isArray(candles) || candles.length < 2) return null;
     const prices = candles.map((candle) => candle.close);
     const min = Math.min(...prices);
@@ -245,12 +314,14 @@
     const range = max - min;
     const pad = 4;
     const usableHeight = height - (pad * 2);
-    return candles.map((candle, index) => {
+    const points = candles.map((candle, index) => {
       const x = (index / (candles.length - 1)) * width;
       const ratio = range > 0 ? (candle.close - min) / range : 0.5;
       const y = pad + ((1 - ratio) * usableHeight);
-      return `${index === 0 ? 'M' : 'L'}${x.toFixed(2)} ${y.toFixed(2)}`;
-    }).join(' ');
+      return { candle, x, y };
+    });
+    const path = points.map((point, index) => `${index === 0 ? 'M' : 'L'}${point.x.toFixed(2)} ${point.y.toFixed(2)}`).join(' ');
+    return { path, points, width, height };
   }
 
   function getTrendLabel(candles) {
@@ -277,6 +348,7 @@
       this.chartSuccess = false;
 
       injectToolsStyle();
+      this.normalizeLaunchLabels();
       this.refreshFastNetwork();
       this.refreshMining();
       this.refreshChart();
@@ -284,6 +356,15 @@
       this.networkTimer = window.setInterval(() => this.refreshFastNetwork(), NETWORK_REFRESH_MS);
       this.miningTimer = window.setInterval(() => this.refreshMining(), MINING_REFRESH_MS);
       this.chartTimer = window.setInterval(() => this.refreshChart(), CHART_REFRESH_MS);
+    }
+
+    normalizeLaunchLabels() {
+      const launch = Array.from(this.root.querySelectorAll('.msc-tools-launch')).find((item) => {
+        const label = item.querySelector('span:first-child');
+        return label && label.textContent.trim().toLowerCase() === 'mempool / fee navigator';
+      });
+      const label = launch && launch.querySelector('span:first-child');
+      if (label) label.textContent = 'Fee Navigator';
     }
 
     findReadout(labelText) {
@@ -397,13 +478,80 @@
       }
     }
 
+    renderTraceGuides(geometry) {
+      const svg = this.root.querySelector('.msc-tools-trace');
+      if (!svg || !geometry || !Array.isArray(geometry.points) || geometry.points.length < 2) return;
+
+      const existing = svg.querySelector('[data-btc-trace-guides]');
+      if (existing) existing.remove();
+
+      const guideGroup = document.createElementNS(SVG_NS, 'g');
+      guideGroup.setAttribute('data-btc-trace-guides', '');
+      guideGroup.setAttribute('aria-hidden', 'true');
+
+      const fractions = [0, 1 / 3, 2 / 3, 1];
+      const indexes = [...new Set(fractions.map((fraction) => Math.round((geometry.points.length - 1) * fraction)))];
+      const lastTime = geometry.points[geometry.points.length - 1].candle.time;
+
+      indexes.forEach((index) => {
+        const point = geometry.points[index];
+        const isLatest = index === geometry.points.length - 1;
+        const item = document.createElementNS(SVG_NS, 'g');
+        item.setAttribute('class', `msc-tools-trace__guide${isLatest ? ' msc-tools-trace__guide--latest' : ''}`);
+
+        const line = document.createElementNS(SVG_NS, 'line');
+        line.setAttribute('class', 'msc-tools-trace__guide-line');
+        line.setAttribute('x1', point.x.toFixed(2));
+        line.setAttribute('x2', point.x.toFixed(2));
+        line.setAttribute('y1', '8');
+        line.setAttribute('y2', '139');
+        item.appendChild(line);
+
+        const dot = document.createElementNS(SVG_NS, 'circle');
+        dot.setAttribute('class', 'msc-tools-trace__guide-dot');
+        dot.setAttribute('cx', point.x.toFixed(2));
+        dot.setAttribute('cy', point.y.toFixed(2));
+        dot.setAttribute('r', isLatest ? '3.8' : '3.2');
+        item.appendChild(dot);
+
+        const isFirst = index === 0;
+        const x = isFirst ? 6 : (isLatest ? geometry.width - 6 : point.x);
+        const anchor = isFirst ? 'start' : (isLatest ? 'end' : 'middle');
+        const priceY = point.y < 24 ? point.y + 16 : point.y - 8;
+
+        const price = document.createElementNS(SVG_NS, 'text');
+        price.setAttribute('class', 'msc-tools-trace__guide-price');
+        price.setAttribute('x', x.toFixed(2));
+        price.setAttribute('y', priceY.toFixed(2));
+        price.setAttribute('text-anchor', anchor);
+        price.textContent = formatGuidePrice(point.candle.close);
+        item.appendChild(price);
+
+        const elapsedHours = Math.max(0, Math.round((lastTime - point.candle.time) / 3600));
+        const time = document.createElementNS(SVG_NS, 'text');
+        time.setAttribute('class', 'msc-tools-trace__guide-time');
+        time.setAttribute('x', x.toFixed(2));
+        time.setAttribute('y', '147');
+        time.setAttribute('text-anchor', anchor);
+        time.textContent = isLatest ? 'LATEST' : `${elapsedHours}H AGO`;
+        item.appendChild(time);
+
+        guideGroup.appendChild(item);
+      });
+
+      const ghost = svg.querySelector('.msc-tools-trace__ghost');
+      if (ghost) svg.insertBefore(guideGroup, ghost);
+      else svg.appendChild(guideGroup);
+    }
+
     renderChart(candles) {
-      const path = buildTracePath(candles);
-      if (!path) throw new Error('insufficient BTC candle data');
+      const geometry = buildTraceGeometry(candles);
+      if (!geometry) throw new Error('insufficient BTC candle data');
       const trace = this.root.querySelector('.msc-tools-trace__path');
       const ghost = this.root.querySelector('.msc-tools-trace__ghost');
-      if (trace) trace.setAttribute('d', path);
-      if (ghost) ghost.setAttribute('d', path);
+      if (trace) trace.setAttribute('d', geometry.path);
+      if (ghost) ghost.setAttribute('d', geometry.path);
+      this.renderTraceGuides(geometry);
 
       const trendItem = Array.from(this.root.querySelectorAll('.msc-tools-price__meta-item')).find((item) => {
         const label = item.querySelector('.msc-tools-price__meta-label');
