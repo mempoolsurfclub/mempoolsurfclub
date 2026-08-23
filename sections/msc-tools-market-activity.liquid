@@ -1,0 +1,410 @@
+<style>
+  body [data-msc-ecosystem-radar] .msc-tools-cockpit__rail--right {
+    grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity {
+    min-height: 0;
+    padding: var(--msc-tools-inset);
+    border: 1px solid rgba(212,190,153,.16);
+    border-radius: 16px;
+    background: rgba(255,255,255,.035);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity__header,
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity__footer,
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity__label,
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity__context,
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity__meta,
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity__status,
+  body [data-msc-ecosystem-radar] .msc-tools-readout__note,
+  body [data-msc-ecosystem-radar] .msc-tools-price__change {
+    text-transform: uppercase;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity__label {
+    margin: 0;
+    color: rgba(251,248,239,.48);
+    font-size: .94rem;
+    letter-spacing: .14em;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity__status {
+    flex: 0 0 auto;
+    color: var(--msc-sand);
+    font-size: .78rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: .12em;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity__context {
+    margin: .8rem 0 .35rem;
+    color: var(--msc-sand);
+    font-size: .82rem;
+    line-height: 1.15;
+    letter-spacing: .08em;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity__list {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity__row {
+    min-width: 0;
+    padding: .58rem 0;
+    border-top: 1px solid rgba(212,190,153,.12);
+    align-items: baseline;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity__name {
+    min-width: 0;
+    overflow: hidden;
+    color: var(--msc-paper-soft);
+    font-size: .96rem;
+    font-weight: 650;
+    line-height: 1.08;
+    letter-spacing: .015em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity__meta {
+    flex: 0 0 auto;
+    color: var(--msc-sand);
+    font-size: .78rem;
+    line-height: 1.08;
+    letter-spacing: .04em;
+    white-space: nowrap;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity__footer {
+    margin-top: auto;
+    padding-top: .55rem;
+    border-top: 1px solid rgba(212,190,153,.12);
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity__updated {
+    min-width: 0;
+    overflow: hidden;
+    color: rgba(251,248,239,.42);
+    font-size: .72rem;
+    line-height: 1;
+    letter-spacing: .08em;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity[data-market-status="delayed"] .msc-tools-market-activity__status,
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity[data-market-status="unavailable"] .msc-tools-market-activity__status {
+    opacity: .72;
+  }
+
+  @media screen and (max-width: 990px) {
+    body [data-msc-ecosystem-radar] .msc-tools-cockpit__rail--right {
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      grid-template-rows: none !important;
+    }
+  }
+
+  @media screen and (max-width: 520px) {
+    body [data-msc-ecosystem-radar] .msc-tools-cockpit__rail--right {
+      grid-template-columns: 1fr !important;
+    }
+  }
+</style>
+
+<script>
+(() => {
+  'use strict';
+
+  const ROOT = '[data-msc-ecosystem-radar]';
+  const DATA_ROOT = 'https://raw.githubusercontent.com/mempoolsurfclub/mempoolsurfclub/homepage-market-data/data/api/v1/market';
+  const DATA_URLS = {
+    ORDINAL: `${DATA_ROOT}/ordinals.json`,
+    RUNE: `${DATA_ROOT}/runes.json`
+  };
+  const REFRESH_MS = 15 * 60 * 1000;
+  const CACHE_BUCKET_MS = 5 * 60 * 1000;
+  const REQUEST_TIMEOUT_MS = 10000;
+  const MAX_AGE_MS = 6 * 60 * 60 * 1000;
+  const LAST_GOOD_MAX_AGE_MS = 24 * 60 * 60 * 1000;
+  const MAX_ROWS = 3;
+
+  function cacheKey(protocol) {
+    return `msc-tools-${protocol.toLowerCase()}-activity-v1`;
+  }
+
+  function formatBtc(value) {
+    if (!Number.isFinite(value) || value <= 0) return '— BTC';
+    if (value >= 10) return `${value.toFixed(1)} BTC`;
+    if (value >= 1) return `${value.toFixed(2)} BTC`;
+    if (value >= .1) return `${value.toFixed(3)} BTC`;
+    if (value >= .01) return `${value.toFixed(4)} BTC`;
+    return `${value.toFixed(5)} BTC`;
+  }
+
+  function formatSales(value) {
+    const count = Number(value);
+    if (!Number.isFinite(count) || count < 1) return 'SALE DATA N/A';
+    const rounded = Math.round(count);
+    return `${rounded} ${rounded === 1 ? 'SALE' : 'SALES'}`;
+  }
+
+  function formatUpdated(timestamp) {
+    const date = new Date(timestamp);
+    if (!Number.isFinite(date.getTime())) return 'UPDATE TIME N/A';
+    return `UPDATED ${new Intl.DateTimeFormat('en-US', {
+      hour: 'numeric',
+      minute: '2-digit'
+    }).format(date)}`;
+  }
+
+  function normalizeAsset(asset, expectedType) {
+    const name = typeof asset?.name === 'string' ? asset.name.trim() : '';
+    const type = typeof asset?.type === 'string' ? asset.type.toUpperCase() : '';
+    const volumeBtc = Number(asset?.volumeBtc);
+    const salesCount = Number(asset?.salesCount);
+    const rank = Number(asset?.rank);
+    if (!name || type !== expectedType || !Number.isFinite(volumeBtc) || volumeBtc <= 0) return null;
+    return {
+      name,
+      type,
+      volumeBtc,
+      salesCount: Number.isFinite(salesCount) && salesCount > 0 ? Math.round(salesCount) : null,
+      rank: Number.isFinite(rank) ? rank : Number.POSITIVE_INFINITY
+    };
+  }
+
+  function normalizeSnapshot(payload, protocol, allowStale = false) {
+    if (!payload || payload.schemaVersion !== 1 || payload.api !== 'MSC API' || payload.version !== 'v1') return null;
+    if (payload.window !== '24h' || payload.mode !== 'live' || payload.protocol !== protocol || payload.provider !== 'Satflow') return null;
+
+    const generatedAt = Date.parse(payload.generatedAt);
+    const maxAge = allowStale ? LAST_GOOD_MAX_AGE_MS : MAX_AGE_MS;
+    if (!Number.isFinite(generatedAt) || Date.now() - generatedAt > maxAge) return null;
+
+    const assets = Array.isArray(payload.assets)
+      ? payload.assets
+        .map((asset) => normalizeAsset(asset, protocol))
+        .filter(Boolean)
+        .sort((a, b) => a.rank - b.rank || b.volumeBtc - a.volumeBtc)
+        .slice(0, MAX_ROWS)
+      : [];
+
+    if (!assets.length) return null;
+    return { generatedAt, assets };
+  }
+
+  function readLastGood(protocol) {
+    try {
+      const payload = JSON.parse(window.localStorage.getItem(cacheKey(protocol)) || 'null');
+      return normalizeSnapshot(payload, protocol, true);
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function writeLastGood(protocol, payload) {
+    try {
+      window.localStorage.setItem(cacheKey(protocol), JSON.stringify(payload));
+    } catch (error) {
+      // Storage may be unavailable in private or restricted browsing contexts.
+    }
+  }
+
+  async function requestSnapshot(protocol) {
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+    try {
+      const response = await fetch(`${DATA_URLS[protocol]}?v=${Math.floor(Date.now() / CACHE_BUCKET_MS)}`, {
+        signal: controller.signal,
+        cache: 'no-store',
+        headers: { accept: 'application/json' }
+      });
+      if (!response.ok) throw new Error(`http ${response.status}`);
+      return response.json();
+    } finally {
+      window.clearTimeout(timeout);
+    }
+  }
+
+  function createCard(protocol) {
+    const title = protocol === 'ORDINAL' ? 'ORDINALS ACTIVITY' : 'RUNES ACTIVITY';
+    const card = document.createElement('article');
+    card.className = 'msc-tools-market-activity';
+    card.dataset.marketProtocol = protocol;
+    card.dataset.marketStatus = 'loading';
+    card.setAttribute('aria-label', `${title.toLowerCase()} from Satflow trailing 24-hour completed sales`);
+
+    const header = document.createElement('div');
+    header.className = 'msc-tools-market-activity__header';
+
+    const label = document.createElement('p');
+    label.className = 'msc-tools-market-activity__label';
+    label.textContent = title;
+
+    const status = document.createElement('span');
+    status.className = 'msc-tools-market-activity__status';
+    status.dataset.marketActivityStatus = '';
+    status.textContent = 'LOADING';
+
+    const context = document.createElement('p');
+    context.className = 'msc-tools-market-activity__context';
+    context.textContent = '24H COMPLETED SALES · SATFLOW';
+
+    const list = document.createElement('ol');
+    list.className = 'msc-tools-market-activity__list';
+    list.dataset.marketActivityList = '';
+    list.setAttribute('aria-live', 'polite');
+
+    const footer = document.createElement('div');
+    footer.className = 'msc-tools-market-activity__footer';
+
+    const updated = document.createElement('span');
+    updated.className = 'msc-tools-market-activity__updated';
+    updated.dataset.marketActivityUpdated = '';
+    updated.textContent = 'CONNECTING TO MSC API';
+
+    const footerStatus = document.createElement('span');
+    footerStatus.className = 'msc-tools-market-activity__updated';
+    footerStatus.textContent = 'TOP 3 BY BTC VOLUME';
+
+    header.append(label, status);
+    footer.append(updated, footerStatus);
+    card.append(header, context, list, footer);
+    return card;
+  }
+
+  function createRow(asset) {
+    const row = document.createElement('li');
+    row.className = 'msc-tools-market-activity__row';
+
+    const name = document.createElement('span');
+    name.className = 'msc-tools-market-activity__name';
+    name.textContent = asset.name;
+    name.title = asset.name;
+
+    const meta = document.createElement('span');
+    meta.className = 'msc-tools-market-activity__meta';
+    meta.textContent = `${formatBtc(asset.volumeBtc)} · ${formatSales(asset.salesCount)}`;
+
+    row.append(name, meta);
+    return row;
+  }
+
+  function renderUnavailable(card) {
+    const list = card.querySelector('[data-market-activity-list]');
+    const status = card.querySelector('[data-market-activity-status]');
+    const updated = card.querySelector('[data-market-activity-updated]');
+    if (!list || !status || !updated) return;
+
+    const row = document.createElement('li');
+    row.className = 'msc-tools-market-activity__row';
+
+    const name = document.createElement('span');
+    name.className = 'msc-tools-market-activity__name';
+    name.textContent = 'MARKET DATA DELAYED';
+
+    const meta = document.createElement('span');
+    meta.className = 'msc-tools-market-activity__meta';
+    meta.textContent = 'RETRYING';
+
+    row.append(name, meta);
+    list.replaceChildren(row);
+    status.textContent = 'DELAYED';
+    updated.textContent = 'MSC API SNAPSHOT UNAVAILABLE';
+    card.dataset.marketStatus = 'unavailable';
+  }
+
+  function renderSnapshot(card, snapshot, delayed = false) {
+    const list = card.querySelector('[data-market-activity-list]');
+    const status = card.querySelector('[data-market-activity-status]');
+    const updated = card.querySelector('[data-market-activity-updated]');
+    if (!list || !status || !updated) return;
+
+    const fragment = document.createDocumentFragment();
+    snapshot.assets.forEach((asset) => fragment.appendChild(createRow(asset)));
+    list.replaceChildren(fragment);
+    status.textContent = delayed ? 'DELAYED' : '24H';
+    updated.textContent = formatUpdated(snapshot.generatedAt);
+    card.dataset.marketStatus = delayed ? 'delayed' : 'live';
+  }
+
+  class ProtocolActivity {
+    constructor(card, protocol) {
+      this.card = card;
+      this.protocol = protocol;
+      this.lastGood = readLastGood(protocol);
+
+      if (this.lastGood) renderSnapshot(this.card, this.lastGood, true);
+      else renderUnavailable(this.card);
+
+      this.refresh();
+      this.timer = window.setInterval(() => this.refresh(), REFRESH_MS);
+    }
+
+    async refresh() {
+      if (document.hidden) return;
+      try {
+        const payload = await requestSnapshot(this.protocol);
+        const snapshot = normalizeSnapshot(payload, this.protocol);
+        if (!snapshot) throw new Error('invalid MSC market snapshot');
+        renderSnapshot(this.card, snapshot, false);
+        writeLastGood(this.protocol, payload);
+        this.lastGood = snapshot;
+      } catch (error) {
+        const fallback = this.lastGood || readLastGood(this.protocol);
+        if (fallback) renderSnapshot(this.card, fallback, true);
+        else renderUnavailable(this.card);
+      }
+    }
+  }
+
+  function install(root) {
+    if (!root || root.dataset.marketActivityInitialized === 'true') return;
+    const rail = root.querySelector('.msc-tools-cockpit__rail--right');
+    if (!rail) return;
+
+    root.dataset.marketActivityInitialized = 'true';
+    rail.setAttribute('aria-label', 'Ordinals and Runes market activity');
+
+    const ordinals = createCard('ORDINAL');
+    const runes = createCard('RUNE');
+    rail.replaceChildren(ordinals, runes);
+
+    new ProtocolActivity(ordinals, 'ORDINAL');
+    new ProtocolActivity(runes, 'RUNE');
+  }
+
+  function init(scope = document) {
+    if (scope.matches && scope.matches(ROOT)) install(scope);
+    if (scope.querySelectorAll) scope.querySelectorAll(ROOT).forEach(install);
+  }
+
+  init(document);
+  document.addEventListener('shopify:section:load', (event) => init(event.target));
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Tools market activity",
+  "settings": []
+}
+{% endschema %}
