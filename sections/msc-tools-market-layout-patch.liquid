@@ -79,11 +79,11 @@
       position: absolute !important;
       z-index: 2 !important;
       top: 8.35rem !important;
-      right: var(--msc-tools-inset) !important;
+      right: auto !important;
       left: var(--msc-tools-inset) !important;
       bottom: auto !important;
       flex: none !important;
-      width: auto !important;
+      width: calc(100% - (2 * var(--msc-tools-inset))) !important;
       height: calc(100% - 10rem) !important;
       min-height: 0 !important;
       max-height: none !important;
@@ -95,7 +95,20 @@
       display: none !important;
     }
 
+    body [data-msc-ecosystem-radar] .msc-tools-trace__axis-grid {
+      stroke: rgba(212, 190, 153, .16) !important;
+    }
+
+    body [data-msc-ecosystem-radar] .msc-tools-trace__axis-grid--time {
+      stroke: rgba(212, 190, 153, .1) !important;
+    }
+
+    body [data-msc-ecosystem-radar] .msc-tools-trace__axis-domain {
+      stroke: rgba(212, 190, 153, .26) !important;
+    }
+
     body [data-msc-ecosystem-radar] .msc-tools-trace__axis-label--price {
+      fill: rgba(251, 248, 239, .68) !important;
       font-size: 4.6px !important;
     }
 
