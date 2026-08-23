@@ -21,6 +21,12 @@
     display: none !important;
   }
 
+  body [data-msc-ecosystem-radar] .msc-tools-launch--inscriber {
+    border-color: rgba(212,190,153,.18) !important;
+    color: var(--msc-paper-soft) !important;
+    background: rgba(255,255,255,.035) !important;
+  }
+
   @media screen and (min-width: 991px) {
     body [data-msc-ecosystem-radar] .msc-tools-price {
       min-height: 35.5rem !important;
@@ -79,25 +85,25 @@
     body [data-msc-ecosystem-radar] .msc-tools-price__display {
       position: absolute !important;
       z-index: 4 !important;
-      top: 3.9rem !important;
+      top: calc(var(--msc-tools-inset) + 1.8rem) !important;
       left: var(--msc-tools-inset) !important;
       margin: 0 !important;
       text-align: left !important;
     }
 
     body [data-msc-ecosystem-radar] .msc-tools-price__value {
-      font-size: clamp(2.35rem, 2.8vw, 3.5rem) !important;
-      line-height: .9 !important;
-      letter-spacing: -.055em !important;
+      font-size: clamp(1.45rem, 1.6vw, 2rem) !important;
+      line-height: 1 !important;
+      letter-spacing: -.025em !important;
     }
 
     body [data-msc-ecosystem-radar] .msc-tools-price__change {
       display: block !important;
       min-height: 0 !important;
-      margin-top: .4rem !important;
-      font-size: .88rem !important;
+      margin-top: .3rem !important;
+      font-size: 1.05rem !important;
       line-height: 1 !important;
-      letter-spacing: .09em !important;
+      letter-spacing: 0 !important;
       text-align: left !important;
     }
 
