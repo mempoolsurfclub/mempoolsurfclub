@@ -81,28 +81,28 @@
     if (!chart || !field || groups.length < 5) return;
     if (chart.dataset.mscDepthEnhanced === 'true') return;
 
-    const overviewCopy = 'Explore Bitcoin by depth. MSC SONAR organizes the Learn system from foundational concepts at the surface through network mechanics, systems built on Bitcoin, protocol internals, and the wider ecosystem. Hover over a depth to explore.';
+    const overviewCopy = 'Explore Bitcoin by depth. Choose a level to begin.';
 
     const regionMeta = [
       {
         label: 'Surface',
         key: 'basics',
         guideCount: 16,
-        brief: 'Start with the foundation: what Bitcoin is, how ownership and transactions work, and the security, privacy, and monetary concepts behind using it.',
+        brief: 'Start with Bitcoin basics. Learn wallets, transactions, fees, security, and privacy.',
         fallbackHref: '/pages/learn-bitcoin-basics'
       },
       {
         label: 'Shallow',
         key: 'network',
         guideCount: 16,
-        brief: 'Follow the network itself through mining, nodes, mempools, blocks, chainwork, proof of work, consensus, and network upgrades.',
+        brief: 'See how Bitcoin’s network works. Learn nodes, mining, mempools, blocks, and consensus.',
         fallbackHref: '/pages/learn-bitcoin-network'
       },
       {
         label: 'Middle',
         key: 'building',
         guideCount: 16,
-        brief: 'Explore systems built around Bitcoin: Layer 2, digital assets, development models, and emerging protocols, including the assumptions and tradeoffs each introduces.',
+        brief: 'Explore systems built on Bitcoin. Learn Layer 2s, digital assets, and developer tools.',
         fallbackHref: '/pages/learn-building-on-bitcoin'
       },
       {
@@ -110,14 +110,14 @@
         key: 'development',
         guideCount: 16,
         displayTitle: 'Bitcoin Protocols',
-        brief: 'Go inside Bitcoin’s implementation and protocol machinery: Bitcoin Core, BIPs, Script, cryptography, testing, infrastructure, and the boundary between consensus rules and software policy.',
+        brief: 'Go inside Bitcoin’s protocol. Learn Core, BIPs, Script, cryptography, and testing.',
         fallbackHref: '/pages/learn-bitcoin-development'
       },
       {
         label: 'Trench',
         key: 'ecosystem',
         guideCount: 16,
-        brief: 'Map the human and organizational layer around Bitcoin: builders, companies, service providers, marketplaces, communities, conferences, history, and open-source projects, without confusing influence with protocol authority.',
+        brief: 'Explore Bitcoin’s wider ecosystem. Learn builders, services, marketplaces, communities, and open-source projects.',
         fallbackHref: '/pages/learn-bitcoin-ecosystem'
       }
     ];
@@ -501,8 +501,8 @@
       briefCopy.textContent = region.brief;
       briefCount.textContent = `${region.guideCount} guides`;
       briefAction.href = region.href;
-      briefAction.textContent = `Explore ${region.label} →`;
-      briefAction.setAttribute('aria-label', `Explore ${region.label}: ${region.title}`);
+      briefAction.textContent = 'View guide →';
+      briefAction.setAttribute('aria-label', `View ${region.title} guide`);
       brief.setAttribute('aria-label', `${region.label} depth brief: ${region.title}`);
     };
 
