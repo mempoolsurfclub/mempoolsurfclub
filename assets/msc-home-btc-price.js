@@ -31,6 +31,10 @@
     hour: 'numeric',
     minute: '2-digit'
   });
+  const chartDateFormatter = new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric'
+  });
 
   async function request(url, mode = 'json') {
     const controller = new AbortController();
@@ -288,9 +292,19 @@
     return `$${usdFormatter.format(price)}`;
   }
 
-  function formatAxisTime(time) {
+  function formatAxisTime(time, showDate = false) {
     if (!Number.isFinite(time)) return '';
-    return chartTimeFormatter.format(new Date(time * 1000));
+    const date = new Date(time * 1000);
+    if (showDate) return chartDateFormatter.format(date).toUpperCase();
+    return chartTimeFormatter.format(date);
+  }
+
+  function isSameChartDay(firstTime, secondTime) {
+    const first = new Date(firstTime * 1000);
+    const second = new Date(secondTime * 1000);
+    return first.getFullYear() === second.getFullYear()
+      && first.getMonth() === second.getMonth()
+      && first.getDate() === second.getDate();
   }
 
   function normalizeCandles(payload) {
@@ -353,23 +367,44 @@
       .map((point, index) => `${index === 0 ? 'M' : 'L'}${point.x.toFixed(2)} ${point.y.toFixed(2)}`)
       .join(' ');
 
-    const priceTicks = [];
-    for (let value = axisMin; value <= axisMax + (step * 0.5); value += step) {
-      const ratio = (value - axisMin) / axisRange;
-      priceTicks.push({
-        value,
-        y: plot.top + ((1 - ratio) * plotHeight)
-      });
+    const priceTickCount = 6;
+    const priceTicks = Array.from({ length: priceTickCount }, (_, index) => {
+      const fraction = index / (priceTickCount - 1);
+      return {
+        value: axisMin + (axisRange * fraction),
+        y: plot.top + ((1 - fraction) * plotHeight)
+      };
+    });
+
+    const timeTickCount = Math.min(8, candles.length);
+    const timeIndices = Array.from({ length: timeTickCount }, (_, index) => (
+      Math.round(((candles.length - 1) * index) / Math.max(1, timeTickCount - 1))
+    ));
+    const dateBoundaryIndex = candles.findIndex((candle, index) => (
+      index > 0 && !isSameChartDay(candles[index - 1].time, candle.time)
+    ));
+
+    if (dateBoundaryIndex > 0 && dateBoundaryIndex < candles.length - 1 && !timeIndices.includes(dateBoundaryIndex)) {
+      let nearestPosition = 1;
+      let nearestDistance = Number.POSITIVE_INFINITY;
+      for (let position = 1; position < timeIndices.length - 1; position += 1) {
+        const distance = Math.abs(timeIndices[position] - dateBoundaryIndex);
+        if (distance < nearestDistance) {
+          nearestDistance = distance;
+          nearestPosition = position;
+        }
+      }
+      timeIndices[nearestPosition] = dateBoundaryIndex;
+      timeIndices.sort((a, b) => a - b);
     }
 
-    const timeFractions = [0, 0.25, 0.5, 0.75, 1];
-    const timeTicks = timeFractions.map((fraction) => {
-      const index = Math.round((candles.length - 1) * fraction);
+    const timeTicks = timeIndices.map((index) => {
       const point = points[index];
       return {
         time: point.candle.time,
         x: point.x,
-        fraction
+        fraction: index / (candles.length - 1),
+        showDate: index === dateBoundaryIndex
       };
     });
 
@@ -581,7 +616,7 @@
         label.setAttribute('x', tick.x.toFixed(2));
         label.setAttribute('y', '147');
         label.setAttribute('text-anchor', tick.fraction === 0 ? 'start' : (tick.fraction === 1 ? 'end' : 'middle'));
-        label.textContent = formatAxisTime(tick.time);
+        label.textContent = formatAxisTime(tick.time, tick.showDate);
         axisGroup.appendChild(label);
       });
 
