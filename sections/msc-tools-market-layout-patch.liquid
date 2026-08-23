@@ -85,7 +85,7 @@
     body [data-msc-ecosystem-radar] .msc-tools-price__display {
       position: absolute !important;
       z-index: 4 !important;
-      top: calc(var(--msc-tools-inset) + 1.8rem) !important;
+      top: var(--msc-tools-price-value-top, calc(var(--msc-tools-inset) + 2rem)) !important;
       left: var(--msc-tools-inset) !important;
       margin: 0 !important;
       text-align: left !important;
@@ -102,7 +102,7 @@
       min-height: 0 !important;
       margin-top: .3rem !important;
       font-size: 1.05rem !important;
-      line-height: 1 !important;
+      line-height: inherit !important;
       letter-spacing: 0 !important;
       text-align: left !important;
     }
@@ -205,6 +205,27 @@
     if (meta) meta.remove();
   }
 
+  function alignPriceRows(root) {
+    if (!root) return;
+
+    const pricePanel = root.querySelector('.msc-tools-price');
+    const priceDisplay = pricePanel && pricePanel.querySelector('.msc-tools-price__display');
+    const referenceValue = root.querySelector('.msc-tools-cockpit__rail .msc-tools-readout:first-child .msc-tools-readout__value');
+    if (!pricePanel || !priceDisplay || !referenceValue) return;
+
+    if (window.innerWidth < 991) {
+      pricePanel.style.removeProperty('--msc-tools-price-value-top');
+      return;
+    }
+
+    const panelRect = pricePanel.getBoundingClientRect();
+    const referenceRect = referenceValue.getBoundingClientRect();
+    const valueTop = referenceRect.top - panelRect.top;
+    if (!Number.isFinite(valueTop)) return;
+
+    pricePanel.style.setProperty('--msc-tools-price-value-top', `${valueTop}px`);
+  }
+
   function renderAxisOverlay(root, svg) {
     const pricePanel = root && root.querySelector('.msc-tools-price');
     if (!pricePanel || !svg || !svg.viewBox || !svg.viewBox.baseVal) return;
@@ -274,6 +295,7 @@
   function install(root) {
     if (!root) return;
     removeLegacyMeta(root);
+    alignPriceRows(root);
     refineAxisLabels(root);
 
     const svg = root.querySelector('.msc-tools-trace');
@@ -289,7 +311,16 @@
     if (scope.querySelectorAll) scope.querySelectorAll(ROOT).forEach(install);
   }
 
+  let resizeFrame = null;
+  window.addEventListener('resize', () => {
+    if (resizeFrame) cancelAnimationFrame(resizeFrame);
+    resizeFrame = requestAnimationFrame(() => init(document));
+  });
+
   init(document);
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => init(document));
+  }
   document.addEventListener('shopify:section:load', (event) => init(event.target));
 })();
 </script>
