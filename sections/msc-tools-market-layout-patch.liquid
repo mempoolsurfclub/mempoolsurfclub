@@ -96,11 +96,11 @@
     }
 
     body [data-msc-ecosystem-radar] .msc-tools-trace__axis-label--price {
-      font-size: 8.5px !important;
+      font-size: 4.6px !important;
     }
 
     body [data-msc-ecosystem-radar] .msc-tools-trace__axis-label--time {
-      font-size: 8px !important;
+      font-size: 4.2px !important;
     }
   }
 </style>
@@ -117,9 +117,36 @@
     if (meta) meta.remove();
   }
 
+  function refineAxisLabels(root) {
+    const svg = root && root.querySelector('.msc-tools-trace');
+    if (!svg) return;
+
+    svg.querySelectorAll('.msc-tools-trace__axis-label--price').forEach((label) => {
+      label.setAttribute('x', '690');
+      label.setAttribute('text-anchor', 'end');
+    });
+
+    svg.querySelectorAll('.msc-tools-trace__axis-label--time').forEach((label) => {
+      label.setAttribute('y', '143');
+    });
+  }
+
+  function install(root) {
+    if (!root) return;
+    removeLegacyMeta(root);
+    refineAxisLabels(root);
+
+    const svg = root.querySelector('.msc-tools-trace');
+    if (!svg || svg.dataset.axisRefinementInitialized === 'true') return;
+    svg.dataset.axisRefinementInitialized = 'true';
+
+    const observer = new MutationObserver(() => refineAxisLabels(root));
+    observer.observe(svg, { childList: true, subtree: true });
+  }
+
   function init(scope = document) {
-    if (scope.matches && scope.matches(ROOT)) removeLegacyMeta(scope);
-    if (scope.querySelectorAll) scope.querySelectorAll(ROOT).forEach(removeLegacyMeta);
+    if (scope.matches && scope.matches(ROOT)) install(scope);
+    if (scope.querySelectorAll) scope.querySelectorAll(ROOT).forEach(install);
   }
 
   init(document);
