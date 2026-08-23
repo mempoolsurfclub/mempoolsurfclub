@@ -174,7 +174,7 @@
   #SurfReport-{{ section.id }} .msc-tools-price {
     position: relative;
     display: flex;
-    min-height: 33rem;
+    min-height: 30rem;
     flex-direction: column;
     justify-content: space-between;
     overflow: hidden;
@@ -213,13 +213,13 @@
   #SurfReport-{{ section.id }} .msc-tools-price__display {
     position: relative;
     z-index: 2;
-    margin: clamp(2.6rem, 4vw, 4.2rem) 0 0;
+    margin: clamp(1.8rem, 2.8vw, 3rem) 0 0;
     text-align: center;
   }
 
   #SurfReport-{{ section.id }} .msc-tools-price__value {
     color: var(--msc-paper-soft);
-    font-size: clamp(4.3rem, 7vw, 8rem);
+    font-size: clamp(3.8rem, 5.8vw, 6.7rem);
     line-height: .86;
     letter-spacing: -.065em;
     text-shadow: 0 12px 34px rgba(3,18,22,.34);
@@ -239,8 +239,8 @@
     position: relative;
     z-index: 2;
     width: 100%;
-    height: 11rem;
-    margin: 1rem 0 .6rem;
+    height: 9.5rem;
+    margin: .8rem 0 .45rem;
     overflow: visible;
   }
 
@@ -354,11 +354,13 @@
     padding: 1rem;
     border: 1px solid rgba(212,190,153,.18);
     border-radius: 14px;
-    color: rgba(251,248,239,.76);
+    color: var(--msc-paper-soft);
     background: rgba(255,255,255,.035);
     text-decoration: none;
-    font-size: 1.08rem;
-    line-height: 1.25;
+    font-size: clamp(1.1rem, 1.2vw, 1.35rem);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: .04em;
     transition: transform .2s ease, border-color .2s ease, background .2s ease;
   }
 
@@ -374,7 +376,12 @@
     background: linear-gradient(180deg, rgba(212,190,153,.12), rgba(255,255,255,.035));
   }
 
-  #SurfReport-{{ section.id }} .msc-tools-launch__arrow { color: var(--msc-sand); }
+  #SurfReport-{{ section.id }} .msc-tools-launch__arrow {
+    flex: 0 0 auto;
+    color: var(--msc-sand);
+    font-size: .92em;
+    opacity: .78;
+  }
 
   @keyframes mscToolsTrace {
     to { stroke-dashoffset: -90; }
@@ -424,7 +431,7 @@
     }
 
     #SurfReport-{{ section.id }} .msc-tools-price { order: -1; min-height: 29rem; }
-    #SurfReport-{{ section.id }} .msc-tools-price__value { font-size: clamp(4rem, 15vw, 6.2rem); }
+    #SurfReport-{{ section.id }} .msc-tools-price__value { font-size: clamp(3.5rem, 12vw, 5.2rem); }
 
     #SurfReport-{{ section.id }} .msc-tools-cockpit__search {
       grid-template-columns: 1fr auto;
@@ -543,7 +550,7 @@
         <nav class="msc-tools-launches" aria-label="Quick launch tools">
           <div class="msc-tools-launches__row">
             <a class="msc-tools-launch" href="{{ routes.search_url }}?q=Mempool%20Fee%20Navigator&amp;type=page"><span>Mempool / Fee Navigator</span><span class="msc-tools-launch__arrow">↗</span></a>
-            <a class="msc-tools-launch msc-tools-launch--inscriber" href="{{ routes.search_url }}?q=MSC%20Inscriber&amp;type=page"><span>MSC Inscriber</span><span class="msc-tools-launch__arrow">↗</span></a>
+            <a class="msc-tools-launch msc-tools-launch--inscriber" href="{{ routes.search_url }}?q=MSC%20Inscriber&amp;type=page"><span>Inscriber</span><span class="msc-tools-launch__arrow">↗</span></a>
             <a class="msc-tools-launch" href="{{ routes.search_url }}?q=Transaction%20Analyzer&amp;type=page"><span>Transaction Analyzer</span><span class="msc-tools-launch__arrow">↗</span></a>
             <a class="msc-tools-launch" href="{{ routes.search_url }}?q=Block%20Explorer&amp;type=page"><span>Block Explorer</span><span class="msc-tools-launch__arrow">↗</span></a>
             <a class="msc-tools-launch" href="{{ routes.search_url }}?q=UTXO%20Planner&amp;type=page"><span>UTXO Planner</span><span class="msc-tools-launch__arrow">↗</span></a>
