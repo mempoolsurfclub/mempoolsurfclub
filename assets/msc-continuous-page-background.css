@@ -123,4 +123,22 @@
   #MainContent:has([id^="SurfReport-"].msc-shell) .msc-tools-hero__identity {
     margin-bottom: 1.8rem !important;
   }
+
+  /* Align the upper cockpit deck to the same five-column system as the launch row:
+   * outer metric rails occupy columns 1 and 5; the market chart spans columns 2-4. */
+  #MainContent:has([id^="SurfReport-"].msc-shell) .msc-tools-cockpit__deck {
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  }
+
+  #MainContent:has([id^="SurfReport-"].msc-shell) .msc-tools-cockpit__deck > .msc-tools-cockpit__rail:first-child {
+    grid-column: 1;
+  }
+
+  #MainContent:has([id^="SurfReport-"].msc-shell) .msc-tools-cockpit__deck > .msc-tools-price {
+    grid-column: 2 / span 3;
+  }
+
+  #MainContent:has([id^="SurfReport-"].msc-shell) .msc-tools-cockpit__deck > .msc-tools-cockpit__rail:last-child {
+    grid-column: 5;
+  }
 }
