@@ -1,0 +1,308 @@
+<style>
+  @media screen and (min-width: 991px) {
+    [data-msc-ecosystem-radar] .msc-tools-price {
+      min-height: 35.5rem;
+      display: block;
+      position: relative;
+    }
+
+    [data-msc-ecosystem-radar] .msc-tools-price__heading {
+      position: absolute;
+      inset: var(--msc-tools-inset) var(--msc-tools-inset) auto;
+      z-index: 4;
+      display: block;
+      pointer-events: none;
+    }
+
+    [data-msc-ecosystem-radar] .msc-tools-price__heading > div:first-child {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: none;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    [data-msc-ecosystem-radar] .msc-tools-price__pair {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: max-content;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: baseline;
+      gap: .4rem;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    [data-msc-ecosystem-radar] .msc-tools-price__pair .msc-tools-price__label::after {
+      content: ":";
+    }
+
+    [data-msc-ecosystem-radar] .msc-tools-price__pair .msc-tools-price__meta-value {
+      margin: 0;
+      color: var(--msc-paper-soft);
+      font-size: .94rem;
+      line-height: 1;
+      letter-spacing: .1em;
+    }
+
+    [data-msc-ecosystem-radar] .msc-tools-price__display {
+      position: absolute;
+      z-index: 4;
+      top: 3.15rem;
+      left: var(--msc-tools-inset);
+      margin: 0;
+      text-align: left;
+    }
+
+    [data-msc-ecosystem-radar] .msc-tools-price__value {
+      font-size: clamp(2.6rem, 3.4vw, 4rem);
+      line-height: .9;
+      letter-spacing: -.055em;
+    }
+
+    [data-msc-ecosystem-radar] .msc-tools-price__change {
+      min-height: 0;
+      margin-top: .45rem;
+      font-size: .92rem;
+      line-height: 1;
+      letter-spacing: .09em;
+    }
+
+    [data-msc-ecosystem-radar] .msc-tools-trace {
+      position: absolute;
+      z-index: 2;
+      top: 8rem;
+      right: var(--msc-tools-inset);
+      bottom: var(--msc-tools-inset);
+      left: var(--msc-tools-inset);
+      width: auto;
+      height: auto;
+      min-height: 0;
+      max-height: none;
+      margin: 0;
+      overflow: visible;
+    }
+
+    [data-msc-ecosystem-radar] .msc-tools-price__meta {
+      display: none !important;
+    }
+
+    [data-msc-ecosystem-radar] .msc-tools-trace__axis-label--price {
+      font-size: 8.5px;
+    }
+
+    [data-msc-ecosystem-radar] .msc-tools-trace__axis-label--time {
+      font-size: 8px;
+    }
+  }
+</style>
+
+<script>
+(() => {
+  'use strict';
+
+  const ROOT = '[data-msc-ecosystem-radar]';
+  const CANDLES_URL = 'https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=900';
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const REFRESH_MS = 300000;
+  const timeFormatter = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit' });
+
+  function safeNumber(value) {
+    const number = Number(value);
+    return Number.isFinite(number) ? number : null;
+  }
+
+  function normalizeCandles(payload) {
+    if (!Array.isArray(payload)) return [];
+    return payload
+      .map((candle) => {
+        if (!Array.isArray(candle) || candle.length < 5) return null;
+        const time = safeNumber(candle[0]);
+        const close = safeNumber(candle[4]);
+        if (time === null || close === null || close <= 0) return null;
+        return { time, close };
+      })
+      .filter(Boolean)
+      .sort((a, b) => a.time - b.time)
+      .slice(-97);
+  }
+
+  function niceStep(value) {
+    if (!Number.isFinite(value) || value <= 0) return 1;
+    const magnitude = 10 ** Math.floor(Math.log10(value));
+    const normalized = value / magnitude;
+    let nice = 1;
+    if (normalized > 5) nice = 10;
+    else if (normalized > 2.5) nice = 5;
+    else if (normalized > 2) nice = 2.5;
+    else if (normalized > 1) nice = 2;
+    return nice * magnitude;
+  }
+
+  function formatPrice(value) {
+    if (!Number.isFinite(value)) return '';
+    if (value === 0) return '$0';
+    if (value >= 1000) return `$${(value / 1000).toFixed(value % 1000 === 0 ? 0 : 1)}K`;
+    return `$${Math.round(value).toLocaleString('en-US')}`;
+  }
+
+  function buildGeometry(candles) {
+    if (candles.length < 2) return null;
+    const maxObserved = Math.max(...candles.map((candle) => candle.close));
+    const targetCeiling = maxObserved * 1.08;
+    const step = niceStep(targetCeiling / 5);
+    const axisMax = Math.max(step * 5, Math.ceil(targetCeiling / step) * step);
+    const plot = { left: 0, right: 650, top: 6, bottom: 124 };
+    const plotWidth = plot.right - plot.left;
+    const plotHeight = plot.bottom - plot.top;
+
+    const points = candles.map((candle, index) => {
+      const x = plot.left + ((index / (candles.length - 1)) * plotWidth);
+      const ratio = candle.close / axisMax;
+      const y = plot.top + ((1 - ratio) * plotHeight);
+      return { candle, x, y };
+    });
+
+    const path = points
+      .map((point, index) => `${index === 0 ? 'M' : 'L'}${point.x.toFixed(2)} ${point.y.toFixed(2)}`)
+      .join(' ');
+
+    const priceTicks = [];
+    for (let value = 0; value <= axisMax + (step * .5); value += step) {
+      priceTicks.push({ value, y: plot.top + ((1 - (value / axisMax)) * plotHeight) });
+    }
+
+    const timeTicks = [0, .25, .5, .75, 1].map((fraction) => {
+      const index = Math.round((candles.length - 1) * fraction);
+      const point = points[index];
+      return { time: point.candle.time, x: point.x, fraction };
+    });
+
+    return { path, plot, priceTicks, timeTicks };
+  }
+
+  function renderAxes(svg, geometry) {
+    const existing = svg.querySelector('[data-btc-trace-axes]');
+    if (existing) existing.remove();
+
+    const group = document.createElementNS(SVG_NS, 'g');
+    group.setAttribute('data-btc-trace-axes', '');
+    group.setAttribute('aria-hidden', 'true');
+
+    geometry.priceTicks.forEach((tick) => {
+      const line = document.createElementNS(SVG_NS, 'line');
+      line.setAttribute('class', 'msc-tools-trace__axis-grid');
+      line.setAttribute('x1', geometry.plot.left.toFixed(2));
+      line.setAttribute('x2', geometry.plot.right.toFixed(2));
+      line.setAttribute('y1', tick.y.toFixed(2));
+      line.setAttribute('y2', tick.y.toFixed(2));
+      group.appendChild(line);
+
+      const label = document.createElementNS(SVG_NS, 'text');
+      label.setAttribute('class', 'msc-tools-trace__axis-label msc-tools-trace__axis-label--price');
+      label.setAttribute('x', '714');
+      label.setAttribute('y', (tick.y + 3).toFixed(2));
+      label.setAttribute('text-anchor', 'end');
+      label.textContent = formatPrice(tick.value);
+      group.appendChild(label);
+    });
+
+    geometry.timeTicks.forEach((tick) => {
+      const line = document.createElementNS(SVG_NS, 'line');
+      line.setAttribute('class', 'msc-tools-trace__axis-grid msc-tools-trace__axis-grid--time');
+      line.setAttribute('x1', tick.x.toFixed(2));
+      line.setAttribute('x2', tick.x.toFixed(2));
+      line.setAttribute('y1', geometry.plot.top.toFixed(2));
+      line.setAttribute('y2', geometry.plot.bottom.toFixed(2));
+      group.appendChild(line);
+
+      const label = document.createElementNS(SVG_NS, 'text');
+      label.setAttribute('class', 'msc-tools-trace__axis-label msc-tools-trace__axis-label--time');
+      label.setAttribute('x', tick.x.toFixed(2));
+      label.setAttribute('y', '147');
+      label.setAttribute('text-anchor', tick.fraction === 0 ? 'start' : (tick.fraction === 1 ? 'end' : 'middle'));
+      label.textContent = timeFormatter.format(new Date(tick.time * 1000));
+      group.appendChild(label);
+    });
+
+    const rightAxis = document.createElementNS(SVG_NS, 'line');
+    rightAxis.setAttribute('class', 'msc-tools-trace__axis-domain');
+    rightAxis.setAttribute('x1', geometry.plot.right.toFixed(2));
+    rightAxis.setAttribute('x2', geometry.plot.right.toFixed(2));
+    rightAxis.setAttribute('y1', geometry.plot.top.toFixed(2));
+    rightAxis.setAttribute('y2', geometry.plot.bottom.toFixed(2));
+    group.appendChild(rightAxis);
+
+    const bottomAxis = document.createElementNS(SVG_NS, 'line');
+    bottomAxis.setAttribute('class', 'msc-tools-trace__axis-domain');
+    bottomAxis.setAttribute('x1', geometry.plot.left.toFixed(2));
+    bottomAxis.setAttribute('x2', geometry.plot.right.toFixed(2));
+    bottomAxis.setAttribute('y1', geometry.plot.bottom.toFixed(2));
+    bottomAxis.setAttribute('y2', geometry.plot.bottom.toFixed(2));
+    group.appendChild(bottomAxis);
+
+    const ghost = svg.querySelector('.msc-tools-trace__ghost');
+    if (ghost) svg.insertBefore(group, ghost);
+    else svg.appendChild(group);
+  }
+
+  function install(root) {
+    if (!root || root.dataset.toolsZeroAxisInitialized === 'true') return;
+    root.dataset.toolsZeroAxisInitialized = 'true';
+
+    const svg = root.querySelector('.msc-tools-trace');
+    const trace = root.querySelector('.msc-tools-trace__path');
+    const ghost = root.querySelector('.msc-tools-trace__ghost');
+    const staticGrid = root.querySelector('.msc-tools-trace__grid');
+    if (!svg || !trace) return;
+
+    let geometry = null;
+
+    function applyGeometry() {
+      if (!geometry) return;
+      if (trace.getAttribute('d') !== geometry.path) trace.setAttribute('d', geometry.path);
+      if (ghost && ghost.getAttribute('d') !== geometry.path) ghost.setAttribute('d', geometry.path);
+      if (staticGrid) staticGrid.setAttribute('d', '');
+      renderAxes(svg, geometry);
+    }
+
+    async function refresh() {
+      if (document.hidden) return;
+      try {
+        const response = await fetch(CANDLES_URL, { cache: 'no-store', headers: { accept: 'application/json' } });
+        if (!response.ok) throw new Error(`http ${response.status}`);
+        geometry = buildGeometry(normalizeCandles(await response.json()));
+        if (geometry) applyGeometry();
+      } catch (error) {
+        // Preserve the existing live chart if the zero-axis refresh is unavailable.
+      }
+    }
+
+    const observer = new MutationObserver(() => {
+      if (geometry && trace.getAttribute('d') !== geometry.path) applyGeometry();
+    });
+    observer.observe(trace, { attributes: true, attributeFilter: ['d'] });
+
+    refresh();
+    window.setInterval(refresh, REFRESH_MS);
+  }
+
+  function init(scope = document) {
+    if (scope.matches && scope.matches(ROOT)) install(scope);
+    if (scope.querySelectorAll) scope.querySelectorAll(ROOT).forEach(install);
+  }
+
+  init(document);
+  document.addEventListener('shopify:section:load', (event) => init(event.target));
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Tools market layout",
+  "settings": []
+}
+{% endschema %}
