@@ -106,6 +106,13 @@
   white-space: nowrap;
 }
 
+/* The Inscriber button has a neutral resting override in the Tools layout patch.
+ * Restore the shared launch hover treatment so all five buttons respond alike. */
+#MainContent:has([id^="SurfReport-"].msc-shell) .msc-tools-launch--inscriber:hover {
+  border-color: rgba(212,190,153,.46) !important;
+  background: rgba(255,255,255,.07) !important;
+}
+
 @media screen and (max-width: 700px) {
   #MainContent:has([id^="SurfReport-"].msc-shell) .msc-tools-cockpit__topline {
     flex-wrap: wrap;
