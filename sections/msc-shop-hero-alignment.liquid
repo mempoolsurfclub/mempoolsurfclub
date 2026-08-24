@@ -46,7 +46,7 @@
     color: var(--msc-sand, #d4be99) !important;
     line-height: .9 !important;
     letter-spacing: -.06em !important;
-    text-wrap: balance;
+    text-wrap: wrap;
   }
 
   .msc-shop-supply .msc-shop-supply__copy {
@@ -62,20 +62,20 @@
 
     .msc-shop-supply .msc-shop-supply__intro {
       display: grid;
-      grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+      grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr);
       grid-template-areas:
         "kicker kicker"
         "title copy";
       column-gap: clamp(3.2rem, 4vw, 4.8rem);
-      row-gap: 1.35rem;
+      row-gap: .7rem;
       align-items: start;
-      margin-bottom: clamp(2.4rem, 3vw, 3.2rem) !important;
+      margin-bottom: clamp(2rem, 2.5vw, 2.6rem) !important;
     }
 
     .msc-shop-supply .msc-shop-supply__eyebrow {
       grid-area: kicker;
       justify-self: start;
-      margin: 0 0 .25rem !important;
+      margin: 0 !important;
     }
 
     .msc-shop-supply .msc-shop-supply__title {
@@ -83,12 +83,12 @@
       align-self: start;
       max-width: none !important;
       margin: 0 !important;
-      font-size: clamp(4rem, 5.4vw, 5.2rem) !important;
+      font-size: clamp(4rem, 4.8vw, 5rem) !important;
     }
 
     .msc-shop-supply .msc-shop-supply__copy {
       grid-area: copy;
-      align-self: end;
+      align-self: center;
       width: 100%;
       max-width: none !important;
       margin: 0 !important;
@@ -101,13 +101,13 @@
     }
 
     .msc-shop-supply .msc-shop-supply__title {
-      font-size: clamp(4.6rem, 4.75vw, 5.8rem) !important;
+      font-size: clamp(4.5rem, 4.35vw, 5.2rem) !important;
     }
   }
 
   @media screen and (min-width: 1180px) {
     .msc-shop-supply .msc-shop-supply__title {
-      font-size: clamp(5rem, 4.9vw, 6rem) !important;
+      font-size: 5.2rem !important;
     }
   }
 
@@ -123,9 +123,9 @@
         "kicker"
         "title"
         "copy";
-      gap: 1.35rem;
+      gap: 1.15rem;
       align-items: start;
-      margin-bottom: 2.4rem !important;
+      margin-bottom: 2.2rem !important;
     }
 
     .msc-shop-supply .msc-shop-supply__eyebrow {
