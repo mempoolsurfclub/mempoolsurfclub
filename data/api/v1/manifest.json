@@ -2,12 +2,14 @@
   "schemaVersion": 1,
   "api": "MSC API",
   "version": "v1",
-  "generatedAt": "2026-08-24T03:11:54.337Z",
+  "generatedAt": "2026-08-24T04:04:26.001Z",
   "mode": "live",
   "endpoints": [
     "/v1/market/homepage.json",
     "/v1/market/ordinals.json",
-    "/v1/market/runes.json"
+    "/v1/market/runes.json",
+    "/v1/market/ordinals-activity.json",
+    "/v1/market/runes-activity.json"
   ],
   "providers": {
     "ordinals": {
@@ -15,6 +17,10 @@
       "status": "live"
     },
     "runes": {
+      "name": "Satflow",
+      "status": "live"
+    },
+    "toolsActivity": {
       "name": "Satflow",
       "status": "live"
     }
