@@ -1,11 +1,12 @@
 {
   "sections": {
     "shop_supply": {
-      "type": "msc-shop-supply-locker",
+      "type": "msc-shop-supply-locker-v2",
       "blocks": {
         "wishy": {
           "type": "collection_bay",
           "settings": {
+            "collection": "wishy",
             "title": "WISHY",
             "code": "COLL / 001",
             "status": "ACTIVE",
@@ -16,39 +17,18 @@
         "billy": {
           "type": "collection_bay",
           "settings": {
+            "collection": "",
             "title": "BILLY",
             "code": "COLL / 002",
-            "status": "ACTIVE",
+            "status": "INDEXED",
             "description": "Collection archive and releases from Billy.",
             "link": "/pages/billy-1"
-          }
-        },
-        "open_03": {
-          "type": "collection_bay",
-          "settings": {
-            "title": "OPEN BAY",
-            "code": "COLL / 003",
-            "status": "READY",
-            "description": "Reserved for a future MSC, artist, project, or collaboration collection.",
-            "link": ""
-          }
-        },
-        "open_04": {
-          "type": "collection_bay",
-          "settings": {
-            "title": "OPEN BAY",
-            "code": "COLL / 004",
-            "status": "READY",
-            "description": "Reserved for a future MSC, artist, project, or collaboration collection.",
-            "link": ""
           }
         }
       },
       "block_order": [
         "wishy",
-        "billy",
-        "open_03",
-        "open_04"
+        "billy"
       ],
       "settings": {
         "eyebrow": "MSC SHOP // FIELD SUPPLY",
