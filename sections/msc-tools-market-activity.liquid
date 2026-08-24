@@ -136,8 +136,8 @@
   const ROOT = '[data-msc-ecosystem-radar]';
   const DATA_ROOT = 'https://raw.githubusercontent.com/mempoolsurfclub/mempoolsurfclub/homepage-market-data/data/api/v1/market';
   const DATA_URLS = {
-    ORDINAL: `${DATA_ROOT}/ordinals.json`,
-    RUNE: `${DATA_ROOT}/runes.json`
+    ORDINAL: `${DATA_ROOT}/ordinals-activity.json`,
+    RUNE: `${DATA_ROOT}/runes-activity.json`
   };
   const REFRESH_MS = 15 * 60 * 1000;
   const CACHE_BUCKET_MS = 5 * 60 * 1000;
@@ -147,23 +147,27 @@
   const MAX_ROWS = 3;
 
   function cacheKey(protocol) {
-    return `msc-tools-${protocol.toLowerCase()}-activity-v1`;
+    return `msc-tools-${protocol.toLowerCase()}-activity-v2`;
   }
 
-  function formatBtc(value) {
-    if (!Number.isFinite(value) || value <= 0) return '— BTC';
-    if (value >= 10) return `${value.toFixed(1)} BTC`;
-    if (value >= 1) return `${value.toFixed(2)} BTC`;
-    if (value >= .1) return `${value.toFixed(3)} BTC`;
-    if (value >= .01) return `${value.toFixed(4)} BTC`;
-    return `${value.toFixed(5)} BTC`;
+  function formatBtcSats(value) {
+    const sats = Number(value);
+    if (!Number.isFinite(sats) || sats <= 0) return '— BTC';
+    const btc = Math.round(sats) / 100_000_000;
+    const exact = btc.toFixed(8).replace(/0+$/, '').replace(/\.$/, '');
+    return `${exact} BTC`;
   }
 
-  function formatSales(value) {
-    const count = Number(value);
-    if (!Number.isFinite(count) || count < 1) return 'SALE DATA N/A';
-    const rounded = Math.round(count);
-    return `${rounded} ${rounded === 1 ? 'SALE' : 'SALES'}`;
+  function formatAge(timestamp) {
+    const completedAt = Date.parse(timestamp);
+    if (!Number.isFinite(completedAt)) return 'TIME N/A';
+    const elapsed = Math.max(0, Date.now() - completedAt);
+    const minutes = Math.floor(elapsed / 60_000);
+    if (minutes < 1) return 'NOW';
+    if (minutes < 60) return `${minutes}M AGO`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}H AGO`;
+    return `${Math.floor(hours / 24)}D AGO`;
   }
 
   function formatUpdated(timestamp) {
@@ -175,19 +179,17 @@
     }).format(date)}`;
   }
 
-  function normalizeAsset(asset, expectedType) {
-    const name = typeof asset?.name === 'string' ? asset.name.trim() : '';
-    const type = typeof asset?.type === 'string' ? asset.type.toUpperCase() : '';
-    const volumeBtc = Number(asset?.volumeBtc);
-    const salesCount = Number(asset?.salesCount);
-    const rank = Number(asset?.rank);
-    if (!name || type !== expectedType || !Number.isFinite(volumeBtc) || volumeBtc <= 0) return null;
+  function normalizeSale(sale, expectedType) {
+    const name = typeof sale?.name === 'string' ? sale.name.trim() : '';
+    const type = typeof sale?.type === 'string' ? sale.type.toUpperCase() : '';
+    const priceSats = Number(sale?.priceSats);
+    const completedAt = Date.parse(sale?.completedAt);
+    if (!name || type !== expectedType || !Number.isFinite(priceSats) || priceSats <= 0 || !Number.isFinite(completedAt)) return null;
     return {
       name,
       type,
-      volumeBtc,
-      salesCount: Number.isFinite(salesCount) && salesCount > 0 ? Math.round(salesCount) : null,
-      rank: Number.isFinite(rank) ? rank : Number.POSITIVE_INFINITY
+      priceSats: Math.round(priceSats),
+      completedAt
     };
   }
 
@@ -199,16 +201,14 @@
     const maxAge = allowStale ? LAST_GOOD_MAX_AGE_MS : MAX_AGE_MS;
     if (!Number.isFinite(generatedAt) || Date.now() - generatedAt > maxAge) return null;
 
-    const assets = Array.isArray(payload.assets)
-      ? payload.assets
-        .map((asset) => normalizeAsset(asset, protocol))
-        .filter(Boolean)
-        .sort((a, b) => a.rank - b.rank || b.volumeBtc - a.volumeBtc)
-        .slice(0, MAX_ROWS)
-      : [];
+    if (payload.kind !== 'completed-sales' || !Array.isArray(payload.sales)) return null;
+    const sales = payload.sales
+      .map((sale) => normalizeSale(sale, protocol))
+      .filter(Boolean)
+      .sort((a, b) => b.completedAt - a.completedAt)
+      .slice(0, MAX_ROWS);
 
-    if (!assets.length) return null;
-    return { generatedAt, assets };
+    return { generatedAt, sales };
   }
 
   function readLastGood(protocol) {
@@ -250,7 +250,7 @@
     card.className = 'msc-tools-market-activity';
     card.dataset.marketProtocol = protocol;
     card.dataset.marketStatus = 'loading';
-    card.setAttribute('aria-label', `${title.toLowerCase()} from Satflow trailing 24-hour completed sales`);
+    card.setAttribute('aria-label', `${title.toLowerCase()} recent completed sales from Satflow`);
 
     const header = document.createElement('div');
     header.className = 'msc-tools-market-activity__header';
@@ -266,7 +266,7 @@
 
     const context = document.createElement('p');
     context.className = 'msc-tools-market-activity__context';
-    context.textContent = '24H COMPLETED SALES · SATFLOW';
+    context.textContent = 'LIVE SALES · SATFLOW';
 
     const list = document.createElement('ol');
     list.className = 'msc-tools-market-activity__list';
@@ -283,7 +283,7 @@
 
     const footerStatus = document.createElement('span');
     footerStatus.className = 'msc-tools-market-activity__updated';
-    footerStatus.textContent = 'TOP 3 BY BTC VOLUME';
+    footerStatus.textContent = 'MOST RECENT FIRST';
 
     header.append(label, status);
     footer.append(updated, footerStatus);
@@ -291,18 +291,21 @@
     return card;
   }
 
-  function createRow(asset) {
+  function createRow(sale) {
     const row = document.createElement('li');
     row.className = 'msc-tools-market-activity__row';
 
     const name = document.createElement('span');
     name.className = 'msc-tools-market-activity__name';
-    name.textContent = asset.name;
-    name.title = asset.name;
+    const displayName = sale.type === 'ORDINAL'
+      ? sale.name.replace(/[-_]+/g, ' ').toUpperCase()
+      : sale.name;
+    name.textContent = `SALE · ${displayName}`;
+    name.title = `Completed sale · ${displayName}`;
 
     const meta = document.createElement('span');
     meta.className = 'msc-tools-market-activity__meta';
-    meta.textContent = `${formatBtc(asset.volumeBtc)} · ${formatSales(asset.salesCount)}`;
+    meta.textContent = `${formatBtcSats(sale.priceSats)} · ${formatAge(sale.completedAt)}`;
 
     row.append(name, meta);
     return row;
@@ -319,7 +322,7 @@
 
     const name = document.createElement('span');
     name.className = 'msc-tools-market-activity__name';
-    name.textContent = 'MARKET DATA DELAYED';
+    name.textContent = 'SALE FEED DELAYED';
 
     const meta = document.createElement('span');
     meta.className = 'msc-tools-market-activity__meta';
@@ -328,7 +331,7 @@
     row.append(name, meta);
     list.replaceChildren(row);
     status.textContent = 'DELAYED';
-    updated.textContent = 'MSC API SNAPSHOT UNAVAILABLE';
+    updated.textContent = 'MSC API ACTIVITY UNAVAILABLE';
     card.dataset.marketStatus = 'unavailable';
   }
 
@@ -339,9 +342,22 @@
     if (!list || !status || !updated) return;
 
     const fragment = document.createDocumentFragment();
-    snapshot.assets.forEach((asset) => fragment.appendChild(createRow(asset)));
+    if (snapshot.sales.length) {
+      snapshot.sales.forEach((sale) => fragment.appendChild(createRow(sale)));
+    } else {
+      const row = document.createElement('li');
+      row.className = 'msc-tools-market-activity__row';
+      const name = document.createElement('span');
+      name.className = 'msc-tools-market-activity__name';
+      name.textContent = 'NO COMPLETED SALES IN 24H';
+      const meta = document.createElement('span');
+      meta.className = 'msc-tools-market-activity__meta';
+      meta.textContent = '—';
+      row.append(name, meta);
+      fragment.appendChild(row);
+    }
     list.replaceChildren(fragment);
-    status.textContent = delayed ? 'DELAYED' : '24H';
+    status.textContent = delayed ? 'DELAYED' : 'LIVE';
     updated.textContent = formatUpdated(snapshot.generatedAt);
     card.dataset.marketStatus = delayed ? 'delayed' : 'live';
   }
