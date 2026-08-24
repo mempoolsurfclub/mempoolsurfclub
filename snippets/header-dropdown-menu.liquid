@@ -9,7 +9,7 @@
   <ul class="list-menu list-menu--inline" role="list">
     {%- for link in section.settings.menu.links -%}
       <li>
-        {%- if link.links != blank -%}
+        {%- if link.links != blank and link.handle != 'shop' -%}
           <header-menu>
             <details id="Details-HeaderMenu-{{ forloop.index }}">
               <summary
