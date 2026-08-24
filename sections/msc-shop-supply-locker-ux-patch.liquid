@@ -1,0 +1,440 @@
+<style>
+  /* Supply Locker usability correction layer.
+   * Keeps the existing commerce locker intact while improving legibility,
+   * hierarchy, collection navigation, and purchase controls.
+   */
+
+  .msc-shop-supply .msc-supply-console__bar,
+  .msc-shop-supply .msc-supply-console__footer,
+  .msc-shop-supply .msc-supply-console__index-head,
+  .msc-shop-supply .msc-supply-inspection__top {
+    font-size: 1.05rem !important;
+    line-height: 1.25;
+  }
+
+  .msc-shop-supply .msc-supply-console__bar,
+  .msc-shop-supply .msc-supply-console__footer {
+    padding: 1.2rem 1.5rem !important;
+  }
+
+  .msc-shop-supply .msc-supply-console__body {
+    grid-template-columns: minmax(220px, .42fr) minmax(0, 1.58fr) !important;
+    min-height: 0 !important;
+  }
+
+  .msc-shop-supply .msc-supply-console__index,
+  .msc-shop-supply .msc-supply-inspection {
+    padding: 1.5rem !important;
+  }
+
+  .msc-shop-supply .msc-supply-console__index-head {
+    padding-bottom: 1.15rem !important;
+  }
+
+  .msc-shop-supply .msc-supply-console__bays {
+    gap: .85rem !important;
+  }
+
+  .msc-shop-supply .msc-supply-bay {
+    position: relative;
+    min-height: 6rem !important;
+    padding: 0 1.15rem !important;
+    font-size: .95rem !important;
+    overflow: hidden;
+  }
+
+  .msc-shop-supply .msc-supply-bay__number {
+    font-size: .88rem !important;
+  }
+
+  .msc-shop-supply .msc-supply-bay__name {
+    font-size: 1.25rem !important;
+    letter-spacing: .055em !important;
+  }
+
+  .msc-shop-supply .msc-supply-bay__status {
+    font-size: .86rem !important;
+    font-weight: 700;
+  }
+
+  .msc-shop-supply .msc-supply-bay.is-active {
+    border-color: rgba(212,190,153,.64) !important;
+    background: rgba(212,190,153,.105) !important;
+    box-shadow: inset 0 0 0 1px rgba(212,190,153,.08);
+  }
+
+  .msc-shop-supply .msc-supply-bay.is-active::before {
+    content: "";
+    position: absolute;
+    inset: .85rem auto .85rem 0;
+    width: 3px;
+    border-radius: 0 999px 999px 0;
+    background: var(--msc-sand, #d4be99);
+    box-shadow: 0 0 16px rgba(212,190,153,.5);
+  }
+
+  .msc-shop-supply .msc-supply-console__index-note {
+    margin-top: 1.5rem !important;
+    padding-top: 1.4rem !important;
+    border-top: 1px solid rgba(212,190,153,.12);
+    color: rgba(251,248,239,.58) !important;
+  }
+
+  .msc-shop-supply .msc-supply-console__index-note > span {
+    font-size: .86rem !important;
+    font-weight: 700;
+  }
+
+  .msc-shop-supply .msc-supply-console__index-note p {
+    max-width: 22rem !important;
+    margin-top: .7rem !important;
+    font-size: 1.1rem !important;
+    line-height: 1.55 !important;
+  }
+
+  .msc-shop-supply .msc-supply-micro {
+    font-size: .82rem !important;
+    font-weight: 700;
+  }
+
+  .msc-shop-supply .msc-supply-collection-head {
+    gap: 2.4rem !important;
+    margin-bottom: 1.35rem !important;
+    padding: 1.35rem 0 1.3rem !important;
+  }
+
+  .msc-shop-supply .msc-supply-collection-head h2 {
+    font-size: clamp(2.8rem, 3vw, 3.8rem) !important;
+    line-height: 1;
+  }
+
+  .msc-shop-supply .msc-supply-collection-head p:not(.msc-supply-micro) {
+    max-width: 54rem !important;
+    margin-top: .7rem !important;
+    color: rgba(251,248,239,.7) !important;
+    font-size: 1.15rem !important;
+    line-height: 1.5 !important;
+  }
+
+  .msc-shop-supply .msc-supply-collection-head__meta {
+    gap: .8rem !important;
+    font-size: .86rem !important;
+  }
+
+  .msc-shop-supply .msc-supply-collection-head__meta strong,
+  .msc-shop-supply .msc-supply-collection-head__meta a {
+    font-weight: 800;
+  }
+
+  .msc-shop-supply .msc-supply-product-toolbar {
+    margin-bottom: .95rem !important;
+    font-size: .85rem !important;
+    font-weight: 700;
+  }
+
+  .msc-shop-supply .msc-supply-product-grid {
+    gap: 1rem !important;
+  }
+
+  .msc-shop-supply .msc-supply-product {
+    border-color: rgba(212,190,153,.2) !important;
+  }
+
+  .msc-shop-supply .msc-supply-product__availability {
+    padding: .42rem .58rem !important;
+    font-size: .8rem !important;
+    font-weight: 750;
+  }
+
+  .msc-shop-supply .msc-supply-product__body {
+    display: flex;
+    flex-direction: column;
+    padding: 1.2rem !important;
+  }
+
+  .msc-shop-supply .msc-supply-product__meta {
+    font-size: .8rem !important;
+  }
+
+  .msc-shop-supply .msc-supply-product h3 {
+    min-height: 2.7em !important;
+    margin: .8rem 0 .45rem !important;
+    font-size: 1.45rem !important;
+    line-height: 1.28 !important;
+    letter-spacing: -.015em;
+  }
+
+  .msc-shop-supply .msc-supply-product__price {
+    margin-bottom: .95rem !important;
+    font-size: 1.18rem !important;
+    font-weight: 800 !important;
+  }
+
+  /* Hide the server-rendered Liquid form failure before paint from becoming a
+   * visible shopping-state error. A repaired real-product form is inserted below.
+   */
+  .msc-shop-supply product-form.msc-supply-product__form:not(.msc-supply-product__form--repaired) {
+    display: none !important;
+  }
+
+  .msc-shop-supply .msc-supply-product__form-loading {
+    min-height: 4.2rem;
+    display: flex;
+    align-items: center;
+    border-top: 1px solid rgba(212,190,153,.12);
+    color: rgba(251,248,239,.5);
+    font-size: .82rem;
+    letter-spacing: .11em;
+    text-transform: uppercase;
+  }
+
+  .msc-shop-supply .msc-supply-product__form--repaired {
+    display: block !important;
+    margin-top: .15rem;
+    padding-top: .9rem;
+    border-top: 1px solid rgba(212,190,153,.12);
+  }
+
+  .msc-shop-supply .msc-supply-product__variant-label {
+    margin-bottom: .45rem !important;
+    font-size: .82rem !important;
+    font-weight: 700;
+  }
+
+  .msc-shop-supply .msc-supply-product__variant {
+    min-height: 3.8rem !important;
+    margin-bottom: .7rem !important;
+    padding: 0 .85rem !important;
+    font-size: 1.05rem !important;
+  }
+
+  .msc-shop-supply .msc-supply-product__quick-add {
+    min-height: 4.1rem !important;
+    font-size: 1rem !important;
+    font-weight: 850 !important;
+    letter-spacing: .11em !important;
+  }
+
+  .msc-shop-supply .msc-supply-product__quick-add:focus-visible,
+  .msc-shop-supply .msc-supply-product__view:focus-visible,
+  .msc-shop-supply .msc-supply-collection-head__meta a:focus-visible,
+  .msc-shop-supply .msc-supply-console__footer a:focus-visible {
+    outline: 2px solid var(--msc-sand, #d4be99);
+    outline-offset: 3px;
+  }
+
+  .msc-shop-supply .msc-supply-product__view {
+    margin-top: .8rem !important;
+    font-size: .9rem !important;
+    font-weight: 750;
+  }
+
+  .msc-shop-supply .msc-supply-product .product-form__error-message-wrapper {
+    margin: 0 0 .6rem !important;
+    font-size: .95rem !important;
+    line-height: 1.4;
+  }
+
+  .msc-shop-supply .msc-supply-product__fallback-action {
+    display: block;
+    margin-top: .15rem;
+    padding: 1.2rem 0;
+    border-top: 1px solid rgba(212,190,153,.12);
+    color: var(--msc-sand, #d4be99);
+    font-size: .95rem;
+    font-weight: 800;
+    letter-spacing: .09em;
+    text-decoration: none;
+  }
+
+  .msc-shop-supply .msc-supply-console__footer a {
+    font-size: 1.05rem !important;
+    font-weight: 850;
+    letter-spacing: .1em;
+  }
+
+  @media screen and (max-width: 1100px) {
+    .msc-shop-supply .msc-supply-console__body {
+      grid-template-columns: minmax(210px, .42fr) minmax(0, 1.58fr) !important;
+    }
+  }
+
+  @media screen and (max-width: 800px) {
+    .msc-shop-supply .msc-supply-console__body {
+      grid-template-columns: 1fr !important;
+    }
+
+    .msc-shop-supply .msc-supply-console__index-note {
+      display: none !important;
+    }
+  }
+
+  @media screen and (max-width: 560px) {
+    .msc-shop-supply .msc-supply-console__bar,
+    .msc-shop-supply .msc-supply-console__footer,
+    .msc-shop-supply .msc-supply-console__index-head,
+    .msc-shop-supply .msc-supply-inspection__top {
+      font-size: .95rem !important;
+    }
+
+    .msc-shop-supply .msc-supply-product h3 {
+      min-height: 0 !important;
+      font-size: 1.55rem !important;
+    }
+  }
+</style>
+
+<script>
+(() => {
+  const initLockerUsability = () => {
+    const root = document.querySelector('.msc-shop-supply[data-msc-shop-supply]');
+    if (!root || root.dataset.mscLockerUsability === 'v1') return;
+    root.dataset.mscLockerUsability = 'v1';
+
+    /* Preserve native button semantics for collection controls. */
+    root.querySelector('.msc-supply-console__bays')?.removeAttribute('role');
+    root.querySelectorAll('[data-shop-bay][role="listitem"]').forEach((bay) => bay.removeAttribute('role'));
+
+    const money = (cents) => {
+      const currency = window.Shopify?.currency?.active || 'USD';
+      try {
+        const formatted = new Intl.NumberFormat(undefined, {
+          style: 'currency',
+          currency,
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }).format(Number(cents || 0) / 100);
+        return `${formatted} ${currency}`;
+      } catch (_) {
+        return `${(Number(cents || 0) / 100).toFixed(2)} ${currency}`;
+      }
+    };
+
+    const escapeHtml = (value) => String(value ?? '')
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#039;');
+
+    const productHandleFromCard = (card) => {
+      const href = card.querySelector('.msc-supply-product__media')?.getAttribute('href') || '';
+      const path = new URL(href, window.location.origin).pathname;
+      const marker = '/products/';
+      if (!path.includes(marker)) return '';
+      return path.split(marker)[1].split('/')[0];
+    };
+
+    const makeProductForm = (card, productData, cardIndex) => {
+      const variants = Array.isArray(productData?.variants) ? productData.variants : [];
+      if (!variants.length) return null;
+
+      const selected = variants.find((variant) => variant.available) || variants[0];
+      const uniqueId = `MscSupplyRepair-${cardIndex}-${productData.id}`;
+      const selectId = `${uniqueId}-Variant`;
+
+      const variantField = variants.length > 1
+        ? `
+          <label class="msc-supply-product__variant-label" for="${selectId}">SELECT VARIANT</label>
+          <select class="msc-supply-product__variant" id="${selectId}" name="id" data-repaired-variant-select>
+            ${variants.map((variant) => `
+              <option value="${variant.id}" data-price="${variant.price}" ${variant.id === selected.id ? 'selected' : ''} ${variant.available ? '' : 'disabled'}>
+                ${escapeHtml(variant.title)}${variant.available ? '' : ' — SOLD OUT'}
+              </option>
+            `).join('')}
+          </select>`
+        : `<input type="hidden" name="id" value="${selected.id}" class="product-variant-id" ${selected.available ? '' : 'disabled'}>`;
+
+      const template = document.createElement('template');
+      template.innerHTML = `
+        <product-form class="msc-supply-product__form msc-supply-product__form--repaired" data-hide-errors="false">
+          <form method="post" action="${window.routes?.cart_add_url || '/cart/add'}" id="${uniqueId}" class="form" enctype="multipart/form-data" novalidate="novalidate" data-type="add-to-cart-form">
+            <input type="hidden" name="form_type" value="product">
+            <input type="hidden" name="utf8" value="✓">
+            ${variantField}
+            <div class="product-form__error-message-wrapper" role="alert" hidden>
+              <span class="product-form__error-message"></span>
+            </div>
+            <button type="submit" name="add" class="msc-supply-product__quick-add" ${selected.available ? '' : 'disabled'}>
+              <span>${selected.available ? 'QUICK ADD' : 'SOLD OUT'}</span>
+              <span class="loading__spinner hidden" aria-hidden="true"></span>
+            </button>
+          </form>
+        </product-form>`;
+
+      const repaired = template.content.firstElementChild;
+      const select = repaired.querySelector('[data-repaired-variant-select]');
+      if (select) {
+        select.addEventListener('change', () => {
+          const option = select.options[select.selectedIndex];
+          const price = card.querySelector('[data-product-price]');
+          if (price && option?.dataset.price) price.textContent = money(option.dataset.price);
+        });
+      }
+
+      return repaired;
+    };
+
+    root.querySelectorAll('[data-supply-product]').forEach((card, cardIndex) => {
+      const brokenForm = card.querySelector('product-form.msc-supply-product__form:not(.msc-supply-product__form--repaired)');
+      if (!brokenForm) return;
+
+      const loading = document.createElement('div');
+      loading.className = 'msc-supply-product__form-loading';
+      loading.textContent = 'Loading purchase options…';
+      brokenForm.insertAdjacentElement('afterend', loading);
+
+      const handle = productHandleFromCard(card);
+      if (!handle) {
+        brokenForm.remove();
+        loading.remove();
+        return;
+      }
+
+      const rootPath = window.Shopify?.routes?.root || '/';
+      fetch(`${rootPath}products/${encodeURIComponent(handle)}.js`, { credentials: 'same-origin' })
+        .then((response) => {
+          if (!response.ok) throw new Error(`Product request failed: ${response.status}`);
+          return response.json();
+        })
+        .then((productData) => {
+          const repaired = makeProductForm(card, productData, cardIndex);
+          brokenForm.remove();
+          if (!repaired) throw new Error('No product variants returned');
+          loading.replaceWith(repaired);
+        })
+        .catch(() => {
+          brokenForm.remove();
+          const itemLink = card.querySelector('.msc-supply-product__view')?.getAttribute('href')
+            || card.querySelector('.msc-supply-product__media')?.getAttribute('href')
+            || '#';
+          const fallback = document.createElement('a');
+          fallback.className = 'msc-supply-product__fallback-action';
+          fallback.href = itemLink;
+          fallback.textContent = 'VIEW ITEM TO PURCHASE →';
+          loading.replaceWith(fallback);
+        });
+    });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLockerUsability, { once: true });
+  } else {
+    initLockerUsability();
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "MSC Shop locker UX patch",
+  "tag": "section",
+  "class": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "MSC Shop locker UX patch"
+    }
+  ]
+}
+{% endschema %}
