@@ -1,0 +1,551 @@
+{{ 'component-loading-overlay.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+
+<section class="msc-shop-supply msc-shop-supply--commerce" id="MscShopSupply-{{ section.id }}" data-msc-shop-supply>
+  <div class="msc-shop-supply__shell">
+    <div class="msc-shop-supply__intro">
+      <div>
+        <p class="msc-shop-supply__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        <h1 class="msc-shop-supply__title">{{ section.settings.heading | escape }}</h1>
+        <div class="msc-shop-supply__copy rte">{{ section.settings.copy }}</div>
+      </div>
+
+      <div class="msc-shop-supply__actions">
+        <a class="msc-shop-supply__button" href="{{ section.settings.primary_link | default: routes.all_products_collection_url }}">{{ section.settings.primary_label | escape }}</a>
+        <a class="msc-shop-supply__button msc-shop-supply__button--ghost" href="#MscShopCatalog-{{ section.id }}">{{ section.settings.secondary_label | escape }}</a>
+      </div>
+    </div>
+
+    <div class="msc-supply-console" aria-label="MSC Shop collection and product browser">
+      <div class="msc-supply-console__bar">
+        <span>MSC SUPPLY LOCKER</span>
+        <span class="msc-supply-console__signal"><i aria-hidden="true"></i> CATALOG ONLINE</span>
+      </div>
+
+      <div class="msc-supply-console__body">
+        <aside class="msc-supply-console__index" aria-label="Shop collections">
+          <div class="msc-supply-console__index-head">
+            <span>COLLECTION INDEX</span>
+            <span>{{ section.blocks.size | prepend: '0' | slice: -2, 2 }} LIVE</span>
+          </div>
+
+          <div class="msc-supply-console__bays" role="list">
+            {%- for block in section.blocks -%}
+              {%- liquid
+                assign bay_collection = block.settings.collection
+                assign bay_title = block.settings.title
+                if bay_title == blank and bay_collection != blank
+                  assign bay_title = bay_collection.title
+                endif
+                if bay_title == blank
+                  assign bay_title = 'COLLECTION'
+                endif
+                assign bay_status = block.settings.status | default: 'ACTIVE'
+              -%}
+              <button
+                class="msc-supply-bay{% if forloop.first %} is-active{% endif %}"
+                type="button"
+                role="listitem"
+                data-shop-bay
+                data-panel-id="{{ block.id }}"
+                aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}"
+                {{ block.shopify_attributes }}
+              >
+                <span class="msc-supply-bay__number">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+                <span class="msc-supply-bay__name">{{ bay_title | escape }}</span>
+                <span class="msc-supply-bay__status">
+                  {%- if bay_collection != blank -%}
+                    {{ bay_collection.products_count }} ITEMS
+                  {%- else -%}
+                    {{ bay_status | escape }}
+                  {%- endif -%}
+                </span>
+              </button>
+            {%- endfor -%}
+          </div>
+
+          <div class="msc-supply-console__index-note">
+            <span>SUPPLY NOTE</span>
+            <p>Select a collection to load current merchandise into the inspection bay.</p>
+          </div>
+        </aside>
+
+        <div class="msc-supply-inspection" aria-live="polite">
+          {%- for block in section.blocks -%}
+            {%- liquid
+              assign bay_collection = block.settings.collection
+              assign bay_title = block.settings.title
+              if bay_title == blank and bay_collection != blank
+                assign bay_title = bay_collection.title
+              endif
+              if bay_title == blank
+                assign bay_title = 'COLLECTION'
+              endif
+              assign bay_code = block.settings.code | default: 'COLL / ---'
+              assign bay_status = block.settings.status | default: 'ACTIVE'
+              assign bay_description = block.settings.description
+              if bay_description == blank and bay_collection != blank
+                assign bay_description = bay_collection.description | strip_html | truncate: 180
+              endif
+              assign bay_link = block.settings.link
+              if bay_collection != blank
+                assign bay_link = bay_collection.url
+              endif
+            -%}
+
+            <section
+              class="msc-supply-panel{% if forloop.first %} is-active{% endif %}"
+              data-bay-panel="{{ block.id }}"
+              {% unless forloop.first %}hidden{% endunless %}
+              aria-label="{{ bay_title | escape }} collection"
+            >
+              <div class="msc-supply-inspection__top">
+                <span>INSPECTION BAY</span>
+                <span>{{ bay_code | escape }}{% if bay_collection != blank %} // {{ bay_collection.products_count }} ITEMS{% endif %}</span>
+              </div>
+
+              <div class="msc-supply-collection-head">
+                <div>
+                  <p class="msc-supply-micro">SELECTED COLLECTION</p>
+                  <h2>{{ bay_title | escape }}</h2>
+                  {%- if bay_description != blank -%}<p>{{ bay_description | escape }}</p>{%- endif -%}
+                </div>
+                <div class="msc-supply-collection-head__meta">
+                  <span>STATUS <strong>{{ bay_status | escape }}</strong></span>
+                  {%- if bay_link != blank -%}<a href="{{ bay_link }}">VIEW FULL COLLECTION →</a>{%- endif -%}
+                </div>
+              </div>
+
+              {%- if bay_collection != blank and bay_collection.products_count > 0 -%}
+                <div class="msc-supply-product-toolbar">
+                  <span>CURRENT LOADOUT</span>
+                  <span>SHOWING {{ bay_collection.products_count | at_most: 3 }} / {{ bay_collection.products_count }}</span>
+                </div>
+
+                <div class="msc-supply-product-grid">
+                  {%- for product in bay_collection.products limit: 3 -%}
+                    {%- assign selected_variant = product.selected_or_first_available_variant -%}
+                    <article class="msc-supply-product" data-supply-product>
+                      <a class="msc-supply-product__media" href="{{ product.url }}" aria-label="View {{ product.title | escape }}">
+                        {%- if product.featured_media -%}
+                          {{ product.featured_media | image_url: width: 720 | image_tag: loading: 'lazy', widths: '240, 360, 540, 720', sizes: '(min-width: 901px) 20vw, (min-width: 561px) 42vw, 82vw', alt: product.featured_media.alt | default: product.title }}
+                        {%- else -%}
+                          <div class="msc-supply-product__placeholder" aria-hidden="true">MSC</div>
+                        {%- endif -%}
+                        <span class="msc-supply-product__scan" aria-hidden="true"></span>
+                        <span class="msc-supply-product__availability{% unless product.available %} is-sold-out{% endunless %}">
+                          {% if product.available %}IN STOCK{% else %}SOLD OUT{% endif %}
+                        </span>
+                      </a>
+
+                      <div class="msc-supply-product__body">
+                        <div class="msc-supply-product__meta">
+                          <span>ITEM / {{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+                          <span>{{ bay_code | escape }}</span>
+                        </div>
+                        <h3><a href="{{ product.url }}">{{ product.title | escape }}</a></h3>
+                        <p class="msc-supply-product__price" data-product-price>
+                          {%- if product.price_varies -%}FROM {% endif -%}{{ product.price | money_with_currency }}
+                        </p>
+
+                        <product-form class="msc-supply-product__form" data-section-id="{{ section.id }}" data-hide-errors="false">
+                          {%- form 'product', product, id: 'MscSupplyQuickAdd-' | append: section.id | append: '-' | append: block.id | append: '-' | append: product.id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+                            {%- if product.variants.size > 1 -%}
+                              <label class="msc-supply-product__variant-label" for="MscSupplyVariant-{{ section.id }}-{{ block.id }}-{{ product.id }}">SELECT VARIANT</label>
+                              <select
+                                class="msc-supply-product__variant"
+                                id="MscSupplyVariant-{{ section.id }}-{{ block.id }}-{{ product.id }}"
+                                name="id"
+                                data-variant-select
+                              >
+                                {%- for variant in product.variants -%}
+                                  <option
+                                    value="{{ variant.id }}"
+                                    data-price="{{ variant.price | money_with_currency | escape }}"
+                                    {% if variant.id == selected_variant.id %}selected{% endif %}
+                                    {% unless variant.available %}disabled{% endunless %}
+                                  >
+                                    {{ variant.title | escape }}{% unless variant.available %} — SOLD OUT{% endunless %}
+                                  </option>
+                                {%- endfor -%}
+                              </select>
+                            {%- else -%}
+                              <input type="hidden" name="id" value="{{ selected_variant.id }}" class="product-variant-id" {% unless selected_variant.available %}disabled{% endunless %}>
+                            {%- endif -%}
+
+                            <div class="product-form__error-message-wrapper" role="alert" hidden>
+                              <span class="product-form__error-message"></span>
+                            </div>
+
+                            <button
+                              type="submit"
+                              name="add"
+                              class="msc-supply-product__quick-add"
+                              {% unless selected_variant.available %}disabled{% endunless %}
+                            >
+                              <span>{% if selected_variant.available %}QUICK ADD{% else %}SOLD OUT{% endif %}</span>
+                              {%- render 'loading-spinner' -%}
+                            </button>
+                          {%- endform -%}
+                        </product-form>
+
+                        <a class="msc-supply-product__view" href="{{ product.url }}">VIEW ITEM →</a>
+                      </div>
+                    </article>
+                  {%- endfor -%}
+                </div>
+              {%- else -%}
+                <div class="msc-supply-empty">
+                  <div class="msc-supply-empty__object" aria-hidden="true">
+                    <div class="msc-supply-empty__crate">MSC</div>
+                    <span></span>
+                  </div>
+                  <div>
+                    <p class="msc-supply-micro">PRODUCT FEED</p>
+                    <h3>CATALOG ROUTE PENDING.</h3>
+                    <p>This collection is part of the Shop index, but a Shopify product collection has not been assigned to this bay yet.</p>
+                    {%- if bay_link != blank -%}<a href="{{ bay_link }}">OPEN COLLECTION →</a>{%- endif -%}
+                  </div>
+                </div>
+              {%- endif -%}
+            </section>
+          {%- endfor -%}
+        </div>
+      </div>
+
+      <div class="msc-supply-console__footer" id="MscShopCatalog-{{ section.id }}">
+        <span>SHIP'S STORE // PRODUCT BROWSER</span>
+        <a href="{{ routes.all_products_collection_url }}">VIEW FULL INVENTORY →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  body:has(.msc-shop-supply) .msc-shop > .msc-container > .msc-shop-hero { display: none; }
+  body:has(.msc-shop-supply) .msc-shop { padding-top: 0; }
+  body:has(.msc-shop-supply) .msc-shop .msc-shop-hero + .msc-block { margin-top: clamp(2.5rem, 5vw, 5rem); }
+
+  .msc-shop-supply {
+    position: relative;
+    overflow: hidden;
+    color: var(--msc-paper-soft, #fbf8ef);
+    background:
+      radial-gradient(circle at 74% 34%, rgba(212,190,153,.14), transparent 30rem),
+      radial-gradient(circle at 8% 0%, rgba(78,107,113,.32), transparent 34rem),
+      linear-gradient(145deg, #071f24 0%, #10282d 46%, #173c43 100%);
+  }
+
+  .msc-shop-supply::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(212,190,153,.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212,190,153,.035) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: linear-gradient(to bottom, #000 0 72%, transparent 100%);
+  }
+
+  .msc-shop-supply__shell {
+    position: relative;
+    width: min(1460px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: clamp(5rem, 7vw, 8rem) 0 clamp(4rem, 7vw, 7rem);
+  }
+
+  .msc-shop-supply__intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(250px, .55fr);
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: end;
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .msc-shop-supply__eyebrow,
+  .msc-supply-console__bar,
+  .msc-supply-console__index-head,
+  .msc-supply-inspection__top,
+  .msc-supply-console__footer,
+  .msc-supply-bay,
+  .msc-supply-micro,
+  .msc-supply-product-toolbar,
+  .msc-supply-product__meta,
+  .msc-supply-product__variant-label,
+  .msc-supply-product__availability,
+  .msc-supply-console__index-note > span,
+  .msc-supply-collection-head__meta {
+    text-transform: uppercase;
+    letter-spacing: .12em;
+  }
+
+  .msc-shop-supply__eyebrow { margin: 0 0 1.1rem; color: var(--msc-sand, #d4be99); font-size: 1rem; }
+  .msc-shop-supply__title { max-width: 11ch; margin: 0; color: var(--msc-paper-soft, #fbf8ef); font-size: clamp(4rem, 6.5vw, 7.6rem); line-height: .9; letter-spacing: -.055em; }
+  .msc-shop-supply__copy { max-width: 68rem; margin-top: 1.6rem; color: rgba(251,248,239,.72); font-size: clamp(1.35rem, 1.7vw, 1.8rem); line-height: 1.5; }
+  .msc-shop-supply__copy p { margin: 0; }
+  .msc-shop-supply__actions { display: flex; flex-direction: column; gap: .8rem; align-items: stretch; }
+
+  .msc-shop-supply__button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 5rem;
+    padding: 0 1.5rem;
+    border: 1px solid rgba(212,190,153,.28);
+    border-radius: 14px;
+    color: #10282d;
+    background: var(--msc-sand, #d4be99);
+    font-weight: 750;
+    text-decoration: none;
+    transition: transform .2s ease, border-color .2s ease, background .2s ease;
+  }
+  .msc-shop-supply__button::after { content: "→"; }
+  .msc-shop-supply__button:hover { transform: translateY(-2px); }
+  .msc-shop-supply__button--ghost { color: var(--msc-paper-soft, #fbf8ef); background: rgba(255,255,255,.035); }
+  .msc-shop-supply__button--ghost::after { content: "↓"; }
+
+  .msc-supply-console {
+    overflow: hidden;
+    border: 1px solid rgba(212,190,153,.22);
+    border-radius: 18px;
+    background: rgba(4,25,29,.78);
+    box-shadow: 0 30px 80px rgba(0,0,0,.22);
+  }
+
+  .msc-supply-console__bar,
+  .msc-supply-console__footer,
+  .msc-supply-console__index-head,
+  .msc-supply-inspection__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    color: rgba(251,248,239,.48);
+    font-size: .78rem;
+  }
+
+  .msc-supply-console__bar { padding: 1rem 1.25rem; border-bottom: 1px solid rgba(212,190,153,.16); }
+  .msc-supply-console__signal { color: var(--msc-sand, #d4be99); }
+  .msc-supply-console__signal i { display: inline-block; width: .55rem; height: .55rem; margin-right: .45rem; border-radius: 50%; background: var(--msc-sand, #d4be99); box-shadow: 0 0 14px rgba(212,190,153,.75); }
+
+  .msc-supply-console__body { display: grid; grid-template-columns: minmax(250px, .58fr) minmax(0, 1.42fr); min-height: 570px; }
+  .msc-supply-console__index { display: flex; flex-direction: column; padding: 1.25rem; border-right: 1px solid rgba(212,190,153,.16); }
+  .msc-supply-console__index-head { padding-bottom: 1rem; }
+  .msc-supply-console__bays { display: grid; gap: .7rem; }
+
+  .msc-supply-bay {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 2.3rem minmax(0, 1fr) auto;
+    gap: .75rem;
+    align-items: center;
+    min-height: 5.4rem;
+    padding: 0 1rem;
+    border: 1px solid rgba(212,190,153,.14);
+    border-radius: 12px;
+    color: rgba(251,248,239,.7);
+    background: rgba(255,255,255,.025);
+    font: inherit;
+    font-size: .76rem;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color .2s ease, background .2s ease, transform .2s ease;
+  }
+  .msc-supply-bay:hover,
+  .msc-supply-bay:focus-visible,
+  .msc-supply-bay.is-active { outline: none; border-color: rgba(212,190,153,.48); background: rgba(212,190,153,.08); transform: translateX(2px); }
+  .msc-supply-bay__number { color: rgba(251,248,239,.34); }
+  .msc-supply-bay__name { overflow: hidden; color: var(--msc-paper-soft, #fbf8ef); font-size: .9rem; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+  .msc-supply-bay__status { color: var(--msc-sand, #d4be99); font-size: .66rem; white-space: nowrap; }
+
+  .msc-supply-console__index-note { margin-top: auto; padding-top: 2rem; color: rgba(251,248,239,.46); }
+  .msc-supply-console__index-note > span { color: var(--msc-sand, #d4be99); font-size: .66rem; }
+  .msc-supply-console__index-note p { max-width: 24rem; margin: .65rem 0 0; font-size: .9rem; line-height: 1.5; }
+
+  .msc-supply-inspection { min-width: 0; padding: 1.25rem; }
+  .msc-supply-panel[hidden] { display: none !important; }
+  .msc-supply-inspection__top { padding-bottom: .85rem; }
+
+  .msc-supply-collection-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 2rem;
+    align-items: end;
+    margin-bottom: 1.15rem;
+    padding: 1.2rem 0 1.15rem;
+    border-top: 1px solid rgba(212,190,153,.1);
+    border-bottom: 1px solid rgba(212,190,153,.12);
+  }
+  .msc-supply-micro { margin: 0 0 .45rem; color: rgba(251,248,239,.4); font-size: .66rem; }
+  .msc-supply-collection-head h2 { margin: 0; color: var(--msc-paper-soft, #fbf8ef); font-size: clamp(2.2rem, 3vw, 3.4rem); letter-spacing: -.04em; }
+  .msc-supply-collection-head p:not(.msc-supply-micro) { max-width: 48rem; margin: .55rem 0 0; color: rgba(251,248,239,.58); font-size: .96rem; line-height: 1.45; }
+  .msc-supply-collection-head__meta { display: grid; gap: .65rem; justify-items: end; font-size: .68rem; color: rgba(251,248,239,.48); }
+  .msc-supply-collection-head__meta strong,
+  .msc-supply-collection-head__meta a { color: var(--msc-sand, #d4be99); text-decoration: none; }
+
+  .msc-supply-product-toolbar { display: flex; justify-content: space-between; gap: 1rem; margin-bottom: .75rem; color: rgba(251,248,239,.42); font-size: .66rem; }
+  .msc-supply-product-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .85rem; }
+
+  .msc-supply-product { min-width: 0; overflow: hidden; border: 1px solid rgba(212,190,153,.14); border-radius: 14px; background: rgba(255,255,255,.025); }
+  .msc-supply-product__media { position: relative; display: block; aspect-ratio: 1 / 1; overflow: hidden; border-bottom: 1px solid rgba(212,190,153,.12); background: rgba(212,190,153,.035); }
+  .msc-supply-product__media::before,
+  .msc-supply-product__media::after { content: ""; position: absolute; z-index: 2; pointer-events: none; background: rgba(212,190,153,.16); }
+  .msc-supply-product__media::before { left: 50%; top: 0; bottom: 0; width: 1px; }
+  .msc-supply-product__media::after { top: 50%; left: 0; right: 0; height: 1px; }
+  .msc-supply-product__media img { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: cover; transition: transform .35s ease, filter .35s ease; }
+  .msc-supply-product:hover .msc-supply-product__media img { transform: scale(1.025); }
+  .msc-supply-product__placeholder { position: absolute; inset: 0; display: grid; place-items: center; color: rgba(212,190,153,.5); font-size: 2rem; letter-spacing: .18em; }
+  .msc-supply-product__scan { position: absolute; z-index: 3; left: 8%; right: 8%; top: 18%; height: 1px; background: linear-gradient(90deg, transparent, rgba(212,190,153,.75), transparent); opacity: .35; transition: transform .45s ease, opacity .45s ease; }
+  .msc-supply-product:hover .msc-supply-product__scan { transform: translateY(120px); opacity: .8; }
+  .msc-supply-product__availability { position: absolute; z-index: 4; top: .7rem; right: .7rem; padding: .35rem .45rem; border: 1px solid rgba(212,190,153,.28); border-radius: 999px; color: #10282d; background: rgba(212,190,153,.9); font-size: .58rem; }
+  .msc-supply-product__availability.is-sold-out { color: rgba(251,248,239,.65); background: rgba(4,25,29,.82); }
+
+  .msc-supply-product__body { padding: .9rem; }
+  .msc-supply-product__meta { display: flex; justify-content: space-between; gap: .75rem; color: rgba(251,248,239,.34); font-size: .58rem; }
+  .msc-supply-product h3 { min-height: 2.8em; margin: .65rem 0 .35rem; font-size: 1rem; line-height: 1.35; }
+  .msc-supply-product h3 a { color: var(--msc-paper-soft, #fbf8ef); text-decoration: none; }
+  .msc-supply-product__price { margin: 0 0 .75rem; color: var(--msc-sand, #d4be99); font-size: .92rem; font-weight: 700; }
+  .msc-supply-product__variant-label { display: block; margin-bottom: .35rem; color: rgba(251,248,239,.42); font-size: .58rem; }
+  .msc-supply-product__variant { width: 100%; min-height: 2.75rem; margin-bottom: .55rem; padding: 0 .65rem; border: 1px solid rgba(212,190,153,.2); border-radius: 8px; color: var(--msc-paper-soft, #fbf8ef); background: #0b292e; font: inherit; font-size: .78rem; }
+  .msc-supply-product__variant:focus-visible { outline: 1px solid var(--msc-sand, #d4be99); outline-offset: 2px; }
+  .msc-supply-product__quick-add { position: relative; width: 100%; min-height: 2.9rem; border: 1px solid var(--msc-sand, #d4be99); border-radius: 8px; color: #10282d; background: var(--msc-sand, #d4be99); font: inherit; font-size: .72rem; font-weight: 800; letter-spacing: .1em; cursor: pointer; }
+  .msc-supply-product__quick-add:hover:not(:disabled) { filter: brightness(1.06); }
+  .msc-supply-product__quick-add:disabled { opacity: .45; cursor: not-allowed; }
+  .msc-supply-product__quick-add .loading__spinner { width: 1.2rem; }
+  .msc-supply-product__quick-add.loading > span { opacity: 0; }
+  .msc-supply-product__view { display: inline-block; margin-top: .65rem; color: rgba(251,248,239,.58); font-size: .66rem; letter-spacing: .1em; text-decoration: none; }
+  .msc-supply-product__view:hover { color: var(--msc-sand, #d4be99); }
+  .msc-supply-product .product-form__error-message-wrapper { margin: 0 0 .45rem; color: #f0c9b7; font-size: .72rem; }
+
+  .msc-supply-empty { display: grid; grid-template-columns: minmax(220px, .8fr) minmax(0, 1fr); gap: 1.5rem; align-items: center; min-height: 330px; padding: 1.25rem; border: 1px solid rgba(212,190,153,.12); border-radius: 14px; background: rgba(255,255,255,.02); }
+  .msc-supply-empty__object { position: relative; display: grid; place-items: center; min-height: 260px; overflow: hidden; border: 1px solid rgba(212,190,153,.1); border-radius: 12px; background-image: linear-gradient(rgba(212,190,153,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(212,190,153,.05) 1px, transparent 1px); background-size: 28px 28px; }
+  .msc-supply-empty__crate { display: grid; place-items: center; width: 58%; aspect-ratio: 1.3; border: 1px solid rgba(212,190,153,.55); color: rgba(212,190,153,.55); letter-spacing: .18em; transform: perspective(600px) rotateX(5deg) rotateY(-10deg); }
+  .msc-supply-empty__object > span { position: absolute; left: 8%; right: 8%; top: 22%; height: 1px; background: linear-gradient(90deg, transparent, rgba(212,190,153,.7), transparent); }
+  .msc-supply-empty h3 { margin: 0; color: var(--msc-paper-soft, #fbf8ef); font-size: clamp(1.6rem, 2.4vw, 2.6rem); }
+  .msc-supply-empty p:not(.msc-supply-micro) { max-width: 42rem; color: rgba(251,248,239,.58); line-height: 1.5; }
+  .msc-supply-empty a { color: var(--msc-sand, #d4be99); font-size: .72rem; letter-spacing: .1em; text-decoration: none; }
+
+  .msc-supply-console__footer { padding: 1rem 1.25rem; border-top: 1px solid rgba(212,190,153,.16); }
+  .msc-supply-console__footer a { color: var(--msc-sand, #d4be99); text-decoration: none; }
+
+  @media screen and (max-width: 1100px) {
+    .msc-supply-console__body { grid-template-columns: minmax(220px, .5fr) minmax(0, 1.5fr); }
+    .msc-supply-product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .msc-supply-product:nth-child(3) { display: none; }
+  }
+
+  @media screen and (max-width: 800px) {
+    .msc-shop-supply__intro { grid-template-columns: 1fr; }
+    .msc-shop-supply__actions { flex-direction: row; flex-wrap: wrap; }
+    .msc-shop-supply__button { min-width: 220px; flex: 1 1 220px; }
+    .msc-supply-console__body { grid-template-columns: 1fr; }
+    .msc-supply-console__index { border-right: 0; border-bottom: 1px solid rgba(212,190,153,.16); }
+    .msc-supply-console__bays { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .msc-supply-console__index-note { display: none; }
+    .msc-supply-collection-head { grid-template-columns: 1fr; align-items: start; }
+    .msc-supply-collection-head__meta { justify-items: start; }
+  }
+
+  @media screen and (max-width: 560px) {
+    .msc-shop-supply__shell { width: min(100% - 20px, 1460px); padding-top: 4.5rem; }
+    .msc-shop-supply__title { font-size: clamp(3.6rem, 15vw, 5rem); }
+    .msc-shop-supply__actions { flex-direction: column; }
+    .msc-supply-console__bays,
+    .msc-supply-product-grid { grid-template-columns: 1fr; }
+    .msc-supply-product:nth-child(3) { display: block; }
+    .msc-supply-console__bar,
+    .msc-supply-console__footer,
+    .msc-supply-product-toolbar { align-items: flex-start; flex-direction: column; }
+    .msc-supply-inspection { padding: 1rem; }
+    .msc-supply-empty { grid-template-columns: 1fr; }
+    .msc-supply-empty__object { min-height: 210px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .msc-supply-bay,
+    .msc-shop-supply__button,
+    .msc-supply-product__media img,
+    .msc-supply-product__scan { transition: none; }
+    .msc-supply-product:hover .msc-supply-product__scan { transform: none; }
+  }
+</style>
+
+<script>
+(() => {
+  const root = document.getElementById('MscShopSupply-{{ section.id }}');
+  if (!root || root.dataset.supplyInitialized === 'true') return;
+  root.dataset.supplyInitialized = 'true';
+
+  const bays = [...root.querySelectorAll('[data-shop-bay]')];
+  const panels = [...root.querySelectorAll('[data-bay-panel]')];
+
+  function inspect(panelId) {
+    bays.forEach((bay) => {
+      const active = bay.dataset.panelId === panelId;
+      bay.classList.toggle('is-active', active);
+      bay.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+    panels.forEach((panel) => {
+      const active = panel.dataset.bayPanel === panelId;
+      panel.hidden = !active;
+      panel.classList.toggle('is-active', active);
+    });
+  }
+
+  bays.forEach((bay) => {
+    bay.addEventListener('click', () => inspect(bay.dataset.panelId));
+    bay.addEventListener('mouseenter', () => inspect(bay.dataset.panelId));
+    bay.addEventListener('focus', () => inspect(bay.dataset.panelId));
+  });
+
+  root.querySelectorAll('[data-variant-select]').forEach((select) => {
+    select.addEventListener('change', () => {
+      const card = select.closest('[data-supply-product]');
+      const price = card && card.querySelector('[data-product-price]');
+      const option = select.options[select.selectedIndex];
+      if (price && option && option.dataset.price) price.textContent = option.dataset.price;
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "MSC Shop commerce locker",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "MSC SHOP // FIELD SUPPLY" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "OBJECTS FROM THE BITCOIN CURRENT." },
+    { "type": "richtext", "id": "copy", "label": "Copy", "default": "<p>MSC releases and independent collections from artists, projects, and collaborators—organized as an expanding field catalog.</p>" },
+    { "type": "text", "id": "primary_label", "label": "Primary button label", "default": "Browse all products" },
+    { "type": "url", "id": "primary_link", "label": "Primary button link" },
+    { "type": "text", "id": "secondary_label", "label": "Secondary button label", "default": "Browse collections" }
+  ],
+  "blocks": [
+    {
+      "type": "collection_bay",
+      "name": "Collection bay",
+      "limit": 8,
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Shopify product collection" },
+        { "type": "text", "id": "title", "label": "Display title" },
+        { "type": "text", "id": "code", "label": "Catalog code", "default": "COLL / 001" },
+        { "type": "text", "id": "status", "label": "Status", "default": "ACTIVE" },
+        { "type": "textarea", "id": "description", "label": "Description" },
+        { "type": "url", "id": "link", "label": "Fallback page link when no Shopify collection is assigned" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "MSC Shop commerce locker",
+      "blocks": [
+        { "type": "collection_bay", "settings": { "title": "WISHY", "code": "COLL / 001", "status": "ACTIVE", "description": "Apparel and objects from the Wishy collection." } },
+        { "type": "collection_bay", "settings": { "title": "BILLY", "code": "COLL / 002", "status": "ACTIVE", "description": "Collection archive and releases from Billy." } }
+      ]
+    }
+  ]
+}
+{% endschema %}
