@@ -7,10 +7,6 @@ if (!API_KEY) {
   process.exit(2);
 }
 
-function clean(value) {
-  return typeof value === 'string' ? value.trim() : value;
-}
-
 function compactObject(object) {
   if (!object || typeof object !== 'object' || Array.isArray(object)) return object;
   return Object.fromEntries(Object.entries(object).filter(([, value]) => (
@@ -26,7 +22,7 @@ async function request(path) {
       headers: {
         accept: 'application/json',
         'x-api-key': API_KEY,
-        'user-agent': 'Mempool-Surf-Club-satflow-reconciliation/1.0'
+        'user-agent': 'Mempool-Surf-Club-satflow-reconciliation/1.1'
       },
       signal: controller.signal
     });
@@ -50,10 +46,6 @@ function itemsFrom(payload) {
   ].find(Array.isArray) || [];
 }
 
-function paginationFrom(payload) {
-  return payload?.data?.pagination || payload?.pagination || null;
-}
-
 function firstRune(row) {
   const candidate = row?.runes ?? row?.sale?.runes ?? row?.sale?.runesData?.runes ?? row?.ask?.runes ?? row?.ask?.runesData?.runes ?? row?.rune ?? row?.token?.rune ?? row?.collection?.rune;
   return Array.isArray(candidate) ? candidate[0] : candidate;
@@ -63,22 +55,13 @@ function safeRow(row) {
   const rune = firstRune(row);
   const collection = row?.collection || row?.collectionData || row?.sale?.collection || row?.ask?.collection;
   return compactObject({
-    topLevelKeys: Object.keys(row || {}).sort(),
+    id: row?.id ?? row?._id,
     fillCompletedAt: row?.fillCompletedAt ?? row?.fill_completed_at ?? row?.sale?.fillCompletedAt ?? row?.sale?.fill_completed_at,
-    external: row?.external ?? row?.isExternal ?? row?.is_external,
-    marketplace: row?.marketplace ?? row?.market ?? row?.source ?? row?.sale?.marketplace,
     type: row?.protocol ?? row?.type ?? row?.assetType ?? row?.tokenStandard ?? row?.bid?.type,
     price: row?.price,
-    salePrice: row?.salePrice ?? row?.sale_price,
-    totalPrice: row?.totalPrice ?? row?.total_price,
-    priceSats: row?.priceSats ?? row?.price_sats,
-    salePriceNested: row?.sale?.price,
-    saleTotalPriceNested: row?.sale?.totalPrice ?? row?.sale?.total_price,
-    fillPrice: row?.fill?.price,
-    fillTotalPrice: row?.fill?.totalPrice,
+    unitPrice: row?.unitPrice ?? row?.unit_price,
+    runesAmountAsNumber: row?.runesAmountAsNumber ?? row?.runes_amount_as_number,
     askPrice: row?.ask?.price,
-    amountSats: row?.amountSats ?? row?.amount_sats,
-    valueSats: row?.valueSats ?? row?.value_sats,
     collection: collection ? compactObject({
       id: collection?._id ?? collection?.id ?? collection?.collectionId ?? collection?.collection_id,
       name: collection?.name ?? collection?.title,
@@ -100,25 +83,26 @@ function print(label, value) {
   console.log(JSON.stringify(value, null, 2));
 }
 
-async function inspectSalesVariant(label, externalValue) {
-  const params = new URLSearchParams({
+function commonSalesParams() {
+  return {
     timeRange: '24h',
     active: 'false',
     page: '1',
     pageSize: '100',
     sortBy: 'fillCompletedAt',
     sortDirection: 'desc'
-  });
-  if (externalValue !== null) params.set('external', externalValue);
+  };
+}
 
+async function inspectSales(label, extra = {}) {
+  const params = new URLSearchParams({ ...commonSalesParams(), ...extra });
   const result = await request(`/activity/sales?${params}`);
   const items = itemsFrom(result.payload);
   print(`SALES ${label}`, {
     status: result.status,
-    topLevelKeys: Object.keys(result.payload || {}).sort(),
-    dataKeys: Object.keys(result.payload?.data || {}).sort(),
+    total: result.payload?.data?.total ?? result.payload?.total ?? null,
+    meta: result.payload?.data?._meta ?? result.payload?._meta ?? null,
     itemCount: items.length,
-    pagination: paginationFrom(result.payload),
     firstThreeRows: items.slice(0, 3).map(safeRow)
   });
   return { result, items };
@@ -126,48 +110,41 @@ async function inspectSalesVariant(label, externalValue) {
 
 async function inspectCollectionStats(identifier) {
   const result = await request(`/collection-stats?collectionId=${encodeURIComponent(identifier)}`);
-  const payload = result.payload;
+  const data = result.payload?.data;
   print(`COLLECTION STATS ${identifier}`, {
     status: result.status,
-    topLevelKeys: Object.keys(payload || {}).sort(),
-    dataKeys: Object.keys(payload?.data || {}).sort(),
-    payload: result.ok ? payload : null
+    floor: data?.floor,
+    listedCount: data?.listedCount,
+    volume1d: data?.volume1d,
+    volume7d: data?.volume7d,
+    volume30d: data?.volume30d,
+    metadata: data?.metadata ? {
+      id: data.metadata.id,
+      name: data.metadata.name,
+      internalId: data.metadata._id
+    } : null
   });
 }
 
-const variants = [];
-variants.push(await inspectSalesVariant('external omitted', null));
-variants.push(await inspectSalesVariant('external=true', 'true'));
-variants.push(await inspectSalesVariant('external=false', 'false'));
+await inspectSales('external omitted');
+await inspectSales('external=true', { external: 'true' });
+await inspectSales('external=false', { external: 'false' });
 
-const identifiers = new Set(['omb', 'nodemonkes', 'bitcoin-puppets']);
-for (const { items } of variants) {
-  for (const row of items) {
-    const summary = safeRow(row);
-    const collection = summary.collection;
-    if (collection?.id) identifiers.add(String(collection.id));
-    if (collection?.slug) identifiers.add(String(collection.slug));
-    if (summary.collectionSlug) identifiers.add(String(summary.collectionSlug));
-    if (identifiers.size >= 8) break;
-  }
-  if (identifiers.size >= 8) break;
-}
-
-for (const identifier of [...identifiers].slice(0, 8)) {
+for (const identifier of ['omb', 'nodemonkes', 'bitcoin-puppets', 'cents', 'tap-DMT-NAT']) {
   await inspectCollectionStats(identifier);
 }
 
-for (const endpoint of [
-  '/rune-stats?rune=PUPS%E2%80%A2WORLD%E2%80%A2PEACE',
-  '/rune-stats?rune=DOG%E2%80%A2GO%E2%80%A2TO%E2%80%A2THE%E2%80%A2MOON',
-  '/runes/stats?rune=PUPS%E2%80%A2WORLD%E2%80%A2PEACE',
-  '/runes/stats?rune=DOG%E2%80%A2GO%E2%80%A2TO%E2%80%A2THE%E2%80%A2MOON'
+for (const [label, filter] of [
+  ['collectionId=omb', { collectionId: 'omb' }],
+  ['collection=omb', { collection: 'omb' }],
+  ['collectionSlug=omb', { collectionSlug: 'omb' }],
+  ['collectionId=bitcoin-puppets', { collectionId: 'bitcoin-puppets' }],
+  ['collectionId=nodemonkes', { collectionId: 'nodemonkes' }],
+  ['runeId=845764:84', { runeId: '845764:84' }],
+  ['rune=845764:84', { rune: '845764:84' }],
+  ['runes=845764:84', { runes: '845764:84' }],
+  ['runeName=BILLION DOLLAR CAT', { runeName: 'BILLION•DOLLAR•CAT' }],
+  ['runeId=840000:3', { runeId: '840000:3' }]
 ]) {
-  const result = await request(endpoint);
-  print(`RUNE STATS PROBE ${endpoint}`, {
-    status: result.status,
-    topLevelKeys: Object.keys(result.payload || {}).sort(),
-    dataKeys: Object.keys(result.payload?.data || {}).sort(),
-    payload: result.ok ? result.payload : null
-  });
+  await inspectSales(label, filter);
 }
