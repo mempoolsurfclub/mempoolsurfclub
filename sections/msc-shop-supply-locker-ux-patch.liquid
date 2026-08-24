@@ -170,8 +170,9 @@
     font-weight: 800 !important;
   }
 
-  /* Hide the server-rendered Liquid form failure before paint from becoming a
-   * visible shopping-state error. A repaired real-product form is inserted below.
+  /* Hide the server-rendered Liquid form failure before it can become a
+   * visible shopping-state error. The broken custom element is then removed
+   * synchronously, before the deferred theme product-form script upgrades it.
    */
   .msc-shop-supply product-form.msc-supply-product__form:not(.msc-supply-product__form--repaired) {
     display: none !important;
@@ -288,8 +289,8 @@
 (() => {
   const initLockerUsability = () => {
     const root = document.querySelector('.msc-shop-supply[data-msc-shop-supply]');
-    if (!root || root.dataset.mscLockerUsability === 'v1') return;
-    root.dataset.mscLockerUsability = 'v1';
+    if (!root || root.dataset.mscLockerUsability === 'v2') return;
+    root.dataset.mscLockerUsability = 'v2';
 
     /* Preserve native button semantics for collection controls. */
     root.querySelector('.msc-supply-console__bays')?.removeAttribute('role');
@@ -323,6 +324,17 @@
       const marker = '/products/';
       if (!path.includes(marker)) return '';
       return path.split(marker)[1].split('/')[0];
+    };
+
+    const showFallback = (card, loading) => {
+      const itemLink = card.querySelector('.msc-supply-product__view')?.getAttribute('href')
+        || card.querySelector('.msc-supply-product__media')?.getAttribute('href')
+        || '#';
+      const fallback = document.createElement('a');
+      fallback.className = 'msc-supply-product__fallback-action';
+      fallback.href = itemLink;
+      fallback.textContent = 'VIEW ITEM TO PURCHASE →';
+      loading.replaceWith(fallback);
     };
 
     const makeProductForm = (card, productData, cardIndex) => {
@@ -384,10 +396,15 @@
       loading.textContent = 'Loading purchase options…';
       brokenForm.insertAdjacentElement('afterend', loading);
 
+      /* Critical: remove the malformed product-form element synchronously.
+       * product-form.js is loaded with defer by the locker section, so this runs
+       * first and prevents that script from upgrading a form with no <form> child.
+       */
+      brokenForm.remove();
+
       const handle = productHandleFromCard(card);
       if (!handle) {
-        brokenForm.remove();
-        loading.remove();
+        showFallback(card, loading);
         return;
       }
 
@@ -399,29 +416,17 @@
         })
         .then((productData) => {
           const repaired = makeProductForm(card, productData, cardIndex);
-          brokenForm.remove();
           if (!repaired) throw new Error('No product variants returned');
           loading.replaceWith(repaired);
         })
-        .catch(() => {
-          brokenForm.remove();
-          const itemLink = card.querySelector('.msc-supply-product__view')?.getAttribute('href')
-            || card.querySelector('.msc-supply-product__media')?.getAttribute('href')
-            || '#';
-          const fallback = document.createElement('a');
-          fallback.className = 'msc-supply-product__fallback-action';
-          fallback.href = itemLink;
-          fallback.textContent = 'VIEW ITEM TO PURCHASE →';
-          loading.replaceWith(fallback);
-        });
+        .catch(() => showFallback(card, loading));
     });
   };
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initLockerUsability, { once: true });
-  } else {
-    initLockerUsability();
-  }
+  /* This patch section is rendered immediately after the locker markup, so the
+   * locker already exists and can be repaired synchronously during parsing.
+   */
+  initLockerUsability();
 })();
 </script>
 
