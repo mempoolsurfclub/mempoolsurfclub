@@ -33,6 +33,12 @@
         "radar_shop_url": ""
       }
     },
+    "api_efficiency": {
+      "type": "msc-api-efficiency",
+      "settings": {
+        "context": "home"
+      }
+    },
     "msc_home_gateway": {
       "type": "msc-home-gateway",
       "blocks": {
@@ -103,6 +109,7 @@
   },
   "order": [
     "msc_home_hero",
+    "api_efficiency",
     "msc_home_gateway"
   ]
 }
