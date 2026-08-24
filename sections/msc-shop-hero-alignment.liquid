@@ -16,30 +16,7 @@
   }
 
   .msc-shop-supply .msc-shop-supply__eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: .55rem;
-    width: fit-content;
-    padding: .45rem .75rem;
-    border: 1px solid var(--msc-line, rgba(212, 190, 153, .28));
-    border-radius: 999px;
-    color: var(--msc-sand, #d4be99);
-    background: rgba(255,255,255,.05);
-    backdrop-filter: blur(10px);
-    font-size: 1.15rem;
-    line-height: 1;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-  }
-
-  .msc-shop-supply .msc-shop-supply__eyebrow::before {
-    content: "";
-    width: .55rem;
-    height: .55rem;
-    flex: 0 0 auto;
-    border-radius: 999px;
-    background: var(--msc-sand, #d4be99);
-    box-shadow: 0 0 18px rgba(212,190,153,.85);
+    display: none !important;
   }
 
   .msc-shop-supply .msc-shop-supply__title {
@@ -63,19 +40,10 @@
     .msc-shop-supply .msc-shop-supply__intro {
       display: grid;
       grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr);
-      grid-template-areas:
-        "kicker kicker"
-        "title copy";
+      grid-template-areas: "title copy";
       column-gap: clamp(3.2rem, 4vw, 4.8rem);
-      row-gap: .7rem;
-      align-items: start;
+      align-items: center;
       margin-bottom: clamp(2rem, 2.5vw, 2.6rem) !important;
-    }
-
-    .msc-shop-supply .msc-shop-supply__eyebrow {
-      grid-area: kicker;
-      justify-self: start;
-      margin: 0 !important;
     }
 
     .msc-shop-supply .msc-shop-supply__title {
@@ -120,17 +88,11 @@
       display: grid;
       grid-template-columns: 1fr;
       grid-template-areas:
-        "kicker"
         "title"
         "copy";
       gap: 1.15rem;
       align-items: start;
       margin-bottom: 2.2rem !important;
-    }
-
-    .msc-shop-supply .msc-shop-supply__eyebrow {
-      grid-area: kicker;
-      margin: 0 !important;
     }
 
     .msc-shop-supply .msc-shop-supply__title {
