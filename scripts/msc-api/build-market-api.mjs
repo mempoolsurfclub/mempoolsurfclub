@@ -1,6 +1,7 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { buildMarketSnapshots } from './market-data.mjs';
+import { buildToolsActivitySnapshots } from './tools-activity-data.mjs';
 
 const outputRoot = process.argv[2] || 'data/api';
 const marketDir = join(outputRoot, 'v1', 'market');
@@ -57,6 +58,18 @@ function safePreview(error) {
   };
 }
 
+function validateToolsActivity(snapshot, protocol) {
+  if (!snapshot || snapshot.schemaVersion !== 1 || snapshot.api !== 'MSC API' || snapshot.version !== 'v1') {
+    throw new Error(`Invalid MSC Tools ${protocol} activity schema`);
+  }
+  if (snapshot.window !== '24h' || snapshot.protocol !== protocol || snapshot.provider !== 'Satflow' || snapshot.kind !== 'completed-sales') {
+    throw new Error(`Invalid MSC Tools ${protocol} activity contract`);
+  }
+  if (!['live', 'preview'].includes(snapshot.mode) || !Array.isArray(snapshot.sales)) {
+    throw new Error(`Invalid MSC Tools ${protocol} activity payload`);
+  }
+}
+
 let snapshots;
 try {
   snapshots = await buildMarketSnapshots();
@@ -65,12 +78,29 @@ try {
   console.error(`MSC API provider diagnostic: ${snapshots.manifest.diagnostic}`);
 }
 
+const toolsActivity = await buildToolsActivitySnapshots();
+validateToolsActivity(toolsActivity.ordinals, 'ORDINAL');
+validateToolsActivity(toolsActivity.runes, 'RUNE');
+
+const activityEndpoints = [
+  '/v1/market/ordinals-activity.json',
+  '/v1/market/runes-activity.json'
+];
+snapshots.manifest.endpoints = [...new Set([...(snapshots.manifest.endpoints || []), ...activityEndpoints])];
+snapshots.manifest.providers.toolsActivity = {
+  name: 'Satflow',
+  status: toolsActivity.ordinals.mode === 'live' || toolsActivity.runes.mode === 'live' ? 'live' : 'unconfigured'
+};
+
 await mkdir(marketDir, { recursive: true });
 await Promise.all([
   writeFile(join(outputRoot, 'v1', 'manifest.json'), `${JSON.stringify(snapshots.manifest, null, 2)}\n`, 'utf8'),
   writeFile(join(marketDir, 'homepage.json'), `${JSON.stringify(snapshots.homepage, null, 2)}\n`, 'utf8'),
   writeFile(join(marketDir, 'ordinals.json'), `${JSON.stringify(snapshots.ordinals, null, 2)}\n`, 'utf8'),
-  writeFile(join(marketDir, 'runes.json'), `${JSON.stringify(snapshots.runes, null, 2)}\n`, 'utf8')
+  writeFile(join(marketDir, 'runes.json'), `${JSON.stringify(snapshots.runes, null, 2)}\n`, 'utf8'),
+  writeFile(join(marketDir, 'ordinals-activity.json'), `${JSON.stringify(toolsActivity.ordinals, null, 2)}\n`, 'utf8'),
+  writeFile(join(marketDir, 'runes-activity.json'), `${JSON.stringify(toolsActivity.runes, null, 2)}\n`, 'utf8')
 ]);
 
 console.log(`Wrote MSC API ${snapshots.manifest.mode.toUpperCase()} market snapshots to ${outputRoot}`);
+console.log(`Wrote Tools activity snapshots: ${toolsActivity.ordinals.sales.length} Ordinals, ${toolsActivity.runes.sales.length} Runes`);
