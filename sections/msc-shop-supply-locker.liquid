@@ -1,0 +1,451 @@
+<section class="msc-shop-supply" id="MscShopSupply-{{ section.id }}" data-msc-shop-supply>
+  <div class="msc-shop-supply__shell">
+    <div class="msc-shop-supply__intro">
+      <div>
+        <p class="msc-shop-supply__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        <h1 class="msc-shop-supply__title">{{ section.settings.heading | escape }}</h1>
+        <div class="msc-shop-supply__copy rte">{{ section.settings.copy }}</div>
+      </div>
+
+      <div class="msc-shop-supply__actions">
+        <a class="msc-shop-supply__button" href="{{ section.settings.primary_link | default: routes.all_products_collection_url }}">{{ section.settings.primary_label | escape }}</a>
+        <a class="msc-shop-supply__button msc-shop-supply__button--ghost" href="#MscShopCatalog-{{ section.id }}">{{ section.settings.secondary_label | escape }}</a>
+      </div>
+    </div>
+
+    <div class="msc-supply-console" aria-label="MSC collection inventory console">
+      <div class="msc-supply-console__bar">
+        <span>MSC SUPPLY LOCKER</span>
+        <span class="msc-supply-console__signal"><i aria-hidden="true"></i> CATALOG ONLINE</span>
+      </div>
+
+      <div class="msc-supply-console__body">
+        <div class="msc-supply-console__index" aria-label="Collection bays">
+          <div class="msc-supply-console__index-head">
+            <span>COLLECTION INDEX</span>
+            <span>{{ section.blocks.size | prepend: '0' | slice: -2, 2 }} BAYS</span>
+          </div>
+
+          <div class="msc-supply-console__bays">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'collection_bay' -%}
+                {%- assign bay_title = block.settings.title | default: 'OPEN BAY' -%}
+                {%- assign bay_code = block.settings.code | default: 'COLL / ---' -%}
+                {%- assign bay_status = block.settings.status | default: 'READY' -%}
+                {%- assign bay_description = block.settings.description | default: 'Reserved for a future collection.' -%}
+                {%- if block.settings.link != blank -%}
+                  <a
+                    class="msc-supply-bay{% if forloop.first %} is-active{% endif %}"
+                    href="{{ block.settings.link }}"
+                    data-shop-bay
+                    data-bay-title="{{ bay_title | escape }}"
+                    data-bay-code="{{ bay_code | escape }}"
+                    data-bay-status="{{ bay_status | escape }}"
+                    data-bay-description="{{ bay_description | escape }}"
+                    data-bay-link="{{ block.settings.link }}"
+                    {{ block.shopify_attributes }}
+                  >
+                {%- else -%}
+                  <button
+                    class="msc-supply-bay{% if forloop.first %} is-active{% endif %} msc-supply-bay--open"
+                    type="button"
+                    data-shop-bay
+                    data-bay-title="{{ bay_title | escape }}"
+                    data-bay-code="{{ bay_code | escape }}"
+                    data-bay-status="{{ bay_status | escape }}"
+                    data-bay-description="{{ bay_description | escape }}"
+                    data-bay-link=""
+                    {{ block.shopify_attributes }}
+                  >
+                {%- endif -%}
+                  <span class="msc-supply-bay__number">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+                  <span class="msc-supply-bay__name">{{ bay_title | escape }}</span>
+                  <span class="msc-supply-bay__status">{{ bay_status | escape }}</span>
+                {%- if block.settings.link != blank -%}</a>{%- else -%}</button>{%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+
+        {%- assign first_bay = section.blocks.first -%}
+        <div class="msc-supply-inspection" aria-live="polite">
+          <div class="msc-supply-inspection__top">
+            <span>INSPECTION BAY</span>
+            <span data-inspection-code>{{ first_bay.settings.code | default: 'COLL / 001' | escape }}</span>
+          </div>
+
+          <div class="msc-supply-inspection__object" aria-hidden="true">
+            <div class="msc-supply-inspection__crate">
+              <span></span><span></span><span></span><span></span>
+            </div>
+            <div class="msc-supply-inspection__scan"></div>
+          </div>
+
+          <div class="msc-supply-inspection__readout">
+            <p>SELECTED COLLECTION</p>
+            <h2 data-inspection-title>{{ first_bay.settings.title | default: 'OPEN BAY' | escape }}</h2>
+            <p class="msc-supply-inspection__description" data-inspection-description>{{ first_bay.settings.description | default: 'Reserved for a future collection.' | escape }}</p>
+            <div class="msc-supply-inspection__footer">
+              <span>STATUS <strong data-inspection-status>{{ first_bay.settings.status | default: 'READY' | escape }}</strong></span>
+              <a href="{{ first_bay.settings.link | default: routes.all_products_collection_url }}" data-inspection-link{% if first_bay.settings.link == blank %} hidden{% endif %}>OPEN COLLECTION →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="msc-supply-console__footer" id="MscShopCatalog-{{ section.id }}">
+        <span>SHIP'S STORE // INVENTORY SYSTEM</span>
+        <a href="{{ routes.all_products_collection_url }}">VIEW FULL INVENTORY →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  body:has(.msc-shop-supply) .msc-shop > .msc-container > .msc-shop-hero { display: none; }
+  body:has(.msc-shop-supply) .msc-shop { padding-top: 0; }
+  body:has(.msc-shop-supply) .msc-shop .msc-shop-hero + .msc-block { margin-top: clamp(2.5rem, 5vw, 5rem); }
+
+  .msc-shop-supply {
+    position: relative;
+    overflow: hidden;
+    color: var(--msc-paper-soft, #fbf8ef);
+    background:
+      radial-gradient(circle at 74% 34%, rgba(212,190,153,.14), transparent 30rem),
+      radial-gradient(circle at 8% 0%, rgba(78,107,113,.32), transparent 34rem),
+      linear-gradient(145deg, #071f24 0%, #10282d 46%, #173c43 100%);
+  }
+
+  .msc-shop-supply::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(212,190,153,.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212,190,153,.035) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: linear-gradient(to bottom, #000 0 70%, transparent 100%);
+  }
+
+  .msc-shop-supply__shell {
+    position: relative;
+    width: min(1180px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: clamp(5.5rem, 8vw, 9rem) 0 clamp(4rem, 7vw, 7rem);
+  }
+
+  .msc-shop-supply__intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(250px, .55fr);
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: end;
+    margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
+  }
+
+  .msc-shop-supply__eyebrow,
+  .msc-supply-console__bar,
+  .msc-supply-console__index-head,
+  .msc-supply-inspection__top,
+  .msc-supply-inspection__readout > p,
+  .msc-supply-inspection__footer,
+  .msc-supply-console__footer,
+  .msc-supply-bay {
+    text-transform: uppercase;
+    letter-spacing: .12em;
+  }
+
+  .msc-shop-supply__eyebrow {
+    margin: 0 0 1.1rem;
+    color: var(--msc-sand, #d4be99);
+    font-size: 1rem;
+  }
+
+  .msc-shop-supply__title {
+    max-width: 11ch;
+    margin: 0;
+    color: var(--msc-paper-soft, #fbf8ef);
+    font-size: clamp(4rem, 6.5vw, 7.6rem);
+    line-height: .9;
+    letter-spacing: -.055em;
+  }
+
+  .msc-shop-supply__copy {
+    max-width: 68rem;
+    margin-top: 1.6rem;
+    color: rgba(251,248,239,.72);
+    font-size: clamp(1.35rem, 1.7vw, 1.8rem);
+    line-height: 1.5;
+  }
+
+  .msc-shop-supply__copy p { margin: 0; }
+  .msc-shop-supply__actions { display: flex; flex-direction: column; gap: .8rem; align-items: stretch; }
+
+  .msc-shop-supply__button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 5rem;
+    padding: 0 1.5rem;
+    border: 1px solid rgba(212,190,153,.28);
+    border-radius: 14px;
+    color: #10282d;
+    background: var(--msc-sand, #d4be99);
+    font-weight: 750;
+    text-decoration: none;
+    transition: transform .2s ease, border-color .2s ease, background .2s ease;
+  }
+
+  .msc-shop-supply__button::after { content: "→"; }
+  .msc-shop-supply__button:hover { transform: translateY(-2px); }
+  .msc-shop-supply__button--ghost { color: var(--msc-paper-soft, #fbf8ef); background: rgba(255,255,255,.035); }
+  .msc-shop-supply__button--ghost::after { content: "↓"; }
+
+  .msc-supply-console {
+    overflow: hidden;
+    border: 1px solid rgba(212,190,153,.22);
+    border-radius: 18px;
+    background: rgba(4,25,29,.76);
+    box-shadow: 0 30px 80px rgba(0,0,0,.22);
+  }
+
+  .msc-supply-console__bar,
+  .msc-supply-console__footer,
+  .msc-supply-console__index-head,
+  .msc-supply-inspection__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    color: rgba(251,248,239,.48);
+    font-size: .78rem;
+  }
+
+  .msc-supply-console__bar { padding: 1rem 1.25rem; border-bottom: 1px solid rgba(212,190,153,.16); }
+  .msc-supply-console__signal { color: var(--msc-sand, #d4be99); }
+  .msc-supply-console__signal i { display: inline-block; width: .55rem; height: .55rem; margin-right: .45rem; border-radius: 50%; background: var(--msc-sand, #d4be99); box-shadow: 0 0 14px rgba(212,190,153,.75); }
+
+  .msc-supply-console__body {
+    display: grid;
+    grid-template-columns: minmax(260px, .72fr) minmax(0, 1.28fr);
+    min-height: 480px;
+  }
+
+  .msc-supply-console__index { padding: 1.25rem; border-right: 1px solid rgba(212,190,153,.16); }
+  .msc-supply-console__index-head { padding-bottom: 1rem; }
+  .msc-supply-console__bays { display: grid; gap: .7rem; }
+
+  .msc-supply-bay {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 2.3rem minmax(0, 1fr) auto;
+    gap: .75rem;
+    align-items: center;
+    min-height: 5.4rem;
+    padding: 0 1rem;
+    border: 1px solid rgba(212,190,153,.14);
+    border-radius: 12px;
+    color: rgba(251,248,239,.7);
+    background: rgba(255,255,255,.025);
+    font: inherit;
+    font-size: .76rem;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    transition: border-color .2s ease, background .2s ease, transform .2s ease;
+  }
+
+  .msc-supply-bay:hover,
+  .msc-supply-bay:focus-visible,
+  .msc-supply-bay.is-active {
+    outline: none;
+    border-color: rgba(212,190,153,.48);
+    background: rgba(212,190,153,.08);
+    transform: translateX(2px);
+  }
+
+  .msc-supply-bay__number { color: rgba(251,248,239,.34); }
+  .msc-supply-bay__name { overflow: hidden; color: var(--msc-paper-soft, #fbf8ef); font-size: .9rem; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+  .msc-supply-bay__status { color: var(--msc-sand, #d4be99); font-size: .68rem; }
+  .msc-supply-bay--open .msc-supply-bay__name { color: rgba(251,248,239,.48); }
+
+  .msc-supply-inspection { min-width: 0; display: grid; grid-template-rows: auto minmax(235px, 1fr) auto; padding: 1.25rem; }
+  .msc-supply-inspection__top { padding-bottom: .8rem; }
+
+  .msc-supply-inspection__object {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 230px;
+    overflow: hidden;
+    border: 1px solid rgba(212,190,153,.12);
+    border-radius: 14px;
+    background:
+      linear-gradient(rgba(212,190,153,.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212,190,153,.05) 1px, transparent 1px),
+      radial-gradient(circle at 50% 50%, rgba(212,190,153,.09), transparent 55%);
+    background-size: 28px 28px, 28px 28px, auto;
+  }
+
+  .msc-supply-inspection__object::before,
+  .msc-supply-inspection__object::after {
+    content: "";
+    position: absolute;
+    background: rgba(212,190,153,.2);
+  }
+  .msc-supply-inspection__object::before { width: 1px; height: 100%; left: 50%; }
+  .msc-supply-inspection__object::after { height: 1px; width: 100%; top: 50%; }
+
+  .msc-supply-inspection__crate {
+    position: relative;
+    z-index: 1;
+    width: min(220px, 54%);
+    aspect-ratio: 1.35;
+    border: 1px solid rgba(212,190,153,.72);
+    transform: perspective(600px) rotateX(5deg) rotateY(-12deg);
+    box-shadow: inset 0 0 0 10px rgba(212,190,153,.025), 0 0 38px rgba(212,190,153,.08);
+  }
+
+  .msc-supply-inspection__crate::before {
+    content: "MSC";
+    position: absolute;
+    inset: 18% 14%;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(212,190,153,.4);
+    color: rgba(212,190,153,.72);
+    font-size: clamp(1.6rem, 3vw, 3rem);
+    letter-spacing: .2em;
+  }
+
+  .msc-supply-inspection__crate span { position: absolute; background: rgba(212,190,153,.5); }
+  .msc-supply-inspection__crate span:nth-child(1), .msc-supply-inspection__crate span:nth-child(2) { top: 0; bottom: 0; width: 1px; }
+  .msc-supply-inspection__crate span:nth-child(1) { left: 14%; }
+  .msc-supply-inspection__crate span:nth-child(2) { right: 14%; }
+  .msc-supply-inspection__crate span:nth-child(3), .msc-supply-inspection__crate span:nth-child(4) { left: 0; right: 0; height: 1px; }
+  .msc-supply-inspection__crate span:nth-child(3) { top: 18%; }
+  .msc-supply-inspection__crate span:nth-child(4) { bottom: 18%; }
+
+  .msc-supply-inspection__scan {
+    position: absolute;
+    z-index: 2;
+    left: 10%;
+    right: 10%;
+    top: 20%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212,190,153,.75), transparent);
+    animation: mscSupplyScan 5s ease-in-out infinite;
+  }
+
+  @keyframes mscSupplyScan { 0%, 100% { transform: translateY(0); opacity: .2; } 50% { transform: translateY(140px); opacity: .8; } }
+
+  .msc-supply-inspection__readout { padding-top: 1rem; }
+  .msc-supply-inspection__readout > p { margin: 0 0 .45rem; color: rgba(251,248,239,.4); font-size: .7rem; }
+  .msc-supply-inspection__readout h2 { margin: 0; color: var(--msc-paper-soft, #fbf8ef); font-size: clamp(2rem, 3vw, 3.2rem); letter-spacing: -.035em; }
+  .msc-supply-inspection__description { max-width: 48rem; margin: .65rem 0 0 !important; color: rgba(251,248,239,.62) !important; font-size: 1rem !important; line-height: 1.45; letter-spacing: 0 !important; text-transform: none !important; }
+
+  .msc-supply-inspection__footer { margin-top: 1rem; padding-top: .85rem; border-top: 1px solid rgba(212,190,153,.12); font-size: .7rem; }
+  .msc-supply-inspection__footer strong { color: var(--msc-sand, #d4be99); font-weight: 700; }
+  .msc-supply-inspection__footer a { color: var(--msc-sand, #d4be99); text-decoration: none; }
+
+  .msc-supply-console__footer { padding: 1rem 1.25rem; border-top: 1px solid rgba(212,190,153,.16); }
+  .msc-supply-console__footer a { color: var(--msc-sand, #d4be99); text-decoration: none; }
+
+  @media screen and (max-width: 900px) {
+    .msc-shop-supply__intro { grid-template-columns: 1fr; }
+    .msc-shop-supply__actions { flex-direction: row; flex-wrap: wrap; }
+    .msc-shop-supply__button { min-width: 220px; flex: 1 1 220px; }
+    .msc-supply-console__body { grid-template-columns: 1fr; }
+    .msc-supply-console__index { border-right: 0; border-bottom: 1px solid rgba(212,190,153,.16); }
+    .msc-supply-console__bays { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media screen and (max-width: 560px) {
+    .msc-shop-supply__shell { width: min(100% - 20px, 1180px); padding-top: 4.5rem; }
+    .msc-shop-supply__title { font-size: clamp(3.6rem, 15vw, 5rem); }
+    .msc-shop-supply__actions { flex-direction: column; }
+    .msc-supply-console__bays { grid-template-columns: 1fr; }
+    .msc-supply-console__bar, .msc-supply-console__footer { align-items: flex-start; flex-direction: column; }
+    .msc-supply-inspection { padding: 1rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .msc-supply-inspection__scan { animation: none; }
+    .msc-supply-bay, .msc-shop-supply__button { transition: none; }
+  }
+</style>
+
+<script>
+(() => {
+  const root = document.getElementById('MscShopSupply-{{ section.id }}');
+  if (!root || root.dataset.supplyInitialized === 'true') return;
+  root.dataset.supplyInitialized = 'true';
+
+  const bays = [...root.querySelectorAll('[data-shop-bay]')];
+  const title = root.querySelector('[data-inspection-title]');
+  const code = root.querySelector('[data-inspection-code]');
+  const status = root.querySelector('[data-inspection-status]');
+  const description = root.querySelector('[data-inspection-description]');
+  const link = root.querySelector('[data-inspection-link]');
+
+  function inspect(bay) {
+    if (!bay) return;
+    bays.forEach((item) => item.classList.toggle('is-active', item === bay));
+    if (title) title.textContent = bay.dataset.bayTitle || 'OPEN BAY';
+    if (code) code.textContent = bay.dataset.bayCode || 'COLL / ---';
+    if (status) status.textContent = bay.dataset.bayStatus || 'READY';
+    if (description) description.textContent = bay.dataset.bayDescription || 'Reserved for a future collection.';
+    if (link) {
+      const href = bay.dataset.bayLink || '';
+      link.hidden = !href;
+      if (href) link.href = href;
+    }
+  }
+
+  bays.forEach((bay) => {
+    bay.addEventListener('mouseenter', () => inspect(bay));
+    bay.addEventListener('focus', () => inspect(bay));
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "MSC Shop supply locker",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "MSC SHOP // FIELD SUPPLY" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "OBJECTS FROM THE BITCOIN CURRENT." },
+    { "type": "richtext", "id": "copy", "label": "Copy", "default": "<p>MSC releases and independent collections from artists, projects, and collaborators—organized as an expanding field catalog.</p>" },
+    { "type": "text", "id": "primary_label", "label": "Primary button label", "default": "Browse all products" },
+    { "type": "url", "id": "primary_link", "label": "Primary button link" },
+    { "type": "text", "id": "secondary_label", "label": "Secondary button label", "default": "Browse collections" }
+  ],
+  "blocks": [
+    {
+      "type": "collection_bay",
+      "name": "Collection bay",
+      "limit": 8,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Collection title", "default": "OPEN BAY" },
+        { "type": "text", "id": "code", "label": "Catalog code", "default": "COLL / 001" },
+        { "type": "text", "id": "status", "label": "Status", "default": "READY" },
+        { "type": "textarea", "id": "description", "label": "Description", "default": "Reserved for a future collection." },
+        { "type": "url", "id": "link", "label": "Collection or page link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "MSC Shop supply locker",
+      "blocks": [
+        { "type": "collection_bay", "settings": { "title": "WISHY", "code": "COLL / 001", "status": "ACTIVE", "description": "Apparel and objects from the Wishy collection." } },
+        { "type": "collection_bay", "settings": { "title": "BILLY", "code": "COLL / 002", "status": "ACTIVE", "description": "Collection archive and releases from Billy." } },
+        { "type": "collection_bay", "settings": { "title": "OPEN BAY", "code": "COLL / 003", "status": "READY", "description": "Reserved for a future MSC, artist, project, or collaboration collection." } },
+        { "type": "collection_bay", "settings": { "title": "OPEN BAY", "code": "COLL / 004", "status": "READY", "description": "Reserved for a future MSC, artist, project, or collaboration collection." } }
+      ]
+    }
+  ]
+}
+{% endschema %}
