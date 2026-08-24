@@ -1,0 +1,23 @@
+<script
+  src="{{ 'msc-api-efficiency.js' | asset_url }}"
+  data-msc-api-efficiency-context="{{ section.settings.context | escape }}"
+></script>
+
+{% schema %}
+{
+  "name": "MSC API efficiency",
+  "settings": [
+    {
+      "type": "select",
+      "id": "context",
+      "label": "Context",
+      "options": [
+        { "value": "home", "label": "Home radar" },
+        { "value": "tools", "label": "Tools" }
+      ],
+      "default": "home"
+    }
+  ],
+  "presets": [{ "name": "MSC API efficiency" }]
+}
+{% endschema %}
