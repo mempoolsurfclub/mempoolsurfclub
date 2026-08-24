@@ -1,17 +1,11 @@
 const API_ROOT = 'https://api.satflow.com/v1';
 const API_KEY = String(process.env.SATFLOW_API_KEY || '').trim();
 const TIMEOUT_MS = 20_000;
+const PAGE_SIZE = 100;
 
 if (!API_KEY) {
   console.error('SATFLOW_API_KEY is unavailable to this workflow.');
   process.exit(2);
-}
-
-function compactObject(object) {
-  if (!object || typeof object !== 'object' || Array.isArray(object)) return object;
-  return Object.fromEntries(Object.entries(object).filter(([, value]) => (
-    value !== undefined && value !== null && value !== ''
-  )));
 }
 
 async function request(path) {
@@ -22,7 +16,7 @@ async function request(path) {
       headers: {
         accept: 'application/json',
         'x-api-key': API_KEY,
-        'user-agent': 'Mempool-Surf-Club-satflow-reconciliation/1.1'
+        'user-agent': 'Mempool-Surf-Club-satflow-reconciliation/1.2'
       },
       signal: controller.signal
     });
@@ -35,116 +29,115 @@ async function request(path) {
   }
 }
 
-function itemsFrom(payload) {
-  return [
-    payload?.data?.items,
-    payload?.data?.sales,
-    payload?.data?.results,
-    payload?.items,
-    payload?.sales,
-    payload?.results
-  ].find(Array.isArray) || [];
+function salesFrom(payload) {
+  return payload?.data?.sales || payload?.data?.items || payload?.data?.results || [];
+}
+
+function salePrice(row) {
+  const value = Number(row?.price);
+  return Number.isFinite(value) && value > 0 ? value : 0;
 }
 
 function firstRune(row) {
-  const candidate = row?.runes ?? row?.sale?.runes ?? row?.sale?.runesData?.runes ?? row?.ask?.runes ?? row?.ask?.runesData?.runes ?? row?.rune ?? row?.token?.rune ?? row?.collection?.rune;
+  const candidate = row?.runes ?? row?.sale?.runes ?? row?.sale?.runesData?.runes ?? row?.ask?.runes ?? row?.rune;
   return Array.isArray(candidate) ? candidate[0] : candidate;
 }
 
-function safeRow(row) {
-  const rune = firstRune(row);
-  const collection = row?.collection || row?.collectionData || row?.sale?.collection || row?.ask?.collection;
-  return compactObject({
-    id: row?.id ?? row?._id,
-    fillCompletedAt: row?.fillCompletedAt ?? row?.fill_completed_at ?? row?.sale?.fillCompletedAt ?? row?.sale?.fill_completed_at,
-    type: row?.protocol ?? row?.type ?? row?.assetType ?? row?.tokenStandard ?? row?.bid?.type,
-    price: row?.price,
-    unitPrice: row?.unitPrice ?? row?.unit_price,
-    runesAmountAsNumber: row?.runesAmountAsNumber ?? row?.runes_amount_as_number,
-    askPrice: row?.ask?.price,
-    collection: collection ? compactObject({
-      id: collection?._id ?? collection?.id ?? collection?.collectionId ?? collection?.collection_id,
-      name: collection?.name ?? collection?.title,
-      slug: collection?.slug
-    }) : null,
-    collectionSlug: row?.collectionSlug ?? row?.collection_slug ?? row?.bid?.collectionSlug ?? row?.bid?.collection_slug,
-    rune: rune ? compactObject({
-      id: rune?._id ?? rune?.id ?? rune?.runeId ?? rune?.rune_id,
-      name: rune?.name,
-      spacedName: rune?.spacedName ?? rune?.spaced_name,
-      amount: rune?.amount,
-      divisibility: rune?.divisibility
-    }) : null
-  });
-}
+async function fetchAllSales(collectionSlug, external) {
+  const rows = [];
+  let page = 1;
+  let expectedTotal = null;
 
-function print(label, value) {
-  console.log(`\n=== ${label} ===`);
-  console.log(JSON.stringify(value, null, 2));
-}
+  while (page <= 20) {
+    const params = new URLSearchParams({
+      collectionSlug,
+      external: external ? 'true' : 'false',
+      timeRange: '24h',
+      active: 'false',
+      page: String(page),
+      pageSize: String(PAGE_SIZE),
+      sortBy: 'fillCompletedAt',
+      sortDirection: 'desc'
+    });
+    const result = await request(`/activity/sales?${params}`);
+    if (!result.ok) return { status: result.status, total: null, rows: [], priceSum: null };
 
-function commonSalesParams() {
+    const pageRows = salesFrom(result.payload);
+    const total = Number(result.payload?.data?.total);
+    if (Number.isFinite(total)) expectedTotal = total;
+    rows.push(...pageRows);
+
+    if (pageRows.length === 0 || pageRows.length < PAGE_SIZE || (expectedTotal !== null && rows.length >= expectedTotal)) break;
+    page += 1;
+  }
+
   return {
-    timeRange: '24h',
-    active: 'false',
-    page: '1',
-    pageSize: '100',
-    sortBy: 'fillCompletedAt',
-    sortDirection: 'desc'
+    status: 200,
+    total: expectedTotal,
+    rows,
+    priceSum: rows.reduce((sum, row) => sum + salePrice(row), 0)
   };
 }
 
-async function inspectSales(label, extra = {}) {
-  const params = new URLSearchParams({ ...commonSalesParams(), ...extra });
-  const result = await request(`/activity/sales?${params}`);
-  const items = itemsFrom(result.payload);
-  print(`SALES ${label}`, {
-    status: result.status,
-    total: result.payload?.data?.total ?? result.payload?.total ?? null,
-    meta: result.payload?.data?._meta ?? result.payload?._meta ?? null,
-    itemCount: items.length,
-    firstThreeRows: items.slice(0, 3).map(safeRow)
-  });
-  return { result, items };
-}
-
-async function inspectCollectionStats(identifier) {
-  const result = await request(`/collection-stats?collectionId=${encodeURIComponent(identifier)}`);
+async function collectionStats(collectionSlug) {
+  const result = await request(`/collection-stats?collectionId=${encodeURIComponent(collectionSlug)}`);
   const data = result.payload?.data;
-  print(`COLLECTION STATS ${identifier}`, {
+  return {
     status: result.status,
-    floor: data?.floor,
-    listedCount: data?.listedCount,
-    volume1d: data?.volume1d,
-    volume7d: data?.volume7d,
-    volume30d: data?.volume30d,
-    metadata: data?.metadata ? {
-      id: data.metadata.id,
-      name: data.metadata.name,
-      internalId: data.metadata._id
-    } : null
+    volume1d: Number.isFinite(Number(data?.volume1d)) ? Number(data.volume1d) : null,
+    name: data?.metadata?.name || null,
+    id: data?.metadata?.id || null
+  };
+}
+
+function runeSummary(rows) {
+  const names = new Set();
+  const ids = new Set();
+  rows.forEach((row) => {
+    const rune = firstRune(row);
+    if (rune?.name) names.add(rune.name);
+    if (rune?.id) ids.add(rune.id);
   });
+  return { names: [...names], ids: [...ids] };
 }
 
-await inspectSales('external omitted');
-await inspectSales('external=true', { external: 'true' });
-await inspectSales('external=false', { external: 'false' });
+async function inspect(slug) {
+  const [stats, internal, withExternal] = await Promise.all([
+    collectionStats(slug),
+    fetchAllSales(slug, false),
+    fetchAllSales(slug, true)
+  ]);
 
-for (const identifier of ['omb', 'nodemonkes', 'bitcoin-puppets', 'cents', 'tap-DMT-NAT']) {
-  await inspectCollectionStats(identifier);
+  console.log(`\n=== ${slug} ===`);
+  console.log(JSON.stringify({
+    stats,
+    internal: {
+      total: internal.total,
+      returned: internal.rows.length,
+      priceSum: internal.priceSum,
+      runes: runeSummary(internal.rows)
+    },
+    withExternal: {
+      total: withExternal.total,
+      returned: withExternal.rows.length,
+      priceSum: withExternal.priceSum,
+      runes: runeSummary(withExternal.rows)
+    },
+    comparisons: {
+      internalMatchesVolume1d: stats.volume1d !== null && internal.priceSum === stats.volume1d,
+      withExternalMatchesVolume1d: stats.volume1d !== null && withExternal.priceSum === stats.volume1d
+    }
+  }, null, 2));
 }
 
-for (const [label, filter] of [
-  ['collectionId=omb', { collectionId: 'omb' }],
-  ['collection=omb', { collection: 'omb' }],
-  ['collectionSlug=omb', { collectionSlug: 'omb' }],
-  ['collectionId=bitcoin-puppets', { collectionId: 'bitcoin-puppets' }],
-  ['collectionId=nodemonkes', { collectionId: 'nodemonkes' }],
-  ['runeId=845764:84', { runeId: '845764:84' }],
-  ['rune=845764:84', { rune: '845764:84' }],
-  ['runes=845764:84', { runes: '845764:84' }],
-  ['runeName=BILLION DOLLAR CAT', { runeName: 'BILLION•DOLLAR•CAT' }],
-  ['runeId=840000:3', { runeId: '840000:3' }]
+for (const slug of [
+  'omb',
+  'bitcoin-puppets',
+  'nodemonkes',
+  'tap-DMT-NAT',
+  'BILLION•DOLLAR•CAT',
+  'PUPS•WORLD•PEACE',
+  'DOG•GO•TO•THE•MOON'
 ]) {
-  await inspectSales(label, filter);
+  await inspect(slug);
 }
