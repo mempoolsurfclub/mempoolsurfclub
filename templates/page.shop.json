@@ -1,10 +1,70 @@
 {
   "sections": {
+    "shop_supply": {
+      "type": "msc-shop-supply-locker",
+      "blocks": {
+        "wishy": {
+          "type": "collection_bay",
+          "settings": {
+            "title": "WISHY",
+            "code": "COLL / 001",
+            "status": "ACTIVE",
+            "description": "Apparel and objects from the Wishy collection.",
+            "link": "/collections/wishy"
+          }
+        },
+        "billy": {
+          "type": "collection_bay",
+          "settings": {
+            "title": "BILLY",
+            "code": "COLL / 002",
+            "status": "ACTIVE",
+            "description": "Collection archive and releases from Billy.",
+            "link": "/pages/billy-1"
+          }
+        },
+        "open_03": {
+          "type": "collection_bay",
+          "settings": {
+            "title": "OPEN BAY",
+            "code": "COLL / 003",
+            "status": "READY",
+            "description": "Reserved for a future MSC, artist, project, or collaboration collection.",
+            "link": ""
+          }
+        },
+        "open_04": {
+          "type": "collection_bay",
+          "settings": {
+            "title": "OPEN BAY",
+            "code": "COLL / 004",
+            "status": "READY",
+            "description": "Reserved for a future MSC, artist, project, or collaboration collection.",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "wishy",
+        "billy",
+        "open_03",
+        "open_04"
+      ],
+      "settings": {
+        "eyebrow": "MSC SHOP // FIELD SUPPLY",
+        "heading": "OBJECTS FROM THE BITCOIN CURRENT.",
+        "copy": "<p>MSC releases and independent collections from artists, projects, and collaborators—organized as an expanding field catalog.</p>",
+        "primary_label": "Browse all products",
+        "primary_link": "/collections/all",
+        "secondary_label": "Browse collections"
+      }
+    },
     "msc_shop": {
       "type": "msc-shop"
     }
   },
   "order": [
+    "shop_supply",
     "msc_shop"
   ]
 }
