@@ -31,6 +31,16 @@
   text-shadow: 0 1px 8px rgba(4, 15, 21, .72);
 }
 
+/* Match Learn depth guide titles to the Explore Atlas lower-panel region titles. */
+.msc-learn .msc-depth-map__title {
+  color: var(--msc-paper-soft) !important;
+  font-size: clamp(1.15rem, 1.45vw, 1.55rem) !important;
+  font-weight: 700 !important;
+  line-height: 1.08 !important;
+  letter-spacing: .06em !important;
+  text-transform: uppercase;
+}
+
 @media screen and (min-width: 991px) {
   .msc-depth-map__region {
     right: auto;
@@ -81,12 +91,6 @@
     letter-spacing: .12em;
   }
 
-  .msc-depth-map__title {
-    font-size: 1.65rem;
-    line-height: 1.08;
-    letter-spacing: 0;
-  }
-
   .msc-depth-map__meta {
     min-height: 1.55rem;
     margin-top: .36rem;
@@ -120,10 +124,6 @@
   .msc-depth-map__region[data-region="building"] { --msc-sounder-indent: 27%; }
   .msc-depth-map__region[data-region="development"] { --msc-sounder-indent: 39%; }
   .msc-depth-map__region[data-region="ecosystem"] { --msc-sounder-indent: 50%; }
-
-  .msc-depth-map__title {
-    font-size: 1.4rem;
-  }
 
   .msc-depth-map__subcategories,
   .msc-depth-map__description {
