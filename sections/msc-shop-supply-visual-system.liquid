@@ -1,0 +1,279 @@
+<style>
+  /* Shop Supply Locker visual-system alignment.
+   * Visual only: preserve collection switching, product data, Quick Add,
+   * accessibility repairs, hero alignment, and lower Shop content.
+   */
+
+  .msc-shop-supply {
+    --msc-shop-panel-deep: rgba(7, 31, 36, .92);
+    --msc-shop-panel-mid: rgba(16, 40, 45, .82);
+    --msc-shop-panel-teal: rgba(23, 60, 67, .72);
+    --msc-shop-line: rgba(212, 190, 153, .32);
+    --msc-shop-line-soft: rgba(212, 190, 153, .18);
+    --msc-shop-label: rgba(212, 190, 153, .74);
+    --msc-shop-paper: rgba(251, 248, 239, .94);
+    --msc-shop-paper-muted: rgba(251, 248, 239, .68);
+  }
+
+  /* Bring the Locker into the same illuminated blue-teal instrument family
+   * used by Atlas, SONAR, and the Tools cockpit instead of near-black UI. */
+  .msc-shop-supply .msc-supply-console {
+    border-color: rgba(212, 190, 153, .38) !important;
+    border-radius: 22px !important;
+    background:
+      radial-gradient(circle at 72% 28%, rgba(212, 190, 153, .09), transparent 30rem),
+      radial-gradient(circle at 18% 72%, rgba(78, 107, 113, .16), transparent 34rem),
+      linear-gradient(145deg, rgba(12, 38, 44, .94), rgba(21, 57, 64, .88)) !important;
+    box-shadow:
+      0 26px 76px rgba(5, 20, 24, .3),
+      inset 0 1px 0 rgba(251, 248, 239, .035) !important;
+    backdrop-filter: blur(14px);
+  }
+
+  .msc-shop-supply .msc-supply-console__bar,
+  .msc-shop-supply .msc-supply-console__footer {
+    border-color: rgba(212, 190, 153, .26) !important;
+    background: rgba(16, 40, 45, .44);
+    color: rgba(251, 248, 239, .9) !important;
+    font-size: 1rem !important;
+    font-weight: 720;
+    letter-spacing: .12em !important;
+  }
+
+  .msc-shop-supply .msc-supply-console__signal,
+  .msc-shop-supply .msc-supply-console__footer a {
+    color: rgba(212, 190, 153, .9) !important;
+  }
+
+  .msc-shop-supply .msc-supply-console__body {
+    background:
+      radial-gradient(circle at 76% 40%, rgba(212, 190, 153, .055), transparent 32rem),
+      linear-gradient(145deg, rgba(23, 60, 67, .34), rgba(7, 31, 36, .42));
+  }
+
+  .msc-shop-supply .msc-supply-console__index {
+    border-color: rgba(212, 190, 153, .24) !important;
+    background: linear-gradient(180deg, rgba(7, 31, 36, .34), rgba(7, 31, 36, .18));
+  }
+
+  .msc-shop-supply .msc-supply-inspection {
+    background: linear-gradient(180deg, rgba(16, 40, 45, .16), rgba(7, 31, 36, .12));
+  }
+
+  /* Match the shared MSC label hierarchy: quiet sand instrumentation,
+   * cream primary labels, and fewer competing text weights. */
+  .msc-shop-supply .msc-supply-console__index-head,
+  .msc-shop-supply .msc-supply-inspection__top {
+    color: rgba(212, 190, 153, .72) !important;
+    font-size: .9rem !important;
+    font-weight: 700;
+    letter-spacing: .14em !important;
+  }
+
+  .msc-shop-supply .msc-supply-micro,
+  .msc-shop-supply .msc-supply-product-toolbar,
+  .msc-shop-supply .msc-supply-product__meta,
+  .msc-shop-supply .msc-supply-product__variant-label,
+  .msc-shop-supply .msc-supply-console__index-note > span,
+  .msc-shop-supply .msc-supply-collection-head__meta {
+    color: rgba(212, 190, 153, .62) !important;
+    letter-spacing: .12em !important;
+  }
+
+  .msc-shop-supply .msc-supply-micro {
+    font-size: .78rem !important;
+  }
+
+  .msc-shop-supply .msc-supply-product-toolbar,
+  .msc-shop-supply .msc-supply-product__meta,
+  .msc-shop-supply .msc-supply-product__variant-label,
+  .msc-shop-supply .msc-supply-collection-head__meta {
+    font-size: .8rem !important;
+  }
+
+  .msc-shop-supply .msc-supply-console__index-note {
+    border-color: rgba(212, 190, 153, .16) !important;
+    color: rgba(251, 248, 239, .56) !important;
+  }
+
+  .msc-shop-supply .msc-supply-console__index-note p {
+    color: rgba(251, 248, 239, .58) !important;
+  }
+
+  /* Collection controls should feel like the Atlas/Tools controls rather
+   * than separate dark retail tiles. */
+  .msc-shop-supply .msc-supply-bay {
+    border-color: rgba(212, 190, 153, .18) !important;
+    border-radius: 14px !important;
+    color: rgba(251, 248, 239, .7) !important;
+    background: rgba(255, 255, 255, .025) !important;
+    box-shadow: inset 0 1px 0 rgba(251, 248, 239, .018);
+  }
+
+  .msc-shop-supply .msc-supply-bay:hover,
+  .msc-shop-supply .msc-supply-bay:focus-visible {
+    border-color: rgba(212, 190, 153, .42) !important;
+    background: rgba(212, 190, 153, .075) !important;
+  }
+
+  .msc-shop-supply .msc-supply-bay.is-active {
+    border-color: rgba(212, 190, 153, .58) !important;
+    background: linear-gradient(90deg, rgba(212, 190, 153, .12), rgba(255, 255, 255, .035)) !important;
+    box-shadow:
+      inset 0 0 0 1px rgba(212, 190, 153, .06),
+      0 10px 26px rgba(4, 17, 23, .12) !important;
+  }
+
+  .msc-shop-supply .msc-supply-bay__number {
+    color: rgba(212, 190, 153, .48) !important;
+  }
+
+  .msc-shop-supply .msc-supply-bay__name {
+    color: rgba(251, 248, 239, .94) !important;
+    font-size: 1.22rem !important;
+    font-weight: 760 !important;
+    letter-spacing: .045em !important;
+  }
+
+  .msc-shop-supply .msc-supply-bay__status {
+    color: rgba(212, 190, 153, .78) !important;
+    font-size: .82rem !important;
+  }
+
+  /* Let the selected collection read as the primary inspection state. */
+  .msc-shop-supply .msc-supply-collection-head {
+    border-color: rgba(212, 190, 153, .18) !important;
+  }
+
+  .msc-shop-supply .msc-supply-collection-head h2 {
+    color: rgba(251, 248, 239, .96) !important;
+    text-shadow: 0 8px 24px rgba(3, 18, 22, .22);
+  }
+
+  .msc-shop-supply .msc-supply-collection-head p:not(.msc-supply-micro) {
+    color: rgba(251, 248, 239, .7) !important;
+  }
+
+  .msc-shop-supply .msc-supply-collection-head__meta strong,
+  .msc-shop-supply .msc-supply-collection-head__meta a {
+    color: rgba(212, 190, 153, .9) !important;
+  }
+
+  /* Product cards become inspection modules. Photography stays untouched;
+   * the surrounding frame does the brand work. */
+  .msc-shop-supply .msc-supply-product {
+    border-color: rgba(212, 190, 153, .24) !important;
+    border-radius: 16px !important;
+    background:
+      linear-gradient(180deg, rgba(20, 54, 61, .54), rgba(7, 31, 36, .7)) !important;
+    box-shadow:
+      0 14px 34px rgba(4, 17, 23, .16),
+      inset 0 1px 0 rgba(251, 248, 239, .025);
+  }
+
+  .msc-shop-supply .msc-supply-product__media {
+    margin: .7rem .7rem 0;
+    overflow: hidden;
+    border: 1px solid rgba(212, 190, 153, .28) !important;
+    border-radius: 12px;
+    background:
+      linear-gradient(rgba(212, 190, 153, .035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212, 190, 153, .035) 1px, transparent 1px),
+      rgba(7, 31, 36, .62) !important;
+    background-size: 28px 28px, 28px 28px, auto !important;
+    box-shadow: inset 0 0 0 1px rgba(251, 248, 239, .018);
+  }
+
+  .msc-shop-supply .msc-supply-product__media::before,
+  .msc-shop-supply .msc-supply-product__media::after {
+    background: rgba(212, 190, 153, .2) !important;
+  }
+
+  .msc-shop-supply .msc-supply-product__scan {
+    background: linear-gradient(90deg, transparent, rgba(212, 190, 153, .7), transparent) !important;
+  }
+
+  .msc-shop-supply .msc-supply-product__availability {
+    border-color: rgba(212, 190, 153, .42) !important;
+    background: rgba(212, 190, 153, .92) !important;
+    box-shadow: 0 0 18px rgba(212, 190, 153, .16);
+  }
+
+  .msc-shop-supply .msc-supply-product__body {
+    padding: 1.25rem !important;
+  }
+
+  .msc-shop-supply .msc-supply-product h3 {
+    color: rgba(251, 248, 239, .96) !important;
+    font-weight: 760 !important;
+  }
+
+  .msc-shop-supply .msc-supply-product h3 a {
+    color: inherit !important;
+  }
+
+  .msc-shop-supply .msc-supply-product__price {
+    color: rgba(212, 190, 153, .96) !important;
+    font-size: 1.24rem !important;
+    font-weight: 800 !important;
+  }
+
+  .msc-shop-supply .msc-supply-product__variant {
+    border-color: rgba(212, 190, 153, .28) !important;
+    color: rgba(251, 248, 239, .88) !important;
+    background: rgba(7, 31, 36, .78) !important;
+  }
+
+  .msc-shop-supply .msc-supply-product__form--repaired,
+  .msc-shop-supply .msc-supply-product__form-loading,
+  .msc-shop-supply .msc-supply-product__fallback-action {
+    border-color: rgba(212, 190, 153, .18) !important;
+  }
+
+  .msc-shop-supply .msc-supply-product__quick-add {
+    border-color: rgba(212, 190, 153, .94) !important;
+    color: #10282d !important;
+    background: rgba(212, 190, 153, .94) !important;
+  }
+
+  .msc-shop-supply .msc-supply-product__view,
+  .msc-shop-supply .msc-supply-product__fallback-action {
+    color: rgba(212, 190, 153, .82) !important;
+  }
+
+  .msc-shop-supply .msc-supply-product__view:hover,
+  .msc-shop-supply .msc-supply-product__fallback-action:hover {
+    color: rgba(251, 248, 239, .94) !important;
+  }
+
+  .msc-shop-supply .msc-supply-empty,
+  .msc-shop-supply .msc-supply-empty__object {
+    border-color: rgba(212, 190, 153, .2) !important;
+    background-color: rgba(7, 31, 36, .24) !important;
+  }
+
+  @media screen and (max-width: 800px) {
+    .msc-shop-supply .msc-supply-console__index {
+      border-right: 0 !important;
+      border-bottom-color: rgba(212, 190, 153, .24) !important;
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .msc-shop-supply .msc-supply-console {
+      backdrop-filter: none;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "MSC Shop visual system",
+  "settings": [],
+  "presets": [
+    {
+      "name": "MSC Shop visual system"
+    }
+  ]
+}
+{% endschema %}
