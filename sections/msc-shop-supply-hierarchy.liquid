@@ -1,0 +1,548 @@
+<div class="msc-shop-hierarchy-source" data-msc-shop-hierarchy-source data-section-id="{{ section.id }}" hidden>
+  <template data-msc-shop-hierarchy-nav>
+    <div class="msc-supply-group-list" aria-label="Shop catalog groups">
+      {%- assign group_keys = 'msc,bitcoin,ordinals,runes' | split: ',' -%}
+      {%- assign group_titles = 'MSC,BITCOIN,ORDINALS,RUNES' | split: ',' -%}
+      {%- for group_key in group_keys -%}
+        <div class="msc-supply-group" data-supply-group="{{ group_key }}">
+          <button
+            class="msc-supply-group-toggle{% if group_key == 'msc' %} is-active{% endif %}"
+            type="button"
+            data-shop-group
+            data-group-id="{{ group_key }}"
+            aria-expanded="{% if group_key == 'msc' %}true{% else %}false{% endif %}"
+            aria-controls="MscSupplyGroupChildren-{{ section.id }}-{{ group_key }}"
+          >
+            <span class="msc-supply-group-toggle__number">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+            <span class="msc-supply-group-toggle__name">{{ group_titles[forloop.index0] }}</span>
+            <span class="msc-supply-group-toggle__count" data-group-count>00</span>
+            <span class="msc-supply-group-toggle__chevron" aria-hidden="true">⌄</span>
+          </button>
+
+          <div
+            class="msc-supply-group-children"
+            id="MscSupplyGroupChildren-{{ section.id }}-{{ group_key }}"
+            data-group-children="{{ group_key }}"
+            {% unless group_key == 'msc' %}hidden{% endunless %}
+          >
+            {%- assign child_index = 0 -%}
+            {%- for block in section.blocks -%}
+              {%- if block.settings.group == group_key -%}
+                {%- assign child_index = child_index | plus: 1 -%}
+                {%- liquid
+                  assign bay_collection = block.settings.collection
+                  assign bay_title = block.settings.title
+                  if bay_title == blank and bay_collection != blank
+                    assign bay_title = bay_collection.title
+                  endif
+                  if bay_title == blank
+                    assign bay_title = 'COLLECTION'
+                  endif
+                  assign bay_status = block.settings.status | default: 'ROUTE PENDING'
+                -%}
+                <button
+                  class="msc-supply-bay msc-supply-bay--child"
+                  type="button"
+                  data-shop-bay
+                  data-panel-id="{{ block.id }}"
+                  data-group-id="{{ group_key }}"
+                  aria-pressed="false"
+                  {{ block.shopify_attributes }}
+                >
+                  <span class="msc-supply-bay__number">{{ child_index | prepend: '0' | slice: -2, 2 }}</span>
+                  <span class="msc-supply-bay__name">{{ bay_title | escape }}</span>
+                  <span class="msc-supply-bay__status">
+                    {%- if bay_collection != blank -%}
+                      {{ bay_collection.products_count }} ITEMS
+                    {%- else -%}
+                      {{ bay_status | escape }}
+                    {%- endif -%}
+                  </span>
+                </button>
+              {%- endif -%}
+            {%- endfor -%}
+
+            {%- if child_index == 0 -%}
+              <div class="msc-supply-group-empty" data-group-empty>
+                {% if group_key == 'msc' or group_key == 'bitcoin' %}CATEGORIES INDEXING{% else %}PROJECTS INDEXING{% endif %}
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </template>
+
+  <template data-msc-shop-hierarchy-panels>
+    <section class="msc-supply-panel is-active" data-group-panel="msc" aria-label="MSC shop category selector">
+      <div class="msc-supply-inspection__top"><span>INSPECTION BAY</span><span>MSC / CATALOG</span></div>
+      <div class="msc-supply-collection-head">
+        <div>
+          <p class="msc-supply-micro">SHOP CHANNEL</p>
+          <h2>MSC</h2>
+          <p>Shop Mempool Surf Club merchandise by category.</p>
+        </div>
+        <div class="msc-supply-collection-head__meta"><span>SELECT <strong>A CATEGORY</strong></span></div>
+      </div>
+      <div class="msc-supply-hierarchy-prompt">HEADWEAR · T-SHIRTS · OUTERWEAR · ACCESSORIES</div>
+    </section>
+
+    <section class="msc-supply-panel" data-group-panel="bitcoin" hidden aria-label="Bitcoin merchandise category selector">
+      <div class="msc-supply-inspection__top"><span>INSPECTION BAY</span><span>BITCOIN / CATALOG</span></div>
+      <div class="msc-supply-collection-head">
+        <div>
+          <p class="msc-supply-micro">SHOP CHANNEL</p>
+          <h2>BITCOIN</h2>
+          <p>Shop Bitcoin merchandise by category.</p>
+        </div>
+        <div class="msc-supply-collection-head__meta"><span>SELECT <strong>A CATEGORY</strong></span></div>
+      </div>
+      <div class="msc-supply-hierarchy-prompt">HEADWEAR · T-SHIRTS · OUTERWEAR · ACCESSORIES</div>
+    </section>
+
+    <section class="msc-supply-panel" data-group-panel="ordinals" hidden aria-label="Ordinals collaboration selector">
+      <div class="msc-supply-inspection__top"><span>INSPECTION BAY</span><span>ORDINALS / PROJECTS</span></div>
+      <div class="msc-supply-collection-head">
+        <div>
+          <p class="msc-supply-micro">COLLABORATION CHANNEL</p>
+          <h2>ORDINALS</h2>
+          <p>Select an Ordinals project to inspect its MSC collaboration merchandise.</p>
+        </div>
+        <div class="msc-supply-collection-head__meta"><span>SELECT <strong>A PROJECT</strong></span></div>
+      </div>
+      <div class="msc-supply-hierarchy-prompt">PROJECT COLLABORATIONS WILL APPEAR HERE AS THEY ARE ADDED.</div>
+    </section>
+
+    <section class="msc-supply-panel" data-group-panel="runes" hidden aria-label="Runes collaboration selector">
+      <div class="msc-supply-inspection__top"><span>INSPECTION BAY</span><span>RUNES / PROJECTS</span></div>
+      <div class="msc-supply-collection-head">
+        <div>
+          <p class="msc-supply-micro">COLLABORATION CHANNEL</p>
+          <h2>RUNES</h2>
+          <p>Select a Runes project to inspect its MSC collaboration merchandise.</p>
+        </div>
+        <div class="msc-supply-collection-head__meta"><span>SELECT <strong>A PROJECT</strong></span></div>
+      </div>
+      <div class="msc-supply-hierarchy-prompt">SELECT A PROJECT FROM THE COLLECTION INDEX.</div>
+    </section>
+
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign bay_collection = block.settings.collection
+        assign bay_title = block.settings.title
+        if bay_title == blank and bay_collection != blank
+          assign bay_title = bay_collection.title
+        endif
+        if bay_title == blank
+          assign bay_title = 'COLLECTION'
+        endif
+        assign bay_code = block.settings.code | default: 'COLL / ---'
+        assign bay_status = block.settings.status | default: 'ROUTE PENDING'
+        assign bay_description = block.settings.description
+        if bay_description == blank and bay_collection != blank
+          assign bay_description = bay_collection.description | strip_html | truncate: 180
+        endif
+        assign bay_link = block.settings.link
+        if bay_collection != blank
+          assign bay_link = bay_collection.url
+        endif
+      -%}
+
+      <section
+        class="msc-supply-panel"
+        data-bay-panel="{{ block.id }}"
+        data-group-id="{{ block.settings.group }}"
+        hidden
+        aria-label="{{ bay_title | escape }} collection"
+      >
+        <div class="msc-supply-inspection__top">
+          <span>INSPECTION BAY</span>
+          <span>{{ bay_code | escape }}{% if bay_collection != blank %} // {{ bay_collection.products_count }} ITEMS{% endif %}</span>
+        </div>
+
+        <div class="msc-supply-collection-head">
+          <div>
+            <p class="msc-supply-micro">SELECTED COLLECTION</p>
+            <h2>{{ bay_title | escape }}</h2>
+            {%- if bay_description != blank -%}<p>{{ bay_description | escape }}</p>{%- endif -%}
+          </div>
+          <div class="msc-supply-collection-head__meta">
+            <span>STATUS <strong>{{ bay_status | escape }}</strong></span>
+            {%- if bay_link != blank -%}<a href="{{ bay_link }}">VIEW FULL COLLECTION →</a>{%- endif -%}
+          </div>
+        </div>
+
+        {%- if bay_collection != blank and bay_collection.products_count > 0 -%}
+          <div class="msc-supply-product-toolbar">
+            <span>CURRENT LOADOUT</span>
+            <span>SHOWING {{ bay_collection.products_count | at_most: 3 }} / {{ bay_collection.products_count }}</span>
+          </div>
+
+          <div class="msc-supply-product-grid">
+            {%- for product in bay_collection.products limit: 3 -%}
+              {%- assign selected_variant = product.selected_or_first_available_variant -%}
+              <article class="msc-supply-product" data-supply-product>
+                <a class="msc-supply-product__media" href="{{ product.url }}" aria-label="View {{ product.title | escape }}">
+                  {%- if product.featured_media -%}
+                    {{ product.featured_media | image_url: width: 720 | image_tag: loading: 'lazy', widths: '240, 360, 540, 720', sizes: '(min-width: 901px) 20vw, (min-width: 561px) 42vw, 82vw', alt: product.featured_media.alt | default: product.title }}
+                  {%- else -%}
+                    <div class="msc-supply-product__placeholder" aria-hidden="true">MSC</div>
+                  {%- endif -%}
+                  <span class="msc-supply-product__scan" aria-hidden="true"></span>
+                  <span class="msc-supply-product__availability{% unless product.available %} is-sold-out{% endunless %}">{% if product.available %}IN STOCK{% else %}SOLD OUT{% endif %}</span>
+                </a>
+
+                <div class="msc-supply-product__body">
+                  <div class="msc-supply-product__meta">
+                    <span>ITEM / {{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+                    <span>{{ bay_code | escape }}</span>
+                  </div>
+                  <h3><a href="{{ product.url }}">{{ product.title | escape }}</a></h3>
+                  <p class="msc-supply-product__price" data-product-price>{%- if product.price_varies -%}FROM {% endif -%}{{ product.price | money_with_currency }}</p>
+
+                  <product-form class="msc-supply-product__form" data-section-id="{{ section.id }}" data-hide-errors="false">
+                    {%- form 'product', product, id: 'MscSupplyHierarchyQuickAdd-' | append: section.id | append: '-' | append: block.id | append: '-' | append: product.id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+                      {%- if product.variants.size > 1 -%}
+                        <label class="msc-supply-product__variant-label" for="MscSupplyHierarchyVariant-{{ section.id }}-{{ block.id }}-{{ product.id }}">SELECT VARIANT</label>
+                        <select class="msc-supply-product__variant" id="MscSupplyHierarchyVariant-{{ section.id }}-{{ block.id }}-{{ product.id }}" name="id" data-variant-select>
+                          {%- for variant in product.variants -%}
+                            <option value="{{ variant.id }}" data-price="{{ variant.price | money_with_currency | escape }}" {% if variant.id == selected_variant.id %}selected{% endif %} {% unless variant.available %}disabled{% endunless %}>
+                              {{ variant.title | escape }}{% unless variant.available %} — SOLD OUT{% endunless %}
+                            </option>
+                          {%- endfor -%}
+                        </select>
+                      {%- else -%}
+                        <input type="hidden" name="id" value="{{ selected_variant.id }}" class="product-variant-id" {% unless selected_variant.available %}disabled{% endunless %}>
+                      {%- endif -%}
+
+                      <div class="product-form__error-message-wrapper" role="alert" hidden><span class="product-form__error-message"></span></div>
+                      <button type="submit" name="add" class="msc-supply-product__quick-add" {% unless selected_variant.available %}disabled{% endunless %}>
+                        <span>{% if selected_variant.available %}QUICK ADD{% else %}SOLD OUT{% endif %}</span>
+                        {%- render 'loading-spinner' -%}
+                      </button>
+                    {%- endform -%}
+                  </product-form>
+
+                  <a class="msc-supply-product__view" href="{{ product.url }}">VIEW ITEM →</a>
+                </div>
+              </article>
+            {%- endfor -%}
+          </div>
+        {%- else -%}
+          <div class="msc-supply-empty">
+            <div class="msc-supply-empty__object" aria-hidden="true"><div class="msc-supply-empty__crate">MSC</div><span></span></div>
+            <div>
+              <p class="msc-supply-micro">PRODUCT FEED</p>
+              <h3>CATALOG ROUTE PENDING.</h3>
+              <p>This route is part of the Shop index, but a Shopify product collection has not been assigned yet.</p>
+              {%- if bay_link != blank -%}<a href="{{ bay_link }}">OPEN COLLECTION →</a>{%- endif -%}
+            </div>
+          </div>
+        {%- endif -%}
+      </section>
+    {%- endfor -%}
+  </template>
+</div>
+
+<style>
+  .shopify-section.msc-shop-hierarchy-section { display: contents; }
+
+  .msc-shop-supply .msc-supply-console__bays {
+    display: block !important;
+  }
+
+  .msc-shop-supply .msc-supply-group-list {
+    display: grid;
+    gap: .7rem;
+  }
+
+  .msc-shop-supply .msc-supply-group {
+    min-width: 0;
+  }
+
+  .msc-shop-supply .msc-supply-group-toggle {
+    width: 100%;
+    min-height: 5.6rem;
+    display: grid;
+    grid-template-columns: 2.3rem minmax(0, 1fr) auto 1.1rem;
+    gap: .75rem;
+    align-items: center;
+    padding: 0 1rem;
+    border: 1px solid rgba(212,190,153,.2);
+    border-radius: 14px;
+    color: rgba(251,248,239,.72);
+    background: rgba(16,40,45,.08);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color .2s ease, background-color .2s ease;
+  }
+
+  .msc-shop-supply .msc-supply-group-toggle:hover,
+  .msc-shop-supply .msc-supply-group-toggle:focus-visible,
+  .msc-shop-supply .msc-supply-group-toggle.is-active {
+    outline: none;
+    border-color: rgba(212,190,153,.52);
+    background: rgba(212,190,153,.07);
+  }
+
+  .msc-shop-supply .msc-supply-group-toggle__number {
+    color: rgba(212,190,153,.48);
+    font-size: .88rem;
+    letter-spacing: .1em;
+  }
+
+  .msc-shop-supply .msc-supply-group-toggle__name {
+    overflow: hidden;
+    color: rgba(251,248,239,.95);
+    font-size: 1.25rem;
+    font-weight: 760;
+    letter-spacing: .055em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .msc-shop-supply .msc-supply-group-toggle__count {
+    color: rgba(212,190,153,.76);
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    white-space: nowrap;
+  }
+
+  .msc-shop-supply .msc-supply-group-toggle__chevron {
+    color: rgba(212,190,153,.7);
+    font-size: 1.1rem;
+    transform-origin: center;
+    transition: transform .2s ease;
+  }
+
+  .msc-shop-supply .msc-supply-group-toggle[aria-expanded="true"] .msc-supply-group-toggle__chevron {
+    transform: rotate(180deg);
+  }
+
+  .msc-shop-supply .msc-supply-group-children {
+    display: grid;
+    gap: .55rem;
+    padding: .65rem 0 .15rem 1.15rem;
+  }
+
+  .msc-shop-supply .msc-supply-group-children[hidden] {
+    display: none !important;
+  }
+
+  .msc-shop-supply .msc-supply-group-children .msc-supply-bay {
+    min-height: 4.7rem !important;
+    padding: 0 .9rem !important;
+    border-radius: 11px !important;
+    background: rgba(16,40,45,.055) !important;
+  }
+
+  .msc-shop-supply .msc-supply-group-children .msc-supply-bay__name {
+    font-size: 1.02rem !important;
+    letter-spacing: .045em !important;
+  }
+
+  .msc-shop-supply .msc-supply-group-children .msc-supply-bay__status {
+    font-size: .72rem !important;
+  }
+
+  .msc-shop-supply .msc-supply-group-empty {
+    padding: .9rem 1rem;
+    border-left: 1px solid rgba(212,190,153,.22);
+    color: rgba(212,190,153,.55);
+    font-size: .72rem;
+    letter-spacing: .1em;
+  }
+
+  .msc-shop-supply .msc-supply-hierarchy-prompt {
+    min-height: 210px;
+    display: grid;
+    place-items: center;
+    padding: 2rem;
+    border: 1px solid rgba(212,190,153,.16);
+    border-radius: 14px;
+    color: rgba(212,190,153,.72);
+    background:
+      linear-gradient(rgba(212,190,153,.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212,190,153,.025) 1px, transparent 1px),
+      rgba(16,40,45,.055);
+    background-size: 28px 28px, 28px 28px, auto;
+    font-size: .88rem;
+    font-weight: 700;
+    letter-spacing: .11em;
+    text-align: center;
+  }
+
+  @media screen and (max-width: 800px) {
+    .msc-shop-supply .msc-supply-group-list {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .msc-shop-supply .msc-supply-group-toggle,
+    .msc-shop-supply .msc-supply-group-toggle__chevron {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+(() => {
+  const source = document.querySelector('[data-msc-shop-hierarchy-source][data-section-id="{{ section.id }}"]');
+  const root = document.querySelector('.msc-shop-supply[data-msc-shop-supply]');
+  if (!source || !root || root.dataset.supplyHierarchy === '{{ section.id }}') return;
+
+  const navTemplate = source.querySelector('[data-msc-shop-hierarchy-nav]');
+  const panelTemplate = source.querySelector('[data-msc-shop-hierarchy-panels]');
+  const navHost = root.querySelector('.msc-supply-console__bays');
+  const panelHost = root.querySelector('.msc-supply-inspection');
+  if (!navTemplate || !panelTemplate || !navHost || !panelHost) return;
+
+  navHost.replaceChildren(navTemplate.content.cloneNode(true));
+  panelHost.replaceChildren(panelTemplate.content.cloneNode(true));
+  navHost.removeAttribute('role');
+  root.dataset.supplyHierarchy = '{{ section.id }}';
+
+  const groupButtons = [...root.querySelectorAll('[data-shop-group]')];
+  const childGroups = [...root.querySelectorAll('[data-group-children]')];
+  const bays = [...root.querySelectorAll('[data-shop-bay]')];
+  const panels = [...root.querySelectorAll('[data-bay-panel]')];
+  const groupPanels = [...root.querySelectorAll('[data-group-panel]')];
+
+  const indexStatus = root.querySelector('.msc-supply-console__index-head span:last-child');
+  if (indexStatus) indexStatus.textContent = '04 CHANNELS';
+
+  groupButtons.forEach((button) => {
+    const groupId = button.dataset.groupId;
+    const count = bays.filter((bay) => bay.dataset.groupId === groupId).length;
+    const countNode = button.querySelector('[data-group-count]');
+    if (!countNode) return;
+    const noun = groupId === 'msc' || groupId === 'bitcoin'
+      ? (count === 1 ? 'CATEGORY' : 'CATEGORIES')
+      : (count === 1 ? 'PROJECT' : 'PROJECTS');
+    countNode.textContent = `${String(count).padStart(2, '0')} ${noun}`;
+  });
+
+  function setGroup(groupId) {
+    groupButtons.forEach((button) => {
+      const active = button.dataset.groupId === groupId;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-expanded', active ? 'true' : 'false');
+    });
+
+    childGroups.forEach((group) => {
+      group.hidden = group.dataset.groupChildren !== groupId;
+    });
+
+    bays.forEach((bay) => {
+      bay.classList.remove('is-active');
+      bay.setAttribute('aria-pressed', 'false');
+    });
+
+    panels.forEach((panel) => {
+      panel.hidden = true;
+      panel.classList.remove('is-active');
+    });
+
+    groupPanels.forEach((panel) => {
+      const active = panel.dataset.groupPanel === groupId;
+      panel.hidden = !active;
+      panel.classList.toggle('is-active', active);
+    });
+  }
+
+  function inspect(panelId, groupId) {
+    groupButtons.forEach((button) => {
+      const active = button.dataset.groupId === groupId;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-expanded', active ? 'true' : 'false');
+    });
+
+    childGroups.forEach((group) => {
+      group.hidden = group.dataset.groupChildren !== groupId;
+    });
+
+    bays.forEach((bay) => {
+      const active = bay.dataset.panelId === panelId;
+      bay.classList.toggle('is-active', active);
+      bay.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+
+    groupPanels.forEach((panel) => {
+      panel.hidden = true;
+      panel.classList.remove('is-active');
+    });
+
+    panels.forEach((panel) => {
+      const active = panel.dataset.bayPanel === panelId;
+      panel.hidden = !active;
+      panel.classList.toggle('is-active', active);
+    });
+  }
+
+  groupButtons.forEach((button) => {
+    button.addEventListener('click', () => setGroup(button.dataset.groupId));
+  });
+
+  bays.forEach((bay) => {
+    const open = () => inspect(bay.dataset.panelId, bay.dataset.groupId);
+    bay.addEventListener('click', open);
+    bay.addEventListener('mouseenter', open);
+    bay.addEventListener('focus', open);
+  });
+
+  root.querySelectorAll('[data-variant-select]').forEach((select) => {
+    select.addEventListener('change', () => {
+      const card = select.closest('[data-supply-product]');
+      const price = card && card.querySelector('[data-product-price]');
+      const option = select.options[select.selectedIndex];
+      if (price && option && option.dataset.price) price.textContent = option.dataset.price;
+    });
+  });
+
+  setGroup('msc');
+})();
+</script>
+
+{% schema %}
+{
+  "name": "MSC Shop hierarchy",
+  "tag": "section",
+  "class": "msc-shop-hierarchy-section",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "collection_route",
+      "name": "Collection route",
+      "limit": 24,
+      "settings": [
+        {
+          "type": "select",
+          "id": "group",
+          "label": "Parent shop group",
+          "options": [
+            { "value": "msc", "label": "MSC" },
+            { "value": "bitcoin", "label": "Bitcoin" },
+            { "value": "ordinals", "label": "Ordinals" },
+            { "value": "runes", "label": "Runes" }
+          ],
+          "default": "msc"
+        },
+        { "type": "collection", "id": "collection", "label": "Shopify product collection" },
+        { "type": "text", "id": "title", "label": "Display title" },
+        { "type": "text", "id": "code", "label": "Catalog code", "default": "COLL / 001" },
+        { "type": "text", "id": "status", "label": "Status", "default": "ROUTE PENDING" },
+        { "type": "textarea", "id": "description", "label": "Description" },
+        { "type": "url", "id": "link", "label": "Fallback page link when no Shopify collection is assigned" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "MSC Shop hierarchy"
+    }
+  ]
+}
+{% endschema %}
