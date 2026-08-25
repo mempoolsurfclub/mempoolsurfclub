@@ -34,12 +34,19 @@
     "tools_market_activity": {
       "type": "msc-tools-market-activity",
       "settings": {}
+    },
+    "api_efficiency": {
+      "type": "msc-api-efficiency",
+      "settings": {
+        "context": "tools"
+      }
     }
   },
   "order": [
     "main",
     "msc_surf_report",
     "tools_market_layout",
-    "tools_market_activity"
+    "tools_market_activity",
+    "api_efficiency"
   ]
 }
