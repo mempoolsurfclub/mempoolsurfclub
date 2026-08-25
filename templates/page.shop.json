@@ -2,34 +2,6 @@
   "sections": {
     "shop_supply": {
       "type": "msc-shop-supply-locker-v2",
-      "blocks": {
-        "wishy": {
-          "type": "collection_bay",
-          "settings": {
-            "collection": "wishy",
-            "title": "WISHY",
-            "code": "COLL / 001",
-            "status": "ACTIVE",
-            "description": "Apparel and objects from the Wishy collection.",
-            "link": "/collections/wishy"
-          }
-        },
-        "billy": {
-          "type": "collection_bay",
-          "settings": {
-            "collection": "",
-            "title": "BILLY",
-            "code": "COLL / 002",
-            "status": "INDEXED",
-            "description": "Collection archive and releases from Billy.",
-            "link": "/pages/billy-1"
-          }
-        }
-      },
-      "block_order": [
-        "wishy",
-        "billy"
-      ],
       "settings": {
         "eyebrow": "MSC SHOP // FIELD SUPPLY",
         "heading": "SHOP THE BITCOIN CURRENT.",
@@ -38,6 +10,131 @@
         "primary_link": "/collections/all",
         "secondary_label": "Browse collections"
       }
+    },
+    "shop_hierarchy": {
+      "type": "msc-shop-supply-hierarchy",
+      "blocks": {
+        "msc_headwear": {
+          "type": "collection_route",
+          "settings": {
+            "group": "msc",
+            "collection": "",
+            "title": "HEADWEAR",
+            "code": "MSC / HEAD",
+            "status": "ROUTE PENDING",
+            "description": "",
+            "link": ""
+          }
+        },
+        "msc_tshirts": {
+          "type": "collection_route",
+          "settings": {
+            "group": "msc",
+            "collection": "",
+            "title": "T-SHIRTS",
+            "code": "MSC / TEES",
+            "status": "ROUTE PENDING",
+            "description": "",
+            "link": ""
+          }
+        },
+        "msc_outerwear": {
+          "type": "collection_route",
+          "settings": {
+            "group": "msc",
+            "collection": "",
+            "title": "OUTERWEAR",
+            "code": "MSC / OUTER",
+            "status": "ROUTE PENDING",
+            "description": "",
+            "link": ""
+          }
+        },
+        "msc_accessories": {
+          "type": "collection_route",
+          "settings": {
+            "group": "msc",
+            "collection": "",
+            "title": "ACCESSORIES",
+            "code": "MSC / ACC",
+            "status": "ROUTE PENDING",
+            "description": "",
+            "link": ""
+          }
+        },
+        "bitcoin_headwear": {
+          "type": "collection_route",
+          "settings": {
+            "group": "bitcoin",
+            "collection": "",
+            "title": "HEADWEAR",
+            "code": "BTC / HEAD",
+            "status": "ROUTE PENDING",
+            "description": "",
+            "link": ""
+          }
+        },
+        "bitcoin_tshirts": {
+          "type": "collection_route",
+          "settings": {
+            "group": "bitcoin",
+            "collection": "",
+            "title": "T-SHIRTS",
+            "code": "BTC / TEES",
+            "status": "ROUTE PENDING",
+            "description": "",
+            "link": ""
+          }
+        },
+        "bitcoin_outerwear": {
+          "type": "collection_route",
+          "settings": {
+            "group": "bitcoin",
+            "collection": "",
+            "title": "OUTERWEAR",
+            "code": "BTC / OUTER",
+            "status": "ROUTE PENDING",
+            "description": "",
+            "link": ""
+          }
+        },
+        "bitcoin_accessories": {
+          "type": "collection_route",
+          "settings": {
+            "group": "bitcoin",
+            "collection": "",
+            "title": "ACCESSORIES",
+            "code": "BTC / ACC",
+            "status": "ROUTE PENDING",
+            "description": "",
+            "link": ""
+          }
+        },
+        "runes_billion_dollar_cat": {
+          "type": "collection_route",
+          "settings": {
+            "group": "runes",
+            "collection": "",
+            "title": "BILLION DOLLAR CAT",
+            "code": "RUNES / BDC",
+            "status": "COLLAB PENDING",
+            "description": "MSC collaboration merchandise for Billion Dollar Cat.",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "msc_headwear",
+        "msc_tshirts",
+        "msc_outerwear",
+        "msc_accessories",
+        "bitcoin_headwear",
+        "bitcoin_tshirts",
+        "bitcoin_outerwear",
+        "bitcoin_accessories",
+        "runes_billion_dollar_cat"
+      ],
+      "settings": {}
     },
     "shop_locker_ux": {
       "type": "msc-shop-supply-locker-ux-patch",
@@ -57,6 +154,7 @@
   },
   "order": [
     "shop_supply",
+    "shop_hierarchy",
     "shop_locker_ux",
     "shop_visual_system",
     "shop_hero_alignment",
