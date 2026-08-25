@@ -1,0 +1,177 @@
+<style>
+  /* Tools cockpit visual-system alignment.
+   * Visual only: preserve market data, chart geometry, rails, launches,
+   * search behavior, and existing responsive structure.
+   */
+
+  body [data-msc-ecosystem-radar].msc-tools-cockpit {
+    border-color: rgba(212, 190, 153, .42) !important;
+    background:
+      linear-gradient(rgba(212,190,153,.032) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212,190,153,.032) 1px, transparent 1px),
+      radial-gradient(circle at 50% 42%, rgba(212,190,153,.085), transparent 40%),
+      linear-gradient(145deg, rgba(18, 53, 60, .94), rgba(24, 63, 70, .88)) !important;
+    background-size: 34px 34px, 34px 34px, auto, auto !important;
+    box-shadow:
+      0 24px 68px rgba(5, 20, 24, .24),
+      inset 0 1px 0 rgba(251,248,239,.035) !important;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-cockpit__topline {
+    border-color: rgba(212,190,153,.22) !important;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-cockpit__status-title,
+  body [data-msc-ecosystem-radar] .msc-tools-cockpit__system {
+    color: rgba(251,248,239,.94) !important;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-cockpit__status-subtitle {
+    color: rgba(212,190,153,.82) !important;
+  }
+
+  /* Treat the cockpit as one instrument with internal divisions instead of
+   * a collection of dark dashboard cards. */
+  body [data-msc-ecosystem-radar] .msc-tools-readout,
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity,
+  body [data-msc-ecosystem-radar] .msc-tools-price,
+  body [data-msc-ecosystem-radar] .msc-tools-launch,
+  body [data-msc-ecosystem-radar] .msc-tools-cockpit__search {
+    border-color: rgba(212,190,153,.22) !important;
+    background: rgba(16,40,45,.24) !important;
+    box-shadow: inset 0 1px 0 rgba(251,248,239,.018);
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-readout,
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity,
+  body [data-msc-ecosystem-radar] .msc-tools-launch {
+    border-radius: 15px !important;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-price {
+    border-color: rgba(212,190,153,.32) !important;
+    background:
+      radial-gradient(circle at 54% 42%, rgba(212,190,153,.075), transparent 44%),
+      linear-gradient(180deg, rgba(34,76,84,.42), rgba(16,40,45,.2)) !important;
+    box-shadow:
+      inset 0 1px 0 rgba(251,248,239,.022),
+      0 12px 32px rgba(5,20,24,.08);
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-cockpit__search {
+    border-color: rgba(212,190,153,.22) !important;
+    background: rgba(9,31,36,.22) !important;
+  }
+
+  /* Shared MSC label hierarchy: muted sand instrumentation, warm cream
+   * primary values, and restrained contrast. */
+  body [data-msc-ecosystem-radar] .msc-tools-readout__label,
+  body [data-msc-ecosystem-radar] .msc-tools-price__label,
+  body [data-msc-ecosystem-radar] .msc-tools-price__meta-label,
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity__label {
+    color: rgba(212,190,153,.68) !important;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-readout__value,
+  body [data-msc-ecosystem-radar] .msc-tools-price__value,
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity__name {
+    color: rgba(251,248,239,.94) !important;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-readout__note,
+  body [data-msc-ecosystem-radar] .msc-tools-price__change,
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity__context,
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity__status,
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity__meta,
+  body [data-msc-ecosystem-radar] .msc-tools-cockpit__search-label {
+    color: rgba(212,190,153,.86) !important;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity__updated {
+    color: rgba(212,190,153,.48) !important;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity__row,
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity__footer,
+  body [data-msc-ecosystem-radar] .msc-tools-price__meta-item {
+    border-color: rgba(212,190,153,.14) !important;
+  }
+
+  /* Keep the market trace technical and cartographic rather than bright UI. */
+  body [data-msc-ecosystem-radar] .msc-tools-trace__axis-grid {
+    stroke: rgba(212,190,153,.14) !important;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-trace__axis-grid--time {
+    stroke: rgba(212,190,153,.085) !important;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-trace__axis-domain {
+    stroke: rgba(212,190,153,.24) !important;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-trace__path {
+    stroke: rgba(212,190,153,.86) !important;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-axis-overlay__label--price {
+    color: rgba(251,248,239,.72) !important;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-axis-overlay__label--time {
+    color: rgba(212,190,153,.68) !important;
+  }
+
+  /* Launch controls should read like instrument controls, not five separate
+   * white dashboard buttons. Preserve their exact layout and destinations. */
+  body [data-msc-ecosystem-radar] .msc-tools-launch {
+    color: rgba(251,248,239,.9) !important;
+    font-weight: 700 !important;
+    letter-spacing: .055em !important;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-launch:hover,
+  body [data-msc-ecosystem-radar] .msc-tools-launch:focus-visible {
+    border-color: rgba(212,190,153,.46) !important;
+    background: rgba(212,190,153,.075) !important;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-launch:focus-visible {
+    outline: 2px solid rgba(212,190,153,.9);
+    outline-offset: 2px;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-cockpit__search input {
+    color: rgba(251,248,239,.9) !important;
+  }
+
+  body [data-msc-ecosystem-radar] .msc-tools-cockpit__search input::placeholder {
+    color: rgba(251,248,239,.42) !important;
+  }
+
+  /* Keep solid sand reserved for the single primary search action. */
+  body [data-msc-ecosystem-radar] .msc-tools-cockpit__search button {
+    border-color: rgba(212,190,153,.9) !important;
+    background: rgba(212,190,153,.92) !important;
+    color: #10282d !important;
+    box-shadow: 0 0 18px rgba(212,190,153,.08);
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    body [data-msc-ecosystem-radar].msc-tools-cockpit {
+      background-color: #173c43 !important;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Tools visual system",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Tools visual system"
+    }
+  ]
+}
+{% endschema %}
