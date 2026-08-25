@@ -21,7 +21,7 @@
     const scriptUrl = new URL(script.src);
     const reviewUrl = new URL('msc-learn-sounder-readability.css', scriptUrl);
     reviewUrl.search = scriptUrl.search;
-    reviewUrl.searchParams.set('msc_readability_rev', 'v2');
+    reviewUrl.searchParams.set('msc_readability_rev', 'v3');
 
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -134,7 +134,7 @@
       return {
         group,
         sourceTitle,
-        title: meta.displayTitle || sourceTitle,
+        title: (meta.displayTitle || sourceTitle).toUpperCase(),
         description,
         subcategories,
         href: existingGuideLink || meta.fallbackHref,
