@@ -1,0 +1,78 @@
+<style>
+  /* Shared MSC instrument-label typography.
+   * Learn SONAR depth labels are the reference: warm sand, compact uppercase,
+   * deliberate weight, and restrained tracking. This layer only normalizes
+   * similarly sized primary technical labels; smaller metadata stays quiet.
+   */
+
+  .shopify-section.msc-widget-label-typography-section {
+    display: contents;
+  }
+
+  /* Home Radar — primary sand system label only. */
+  @media screen and (min-width: 741px) {
+    .msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__labels > span:first-child::after {
+      color: rgba(212, 190, 153, .88) !important;
+      font-size: .92rem !important;
+      font-weight: 780 !important;
+      line-height: 1 !important;
+      letter-spacing: .12em !important;
+      text-transform: uppercase;
+    }
+  }
+
+  /* Explore Atlas — primary cartographic/instrument labels around .9rem. */
+  .msc-explore-atlas-shell .msc-atlas-window__identity span,
+  .msc-explore-atlas-shell .msc-atlas-window__readout span,
+  .msc-explore-atlas-shell .msc-atlas-window__coord,
+  .msc-explore-atlas-shell .msc-atlas-inspect__kicker,
+  .msc-explore-atlas-shell .msc-atlas-inspect__meta {
+    color: rgba(212, 190, 153, .88) !important;
+    font-size: .92rem !important;
+    font-weight: 780 !important;
+    line-height: 1 !important;
+    letter-spacing: .12em !important;
+    text-transform: uppercase;
+  }
+
+  /* Tools Cockpit — primary instrument labels, not values or small telemetry. */
+  body [data-msc-ecosystem-radar] .msc-tools-cockpit__status-subtitle,
+  body [data-msc-ecosystem-radar] .msc-tools-readout__label,
+  body [data-msc-ecosystem-radar] .msc-tools-price__label,
+  body [data-msc-ecosystem-radar] .msc-tools-price__meta-label,
+  body [data-msc-ecosystem-radar] .msc-tools-market-activity__label,
+  body [data-msc-ecosystem-radar] .msc-tools-cockpit__search-label {
+    color: rgba(212, 190, 153, .88) !important;
+    font-size: .92rem !important;
+    font-weight: 780 !important;
+    line-height: 1 !important;
+    letter-spacing: .12em !important;
+    text-transform: uppercase;
+  }
+
+  /* Shop Supply Locker — primary bay/system labels only. */
+  .msc-shop-supply .msc-supply-console__index-head,
+  .msc-shop-supply .msc-supply-inspection__top,
+  .msc-shop-supply .msc-supply-console__signal {
+    color: rgba(212, 190, 153, .88) !important;
+    font-size: .92rem !important;
+    font-weight: 780 !important;
+    line-height: 1 !important;
+    letter-spacing: .12em !important;
+    text-transform: uppercase;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "MSC widget label type",
+  "tag": "section",
+  "class": "msc-widget-label-typography-section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "MSC widget label type"
+    }
+  ]
+}
+{% endschema %}
