@@ -157,6 +157,21 @@
     box-shadow: 0 0 18px rgba(212,190,153,.08);
   }
 
+  /* Desktop search bay should use the same vertical rhythm as the five
+   * launch controls above it. Keep the existing row gap and horizontal inset. */
+  @media screen and (min-width: 991px) {
+    body [data-msc-ecosystem-radar] .msc-tools-cockpit__search {
+      min-height: 5.5rem !important;
+      padding-block: .45rem !important;
+      box-sizing: border-box;
+    }
+
+    body [data-msc-ecosystem-radar] .msc-tools-cockpit__search input,
+    body [data-msc-ecosystem-radar] .msc-tools-cockpit__search button {
+      padding-block: .65rem !important;
+    }
+  }
+
   @media (prefers-reduced-transparency: reduce) {
     body [data-msc-ecosystem-radar].msc-tools-cockpit {
       background-color: #173c43 !important;
