@@ -1,0 +1,98 @@
+<style>
+  /* Focused hierarchy correction: remove serial numbering and keep every
+   * parent channel collapsed until the shopper chooses to open it. */
+  .msc-shop-supply .msc-supply-group-toggle__number,
+  .msc-shop-supply .msc-supply-group-children .msc-supply-bay__number {
+    display: none !important;
+  }
+
+  .msc-shop-supply .msc-supply-group-toggle {
+    grid-template-columns: minmax(0, 1fr) auto 1.1rem !important;
+  }
+
+  .msc-shop-supply .msc-supply-group-children .msc-supply-bay {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+  }
+</style>
+
+<script>
+(() => {
+  const root = document.querySelector('.msc-shop-supply[data-msc-shop-supply]');
+  if (!root || root.dataset.supplyCollapsedNav === 'v1') return;
+
+  const groupButtons = [...root.querySelectorAll('[data-shop-group]')];
+  const childGroups = [...root.querySelectorAll('[data-group-children]')];
+  const bays = [...root.querySelectorAll('[data-shop-bay]')];
+  const panels = [...root.querySelectorAll('[data-bay-panel]')];
+  const groupPanels = [...root.querySelectorAll('[data-group-panel]')];
+  if (!groupButtons.length || !childGroups.length) return;
+
+  root.dataset.supplyCollapsedNav = 'v1';
+
+  root.querySelectorAll('.msc-supply-group-toggle__number, .msc-supply-group-children .msc-supply-bay__number')
+    .forEach((node) => node.remove());
+
+  const showGroupPanel = (groupId) => {
+    bays.forEach((bay) => {
+      bay.classList.remove('is-active');
+      bay.setAttribute('aria-pressed', 'false');
+    });
+
+    panels.forEach((panel) => {
+      panel.hidden = true;
+      panel.classList.remove('is-active');
+    });
+
+    groupPanels.forEach((panel) => {
+      const active = panel.dataset.groupPanel === groupId;
+      panel.hidden = !active;
+      panel.classList.toggle('is-active', active);
+    });
+
+    groupButtons.forEach((candidate) => {
+      candidate.classList.toggle('is-active', candidate.dataset.groupId === groupId);
+    });
+  };
+
+  /* Preserve MSC as the landing Inspection Bay, but do not expose its child
+   * routes until the shopper explicitly opens the MSC tile. */
+  groupButtons.forEach((button) => button.setAttribute('aria-expanded', 'false'));
+  childGroups.forEach((group) => { group.hidden = true; });
+  showGroupPanel('msc');
+
+  groupButtons.forEach((button) => {
+    button.addEventListener('click', (event) => {
+      /* The hierarchy section already registered a click handler. Capture this
+       * click first so the parent tile behaves as a true open/close accordion. */
+      event.stopImmediatePropagation();
+
+      const groupId = button.dataset.groupId;
+      const wasOpen = button.getAttribute('aria-expanded') === 'true';
+
+      groupButtons.forEach((candidate) => candidate.setAttribute('aria-expanded', 'false'));
+      childGroups.forEach((group) => { group.hidden = true; });
+      showGroupPanel(groupId);
+
+      if (!wasOpen) {
+        button.setAttribute('aria-expanded', 'true');
+        const children = childGroups.find((group) => group.dataset.groupChildren === groupId);
+        if (children) children.hidden = false;
+      }
+    }, true);
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "MSC Shop collapsed nav",
+  "tag": "section",
+  "class": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "MSC Shop collapsed nav"
+    }
+  ]
+}
+{% endschema %}
