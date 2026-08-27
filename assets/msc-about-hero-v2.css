@@ -1,80 +1,92 @@
-/* About hero v3 — visual lock to the approved MSC page + widget system. */
+/* About hero v4 — clean MSC intro + full-width charter system. */
 
-.msc-about {
-  padding-top: clamp(4.8rem, 6.5vw, 6.8rem);
+.msc-shell.msc-about {
+  padding-top: 5.5rem;
 }
 
-.msc-about-hero {
+.msc-shell.msc-about .msc-about-hero {
+  display: block !important;
+  grid-template-columns: none !important;
+  gap: 0 !important;
+  align-items: initial !important;
+}
+
+.msc-shell.msc-about .msc-about-hero__content {
   display: block;
-}
-
-.msc-about-hero__content {
-  min-width: 0;
+  width: 100%;
   max-width: none;
   margin: 0;
 }
 
-.msc-about-hero__title {
+.msc-shell.msc-about .msc-about-hero__content .msc-eyebrow {
+  margin: 0 0 1.35rem;
+}
+
+.msc-shell.msc-about .msc-about-hero__title {
   max-width: none;
   margin: 0;
   color: var(--msc-sand) !important;
-  font-size: clamp(4.6rem, 4.75vw, 5.8rem) !important;
-  line-height: .9 !important;
+  font-size: clamp(4.2rem, 4.35vw, 5.2rem) !important;
+  line-height: .92 !important;
   letter-spacing: -.06em !important;
   text-wrap: balance;
 }
 
-.msc-about-hero__copy {
+.msc-shell.msc-about .msc-about-hero__copy {
   width: 100%;
   max-width: none;
   margin: 0;
-  color: rgba(251, 248, 239, .72);
+  color: rgba(251,248,239,.72);
+  font-size: clamp(1.5rem, 1.55vw, 1.75rem);
+  line-height: 1.5;
 }
 
-.msc-about-hero__copy p {
+.msc-shell.msc-about .msc-about-hero__copy p {
   margin: 0;
 }
 
-.msc-about-hero__index {
-  display: none;
+.msc-shell.msc-about .msc-about-hero__index {
+  display: none !important;
 }
 
-.msc-about-charter {
-  --msc-about-edge: rgba(212, 190, 153, .28);
-  --msc-about-edge-mid: rgba(212, 190, 153, .18);
-  --msc-about-edge-soft: rgba(212, 190, 153, .10);
-  --msc-about-cream: rgba(251, 248, 239, .94);
-  --msc-about-cream-soft: rgba(251, 248, 239, .72);
-  --msc-about-cream-faint: rgba(251, 248, 239, .52);
-  --msc-about-sand: rgba(212, 190, 153, .88);
-  --msc-about-sand-soft: rgba(212, 190, 153, .64);
+.msc-shell.msc-about .msc-about-charter {
+  --msc-about-edge: rgba(212,190,153,.28);
+  --msc-about-edge-mid: rgba(212,190,153,.18);
+  --msc-about-edge-soft: rgba(212,190,153,.10);
+  --msc-about-cream: rgba(251,248,239,.94);
+  --msc-about-cream-soft: rgba(251,248,239,.72);
+  --msc-about-cream-faint: rgba(251,248,239,.52);
+  --msc-about-sand: rgba(212,190,153,.88);
+  --msc-about-sand-soft: rgba(212,190,153,.64);
   position: relative;
-  width: 100%;
-  min-height: 0;
-  margin-top: clamp(2.4rem, 3vw, 3.2rem);
-  padding: clamp(1.25rem, 1.9vw, 1.8rem);
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 2rem 0 0 !important;
+  padding: clamp(1.25rem,1.9vw,1.8rem);
   overflow: hidden;
   border: 1px solid var(--msc-about-edge);
   border-radius: 30px;
   background:
     linear-gradient(rgba(251,248,239,.008) 1px, transparent 1px),
     linear-gradient(90deg, rgba(251,248,239,.008) 1px, transparent 1px),
-    radial-gradient(circle at 48% 34%, rgba(78,107,113,.12), transparent 46%),
+    radial-gradient(circle at 48% 30%, rgba(78,107,113,.11), transparent 45%),
     linear-gradient(180deg, rgba(33,70,77,.86), rgba(23,56,63,.90));
-  background-size: 34px 34px, 34px 34px, auto, auto;
+  background-size: 34px 34px,34px 34px,auto,auto;
   box-shadow:
-    0 24px 70px rgba(8, 25, 33, .16),
-    inset 0 1px 0 rgba(251, 248, 239, .025);
+    0 24px 70px rgba(8,25,33,.16),
+    inset 0 1px 0 rgba(251,248,239,.025);
   color: var(--msc-about-cream);
 }
 
-.msc-about-charter::before {
-  content: none;
+.msc-shell.msc-about .msc-about-charter::before {
+  content: none !important;
 }
 
-.msc-about-charter__topbar {
+.msc-shell.msc-about .msc-about-charter__topbar {
   position: relative;
-  z-index: 3;
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -84,16 +96,16 @@
   border-bottom: 1px solid var(--msc-about-edge-mid);
 }
 
-.msc-about-charter__identity,
-.msc-about-charter__code {
+.msc-shell.msc-about .msc-about-charter__identity,
+.msc-shell.msc-about .msc-about-charter__code {
   display: inline-flex;
   align-items: baseline;
-  gap: .8rem;
+  gap: .7rem;
   margin: 0;
   text-transform: uppercase;
 }
 
-.msc-about-charter__identity strong {
+.msc-shell.msc-about .msc-about-charter__identity strong {
   color: var(--msc-about-cream);
   font-size: 1.3rem;
   font-weight: 650;
@@ -101,367 +113,369 @@
   letter-spacing: .09em;
 }
 
-.msc-about-charter__identity span {
+.msc-shell.msc-about .msc-about-charter__identity span {
   color: var(--msc-about-sand);
-  font-size: .94rem;
+  font-size: .92rem;
   font-weight: 650;
   line-height: 1.1;
   letter-spacing: .14em;
 }
 
-.msc-about-charter__code {
+.msc-shell.msc-about .msc-about-charter__code {
   color: var(--msc-about-cream);
-  font-size: 1rem;
+  font-size: .98rem;
   font-weight: 650;
   line-height: 1.1;
   letter-spacing: .16em;
-  text-align: right;
   white-space: nowrap;
 }
 
-.msc-about-charter__map {
+.msc-shell.msc-about .msc-about-charter__map {
   position: relative;
-  min-height: 35rem;
-  margin-top: clamp(1rem, 1.5vw, 1.4rem);
-  padding: clamp(1.5rem, 2vw, 2rem);
+  display: flex !important;
+  flex-direction: column;
+  min-height: 0 !important;
+  margin-top: clamp(1rem,1.5vw,1.4rem);
+  padding: 0 !important;
   overflow: hidden;
   border: 1px solid var(--msc-about-edge-mid);
   border-radius: 22px;
   background:
-    linear-gradient(rgba(251,248,239,.014) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(251,248,239,.014) 1px, transparent 1px),
-    radial-gradient(circle at 24% 14%, rgba(212,190,153,.065), transparent 31%),
-    radial-gradient(circle at 78% 72%, rgba(78,107,113,.15), transparent 42%),
+    linear-gradient(rgba(251,248,239,.012) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(251,248,239,.012) 1px, transparent 1px),
+    radial-gradient(circle at 24% 12%, rgba(212,190,153,.055), transparent 30%),
+    radial-gradient(circle at 78% 72%, rgba(78,107,113,.14), transparent 42%),
     linear-gradient(180deg, rgba(30,68,76,.60) 0%, rgba(19,49,57,.78) 48%, rgba(8,25,33,.94) 100%);
-  background-size: 34px 34px, 34px 34px, auto, auto, auto;
+  background-size: 34px 34px,34px 34px,auto,auto,auto;
   box-shadow:
     inset 0 1px 0 rgba(251,248,239,.018),
     0 12px 30px rgba(4,15,21,.08);
 }
 
-.msc-about-charter__connectors {
-  position: absolute;
-  inset: 2rem;
-  z-index: 0;
-  width: calc(100% - 4rem);
-  height: calc(100% - 4rem);
-  overflow: visible;
-  pointer-events: none;
+.msc-shell.msc-about .msc-about-charter__connectors {
+  display: none !important;
 }
 
-.msc-about-charter__connectors path {
-  fill: none;
-  stroke: rgba(212, 190, 153, .105);
-  stroke-width: .8;
-  stroke-dasharray: 2.2 2.8;
-  vector-effect: non-scaling-stroke;
+.msc-shell.msc-about .msc-about-charter__source {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  z-index: 1;
+  display: flex !important;
+  width: 100% !important;
+  min-height: 8.6rem;
+  aspect-ratio: auto !important;
+  margin: 0 !important;
+  padding: 1.45rem clamp(1.5rem,2.2vw,2.2rem);
+  align-items: center;
+  justify-content: center;
+  transform: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: rgba(8,25,33,.12) !important;
+  box-shadow: none !important;
+  text-align: left !important;
 }
 
-.msc-about-charter__connectors circle {
-  fill: rgba(212, 190, 153, .42);
-}
-
-.msc-about-charter__source {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 2;
-  display: grid;
-  place-items: center;
-  width: 10.2rem;
-  aspect-ratio: 1;
-  transform: translate(-50%, -50%);
-  border: 1px solid var(--msc-about-edge-mid);
-  border-radius: 50%;
-  background: rgba(8, 25, 33, .90);
-  box-shadow:
-    0 0 0 1rem rgba(212,190,153,.018),
-    0 0 0 2rem rgba(212,190,153,.010),
-    0 12px 30px rgba(4,15,21,.10);
-  text-align: center;
-}
-
-.msc-about-charter__source::after {
+.msc-shell.msc-about .msc-about-charter__source::after {
   content: "";
   position: absolute;
-  inset: -.75rem;
-  border: 1px solid var(--msc-about-edge-soft);
-  border-radius: 50%;
-  animation: mscAboutSourcePulse 5.4s ease-in-out infinite;
+  left: 50%;
+  bottom: 0;
+  width: 1px;
+  height: 1.4rem;
+  border: 0;
+  border-radius: 0;
+  background: rgba(212,190,153,.22);
+  transform: translateX(-50%);
+  animation: none !important;
 }
 
-.msc-about-charter__bitcoin {
+.msc-shell.msc-about .msc-about-charter__source > div {
+  display: grid;
+  grid-template-columns: 3.2rem auto;
+  grid-template-areas:
+    "mark label"
+    "mark detail";
+  column-gap: 1.15rem;
+  align-items: center;
+}
+
+.msc-shell.msc-about .msc-about-charter__bitcoin {
+  grid-area: mark;
   display: block;
-  width: 3.2rem;
-  height: 4.15rem;
-  margin: 0 auto .45rem;
+  width: 2.55rem;
+  height: 3.35rem;
+  margin: 0;
   fill: var(--msc-about-sand);
 }
 
-.msc-about-charter__source strong,
-.msc-about-charter__source span {
+.msc-shell.msc-about .msc-about-charter__source strong {
+  grid-area: label;
   display: block;
+  color: var(--msc-about-cream);
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: .08em;
   text-transform: uppercase;
 }
 
-.msc-about-charter__source strong {
-  color: var(--msc-about-cream);
-  font-size: .95rem;
-  font-weight: 700;
-  letter-spacing: .11em;
-}
-
-.msc-about-charter__source span {
-  margin-top: .25rem;
+.msc-shell.msc-about .msc-about-charter__source span {
+  grid-area: detail;
+  display: block;
+  margin-top: .28rem;
   color: var(--msc-about-sand-soft);
-  font-size: .7rem;
-  font-weight: 700;
-  letter-spacing: .12em;
-}
-
-.msc-about-charter__stations {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 11.5rem clamp(13rem, 18vw, 22rem);
-}
-
-.msc-about-charter__station {
-  display: block;
-  width: min(100%, 30rem);
-  min-height: 8.8rem;
-  padding: 1.25rem 1.35rem;
-  border: 1px solid var(--msc-about-edge-soft);
-  border-radius: 14px;
-  background: rgba(8,25,33,.065);
-  box-shadow: none;
-  color: inherit;
-  text-align: left;
-  text-decoration: none;
-  transition: border-color .2s ease, background-color .2s ease, transform .2s ease;
-}
-
-.msc-about-charter__station:nth-child(odd) {
-  justify-self: start;
-}
-
-.msc-about-charter__station:nth-child(even) {
-  justify-self: end;
-  text-align: left;
-}
-
-.msc-about-charter__station:hover,
-.msc-about-charter__station:focus-visible {
-  border-color: rgba(212,190,153,.30);
-  background: rgba(212,190,153,.045);
-  transform: translateY(-1px);
-}
-
-.msc-about-charter__station:focus-visible {
-  outline: 2px solid var(--msc-sand);
-  outline-offset: 3px;
-}
-
-.msc-about-charter__station-code {
-  display: block;
-  margin-bottom: .7rem;
-  color: var(--msc-about-sand);
   font-size: .78rem;
   font-weight: 700;
+  line-height: 1.1;
   letter-spacing: .14em;
   text-transform: uppercase;
 }
 
-.msc-about-charter__station h2 {
-  margin: 0 0 .55rem;
-  color: var(--msc-about-cream);
-  font-size: clamp(1.05rem, 1.2vw, 1.3rem);
+.msc-shell.msc-about .msc-about-charter__stations {
+  position: relative;
+  z-index: 1;
+  display: grid !important;
+  grid-template-columns: repeat(4,minmax(0,1fr)) !important;
+  gap: 0 !important;
+  border-top: 1px solid var(--msc-about-edge-soft);
+}
+
+.msc-shell.msc-about .msc-about-charter__station,
+.msc-shell.msc-about .msc-about-charter__station:nth-child(odd),
+.msc-shell.msc-about .msc-about-charter__station:nth-child(even) {
+  display: block;
+  width: 100% !important;
+  min-width: 0;
+  min-height: 14rem;
+  padding: clamp(1.5rem,2vw,2rem);
+  justify-self: stretch !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: inherit;
+  text-align: left !important;
+  text-decoration: none;
+  transition: background-color .2s ease;
+}
+
+.msc-shell.msc-about .msc-about-charter__station + .msc-about-charter__station {
+  border-left: 1px solid var(--msc-about-edge-soft) !important;
+}
+
+.msc-shell.msc-about .msc-about-charter__station:hover,
+.msc-shell.msc-about .msc-about-charter__station:focus-visible {
+  background: rgba(212,190,153,.04) !important;
+  transform: none !important;
+}
+
+.msc-shell.msc-about .msc-about-charter__station:focus-visible {
+  outline: 2px solid var(--msc-sand);
+  outline-offset: -3px;
+}
+
+.msc-shell.msc-about .msc-about-charter__station-code {
+  display: block;
+  margin-bottom: .9rem;
+  color: var(--msc-about-sand);
+  font-size: .82rem;
   font-weight: 700;
-  letter-spacing: .04em;
-  line-height: 1.08;
+  line-height: 1.1;
+  letter-spacing: .14em;
   text-transform: uppercase;
 }
 
-.msc-about-charter__station p {
+.msc-shell.msc-about .msc-about-charter__station h2 {
+  max-width: 16ch;
+  margin: 0 0 .75rem;
+  color: var(--msc-about-cream);
+  font-size: clamp(1.3rem,1.45vw,1.6rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: .035em;
+  text-transform: uppercase;
+}
+
+.msc-shell.msc-about .msc-about-charter__station p {
+  max-width: 27ch;
   margin: 0;
   color: var(--msc-about-cream-soft);
-  font-size: .95rem;
-  line-height: 1.42;
+  font-size: clamp(1rem,1.05vw,1.12rem);
+  line-height: 1.5;
 }
 
-.msc-about-charter__footer {
+.msc-shell.msc-about .msc-about-charter__footer {
   position: relative;
-  z-index: 3;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(1rem, 1.5vw, 1.4rem);
-  min-height: 5.5rem;
-  margin-top: clamp(1rem, 1.5vw, 1.4rem);
-  border-top: 0;
-}
-
-.msc-about-charter__metric {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: .25rem;
-  min-width: 0;
-  padding: 1rem 1.15rem;
+  z-index: 2;
+  display: grid !important;
+  grid-template-columns: repeat(4,minmax(0,1fr)) !important;
+  gap: 0 !important;
+  min-height: 5.4rem;
+  margin-top: clamp(1rem,1.5vw,1.4rem);
   border: 1px solid var(--msc-about-edge-soft);
   border-radius: 14px;
   background: rgba(8,25,33,.14);
-  box-shadow: inset 0 1px 0 rgba(251,248,239,.012);
+  overflow: hidden;
 }
 
-.msc-about-charter__metric + .msc-about-charter__metric {
-  border-left: 1px solid var(--msc-about-edge-soft);
+.msc-shell.msc-about .msc-about-charter__metric {
+  display: flex;
+  min-width: 0;
+  padding: .95rem 1.1rem;
+  flex-direction: column;
+  justify-content: center;
+  gap: .28rem;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
-.msc-about-charter__metric span,
-.msc-about-charter__metric strong {
+.msc-shell.msc-about .msc-about-charter__metric + .msc-about-charter__metric {
+  border-left: 1px solid var(--msc-about-edge-soft) !important;
+}
+
+.msc-shell.msc-about .msc-about-charter__metric span,
+.msc-shell.msc-about .msc-about-charter__metric strong {
   text-transform: uppercase;
 }
 
-.msc-about-charter__metric span {
+.msc-shell.msc-about .msc-about-charter__metric span {
   color: var(--msc-about-sand-soft);
   font-size: .72rem;
   font-weight: 700;
   letter-spacing: .13em;
 }
 
-.msc-about-charter__metric strong {
+.msc-shell.msc-about .msc-about-charter__metric strong {
   color: var(--msc-about-cream-soft);
-  font-size: .84rem;
+  font-size: .86rem;
   font-weight: 700;
   letter-spacing: .07em;
 }
 
-@keyframes mscAboutSourcePulse {
-  0%, 100% { opacity: .28; transform: scale(.985); }
-  50% { opacity: .65; transform: scale(1.025); }
-}
-
 @media screen and (min-width: 761px) {
-  .msc-about-hero__content {
-    display: grid;
-    grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+  .msc-shell.msc-about .msc-about-hero__content {
+    display: grid !important;
+    grid-template-columns: minmax(0,.92fr) minmax(0,1.08fr) !important;
     grid-template-areas:
       "kicker kicker"
-      "title copy";
-    column-gap: clamp(3.2rem, 4vw, 4.8rem);
+      "title copy" !important;
+    column-gap: clamp(3.2rem,4vw,4.8rem);
     row-gap: 1.35rem;
     align-items: start;
   }
 
-  .msc-about-hero__content .msc-eyebrow {
+  .msc-shell.msc-about .msc-about-hero__content .msc-eyebrow {
     grid-area: kicker;
     justify-self: start;
     margin: 0 0 .25rem;
   }
 
-  .msc-about-hero__title {
+  .msc-shell.msc-about .msc-about-hero__title {
     grid-area: title;
     align-self: start;
   }
 
-  .msc-about-hero__copy {
+  .msc-shell.msc-about .msc-about-hero__copy {
     grid-area: copy;
     align-self: end;
   }
 }
 
-@media screen and (min-width: 1180px) {
-  .msc-about-hero__title {
-    font-size: clamp(5rem, 4.9vw, 6rem) !important;
-  }
-}
-
 @media screen and (max-width: 990px) {
-  .msc-about-charter__stations {
-    gap: 10.5rem 8rem;
+  .msc-shell.msc-about .msc-about-charter__stations {
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+  }
+
+  .msc-shell.msc-about .msc-about-charter__station:nth-child(3) {
+    border-left: 0 !important;
+    border-top: 1px solid var(--msc-about-edge-soft) !important;
+  }
+
+  .msc-shell.msc-about .msc-about-charter__station:nth-child(4) {
+    border-top: 1px solid var(--msc-about-edge-soft) !important;
   }
 }
 
 @media screen and (max-width: 760px) {
-  .msc-about {
+  .msc-shell.msc-about {
     padding-top: 4.2rem;
   }
 
-  .msc-about-hero__content {
-    display: block;
+  .msc-shell.msc-about .msc-about-hero__content {
+    display: block !important;
   }
 
-  .msc-about-hero__title {
-    margin: 1.45rem 0 1.2rem;
-    font-size: 4.2rem !important;
+  .msc-shell.msc-about .msc-about-hero__content .msc-eyebrow {
+    margin-bottom: 1.45rem;
   }
 
-  .msc-about-charter {
-    margin-top: 2.4rem;
-    padding: 1.25rem;
+  .msc-shell.msc-about .msc-about-hero__title {
+    margin: 0 0 1.25rem;
+    font-size: clamp(3.8rem,12vw,4.6rem) !important;
+  }
+
+  .msc-shell.msc-about .msc-about-hero__copy {
+    font-size: 1.45rem;
+  }
+
+  .msc-shell.msc-about .msc-about-charter {
+    margin-top: 2.2rem !important;
+    padding: 1.2rem;
     border-radius: 24px;
   }
 
-  .msc-about-charter__topbar {
+  .msc-shell.msc-about .msc-about-charter__topbar {
     align-items: flex-start;
     flex-direction: column;
     min-height: 0;
     padding-bottom: 1rem;
   }
 
-  .msc-about-charter__code {
-    text-align: left;
+  .msc-shell.msc-about .msc-about-charter__source {
+    min-height: 7.8rem;
   }
 
-  .msc-about-charter__map {
-    min-height: auto;
-    padding: 1.5rem;
+  .msc-shell.msc-about .msc-about-charter__stations {
+    grid-template-columns: 1fr !important;
   }
 
-  .msc-about-charter__connectors {
-    display: none;
+  .msc-shell.msc-about .msc-about-charter__station,
+  .msc-shell.msc-about .msc-about-charter__station:nth-child(3),
+  .msc-shell.msc-about .msc-about-charter__station:nth-child(4) {
+    min-height: 0;
+    border-left: 0 !important;
+    border-top: 1px solid var(--msc-about-edge-soft) !important;
   }
 
-  .msc-about-charter__source {
-    position: relative;
-    top: auto;
-    left: auto;
-    width: 9.8rem;
-    margin: .5rem auto 2rem;
-    transform: none;
+  .msc-shell.msc-about .msc-about-charter__station:first-child {
+    border-top: 0 !important;
   }
 
-  .msc-about-charter__stations {
-    grid-template-columns: 1fr;
-    gap: .9rem;
+  .msc-shell.msc-about .msc-about-charter__station h2,
+  .msc-shell.msc-about .msc-about-charter__station p {
+    max-width: none;
   }
 
-  .msc-about-charter__station,
-  .msc-about-charter__station:nth-child(odd),
-  .msc-about-charter__station:nth-child(even) {
-    width: 100%;
-    justify-self: stretch;
-    text-align: left;
+  .msc-shell.msc-about .msc-about-charter__footer {
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
   }
 
-  .msc-about-charter__footer {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .msc-shell.msc-about .msc-about-charter__metric:nth-child(3) {
+    border-left: 0 !important;
+    border-top: 1px solid var(--msc-about-edge-soft) !important;
   }
-}
 
-@media screen and (max-width: 480px) {
-  .msc-about-charter__footer {
-    grid-template-columns: 1fr;
+  .msc-shell.msc-about .msc-about-charter__metric:nth-child(4) {
+    border-top: 1px solid var(--msc-about-edge-soft) !important;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .msc-about-charter__source::after {
-    animation: none;
-  }
-
-  .msc-about-charter__station {
+  .msc-shell.msc-about .msc-about-charter__station {
     transition: none;
   }
 }
