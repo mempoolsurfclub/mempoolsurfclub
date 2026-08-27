@@ -1,0 +1,375 @@
+<style>
+  .shopify-section.msc-explore-journal-cohesion-v2-section {
+    display: contents;
+  }
+
+  /* One continuous Explore canvas across Atlas + Journal. */
+  #MainContent:has(.msc-explore-atlas-shell) {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at top left, rgba(212, 190, 153, .24), transparent 36rem),
+      radial-gradient(circle at bottom right, rgba(78, 107, 113, .32), transparent 44rem),
+      linear-gradient(135deg, #10282d 0%, #173c43 42%, #4e6b71 100%);
+  }
+
+  #MainContent:has(.msc-explore-atlas-shell)::before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,.85), transparent 92%);
+  }
+
+  #MainContent:has(.msc-explore-atlas-shell) > .shopify-section {
+    position: relative;
+    z-index: 1;
+  }
+
+  .msc-explore-atlas-shell,
+  .msc-explore-journal {
+    background: transparent !important;
+  }
+
+  .msc-explore-atlas-shell::before,
+  .msc-explore-journal::before {
+    display: none !important;
+  }
+
+  /* Journal intro: one centered transition, not a second hero. */
+  .msc-explore-journal {
+    --msc-widget-edge: rgba(212, 190, 153, .28);
+    --msc-widget-edge-mid: rgba(212, 190, 153, .18);
+    --msc-widget-edge-soft: rgba(212, 190, 153, .10);
+    --msc-widget-cream: rgba(251, 248, 239, .94);
+    --msc-widget-cream-soft: rgba(251, 248, 239, .72);
+    --msc-widget-cream-faint: rgba(251, 248, 239, .52);
+    --msc-widget-sand: rgba(212, 190, 153, .88);
+    --msc-widget-sand-soft: rgba(212, 190, 153, .64);
+    padding-top: clamp(4.4rem, 6vw, 6.6rem) !important;
+  }
+
+  .msc-explore-journal__intro {
+    display: block !important;
+    max-width: 112rem;
+    margin: 0 auto clamp(2.8rem, 4vw, 4.2rem) !important;
+    text-align: center;
+  }
+
+  .msc-explore-journal__kicker {
+    margin: 0 0 .9rem !important;
+    color: var(--msc-widget-sand-soft) !important;
+    font-size: .92rem !important;
+    line-height: 1.2 !important;
+    font-weight: 700 !important;
+    letter-spacing: .16em !important;
+    text-transform: uppercase;
+  }
+
+  .msc-explore-journal__title {
+    max-width: none !important;
+    margin: 0 auto !important;
+    color: var(--msc-widget-cream) !important;
+    font-size: clamp(3rem, 3.65vw, 4.8rem) !important;
+    line-height: 1 !important;
+    letter-spacing: -.04em !important;
+    white-space: nowrap;
+  }
+
+  .msc-explore-journal__copy {
+    max-width: 72rem !important;
+    margin: 1.25rem auto 0 !important;
+    color: var(--msc-widget-cream-soft) !important;
+    font-size: clamp(1.4rem, 1.55vw, 1.65rem) !important;
+    line-height: 1.5 !important;
+    text-align: center;
+  }
+
+  /* Outer housing mirrors the approved Atlas/Tools/Shop widget family. */
+  .msc-journal-console {
+    border: 1px solid var(--msc-widget-edge) !important;
+    border-radius: 20px !important;
+    background:
+      linear-gradient(180deg, rgba(34,71,78,.70), rgba(24,57,64,.78)) !important;
+    box-shadow:
+      0 24px 70px rgba(8,25,33,.16),
+      inset 0 1px 0 rgba(251,248,239,.025) !important;
+    backdrop-filter: blur(18px);
+  }
+
+  .msc-journal-console__bar {
+    min-height: 5.2rem !important;
+    padding: 1rem 1.6rem !important;
+    border-color: var(--msc-widget-edge-mid) !important;
+    background: rgba(16,40,45,.30) !important;
+    color: var(--msc-widget-cream-faint) !important;
+    font-size: .92rem !important;
+    line-height: 1.2 !important;
+    font-weight: 650 !important;
+    letter-spacing: .16em !important;
+    text-transform: uppercase;
+  }
+
+  .msc-journal-console__status {
+    color: var(--msc-widget-cream-soft) !important;
+  }
+
+  .msc-journal-console__status-dot {
+    background: var(--msc-widget-sand) !important;
+    box-shadow: 0 0 12px rgba(212,190,153,.38) !important;
+  }
+
+  /* Filters behave like an MSC instrument navigation strip, not pills. */
+  .msc-journal-filters {
+    gap: 0 !important;
+    padding: 0 !important;
+    border-color: var(--msc-widget-edge-mid) !important;
+    background:
+      linear-gradient(180deg, rgba(24,58,65,.54), rgba(16,45,52,.64)) !important;
+  }
+
+  .msc-journal-filter {
+    min-height: 4.5rem !important;
+    margin: 0 !important;
+    padding: 1rem 1.35rem !important;
+    border: 0 !important;
+    border-right: 1px solid var(--msc-widget-edge-soft) !important;
+    border-radius: 0 !important;
+    color: var(--msc-widget-cream-faint) !important;
+    background: transparent !important;
+    font-size: .92rem !important;
+    line-height: 1.1 !important;
+    font-weight: 700 !important;
+    letter-spacing: .13em !important;
+    text-transform: uppercase;
+  }
+
+  .msc-journal-filter:hover,
+  .msc-journal-filter:focus-visible,
+  .msc-journal-filter[aria-pressed="true"] {
+    color: var(--msc-widget-cream) !important;
+    background: rgba(212,190,153,.055) !important;
+  }
+
+  .msc-journal-filter[aria-pressed="true"] {
+    box-shadow: inset 0 -2px 0 var(--msc-widget-sand-soft) !important;
+  }
+
+  /* Left index uses the same secondary-housing depth as MSC nav/index panels. */
+  .msc-journal-index {
+    border-color: var(--msc-widget-edge-mid) !important;
+    background:
+      linear-gradient(180deg, rgba(27,63,70,.34), rgba(17,47,54,.40)) !important;
+  }
+
+  .msc-journal-index__heading {
+    min-height: 4.4rem !important;
+    padding: 1rem 1.35rem !important;
+    border-color: var(--msc-widget-edge-soft) !important;
+    color: var(--msc-widget-cream-faint) !important;
+    font-size: .92rem !important;
+    line-height: 1.2 !important;
+    font-weight: 650 !important;
+    letter-spacing: .14em !important;
+    text-transform: uppercase;
+  }
+
+  .msc-journal-entry {
+    border-color: var(--msc-widget-edge-soft) !important;
+    background: transparent !important;
+  }
+
+  .msc-journal-entry:hover,
+  .msc-journal-entry[aria-pressed="true"] {
+    background: rgba(212,190,153,.055) !important;
+  }
+
+  .msc-journal-entry::before {
+    background: var(--msc-widget-sand-soft) !important;
+  }
+
+  .msc-journal-entry__number {
+    color: var(--msc-widget-cream-faint) !important;
+    font-size: .92rem !important;
+    letter-spacing: .14em !important;
+  }
+
+  .msc-journal-entry__meta,
+  .msc-journal-preview__meta,
+  .msc-journal-empty__eyebrow,
+  .msc-journal-empty-index__type {
+    color: var(--msc-widget-sand-soft) !important;
+    font-size: .92rem !important;
+    line-height: 1.2 !important;
+    font-weight: 700 !important;
+    letter-spacing: .14em !important;
+    text-transform: uppercase;
+  }
+
+  .msc-journal-entry__title {
+    color: var(--msc-widget-cream) !important;
+    font-size: 1.25rem !important;
+    line-height: 1.35 !important;
+    font-weight: 650 !important;
+    letter-spacing: .01em !important;
+  }
+
+  /* Main viewer is the deepest instrument field, matching Atlas viewport depth. */
+  .msc-journal-viewer {
+    background:
+      radial-gradient(circle at 24% 14%, rgba(212,190,153,.065), transparent 31%),
+      radial-gradient(circle at 78% 72%, rgba(78,107,113,.16), transparent 42%),
+      linear-gradient(180deg, rgba(30,68,76,.62) 0%, rgba(19,49,57,.78) 46%, rgba(8,25,33,.94) 100%) !important;
+    box-shadow:
+      inset 0 0 0 1px rgba(251,248,239,.018),
+      inset 0 -5rem 8rem rgba(4,15,21,.12) !important;
+  }
+
+  .msc-journal-preview__media {
+    border-color: var(--msc-widget-edge-mid) !important;
+    background:
+      radial-gradient(circle at 24% 14%, rgba(212,190,153,.06), transparent 31%),
+      radial-gradient(circle at 78% 72%, rgba(78,107,113,.14), transparent 42%),
+      linear-gradient(180deg, rgba(30,68,76,.58) 0%, rgba(19,49,57,.74) 52%, rgba(8,25,33,.90) 100%) !important;
+  }
+
+  .msc-journal-preview__placeholder {
+    background-image:
+      linear-gradient(rgba(251,248,239,.014) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(251,248,239,.014) 1px, transparent 1px) !important;
+    background-size: 34px 34px !important;
+  }
+
+  .msc-journal-preview__stamp {
+    border: 1px solid var(--msc-widget-edge-mid) !important;
+    border-radius: 4px !important;
+    color: var(--msc-widget-sand-soft) !important;
+    background: rgba(16,40,45,.76) !important;
+    box-shadow: inset 0 1px 0 rgba(251,248,239,.018) !important;
+    font-size: .9rem !important;
+    font-weight: 700 !important;
+    letter-spacing: .14em !important;
+  }
+
+  .msc-journal-preview__title,
+  .msc-journal-empty__title {
+    color: var(--msc-widget-cream) !important;
+  }
+
+  .msc-journal-preview__deck,
+  .msc-journal-empty__copy,
+  .msc-journal-empty-index__note {
+    color: var(--msc-widget-cream-soft) !important;
+  }
+
+  .msc-journal-preview__byline {
+    color: var(--msc-widget-cream-faint) !important;
+  }
+
+  .msc-journal-viewer__cta {
+    min-height: 4.5rem !important;
+    border: 1px solid rgba(212,190,153,.30) !important;
+    border-radius: 4px !important;
+    color: var(--msc-widget-cream) !important;
+    background: rgba(212,190,153,.055) !important;
+    box-shadow: inset 0 1px 0 rgba(251,248,239,.018) !important;
+    font-size: .95rem !important;
+    font-weight: 700 !important;
+    letter-spacing: .12em !important;
+    text-transform: uppercase;
+  }
+
+  .msc-journal-viewer__cta:hover {
+    border-color: rgba(212,190,153,.42) !important;
+    background: rgba(212,190,153,.09) !important;
+    opacity: 1 !important;
+  }
+
+  .msc-journal-viewer__footer {
+    border-color: var(--msc-widget-edge-mid) !important;
+    background:
+      linear-gradient(180deg, rgba(24,58,65,.54), rgba(16,45,52,.64)) !important;
+    color: var(--msc-widget-cream-faint) !important;
+    font-size: .92rem !important;
+    font-weight: 650 !important;
+    letter-spacing: .14em !important;
+    text-transform: uppercase;
+  }
+
+  .msc-journal-viewer__nav-button {
+    border: 1px solid var(--msc-widget-edge-soft) !important;
+    border-radius: 0 !important;
+    color: var(--msc-widget-cream-soft) !important;
+    background: transparent !important;
+  }
+
+  .msc-journal-viewer__nav-button:hover:not(:disabled) {
+    color: var(--msc-widget-cream) !important;
+    background: rgba(212,190,153,.055) !important;
+  }
+
+  .msc-journal-empty,
+  .msc-journal-empty-index,
+  .msc-journal-archive,
+  .msc-journal-empty-index__row {
+    border-color: var(--msc-widget-edge-soft) !important;
+  }
+
+  .msc-journal-empty {
+    background:
+      radial-gradient(circle at 68% 24%, rgba(78,107,113,.10), transparent 34rem),
+      linear-gradient(180deg, rgba(22,57,64,.38), rgba(9,31,38,.62)) !important;
+  }
+
+  .msc-journal-archive {
+    color: var(--msc-widget-cream-faint) !important;
+  }
+
+  .msc-journal-archive a {
+    color: var(--msc-widget-sand-soft) !important;
+  }
+
+  @media screen and (max-width: 989px) {
+    .msc-explore-journal__title {
+      white-space: normal;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .msc-explore-journal {
+      padding-top: 3.6rem !important;
+    }
+
+    .msc-explore-journal__intro {
+      margin-bottom: 2.5rem !important;
+    }
+
+    .msc-explore-journal__title {
+      font-size: clamp(2.8rem, 10vw, 4rem) !important;
+    }
+
+    .msc-journal-console {
+      border-radius: 16px !important;
+    }
+
+    .msc-journal-filter {
+      min-height: 4.2rem !important;
+      padding: .9rem 1.1rem !important;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "MSC Explore Journal Cohesion V2",
+  "tag": "section",
+  "class": "msc-explore-journal-cohesion-v2-section",
+  "settings": []
+}
+{% endschema %}
