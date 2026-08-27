@@ -1,0 +1,353 @@
+{{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
+{{ 'msc-explore-journal.css' | asset_url | stylesheet_tag }}
+
+{%- assign journal_blog = section.settings.content_blog -%}
+{%- assign has_articles = false -%}
+{%- if journal_blog != blank and journal_blog.articles_count > 0 -%}
+  {%- assign has_articles = true -%}
+{%- endif -%}
+
+{%- assign interviews_handle = section.settings.interviews_tag | handleize -%}
+{%- assign updates_handle = section.settings.updates_tag | handleize -%}
+{%- assign research_handle = section.settings.research_tag | handleize -%}
+{%- assign culture_handle = section.settings.culture_tag | handleize -%}
+{%- assign field_notes_handle = section.settings.field_notes_tag | handleize -%}
+
+<section class="msc-explore-journal" id="MscExploreJournal-{{ section.id }}" data-journal-root>
+  <div class="msc-explore-journal__inner">
+    <header class="msc-explore-journal__intro">
+      <div>
+        <p class="msc-explore-journal__kicker">{{ section.settings.eyebrow | escape }}</p>
+        <h2 class="msc-explore-journal__title">{{ section.settings.heading | escape }}</h2>
+      </div>
+      <div class="msc-explore-journal__copy rte">{{ section.settings.supporting_copy }}</div>
+    </header>
+
+    <div class="msc-journal-console">
+      <div class="msc-journal-console__bar">
+        <span>ARTICLE INDEX / LIVE ARCHIVE</span>
+        <span class="msc-journal-console__status"><i class="msc-journal-console__status-dot" aria-hidden="true"></i><span data-journal-status>{%- if has_articles -%}CURRENT FEED{%- else -%}JOURNAL STANDBY{%- endif -%}</span></span>
+      </div>
+
+      <div class="msc-journal-filters" aria-label="Filter Explore articles">
+        <button class="msc-journal-filter" type="button" data-journal-filter="all" aria-pressed="true">All</button>
+        <button class="msc-journal-filter" type="button" data-journal-filter="{{ interviews_handle }}" aria-pressed="false">{{ section.settings.interviews_label | escape }}</button>
+        <button class="msc-journal-filter" type="button" data-journal-filter="{{ updates_handle }}" aria-pressed="false">{{ section.settings.updates_label | escape }}</button>
+        <button class="msc-journal-filter" type="button" data-journal-filter="{{ research_handle }}" aria-pressed="false">{{ section.settings.research_label | escape }}</button>
+        <button class="msc-journal-filter" type="button" data-journal-filter="{{ culture_handle }}" aria-pressed="false">{{ section.settings.culture_label | escape }}</button>
+        <button class="msc-journal-filter" type="button" data-journal-filter="{{ field_notes_handle }}" aria-pressed="false">{{ section.settings.field_notes_label | escape }}</button>
+      </div>
+
+      <div class="msc-journal-layout">
+        <aside class="msc-journal-index" aria-label="Explore article index">
+          <div class="msc-journal-index__heading">
+            <span>Latest entries</span>
+            <span>{%- if has_articles -%}{{ journal_blog.articles_count }} total{%- else -%}00 entries{%- endif -%}</span>
+          </div>
+
+          {%- if has_articles -%}
+            <div class="msc-journal-index__list" data-journal-index>
+              {%- for article in journal_blog.articles limit: section.settings.article_limit -%}
+                {%- assign article_tag_handles = '|' -%}
+                {%- for tag in article.tags -%}
+                  {%- assign article_tag_handles = article_tag_handles | append: tag | handleize | append: '|' -%}
+                {%- endfor -%}
+
+                {%- assign primary_label = 'Dispatch' -%}
+                {%- assign interviews_token = interviews_handle | prepend: '|' | append: '|' -%}
+                {%- assign updates_token = updates_handle | prepend: '|' | append: '|' -%}
+                {%- assign research_token = research_handle | prepend: '|' | append: '|' -%}
+                {%- assign culture_token = culture_handle | prepend: '|' | append: '|' -%}
+                {%- assign field_notes_token = field_notes_handle | prepend: '|' | append: '|' -%}
+
+                {%- if article_tag_handles contains interviews_token -%}
+                  {%- assign primary_label = section.settings.interviews_label -%}
+                {%- elsif article_tag_handles contains updates_token -%}
+                  {%- assign primary_label = section.settings.updates_label -%}
+                {%- elsif article_tag_handles contains research_token -%}
+                  {%- assign primary_label = section.settings.research_label -%}
+                {%- elsif article_tag_handles contains culture_token -%}
+                  {%- assign primary_label = section.settings.culture_label -%}
+                {%- elsif article_tag_handles contains field_notes_token -%}
+                  {%- assign primary_label = section.settings.field_notes_label -%}
+                {%- endif -%}
+
+                <div class="msc-journal-index__row" data-journal-row data-tags="{{ article_tag_handles | escape }}">
+                  <button
+                    class="msc-journal-entry"
+                    type="button"
+                    data-journal-entry="article-{{ article.id }}"
+                    aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}"
+                  >
+                    <span class="msc-journal-entry__number">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
+                    <span>
+                      <span class="msc-journal-entry__meta"><span>{{ primary_label | escape }}</span><span>{{ article.published_at | date: '%b %d, %Y' }}</span></span>
+                      <strong class="msc-journal-entry__title">{{ article.title | escape }}</strong>
+                    </span>
+                  </button>
+                </div>
+              {%- endfor -%}
+            </div>
+          {%- else -%}
+            <div class="msc-journal-empty-index" aria-label="Planned journal channels">
+              <div class="msc-journal-empty-index__row"><span class="msc-journal-empty-index__type">Interview</span><span class="msc-journal-empty-index__note">Conversations with people building, researching, and creating around Bitcoin.</span></div>
+              <div class="msc-journal-empty-index__row"><span class="msc-journal-empty-index__type">Update</span><span class="msc-journal-empty-index__note">Important ecosystem changes and developments worth following.</span></div>
+              <div class="msc-journal-empty-index__row"><span class="msc-journal-empty-index__type">Field Note</span><span class="msc-journal-empty-index__note">Short observations, signals, and context from across the Bitcoin ocean.</span></div>
+            </div>
+          {%- endif -%}
+        </aside>
+
+        <div class="msc-journal-viewer" aria-live="polite">
+          {%- if has_articles -%}
+            {%- for article in journal_blog.articles limit: section.settings.article_limit -%}
+              {%- assign article_tag_handles = '|' -%}
+              {%- for tag in article.tags -%}
+                {%- assign article_tag_handles = article_tag_handles | append: tag | handleize | append: '|' -%}
+              {%- endfor -%}
+
+              {%- assign primary_label = 'Dispatch' -%}
+              {%- assign interviews_token = interviews_handle | prepend: '|' | append: '|' -%}
+              {%- assign updates_token = updates_handle | prepend: '|' | append: '|' -%}
+              {%- assign research_token = research_handle | prepend: '|' | append: '|' -%}
+              {%- assign culture_token = culture_handle | prepend: '|' | append: '|' -%}
+              {%- assign field_notes_token = field_notes_handle | prepend: '|' | append: '|' -%}
+
+              {%- if article_tag_handles contains interviews_token -%}
+                {%- assign primary_label = section.settings.interviews_label -%}
+              {%- elsif article_tag_handles contains updates_token -%}
+                {%- assign primary_label = section.settings.updates_label -%}
+              {%- elsif article_tag_handles contains research_token -%}
+                {%- assign primary_label = section.settings.research_label -%}
+              {%- elsif article_tag_handles contains culture_token -%}
+                {%- assign primary_label = section.settings.culture_label -%}
+              {%- elsif article_tag_handles contains field_notes_token -%}
+                {%- assign primary_label = section.settings.field_notes_label -%}
+              {%- endif -%}
+
+              {%- assign word_count = article.content | strip_html | split: ' ' | size -%}
+              {%- assign read_minutes = word_count | divided_by: 220 | plus: 1 -%}
+
+              <article class="msc-journal-preview" data-journal-preview="article-{{ article.id }}" {% unless forloop.first %}hidden{% endunless %}>
+                <div class="msc-journal-preview__media">
+                  {%- if article.image -%}
+                    {{ article.image | image_url: width: 1500 | image_tag: loading: 'lazy', widths: '600,900,1200,1500', sizes: '(min-width: 990px) 65vw, 100vw', alt: article.image.alt | default: article.title }}
+                  {%- else -%}
+                    <div class="msc-journal-preview__placeholder" aria-hidden="true"></div>
+                  {%- endif -%}
+                  <span class="msc-journal-preview__stamp">ENTRY {% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
+                </div>
+                <div class="msc-journal-preview__body">
+                  <div class="msc-journal-preview__meta"><span>{{ primary_label | escape }}</span><span>{{ article.published_at | date: '%B %d, %Y' }}</span><span>~{{ read_minutes }} min read</span></div>
+                  <h3 class="msc-journal-preview__title">{{ article.title | escape }}</h3>
+                  <div class="msc-journal-preview__deck">{{ article.excerpt_or_content | strip_html | truncate: 280 }}</div>
+                  {%- if article.author != blank -%}<p class="msc-journal-preview__byline">Filed by {{ article.author | escape }}</p>{%- endif -%}
+                  <div class="msc-journal-preview__actions"><a class="msc-journal-viewer__cta" href="{{ article.url }}">Read article →</a></div>
+                </div>
+              </article>
+            {%- endfor -%}
+
+            <div class="msc-journal-viewer__footer">
+              <span data-journal-position>Entry 01</span>
+              <div class="msc-journal-viewer__nav" aria-label="Article viewer navigation">
+                <button class="msc-journal-viewer__nav-button" type="button" data-journal-prev aria-label="Previous article">←</button>
+                <button class="msc-journal-viewer__nav-button" type="button" data-journal-next aria-label="Next article">→</button>
+              </div>
+            </div>
+          {%- else -%}
+            <div class="msc-journal-empty">
+              <div class="msc-journal-empty__signal" aria-hidden="true"></div>
+              <div class="msc-journal-empty__body">
+                <p class="msc-journal-empty__eyebrow">Field journal / ready</p>
+                <h3 class="msc-journal-empty__title">THE JOURNAL IS READY FOR ITS FIRST ENTRY.</h3>
+                <p class="msc-journal-empty__copy">This viewer will become the home for MSC interviews, ecosystem updates, research, culture coverage, and field notes. Published articles will automatically enter the index and open in this reading preview.</p>
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+
+    <div class="msc-journal-archive">
+      <span>{%- if has_articles -%}Showing the latest {{ section.settings.article_limit }} journal entries.{%- else -%}No placeholder articles have been published. The viewer is connected to the MSC editorial blog.{%- endif -%}</span>
+      {%- if journal_blog != blank -%}<a href="{{ journal_blog.url }}">View full archive →</a>{%- endif -%}
+    </div>
+  </div>
+</section>
+
+<script>
+  (() => {
+    const root = document.getElementById('MscExploreJournal-{{ section.id }}');
+    if (!root || root.dataset.journalReady === 'true') return;
+    root.dataset.journalReady = 'true';
+
+    const rows = Array.from(root.querySelectorAll('[data-journal-row]'));
+    const entries = Array.from(root.querySelectorAll('[data-journal-entry]'));
+    const previews = Array.from(root.querySelectorAll('[data-journal-preview]'));
+    const filters = Array.from(root.querySelectorAll('[data-journal-filter]'));
+    const prevButton = root.querySelector('[data-journal-prev]');
+    const nextButton = root.querySelector('[data-journal-next]');
+    const position = root.querySelector('[data-journal-position]');
+    const status = root.querySelector('[data-journal-status]');
+
+    if (!entries.length || !previews.length) return;
+
+    const visibleEntries = () => entries.filter((entry) => !entry.closest('[data-journal-row]')?.hidden);
+
+    const selectEntry = (id, moveFocus = false) => {
+      entries.forEach((entry) => entry.setAttribute('aria-pressed', String(entry.dataset.journalEntry === id)));
+      previews.forEach((preview) => { preview.hidden = preview.dataset.journalPreview !== id; });
+
+      const activeEntries = visibleEntries();
+      const activeIndex = activeEntries.findIndex((entry) => entry.dataset.journalEntry === id);
+      if (position && activeIndex >= 0) position.textContent = `Entry ${String(activeIndex + 1).padStart(2, '0')} / ${String(activeEntries.length).padStart(2, '0')}`;
+      if (prevButton) prevButton.disabled = activeIndex <= 0;
+      if (nextButton) nextButton.disabled = activeIndex < 0 || activeIndex >= activeEntries.length - 1;
+      if (moveFocus) entries.find((entry) => entry.dataset.journalEntry === id)?.focus();
+    };
+
+    const applyFilter = (filter) => {
+      rows.forEach((row) => {
+        const tags = row.dataset.tags || '|';
+        row.hidden = filter !== 'all' && !tags.includes(`|${filter}|`);
+      });
+
+      filters.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.journalFilter === filter)));
+      const activeEntries = visibleEntries();
+      const selected = entries.find((entry) => entry.getAttribute('aria-pressed') === 'true');
+      if (!selected || selected.closest('[data-journal-row]')?.hidden) {
+        if (activeEntries[0]) selectEntry(activeEntries[0].dataset.journalEntry);
+      } else {
+        selectEntry(selected.dataset.journalEntry);
+      }
+      if (status) status.textContent = activeEntries.length ? `${activeEntries.length} ${activeEntries.length === 1 ? 'ENTRY' : 'ENTRIES'} IN VIEW` : 'NO MATCHING ENTRIES';
+    };
+
+    entries.forEach((entry) => entry.addEventListener('click', () => selectEntry(entry.dataset.journalEntry)));
+    filters.forEach((filter) => filter.addEventListener('click', () => applyFilter(filter.dataset.journalFilter)));
+
+    prevButton?.addEventListener('click', () => {
+      const activeEntries = visibleEntries();
+      const currentIndex = activeEntries.findIndex((entry) => entry.getAttribute('aria-pressed') === 'true');
+      if (currentIndex > 0) selectEntry(activeEntries[currentIndex - 1].dataset.journalEntry, true);
+    });
+
+    nextButton?.addEventListener('click', () => {
+      const activeEntries = visibleEntries();
+      const currentIndex = activeEntries.findIndex((entry) => entry.getAttribute('aria-pressed') === 'true');
+      if (currentIndex >= 0 && currentIndex < activeEntries.length - 1) selectEntry(activeEntries[currentIndex + 1].dataset.journalEntry, true);
+    });
+
+    selectEntry(entries[0].dataset.journalEntry);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "MSC Explore Field Journal",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "blog",
+      "id": "content_blog",
+      "label": "Article source"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "MSC FIELD JOURNAL"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "THE LATEST FROM THE BITCOIN OCEAN."
+    },
+    {
+      "type": "richtext",
+      "id": "supporting_copy",
+      "label": "Supporting copy",
+      "default": "<p>Interviews, updates, research, and field notes tracking the people, projects, and ideas moving through Bitcoin.</p>"
+    },
+    {
+      "type": "range",
+      "id": "article_limit",
+      "label": "Articles in viewer",
+      "min": 4,
+      "max": 16,
+      "step": 1,
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Article filters"
+    },
+    {
+      "type": "text",
+      "id": "interviews_label",
+      "label": "Interviews label",
+      "default": "Interviews"
+    },
+    {
+      "type": "text",
+      "id": "interviews_tag",
+      "label": "Interviews article tag",
+      "default": "Interviews"
+    },
+    {
+      "type": "text",
+      "id": "updates_label",
+      "label": "Updates label",
+      "default": "Updates"
+    },
+    {
+      "type": "text",
+      "id": "updates_tag",
+      "label": "Updates article tag",
+      "default": "Updates"
+    },
+    {
+      "type": "text",
+      "id": "research_label",
+      "label": "Research label",
+      "default": "Research"
+    },
+    {
+      "type": "text",
+      "id": "research_tag",
+      "label": "Research article tag",
+      "default": "Research"
+    },
+    {
+      "type": "text",
+      "id": "culture_label",
+      "label": "Culture label",
+      "default": "Culture"
+    },
+    {
+      "type": "text",
+      "id": "culture_tag",
+      "label": "Culture article tag",
+      "default": "Culture"
+    },
+    {
+      "type": "text",
+      "id": "field_notes_label",
+      "label": "Field notes label",
+      "default": "Field Notes"
+    },
+    {
+      "type": "text",
+      "id": "field_notes_tag",
+      "label": "Field notes article tag",
+      "default": "Field Notes"
+    }
+  ],
+  "presets": [
+    {
+      "name": "MSC Explore Field Journal"
+    }
+  ]
+}
+{% endschema %}
