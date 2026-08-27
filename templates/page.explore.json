@@ -100,123 +100,24 @@
       "type": "msc-explore-atlas-right-hud-tune",
       "settings": {}
     },
-    "msc_explore": {
-      "type": "msc-explore",
-      "blocks": {
-        "category_artists": {
-          "type": "category",
-          "settings": {
-            "meta": "Culture",
-            "title": "Artists",
-            "description": "Explore artists, Ordinals, digital artifacts, and visual culture built on Bitcoin.",
-            "link": "",
-            "action_label": "EXPLORE ARTISTS"
-          }
-        },
-        "category_founders": {
-          "type": "category",
-          "settings": {
-            "meta": "People",
-            "title": "Founders",
-            "description": "People building companies, protocols, media, and communities across Bitcoin.",
-            "link": "",
-            "action_label": "MEET FOUNDERS"
-          }
-        },
-        "category_companies": {
-          "type": "category",
-          "settings": {
-            "meta": "Market",
-            "title": "Companies",
-            "description": "Organizations building infrastructure, products, services, and media.",
-            "link": "",
-            "action_label": "VIEW COMPANIES"
-          }
-        },
-        "category_projects": {
-          "type": "category",
-          "settings": {
-            "meta": "Labs",
-            "title": "Projects",
-            "description": "Protocols, apps, collections, tools, and experiments moving through the ecosystem.",
-            "link": "",
-            "action_label": "EXPLORE PROJECTS"
-          }
-        },
-        "category_editorials": {
-          "type": "category",
-          "settings": {
-            "meta": "Reading",
-            "title": "Editorials",
-            "description": "Interviews, guides, and cultural coverage across Bitcoin, Ordinals, and Runes.",
-            "link": "",
-            "action_label": "READ EDITORIALS"
-          }
-        },
-        "category_reports": {
-          "type": "category",
-          "settings": {
-            "meta": "Research",
-            "title": "On-Chain Reports",
-            "description": "Network and culture reports grounded in verified sources.",
-            "link": "",
-            "action_label": "VIEW REPORTS"
-          }
-        }
-      },
-      "block_order": [
-        "category_artists",
-        "category_founders",
-        "category_companies",
-        "category_projects",
-        "category_editorials",
-        "category_reports"
-      ],
+    "msc_explore_journal": {
+      "type": "msc-explore-journal",
       "settings": {
-        "signal_phrase_1": "SCANNING THE BITCOIN ECOSYSTEM",
-        "signal_phrase_2": "READING NETWORK + CULTURE SIGNALS",
-        "signal_phrase_3": "WATCHING THE MEMPOOL",
-        "heading": "EXPLORE THE ECOSYSTEM.",
-        "supporting_copy": "<p>Bitcoin moves in waves through art, code, people, projects, and ideas. Explore the cultural signals shaping the same ocean.</p>",
-        "search_label": "Search the Bitcoin culture index",
-        "search_placeholder": "Search artists, founders, companies, projects, reports...",
-        "search_button": "Search",
-        "search_types": "article,page,product",
-        "map_companies_link": "shopify://pages/companies",
-        "map_art_link": "shopify://pages/artists",
-        "map_builders_link": "shopify://pages/builders",
         "content_blog": "msc-editorial",
+        "eyebrow": "MSC FIELD JOURNAL",
+        "heading": "THE LATEST FROM THE BITCOIN OCEAN.",
+        "supporting_copy": "<p>Interviews, updates, research, and field notes tracking the people, projects, and ideas moving through Bitcoin.</p>",
+        "article_limit": 10,
+        "interviews_label": "Interviews",
         "interviews_tag": "Interviews",
-        "highlights_tag": "Highlights",
-        "weekly_recaps_tag": "Weekly Recaps",
-        "community_tag": "Community",
-        "breaking_news_tag": "Breaking News",
-        "culture_index_tags": "Artist, Founder, Builder, Miner, Content Creator, Company, Project",
-        "stories_limit": 3,
-        "culture_index_limit": 4,
-        "weekly_recaps_limit": 3,
-        "breaking_news_hours": 48,
-        "editorial_kicker": "Signals From the Culture",
-        "editorial_heading": "Stories moving through the Bitcoin ocean.",
-        "editorial_copy": "<p>Interviews, highlights, weekly recaps, community stories, and breaking news tracking the signals moving through Bitcoin culture.</p>",
-        "discovery_kicker": "People Behind the Current",
-        "discovery_heading": "Artists, founders, companies, and projects shaping the next wave.",
-        "discovery_copy": "<p>Coverage of the artists, founders, builders, miners, companies, projects, and creators shaping Bitcoin culture.</p>",
-        "reports_kicker": "WEEKLY SWELL REPORT",
-        "reports_heading": "Weekly recaps from the network.",
-        "reports_copy": "<p>Every Friday, review volume, new releases, ecosystem updates, and the week’s most important cultural signals.</p>",
-        "show_recent": false,
-        "editorial_empty_label": "EDITORIAL SIGNALS",
-        "editorial_empty_heading": "The first stories are taking shape.",
-        "editorial_empty_copy": "Interviews, highlights, weekly recaps, community coverage, and breaking news will appear here as they are published.",
-        "discovery_empty_label": "CULTURE INDEX",
-        "discovery_empty_heading": "The people behind the current are being mapped.",
-        "discovery_empty_copy": "Profiles and coverage of artists, founders, builders, miners, companies, projects, and content creators will appear here as they are published.",
-        "reports_empty_label": "WEEKLY RECAPS",
-        "reports_empty_heading": "The first weekly recap is coming Friday.",
-        "reports_empty_copy": "Friday coverage of volume, new releases, ecosystem updates, and cultural signals will appear here.",
-        "recent_kicker": "New Signals",
-        "recent_heading": "Recently added to the index."
+        "updates_label": "Updates",
+        "updates_tag": "Updates",
+        "research_label": "Research",
+        "research_tag": "Research",
+        "culture_label": "Culture",
+        "culture_tag": "Culture",
+        "field_notes_label": "Field Notes",
+        "field_notes_tag": "Field Notes"
       }
     },
     "widget_label_typography": {
@@ -229,7 +130,7 @@
     "msc_explore_atlas",
     "msc_atlas_header_controls",
     "msc_atlas_right_hud_tune",
-    "msc_explore",
+    "msc_explore_journal",
     "widget_label_typography"
   ]
 }
