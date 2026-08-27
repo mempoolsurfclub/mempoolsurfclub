@@ -1,0 +1,168 @@
+{{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
+{{ 'msc-about-mission.css' | asset_url | stylesheet_tag }}
+
+<section class="msc-about-mission" id="MscAboutMission-{{ section.id }}">
+  <div class="msc-container">
+    <header class="msc-about-mission__intro">
+      <p class="msc-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      <h1 class="msc-title msc-about-mission__title">{{ section.settings.heading | escape }}</h1>
+      <div class="msc-subtitle msc-about-mission__copy rte">{{ section.settings.hero_copy }}</div>
+    </header>
+
+    <div class="msc-mission-current" aria-label="Mempool Surf Club mission story">
+      <div class="msc-mission-current__topbar">
+        <div class="msc-mission-current__identity"><strong>MSC FIELD LOG</strong><span>MISSION CURRENT</span></div>
+        <div class="msc-mission-current__code">MSC / STORY-01</div>
+      </div>
+
+      <div class="msc-mission-current__field">
+        <div class="msc-mission-current__statement">
+          <div class="msc-mission-current__bitcoin" aria-hidden="true">
+            <svg viewBox="0 0 450 913" focusable="false">
+              <path d="M103 913V815H0V101H103V0H170V101H172Q207 101 236 104V0H303V115Q367 131 399.5 171Q432 211 432 282Q432 343 410 385Q388 427 347 436V441Q376 448 399 466Q422 484 436 518Q450 552 450 608Q450 684 411 734.5Q372 785 303 804V913H236V815Q227 815 217 815H170V913ZM189 384Q239 384 258 363Q277 342 277 302Q277 261 254 243Q231 225 181 225H151V384ZM151 504V690H200Q252 690 272.5 663.5Q293 637 293 593Q293 553 272 528.5Q251 504 195 504Z" />
+            </svg>
+          </div>
+          <div>
+            <span>WHY WE BUILD</span>
+            <h2>WE WANT MORE PEOPLE TO UNDERSTAND WHAT BITCOIN IS DOING.</h2>
+          </div>
+          <p>Not just price. The network, the builders, the ideas, the tools, and the culture moving around it.</p>
+        </div>
+
+        <div class="msc-mission-current__route" aria-hidden="true">
+          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" focusable="false">
+            <path class="msc-mission-current__route-ghost" d="M0 66 C120 66 126 28 240 34 S386 92 480 70 S596 20 720 42 S850 98 960 64 S1080 36 1200 54" />
+            <path class="msc-mission-current__route-line" d="M0 66 C120 66 126 28 240 34 S386 92 480 70 S596 20 720 42 S850 98 960 64 S1080 36 1200 54" />
+          </svg>
+        </div>
+
+        <div class="msc-mission-current__steps">
+          <article class="msc-mission-step">
+            <span>01 / WATCH</span>
+            <h3>FOLLOW THE SIGNAL</h3>
+            <p>We watch blocks, fees, infrastructure, builders, protocols, and the movements shaping Bitcoin.</p>
+          </article>
+          <article class="msc-mission-step">
+            <span>02 / TEACH</span>
+            <h3>MAKE BITCOIN UNDERSTANDABLE</h3>
+            <p>We turn complexity into clear learning guides so more people can understand what is happening and why.</p>
+          </article>
+          <article class="msc-mission-step">
+            <span>03 / BUILD</span>
+            <h3>CREATE USEFUL TOOLS</h3>
+            <p>We build interfaces that make the network easier to inspect, navigate, and learn from.</p>
+          </article>
+          <article class="msc-mission-step">
+            <span>04 / CARRY</span>
+            <h3>BRING THE CULTURE OFFLINE</h3>
+            <p>We make apparel and objects for people who want to wear, carry, and share their connection to Bitcoin.</p>
+          </article>
+          <article class="msc-mission-step">
+            <span>05 / KEEP GOING</span>
+            <h3>IMPROVE THE CLUBHOUSE</h3>
+            <p>We keep researching, publishing, designing, experimenting, and improving the platform as Bitcoin evolves.</p>
+          </article>
+        </div>
+      </div>
+
+      <div class="msc-mission-current__footer" aria-label="Mempool Surf Club mission principles">
+        <span><small>FOUNDATION</small><strong>BITCOIN FIRST</strong></span>
+        <span><small>METHOD</small><strong>LEARN + BUILD</strong></span>
+        <span><small>MODEL</small><strong>INDEPENDENT</strong></span>
+        <span><small>STATUS</small><strong>ALWAYS LEARNING</strong></span>
+      </div>
+    </div>
+
+    <section class="msc-support-signal" aria-labelledby="MscSupportSignal-{{ section.id }}">
+      <div class="msc-support-signal__story">
+        <p class="msc-section-kicker">{{ section.settings.support_kicker | escape }}</p>
+        <h2 id="MscSupportSignal-{{ section.id }}">{{ section.settings.support_heading | escape }}</h2>
+        <div class="rte">{{ section.settings.support_copy }}</div>
+        <div class="msc-support-signal__impact" aria-label="What Bitcoin support helps fund">
+          <span>TOOLS</span><span>LEARNING GUIDES</span><span>HOSTING + RESEARCH</span><span>DESIGN + IMPROVEMENTS</span>
+        </div>
+      </div>
+
+      <div class="msc-support-signal__terminal">
+        <div class="msc-support-signal__terminal-top">
+          <span>BITCOIN SUPPORT CHANNEL</span>
+          <strong>{% if section.settings.bitcoin_address != blank or section.settings.lightning_address != blank %}OPEN{% else %}PREPARING{% endif %}</strong>
+        </div>
+
+        {%- if section.settings.bitcoin_address != blank -%}
+          <div class="msc-support-channel">
+            <div><span>ON-CHAIN BTC</span><code id="MscBtcAddress-{{ section.id }}">{{ section.settings.bitcoin_address | escape }}</code></div>
+            <div class="msc-support-channel__actions">
+              <button type="button" data-msc-copy="#MscBtcAddress-{{ section.id }}">COPY</button>
+              <a href="bitcoin:{{ section.settings.bitcoin_address | url_encode }}">OPEN WALLET</a>
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.lightning_address != blank -%}
+          <div class="msc-support-channel">
+            <div><span>LIGHTNING</span><code id="MscLightningAddress-{{ section.id }}">{{ section.settings.lightning_address | escape }}</code></div>
+            <div class="msc-support-channel__actions">
+              <button type="button" data-msc-copy="#MscLightningAddress-{{ section.id }}">COPY</button>
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.bitcoin_address == blank and section.settings.lightning_address == blank -%}
+          <div class="msc-support-signal__empty">
+            <span>DIRECT BITCOIN SUPPORT</span>
+            <strong>SUPPORT CHANNEL OPENING SOON</strong>
+            <p>No address is published yet. We will only display verified MSC support details here.</p>
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.bitcoin_qr != blank or section.settings.lightning_qr != blank -%}
+          <div class="msc-support-signal__qrs">
+            {%- if section.settings.bitcoin_qr != blank -%}<figure>{{ section.settings.bitcoin_qr | image_url: width: 360 | image_tag: loading: 'lazy', alt: 'Mempool Surf Club Bitcoin support QR code' }}<figcaption>ON-CHAIN</figcaption></figure>{%- endif -%}
+            {%- if section.settings.lightning_qr != blank -%}<figure>{{ section.settings.lightning_qr | image_url: width: 360 | image_tag: loading: 'lazy', alt: 'Mempool Surf Club Lightning support QR code' }}<figcaption>LIGHTNING</figcaption></figure>{%- endif -%}
+          </div>
+        {%- endif -%}
+
+        <p class="msc-support-signal__note">Direct Bitcoin support helps MSC keep building, teaching, and improving independently.</p>
+      </div>
+    </section>
+  </div>
+</section>
+
+<script>
+  (() => {
+    const root = document.getElementById('MscAboutMission-{{ section.id }}');
+    if (!root) return;
+    root.querySelectorAll('[data-msc-copy]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const target = root.querySelector(button.getAttribute('data-msc-copy'));
+        if (!target || !navigator.clipboard) return;
+        await navigator.clipboard.writeText(target.textContent.trim());
+        const original = button.textContent;
+        button.textContent = 'COPIED';
+        window.setTimeout(() => { button.textContent = original; }, 1400);
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "MSC About Mission",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {"type":"text","id":"eyebrow","label":"Hero eyebrow","default":"ABOUT MEMPOOL SURF CLUB"},
+    {"type":"text","id":"heading","label":"Hero heading","default":"BUILT TO READ THE WHOLE BITCOIN OCEAN."},
+    {"type":"richtext","id":"hero_copy","label":"Hero copy","default":"<p>We built Mempool Surf Club because Bitcoin is too important to reduce to a price chart. We follow the network, turn complexity into learning guides, build useful tools, document the culture, and make things people are proud to wear and carry.</p>"},
+    {"type":"text","id":"support_kicker","label":"Support kicker","default":"SUPPORT THE SIGNAL"},
+    {"type":"text","id":"support_heading","label":"Support heading","default":"HELP US KEEP BUILDING."},
+    {"type":"richtext","id":"support_copy","label":"Support copy","default":"<p>MSC is independently built and maintained. Bitcoin support helps fund hosting, research, new tools, learning guides, design, and the time it takes to keep the site useful and current.</p>"},
+    {"type":"textarea","id":"bitcoin_address","label":"Bitcoin on-chain support address"},
+    {"type":"text","id":"lightning_address","label":"Lightning support address"},
+    {"type":"image_picker","id":"bitcoin_qr","label":"Bitcoin QR image"},
+    {"type":"image_picker","id":"lightning_qr","label":"Lightning QR image"}
+  ],
+  "presets": [{"name":"MSC About Mission"}]
+}
+{% endschema %}
