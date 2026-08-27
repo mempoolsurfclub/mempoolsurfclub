@@ -1,0 +1,162 @@
+<style>
+  .shopify-section.msc-about-mission-refine-section {
+    display: contents;
+  }
+
+  #MainContent:has(.msc-about-mission) .msc-mission-current__statement {
+    display: grid;
+    grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+    gap: 0;
+    align-items: stretch;
+    min-height: 15rem;
+    padding: 0;
+    background: rgba(8,25,33,.10);
+  }
+
+  #MainContent:has(.msc-about-mission) .msc-mission-current__logo-panel,
+  #MainContent:has(.msc-about-mission) .msc-mission-current__story-panel {
+    min-width: 0;
+  }
+
+  #MainContent:has(.msc-about-mission) .msc-mission-current__logo-panel {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: clamp(2rem, 3.4vw, 3.6rem);
+    border-right: 1px solid var(--msc-am-edge-soft);
+    background:
+      radial-gradient(circle at 22% 38%, rgba(212,190,153,.055), transparent 38%),
+      rgba(8,25,33,.08);
+  }
+
+  #MainContent:has(.msc-about-mission) .msc-mission-current__logo-lockup {
+    display: flex;
+    width: 100%;
+    align-items: center;
+  }
+
+  #MainContent:has(.msc-about-mission) .msc-mission-current__logo-image {
+    display: block;
+    width: min(100%, 28rem);
+    max-width: 100%;
+    max-height: 9.5rem;
+    object-fit: contain;
+    object-position: left center;
+  }
+
+  #MainContent:has(.msc-about-mission) .msc-mission-current__logo-fallback {
+    max-width: 12ch;
+    color: var(--msc-am-sand);
+    font-size: clamp(2rem, 3vw, 3.3rem);
+    line-height: .92;
+    letter-spacing: -.045em;
+    text-transform: uppercase;
+  }
+
+  #MainContent:has(.msc-about-mission) .msc-mission-current__story-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(2rem, 3.4vw, 3.6rem);
+  }
+
+  #MainContent:has(.msc-about-mission) .msc-mission-current__story-panel > span {
+    color: var(--msc-am-sand);
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+
+  #MainContent:has(.msc-about-mission) .msc-mission-current__story-panel h2 {
+    max-width: 21ch;
+    margin: .65rem 0 .85rem;
+    color: var(--msc-am-cream);
+    font-size: clamp(1.8rem, 2.45vw, 2.7rem);
+    line-height: 1;
+    letter-spacing: -.025em;
+  }
+
+  #MainContent:has(.msc-about-mission) .msc-mission-current__story-panel p {
+    max-width: 62ch;
+    margin: 0;
+    color: var(--msc-am-cream-soft);
+    font-size: clamp(1rem, 1.18vw, 1.18rem);
+    line-height: 1.58;
+  }
+
+  #MainContent:has(.msc-about-mission) .msc-mission-current__footer {
+    display: none !important;
+  }
+
+  @media screen and (max-width: 820px) {
+    #MainContent:has(.msc-about-mission) .msc-mission-current__statement {
+      grid-template-columns: 1fr;
+    }
+
+    #MainContent:has(.msc-about-mission) .msc-mission-current__logo-panel {
+      min-height: 11rem;
+      border-right: 0;
+      border-bottom: 1px solid var(--msc-am-edge-soft);
+    }
+
+    #MainContent:has(.msc-about-mission) .msc-mission-current__logo-image {
+      width: min(100%, 24rem);
+    }
+  }
+</style>
+
+<template id="MscAboutMissionRefineTemplate-{{ section.id }}">
+  <div class="msc-mission-current__logo-panel" aria-label="Mempool Surf Club">
+    <div class="msc-mission-current__logo-lockup">
+      {%- if settings.logo != blank -%}
+        {%- assign mission_logo_alt = settings.logo.alt | default: shop.name | escape -%}
+        {{ settings.logo | image_url: width: 900 | image_tag:
+          class: 'msc-mission-current__logo-image',
+          widths: '300, 450, 600, 900',
+          alt: mission_logo_alt,
+          loading: 'eager'
+        }}
+      {%- else -%}
+        <strong class="msc-mission-current__logo-fallback">{{ shop.name }}</strong>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <div class="msc-mission-current__story-panel">
+    <span>WHY WE BUILD</span>
+    <h2>BITCOIN IS MORE THAN A PRICE.</h2>
+    <p>It is a living network of people, ideas, technology, tools, and culture. MSC exists to follow the signal, make it easier to understand, build useful things, and help more people find their way into Bitcoin.</p>
+  </div>
+</template>
+
+<script>
+  (() => {
+    const mission = document.querySelector('.msc-about-mission');
+    const template = document.getElementById('MscAboutMissionRefineTemplate-{{ section.id }}');
+    if (!mission || !template || mission.dataset.mscStoryRefined === 'true') return;
+
+    const statement = mission.querySelector('.msc-mission-current__statement');
+    if (statement) {
+      statement.replaceChildren(template.content.cloneNode(true));
+    }
+
+    const teachStep = Array.from(mission.querySelectorAll('.msc-mission-step')).find((step) =>
+      step.querySelector('span')?.textContent.includes('02 / TEACH')
+    );
+    const teachHeading = teachStep?.querySelector('h3');
+    if (teachHeading) teachHeading.textContent = 'TEACH BITCOIN CLEARLY';
+
+    mission.querySelector('.msc-mission-current__footer')?.remove();
+    mission.dataset.mscStoryRefined = 'true';
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "MSC About Mission Refine",
+  "tag": "section",
+  "class": "msc-about-mission-refine-section",
+  "settings": []
+}
+{% endschema %}
