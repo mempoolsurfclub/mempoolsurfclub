@@ -285,3 +285,22 @@
     animation: none !important;
   }
 }
+
+/* Keep the radar Bitcoin mark identical across operating systems by removing font-glyph fallback from the visible rendering. */
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__bitcoin {
+  width: 1em;
+  height: 1em;
+  overflow: hidden;
+  line-height: 1;
+  text-indent: -9999px;
+  white-space: nowrap;
+}
+
+.msc-signal-card[data-msc-ecosystem-radar] .msc-signal-field__bitcoin::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0NTAgOTEzIj48cGF0aCBkPSJNMTAzIDkxM1Y4MTVIMFYxMDFIMTAzVjBIMTcwVjEwMUgxNzJRMjA3IDEwMSAyMzYgMTA0VjBIMzAzVjExNVEzNjcgMTMxIDM5OS41IDE3MS4wUTQzMiAyMTEgNDMyIDI4MlE0MzIgMzQzIDQxMC4wIDM4NS4wUTM4OCA0MjcgMzQ3IDQzNlY0NDFRMzc2IDQ0OCAzOTkuMCA0NjYuMFE0MjIgNDg0IDQzNi4wIDUxOC4wUTQ1MCA1NTIgNDUwIDYwOFE0NTAgNjg0IDQxMS4wIDczNC41UTM3MiA3ODUgMzAzIDgwNFY5MTNIMjM2VjgxNVEyMjcgODE1IDIxNyA4MTVIMTcwVjkxM1pNMTg5IDM4NFEyMzkgMzg0IDI1OC4wIDM2My4wUTI3NyAzNDIgMjc3IDMwMlEyNzcgMjYxIDI1NC4wIDI0My4wUTIzMSAyMjUgMTgxIDIyNUgxNTFWMzg0Wk0xNTEgNTA0VjY5MEgyMDBRMjUyIDY5MCAyNzIuNSA2NjMuNVEyOTMgNjM3IDI5MyA1OTNRMjkzIDU1MyAyNzIuMCA1MjguNVEyNTEgNTA0IDE5NSA1MDRaIi8+PC9zdmc+") center / contain no-repeat;
+  mask: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0NTAgOTEzIj48cGF0aCBkPSJNMTAzIDkxM1Y4MTVIMFYxMDFIMTAzVjBIMTcwVjEwMUgxNzJRMjA3IDEwMSAyMzYgMTA0VjBIMzAzVjExNVEzNjcgMTMxIDM5OS41IDE3MS4wUTQzMiAyMTEgNDMyIDI4MlE0MzIgMzQzIDQxMC4wIDM4NS4wUTM4OCA0MjcgMzQ3IDQzNlY0NDFRMzc2IDQ0OCAzOTkuMCA0NjYuMFE0MjIgNDg0IDQzNi4wIDUxOC4wUTQ1MCA1NTIgNDUwIDYwOFE0NTAgNjg0IDQxMS4wIDczNC41UTM3MiA3ODUgMzAzIDgwNFY5MTNIMjM2VjgxNVEyMjcgODE1IDIxNyA4MTVIMTcwVjkxM1pNMTg5IDM4NFEyMzkgMzg0IDI1OC4wIDM2My4wUTI3NyAzNDIgMjc3IDMwMlEyNzcgMjYxIDI1NC4wIDI0My4wUTIzMSAyMjUgMTgxIDIyNUgxNTFWMzg0Wk0xNTEgNTA0VjY5MEgyMDBRMjUyIDY5MCAyNzIuNSA2NjMuNVEyOTMgNjM3IDI5MyA1OTNRMjkzIDU1MyAyNzIuMCA1MjguNVEyNTEgNTA0IDE5NSA1MDRaIi8+PC9zdmc+") center / contain no-repeat;
+}
