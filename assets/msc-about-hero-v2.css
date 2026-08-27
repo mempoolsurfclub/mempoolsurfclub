@@ -1,0 +1,397 @@
+/* About hero v2 — scoped visual system for the MSC charter schematic only. */
+.msc-about {
+  padding-top: clamp(5rem, 7vw, 7.5rem);
+}
+
+.msc-about-hero {
+  grid-template-columns: minmax(0, .86fr) minmax(42rem, 1.14fr);
+  gap: clamp(3.2rem, 5vw, 6rem);
+  align-items: center;
+}
+
+.msc-about-hero__content {
+  min-width: 0;
+}
+
+.msc-about-hero__title {
+  max-width: 9.6ch;
+  margin-bottom: 1.8rem;
+}
+
+.msc-about-hero__copy {
+  max-width: 66rem;
+  color: rgba(251, 248, 239, .78);
+}
+
+.msc-about-hero__copy p {
+  margin: 0;
+}
+
+.msc-about-hero__index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .55rem 1rem;
+  margin: 2rem 0 0;
+  color: rgba(212, 190, 153, .74);
+  font-size: 1.05rem;
+  font-weight: 760;
+  letter-spacing: .12em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.msc-about-hero__index span {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.msc-about-hero__index span:not(:last-child)::after {
+  content: "";
+  width: 2.4rem;
+  height: 1px;
+  background: rgba(212, 190, 153, .24);
+}
+
+.msc-about-charter {
+  position: relative;
+  min-height: 50rem;
+  overflow: hidden;
+  border: 1px solid rgba(212, 190, 153, .18);
+  border-radius: 2.2rem;
+  background:
+    radial-gradient(circle at 50% 46%, rgba(78, 107, 113, .18), transparent 38%),
+    linear-gradient(180deg, rgba(34, 77, 84, .96), rgba(16, 49, 56, .98));
+  box-shadow: 0 24px 70px rgba(16, 40, 45, .22);
+  color: var(--msc-paper-soft);
+}
+
+.msc-about-charter::before {
+  content: "";
+  position: absolute;
+  inset: 5.3rem 0 4.8rem;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(251, 248, 239, .025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(251, 248, 239, .025) 1px, transparent 1px);
+  background-size: 3.4rem 3.4rem;
+}
+
+.msc-about-charter__topbar {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  min-height: 5.3rem;
+  padding: 0 1.8rem;
+  border-bottom: 1px solid rgba(212, 190, 153, .13);
+}
+
+.msc-about-charter__identity,
+.msc-about-charter__code {
+  display: inline-flex;
+  align-items: baseline;
+  gap: .8rem;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.msc-about-charter__identity strong,
+.msc-about-charter__code {
+  color: rgba(251, 248, 239, .94);
+  font-size: 1.05rem;
+  font-weight: 780;
+  letter-spacing: .12em;
+}
+
+.msc-about-charter__identity span {
+  color: rgba(212, 190, 153, .80);
+  font-size: .85rem;
+  font-weight: 760;
+  letter-spacing: .14em;
+}
+
+.msc-about-charter__map {
+  position: relative;
+  min-height: 39.8rem;
+  padding: 2.2rem;
+}
+
+.msc-about-charter__connectors {
+  position: absolute;
+  inset: 2.2rem;
+  width: calc(100% - 4.4rem);
+  height: calc(100% - 4.4rem);
+  z-index: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.msc-about-charter__connectors path {
+  fill: none;
+  stroke: rgba(212, 190, 153, .18);
+  stroke-width: .8;
+  stroke-dasharray: 2.2 2.8;
+  vector-effect: non-scaling-stroke;
+}
+
+.msc-about-charter__connectors circle {
+  fill: rgba(212, 190, 153, .58);
+}
+
+.msc-about-charter__source {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 11.2rem;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(212, 190, 153, .28);
+  border-radius: 50%;
+  background: rgba(10, 38, 45, .96);
+  box-shadow:
+    0 0 0 1rem rgba(212, 190, 153, .025),
+    0 0 0 2.1rem rgba(212, 190, 153, .018);
+  text-align: center;
+}
+
+.msc-about-charter__source::after {
+  content: "";
+  position: absolute;
+  inset: -.8rem;
+  border: 1px solid rgba(212, 190, 153, .10);
+  border-radius: 50%;
+  animation: mscAboutSourcePulse 5.4s ease-in-out infinite;
+}
+
+.msc-about-charter__bitcoin {
+  display: block;
+  width: 3.7rem;
+  height: 4.8rem;
+  margin: 0 auto .5rem;
+  fill: var(--msc-sand);
+}
+
+.msc-about-charter__source strong,
+.msc-about-charter__source span {
+  display: block;
+  text-transform: uppercase;
+}
+
+.msc-about-charter__source strong {
+  color: rgba(251, 248, 239, .94);
+  font-size: 1rem;
+  font-weight: 780;
+  letter-spacing: .12em;
+}
+
+.msc-about-charter__source span {
+  margin-top: .3rem;
+  color: rgba(212, 190, 153, .68);
+  font-size: .72rem;
+  font-weight: 760;
+  letter-spacing: .11em;
+}
+
+.msc-about-charter__stations {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 13rem 11rem;
+}
+
+.msc-about-charter__station {
+  display: block;
+  min-height: 10.7rem;
+  padding: 1.35rem 1.45rem;
+  border: 1px solid rgba(212, 190, 153, .12);
+  border-radius: 1.4rem;
+  background: rgba(20, 58, 65, .70);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color .2s ease, background-color .2s ease, transform .2s ease;
+}
+
+.msc-about-charter__station:hover,
+.msc-about-charter__station:focus-visible {
+  border-color: rgba(212, 190, 153, .28);
+  background: rgba(24, 66, 73, .84);
+  transform: translateY(-1px);
+}
+
+.msc-about-charter__station:focus-visible {
+  outline: 2px solid var(--msc-sand);
+  outline-offset: 3px;
+}
+
+.msc-about-charter__station:nth-child(even) {
+  text-align: right;
+}
+
+.msc-about-charter__station-code {
+  display: block;
+  margin-bottom: .7rem;
+  color: rgba(212, 190, 153, .82);
+  font-size: .78rem;
+  font-weight: 780;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.msc-about-charter__station h2 {
+  margin: 0 0 .55rem;
+  color: rgba(251, 248, 239, .95);
+  font-size: 1.28rem;
+  font-weight: 780;
+  letter-spacing: .06em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.msc-about-charter__station p {
+  margin: 0;
+  color: rgba(251, 248, 239, .62);
+  font-size: .95rem;
+  line-height: 1.42;
+}
+
+.msc-about-charter__footer {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  min-height: 4.8rem;
+  border-top: 1px solid rgba(212, 190, 153, .13);
+}
+
+.msc-about-charter__metric {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: .2rem;
+  padding: .8rem 1rem;
+}
+
+.msc-about-charter__metric + .msc-about-charter__metric {
+  border-left: 1px solid rgba(212, 190, 153, .10);
+}
+
+.msc-about-charter__metric span,
+.msc-about-charter__metric strong {
+  text-transform: uppercase;
+}
+
+.msc-about-charter__metric span {
+  color: rgba(212, 190, 153, .58);
+  font-size: .68rem;
+  font-weight: 760;
+  letter-spacing: .13em;
+}
+
+.msc-about-charter__metric strong {
+  color: rgba(251, 248, 239, .78);
+  font-size: .78rem;
+  font-weight: 760;
+  letter-spacing: .08em;
+}
+
+@keyframes mscAboutSourcePulse {
+  0%, 100% { opacity: .35; transform: scale(.98); }
+  50% { opacity: .85; transform: scale(1.035); }
+}
+
+@media screen and (max-width: 1100px) {
+  .msc-about-hero {
+    grid-template-columns: minmax(0, .9fr) minmax(36rem, 1.1fr);
+  }
+
+  .msc-about-charter__stations {
+    gap: 12.5rem 8rem;
+  }
+}
+
+@media screen and (max-width: 990px) {
+  .msc-about-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .msc-about-hero__content {
+    max-width: 76rem;
+  }
+
+  .msc-about-charter {
+    min-height: auto;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .msc-about {
+    padding-top: 4.2rem;
+  }
+
+  .msc-about-hero__index span::after {
+    display: none;
+  }
+
+  .msc-about-charter__topbar {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 1.4rem 1.5rem;
+  }
+
+  .msc-about-charter__map {
+    min-height: auto;
+    padding: 1.5rem;
+  }
+
+  .msc-about-charter__connectors {
+    display: none;
+  }
+
+  .msc-about-charter__source {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 10.2rem;
+    margin: .6rem auto 2rem;
+    transform: none;
+  }
+
+  .msc-about-charter__stations {
+    grid-template-columns: 1fr;
+    gap: .9rem;
+  }
+
+  .msc-about-charter__station:nth-child(even) {
+    text-align: left;
+  }
+
+  .msc-about-charter__footer {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .msc-about-charter__metric:nth-child(3) {
+    border-left: 0;
+    border-top: 1px solid rgba(212, 190, 153, .10);
+  }
+
+  .msc-about-charter__metric:nth-child(4) {
+    border-top: 1px solid rgba(212, 190, 153, .10);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .msc-about-charter__source::after {
+    animation: none;
+  }
+
+  .msc-about-charter__station {
+    transition: none;
+  }
+}

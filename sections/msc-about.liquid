@@ -1,4 +1,5 @@
 {{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
+{{ 'msc-about-hero-v2.css' | asset_url | stylesheet_tag }}
 
 <section class="msc-shell msc-about" id="MscAbout-{{ section.id }}">
   <div class="msc-container">
@@ -7,19 +8,69 @@
         <p class="msc-eyebrow">{{ section.settings.hero_eyebrow | escape }}</p>
         <h1 class="msc-title msc-about-hero__title">{{ section.settings.hero_heading | escape }}</h1>
         <div class="msc-subtitle msc-about-hero__copy rte">{{ section.settings.hero_copy }}</div>
-        <div class="msc-about-actions">
-          {%- if section.settings.hero_primary_label != blank -%}<a class="msc-button" href="{{ section.settings.hero_primary_link | default: '#MainContent' }}">{{ section.settings.hero_primary_label | escape }}</a>{%- endif -%}
-          {%- if section.settings.hero_secondary_label != blank -%}<a class="msc-button msc-button--secondary" href="{{ section.settings.hero_secondary_link | default: '#MainContent' }}">{{ section.settings.hero_secondary_label | escape }}</a>{%- endif -%}
-        </div>
+        <p class="msc-about-hero__index" aria-label="Mempool Surf Club platform areas">
+          <span>Explore</span><span>Learn</span><span>Tools</span><span>Shop</span>
+        </p>
       </div>
-      <aside class="msc-club-log msc-glass-card" aria-label="Mempool Surf Club observation log visual">
-        <div class="msc-club-log__top"><span>CLUB LOG</span><span>OBSERVATION 001</span></div>
-        <div class="msc-club-log__stamp"><span>MEMPOOL SURF CLUB</span><strong>BITCOIN / CULTURE / NETWORK</strong></div>
-        <div class="msc-club-log__wave" aria-hidden="true"><svg viewBox="0 0 720 160" preserveAspectRatio="none" focusable="false"><path d="M12 84 C88 34 142 34 218 84 S348 134 424 84 S554 34 708 84"/><path d="M12 118 C92 92 158 92 238 118 S372 144 452 118 S590 92 708 118"/></svg></div>
-        <p class="msc-club-log__status">STATUS: WATCHING THE WAVES</p>
-        <ul class="msc-club-log__lines" aria-label="Observation areas">
-          <li><span>Network</span><i></i></li><li><span>Culture</span><i></i></li><li><span>Art</span><i></i></li><li><span>Code</span><i></i></li><li><span>People</span><i></i></li>
-        </ul>
+
+      <aside class="msc-about-charter" aria-label="Mempool Surf Club system map showing how Explore, Learn, Tools, and Shop connect back to Bitcoin.">
+        <div class="msc-about-charter__topbar">
+          <p class="msc-about-charter__identity"><strong>MSC CHARTER</strong><span>ABOUT SYSTEM</span></p>
+          <p class="msc-about-charter__code">MSC / ABOUT-01</p>
+        </div>
+
+        <div class="msc-about-charter__map">
+          <svg class="msc-about-charter__connectors" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            <path d="M50 50 L18 20" />
+            <path d="M50 50 L82 20" />
+            <path d="M50 50 L18 80" />
+            <path d="M50 50 L82 80" />
+            <circle cx="18" cy="20" r=".7" />
+            <circle cx="82" cy="20" r=".7" />
+            <circle cx="18" cy="80" r=".7" />
+            <circle cx="82" cy="80" r=".7" />
+          </svg>
+
+          <div class="msc-about-charter__source" aria-hidden="true">
+            <div>
+              <svg class="msc-about-charter__bitcoin" viewBox="0 0 450 913" focusable="false">
+                <path d="M103 913V815H0V101H103V0H170V101H172Q207 101 236 104V0H303V115Q367 131 399.5 171Q432 211 432 282Q432 343 410 385Q388 427 347 436V441Q376 448 399 466Q422 484 436 518Q450 552 450 608Q450 684 411 734.5Q372 785 303 804V913H236V815Q227 815 217 815H170V913ZM189 384Q239 384 258 363Q277 342 277 302Q277 261 254 243Q231 225 181 225H151V384ZM151 504V690H200Q252 690 272.5 663.5Q293 637 293 593Q293 553 272 528.5Q251 504 195 504Z" />
+              </svg>
+              <strong>Bitcoin</strong>
+              <span>Source signal</span>
+            </div>
+          </div>
+
+          <div class="msc-about-charter__stations">
+            <a class="msc-about-charter__station" href="/pages/explore-the-bitcoin-ecosystem">
+              <span class="msc-about-charter__station-code">01 / Explore</span>
+              <h2>Map the ecosystem</h2>
+              <p>People, projects, protocols, companies, and culture around Bitcoin.</p>
+            </a>
+            <a class="msc-about-charter__station" href="/pages/learn-bitcoin">
+              <span class="msc-about-charter__station-code">02 / Learn</span>
+              <h2>Explain the system</h2>
+              <p>Clear routes from Bitcoin fundamentals into the network and deeper protocol layers.</p>
+            </a>
+            <a class="msc-about-charter__station" href="/pages/bitcoin-tools">
+              <span class="msc-about-charter__station-code">03 / Tools</span>
+              <h2>Read the network</h2>
+              <p>Interfaces for fees, blocks, transactions, infrastructure, and network conditions.</p>
+            </a>
+            <a class="msc-about-charter__station" href="{{ routes.all_products_collection_url }}">
+              <span class="msc-about-charter__station-code">04 / Shop</span>
+              <h2>Carry the culture</h2>
+              <p>MSC releases and physical collections connected to the ideas moving through Bitcoin.</p>
+            </a>
+          </div>
+        </div>
+
+        <div class="msc-about-charter__footer" aria-label="Mempool Surf Club charter details">
+          <div class="msc-about-charter__metric"><span>Origin</span><strong>Bitcoin</strong></div>
+          <div class="msc-about-charter__metric"><span>Method</span><strong>Observe + Explain</strong></div>
+          <div class="msc-about-charter__metric"><span>Model</span><strong>Independent</strong></div>
+          <div class="msc-about-charter__metric"><span>Status</span><strong>Active</strong></div>
+        </div>
       </aside>
     </div>
 
@@ -115,7 +166,7 @@
   "tag": "section",
   "class": "section",
   "settings": [
-    {"type":"text","id":"hero_eyebrow","label":"Hero eyebrow","default":"THE CLUBHOUSE"},{"type":"text","id":"hero_heading","label":"Hero heading","default":"WE WATCH THE WAVES OF BITCOIN."},{"type":"richtext","id":"hero_copy","label":"Hero copy","default":"<p>Mempool Surf Club is an independent Bitcoin culture platform built to observe the network, document the people and ideas moving through it, and create objects that carry the culture forward.</p>"},{"type":"text","id":"hero_primary_label","label":"Primary button label","default":"Explore the ecosystem"},{"type":"url","id":"hero_primary_link","label":"Primary button link"},{"type":"text","id":"hero_secondary_label","label":"Secondary button label","default":"Read the field guide"},{"type":"url","id":"hero_secondary_link","label":"Secondary button link"},
+    {"type":"text","id":"hero_eyebrow","label":"Hero eyebrow","default":"ABOUT MEMPOOL SURF CLUB"},{"type":"text","id":"hero_heading","label":"Hero heading","default":"BUILT TO READ THE WHOLE BITCOIN OCEAN."},{"type":"richtext","id":"hero_copy","label":"Hero copy","default":"<p>Mempool Surf Club is an independent Bitcoin platform for learning how the network works, exploring the people and projects around it, using tools to read network conditions, and documenting the culture forming alongside it.</p>"},{"type":"text","id":"hero_primary_label","label":"Primary button label","default":"Explore the ecosystem"},{"type":"url","id":"hero_primary_link","label":"Primary button link"},{"type":"text","id":"hero_secondary_label","label":"Secondary button label","default":"Read the field guide"},{"type":"url","id":"hero_secondary_link","label":"Secondary button link"},
     {"type":"richtext","id":"manifesto_copy","label":"Manifesto copy","default":"<p>People watch the mempool. Surfers watch the waves. We watch the waves of Bitcoin.</p><p>Some arrive as macro shifts. Others begin as technical ripples, cultural movements, art, code, businesses, or ideas.</p><p>They may move at different speeds and different scales, but they belong to the same ocean.</p>"},
     {"type":"text","id":"why_kicker","label":"Why kicker","default":"WHY THE CLUB EXISTS"},{"type":"text","id":"why_heading","label":"Why heading","default":"Built to see the whole ocean."},{"type":"richtext","id":"why_copy","label":"Why copy","default":"<p>MSC connects network observation, cultural documentation, education, tools, and physical goods without drifting away from Bitcoin.</p>"},
     {"type":"text","id":"platform_kicker","label":"Platform kicker","default":"INSIDE MSC"},{"type":"text","id":"platform_heading","label":"Platform heading","default":"What lives inside the clubhouse."},{"type":"richtext","id":"platform_copy","label":"Platform copy","default":"<p>Each room has a different job, but every room looks back toward the same Bitcoin ocean.</p>"},
