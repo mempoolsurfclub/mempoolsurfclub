@@ -1,5 +1,6 @@
 {{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
 {{ 'msc-about-mission.css' | asset_url | stylesheet_tag }}
+{{ 'msc-about-contribute.css' | asset_url | stylesheet_tag }}
 
 <section class="msc-about-mission" id="MscAboutMission-{{ section.id }}">
   <div class="msc-container">
@@ -73,76 +74,239 @@
       </div>
     </div>
 
-    <section class="msc-support-signal" aria-labelledby="MscSupportSignal-{{ section.id }}">
-      <div class="msc-support-signal__story">
-        <p class="msc-section-kicker">{{ section.settings.support_kicker | escape }}</p>
-        <h2 id="MscSupportSignal-{{ section.id }}">{{ section.settings.support_heading | escape }}</h2>
-        <div class="rte">{{ section.settings.support_copy }}</div>
-        <div class="msc-support-signal__impact" aria-label="What Bitcoin support helps fund">
+    <section class="msc-contribute" aria-labelledby="MscContribute-{{ section.id }}" data-connected="false">
+      <div class="msc-contribute__story">
+        <p class="msc-section-kicker">{{ section.settings.contribution_kicker | escape }}</p>
+        <h2 id="MscContribute-{{ section.id }}">{{ section.settings.contribution_heading | escape }}</h2>
+        <div class="rte">{{ section.settings.contribution_copy }}</div>
+        <div class="msc-contribute__impact" aria-label="What contributions help MSC build">
           <span>TOOLS</span><span>LEARNING GUIDES</span><span>HOSTING + RESEARCH</span><span>DESIGN + IMPROVEMENTS</span>
         </div>
       </div>
 
-      <div class="msc-support-signal__terminal">
-        <div class="msc-support-signal__terminal-top">
-          <span>BITCOIN SUPPORT CHANNEL</span>
-          <strong>{% if section.settings.bitcoin_address != blank or section.settings.lightning_address != blank %}OPEN{% else %}PREPARING{% endif %}</strong>
+      <div class="msc-contribute__terminal">
+        <div class="msc-contribute__topbar">
+          <span>CONTRIBUTION TERMINAL</span>
+          <strong class="msc-contribute__status-chip" data-msc-terminal-state>READY</strong>
         </div>
 
-        {%- if section.settings.bitcoin_address != blank -%}
-          <div class="msc-support-channel">
-            <div><span>ON-CHAIN BTC</span><code id="MscBtcAddress-{{ section.id }}">{{ section.settings.bitcoin_address | escape }}</code></div>
-            <div class="msc-support-channel__actions">
-              <button type="button" data-msc-copy="#MscBtcAddress-{{ section.id }}">COPY</button>
-              <a href="bitcoin:{{ section.settings.bitcoin_address | url_encode }}">OPEN WALLET</a>
+        <div class="msc-contribute__body">
+          <div class="msc-contribute__wallet">
+            <div class="msc-contribute__wallet-copy">
+              <span>WALLET</span>
+              <strong data-msc-wallet-state>NOT CONNECTED</strong>
+            </div>
+            <div class="msc-contribute__wallet-actions">
+              <button class="msc-contribute__button" type="button" data-msc-wallet-connect>CONNECT WALLET</button>
+              <button class="msc-contribute__button msc-contribute__button--quiet" type="button" data-msc-wallet-disconnect>DISCONNECT</button>
             </div>
           </div>
-        {%- endif -%}
 
-        {%- if section.settings.lightning_address != blank -%}
-          <div class="msc-support-channel">
-            <div><span>LIGHTNING</span><code id="MscLightningAddress-{{ section.id }}">{{ section.settings.lightning_address | escape }}</code></div>
-            <div class="msc-support-channel__actions">
-              <button type="button" data-msc-copy="#MscLightningAddress-{{ section.id }}">COPY</button>
+          <div class="msc-contribute__amount-panel">
+            <span class="msc-contribute__amount-label">AMOUNT / SATS</span>
+            <div class="msc-contribute__presets" aria-label="Contribution amount presets">
+              <button class="msc-contribute__preset" type="button" data-msc-sats="1000">1K</button>
+              <button class="msc-contribute__preset is-active" type="button" data-msc-sats="5000">5K</button>
+              <button class="msc-contribute__preset" type="button" data-msc-sats="10000">10K</button>
+              <button class="msc-contribute__preset" type="button" data-msc-sats="25000">25K</button>
             </div>
+            <label class="msc-contribute__amount">
+              <input type="number" min="1" step="1" inputmode="numeric" value="5000" aria-label="Contribution amount in satoshis" data-msc-amount>
+              <span>SATS</span>
+            </label>
           </div>
-        {%- endif -%}
 
-        {%- if section.settings.bitcoin_address == blank and section.settings.lightning_address == blank -%}
-          <div class="msc-support-signal__empty">
-            <span>DIRECT BITCOIN SUPPORT</span>
-            <strong>SUPPORT CHANNEL OPENING SOON</strong>
-            <p>No address is published yet. We will only display verified MSC support details here.</p>
-          </div>
-        {%- endif -%}
-
-        {%- if section.settings.bitcoin_qr != blank or section.settings.lightning_qr != blank -%}
-          <div class="msc-support-signal__qrs">
-            {%- if section.settings.bitcoin_qr != blank -%}<figure>{{ section.settings.bitcoin_qr | image_url: width: 360 | image_tag: loading: 'lazy', alt: 'Mempool Surf Club Bitcoin support QR code' }}<figcaption>ON-CHAIN</figcaption></figure>{%- endif -%}
-            {%- if section.settings.lightning_qr != blank -%}<figure>{{ section.settings.lightning_qr | image_url: width: 360 | image_tag: loading: 'lazy', alt: 'Mempool Surf Club Lightning support QR code' }}<figcaption>LIGHTNING</figcaption></figure>{%- endif -%}
-          </div>
-        {%- endif -%}
-
-        <p class="msc-support-signal__note">Direct Bitcoin support helps MSC keep building, teaching, and improving independently.</p>
+          <button class="msc-contribute__button msc-contribute__submit" type="button" data-msc-contribute disabled>CONTRIBUTE</button>
+          <p class="msc-contribute__message" aria-live="polite" data-msc-contribution-message>
+            {% if section.settings.contribution_address != blank %}Connect a wallet to contribute.{% else %}Wallet connection is ready. The MSC receiving destination must be configured before funds can be sent.{% endif %}
+          </p>
+          <p class="msc-contribute__footnote">Your wallet controls authorization. Funds move only when you initiate and approve a contribution.</p>
+        </div>
       </div>
     </section>
   </div>
 </section>
 
-<script>
+<script type="module">
   (() => {
     const root = document.getElementById('MscAboutMission-{{ section.id }}');
-    if (!root) return;
-    root.querySelectorAll('[data-msc-copy]').forEach((button) => {
-      button.addEventListener('click', async () => {
-        const target = root.querySelector(button.getAttribute('data-msc-copy'));
-        if (!target || !navigator.clipboard) return;
-        await navigator.clipboard.writeText(target.textContent.trim());
-        const original = button.textContent;
-        button.textContent = 'COPIED';
-        window.setTimeout(() => { button.textContent = original; }, 1400);
-      });
-    });
+    if (!root || root.dataset.mscContributionReady === 'true') return;
+    root.dataset.mscContributionReady = 'true';
+
+    const panel = root.querySelector('.msc-contribute');
+    const connectButton = root.querySelector('[data-msc-wallet-connect]');
+    const disconnectButton = root.querySelector('[data-msc-wallet-disconnect]');
+    const walletState = root.querySelector('[data-msc-wallet-state]');
+    const terminalState = root.querySelector('[data-msc-terminal-state]');
+    const amountInput = root.querySelector('[data-msc-amount]');
+    const contributeButton = root.querySelector('[data-msc-contribute]');
+    const message = root.querySelector('[data-msc-contribution-message]');
+    const presets = Array.from(root.querySelectorAll('[data-msc-sats]'));
+    const contributionAddress = {{ section.settings.contribution_address | strip | json }};
+
+    let provider = null;
+    let bitcoinConnect = null;
+    let loading = false;
+
+    const setMessage = (text, tone = '') => {
+      message.textContent = text;
+      message.dataset.tone = tone;
+    };
+
+    const validAmount = () => {
+      const value = Number(amountInput.value);
+      return Number.isSafeInteger(value) && value > 0 ? value : null;
+    };
+
+    const updateSubmit = () => {
+      contributeButton.disabled = loading || !provider || !contributionAddress || !validAmount();
+    };
+
+    const connectorLabel = () => {
+      try {
+        const config = bitcoinConnect?.getConnectorConfig?.();
+        return config?.connectorName ? String(config.connectorName).toUpperCase() : 'WALLET CONNECTED';
+      } catch (_) {
+        return 'WALLET CONNECTED';
+      }
+    };
+
+    const setConnected = (nextProvider) => {
+      provider = nextProvider || null;
+      panel.dataset.connected = provider ? 'true' : 'false';
+      walletState.textContent = provider ? connectorLabel() : 'NOT CONNECTED';
+      terminalState.textContent = provider ? 'CONNECTED' : 'READY';
+      if (provider) {
+        setMessage(contributionAddress ? 'Choose an amount, then contribute.' : 'Wallet connected. The MSC receiving destination must be configured before funds can be sent.');
+      } else {
+        setMessage(contributionAddress ? 'Connect a wallet to contribute.' : 'Wallet connection is ready. The MSC receiving destination must be configured before funds can be sent.');
+      }
+      updateSubmit();
+    };
+
+    const resolveLightningInvoice = async (address, sats) => {
+      const parts = String(address || '').trim().split('@');
+      if (parts.length !== 2) throw new Error('MSC contribution destination is not a valid Lightning address.');
+
+      const username = parts[0].toLowerCase();
+      const domain = parts[1].toLowerCase();
+      if (!/^[a-z0-9._+-]+$/.test(username) || !/^[a-z0-9.-]+\.[a-z]{2,}$/.test(domain)) {
+        throw new Error('MSC contribution destination is not a valid Lightning address.');
+      }
+
+      const discoveryUrl = `https://${domain}/.well-known/lnurlp/${encodeURIComponent(username)}`;
+      const discoveryResponse = await fetch(discoveryUrl, { headers: { Accept: 'application/json' } });
+      if (!discoveryResponse.ok) throw new Error('Could not reach the MSC contribution destination.');
+
+      const params = await discoveryResponse.json();
+      if (params?.status === 'ERROR') throw new Error(params.reason || 'Contribution destination returned an error.');
+      if (params?.tag !== 'payRequest' || !params?.callback) throw new Error('Contribution destination did not return a valid payment request.');
+
+      const msats = sats * 1000;
+      if (!Number.isSafeInteger(msats)) throw new Error('Contribution amount is too large.');
+      if (Number.isFinite(params.minSendable) && msats < params.minSendable) {
+        throw new Error(`Minimum contribution is ${Math.ceil(params.minSendable / 1000)} sats.`);
+      }
+      if (Number.isFinite(params.maxSendable) && msats > params.maxSendable) {
+        throw new Error(`Maximum contribution is ${Math.floor(params.maxSendable / 1000)} sats.`);
+      }
+
+      const callback = new URL(params.callback);
+      if (callback.protocol !== 'https:') throw new Error('Contribution destination returned an insecure callback.');
+      callback.searchParams.set('amount', String(msats));
+
+      const invoiceResponse = await fetch(callback.toString(), { headers: { Accept: 'application/json' } });
+      if (!invoiceResponse.ok) throw new Error('Could not create the contribution invoice.');
+
+      const invoice = await invoiceResponse.json();
+      if (invoice?.status === 'ERROR') throw new Error(invoice.reason || 'Could not create the contribution invoice.');
+      if (!invoice?.pr || typeof invoice.pr !== 'string') throw new Error('Contribution destination did not return a Lightning invoice.');
+      return invoice.pr;
+    };
+
+    const initContribution = async () => {
+      try {
+        bitcoinConnect = await import('https://esm.sh/@getalby/bitcoin-connect@3.12.2');
+        bitcoinConnect.init({
+          appName: 'Mempool Surf Club',
+          showBalance: false,
+          persistConnection: true
+        });
+
+        bitcoinConnect.onConnected((nextProvider) => setConnected(nextProvider));
+        bitcoinConnect.onDisconnected(() => setConnected(null));
+
+        connectButton.addEventListener('click', async () => {
+          try {
+            terminalState.textContent = 'CONNECTING';
+            setMessage('Choose a wallet to connect.');
+            await bitcoinConnect.launchModal();
+          } catch (error) {
+            terminalState.textContent = provider ? 'CONNECTED' : 'READY';
+            setMessage(error?.message || 'Wallet connection was not completed.', 'error');
+          }
+        });
+
+        disconnectButton.addEventListener('click', async () => {
+          try {
+            await bitcoinConnect.disconnect();
+          } finally {
+            setConnected(null);
+          }
+        });
+
+        presets.forEach((button) => {
+          button.addEventListener('click', () => {
+            amountInput.value = button.dataset.mscSats;
+            presets.forEach((item) => item.classList.toggle('is-active', item === button));
+            updateSubmit();
+          });
+        });
+
+        amountInput.addEventListener('input', () => {
+          presets.forEach((item) => item.classList.toggle('is-active', item.dataset.mscSats === amountInput.value));
+          updateSubmit();
+        });
+
+        contributeButton.addEventListener('click', async () => {
+          const sats = validAmount();
+          if (!sats || !contributionAddress || loading) return;
+
+          loading = true;
+          updateSubmit();
+          terminalState.textContent = 'PREPARING';
+          setMessage(`Preparing ${sats.toLocaleString()} sat contribution…`);
+
+          try {
+            const activeProvider = provider || await bitcoinConnect.requestProvider();
+            setConnected(activeProvider);
+            const invoice = await resolveLightningInvoice(contributionAddress, sats);
+
+            terminalState.textContent = 'AWAITING APPROVAL';
+            setMessage('Approve the contribution in your wallet.');
+            const result = await activeProvider.sendPayment(invoice);
+
+            if (!result?.preimage) throw new Error('The wallet did not confirm the payment.');
+            terminalState.textContent = 'SENT';
+            setMessage(`Contribution sent — ${sats.toLocaleString()} sats. Thank you for helping MSC keep building.`, 'success');
+          } catch (error) {
+            terminalState.textContent = provider ? 'CONNECTED' : 'READY';
+            setMessage(error?.message || 'Contribution was not completed.', 'error');
+          } finally {
+            loading = false;
+            updateSubmit();
+          }
+        });
+
+        setConnected(null);
+      } catch (error) {
+        connectButton.disabled = true;
+        terminalState.textContent = 'UNAVAILABLE';
+        setMessage('Wallet connection is temporarily unavailable. Please try again later.', 'error');
+      }
+    };
+
+    initContribution();
   })();
 </script>
 
@@ -155,13 +319,10 @@
     {"type":"text","id":"eyebrow","label":"Hero eyebrow","default":"ABOUT MEMPOOL SURF CLUB"},
     {"type":"text","id":"heading","label":"Hero heading","default":"BUILT TO READ THE WHOLE BITCOIN OCEAN."},
     {"type":"richtext","id":"hero_copy","label":"Hero copy","default":"<p>We built Mempool Surf Club because Bitcoin is too important to reduce to a price chart. We follow the network, turn complexity into learning guides, build useful tools, document the culture, and make things people are proud to wear and carry.</p>"},
-    {"type":"text","id":"support_kicker","label":"Support kicker","default":"SUPPORT THE SIGNAL"},
-    {"type":"text","id":"support_heading","label":"Support heading","default":"HELP US KEEP BUILDING."},
-    {"type":"richtext","id":"support_copy","label":"Support copy","default":"<p>MSC is independently built and maintained. Bitcoin support helps fund hosting, research, new tools, learning guides, design, and the time it takes to keep the site useful and current.</p>"},
-    {"type":"textarea","id":"bitcoin_address","label":"Bitcoin on-chain support address"},
-    {"type":"text","id":"lightning_address","label":"Lightning support address"},
-    {"type":"image_picker","id":"bitcoin_qr","label":"Bitcoin QR image"},
-    {"type":"image_picker","id":"lightning_qr","label":"Lightning QR image"}
+    {"type":"text","id":"contribution_kicker","label":"Contribution kicker","default":"CONTRIBUTE TO MSC"},
+    {"type":"text","id":"contribution_heading","label":"Contribution heading","default":"KEEP THE CLUBHOUSE MOVING."},
+    {"type":"richtext","id":"contribution_copy","label":"Contribution copy","default":"<p>Contributions help fund hosting, research, new tools, learning guides, design, and the time it takes to keep MSC useful, independent, and improving.</p>"},
+    {"type":"text","id":"contribution_address","label":"MSC receiving Lightning address","info":"Required before connected wallets can send contributions."}
   ],
   "presets": [{"name":"MSC About Mission"}]
 }
