@@ -1,0 +1,120 @@
+<style>
+  .shopify-section.msc-footer-refine-section {
+    display: contents;
+  }
+
+  .msc-site-footer .footer__msc-closing {
+    display: none !important;
+  }
+
+  .msc-site-footer .footer__content-top {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.8rem;
+    padding-top: clamp(2.4rem, 3.5vw, 3.4rem);
+    padding-bottom: clamp(2.8rem, 4vw, 4rem);
+  }
+
+  .msc-site-footer .footer__blocks-wrapper {
+    display: block !important;
+    width: 100%;
+    max-width: 76rem;
+    margin: 0 auto !important;
+  }
+
+  .msc-site-footer .footer-block--menu {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+  }
+
+  .msc-site-footer .footer-block--menu .footer-block__heading {
+    margin: 0 0 1rem;
+    text-align: center;
+  }
+
+  .msc-site-footer .footer-block--menu .footer-block__details-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: .25rem 1.8rem;
+    margin: 0;
+  }
+
+  .msc-site-footer .footer-block--menu .footer-block__details-content > li {
+    margin: 0 !important;
+  }
+
+  .msc-site-footer .footer-block--menu .list-menu__item--link {
+    padding: .35rem 0 !important;
+  }
+
+  .msc-site-footer .footer-block--newsletter {
+    width: min(68rem, 100%);
+    margin: 0 auto !important;
+    padding: 1.25rem 1.5rem 1.35rem !important;
+    align-items: stretch !important;
+    justify-content: center !important;
+  }
+
+  .msc-site-footer .footer-block__newsletter {
+    width: 100%;
+    margin: 0 !important;
+    text-align: center !important;
+  }
+
+  .msc-site-footer .footer-block__newsletter .footer-block__heading {
+    margin: 0 0 .55rem;
+    text-align: center;
+  }
+
+  .msc-site-footer .footer__newsletter-copy {
+    max-width: 54rem;
+    margin: 0 auto .9rem;
+    font-size: 1.25rem;
+    line-height: 1.45;
+    text-align: center;
+  }
+
+  .msc-site-footer .footer__newsletter,
+  .msc-site-footer .newsletter-form__field-wrapper {
+    width: 100%;
+    max-width: 52rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .msc-site-footer .footer__newsletter .field,
+  .msc-site-footer .footer__newsletter .field__input,
+  .msc-site-footer .footer__newsletter .newsletter-form__button {
+    min-height: 5rem;
+  }
+
+  @media screen and (max-width: 749px) {
+    .msc-site-footer .footer__content-top {
+      gap: 1.5rem;
+      padding-top: 2rem;
+      padding-bottom: 2.6rem;
+    }
+
+    .msc-site-footer .footer-block--menu .footer-block__details-content {
+      gap: .2rem 1.25rem;
+    }
+
+    .msc-site-footer .footer-block--newsletter {
+      padding: 1.15rem 1.2rem 1.25rem !important;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "MSC Footer Refine",
+  "tag": "section",
+  "class": "msc-footer-refine-section",
+  "settings": []
+}
+{% endschema %}
