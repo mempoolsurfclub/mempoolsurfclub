@@ -3,6 +3,10 @@
     display: contents;
   }
 
+  .msc-site-footer {
+    border-top: 0 !important;
+  }
+
   .msc-site-footer .footer__msc-closing {
     display: none !important;
   }
@@ -11,9 +15,9 @@
     display: flex !important;
     flex-direction: column;
     align-items: center;
-    gap: 1.8rem;
-    padding-top: clamp(2.4rem, 3.5vw, 3.4rem);
-    padding-bottom: clamp(2.8rem, 4vw, 4rem);
+    gap: 1.6rem;
+    padding-top: clamp(2.2rem, 3vw, 3rem);
+    padding-bottom: clamp(2.5rem, 3.5vw, 3.4rem);
   }
 
   .msc-site-footer .footer__blocks-wrapper {
@@ -53,9 +57,9 @@
   }
 
   .msc-site-footer .footer-block--newsletter {
-    width: min(68rem, 100%);
+    width: min(56rem, 100%);
     margin: 0 auto !important;
-    padding: 1.25rem 1.5rem 1.35rem !important;
+    padding: .9rem 1.2rem 1rem !important;
     align-items: stretch !important;
     justify-content: center !important;
   }
@@ -67,22 +71,21 @@
   }
 
   .msc-site-footer .footer-block__newsletter .footer-block__heading {
-    margin: 0 0 .55rem;
-    text-align: center;
+    display: none !important;
   }
 
   .msc-site-footer .footer__newsletter-copy {
-    max-width: 54rem;
-    margin: 0 auto .9rem;
-    font-size: 1.25rem;
-    line-height: 1.45;
+    max-width: 48rem;
+    margin: 0 auto .65rem;
+    font-size: 1.2rem;
+    line-height: 1.4;
     text-align: center;
   }
 
   .msc-site-footer .footer__newsletter,
   .msc-site-footer .newsletter-form__field-wrapper {
     width: 100%;
-    max-width: 52rem;
+    max-width: 48rem;
     margin-left: auto;
     margin-right: auto;
   }
@@ -90,14 +93,14 @@
   .msc-site-footer .footer__newsletter .field,
   .msc-site-footer .footer__newsletter .field__input,
   .msc-site-footer .footer__newsletter .newsletter-form__button {
-    min-height: 5rem;
+    min-height: 4.8rem;
   }
 
   @media screen and (max-width: 749px) {
     .msc-site-footer .footer__content-top {
-      gap: 1.5rem;
-      padding-top: 2rem;
-      padding-bottom: 2.6rem;
+      gap: 1.35rem;
+      padding-top: 1.8rem;
+      padding-bottom: 2.3rem;
     }
 
     .msc-site-footer .footer-block--menu .footer-block__details-content {
@@ -105,7 +108,8 @@
     }
 
     .msc-site-footer .footer-block--newsletter {
-      padding: 1.15rem 1.2rem 1.25rem !important;
+      width: min(100%, 52rem);
+      padding: .8rem 1rem .9rem !important;
     }
   }
 </style>
