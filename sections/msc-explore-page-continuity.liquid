@@ -4,18 +4,50 @@
   }
 
   /* Explore page canvas continuity.
-   * Atlas and Field Journal already use the same ambient gradient + grid.
-   * Anchor those existing layers to one viewport coordinate system so the
-   * artwork does not restart at the Shopify section boundary. No colors,
-   * widget geometry, Atlas internals, or Journal internals are changed. */
-  .msc-explore-atlas-shell,
-  .msc-explore-journal {
-    background-attachment: fixed;
+   * Use one real ambient canvas behind the Atlas and Field Journal so the
+   * gradient and chart grid cannot restart at the Shopify section boundary.
+   * This is scoped only to a MainContent instance containing this Explore-only
+   * continuity section; Atlas/Journal internals, geometry and controls remain
+   * untouched. */
+  #MainContent:has(.section--msc-explore-page-continuity) {
+    position: relative;
+    isolation: isolate;
+    background:
+      radial-gradient(circle at top left, rgba(212, 190, 153, .24), transparent 36rem),
+      radial-gradient(circle at bottom right, rgba(78, 107, 113, .32), transparent 44rem),
+      linear-gradient(135deg, #10282d 0%, #173c43 42%, #4e6b71 100%);
   }
 
-  .msc-explore-atlas-shell::before,
-  .msc-explore-journal::before {
-    background-attachment: fixed;
+  #MainContent:has(.section--msc-explore-page-continuity)::before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+    background-size: 42px 42px;
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,.85), transparent 92%);
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,.85), transparent 92%);
+  }
+
+  #MainContent:has(.section--msc-explore-page-continuity) > .shopify-section {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Remove only the duplicate ambient paint from the two section shells.
+   * Their content, widget surfaces, borders and all Atlas/Journal internals
+   * continue to render exactly as before over the shared page canvas. */
+  #MainContent:has(.section--msc-explore-page-continuity) .msc-explore-atlas-shell,
+  #MainContent:has(.section--msc-explore-page-continuity) .msc-explore-journal {
+    background: transparent !important;
+  }
+
+  #MainContent:has(.section--msc-explore-page-continuity) .msc-explore-atlas-shell::before,
+  #MainContent:has(.section--msc-explore-page-continuity) .msc-explore-journal::before {
+    background-image: none !important;
   }
 
   /* The Field Journal eyebrow is intentionally blank on Explore. Remove the
