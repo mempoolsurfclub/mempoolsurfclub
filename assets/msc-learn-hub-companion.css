@@ -3,7 +3,11 @@
 
 .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-004"] {
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: clamp(2.8rem, 4vw, 5rem);
+  column-gap: 0;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-004"] > *:not(.msc-guide-companion) {
+  margin-right: clamp(2.4rem, 3.5vw, 4rem);
 }
 
 .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-004"] > .msc-guide-companion {
@@ -87,6 +91,10 @@
 }
 
 @media screen and (max-width: 749px) {
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-004"] > *:not(.msc-guide-companion) {
+    margin-right: 0;
+  }
+
   .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-004"] > .msc-guide-companion {
     grid-column: auto;
     grid-row: auto;
