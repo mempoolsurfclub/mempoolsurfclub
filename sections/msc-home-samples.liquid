@@ -25,7 +25,7 @@
 
   assign shop_link = section.settings.shop_link
   if shop_link == blank
-    assign shop_link = '/pages/shop'
+    assign shop_link = routes.all_products_collection_url
   endif
 
   assign supply_collection = section.settings.product_collection
