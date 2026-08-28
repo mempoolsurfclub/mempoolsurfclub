@@ -143,7 +143,7 @@
 .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-subcategory {
   position: relative;
   padding-top: 2.4rem;
-  border-top: 1px solid rgba(212, 190, 153, .22);
+  border-top: 0;
   scroll-margin-top: 9rem;
 }
 
@@ -289,6 +289,10 @@
 
 .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-subcategory:first-child .msc-learn-guide-card:first-child .msc-learn-page-meta li {
   color: rgba(212, 190, 153, .72);
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-subcategory:first-child .msc-learn-guide-card:last-child {
+  grid-column: 1 / -1;
 }
 
 .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-key-terms,
