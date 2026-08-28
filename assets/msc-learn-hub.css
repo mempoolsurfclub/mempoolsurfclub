@@ -291,8 +291,16 @@
   color: rgba(212, 190, 153, .72);
 }
 
-.msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-subcategory:first-child .msc-learn-guide-card:last-child {
+.msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-004"] {
   grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  grid-template-rows: auto auto 1fr auto;
+  column-gap: clamp(2.8rem, 5vw, 6rem);
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-004"] > * {
+  grid-column: 1;
 }
 
 .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-key-terms,
@@ -397,6 +405,11 @@
     order: -1;
     width: fit-content;
     margin-bottom: .2rem;
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-004"] {
+    display: flex;
+    grid-column: auto;
   }
 
   .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-guide-card { min-height: 0; }
