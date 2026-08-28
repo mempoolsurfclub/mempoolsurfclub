@@ -132,50 +132,12 @@
 }
 
 .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-preview-note { display: none; }
-
-.msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-article {
-  max-width: none;
-  margin-top: clamp(3.8rem, 6vw, 6rem);
-  font-size: 1.6rem;
-  line-height: 1.65;
-}
-
-.msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-article__section { display: none; }
-
-.msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-article__section:nth-child(2) {
-  display: grid;
-  grid-template-columns: minmax(0, .72fr) minmax(0, 1.28fr);
-  gap: clamp(2rem, 5vw, 5rem);
-  align-items: start;
-  padding: clamp(2.6rem, 4.5vw, 4.2rem) 0;
-  border-top: 1px solid rgba(212, 190, 153, .22);
-  border-bottom: 1px solid rgba(212, 190, 153, .22);
-}
-
-.msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-article__section:nth-child(2) h2 {
-  margin: 0;
-  color: var(--msc-hub-sand);
-  font-size: clamp(3rem, 4vw, 4.8rem);
-  line-height: 1;
-  letter-spacing: -.045em;
-  text-wrap: balance;
-}
-
-.msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-article__section:nth-child(2) p { display: none; }
-
-.msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-article__section:nth-child(2) p:first-of-type {
-  display: block;
-  margin: 0;
-  max-width: 72rem;
-  color: rgba(251, 248, 239, .76);
-  font-size: clamp(1.55rem, 1.8vw, 1.8rem);
-  line-height: 1.65;
-}
+.msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-article { display: none; }
 
 .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-subcategories {
   display: grid;
   gap: clamp(4.8rem, 7vw, 7.4rem);
-  margin-top: clamp(4.8rem, 7vw, 7rem);
+  margin-top: clamp(3.8rem, 5.5vw, 5.6rem);
 }
 
 .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-subcategory {
@@ -183,6 +145,11 @@
   padding-top: 2.4rem;
   border-top: 1px solid rgba(212, 190, 153, .22);
   scroll-margin-top: 9rem;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-subcategory:first-child {
+  padding-top: 0;
+  border-top: 0;
 }
 
 .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-subcategory > h2 {
@@ -398,11 +365,6 @@
   }
 
   .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-page__header::after { display: none; }
-
-  .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-article__section:nth-child(2) {
-    grid-template-columns: 1fr;
-    gap: 1.4rem;
-  }
 }
 
 @media screen and (max-width: 749px) {
