@@ -1,0 +1,36 @@
+<style>
+  .section--msc-explore-page-continuity {
+    display: contents;
+  }
+
+  /* Explore page canvas continuity.
+   * Atlas and Field Journal already use the same ambient gradient + grid.
+   * Anchor those existing layers to one viewport coordinate system so the
+   * artwork does not restart at the Shopify section boundary. No colors,
+   * widget geometry, Atlas internals, or Journal internals are changed. */
+  .msc-explore-atlas-shell,
+  .msc-explore-journal {
+    background-attachment: fixed;
+  }
+
+  .msc-explore-atlas-shell::before,
+  .msc-explore-journal::before {
+    background-attachment: fixed;
+  }
+
+  /* The Field Journal eyebrow is intentionally blank on Explore. Remove the
+   * empty node from layout so there is no leftover gap above the title. */
+  .msc-explore-journal__kicker:empty {
+    display: none;
+    margin: 0;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "MSC Explore continuity",
+  "tag": "section",
+  "class": "section section--msc-explore-page-continuity",
+  "settings": []
+}
+{% endschema %}
