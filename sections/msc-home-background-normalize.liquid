@@ -1,0 +1,57 @@
+<style>
+  .section--msc-home-background-normalize {
+    display: contents;
+  }
+
+  /* Homepage canvas normalization.
+   * Keep one continuous canvas, but render it with the exact established MSC
+   * background treatment used elsewhere: shared gradient, 42px chart grid,
+   * and the standard vertical grid fade. */
+  body:has(.section--msc-home-background-normalize) #MainContent {
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at top left, rgba(212, 190, 153, 0.24), transparent 36rem),
+      radial-gradient(circle at bottom right, rgba(78, 107, 113, 0.32), transparent 44rem),
+      linear-gradient(135deg, #10282d 0%, #173c43 42%, #4e6b71 100%) !important;
+    color: var(--msc-paper-soft);
+  }
+
+  body:has(.section--msc-home-background-normalize) #MainContent::before {
+    content: "" !important;
+    display: block !important;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px) !important;
+    background-size: 42px 42px !important;
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,.85), transparent 92%);
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,.85), transparent 92%);
+  }
+
+  body:has(.section--msc-home-background-normalize) .msc-home-hero,
+  body:has(.section--msc-home-background-normalize) .msc-home-samples {
+    background: transparent !important;
+  }
+
+  body:has(.section--msc-home-background-normalize) .msc-home-hero {
+    border-bottom: 0 !important;
+  }
+
+  body:has(.section--msc-home-background-normalize) .msc-home-hero::before,
+  body:has(.section--msc-home-background-normalize) .msc-home-samples::before {
+    content: none !important;
+    display: none !important;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "MSC Home background",
+  "tag": "section",
+  "class": "section section--msc-home-background-normalize",
+  "settings": []
+}
+{% endschema %}
