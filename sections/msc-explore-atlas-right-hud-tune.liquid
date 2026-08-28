@@ -3,6 +3,26 @@
     display: contents;
   }
 
+  /* Approved Atlas region-control lock from PR #294. Keep this correction in
+   * an Atlas-owned section that is guaranteed to load after the base Atlas CSS
+   * so lower Explore-page section changes cannot silently disable it again. */
+  .msc-explore-atlas-shell .msc-atlas-window__coord,
+  .msc-explore-atlas-shell .msc-atlas-region__state {
+    display: none !important;
+  }
+
+  .msc-explore-atlas-shell button.msc-atlas-region {
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0 !important;
+    text-align: center !important;
+  }
+
+  .msc-explore-atlas-shell button.msc-atlas-region strong {
+    width: 100%;
+    text-align: center !important;
+  }
+
   /* Right-side Atlas HUD alignment pass: compact the text stack beside the ruler. */
   .msc-atlas-navhud__right-status {
     left: auto !important;
