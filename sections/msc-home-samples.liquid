@@ -1,0 +1,293 @@
+{{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
+{{ 'msc-home-samples.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign journal_blog = section.settings.content_blog
+  assign journal_link = section.settings.journal_link
+  if journal_link == blank
+    assign journal_link = '/pages/explore-the-bitcoin-ecosystem'
+  endif
+
+  assign learn_link = section.settings.learn_link
+  if learn_link == blank
+    assign learn_link = '/pages/learn-bitcoin'
+  endif
+
+  assign route_link = section.settings.route_link
+  if route_link == blank
+    assign route_page = pages['how-a-bitcoin-transaction-moves']
+    if route_page
+      assign route_link = route_page.url
+    else
+      assign route_link = '/pages/learn-bitcoin-route?msc_learn_id=MSC-ROUTE-001'
+    endif
+  endif
+
+  assign shop_link = section.settings.shop_link
+  if shop_link == blank
+    assign shop_link = routes.all_products_collection_url
+  endif
+
+  assign supply_collection = section.settings.product_collection
+  if supply_collection == blank
+    assign supply_collection = collections['all']
+  endif
+  assign supply_count = supply_collection.products_count | default: 0
+-%}
+
+<section class="msc-home-samples" id="MscHomeSamples-{{ section.id }}" data-msc-home-samples>
+  <div class="msc-home-samples__inner">
+    <section class="msc-home-sample msc-home-sample--journal" aria-labelledby="MscHomeJournalTitle-{{ section.id }}">
+      <header class="msc-home-sample__heading">
+        <div class="msc-home-sample__heading-copy">
+          <p class="msc-home-sample__kicker">{{ section.settings.journal_kicker | escape }}</p>
+          <h2 class="msc-home-sample__title" id="MscHomeJournalTitle-{{ section.id }}">{{ section.settings.journal_heading | escape }}</h2>
+          <div class="msc-home-sample__intro rte">{{ section.settings.journal_copy }}</div>
+        </div>
+        <a class="msc-home-sample__destination" href="{{ journal_link }}">{{ section.settings.journal_action | escape }} <span aria-hidden="true">→</span></a>
+      </header>
+
+      <div class="msc-home-journal-window">
+        <div class="msc-home-window__bar">
+          <span>FIELD JOURNAL // LATEST</span>
+          <span class="msc-home-window__signal">03 MOST RECENT</span>
+        </div>
+
+        {%- if journal_blog != blank and journal_blog.articles_count > 0 -%}
+          <div class="msc-home-journal-grid">
+            {%- for article in journal_blog.articles limit: 3 -%}
+              {%- liquid
+                assign article_label = article.tags.first | default: 'FIELD JOURNAL'
+                assign article_excerpt = article.excerpt_or_content | strip_html | strip
+              -%}
+              <a class="msc-home-journal-entry" href="{{ article.url }}">
+                <div class="msc-home-journal-entry__meta">
+                  <span>{{ article_label | escape }}</span>
+                  <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%b %d, %Y' }}</time>
+                </div>
+                <h3>{{ article.title | escape }}</h3>
+                {%- if article_excerpt != blank -%}<p>{{ article_excerpt | truncate: 150 | escape }}</p>{%- endif -%}
+                <span class="msc-home-journal-entry__action">READ ENTRY <span aria-hidden="true">→</span></span>
+              </a>
+            {%- endfor -%}
+          </div>
+        {%- else -%}
+          <div class="msc-home-journal-empty">Field Journal entries will appear here as they are published.</div>
+        {%- endif -%}
+      </div>
+    </section>
+
+    <section class="msc-home-sample msc-home-sample--learn" aria-labelledby="MscHomeLearnTitle-{{ section.id }}">
+      <header class="msc-home-sample__heading">
+        <div class="msc-home-sample__heading-copy">
+          <p class="msc-home-sample__kicker">{{ section.settings.learn_kicker | escape }}</p>
+          <h2 class="msc-home-sample__title" id="MscHomeLearnTitle-{{ section.id }}">{{ section.settings.learn_heading | escape }}</h2>
+          <div class="msc-home-sample__intro rte">{{ section.settings.learn_copy }}</div>
+        </div>
+        <a class="msc-home-sample__destination" href="{{ learn_link }}">{{ section.settings.learn_action | escape }} <span aria-hidden="true">→</span></a>
+      </header>
+
+      <div class="msc-home-learn-route">
+        <article class="msc-learn-route msc-glass-card">
+          <div>
+            <p class="msc-section-kicker">{{ section.settings.route_kicker | escape }}</p>
+            <h3 class="msc-section-title">{{ section.settings.route_heading | escape }}</h3>
+            <div class="msc-section-header__copy rte">{{ section.settings.route_copy }}</div>
+            <a class="msc-button msc-learn-route__cta" href="{{ route_link }}">{{ section.settings.route_action | escape }}</a>
+          </div>
+          <ol class="msc-learn-route__steps" aria-label="Bitcoin transaction learning route preview">
+            <li><span>1</span><strong>Create</strong></li>
+            <li><span>2</span><strong>Sign</strong></li>
+            <li><span>3</span><strong>Broadcast</strong></li>
+            <li><span>4</span><strong>Mempool</strong></li>
+            <li><span>5</span><strong>Confirm</strong></li>
+          </ol>
+        </article>
+      </div>
+    </section>
+
+    <section class="msc-home-sample msc-home-sample--shop" aria-labelledby="MscHomeShopTitle-{{ section.id }}">
+      <header class="msc-home-sample__heading">
+        <div class="msc-home-sample__heading-copy">
+          <p class="msc-home-sample__kicker">{{ section.settings.shop_kicker | escape }}</p>
+          <h2 class="msc-home-sample__title" id="MscHomeShopTitle-{{ section.id }}">{{ section.settings.shop_heading | escape }}</h2>
+          <div class="msc-home-sample__intro rte">{{ section.settings.shop_copy }}</div>
+        </div>
+        <a class="msc-home-sample__destination" href="{{ shop_link }}">{{ section.settings.shop_action | escape }} <span aria-hidden="true">→</span></a>
+      </header>
+
+      <div class="msc-home-supply-window" data-home-supply-carousel data-product-count="{{ supply_count }}">
+        <div class="msc-home-window__bar">
+          <span>MSC SUPPLY LOCKER // INSPECTION WINDOW</span>
+          <span class="msc-home-window__signal">CATALOG ONLINE</span>
+        </div>
+
+        <div class="msc-home-supply-window__body">
+          {%- if supply_collection != blank and supply_count > 0 -%}
+            <div class="msc-home-supply-media" aria-live="polite">
+              {%- for product in supply_collection.products -%}
+                {%- assign product_alt = product.featured_media.alt | default: product.title -%}
+                <div class="msc-home-supply-slide{% if forloop.first %} is-active{% endif %}" data-supply-slide data-slide-index="{{ forloop.index0 }}" {% unless forloop.first %}hidden{% endunless %} aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}">
+                  {%- if product.featured_media -%}
+                    {{ product.featured_media | image_url: width: 1000 | image_tag: loading: 'lazy', widths: '360, 540, 720, 900, 1000', sizes: '(min-width: 901px) 46vw, 90vw', alt: product_alt }}
+                  {%- else -%}
+                    <div class="msc-home-supply-placeholder" aria-hidden="true">MSC</div>
+                  {%- endif -%}
+                </div>
+              {%- endfor -%}
+            </div>
+
+            <div class="msc-home-supply-inspection">
+              <div class="msc-home-supply-inspection__top">
+                <span>PRODUCT INSPECTION BAY</span>
+                <span>ALL GOODS // {{ supply_count }} ITEMS</span>
+              </div>
+
+              {%- for product in supply_collection.products -%}
+                {%- assign product_copy = product.description | strip_html | strip | truncate: 190 -%}
+                <div class="msc-home-supply-info{% if forloop.first %} is-active{% endif %}" data-supply-info data-info-index="{{ forloop.index0 }}" {% unless forloop.first %}hidden{% endunless %}>
+                  <p class="msc-home-supply-info__status">{% if product.available %}IN STOCK{% else %}SOLD OUT{% endif %} // ITEM {{ forloop.index | prepend: '0' | slice: -2, 2 }}</p>
+                  <h3>{{ product.title | escape }}</h3>
+                  <p class="msc-home-supply-info__price">{% if product.price_varies %}FROM {% endif %}{{ product.price | money_with_currency }}</p>
+                  {%- if product_copy != blank -%}<p class="msc-home-supply-info__copy">{{ product_copy | escape }}</p>{%- endif -%}
+                  <div class="msc-home-supply-info__actions">
+                    <a class="msc-home-supply-link" href="{{ product.url }}">VIEW ITEM →</a>
+                    <a class="msc-home-supply-link" href="{{ shop_link }}">ENTER THE SHOP →</a>
+                  </div>
+                </div>
+              {%- endfor -%}
+
+              <div class="msc-home-supply-controls">
+                <span class="msc-home-supply-count" data-supply-counter aria-live="polite">01 / {{ supply_count | prepend: '0' | slice: -2, 2 }}</span>
+                <div class="msc-home-supply-controls__buttons">
+                  <button class="msc-home-supply-control" type="button" data-supply-prev aria-label="Previous product"{% if supply_count < 2 %} disabled{% endif %}>←</button>
+                  <button class="msc-home-supply-control" type="button" data-supply-next aria-label="Next product"{% if supply_count < 2 %} disabled{% endif %}>→</button>
+                </div>
+              </div>
+            </div>
+          {%- else -%}
+            <div class="msc-home-supply-empty">
+              <div>
+                <p class="msc-home-sample__kicker">PRODUCT FEED</p>
+                <p>Supply Locker products will rotate through this inspection window as the catalog comes online.</p>
+                <a class="msc-home-supply-link" href="{{ shop_link }}">ENTER THE SHOP →</a>
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
+
+<script>
+  (() => {
+    const section = document.getElementById('MscHomeSamples-{{ section.id }}');
+    if (!section) return;
+    const carousel = section.querySelector('[data-home-supply-carousel]');
+    if (!carousel) return;
+
+    const slides = Array.from(carousel.querySelectorAll('[data-supply-slide]'));
+    const infos = Array.from(carousel.querySelectorAll('[data-supply-info]'));
+    const prev = carousel.querySelector('[data-supply-prev]');
+    const next = carousel.querySelector('[data-supply-next]');
+    const counter = carousel.querySelector('[data-supply-counter]');
+    const count = Math.min(slides.length, infos.length);
+    if (!count) return;
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let active = 0;
+    let timer = null;
+    let paused = false;
+
+    const pad = (value) => String(value).padStart(2, '0');
+
+    const render = (index) => {
+      active = (index + count) % count;
+      slides.forEach((slide, i) => {
+        const selected = i === active;
+        slide.classList.toggle('is-active', selected);
+        slide.hidden = !selected;
+        slide.setAttribute('aria-hidden', selected ? 'false' : 'true');
+      });
+      infos.forEach((info, i) => {
+        const selected = i === active;
+        info.classList.toggle('is-active', selected);
+        info.hidden = !selected;
+      });
+      if (counter) counter.textContent = `${pad(active + 1)} / ${pad(count)}`;
+    };
+
+    const stop = () => {
+      if (timer) window.clearInterval(timer);
+      timer = null;
+    };
+
+    const start = () => {
+      stop();
+      if (count < 2 || paused || reduceMotion.matches || document.hidden) return;
+      timer = window.setInterval(() => render(active + 1), 6500);
+    };
+
+    const manual = (direction) => {
+      render(active + direction);
+      start();
+    };
+
+    prev?.addEventListener('click', () => manual(-1));
+    next?.addEventListener('click', () => manual(1));
+
+    carousel.addEventListener('pointerenter', () => { paused = true; stop(); });
+    carousel.addEventListener('pointerleave', () => { paused = false; start(); });
+    carousel.addEventListener('focusin', () => { paused = true; stop(); });
+    carousel.addEventListener('focusout', (event) => {
+      if (event.relatedTarget && carousel.contains(event.relatedTarget)) return;
+      paused = false;
+      start();
+    });
+
+    document.addEventListener('visibilitychange', start);
+    if (reduceMotion.addEventListener) reduceMotion.addEventListener('change', start);
+
+    render(0);
+    start();
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "MSC Homepage samples",
+  "tag": "section",
+  "class": "section section--msc-home-samples",
+  "settings": [
+    {"type":"header","content":"Field Journal sample"},
+    {"type":"blog","id":"content_blog","label":"Field Journal blog"},
+    {"type":"text","id":"journal_kicker","label":"Kicker","default":"EXPLORE / FIELD JOURNAL"},
+    {"type":"text","id":"journal_heading","label":"Heading","default":"LATEST FROM THE BITCOIN OCEAN."},
+    {"type":"richtext","id":"journal_copy","label":"Copy","default":"<p>Three recent entries from the people, projects, research, and culture moving through Bitcoin.</p>"},
+    {"type":"url","id":"journal_link","label":"Full Field Journal link"},
+    {"type":"text","id":"journal_action","label":"Action label","default":"EXPLORE THE JOURNAL"},
+
+    {"type":"header","content":"Learn sample"},
+    {"type":"text","id":"learn_kicker","label":"Kicker","default":"LEARN / FEATURED ROUTE"},
+    {"type":"text","id":"learn_heading","label":"Heading","default":"FOLLOW ONE COMPLETE BITCOIN PATH."},
+    {"type":"richtext","id":"learn_copy","label":"Copy","default":"<p>Start with a guided transaction route, then continue into the full Bitcoin field guide.</p>"},
+    {"type":"url","id":"learn_link","label":"Full Learn page link"},
+    {"type":"text","id":"learn_action","label":"Action label","default":"EXPLORE ALL LEARNING"},
+    {"type":"text","id":"route_kicker","label":"Route kicker","default":"Featured Learning Route"},
+    {"type":"text","id":"route_heading","label":"Route heading","default":"START HERE: HOW A BITCOIN TRANSACTION MOVES"},
+    {"type":"richtext","id":"route_copy","label":"Route copy","default":"<p>Follow the path from wallet creation and signing through the mempool, miner selection, block inclusion, and confirmation.</p>"},
+    {"type":"url","id":"route_link","label":"Featured route link"},
+    {"type":"text","id":"route_action","label":"Route action label","default":"Start the guide"},
+
+    {"type":"header","content":"Shop sample"},
+    {"type":"collection","id":"product_collection","label":"Products to rotate"},
+    {"type":"text","id":"shop_kicker","label":"Kicker","default":"SHOP / CURRENT GOODS"},
+    {"type":"text","id":"shop_heading","label":"Heading","default":"SCAN THE SUPPLY LOCKER."},
+    {"type":"richtext","id":"shop_copy","label":"Copy","default":"<p>Cycle through current MSC goods, releases, and collaborations before entering the full shop.</p>"},
+    {"type":"url","id":"shop_link","label":"Full Shop page link"},
+    {"type":"text","id":"shop_action","label":"Action label","default":"ENTER THE SHOP"}
+  ],
+  "presets": [{"name":"MSC Homepage samples"}]
+}
+{% endschema %}
