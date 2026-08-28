@@ -45,6 +45,13 @@
     content: none !important;
     display: none !important;
   }
+
+  /* Keep the homepage samples visually continuous: no decorative chapter rules
+   * between the Journal, Learn, and Shop previews. Widget borders remain intact. */
+  body:has(.section--msc-home-background-normalize) .msc-home-sample + .msc-home-sample::before {
+    content: none !important;
+    display: none !important;
+  }
 </style>
 
 {% schema %}
