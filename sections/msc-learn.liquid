@@ -245,17 +245,6 @@
       </aside>
     </div>
 
-    <div class="msc-block msc-learn-paths-block" aria-labelledby="MscLearnPaths-{{ section.id }}">
-      {% render 'msc-section-header', kicker: section.settings.paths_kicker, heading: section.settings.paths_heading, copy: section.settings.paths_copy, heading_id: 'MscLearnPaths-' | append: section.id %}
-      <div class="msc-learn-path-grid">
-        {%- for block in section.blocks -%}
-          {%- if block.type == 'learning_path' -%}
-            {% render 'msc-learning-path-card', title: block.settings.title, description: block.settings.description, link: block.settings.link, marker: block.settings.marker, recommended: block.settings.recommended, recommended_label: block.settings.recommended_label, action_label: block.settings.action_label, planned_handle: block.settings.planned_handle %}
-          {%- endif -%}
-        {%- endfor -%}
-      </div>
-    </div>
-
     <div class="msc-block msc-learn-index-block" aria-labelledby="MscLearnIndex-{{ section.id }}">
       {% render 'msc-section-header', kicker: section.settings.index_kicker, heading: section.settings.index_heading, copy: section.settings.index_copy, heading_id: 'MscLearnIndex-' | append: section.id %}
       <div class="msc-learn-index">
@@ -300,27 +289,6 @@
           {%- endif -%}
         {%- endfor -%}
       </div>
-    </div>
-
-    <div class="msc-block msc-learn-route-block" aria-labelledby="MscLearnRoute-{{ section.id }}">
-      <article class="msc-learn-route msc-glass-card">
-        <div>
-          <p class="msc-section-kicker">{{ section.settings.route_kicker | escape }}</p>
-          <h2 id="MscLearnRoute-{{ section.id }}" class="msc-section-title">{{ section.settings.route_heading | escape }}</h2>
-          <div class="msc-section-header__copy rte">{{ section.settings.route_copy }}</div>
-          {%- assign route_link = section.settings.route_link -%}
-          {%- if route_link == blank -%}
-            {%- assign route_page = pages['how-a-bitcoin-transaction-moves'] -%}
-            {%- if route_page -%}{%- assign route_link = route_page.url -%}{%- endif -%}
-          {%- endif -%}
-          {%- if route_link != blank -%}
-            <a class="msc-button msc-learn-route__cta" href="{{ route_link }}">{{ section.settings.route_action_label | escape }}</a>
-          {%- endif -%}
-        </div>
-        <ol class="msc-learn-route__steps" aria-label="Bitcoin transaction learning route preview">
-          <li><span>1</span><strong>Create</strong></li><li><span>2</span><strong>Sign</strong></li><li><span>3</span><strong>Broadcast</strong></li><li><span>4</span><strong>Mempool</strong></li><li><span>5</span><strong>Confirm</strong></li>
-        </ol>
-      </article>
     </div>
 
     <div class="msc-block msc-learn-glossary-block" aria-labelledby="MscLearnGlossary-{{ section.id }}">
