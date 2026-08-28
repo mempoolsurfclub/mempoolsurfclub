@@ -1,9 +1,44 @@
 {{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
 {{ 'msc-learn-hub.css' | asset_url | stylesheet_tag }}
+{{ 'msc-learn-hub-companion.css' | asset_url | stylesheet_tag }}
 {%- assign pilot_registry_id = section.settings.registry_id | strip -%}
 {%- case pilot_registry_id -%}
   {%- when 'MSC-HUB-BASICS' -%}
     {% render 'msc-learn-basics-hub-runtime' %}
+    <template data-msc-guide-companion-template="MSC-GUIDE-004">
+      <aside class="msc-guide-companion" aria-label="Satoshi documented timeline">
+        <p class="msc-guide-companion__eyebrow">Documented record</p>
+        <h4 class="msc-guide-companion__title">From proposal to withdrawal</h4>
+        <ol class="msc-guide-timeline">
+          <li class="msc-guide-timeline__item">
+            <span class="msc-guide-timeline__date">2008</span>
+            <span class="msc-guide-timeline__label">White paper announced on October 31</span>
+          </li>
+          <li class="msc-guide-timeline__item">
+            <span class="msc-guide-timeline__date">2009</span>
+            <span class="msc-guide-timeline__label">First public software released and genesis block created</span>
+          </li>
+          <li class="msc-guide-timeline__item">
+            <span class="msc-guide-timeline__date">2009–10</span>
+            <span class="msc-guide-timeline__label">Early testing, technical discussion, and collaboration</span>
+          </li>
+          <li class="msc-guide-timeline__item">
+            <span class="msc-guide-timeline__date">2010–11</span>
+            <span class="msc-guide-timeline__label">Public involvement declines and winds down</span>
+          </li>
+        </ol>
+      </aside>
+    </template>
+    <script>
+      (() => {
+        const script = document.currentScript;
+        const scope = script.closest('.shopify-section') || document;
+        const card = scope.querySelector('.msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-004"]');
+        const template = scope.querySelector('template[data-msc-guide-companion-template="MSC-GUIDE-004"]');
+        if (!card || !template || card.querySelector('.msc-guide-companion')) return;
+        card.appendChild(template.content.cloneNode(true));
+      })();
+    </script>
   {%- else -%}
     <section class="msc-shell msc-learn-page" data-msc-preview-only="true">
       <div class="msc-container msc-learn-page__container">
