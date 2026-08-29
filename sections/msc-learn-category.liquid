@@ -8,6 +8,17 @@
 {%- case pilot_registry_id -%}
   {%- when 'MSC-HUB-BASICS' -%}
     {% render 'msc-learn-basics-hub-runtime' %}
+    <style>
+      .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-page__header h1 {
+        text-transform: uppercase;
+      }
+
+      @media screen and (min-width: 750px) {
+        .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-page__header h1 {
+          transform: translateX(-1.2rem);
+        }
+      }
+    </style>
     <template data-msc-learn-progress-template="MSC-HUB-BASICS">
       <aside
         class="msc-learn-progress"
