@@ -1,0 +1,217 @@
+{{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
+{{ 'msc-learn-hub-progress.css' | asset_url | stylesheet_tag }}
+{{ 'msc-learn-building-hub.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'msc-learn-hub-progress.js' | asset_url }}" defer="defer"></script>
+
+{% render 'msc-learn-building-hub-runtime' %}
+
+<template data-msc-learn-progress-template="MSC-HUB-BUILDING">
+  <aside
+    class="msc-learn-progress"
+    data-msc-learn-progress
+    data-hub-id="MSC-HUB-BUILDING"
+    data-total-guides="16"
+    data-account-state="{% if customer %}authenticated{% else %}guest{% endif %}"
+    aria-label="Building on Bitcoin learning progress"
+  >
+    <div class="msc-learn-progress__topline">
+      <p class="msc-learn-progress__eyebrow">Learning position</p>
+      <p class="msc-learn-progress__position" data-msc-progress-position>Position 001</p>
+    </div>
+
+    <div class="msc-learn-progress__readout" aria-hidden="true">
+      <strong data-msc-progress-count>00</strong>
+      <span>/ 16</span>
+    </div>
+
+    <p class="msc-learn-progress__summary">
+      <span data-msc-progress-completed>0 complete</span>
+      <span class="msc-learn-progress__summary-separator">·</span>
+      <span data-msc-progress-remaining>16 remaining</span>
+    </p>
+
+    <div class="msc-learn-progress__current">
+      <p class="msc-learn-progress__current-label" data-msc-progress-current-label>Start here</p>
+      <p class="msc-learn-progress__current-title">
+        <span class="msc-learn-progress__current-number" data-msc-progress-current-number>001</span>
+        <span aria-hidden="true">—</span>
+        <span data-msc-progress-current-title>How the Lightning Network Works</span>
+      </p>
+    </div>
+
+    <div
+      class="msc-learn-progress__track"
+      role="progressbar"
+      aria-label="Building on Bitcoin guide completion"
+      aria-valuemin="0"
+      aria-valuemax="16"
+      aria-valuenow="0"
+      aria-valuetext="0 of 16 guides complete"
+    >
+      <div class="msc-learn-progress__groups">
+        <div class="msc-learn-progress__group">
+          <span class="msc-learn-progress__group-label">Layer 2</span>
+          <div class="msc-learn-progress__nodes" aria-hidden="true">
+            <span class="msc-learn-progress__node is-current" data-msc-progress-guide="MSC-GUIDE-033"></span>
+            <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-034"></span>
+            <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-035"></span>
+            <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-036"></span>
+          </div>
+        </div>
+        <div class="msc-learn-progress__group">
+          <span class="msc-learn-progress__group-label">Digital Assets</span>
+          <div class="msc-learn-progress__nodes" aria-hidden="true">
+            <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-037"></span>
+            <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-038"></span>
+            <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-039"></span>
+            <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-040"></span>
+          </div>
+        </div>
+        <div class="msc-learn-progress__group">
+          <span class="msc-learn-progress__group-label">Development</span>
+          <div class="msc-learn-progress__nodes" aria-hidden="true">
+            <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-041"></span>
+            <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-042"></span>
+            <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-043"></span>
+            <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-044"></span>
+          </div>
+        </div>
+        <div class="msc-learn-progress__group">
+          <span class="msc-learn-progress__group-label">Innovation</span>
+          <div class="msc-learn-progress__nodes" aria-hidden="true">
+            <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-045"></span>
+            <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-046"></span>
+            <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-047"></span>
+            <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-048"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="msc-learn-progress__footer" aria-hidden="true">
+      <span>4 sections</span>
+      <span>16 guides</span>
+      <span data-msc-progress-percent>0% complete</span>
+    </div>
+  </aside>
+</template>
+
+<template data-msc-building-lightning-companion>
+  <aside class="msc-building-lightning-companion" aria-label="Lightning channel and settlement system">
+    <svg class="msc-building-lightning-system" viewBox="0 0 560 280" role="img" aria-labelledby="msc-building-lightning-title msc-building-lightning-desc">
+      <title id="msc-building-lightning-title">Lightning channel and settlement system</title>
+      <desc id="msc-building-lightning-desc">Two channel peers update off-chain commitment states, can route through another peer, and retain a Bitcoin settlement path through the funding output.</desc>
+
+      <g class="msc-building-lightning-system__muted" aria-hidden="true">
+        <path d="M34 36H526M34 244H526M58 22V258M502 22V258" />
+        <circle cx="280" cy="140" r="108" />
+      </g>
+
+      <g aria-hidden="true">
+        <circle cx="110" cy="116" r="29" />
+        <path d="M96 116H124M110 102V130" />
+        <text x="110" y="163" text-anchor="middle">PEER A</text>
+      </g>
+
+      <g aria-hidden="true">
+        <circle cx="450" cy="116" r="29" />
+        <path d="M436 116H464M450 102V130" />
+        <text x="450" y="163" text-anchor="middle">PEER B</text>
+      </g>
+
+      <g class="msc-building-lightning-system__strong" aria-hidden="true">
+        <path d="M139 116H421" />
+        <rect x="225" y="91" width="110" height="50" rx="8" />
+        <path d="M240 107H320M240 120H305" />
+        <text x="280" y="78" text-anchor="middle">OFF-CHAIN STATES</text>
+      </g>
+
+      <g aria-hidden="true">
+        <circle cx="280" cy="201" r="21" />
+        <path d="M268 201H292M280 189V213" />
+        <text x="280" y="236" text-anchor="middle">ROUTING PEER</text>
+        <path d="M132 137L260 190M300 190L428 137" />
+      </g>
+
+      <g aria-hidden="true">
+        <rect x="205" y="20" width="150" height="34" rx="6" />
+        <path d="M221 37H339" />
+        <text x="280" y="17" text-anchor="middle">BITCOIN FUNDING OUTPUT</text>
+        <path d="M246 54L176 91M314 54L384 91" />
+      </g>
+
+      <g aria-hidden="true">
+        <rect x="220" y="247" width="120" height="24" rx="5" />
+        <text x="280" y="264" text-anchor="middle">BITCOIN SETTLEMENT</text>
+        <path class="msc-building-lightning-system__strong" d="M280 222V247" />
+        <polyline points="274,237 280,247 286,237" />
+      </g>
+    </svg>
+  </aside>
+</template>
+
+<template data-msc-building-sidechain-companion>
+  <aside class="msc-building-sidechain-companion" aria-label="Bitcoin and sidechain peg boundary">
+    <p class="msc-building-sidechain-companion__eyebrow">Two-ledger model</p>
+    <h4 class="msc-building-sidechain-companion__title">Chain security ≠ peg security</h4>
+
+    <div class="msc-building-peg-system">
+      <div class="msc-building-peg-ledger">
+        <span class="msc-building-peg-ledger__label">Bitcoin ledger</span>
+        <strong>BTC locked</strong>
+        <span>Bitcoin nodes validate the Bitcoin-side UTXO and spend conditions.</span>
+      </div>
+
+      <div class="msc-building-peg-bridge" aria-hidden="true">
+        <span>PEG-IN</span>
+        <span class="msc-building-peg-bridge__pulse"></span>
+        <strong>PEG</strong>
+        <span>PEG-OUT</span>
+      </div>
+
+      <div class="msc-building-peg-ledger">
+        <span class="msc-building-peg-ledger__label">Sidechain ledger</span>
+        <strong>Representation issued</strong>
+        <span>Separate nodes and rules validate sidechain state.</span>
+      </div>
+
+      <div class="msc-building-peg-notes">
+        <div class="msc-building-peg-note"><strong>Chain security:</strong> who orders and validates sidechain state?</div>
+        <div class="msc-building-peg-note"><strong>Peg security:</strong> who can authorize BTC release?</div>
+      </div>
+    </div>
+  </aside>
+</template>
+
+<script>
+  (() => {
+    const script = document.currentScript;
+    const scope = script.closest('.shopify-section') || document;
+    const card = scope.querySelector('.msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]');
+    const template = scope.querySelector('template[data-msc-building-lightning-companion]');
+
+    if (card && template && !card.querySelector('.msc-building-lightning-companion')) {
+      card.appendChild(template.content.cloneNode(true));
+    }
+  })();
+</script>
+
+<script>
+  (() => {
+    const script = document.currentScript;
+    const scope = script.closest('.shopify-section') || document;
+    const card = scope.querySelector('.msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]');
+    const template = scope.querySelector('template[data-msc-building-sidechain-companion]');
+
+    if (card && template && !card.querySelector('.msc-building-sidechain-companion')) {
+      card.appendChild(template.content.cloneNode(true));
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "MSC Learn building hub",
+  "settings": []
+}
+{% endschema %}
