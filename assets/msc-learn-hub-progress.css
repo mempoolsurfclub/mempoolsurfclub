@@ -523,3 +523,17 @@
 .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-page__container .msc-learn-subcategories {
   gap: clamp(3.2rem, 4.7vw, 5rem);
 }
+
+/* Keep every hub transition destination title capitalized and on one line. */
+.msc-learn-hub-transition__title {
+  max-width: none;
+  white-space: nowrap;
+  text-transform: uppercase;
+  text-wrap: nowrap;
+}
+
+@media screen and (max-width: 749px) {
+  .msc-learn-hub-transition__title {
+    font-size: clamp(2.2rem, 7vw, 3.8rem);
+  }
+}
