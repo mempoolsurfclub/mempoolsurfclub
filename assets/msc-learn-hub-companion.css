@@ -350,3 +350,28 @@
     margin: 0;
   }
 }
+
+/* Guide 004 — align the paired content rows and remove the center divider on two-column layouts. */
+@media screen and (min-width: 750px) {
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-004"] > .msc-guide-companion {
+    grid-template-rows: subgrid;
+    row-gap: 1rem;
+    border-left: 0;
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-004"] .msc-guide-companion__eyebrow {
+    grid-row: 1;
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-004"] .msc-guide-companion__title {
+    grid-row: 2;
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-004"] .msc-guide-timeline {
+    grid-row: 3;
+  }
+}
