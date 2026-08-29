@@ -1,0 +1,81 @@
+{{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
+{{ 'msc-learn-hub-progress.css' | asset_url | stylesheet_tag }}
+{{ 'msc-learn-ecosystem-hub.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'msc-learn-hub-progress.js' | asset_url }}" defer="defer"></script>
+
+{% render 'msc-learn-ecosystem-hub-runtime' %}
+
+<template data-msc-learn-progress-template="MSC-HUB-ECOSYSTEM">
+  <aside class="msc-learn-progress" data-msc-learn-progress data-hub-id="MSC-HUB-ECOSYSTEM" data-total-guides="16" data-account-state="{% if customer %}authenticated{% else %}guest{% endif %}" aria-label="Bitcoin Ecosystem learning progress">
+    <div class="msc-learn-progress__topline"><p class="msc-learn-progress__eyebrow">Learning position</p><p class="msc-learn-progress__position" data-msc-progress-position>Position 001</p></div>
+    <div class="msc-learn-progress__readout" aria-hidden="true"><strong data-msc-progress-count>00</strong><span>/ 16</span></div>
+    <p class="msc-learn-progress__summary"><span data-msc-progress-completed>0 complete</span><span class="msc-learn-progress__summary-separator">·</span><span data-msc-progress-remaining>16 remaining</span></p>
+    <div class="msc-learn-progress__current"><p class="msc-learn-progress__current-label" data-msc-progress-current-label>Start here</p><p class="msc-learn-progress__current-title"><span class="msc-learn-progress__current-number" data-msc-progress-current-number>001</span><span aria-hidden="true">—</span><span data-msc-progress-current-title>Who Builds on Bitcoin?</span></p></div>
+    <div class="msc-learn-progress__track" role="progressbar" aria-label="Bitcoin Ecosystem guide completion" aria-valuemin="0" aria-valuemax="16" aria-valuenow="0" aria-valuetext="0 of 16 guides complete"><div class="msc-learn-progress__groups">
+      <div class="msc-learn-progress__group"><span class="msc-learn-progress__group-label">People</span><div class="msc-learn-progress__nodes" aria-hidden="true"><span class="msc-learn-progress__node is-current" data-msc-progress-guide="MSC-GUIDE-065"></span><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-066"></span><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-067"></span><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-068"></span></div></div>
+      <div class="msc-learn-progress__group"><span class="msc-learn-progress__group-label">Companies</span><div class="msc-learn-progress__nodes" aria-hidden="true"><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-069"></span><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-070"></span><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-071"></span><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-072"></span></div></div>
+      <div class="msc-learn-progress__group"><span class="msc-learn-progress__group-label">Markets</span><div class="msc-learn-progress__nodes" aria-hidden="true"><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-073"></span><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-074"></span><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-075"></span><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-076"></span></div></div>
+      <div class="msc-learn-progress__group"><span class="msc-learn-progress__group-label">Community</span><div class="msc-learn-progress__nodes" aria-hidden="true"><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-077"></span><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-078"></span><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-079"></span><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-080"></span></div></div>
+    </div></div>
+    <div class="msc-learn-progress__footer" aria-hidden="true"><span>4 sections</span><span>16 guides</span><span data-msc-progress-percent>0% complete</span></div>
+  </aside>
+</template>
+
+<template data-msc-ecosystem-builders-companion>
+  <aside class="msc-ecosystem-builders-companion" aria-label="Bitcoin ecosystem builder map">
+    <svg class="msc-ecosystem-builders-system" viewBox="0 0 560 280" role="img" aria-labelledby="msc-eco-builders-title msc-eco-builders-desc">
+      <title id="msc-eco-builders-title">Bitcoin ecosystem builder map</title>
+      <desc id="msc-eco-builders-desc">Different roles contribute to Bitcoin-related research, software, infrastructure, products, education, policy, media, design, and culture without forming one central builder organization.</desc>
+      <g class="msc-ecosystem-system__muted" aria-hidden="true"><circle cx="280" cy="140" r="112"/><circle cx="280" cy="140" r="76"/><path d="M32 34H528M32 246H528M52 22V258M508 22V258"/></g>
+      <g class="msc-ecosystem-system__core" aria-hidden="true"><circle cx="280" cy="140" r="46"/><text x="280" y="137" text-anchor="middle">BITCOIN</text><text x="280" y="154" text-anchor="middle">BASE SYSTEM</text></g>
+      <g class="msc-ecosystem-system__roles" aria-hidden="true">
+        <rect x="52" y="48" width="108" height="42" rx="7"/><text x="106" y="74" text-anchor="middle">RESEARCH · CODE</text>
+        <rect x="400" y="48" width="108" height="42" rx="7"/><text x="454" y="74" text-anchor="middle">INFRASTRUCTURE</text>
+        <rect x="36" y="119" width="112" height="42" rx="7"/><text x="92" y="145" text-anchor="middle">PRODUCTS · DESIGN</text>
+        <rect x="412" y="119" width="112" height="42" rx="7"/><text x="468" y="145" text-anchor="middle">EDUCATION · MEDIA</text>
+        <rect x="52" y="190" width="108" height="42" rx="7"/><text x="106" y="216" text-anchor="middle">POLICY · ORGANIZE</text>
+        <rect x="400" y="190" width="108" height="42" rx="7"/><text x="454" y="216" text-anchor="middle">ART · CULTURE</text>
+      </g>
+      <g class="msc-ecosystem-system__links" aria-hidden="true"><path d="M160 69L244 113M400 69L316 113M148 140H234M412 140H326M160 211L244 167M400 211L316 167"/></g>
+      <text class="msc-ecosystem-system__caption" x="280" y="28" text-anchor="middle">OVERLAPPING ROLES · NO CENTRAL BUILDER ORGANIZATION</text>
+    </svg>
+  </aside>
+</template>
+
+<template data-msc-ecosystem-influence-companion>
+  <aside class="msc-ecosystem-influence-companion" aria-label="Bitcoin ecosystem influence map">
+    <p class="msc-ecosystem-influence-companion__eyebrow">Influence map</p>
+    <h4 class="msc-ecosystem-influence-companion__title">Influence does not equal protocol control</h4>
+    <div class="msc-ecosystem-influence-map" aria-label="Capital, products, infrastructure, funding, distribution, policy access, and media can influence the ecosystem but do not cross the consensus boundary">
+      <div class="msc-ecosystem-influence-map__signals" aria-hidden="true">
+        <span>Capital</span><span>Products</span><span>Infrastructure</span><span>Funding</span><span>Distribution</span><span>Policy</span><span>Media</span>
+      </div>
+      <div class="msc-ecosystem-influence-map__boundary">
+        <span class="msc-ecosystem-influence-map__ring">CONSENSUS RULES</span>
+        <strong>BITCOIN</strong>
+        <span>Independent node enforcement</span>
+      </div>
+      <div class="msc-ecosystem-influence-map__statement"><span>Practical influence</span><strong>≠</strong><span>Unilateral authority</span></div>
+    </div>
+  </aside>
+</template>
+
+<script>
+  (() => {
+    const script = document.currentScript;
+    const scope = script.closest('.shopify-section') || document;
+    const featured = scope.querySelector('.msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-065"]');
+    const featuredTemplate = scope.querySelector('template[data-msc-ecosystem-builders-companion]');
+    const influence = scope.querySelector('.msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-068"]');
+    const influenceTemplate = scope.querySelector('template[data-msc-ecosystem-influence-companion]');
+    if (featured && featuredTemplate && !featured.querySelector('.msc-ecosystem-builders-companion')) featured.appendChild(featuredTemplate.content.cloneNode(true));
+    if (influence && influenceTemplate && !influence.querySelector('.msc-ecosystem-influence-companion')) influence.appendChild(influenceTemplate.content.cloneNode(true));
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "MSC Learn ecosystem hub",
+  "settings": []
+}
+{% endschema %}
