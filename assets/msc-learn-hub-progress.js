@@ -36,6 +36,11 @@
     return card ? card.textContent.trim() : guideId;
   };
 
+  const getHubTitle = (page) => {
+    const heading = page.querySelector('.msc-learn-page__header h1');
+    return heading ? heading.textContent.trim() : 'Category';
+  };
+
   const renderWidget = (widget, page) => {
     const hubId = widget.dataset.hubId;
     const nodes = Array.from(widget.querySelectorAll('[data-msc-progress-guide]'));
@@ -83,8 +88,8 @@
 
     if (isComplete) {
       if (currentLabel) currentLabel.textContent = 'Category complete';
-      if (currentNumber) currentNumber.textContent = '16';
-      if (currentTitle) currentTitle.textContent = 'Bitcoin Basics complete';
+      if (currentNumber) currentNumber.textContent = String(total);
+      if (currentTitle) currentTitle.textContent = `${getHubTitle(page)} complete`;
       if (position) position.textContent = 'Complete';
     } else {
       if (currentLabel) currentLabel.textContent = completedCount === 0 ? 'Start here' : 'Current guide';
@@ -102,7 +107,8 @@
 
   const mountWidget = (template) => {
     const scope = template.closest('.shopify-section') || document;
-    const page = scope.querySelector('.msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"]');
+    const hubId = template.dataset.mscLearnProgressTemplate;
+    const page = hubId ? scope.querySelector(`.msc-learn-page[data-msc-registry-id="${hubId}"]`) : null;
     const header = page ? page.querySelector('.msc-learn-page__header') : null;
 
     if (!page || !header || header.querySelector('[data-msc-learn-progress]')) return;
