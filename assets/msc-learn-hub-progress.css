@@ -317,7 +317,7 @@
   flex-direction: column;
   justify-content: center;
   min-width: 0;
-  padding: 1.45rem;
+  padding: 1.1rem 1.25rem;
   border: 1px solid rgba(212, 190, 153, .18);
   border-radius: 16px;
   background: rgba(9, 30, 35, .38);
@@ -329,7 +329,7 @@
   align-items: baseline;
   justify-content: space-between;
   gap: .8rem;
-  padding-bottom: .9rem;
+  padding-bottom: .45rem;
   border-bottom: 1px solid rgba(212, 190, 153, .11);
 }
 
@@ -338,16 +338,18 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   color: rgba(212, 190, 153, .64);
-  font-size: .72rem;
-  letter-spacing: .1em;
+  font-size: 1.44rem;
+  line-height: 1.05;
+  letter-spacing: .06em;
 }
 
 .msc-learn-hub-transition__progress-top strong {
   flex: 0 0 auto;
   color: var(--msc-hub-sand);
-  font-size: 1.15rem;
+  font-size: 2.3rem;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
+  line-height: .9;
   letter-spacing: -.02em;
 }
 
@@ -355,7 +357,7 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: .55rem;
-  margin-top: 1rem;
+  margin-top: .55rem;
 }
 
 .msc-learn-hub-transition__group {
@@ -399,19 +401,20 @@
   align-items: center;
   justify-content: space-between;
   gap: .8rem;
-  margin-top: .9rem;
-  padding-top: .85rem;
+  margin-top: .45rem;
+  padding-top: .4rem;
   border-top: 1px solid rgba(212, 190, 153, .11);
   color: rgba(251, 248, 239, .46);
-  font-size: .68rem;
-  letter-spacing: .07em;
+  font-size: 1.36rem;
+  line-height: 1.05;
+  letter-spacing: .04em;
 }
 
 .msc-learn-hub-transition__progress-footer strong {
-  max-width: 10rem;
+  max-width: 16rem;
   color: rgba(212, 190, 153, .65);
-  font-size: .68rem;
-  line-height: 1.25;
+  font-size: 1.36rem;
+  line-height: 1.05;
   text-align: right;
 }
 
@@ -509,6 +512,6 @@
   }
 
   .msc-learn-hub-transition__progress {
-    padding: 1.25rem;
+    padding: 1rem 1.1rem;
   }
 }
