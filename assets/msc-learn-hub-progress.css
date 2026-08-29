@@ -537,3 +537,12 @@
     font-size: clamp(2.2rem, 7vw, 3.8rem);
   }
 }
+
+/* Treat the four main Learn sections as uppercase system labels across every hub. */
+.msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-subcategory > h2,
+.msc-learn-page[data-msc-registry-id="MSC-HUB-NETWORK"] .msc-learn-subcategory > h2,
+.msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"] .msc-learn-subcategory > h2,
+.msc-learn-page[data-msc-registry-id="MSC-HUB-DEVELOPMENT"] .msc-learn-subcategory > h2,
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-subcategory > h2 {
+  text-transform: uppercase;
+}
