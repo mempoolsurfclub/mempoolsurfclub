@@ -34,17 +34,11 @@
       }
 
       .msc-guide-blockchain__track--focus {
-        opacity: .98;
-        filter: drop-shadow(0 5px 8px rgba(2, 13, 16, .18));
-      }
-
-      .msc-guide-blockchain__connector {
-        fill: none;
-        stroke: currentColor;
-        stroke-width: 1.05;
-        stroke-linecap: round;
-        vector-effect: non-scaling-stroke;
-        opacity: .28;
+        opacity: 0;
+        filter: drop-shadow(0 0 11px rgba(212, 190, 153, .28)) drop-shadow(0 5px 8px rgba(2, 13, 16, .18));
+        animation:
+          msc-guide-blockchain-flow 18s cubic-bezier(.55, 0, .2, 1) infinite,
+          msc-guide-blockchain-focus 18s linear infinite;
       }
 
       .msc-guide-blockchain__block-face,
@@ -78,14 +72,6 @@
         opacity: .82;
       }
 
-      .msc-guide-blockchain__focus-field {
-        fill: none;
-        stroke: currentColor;
-        stroke-width: 1;
-        vector-effect: non-scaling-stroke;
-        opacity: .28;
-      }
-
       .msc-guide-blockchain__focus-field ellipse {
         fill: rgba(2, 13, 16, .22);
         stroke: rgba(212, 190, 153, .08);
@@ -109,10 +95,23 @@
         }
       }
 
+      @keyframes msc-guide-blockchain-focus {
+        0%, 15%, 23%, 38%, 46%, 61%, 69%, 84%, 92%, 100% {
+          opacity: 0;
+        }
+        3%, 12%, 26%, 35%, 49%, 58%, 72%, 81%, 95%, 98% {
+          opacity: .98;
+        }
+      }
+
       @media (prefers-reduced-motion: reduce) {
         .msc-guide-blockchain__track {
           animation: none;
           transform: translateX(0);
+        }
+
+        .msc-guide-blockchain__track--focus {
+          opacity: .98;
         }
       }
 
@@ -227,12 +226,10 @@
           </defs>
 
           <g class="msc-guide-blockchain__focus-field" aria-hidden="true">
-            <path d="M260 52V67M260 193V208" />
             <ellipse cx="260" cy="178" rx="49" ry="7" />
           </g>
 
           <g class="msc-guide-blockchain__track msc-guide-blockchain__track--base" aria-hidden="true">
-            <path class="msc-guide-blockchain__connector" d="M-64 131H1048" />
             <g transform="translate(28 0)"><path class="msc-guide-blockchain__block-top" d="M-38 96H34L50 81H-22Z" /><path class="msc-guide-blockchain__block-side" d="M34 96L50 81V150L34 166Z" /><rect class="msc-guide-blockchain__block-face" x="-38" y="96" width="72" height="70" rx="5" /><text class="msc-guide-blockchain__mark" x="-2" y="141" text-anchor="middle">₿</text></g>
             <g transform="translate(144 0)"><path class="msc-guide-blockchain__block-top" d="M-38 96H34L50 81H-22Z" /><path class="msc-guide-blockchain__block-side" d="M34 96L50 81V150L34 166Z" /><rect class="msc-guide-blockchain__block-face" x="-38" y="96" width="72" height="70" rx="5" /><text class="msc-guide-blockchain__mark" x="-2" y="141" text-anchor="middle">₿</text></g>
             <g transform="translate(260 0)"><path class="msc-guide-blockchain__block-top" d="M-38 96H34L50 81H-22Z" /><path class="msc-guide-blockchain__block-side" d="M34 96L50 81V150L34 166Z" /><rect class="msc-guide-blockchain__block-face" x="-38" y="96" width="72" height="70" rx="5" /><text class="msc-guide-blockchain__mark" x="-2" y="141" text-anchor="middle">₿</text></g>
@@ -245,7 +242,6 @@
           </g>
 
           <g class="msc-guide-blockchain__track msc-guide-blockchain__track--focus" clip-path="url(#msc-guide-001-focus-clip)" aria-hidden="true">
-            <path class="msc-guide-blockchain__connector" d="M-64 131H1048" />
             <g transform="translate(28 0)"><path class="msc-guide-blockchain__block-top" d="M-38 96H34L50 81H-22Z" /><path class="msc-guide-blockchain__block-side" d="M34 96L50 81V150L34 166Z" /><rect class="msc-guide-blockchain__block-face" x="-38" y="96" width="72" height="70" rx="5" /><text class="msc-guide-blockchain__mark" x="-2" y="141" text-anchor="middle">₿</text></g>
             <g transform="translate(144 0)"><path class="msc-guide-blockchain__block-top" d="M-38 96H34L50 81H-22Z" /><path class="msc-guide-blockchain__block-side" d="M34 96L50 81V150L34 166Z" /><rect class="msc-guide-blockchain__block-face" x="-38" y="96" width="72" height="70" rx="5" /><text class="msc-guide-blockchain__mark" x="-2" y="141" text-anchor="middle">₿</text></g>
             <g transform="translate(260 0)"><path class="msc-guide-blockchain__block-top" d="M-38 96H34L50 81H-22Z" /><path class="msc-guide-blockchain__block-side" d="M34 96L50 81V150L34 166Z" /><rect class="msc-guide-blockchain__block-face" x="-38" y="96" width="72" height="70" rx="5" /><text class="msc-guide-blockchain__mark" x="-2" y="141" text-anchor="middle">₿</text></g>
