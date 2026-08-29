@@ -1,0 +1,280 @@
+/* MSC Learn — The Bitcoin Network guide companions
+   Scope: Guide 020 retarget instrument only. */
+
+.msc-learn-page[data-msc-registry-id="MSC-HUB-NETWORK"]
+  .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-020"] {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: auto auto 1fr auto;
+  column-gap: 0;
+  row-gap: 1rem;
+  height: 25rem;
+  min-height: 25rem;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-HUB-NETWORK"]
+  .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-020"] > *:not(.msc-network-retarget-companion) {
+  grid-column: 1;
+  margin-right: clamp(2.4rem, 3.5vw, 4rem);
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-HUB-NETWORK"]
+  .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-020"] > .msc-network-retarget-companion {
+  grid-column: 2;
+  grid-row: 1 / -1;
+}
+
+.msc-network-retarget-companion {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  row-gap: 1rem;
+  align-self: stretch;
+  min-width: 0;
+  padding: 0 0 0 clamp(2.4rem, 3.5vw, 4rem);
+  border-left: 1px solid rgba(212, 190, 153, .16);
+}
+
+.msc-network-retarget-companion__eyebrow {
+  margin: 0;
+  color: rgba(212, 190, 153, .72);
+  font-size: .98rem;
+  font-weight: 850;
+  line-height: normal;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.msc-network-retarget-companion__title {
+  margin: .15rem 0 0;
+  color: var(--msc-hub-sand);
+  font-size: clamp(2.2rem, 2.4vw, 2.9rem);
+  line-height: 1.08;
+  letter-spacing: -.04em;
+}
+
+.msc-network-retarget-instrument {
+  align-self: start;
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.msc-network-retarget-instrument__window {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: .8rem;
+  align-items: center;
+  padding: .75rem 0 .9rem;
+  border-top: 1px solid rgba(212, 190, 153, .16);
+  border-bottom: 1px solid rgba(212, 190, 153, .16);
+}
+
+.msc-network-retarget-instrument__window span {
+  color: rgba(212, 190, 153, .66);
+  font-size: .85rem;
+  font-weight: 820;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+
+.msc-network-retarget-instrument__window span:last-child {
+  text-align: right;
+}
+
+.msc-network-retarget-instrument__window strong {
+  color: var(--msc-hub-sand);
+  font-size: 1rem;
+  font-weight: 850;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.msc-network-retarget-gauge {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(8rem, 1fr) auto;
+  gap: .8rem;
+  align-items: center;
+}
+
+.msc-network-retarget-gauge__label {
+  color: rgba(251, 248, 239, .54);
+  font-size: .82rem;
+  font-weight: 780;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.msc-network-retarget-gauge__track {
+  position: relative;
+  height: 1.1rem;
+}
+
+.msc-network-retarget-gauge__track::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(212, 190, 153, .28), rgba(212, 190, 153, .76), rgba(212, 190, 153, .28));
+}
+
+.msc-network-retarget-gauge__track::after {
+  content: "";
+  position: absolute;
+  top: calc(50% - .4rem);
+  left: 50%;
+  width: 1px;
+  height: .8rem;
+  background: rgba(212, 190, 153, .52);
+}
+
+.msc-network-retarget-gauge__marker {
+  position: absolute;
+  top: 50%;
+  left: 18%;
+  width: .9rem;
+  height: .9rem;
+  border: 1px solid var(--msc-hub-sand);
+  border-radius: 50%;
+  background: var(--msc-hub-sand);
+  box-shadow: 0 0 0 4px rgba(212, 190, 153, .08);
+  transform: translate(-50%, -50%);
+  animation: msc-network-retarget-scan 12s ease-in-out infinite;
+}
+
+.msc-network-retarget-effects {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .7rem;
+}
+
+.msc-network-retarget-effect {
+  display: grid;
+  gap: .2rem;
+  min-width: 0;
+  padding: .75rem .8rem;
+  border: 1px solid rgba(212, 190, 153, .12);
+  border-radius: 10px;
+  background: rgba(6, 28, 32, .16);
+  opacity: .38;
+  animation: msc-network-retarget-state 12s ease-in-out infinite;
+}
+
+.msc-network-retarget-effect:nth-child(2) { animation-delay: 4s; }
+.msc-network-retarget-effect:nth-child(3) { animation-delay: 8s; }
+
+.msc-network-retarget-effect span {
+  color: rgba(251, 248, 239, .62);
+  font-size: .78rem;
+  font-weight: 760;
+  line-height: 1.25;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.msc-network-retarget-effect strong {
+  color: var(--msc-hub-sand);
+  font-size: 1.04rem;
+  font-weight: 850;
+  line-height: 1.15;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.msc-network-retarget-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem 1rem;
+}
+
+.msc-network-retarget-metrics span {
+  color: rgba(212, 190, 153, .58);
+  font-size: .78rem;
+  font-weight: 780;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+@keyframes msc-network-retarget-scan {
+  0%, 18% { left: 18%; }
+  33%, 51% { left: 50%; }
+  66%, 84% { left: 82%; }
+  100% { left: 18%; }
+}
+
+@keyframes msc-network-retarget-state {
+  0%, 20% {
+    opacity: 1;
+    border-color: rgba(212, 190, 153, .34);
+    filter: brightness(1.14);
+  }
+  27%, 100% {
+    opacity: .38;
+    border-color: rgba(212, 190, 153, .12);
+    filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .msc-network-retarget-gauge__marker {
+    left: 50%;
+    animation: none;
+  }
+
+  .msc-network-retarget-effect {
+    opacity: .72;
+    animation: none;
+    filter: none;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-NETWORK"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-020"] {
+    display: flex;
+    grid-column: auto;
+    height: auto;
+    min-height: 0;
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-NETWORK"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-020"] > *:not(.msc-network-retarget-companion) {
+    margin-right: 0;
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-NETWORK"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-020"] > .msc-network-retarget-companion {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .msc-network-retarget-companion {
+    margin-top: 1rem;
+    padding: 2rem 0 0;
+    border-top: 1px solid rgba(212, 190, 153, .16);
+    border-left: 0;
+  }
+
+  .msc-network-retarget-gauge {
+    grid-template-columns: 1fr;
+    gap: .45rem;
+  }
+
+  .msc-network-retarget-gauge__label:last-child {
+    text-align: right;
+  }
+
+  .msc-network-retarget-gauge__track {
+    grid-row: 2;
+    min-width: 0;
+  }
+
+  .msc-network-retarget-effects {
+    grid-template-columns: 1fr;
+  }
+}
