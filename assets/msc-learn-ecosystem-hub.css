@@ -1,0 +1,108 @@
+/* MSC Learn — Bitcoin Ecosystem
+   Reference-format implementation derived from the approved Bitcoin Basics hub system.
+   Scope is intentionally limited to MSC-HUB-ECOSYSTEM. */
+
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] {
+  --msc-hub-ink: #10282d;
+  --msc-hub-deep: #173c43;
+  --msc-hub-sea: #4e6b71;
+  --msc-hub-sand: #d4be99;
+  --msc-hub-paper: #fbf8ef;
+  position: relative;
+  padding: clamp(3.6rem,6vw,6.6rem) 0 clamp(6rem,9vw,9rem);
+  background: radial-gradient(circle at 12% 7%,rgba(212,190,153,.12),transparent 30rem), radial-gradient(circle at 86% 24%,rgba(78,107,113,.28),transparent 42rem), linear-gradient(180deg,#10282d 0%,#173c43 46%,#10282d 100%);
+  color: var(--msc-hub-paper);
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"]::before {
+  background-image: linear-gradient(rgba(251,248,239,.035) 1px,transparent 1px), linear-gradient(90deg,rgba(251,248,239,.035) 1px,transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom,rgba(0,0,0,.88),transparent 96%);
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-page__container { gap: 0; }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-breadcrumbs { position:relative;z-index:2;margin-bottom:1.8rem;color:rgba(251,248,239,.62);font-size:1.05rem;font-weight:750;letter-spacing:.12em;text-transform:uppercase; }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-breadcrumbs li:not(:last-child)::after { color:rgba(212,190,153,.58); }
+
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-page__header {
+  position:relative;display:grid;grid-template-columns:minmax(0,1.45fr) minmax(22rem,.95fr);grid-template-rows:auto auto auto auto;column-gap:clamp(2.5rem,3vw,4rem);align-content:center;max-width:none;min-height:34rem;padding:clamp(3rem,5vw,5rem);overflow:hidden;border:1px solid rgba(212,190,153,.28);border-radius:28px;background:linear-gradient(135deg,rgba(255,255,255,.085),rgba(255,255,255,.035)),rgba(16,40,45,.42);box-shadow:0 26px 70px rgba(5,13,24,.24);backdrop-filter:blur(14px);
+}
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-page__header > *:not(.msc-learn-progress) { grid-column:1;min-width:0;position:relative;z-index:1; }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-page__header::before,
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-page__header::after { display:none; }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-page__header .msc-section-kicker { margin-bottom:1.1rem;color:rgba(251,248,239,.7);font-size:1.05rem;font-weight:800;letter-spacing:.16em; }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-page__header h1 { max-width:none;margin:0;color:var(--msc-hub-sand);font-size:clamp(4rem,4.8vw,6rem);line-height:.9;letter-spacing:-.055em;text-transform:uppercase;white-space:nowrap; }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-page__deck { max-width:76rem;margin:2rem 0 0;color:rgba(251,248,239,.8);font-size:clamp(1.48rem,1.7vw,1.78rem);line-height:1.58; }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-page__header .msc-learn-page-meta { display:flex;flex-wrap:wrap;align-items:center;gap:.45rem 0;margin:2rem 0 0;padding:0;list-style:none; }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-page__header .msc-learn-page-meta li { display:inline-flex;align-items:center;padding:0;border:0;background:transparent;color:rgba(251,248,239,.6);font-size:.94rem;font-weight:780;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap; }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-page__header .msc-learn-page-meta li:not(:last-child)::after { content:"·";margin:0 .8rem;color:rgba(212,190,153,.42); }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-preview-note { display:none; }
+
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-subcategories { display:grid;gap:clamp(4.8rem,7vw,7.4rem);margin-top:clamp(3.8rem,5.5vw,5.6rem); }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-subcategory { position:relative;padding-top:2.4rem;border-top:0;scroll-margin-top:9rem; }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-subcategory:first-child { padding-top:0; }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-subcategory > h2 { display:flex;align-items:baseline;gap:1.2rem;margin:0 0 2rem;color:var(--msc-hub-sand);font-size:clamp(3rem,4vw,4.6rem);line-height:1;letter-spacing:-.045em; }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-subcategory > h2::before { color:rgba(212,190,153,.62);font-size:1.05rem;font-weight:850;letter-spacing:.18em; }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-subcategory:nth-child(1) > h2::before { content:"01"; }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-subcategory:nth-child(2) > h2::before { content:"02"; }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-subcategory:nth-child(3) > h2::before { content:"03"; }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-subcategory:nth-child(4) > h2::before { content:"04"; }
+
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-card-grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.4rem; }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-guide-card { position:relative;display:flex;flex-direction:column;gap:1rem;min-height:25rem;padding:2.1rem;overflow:hidden;border:1px solid rgba(212,190,153,.18);border-radius:20px;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.035));color:var(--msc-hub-paper);box-shadow:0 18px 48px rgba(5,13,24,.16);backdrop-filter:blur(10px); }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-guide-card .msc-section-kicker { margin:0;color:rgba(212,190,153,.72);font-size:.98rem;font-weight:850;letter-spacing:.14em; }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-guide-card h3 { margin:.15rem 0 0;color:var(--msc-hub-sand);font-size:clamp(2.2rem,2.4vw,2.9rem);line-height:1.08;letter-spacing:-.04em;text-wrap:balance; }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-guide-card > p:not(.msc-section-kicker):not(.msc-learn-preview-note) { margin:0;color:rgba(251,248,239,.7);font-size:1.42rem;line-height:1.55; }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-guide-card .msc-learn-page-meta { display:flex;flex-wrap:wrap;gap:.55rem 1.25rem;margin:auto 0 0;padding:1.5rem 0 0;border-top:1px solid rgba(212,190,153,.16);list-style:none; }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-guide-card .msc-learn-page-meta li { padding:0;border:0;background:transparent;color:rgba(212,190,153,.68);font-size:.94rem;font-weight:750;letter-spacing:.08em;text-transform:uppercase; }
+
+/* Guide 065 — featured ecosystem roles card. */
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-065"] { grid-column:1 / -1;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(24rem,.95fr);grid-template-rows:auto auto 1fr auto;column-gap:clamp(2.6rem,4vw,5rem);min-height:26rem;padding:clamp(2.4rem,4vw,3.4rem);border-color:rgba(212,190,153,.54);background:radial-gradient(circle at 88% 22%,rgba(212,190,153,.15),transparent 20rem),linear-gradient(145deg,rgba(23,60,67,.96),rgba(16,40,45,.98));box-shadow:inset 0 0 0 1px rgba(212,190,153,.08),0 24px 58px rgba(5,13,24,.24); }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-065"] > *:not(.msc-ecosystem-builders-companion) { grid-column:1; }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-065"] h3 { max-width:18ch;font-size:clamp(3rem,4.4vw,5rem); }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-065"] > p:not(.msc-section-kicker):not(.msc-learn-preview-note) { max-width:62rem;color:rgba(251,248,239,.8);font-size:clamp(1.5rem,1.7vw,1.72rem); }
+.msc-ecosystem-builders-companion { position:relative;grid-column:2;grid-row:1 / -1;align-self:stretch;min-height:20rem;overflow:hidden;border:1px solid rgba(212,190,153,.22);border-radius:16px;background:linear-gradient(rgba(212,190,153,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(212,190,153,.035) 1px,transparent 1px),rgba(9,30,35,.38);background-size:24px 24px,24px 24px,auto; }
+.msc-ecosystem-builders-system { display:block;width:100%;height:100%;min-height:20rem;color:var(--msc-hub-sand); }
+.msc-ecosystem-builders-system path,.msc-ecosystem-builders-system rect,.msc-ecosystem-builders-system circle { fill:none;stroke:currentColor;stroke-width:1.1;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke; }
+.msc-ecosystem-builders-system text { fill:rgba(212,190,153,.76);font-family:var(--font-body-family,sans-serif);font-size:9px;font-weight:800;letter-spacing:.1em; }
+.msc-ecosystem-system__muted { opacity:.18; }.msc-ecosystem-system__core { opacity:.95; }.msc-ecosystem-system__roles { opacity:.78; }.msc-ecosystem-system__links { opacity:.5; }.msc-ecosystem-system__caption { opacity:.72; }
+
+/* Guide 068 — influence map. */
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-068"] { grid-column:1 / -1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:auto auto 1fr auto;column-gap:0;row-gap:1rem;height:25rem;min-height:25rem; }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-068"] > *:not(.msc-ecosystem-influence-companion) { grid-column:1;margin-right:clamp(2.4rem,3.5vw,4rem); }
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-068"] > .msc-ecosystem-influence-companion { grid-column:2;grid-row:1 / -1; }
+.msc-ecosystem-influence-companion { display:grid;grid-template-rows:auto auto 1fr;row-gap:.9rem;align-self:stretch;min-width:0;padding-left:clamp(2.4rem,3.5vw,4rem);border-left:1px solid rgba(212,190,153,.16); }
+.msc-ecosystem-influence-companion__eyebrow { margin:0;color:rgba(212,190,153,.72);font-size:.98rem;font-weight:850;letter-spacing:.14em;text-transform:uppercase; }
+.msc-ecosystem-influence-companion__title { margin:.15rem 0 0;color:var(--msc-hub-sand);font-size:clamp(2.2rem,2.4vw,2.9rem);line-height:1.08;letter-spacing:-.04em; }
+.msc-ecosystem-influence-map { align-self:start;display:grid;grid-template-columns:minmax(0,1fr) 10.5rem;grid-template-rows:1fr auto;gap:.8rem 1rem;min-width:0; }
+.msc-ecosystem-influence-map__signals { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.45rem;align-content:center; }
+.msc-ecosystem-influence-map__signals span { display:flex;align-items:center;justify-content:center;min-height:2.25rem;padding:.35rem .5rem;border:1px solid rgba(212,190,153,.13);border-radius:8px;color:rgba(251,248,239,.6);font-size:.76rem;font-weight:790;letter-spacing:.08em;text-transform:uppercase;opacity:.35;animation:msc-ecosystem-influence-scan 14s ease-in-out infinite; }
+.msc-ecosystem-influence-map__signals span:nth-child(2){animation-delay:2s}.msc-ecosystem-influence-map__signals span:nth-child(3){animation-delay:4s}.msc-ecosystem-influence-map__signals span:nth-child(4){animation-delay:6s}.msc-ecosystem-influence-map__signals span:nth-child(5){animation-delay:8s}.msc-ecosystem-influence-map__signals span:nth-child(6){animation-delay:10s}.msc-ecosystem-influence-map__signals span:nth-child(7){animation-delay:12s}
+.msc-ecosystem-influence-map__boundary { position:relative;display:grid;place-items:center;align-content:center;gap:.2rem;min-height:8.5rem;border:1px solid rgba(212,190,153,.28);border-radius:50%;text-align:center;box-shadow:inset 0 0 0 7px rgba(212,190,153,.035); }
+.msc-ecosystem-influence-map__boundary::before { content:"";position:absolute;inset:-.7rem;border:1px dashed rgba(212,190,153,.16);border-radius:50%; }
+.msc-ecosystem-influence-map__boundary strong { color:var(--msc-hub-sand);font-size:1rem;letter-spacing:.12em; }
+.msc-ecosystem-influence-map__boundary span { color:rgba(251,248,239,.5);font-size:.65rem;font-weight:760;line-height:1.2;letter-spacing:.06em;text-transform:uppercase; }
+.msc-ecosystem-influence-map__boundary .msc-ecosystem-influence-map__ring { color:rgba(212,190,153,.7);font-size:.62rem; }
+.msc-ecosystem-influence-map__statement { grid-column:1 / -1;display:grid;grid-template-columns:1fr auto 1fr;gap:.8rem;align-items:center;padding-top:.75rem;border-top:1px solid rgba(212,190,153,.16);color:rgba(212,190,153,.68);font-size:.78rem;font-weight:820;letter-spacing:.09em;text-transform:uppercase; }
+.msc-ecosystem-influence-map__statement span:last-child { text-align:right; }.msc-ecosystem-influence-map__statement strong { color:var(--msc-hub-sand);font-size:1.25rem; }
+@keyframes msc-ecosystem-influence-scan { 0%,12%{opacity:1;border-color:rgba(212,190,153,.34);filter:brightness(1.16)} 18%,100%{opacity:.35;border-color:rgba(212,190,153,.13);filter:none} }
+@media (prefers-reduced-motion: reduce) { .msc-ecosystem-influence-map__signals span { opacity:.72;animation:none;filter:none; } }
+
+@media screen and (max-width:989px) {
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-page__header { grid-template-columns:minmax(0,1fr) minmax(20rem,.82fr); }
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-page__header h1 { font-size:clamp(3.2rem,5vw,4.8rem); }
+}
+
+@media screen and (max-width:749px) {
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] { padding-top:2.5rem; }
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-page__header { display:flex;flex-direction:column;min-height:0;padding:2.4rem;border-radius:22px; }
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-page__header h1 { white-space:normal;font-size:clamp(3.5rem,12vw,5rem); }
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-card-grid { grid-template-columns:1fr; }
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-guide-card { min-height:0; }
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-065"] { display:flex;grid-column:auto;min-height:0; }
+  .msc-ecosystem-builders-companion { width:100%;min-height:17rem;margin-top:.6rem; }.msc-ecosystem-builders-system { min-height:17rem; }
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-068"] { display:flex;grid-column:auto;height:auto;min-height:0; }
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-068"] > *:not(.msc-ecosystem-influence-companion) { margin-right:0; }
+  .msc-ecosystem-influence-companion { margin-top:1rem;padding:2rem 0 0;border-top:1px solid rgba(212,190,153,.16);border-left:0; }
+  .msc-ecosystem-influence-map { grid-template-columns:1fr; }.msc-ecosystem-influence-map__boundary { grid-row:2;justify-self:center;width:10.5rem; }.msc-ecosystem-influence-map__statement { grid-row:3; }
+}
