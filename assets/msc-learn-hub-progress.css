@@ -571,3 +571,45 @@
     min-height: 0;
   }
 }
+
+/* Align the fourth guide companion rows across all Learn hubs and remove desktop/tablet center dividers. */
+@media screen and (min-width: 750px) {
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-004"] > .msc-guide-companion,
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-NETWORK"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-020"] > .msc-network-retarget-companion,
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"] > .msc-building-sidechain-companion,
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-DEVELOPMENT"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-052"] > .msc-development-release-companion,
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-068"] > .msc-ecosystem-influence-companion {
+    grid-template-rows: subgrid;
+    row-gap: 1rem;
+    border-left: 0;
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-004"] .msc-guide-companion__eyebrow,
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-NETWORK"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-020"] .msc-network-retarget-companion__eyebrow,
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"] .msc-building-sidechain-companion__eyebrow,
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-DEVELOPMENT"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-052"] .msc-development-release-companion__eyebrow,
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-068"] .msc-ecosystem-influence-companion__eyebrow {
+    grid-row: 1;
+    line-height: inherit;
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-004"] .msc-guide-companion__title,
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-NETWORK"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-020"] .msc-network-retarget-companion__title,
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"] .msc-building-sidechain-companion__title,
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-DEVELOPMENT"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-052"] .msc-development-release-companion__title,
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-068"] .msc-ecosystem-influence-companion__title {
+    grid-row: 2;
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-004"] .msc-guide-timeline,
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-NETWORK"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-020"] .msc-network-retarget-instrument,
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"] .msc-building-peg-system,
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-DEVELOPMENT"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-052"] .msc-development-release-pipeline,
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-068"] .msc-ecosystem-influence-map {
+    grid-row: 3;
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-DEVELOPMENT"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-052"] .msc-development-release-boundary {
+    grid-row: 4;
+  }
+}
