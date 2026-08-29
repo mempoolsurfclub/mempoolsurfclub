@@ -112,30 +112,72 @@
       </aside>
     </template>
     <template data-msc-guide-companion-template="MSC-GUIDE-001">
-      <aside class="msc-guide-companion msc-guide-companion--systems" aria-label="What is Bitcoin visual">
-        <svg class="msc-guide-emblem" viewBox="0 0 520 260" role="img" aria-labelledby="msc-guide-001-emblem-title msc-guide-001-emblem-desc">
-          <title id="msc-guide-001-emblem-title">Bitcoin symbol becoming a question mark</title>
-          <desc id="msc-guide-001-emblem-desc">A matte Bitcoin symbol slowly turns edge-on, becomes a question mark, then turns back into the Bitcoin symbol.</desc>
+      <aside class="msc-guide-companion msc-guide-companion--systems" aria-label="Bitcoin system overview">
+        <svg class="msc-guide-systems" viewBox="0 0 520 260" role="img" aria-labelledby="msc-guide-001-system-title msc-guide-001-system-desc">
+          <title id="msc-guide-001-system-title">Bitcoin system overview</title>
+          <desc id="msc-guide-001-system-desc">A wallet connects into a distributed Bitcoin network, where nodes relay information, verification occurs, and validated records form a chain of blocks.</desc>
 
-          <g class="msc-guide-emblem__field" aria-hidden="true">
-            <circle cx="260" cy="130" r="83" />
-            <circle cx="260" cy="130" r="57" />
-            <path d="M260 31V43M260 217V229M161 130H173M347 130H359" />
-            <ellipse cx="260" cy="210" rx="78" ry="8" class="msc-guide-emblem__shadow" />
+          <g class="msc-guide-systems__grid" aria-hidden="true">
+            <path d="M32 40H488M32 220H488M70 22V238M450 22V238" />
+            <circle cx="260" cy="130" r="86" />
+            <circle cx="260" cy="130" r="58" />
+            <path d="M260 28V44M260 216V232M158 130H174M346 130H362" />
           </g>
 
-          <g class="msc-guide-emblem__symbol msc-guide-emblem__symbol--bitcoin" aria-hidden="true">
-            <text class="msc-guide-emblem__depth msc-guide-emblem__depth--far" x="268" y="169" text-anchor="middle">₿</text>
-            <text class="msc-guide-emblem__depth msc-guide-emblem__depth--mid" x="264" y="169" text-anchor="middle">₿</text>
-            <text class="msc-guide-emblem__depth msc-guide-emblem__depth--near" x="261" y="169" text-anchor="middle">₿</text>
-            <text class="msc-guide-emblem__face" x="258" y="169" text-anchor="middle">₿</text>
+          <g class="msc-guide-systems__links" aria-hidden="true">
+            <path d="M116 130H170L214 130" />
+            <path d="M188 65L230 103" />
+            <path d="M184 197L230 158" />
+            <path d="M290 101L333 66" />
+            <path d="M292 158L336 194" />
+            <path d="M306 130H386" />
+            <path d="M416 163V188" />
+            <path d="M390 202H374M424 202H408M458 202H442" />
+            <path class="msc-guide-systems__direction" d="M156 124L164 130L156 136M340 124L348 130L340 136" />
           </g>
 
-          <g class="msc-guide-emblem__symbol msc-guide-emblem__symbol--question" aria-hidden="true">
-            <text class="msc-guide-emblem__depth msc-guide-emblem__depth--far" x="268" y="171" text-anchor="middle">?</text>
-            <text class="msc-guide-emblem__depth msc-guide-emblem__depth--mid" x="264" y="171" text-anchor="middle">?</text>
-            <text class="msc-guide-emblem__depth msc-guide-emblem__depth--near" x="261" y="171" text-anchor="middle">?</text>
-            <text class="msc-guide-emblem__face" x="258" y="171" text-anchor="middle">?</text>
+          <g class="msc-guide-systems__wallet">
+            <rect x="32" y="101" width="84" height="58" rx="8" />
+            <path d="M44 115H94M44 126H73" />
+            <rect x="79" y="137" width="24" height="10" rx="5" />
+            <circle cx="95" cy="142" r="1.7" class="msc-guide-systems__solid" />
+            <text x="74" y="176" text-anchor="middle">WALLET</text>
+          </g>
+
+          <g class="msc-guide-systems__nodes" aria-hidden="true">
+            <circle cx="178" cy="57" r="10" />
+            <circle cx="174" cy="204" r="10" />
+            <circle cx="340" cy="57" r="10" />
+            <circle cx="344" cy="202" r="10" />
+            <circle cx="160" cy="130" r="5" />
+            <circle cx="360" cy="130" r="5" />
+            <circle cx="206" cy="92" r="4" />
+            <circle cx="310" cy="92" r="4" />
+            <circle cx="207" cy="168" r="4" />
+            <circle cx="312" cy="168" r="4" />
+          </g>
+
+          <g class="msc-guide-systems__core">
+            <circle cx="260" cy="130" r="44" />
+            <circle cx="260" cy="130" r="32" />
+            <text x="260" y="143" text-anchor="middle" class="msc-guide-systems__bitcoin">₿</text>
+            <text x="260" y="192" text-anchor="middle">NETWORK</text>
+          </g>
+
+          <g class="msc-guide-systems__verify">
+            <rect x="386" y="98" width="76" height="64" rx="8" />
+            <rect x="400" y="112" width="48" height="28" rx="3" />
+            <path d="M408 151H440M394 90V98M410 90V98M426 90V98M442 90V98M454 90V98M394 162V170M410 162V170M426 162V170M442 162V170M454 162V170" />
+            <path d="M410 126L419 134L438 118" class="msc-guide-systems__check" />
+            <text x="424" y="184" text-anchor="middle">VERIFY</text>
+          </g>
+
+          <g class="msc-guide-systems__blocks">
+            <rect x="374" y="190" width="28" height="24" rx="3" />
+            <rect x="408" y="190" width="28" height="24" rx="3" />
+            <rect x="442" y="190" width="28" height="24" rx="3" />
+            <path d="M381 198H395M381 204H392M415 198H429M415 204H426M449 198H463M449 204H460" />
+            <text x="422" y="232" text-anchor="middle">BLOCKS</text>
           </g>
         </svg>
       </aside>
