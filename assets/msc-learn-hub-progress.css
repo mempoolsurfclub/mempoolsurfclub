@@ -515,3 +515,11 @@
     padding: 1rem 1.1rem;
   }
 }
+
+/* Match the approved Bitcoin Basics guide-set spacing across the remaining Learn hubs. */
+.msc-learn-page[data-msc-registry-id="MSC-HUB-NETWORK"] .msc-learn-page__container .msc-learn-subcategories,
+.msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"] .msc-learn-page__container .msc-learn-subcategories,
+.msc-learn-page[data-msc-registry-id="MSC-HUB-DEVELOPMENT"] .msc-learn-page__container .msc-learn-subcategories,
+.msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-page__container .msc-learn-subcategories {
+  gap: clamp(3.2rem, 4.7vw, 5rem);
+}
