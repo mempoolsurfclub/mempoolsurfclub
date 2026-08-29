@@ -335,3 +335,18 @@
     animation: none;
   }
 }
+
+/* Guide 001 desktop prototype — align its visual panel to the hero progress rail without changing card or copy geometry. */
+@media screen and (min-width: 990px) {
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-001"] > .msc-guide-companion--systems {
+    position: absolute;
+    grid-column: auto;
+    grid-row: auto;
+    top: 5rem;
+    right: 5rem;
+    bottom: 5rem;
+    left: calc(60.416667% + .55rem);
+    margin: 0;
+  }
+}
