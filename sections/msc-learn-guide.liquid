@@ -1,4 +1,5 @@
 {{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'msc-learn-hub-progress.js' | asset_url }}" defer="defer"></script>
 {%- assign pilot_registry_id = section.settings.registry_id | strip -%}
 {%- case pilot_registry_id -%}
   {%- when 'MSC-GUIDE-001' -%}

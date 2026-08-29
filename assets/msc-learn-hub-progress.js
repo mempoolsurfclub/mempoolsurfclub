@@ -1,18 +1,30 @@
 (() => {
   const STORAGE_KEY = 'mscLearnProgressV1';
+  const HUB_RANGES = {
+    'MSC-HUB-BASICS': [1, 16],
+    'MSC-HUB-NETWORK': [17, 32],
+    'MSC-HUB-BUILDING': [33, 48],
+    'MSC-HUB-DEVELOPMENT': [49, 64],
+    'MSC-HUB-ECOSYSTEM': [65, 80],
+  };
 
   const padGuideNumber = (value) => String(value).padStart(3, '0');
+  const toGuideId = (value) => `MSC-GUIDE-${padGuideNumber(value)}`;
 
-  const getLocalHubState = (hubId) => {
+  const readLocalProgress = () => {
     try {
       const raw = window.localStorage.getItem(STORAGE_KEY);
-      if (!raw) return null;
+      if (!raw) return { hubs: {} };
       const parsed = JSON.parse(raw);
-      return parsed && parsed.hubs ? parsed.hubs[hubId] || null : null;
+      return parsed && typeof parsed === 'object'
+        ? { ...parsed, hubs: parsed.hubs && typeof parsed.hubs === 'object' ? parsed.hubs : {} }
+        : { hubs: {} };
     } catch (error) {
-      return null;
+      return { hubs: {} };
     }
   };
+
+  const getLocalHubState = (hubId) => readLocalProgress().hubs[hubId] || null;
 
   const getHubState = (hubId) => {
     const provider = window.MSCLearnProgress;
@@ -29,6 +41,62 @@
     }
 
     return getLocalHubState(hubId) || {};
+  };
+
+  const saveHubState = (hubId, nextState) => {
+    const completedGuideIds = Array.isArray(nextState.completedGuideIds)
+      ? Array.from(new Set(nextState.completedGuideIds.filter((guideId) => typeof guideId === 'string')))
+      : [];
+    const state = {
+      ...nextState,
+      completedGuideIds,
+      updatedAt: new Date().toISOString(),
+    };
+    const progress = readLocalProgress();
+
+    progress.hubs[hubId] = state;
+    progress.updatedAt = state.updatedAt;
+
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+    } catch (error) {
+      // Continue with the in-page state if local storage is unavailable.
+    }
+
+    const provider = window.MSCLearnProgress;
+    if (provider && typeof provider.setHubState === 'function') {
+      try {
+        provider.setHubState(hubId, state);
+      } catch (error) {
+        // Device-local progress remains the fallback until account writes are available.
+      }
+    }
+
+    document.dispatchEvent(
+      new CustomEvent('msc:learn-progress', {
+        detail: { hubId, state },
+      })
+    );
+
+    return state;
+  };
+
+  const getHubIdForGuide = (guideId) => {
+    const match = /^MSC-GUIDE-(\d{3})$/.exec(guideId || '');
+    if (!match) return null;
+    const guideNumber = Number(match[1]);
+
+    return (
+      Object.entries(HUB_RANGES).find(([, [start, end]]) => guideNumber >= start && guideNumber <= end)?.[0] ||
+      null
+    );
+  };
+
+  const getHubGuideIds = (hubId) => {
+    const range = HUB_RANGES[hubId];
+    if (!range) return [];
+    const [start, end] = range;
+    return Array.from({ length: end - start + 1 }, (_, index) => toGuideId(start + index));
   };
 
   const getGuideTitle = (page, guideId) => {
@@ -88,7 +156,7 @@
 
     if (isComplete) {
       if (currentLabel) currentLabel.textContent = 'Category complete';
-      if (currentNumber) currentNumber.textContent = String(total);
+      if (currentNumber) currentNumber.textContent = padGuideNumber(total);
       if (currentTitle) currentTitle.textContent = `${getHubTitle(page)} complete`;
       if (position) position.textContent = 'Complete';
     } else {
@@ -118,8 +186,78 @@
     if (widget) renderWidget(widget, page);
   };
 
+  const markGuideCurrent = (guideId) => {
+    const hubId = getHubIdForGuide(guideId);
+    if (!hubId) return;
+
+    const state = getHubState(hubId);
+    const completed = new Set(Array.isArray(state.completedGuideIds) ? state.completedGuideIds : []);
+
+    // Revisiting an already completed guide should not move the learner backward.
+    if (completed.has(guideId) || state.currentGuideId === guideId) return;
+
+    saveHubState(hubId, {
+      ...state,
+      completedGuideIds: Array.from(completed),
+      currentGuideId: guideId,
+    });
+  };
+
+  const markGuideComplete = (guideId) => {
+    const hubId = getHubIdForGuide(guideId);
+    if (!hubId) return;
+
+    const state = getHubState(hubId);
+    const completed = new Set(Array.isArray(state.completedGuideIds) ? state.completedGuideIds : []);
+    if (completed.has(guideId)) return;
+
+    completed.add(guideId);
+
+    const guideIds = getHubGuideIds(hubId);
+    const currentIndex = guideIds.indexOf(guideId);
+    const nextIncompleteGuideId =
+      currentIndex >= 0
+        ? guideIds.slice(currentIndex + 1).find((candidateId) => !completed.has(candidateId)) || null
+        : null;
+
+    saveHubState(hubId, {
+      ...state,
+      completedGuideIds: Array.from(completed),
+      currentGuideId: nextIncompleteGuideId,
+    });
+  };
+
+  const trackGuidePage = (page) => {
+    if (page.dataset.mscLearnProgressTracked === 'true') return;
+
+    const guideId = page.dataset.mscRegistryId;
+    if (!getHubIdForGuide(guideId)) return;
+
+    page.dataset.mscLearnProgressTracked = 'true';
+    markGuideCurrent(guideId);
+
+    const completionSentinel = page.querySelector('.msc-learn-prev-next');
+    if (!completionSentinel || !('IntersectionObserver' in window)) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        markGuideComplete(guideId);
+        observer.disconnect();
+      },
+      {
+        threshold: 0.35,
+      }
+    );
+
+    observer.observe(completionSentinel);
+  };
+
   const init = (root = document) => {
     root.querySelectorAll('template[data-msc-learn-progress-template]').forEach(mountWidget);
+    root
+      .querySelectorAll('.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"]')
+      .forEach(trackGuidePage);
   };
 
   const refresh = () => {
@@ -128,6 +266,12 @@
       if (page) renderWidget(widget, page);
     });
   };
+
+  document.addEventListener('click', (event) => {
+    const navigationLink = event.target.closest('.msc-learn-prev-next a');
+    const page = navigationLink?.closest('.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"]');
+    if (page) markGuideComplete(page.dataset.mscRegistryId);
+  });
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => init(), { once: true });
