@@ -320,3 +320,18 @@
     border-left: 0;
   }
 }
+
+/* Guide 001 — keep the focus treatment fixed to the actual center block. */
+.msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-guide-blockchain__focus-field {
+  display: none;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-guide-blockchain__track--focus {
+  animation: msc-guide-blockchain-focus 18s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-guide-blockchain__track--focus {
+    animation: none;
+  }
+}
