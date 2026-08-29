@@ -1,6 +1,7 @@
 {{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
 {{ 'msc-learn-hub-progress.css' | asset_url | stylesheet_tag }}
 {{ 'msc-learn-network-hub.css' | asset_url | stylesheet_tag }}
+{{ 'msc-learn-network-companion.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'msc-learn-hub-progress.js' | asset_url }}" defer="defer"></script>
 
 {% render 'msc-learn-network-hub-runtime' %}
@@ -167,6 +168,53 @@
   </aside>
 </template>
 
+<template data-msc-network-retarget-companion>
+  <aside class="msc-network-retarget-companion" aria-label="Bitcoin difficulty retarget instrument">
+    <p class="msc-network-retarget-companion__eyebrow">Retarget instrument</p>
+    <h4 class="msc-network-retarget-companion__title">2,016-block control window</h4>
+
+    <div class="msc-network-retarget-instrument">
+      <div class="msc-network-retarget-instrument__window">
+        <span>Period start</span>
+        <strong>2,016 blocks</strong>
+        <span>Retarget boundary</span>
+      </div>
+
+      <div class="msc-network-retarget-gauge" aria-label="Faster blocks lower the target and raise difficulty; slower blocks raise the target and lower difficulty">
+        <span class="msc-network-retarget-gauge__label">Faster blocks</span>
+        <div class="msc-network-retarget-gauge__track" aria-hidden="true">
+          <span class="msc-network-retarget-gauge__marker"></span>
+        </div>
+        <span class="msc-network-retarget-gauge__label">Slower blocks</span>
+      </div>
+
+      <div class="msc-network-retarget-effects">
+        <div class="msc-network-retarget-effect">
+          <span>Faster period</span>
+          <strong>Target ↓</strong>
+          <span>Difficulty ↑</span>
+        </div>
+        <div class="msc-network-retarget-effect">
+          <span>Reference pace</span>
+          <strong>600 sec</strong>
+          <span>Average spacing</span>
+        </div>
+        <div class="msc-network-retarget-effect">
+          <span>Slower period</span>
+          <strong>Target ↑</strong>
+          <span>Difficulty ↓</span>
+        </div>
+      </div>
+
+      <div class="msc-network-retarget-metrics" aria-label="Difficulty adjustment parameters">
+        <span>2,016-block interval</span>
+        <span>1,209,600-sec target period</span>
+        <span>0.25×–4× timespan clamp</span>
+      </div>
+    </div>
+  </aside>
+</template>
+
 <script>
   (() => {
     const script = document.currentScript;
@@ -175,6 +223,19 @@
     const template = scope.querySelector('template[data-msc-network-mining-companion]');
 
     if (card && template && !card.querySelector('.msc-network-mining-companion')) {
+      card.appendChild(template.content.cloneNode(true));
+    }
+  })();
+</script>
+
+<script>
+  (() => {
+    const script = document.currentScript;
+    const scope = script.closest('.shopify-section') || document;
+    const card = scope.querySelector('.msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-020"]');
+    const template = scope.querySelector('template[data-msc-network-retarget-companion]');
+
+    if (card && template && !card.querySelector('.msc-network-retarget-companion')) {
       card.appendChild(template.content.cloneNode(true));
     }
   })();
