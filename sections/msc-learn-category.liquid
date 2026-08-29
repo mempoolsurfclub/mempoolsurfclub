@@ -2,6 +2,7 @@
 {{ 'msc-learn-hub.css' | asset_url | stylesheet_tag }}
 {{ 'msc-learn-hub-companion.css' | asset_url | stylesheet_tag }}
 {{ 'msc-learn-hub-progress.css' | asset_url | stylesheet_tag }}
+{{ 'msc-learn-hub-meta.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'msc-learn-hub-progress.js' | asset_url }}" defer="defer"></script>
 {%- assign pilot_registry_id = section.settings.registry_id | strip -%}
 {%- case pilot_registry_id -%}
@@ -125,6 +126,15 @@
       (() => {
         const script = document.currentScript;
         const scope = script.closest('.shopify-section') || document;
+        const page = scope.querySelector('.msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"]');
+        const heroMeta = page ? page.querySelector('.msc-learn-page__header .msc-learn-page-meta') : null;
+        const readingTime = heroMeta ? heroMeta.querySelector('li:nth-child(3)') : null;
+
+        if (readingTime && readingTime.textContent.trim() !== '18 MIN HUB REVIEW') {
+          readingTime.title = readingTime.textContent.trim();
+          readingTime.textContent = '18 MIN HUB REVIEW';
+        }
+
         const card = scope.querySelector('.msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-004"]');
         const template = scope.querySelector('template[data-msc-guide-companion-template="MSC-GUIDE-004"]');
         if (!card || !template || card.querySelector('.msc-guide-companion')) return;
