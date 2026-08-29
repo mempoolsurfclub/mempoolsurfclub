@@ -98,72 +98,45 @@
 </template>
 
 <template data-msc-network-mining-companion>
-  <aside class="msc-network-mining-companion" aria-label="Bitcoin mining system flow">
-    <svg class="msc-network-mining-system" viewBox="0 0 560 280" role="img" aria-labelledby="msc-network-mining-title msc-network-mining-desc">
-      <title id="msc-network-mining-title">Bitcoin mining system flow</title>
-      <desc id="msc-network-mining-desc">Transactions inform a candidate block template, an ASIC searches block-header hashes against a target, and a found block is independently checked by a node.</desc>
+  <aside class="msc-network-mining-companion" aria-label="Animated Bitcoin mining competition">
+    <svg class="msc-network-mining-race" viewBox="0 0 560 280" role="img" aria-labelledby="msc-network-mining-title msc-network-mining-desc">
+      <title id="msc-network-mining-title">Miners competing for a Bitcoin block</title>
+      <desc id="msc-network-mining-desc">Four identical miners compete for one block. Three fade back, one miner remains highlighted and moves toward the block, and the block glows when it is found.</desc>
 
-      <g class="msc-network-mining-system__muted" aria-hidden="true">
-        <path d="M34 36H526M34 244H526M58 22V258M502 22V258" />
-        <circle cx="280" cy="140" r="112" />
-        <circle cx="280" cy="140" r="82" />
+      <defs>
+        <g id="msc-network-miner-icon">
+          <rect x="0" y="0" width="58" height="48" rx="7" />
+          <circle cx="18" cy="24" r="9" />
+          <circle cx="40" cy="24" r="9" />
+          <circle cx="18" cy="24" r="2.2" class="msc-network-mining-race__solid" />
+          <circle cx="40" cy="24" r="2.2" class="msc-network-mining-race__solid" />
+          <path d="M8 9H50M8 39H50" />
+        </g>
+      </defs>
+
+      <g class="msc-network-mining-race__sequence" aria-hidden="true">
+        <g class="msc-network-mining-race__miner msc-network-mining-race__miner--rest" transform="translate(66 116)">
+          <use href="#msc-network-miner-icon" />
+        </g>
+        <g class="msc-network-mining-race__miner msc-network-mining-race__miner--rest" transform="translate(136 116)">
+          <use href="#msc-network-miner-icon" />
+        </g>
+        <g class="msc-network-mining-race__miner msc-network-mining-race__miner--rest" transform="translate(206 116)">
+          <use href="#msc-network-miner-icon" />
+        </g>
+        <g class="msc-network-mining-race__miner msc-network-mining-race__miner--winner" transform="translate(276 116)">
+          <use href="#msc-network-miner-icon" />
+        </g>
+
+        <path class="msc-network-mining-race__connection" d="M376 140H430" />
+
+        <g class="msc-network-mining-race__block">
+          <rect class="msc-network-mining-race__block-halo" x="420" y="96" width="94" height="88" rx="14" />
+          <rect x="430" y="106" width="74" height="68" rx="8" />
+          <rect x="442" y="118" width="50" height="44" rx="5" />
+          <path d="M452 130H482M452 140H476M452 150H484" />
+        </g>
       </g>
-
-      <g aria-hidden="true">
-        <rect x="38" y="90" width="78" height="92" rx="8" />
-        <path d="M52 108H102M52 122H92M52 142H102M52 156H86" />
-        <circle class="msc-network-mining-system__fill" cx="98" cy="156" r="2.4" />
-        <text x="77" y="202" text-anchor="middle">MEMPOOL</text>
-      </g>
-
-      <g aria-hidden="true">
-        <rect x="146" y="88" width="88" height="96" rx="8" />
-        <rect x="160" y="105" width="60" height="50" rx="4" />
-        <path d="M168 115H212M168 127H204M168 139H210M174 166H206" />
-        <text x="190" y="202" text-anchor="middle">TEMPLATE</text>
-      </g>
-
-      <g aria-hidden="true">
-        <rect class="msc-network-mining-system__strong" x="268" y="82" width="96" height="106" rx="10" />
-        <rect x="283" y="101" width="66" height="50" rx="5" />
-        <path d="M294 111H307V124H294ZM313 111H326V124H313ZM332 111H345V124H332ZM294 130H307V143H294ZM313 130H326V143H313ZM332 130H345V143H332Z" />
-        <path d="M282 91V82M298 91V82M314 91V82M330 91V82M346 91V82M282 188V179M298 188V179M314 188V179M330 188V179M346 188V179" />
-        <text x="316" y="207" text-anchor="middle">ASIC HASH</text>
-      </g>
-
-      <g aria-hidden="true">
-        <path d="M397 89V181" />
-        <path d="M383 105H411M383 165H411" />
-        <circle cx="397" cy="135" r="18" />
-        <path class="msc-network-mining-system__strong" d="M388 136L395 143L407 126" />
-        <text x="397" y="207" text-anchor="middle">TARGET</text>
-      </g>
-
-      <g aria-hidden="true">
-        <rect x="438" y="72" width="82" height="70" rx="7" />
-        <path d="M451 88H507M451 101H495M451 116H504" />
-        <text x="479" y="160" text-anchor="middle">BLOCK</text>
-        <rect x="438" y="183" width="82" height="52" rx="7" />
-        <circle cx="458" cy="209" r="9" />
-        <path class="msc-network-mining-system__strong" d="M453 209L457 213L464 204" />
-        <path d="M477 200H506M477 213H497" />
-        <text x="479" y="256" text-anchor="middle">NODE CHECK</text>
-      </g>
-
-      <g class="msc-network-mining-system__flow" aria-hidden="true">
-        <path d="M116 136H146" />
-        <polyline points="136,130 146,136 136,142" />
-        <path d="M234 136H268" />
-        <polyline points="258,130 268,136 258,142" />
-        <path d="M364 136H379" />
-        <polyline points="369,130 379,136 369,142" />
-        <path d="M415 118H438" />
-        <polyline points="428,112 438,118 428,124" />
-        <path d="M479 142V183" />
-        <polyline points="473,173 479,183 485,173" />
-      </g>
-
-      <text x="280" y="32" text-anchor="middle">CANDIDATE BLOCK → PROOF OF WORK → INDEPENDENT VALIDATION</text>
     </svg>
   </aside>
 </template>
