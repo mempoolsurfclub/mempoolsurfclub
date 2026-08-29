@@ -5,7 +5,7 @@
   gap: clamp(3.2rem, 4.7vw, 5rem);
 }
 
-/* Guide 001 — systems companion. The featured card's existing dimensions remain unchanged. */
+/* Guide 001 — rotating Bitcoin / question emblem. The featured card's existing dimensions remain unchanged. */
 .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"]
   .msc-learn-subcategory:first-child
   .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-001"]:first-child::after {
@@ -39,92 +39,154 @@
   border: 1px solid rgba(212, 190, 153, .18);
   border-radius: 16px;
   background:
+    radial-gradient(circle at 50% 50%, rgba(212, 190, 153, .06), transparent 46%),
     linear-gradient(180deg, rgba(212, 190, 153, .045), rgba(212, 190, 153, .015)),
     rgba(6, 28, 32, .18);
   box-shadow: inset 0 0 0 1px rgba(251, 248, 239, .025);
   pointer-events: none;
+  perspective: 700px;
 }
 
-.msc-guide-systems {
+.msc-guide-emblem {
   position: absolute;
   inset: 0;
   display: block;
   width: 100%;
   height: 100%;
-  color: var(--msc-hub-sand);
+  overflow: visible;
 }
 
-.msc-guide-systems__grid,
-.msc-guide-systems__links,
-.msc-guide-systems__wallet,
-.msc-guide-systems__nodes,
-.msc-guide-systems__core,
-.msc-guide-systems__verify,
-.msc-guide-systems__blocks {
+.msc-guide-emblem__field {
   fill: none;
-  stroke: currentColor;
-  stroke-width: 1.15;
+  stroke: rgba(212, 190, 153, .22);
+  stroke-width: 1;
   stroke-linecap: round;
-  stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
 }
 
-.msc-guide-systems__grid {
-  opacity: .16;
+.msc-guide-emblem__field circle:first-child {
+  opacity: .42;
 }
 
-.msc-guide-systems__links {
-  opacity: .54;
+.msc-guide-emblem__field circle:nth-child(2),
+.msc-guide-emblem__field path {
+  opacity: .22;
 }
 
-.msc-guide-systems__wallet,
-.msc-guide-systems__verify,
-.msc-guide-systems__blocks {
-  opacity: .78;
+.msc-guide-emblem__shadow {
+  fill: rgba(2, 13, 16, .28);
+  stroke: rgba(212, 190, 153, .08);
 }
 
-.msc-guide-systems__nodes {
+.msc-guide-emblem__symbol {
+  transform-box: fill-box;
+  transform-origin: center;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
+
+.msc-guide-emblem__symbol text {
+  stroke: none;
+  font-family: var(--font-heading-family, var(--font-body-family, sans-serif));
+  font-weight: 760;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.msc-guide-emblem__symbol--bitcoin text {
+  font-size: 118px;
+}
+
+.msc-guide-emblem__symbol--question text {
+  font-size: 122px;
+}
+
+.msc-guide-emblem__depth {
+  fill: rgba(105, 91, 69, .72);
+}
+
+.msc-guide-emblem__depth--far {
+  opacity: .44;
+}
+
+.msc-guide-emblem__depth--mid {
   opacity: .62;
 }
 
-.msc-guide-systems__core {
-  opacity: .96;
+.msc-guide-emblem__depth--near {
+  opacity: .82;
 }
 
-.msc-guide-systems__core > circle:first-child {
-  fill: rgba(212, 190, 153, .055);
-  stroke-width: 1.4;
-}
-
-.msc-guide-systems__core > circle:nth-child(2) {
-  fill: rgba(212, 190, 153, .035);
-  opacity: .72;
-}
-
-.msc-guide-systems__solid {
-  fill: currentColor;
-  stroke: none;
-}
-
-.msc-guide-systems__check,
-.msc-guide-systems__direction {
-  stroke-width: 1.5;
-}
-
-.msc-guide-systems text {
-  fill: rgba(212, 190, 153, .74);
-  stroke: none;
-  font-family: var(--font-body-family, sans-serif);
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: .16em;
-}
-
-.msc-guide-systems .msc-guide-systems__bitcoin {
+.msc-guide-emblem__face {
   fill: var(--msc-hub-sand);
-  font-size: 34px;
-  font-weight: 700;
-  letter-spacing: 0;
+  stroke: rgba(251, 248, 239, .16);
+  stroke-width: .55;
+  paint-order: stroke fill;
+  filter: drop-shadow(0 9px 16px rgba(2, 13, 16, .24));
+}
+
+.msc-guide-emblem__symbol--bitcoin {
+  animation: msc-guide-emblem-bitcoin 14s cubic-bezier(.45, 0, .2, 1) infinite;
+}
+
+.msc-guide-emblem__symbol--question {
+  opacity: 0;
+  animation: msc-guide-emblem-question 14s cubic-bezier(.45, 0, .2, 1) infinite;
+}
+
+@keyframes msc-guide-emblem-bitcoin {
+  0%, 20% {
+    opacity: 1;
+    transform: perspective(700px) rotateY(-8deg) rotateX(1deg);
+  }
+  30% {
+    opacity: 1;
+    transform: perspective(700px) rotateY(42deg) rotateX(1deg);
+  }
+  38% {
+    opacity: .08;
+    transform: perspective(700px) rotateY(88deg) rotateX(1deg) scaleX(.32);
+  }
+  39%, 61% {
+    opacity: 0;
+    transform: perspective(700px) rotateY(90deg) rotateX(1deg) scaleX(.28);
+  }
+  62% {
+    opacity: .08;
+    transform: perspective(700px) rotateY(-88deg) rotateX(1deg) scaleX(.32);
+  }
+  70% {
+    opacity: 1;
+    transform: perspective(700px) rotateY(-42deg) rotateX(1deg);
+  }
+  80%, 100% {
+    opacity: 1;
+    transform: perspective(700px) rotateY(-8deg) rotateX(1deg);
+  }
+}
+
+@keyframes msc-guide-emblem-question {
+  0%, 34% {
+    opacity: 0;
+    transform: perspective(700px) rotateY(-90deg) rotateX(1deg) scaleX(.28);
+  }
+  39% {
+    opacity: .12;
+    transform: perspective(700px) rotateY(-82deg) rotateX(1deg) scaleX(.38);
+  }
+  47%, 53% {
+    opacity: 1;
+    transform: perspective(700px) rotateY(0deg) rotateX(1deg);
+  }
+  61% {
+    opacity: .12;
+    transform: perspective(700px) rotateY(82deg) rotateX(1deg) scaleX(.38);
+  }
+  66%, 100% {
+    opacity: 0;
+    transform: perspective(700px) rotateY(90deg) rotateX(1deg) scaleX(.28);
+  }
 }
 
 /* Guide 004 — existing timeline companion. */
@@ -262,6 +324,17 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .msc-guide-emblem__symbol--bitcoin {
+    opacity: 1;
+    animation: none;
+    transform: perspective(700px) rotateY(-8deg) rotateX(1deg);
+  }
+
+  .msc-guide-emblem__symbol--question {
+    opacity: 0;
+    animation: none;
+  }
+
   .msc-guide-timeline__item {
     opacity: 1;
     animation: none;
@@ -298,7 +371,7 @@
     border-radius: 13px;
   }
 
-  .msc-guide-systems {
+  .msc-guide-emblem {
     min-height: 17rem;
   }
 
