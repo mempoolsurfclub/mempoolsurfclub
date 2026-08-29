@@ -546,3 +546,28 @@
 .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-subcategory > h2 {
   text-transform: uppercase;
 }
+
+/* Match the approved Bitcoin Basics desktop visual rail on the remaining featured hub companions. */
+@media screen and (min-width: 990px) {
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-NETWORK"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-017"] > .msc-network-mining-companion,
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"] > .msc-building-lightning-companion,
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-DEVELOPMENT"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-049"] > .msc-development-core-companion,
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-065"] > .msc-ecosystem-builders-companion {
+    position: absolute;
+    grid-column: auto;
+    grid-row: auto;
+    top: 5rem;
+    right: 5rem;
+    bottom: 5rem;
+    left: calc(60.416667% + .55rem);
+    min-height: 0;
+    margin: 0;
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-NETWORK"] .msc-network-mining-system,
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"] .msc-building-lightning-system,
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-DEVELOPMENT"] .msc-development-core-system,
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-builders-system {
+    min-height: 0;
+  }
+}
