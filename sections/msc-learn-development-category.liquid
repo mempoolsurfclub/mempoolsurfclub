@@ -1,0 +1,74 @@
+{{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
+{{ 'msc-learn-hub-progress.css' | asset_url | stylesheet_tag }}
+{{ 'msc-learn-development-hub.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'msc-learn-hub-progress.js' | asset_url }}" defer="defer"></script>
+
+{% render 'msc-learn-development-hub-runtime' %}
+
+<template data-msc-learn-progress-template="MSC-HUB-DEVELOPMENT">
+  <aside class="msc-learn-progress" data-msc-learn-progress data-hub-id="MSC-HUB-DEVELOPMENT" data-total-guides="16" data-account-state="{% if customer %}authenticated{% else %}guest{% endif %}" aria-label="Bitcoin Development learning progress">
+    <div class="msc-learn-progress__topline"><p class="msc-learn-progress__eyebrow">Learning position</p><p class="msc-learn-progress__position" data-msc-progress-position>Position 001</p></div>
+    <div class="msc-learn-progress__readout" aria-hidden="true"><strong data-msc-progress-count>00</strong><span>/ 16</span></div>
+    <p class="msc-learn-progress__summary"><span data-msc-progress-completed>0 complete</span><span class="msc-learn-progress__summary-separator">·</span><span data-msc-progress-remaining>16 remaining</span></p>
+    <div class="msc-learn-progress__current"><p class="msc-learn-progress__current-label" data-msc-progress-current-label>Start here</p><p class="msc-learn-progress__current-title"><span class="msc-learn-progress__current-number" data-msc-progress-current-number>001</span><span aria-hidden="true">—</span><span data-msc-progress-current-title>What Is Bitcoin Core?</span></p></div>
+    <div class="msc-learn-progress__track" role="progressbar" aria-label="Bitcoin Development guide completion" aria-valuemin="0" aria-valuemax="16" aria-valuenow="0" aria-valuetext="0 of 16 guides complete">
+      <div class="msc-learn-progress__groups">
+        <div class="msc-learn-progress__group"><span class="msc-learn-progress__group-label">Bitcoin Core</span><div class="msc-learn-progress__nodes" aria-hidden="true"><span class="msc-learn-progress__node is-current" data-msc-progress-guide="MSC-GUIDE-049"></span><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-050"></span><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-051"></span><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-052"></span></div></div>
+        <div class="msc-learn-progress__group"><span class="msc-learn-progress__group-label">Protocols</span><div class="msc-learn-progress__nodes" aria-hidden="true"><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-053"></span><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-054"></span><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-055"></span><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-056"></span></div></div>
+        <div class="msc-learn-progress__group"><span class="msc-learn-progress__group-label">Cryptography</span><div class="msc-learn-progress__nodes" aria-hidden="true"><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-057"></span><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-058"></span><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-059"></span><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-060"></span></div></div>
+        <div class="msc-learn-progress__group"><span class="msc-learn-progress__group-label">Infrastructure</span><div class="msc-learn-progress__nodes" aria-hidden="true"><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-061"></span><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-062"></span><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-063"></span><span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-064"></span></div></div>
+      </div>
+    </div>
+    <div class="msc-learn-progress__footer" aria-hidden="true"><span>4 sections</span><span>16 guides</span><span data-msc-progress-percent>0% complete</span></div>
+  </aside>
+</template>
+
+<template data-msc-development-core-companion>
+  <aside class="msc-development-core-companion" aria-label="Bitcoin Core implementation map">
+    <svg class="msc-development-core-system" viewBox="0 0 560 280" role="img" aria-labelledby="msc-dev-core-title msc-dev-core-desc">
+      <title id="msc-dev-core-title">Bitcoin Core implementation map</title>
+      <desc id="msc-dev-core-desc">Bitcoin Core connects validation, networking, policy, wallet, indexes, and interfaces while remaining an implementation rather than Bitcoin itself.</desc>
+      <g class="msc-development-system__muted" aria-hidden="true"><path d="M30 34H530M30 246H530M52 22V258M508 22V258"/><circle cx="280" cy="140" r="112"/></g>
+      <g aria-hidden="true"><rect x="210" y="88" width="140" height="104" rx="10"/><text x="280" y="123" text-anchor="middle">BITCOIN CORE</text><text x="280" y="145" text-anchor="middle">IMPLEMENTATION</text><path d="M232 163H328"/><text x="280" y="181" text-anchor="middle">VERSIONED SOFTWARE</text></g>
+      <g class="msc-development-system__nodes" aria-hidden="true"><rect x="48" y="60" width="106" height="52" rx="7"/><text x="101" y="82" text-anchor="middle">VALIDATION</text><text x="101" y="99" text-anchor="middle">CHAINSTATE</text><rect x="406" y="60" width="106" height="52" rx="7"/><text x="459" y="82" text-anchor="middle">NETWORKING</text><text x="459" y="99" text-anchor="middle">POLICY</text><rect x="48" y="178" width="106" height="52" rx="7"/><text x="101" y="200" text-anchor="middle">WALLET</text><text x="101" y="217" text-anchor="middle">OPTIONAL</text><rect x="406" y="178" width="106" height="52" rx="7"/><text x="459" y="200" text-anchor="middle">RPC · INDEXES</text><text x="459" y="217" text-anchor="middle">INTERFACES</text></g>
+      <g class="msc-development-system__links" aria-hidden="true"><path d="M154 86L210 116M350 116L406 86M154 204L210 166M350 166L406 204"/></g>
+      <text class="msc-development-system__caption" x="280" y="30" text-anchor="middle">IMPLEMENTATION LAYERS ≠ BITCOIN ITSELF</text>
+    </svg>
+  </aside>
+</template>
+
+<template data-msc-development-release-companion>
+  <aside class="msc-development-release-companion" aria-label="Bitcoin Core release pipeline">
+    <p class="msc-development-release-companion__eyebrow">Release pipeline</p>
+    <h4 class="msc-development-release-companion__title">From development to published artifacts</h4>
+    <ol class="msc-development-release-pipeline" aria-label="Bitcoin Core release stages">
+      <li><span>01</span><strong>Development</strong></li>
+      <li><span>02</span><strong>Release branch</strong></li>
+      <li><span>03</span><strong>Release candidate</strong></li>
+      <li><span>04</span><strong>Stable tag</strong></li>
+      <li><span>05</span><strong>Build + verify</strong></li>
+      <li><span>06</span><strong>Release artifacts</strong></li>
+    </ol>
+    <div class="msc-development-release-boundary"><span>Software release</span><strong>≠</strong><span>Consensus activation · adoption</span></div>
+  </aside>
+</template>
+
+<script>
+  (() => {
+    const script = document.currentScript;
+    const scope = script.closest('.shopify-section') || document;
+    const featured = scope.querySelector('.msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-049"]');
+    const featuredTemplate = scope.querySelector('template[data-msc-development-core-companion]');
+    const release = scope.querySelector('.msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-052"]');
+    const releaseTemplate = scope.querySelector('template[data-msc-development-release-companion]');
+    if (featured && featuredTemplate && !featured.querySelector('.msc-development-core-companion')) featured.appendChild(featuredTemplate.content.cloneNode(true));
+    if (release && releaseTemplate && !release.querySelector('.msc-development-release-companion')) release.appendChild(releaseTemplate.content.cloneNode(true));
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "MSC Learn development hub",
+  "settings": []
+}
+{% endschema %}
