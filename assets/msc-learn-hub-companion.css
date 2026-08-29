@@ -1,10 +1,133 @@
 /* MSC Learn guide companion treatment
-   Scoped to the Bitcoin Basics reference hub and MSC-GUIDE-004 only. */
+   Scoped to the Bitcoin Basics reference hub and guide-specific companions only. */
 
 .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-subcategories {
   gap: clamp(3.2rem, 4.7vw, 5rem);
 }
 
+/* Guide 001 — systems companion. The featured card's existing dimensions remain unchanged. */
+.msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"]
+  .msc-learn-subcategory:first-child
+  .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-001"]:first-child::after {
+  content: none;
+  display: none;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"]
+  .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-001"] {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(30rem, 2fr);
+  grid-template-rows: auto auto 1fr auto;
+  column-gap: clamp(2.8rem, 5vw, 6rem);
+  row-gap: 1rem;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"]
+  .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-001"] > *:not(.msc-guide-companion--systems) {
+  grid-column: 1;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"]
+  .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-001"] > .msc-guide-companion--systems {
+  position: relative;
+  grid-column: 2;
+  grid-row: 1 / -1;
+  align-self: stretch;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid rgba(212, 190, 153, .18);
+  border-radius: 16px;
+  background:
+    linear-gradient(180deg, rgba(212, 190, 153, .045), rgba(212, 190, 153, .015)),
+    rgba(6, 28, 32, .18);
+  box-shadow: inset 0 0 0 1px rgba(251, 248, 239, .025);
+  pointer-events: none;
+}
+
+.msc-guide-systems {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  color: var(--msc-hub-sand);
+}
+
+.msc-guide-systems__grid,
+.msc-guide-systems__links,
+.msc-guide-systems__wallet,
+.msc-guide-systems__nodes,
+.msc-guide-systems__core,
+.msc-guide-systems__verify,
+.msc-guide-systems__blocks {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.15;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.msc-guide-systems__grid {
+  opacity: .16;
+}
+
+.msc-guide-systems__links {
+  opacity: .54;
+}
+
+.msc-guide-systems__wallet,
+.msc-guide-systems__verify,
+.msc-guide-systems__blocks {
+  opacity: .78;
+}
+
+.msc-guide-systems__nodes {
+  opacity: .62;
+}
+
+.msc-guide-systems__core {
+  opacity: .96;
+}
+
+.msc-guide-systems__core > circle:first-child {
+  fill: rgba(212, 190, 153, .055);
+  stroke-width: 1.4;
+}
+
+.msc-guide-systems__core > circle:nth-child(2) {
+  fill: rgba(212, 190, 153, .035);
+  opacity: .72;
+}
+
+.msc-guide-systems__solid {
+  fill: currentColor;
+  stroke: none;
+}
+
+.msc-guide-systems__check,
+.msc-guide-systems__direction {
+  stroke-width: 1.5;
+}
+
+.msc-guide-systems text {
+  fill: rgba(212, 190, 153, .74);
+  stroke: none;
+  font-family: var(--font-body-family, sans-serif);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .16em;
+}
+
+.msc-guide-systems .msc-guide-systems__bitcoin {
+  fill: var(--msc-hub-sand);
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+/* Guide 004 — existing timeline companion. */
 .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-004"] {
   height: 25rem;
   min-height: 25rem;
@@ -127,7 +250,32 @@
   }
 }
 
+@media screen and (max-width: 989px) and (min-width: 750px) {
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-001"] {
+    grid-template-columns: minmax(0, 3fr) minmax(25rem, 2fr);
+    column-gap: 2.8rem;
+  }
+}
+
 @media screen and (max-width: 749px) {
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-001"] {
+    display: flex;
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-001"] > .msc-guide-companion--systems {
+    width: 100%;
+    min-height: 17rem;
+    margin-top: .6rem;
+    border-radius: 13px;
+  }
+
+  .msc-guide-systems {
+    min-height: 17rem;
+  }
+
   .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-004"] {
     height: auto;
     min-height: 0;
