@@ -1,0 +1,279 @@
+/* MSC Learn hub progress instrument
+   Bitcoin Basics reference implementation. Designed to become the shared hub hero widget after visual approval. */
+
+.msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-page__header {
+  padding-right: clamp(48rem, 37vw, 56rem);
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-page__header::before,
+.msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-page__header::after {
+  display: none;
+}
+
+.msc-learn-progress {
+  position: absolute;
+  top: 2.4rem;
+  right: 2.4rem;
+  bottom: 2.4rem;
+  display: flex;
+  flex-direction: column;
+  width: clamp(36rem, 31vw, 44rem);
+  min-width: 0;
+  padding: 2.4rem;
+  overflow: hidden;
+  border: 1px solid rgba(212, 190, 153, .24);
+  border-radius: 20px;
+  background:
+    linear-gradient(rgba(251, 248, 239, .025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(251, 248, 239, .025) 1px, transparent 1px),
+    linear-gradient(155deg, rgba(9, 30, 35, .74), rgba(23, 60, 67, .72));
+  background-size: 22px 22px, 22px 22px, auto;
+  box-shadow:
+    inset 0 0 0 1px rgba(212, 190, 153, .04),
+    0 18px 46px rgba(5, 13, 24, .22);
+  backdrop-filter: blur(12px);
+}
+
+.msc-learn-progress::after {
+  content: "";
+  position: absolute;
+  inset: auto -4rem -7rem auto;
+  width: 20rem;
+  height: 20rem;
+  border: 1px solid rgba(212, 190, 153, .09);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 4rem rgba(212, 190, 153, .025),
+    0 0 0 8rem rgba(212, 190, 153, .015);
+  pointer-events: none;
+}
+
+.msc-learn-progress > * {
+  position: relative;
+  z-index: 1;
+}
+
+.msc-learn-progress__topline,
+.msc-learn-progress__summary,
+.msc-learn-progress__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.msc-learn-progress__eyebrow,
+.msc-learn-progress__position,
+.msc-learn-progress__current-label,
+.msc-learn-progress__group-label,
+.msc-learn-progress__footer {
+  color: rgba(212, 190, 153, .68);
+  font-size: .9rem;
+  font-weight: 850;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.msc-learn-progress__eyebrow,
+.msc-learn-progress__position,
+.msc-learn-progress__current-label {
+  margin: 0;
+}
+
+.msc-learn-progress__position {
+  color: rgba(251, 248, 239, .48);
+  white-space: nowrap;
+}
+
+.msc-learn-progress__readout {
+  display: flex;
+  align-items: baseline;
+  gap: .8rem;
+  margin-top: 1.2rem;
+  color: var(--msc-hub-sand);
+  font-variant-numeric: tabular-nums;
+}
+
+.msc-learn-progress__readout strong {
+  font-size: clamp(4.6rem, 5.2vw, 6.2rem);
+  font-weight: 760;
+  line-height: .9;
+  letter-spacing: -.06em;
+}
+
+.msc-learn-progress__readout span {
+  color: rgba(251, 248, 239, .48);
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+}
+
+.msc-learn-progress__summary {
+  justify-content: flex-start;
+  margin: .8rem 0 0;
+  color: rgba(251, 248, 239, .6);
+  font-size: 1rem;
+  font-weight: 750;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+
+.msc-learn-progress__summary-separator {
+  color: rgba(212, 190, 153, .42);
+}
+
+.msc-learn-progress__current {
+  margin-top: 1.8rem;
+  padding-top: 1.7rem;
+  border-top: 1px solid rgba(212, 190, 153, .16);
+}
+
+.msc-learn-progress__current-title {
+  display: flex;
+  gap: .7rem;
+  margin: .65rem 0 0;
+  color: var(--msc-hub-paper);
+  font-size: clamp(1.55rem, 1.7vw, 1.9rem);
+  font-weight: 760;
+  line-height: 1.25;
+  letter-spacing: -.025em;
+}
+
+.msc-learn-progress__current-number {
+  flex: 0 0 auto;
+  color: var(--msc-hub-sand);
+  font-variant-numeric: tabular-nums;
+}
+
+.msc-learn-progress__track {
+  margin-top: auto;
+  padding-top: 1.8rem;
+}
+
+.msc-learn-progress__groups {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.2rem;
+}
+
+.msc-learn-progress__group {
+  min-width: 0;
+}
+
+.msc-learn-progress__group-label {
+  display: block;
+  min-height: 2.2rem;
+  margin-bottom: .9rem;
+  font-size: .75rem;
+  line-height: 1.25;
+  letter-spacing: .09em;
+}
+
+.msc-learn-progress__nodes {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: .45rem;
+}
+
+.msc-learn-progress__node {
+  position: relative;
+  display: block;
+  height: .65rem;
+  border: 1px solid rgba(212, 190, 153, .24);
+  border-radius: 999px;
+  background: rgba(251, 248, 239, .06);
+  transition: background-color .25s ease, border-color .25s ease, box-shadow .25s ease, opacity .25s ease;
+}
+
+.msc-learn-progress__node.is-complete {
+  border-color: rgba(212, 190, 153, .9);
+  background: var(--msc-hub-sand);
+  box-shadow: 0 0 12px rgba(212, 190, 153, .22);
+}
+
+.msc-learn-progress__node.is-current {
+  border-color: rgba(212, 190, 153, .95);
+  background: rgba(212, 190, 153, .16);
+  box-shadow:
+    inset 0 0 0 1px rgba(212, 190, 153, .28),
+    0 0 0 3px rgba(212, 190, 153, .06);
+  animation: msc-learn-progress-current 2.2s ease-in-out infinite;
+}
+
+.msc-learn-progress__footer {
+  margin-top: 1.4rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid rgba(212, 190, 153, .12);
+  font-size: .78rem;
+  letter-spacing: .1em;
+}
+
+.msc-learn-progress__footer span:last-child {
+  color: rgba(251, 248, 239, .58);
+}
+
+@keyframes msc-learn-progress-current {
+  0%, 100% {
+    opacity: .68;
+    box-shadow:
+      inset 0 0 0 1px rgba(212, 190, 153, .26),
+      0 0 0 3px rgba(212, 190, 153, .05);
+  }
+  50% {
+    opacity: 1;
+    box-shadow:
+      inset 0 0 0 1px rgba(212, 190, 153, .48),
+      0 0 0 5px rgba(212, 190, 153, .09),
+      0 0 18px rgba(212, 190, 153, .22);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .msc-learn-progress__node.is-current {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+@media screen and (max-width: 1099px) {
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"] .msc-learn-page__header {
+    padding-right: clamp(3rem, 5vw, 5rem);
+  }
+
+  .msc-learn-progress {
+    position: relative;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    min-height: 28rem;
+    margin-top: 3rem;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .msc-learn-progress {
+    min-height: 0;
+    padding: 2rem;
+    border-radius: 16px;
+  }
+
+  .msc-learn-progress__readout strong {
+    font-size: 4.4rem;
+  }
+
+  .msc-learn-progress__groups {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem 1.2rem;
+  }
+
+  .msc-learn-progress__group-label {
+    min-height: 0;
+  }
+
+  .msc-learn-progress__footer {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+}
