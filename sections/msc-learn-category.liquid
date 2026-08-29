@@ -1,10 +1,102 @@
 {{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
 {{ 'msc-learn-hub.css' | asset_url | stylesheet_tag }}
 {{ 'msc-learn-hub-companion.css' | asset_url | stylesheet_tag }}
+{{ 'msc-learn-hub-progress.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'msc-learn-hub-progress.js' | asset_url }}" defer="defer"></script>
 {%- assign pilot_registry_id = section.settings.registry_id | strip -%}
 {%- case pilot_registry_id -%}
   {%- when 'MSC-HUB-BASICS' -%}
     {% render 'msc-learn-basics-hub-runtime' %}
+    <template data-msc-learn-progress-template="MSC-HUB-BASICS">
+      <aside
+        class="msc-learn-progress"
+        data-msc-learn-progress
+        data-hub-id="MSC-HUB-BASICS"
+        data-total-guides="16"
+        data-account-state="{% if customer %}authenticated{% else %}guest{% endif %}"
+        aria-label="Bitcoin Basics learning progress"
+      >
+        <div class="msc-learn-progress__topline">
+          <p class="msc-learn-progress__eyebrow">Learning position</p>
+          <p class="msc-learn-progress__position" data-msc-progress-position>Position 001</p>
+        </div>
+
+        <div class="msc-learn-progress__readout" aria-hidden="true">
+          <strong data-msc-progress-count>00</strong>
+          <span>/ 16</span>
+        </div>
+
+        <p class="msc-learn-progress__summary">
+          <span data-msc-progress-completed>0 complete</span>
+          <span class="msc-learn-progress__summary-separator">·</span>
+          <span data-msc-progress-remaining>16 remaining</span>
+        </p>
+
+        <div class="msc-learn-progress__current">
+          <p class="msc-learn-progress__current-label" data-msc-progress-current-label>Start here</p>
+          <p class="msc-learn-progress__current-title">
+            <span class="msc-learn-progress__current-number" data-msc-progress-current-number>001</span>
+            <span aria-hidden="true">—</span>
+            <span data-msc-progress-current-title>What Is Bitcoin?</span>
+          </p>
+        </div>
+
+        <div
+          class="msc-learn-progress__track"
+          role="progressbar"
+          aria-label="Bitcoin Basics guide completion"
+          aria-valuemin="0"
+          aria-valuemax="16"
+          aria-valuenow="0"
+          aria-valuetext="0 of 16 guides complete"
+        >
+          <div class="msc-learn-progress__groups">
+            <div class="msc-learn-progress__group">
+              <span class="msc-learn-progress__group-label">Foundations</span>
+              <div class="msc-learn-progress__nodes" aria-hidden="true">
+                <span class="msc-learn-progress__node is-current" data-msc-progress-guide="MSC-GUIDE-001"></span>
+                <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-002"></span>
+                <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-003"></span>
+                <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-004"></span>
+              </div>
+            </div>
+            <div class="msc-learn-progress__group">
+              <span class="msc-learn-progress__group-label">Using Bitcoin</span>
+              <div class="msc-learn-progress__nodes" aria-hidden="true">
+                <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-005"></span>
+                <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-006"></span>
+                <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-007"></span>
+                <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-008"></span>
+              </div>
+            </div>
+            <div class="msc-learn-progress__group">
+              <span class="msc-learn-progress__group-label">Security</span>
+              <div class="msc-learn-progress__nodes" aria-hidden="true">
+                <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-009"></span>
+                <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-010"></span>
+                <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-011"></span>
+                <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-012"></span>
+              </div>
+            </div>
+            <div class="msc-learn-progress__group">
+              <span class="msc-learn-progress__group-label">Essentials</span>
+              <div class="msc-learn-progress__nodes" aria-hidden="true">
+                <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-013"></span>
+                <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-014"></span>
+                <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-015"></span>
+                <span class="msc-learn-progress__node" data-msc-progress-guide="MSC-GUIDE-016"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="msc-learn-progress__footer" aria-hidden="true">
+          <span>4 sections</span>
+          <span>16 guides</span>
+          <span data-msc-progress-percent>0% complete</span>
+        </div>
+      </aside>
+    </template>
     <template data-msc-guide-companion-template="MSC-GUIDE-004">
       <aside class="msc-guide-companion" aria-label="Satoshi documented timeline">
         <p class="msc-guide-companion__eyebrow">Documented record</p>
