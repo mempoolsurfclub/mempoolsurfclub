@@ -29,10 +29,12 @@
 
 .msc-learn-page[data-msc-registry-id="MSC-HUB-BASICS"]
   .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-001"] > .msc-guide-companion--systems {
+  position: relative;
   grid-column: 2;
   grid-row: 1 / -1;
   align-self: stretch;
   min-width: 0;
+  min-height: 0;
   overflow: hidden;
   border: 1px solid rgba(212, 190, 153, .18);
   border-radius: 16px;
@@ -44,6 +46,8 @@
 }
 
 .msc-guide-systems {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
