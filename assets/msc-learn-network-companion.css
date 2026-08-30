@@ -498,3 +498,12 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Guide 020 — let the instrument use the existing final card row on tablet/desktop. */
+@media screen and (min-width: 750px) {
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-NETWORK"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-020"]
+    .msc-network-retarget-instrument {
+    grid-row: 3 / 5;
+  }
+}
