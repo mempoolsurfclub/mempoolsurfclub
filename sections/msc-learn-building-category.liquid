@@ -22,12 +22,11 @@
     .msc-building-peg-system {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: repeat(2, minmax(5rem, auto));
-    gap: clamp(1.65rem, 2.5vw, 2.35rem);
-    align-content: center;
-    min-height: 0;
-    padding: .35rem .15rem .3rem;
+    grid-template-columns: minmax(0, 1fr) clamp(5.8rem, 8vw, 7.2rem) minmax(0, 1fr);
+    align-items: stretch;
+    column-gap: clamp(1.15rem, 1.7vw, 1.8rem);
+    min-height: 10.6rem;
+    padding: .75rem .35rem .55rem;
     overflow: visible;
   }
 
@@ -35,8 +34,12 @@
     .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
     .msc-building-peg-ledger {
     position: relative;
-    min-height: 5rem;
-    padding: .05rem .35rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    min-height: 9.2rem;
+    padding: .8rem .35rem 1.2rem;
     border: 0;
     border-radius: 0;
     background: transparent;
@@ -44,10 +47,25 @@
 
   .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
     .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+    .msc-building-peg-ledger:first-child {
+    grid-column: 1;
+    text-align: left;
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+    .msc-building-peg-ledger:last-child {
+    grid-column: 3;
+    text-align: right;
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
     .msc-building-peg-ledger__label {
     position: relative;
-    z-index: 2;
-    display: inline-block;
+    z-index: 3;
+    display: block;
+    margin-bottom: .72rem;
     color: rgba(212, 190, 153, .68);
     font-size: .72rem;
     font-weight: 820;
@@ -58,17 +76,23 @@
   .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
     .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
     .msc-building-peg-ledger strong {
-    position: absolute;
-    top: 1.45rem;
-    right: .35rem;
+    position: relative;
     z-index: 3;
-    max-width: 16rem;
-    color: rgba(212, 190, 153, .96);
-    font-size: clamp(1.18rem, 1.42vw, 1.48rem);
+    display: block;
+    max-width: 12ch;
+    margin: 0;
+    color: rgba(212, 190, 153, .98);
+    font-size: clamp(1.45rem, 1.72vw, 1.85rem);
     font-weight: 760;
-    line-height: 1.08;
-    letter-spacing: .035em;
-    text-align: right;
+    line-height: 1.05;
+    letter-spacing: .02em;
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+    .msc-building-peg-ledger:last-child strong {
+    margin-left: auto;
+    animation: msc-guide-036-issued-glow-horizontal 7.2s ease-in-out infinite;
   }
 
   .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
@@ -76,21 +100,19 @@
     .msc-building-peg-ledger::after {
     content: "";
     position: absolute;
-    top: 3.55rem;
     left: .35rem;
     right: .35rem;
-    height: .8rem;
+    bottom: 1.05rem;
+    height: .72rem;
     pointer-events: none;
-    opacity: .92;
+    opacity: .9;
     background-image:
-      radial-gradient(circle at 8% 50%, rgba(212, 190, 153, .62) 0 2px, transparent 2.6px),
-      radial-gradient(circle at 29% 50%, rgba(212, 190, 153, .42) 0 1.8px, transparent 2.4px),
-      radial-gradient(circle at 50% 50%, rgba(212, 190, 153, .62) 0 2.2px, transparent 2.8px),
-      radial-gradient(circle at 71% 50%, rgba(212, 190, 153, .42) 0 1.8px, transparent 2.4px),
-      radial-gradient(circle at 92% 50%, rgba(212, 190, 153, .62) 0 2px, transparent 2.6px),
-      linear-gradient(90deg, rgba(212, 190, 153, .18), rgba(212, 190, 153, .48) 50%, rgba(212, 190, 153, .18));
+      radial-gradient(circle at 10% 50%, rgba(212, 190, 153, .58) 0 1.8px, transparent 2.45px),
+      radial-gradient(circle at 50% 50%, rgba(212, 190, 153, .42) 0 1.7px, transparent 2.35px),
+      radial-gradient(circle at 90% 50%, rgba(212, 190, 153, .58) 0 1.8px, transparent 2.45px),
+      linear-gradient(90deg, rgba(212, 190, 153, .2), rgba(212, 190, 153, .52), rgba(212, 190, 153, .2));
     background-repeat: no-repeat;
-    background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 2px;
+    background-size: 100% 100%, 100% 100%, 100% 100%, 100% 2px;
     background-position: center;
   }
 
@@ -99,47 +121,44 @@
     .msc-building-peg-ledger::before {
     content: "";
     position: absolute;
-    top: 3.95rem;
-    left: 8%;
+    bottom: 1.41rem;
     z-index: 5;
-    width: .46rem;
-    height: .46rem;
+    width: .48rem;
+    height: .48rem;
     border-radius: 50%;
     background: rgba(236, 218, 183, 1);
-    box-shadow: 0 0 .8rem rgba(212, 190, 153, .38);
+    box-shadow: 0 0 .85rem rgba(212, 190, 153, .38);
     opacity: 0;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 50%);
     pointer-events: none;
   }
 
   .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
     .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
     .msc-building-peg-ledger:first-child::before {
-    animation: msc-guide-036-signal-in 7.2s ease-in-out infinite;
+    left: 10%;
+    animation: msc-guide-036-left-signal 7.2s ease-in-out infinite;
   }
 
   .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
     .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
     .msc-building-peg-ledger:last-child::before {
-    left: 50%;
-    animation: msc-guide-036-signal-out 7.2s ease-in-out infinite;
+    left: 10%;
+    animation: msc-guide-036-right-signal 7.2s ease-in-out infinite;
   }
 
   .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
     .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
     .msc-building-peg-bridge {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    z-index: 6;
+    position: relative;
+    grid-column: 2;
     display: grid;
     place-items: center;
-    gap: .42rem;
-    width: 5rem;
-    min-height: 4.6rem;
-    padding: 0;
-    transform: translate(-50%, -50%);
+    align-self: stretch;
+    min-height: 9.2rem;
+    padding: .35rem 0;
     background: transparent;
+    transform: none;
   }
 
   .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
@@ -147,11 +166,11 @@
     .msc-building-peg-bridge::before {
     content: "";
     position: absolute;
-    top: -3.2rem;
-    bottom: -3.2rem;
+    top: .35rem;
+    bottom: .35rem;
     left: 50%;
     width: 1px;
-    background: linear-gradient(180deg, transparent, rgba(212, 190, 153, .5) 18%, rgba(212, 190, 153, .5) 82%, transparent);
+    background: linear-gradient(180deg, transparent, rgba(212, 190, 153, .56) 18%, rgba(212, 190, 153, .56) 82%, transparent);
     transform: translateX(-50%);
   }
 
@@ -160,30 +179,31 @@
     .msc-building-peg-bridge::after {
     content: "";
     position: absolute;
-    top: -2.9rem;
-    left: 50%;
-    width: .4rem;
-    height: .4rem;
+    top: 50%;
+    left: -1.2rem;
+    z-index: 6;
+    width: .46rem;
+    height: .46rem;
     border-radius: 50%;
     background: rgba(236, 218, 183, 1);
     box-shadow: 0 0 .9rem rgba(212, 190, 153, .44);
     opacity: 0;
-    transform: translate(-50%, 0);
-    animation: msc-guide-036-transfer 7.2s ease-in-out infinite;
+    transform: translate(-50%, -50%);
+    animation: msc-guide-036-boundary-cross 7.2s ease-in-out infinite;
   }
 
   .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
     .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
     .msc-building-peg-bridge__pulse {
     position: relative;
-    z-index: 2;
-    width: 1.35rem;
-    height: 1.35rem;
+    z-index: 4;
+    width: 1.55rem;
+    height: 1.55rem;
     border: 1px solid rgba(212, 190, 153, .98);
     border-radius: 50%;
     background: rgba(16, 40, 45, .98);
     box-shadow: 0 0 0 5px rgba(212, 190, 153, .06);
-    animation: msc-guide-036-peg-pulse 7.2s ease-in-out infinite;
+    animation: msc-guide-036-peg-pulse-horizontal 7.2s ease-in-out infinite;
   }
 
   .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
@@ -191,58 +211,68 @@
     .msc-building-peg-bridge__pulse::after {
     content: "";
     position: absolute;
-    inset: -.34rem;
-    border: 1px solid rgba(212, 190, 153, .42);
+    inset: -.38rem;
+    border: 1px solid rgba(212, 190, 153, .44);
     border-radius: inherit;
-    opacity: .54;
+    opacity: .52;
   }
 
   .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
     .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
     .msc-building-peg-bridge strong {
-    position: relative;
-    z-index: 2;
+    position: absolute;
+    top: calc(50% + 1.65rem);
+    left: 50%;
+    z-index: 4;
     color: rgba(212, 190, 153, .9);
-    font-size: .72rem;
+    font-size: .68rem;
     font-weight: 850;
-    letter-spacing: .18em;
+    line-height: 1.2;
+    letter-spacing: .17em;
+    text-align: center;
+    transform: translateX(-50%);
   }
 
   .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
     .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
-    .msc-building-peg-ledger:last-child strong {
-    animation: msc-guide-036-issued-glow 7.2s ease-in-out infinite;
+    .msc-building-peg-bridge strong::after {
+    content: "BOUNDARY";
+    display: block;
+    margin-top: .22rem;
+    color: rgba(212, 190, 153, .46);
+    font-size: .52rem;
+    letter-spacing: .14em;
   }
 
-  @keyframes msc-guide-036-signal-in {
-    0%, 8% { left: 8%; opacity: 0; }
+  @keyframes msc-guide-036-left-signal {
+    0%, 7% { left: 10%; opacity: 0; }
     12% { opacity: 1; }
-    34% { left: 50%; opacity: 1; }
-    40%, 100% { left: 50%; opacity: 0; }
+    33% { left: 96%; opacity: 1; }
+    39%, 100% { left: 96%; opacity: 0; }
   }
 
-  @keyframes msc-guide-036-peg-pulse {
-    0%, 31%, 45%, 100% { box-shadow: 0 0 0 5px rgba(212, 190, 153, .06); }
-    36% { box-shadow: 0 0 0 10px rgba(212, 190, 153, .13), 0 0 1.15rem rgba(212, 190, 153, .2); }
+  @keyframes msc-guide-036-peg-pulse-horizontal {
+    0%, 30%, 45%, 100% { box-shadow: 0 0 0 5px rgba(212, 190, 153, .06); }
+    36% { box-shadow: 0 0 0 11px rgba(212, 190, 153, .13), 0 0 1.2rem rgba(212, 190, 153, .22); }
   }
 
-  @keyframes msc-guide-036-transfer {
-    0%, 38% { opacity: 0; transform: translate(-50%, 0); }
+  @keyframes msc-guide-036-boundary-cross {
+    0%, 38% { left: -1.2rem; opacity: 0; }
     42% { opacity: 1; }
-    55% { opacity: 1; transform: translate(-50%, 5.8rem); }
-    60%, 100% { opacity: 0; transform: translate(-50%, 5.8rem); }
+    53% { left: calc(100% + 1.2rem); opacity: 1; }
+    58%, 100% { left: calc(100% + 1.2rem); opacity: 0; }
   }
 
-  @keyframes msc-guide-036-signal-out {
-    0%, 54% { left: 50%; opacity: 0; }
-    58% { opacity: 1; }
-    77% { left: 92%; opacity: 1; }
-    83%, 100% { left: 92%; opacity: 0; }
+  @keyframes msc-guide-036-right-signal {
+    0%, 55% { left: 4%; opacity: 0; }
+    60% { opacity: 1; }
+    78% { left: 90%; opacity: 1; }
+    84%, 100% { left: 90%; opacity: 0; }
   }
 
-  @keyframes msc-guide-036-issued-glow {
-    0%, 60%, 83%, 100% { color: rgba(212, 190, 153, .96); text-shadow: none; }
-    71% { color: rgba(236, 218, 183, 1); text-shadow: 0 0 .8rem rgba(212, 190, 153, .2); }
+  @keyframes msc-guide-036-issued-glow-horizontal {
+    0%, 60%, 84%, 100% { color: rgba(212, 190, 153, .98); text-shadow: none; }
+    72% { color: rgba(236, 218, 183, 1); text-shadow: 0 0 .8rem rgba(212, 190, 153, .2); }
   }
 
   @media screen and (min-width: 750px) {
@@ -257,15 +287,49 @@
     .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
       .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
       .msc-building-peg-system {
-      gap: 1.25rem;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 4rem auto;
+      row-gap: .65rem;
+      min-height: 0;
       padding-top: .7rem;
     }
 
     .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
       .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
-      .msc-building-peg-ledger strong {
-      max-width: 11rem;
-      font-size: 1.1rem;
+      .msc-building-peg-ledger:first-child,
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-ledger:last-child,
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-bridge {
+      grid-column: 1;
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-ledger {
+      min-height: 6.2rem;
+      padding-top: .4rem;
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-bridge {
+      min-height: 4rem;
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-bridge::before {
+      top: 50%;
+      bottom: auto;
+      left: 10%;
+      right: 10%;
+      width: auto;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(212, 190, 153, .5) 18%, rgba(212, 190, 153, .5) 82%, transparent);
+      transform: none;
     }
   }
 
