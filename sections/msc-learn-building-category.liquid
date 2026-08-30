@@ -279,7 +279,75 @@
     .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
       .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
       > .msc-building-sidechain-companion {
+      position: relative;
       grid-row: 1 / 4;
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      > .msc-building-sidechain-companion::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 1px;
+      background: rgba(212, 190, 153, .16);
+      pointer-events: none;
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-system {
+      align-self: end;
+      height: 8.9rem;
+      min-height: 8.9rem;
+      padding: .3rem .35rem .05rem;
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-ledger {
+      justify-content: flex-start;
+      min-height: 8.55rem;
+      padding: .55rem .35rem .65rem;
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-ledger__label {
+      margin-bottom: .55rem;
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-ledger::after {
+      bottom: .1rem;
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-ledger::before {
+      bottom: .46rem;
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-bridge {
+      min-height: 8.55rem;
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-bridge::before {
+      top: .1rem;
+      bottom: .1rem;
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-bridge strong {
+      top: calc(50% + 1.45rem);
     }
   }
 
