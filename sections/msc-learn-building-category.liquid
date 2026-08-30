@@ -255,6 +255,56 @@
       > .msc-building-sidechain-companion {
       grid-row: 1 / 4;
     }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-ledger__label {
+      color: rgba(212, 190, 153, .62);
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-ledger::after {
+      top: 2.9rem;
+      height: .7rem;
+      opacity: .74;
+      background-image:
+        radial-gradient(circle at center, rgba(212, 190, 153, .5) 0 1.45px, transparent 2px),
+        linear-gradient(90deg, rgba(212, 190, 153, .14), rgba(212, 190, 153, .4) 50%, rgba(212, 190, 153, .14));
+      background-repeat: repeat-x, no-repeat;
+      background-size: 14.285% 100%, 100% 1px;
+      background-position: 0 50%, center 50%;
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-ledger strong {
+      max-width: 15.5rem;
+      margin-right: .55rem;
+      padding: .18rem 0 .18rem .55rem;
+      transform: translateY(.45rem);
+      background: linear-gradient(90deg, rgba(23, 60, 67, .86), rgba(23, 60, 67, .98) 58%);
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-bridge::before {
+      background: linear-gradient(180deg, transparent, rgba(212, 190, 153, .48) 18%, rgba(212, 190, 153, .48) 82%, transparent);
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-bridge__pulse {
+      border-color: rgba(212, 190, 153, .98);
+      box-shadow: 0 0 0 4px rgba(212, 190, 153, .07);
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-bridge__pulse::after {
+      border-color: rgba(212, 190, 153, .44);
+      opacity: .5;
+    }
   }
 
   @media screen and (max-width: 749px) {
