@@ -1,6 +1,24 @@
 {{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
 {{ 'msc-learn-hub-progress.css' | asset_url | stylesheet_tag }}
 {{ 'msc-learn-building-hub.css' | asset_url | stylesheet_tag }}
+<style>
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+    .msc-building-peg-note {
+    font-size: .9rem;
+    line-height: 1.15;
+    letter-spacing: .045em;
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+    .msc-building-peg-note strong {
+    font-size: 1.08rem;
+    font-weight: 820;
+    line-height: 1.1;
+    letter-spacing: .035em;
+  }
+</style>
 <script src="{{ 'msc-learn-hub-progress.js' | asset_url }}" defer="defer"></script>
 
 {% render 'msc-learn-building-hub-runtime' %}
