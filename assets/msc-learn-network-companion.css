@@ -1,7 +1,7 @@
 /* MSC Learn — The Bitcoin Network guide companions
    Scope: Guide 017 mining competition and Guide 020 retarget instrument only. */
 
-/* Guide 017 — simple mining competition. Panel/card geometry remains in msc-learn-network-hub.css. */
+/* Guide 017 — dense mining competition. Panel/card geometry remains in msc-learn-network-hub.css. */
 .msc-network-mining-race {
   display: block;
   width: 100%;
@@ -10,12 +10,12 @@
   color: var(--msc-hub-sand);
 }
 
-.msc-network-mining-race__miner,
-.msc-network-mining-race__block,
-.msc-network-mining-race__connection {
+.msc-network-mining-race__miner-field,
+.msc-network-mining-race__winner,
+.msc-network-mining-race__block {
   fill: none;
   stroke: currentColor;
-  stroke-width: 1.35;
+  stroke-width: 1.15;
   stroke-linecap: round;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
@@ -26,111 +26,151 @@
   stroke: none;
 }
 
-.msc-network-mining-race__sequence {
-  animation: msc-network-mining-race-reset 9.6s ease-in-out infinite;
-}
-
-.msc-network-mining-race__miner {
+.msc-network-mining-race__miner-field {
   opacity: .8;
+  animation: msc-network-mining-race-field 8s ease-in-out infinite;
 }
 
-.msc-network-mining-race__miner--rest {
-  animation: msc-network-mining-race-rest 9.6s ease-in-out infinite;
+.msc-network-mining-race__slot--a,
+.msc-network-mining-race__slot--b,
+.msc-network-mining-race__slot--c,
+.msc-network-mining-race__slot--d {
+  animation: msc-network-mining-race-slot 32s linear infinite;
 }
 
-.msc-network-mining-race__miner--winner {
-  animation: msc-network-mining-race-winner 9.6s ease-in-out infinite;
-}
-
-.msc-network-mining-race__connection {
+.msc-network-mining-race__winner {
   opacity: 0;
-  stroke-width: 1.65;
-  stroke-dasharray: 54;
-  stroke-dashoffset: 54;
-  animation: msc-network-mining-race-connect 9.6s ease-in-out infinite;
+  transform-box: view-box;
+  transform-origin: 0 0;
+  will-change: transform, opacity, filter;
+  animation: msc-network-mining-race-winner 32s linear infinite;
+}
+
+.msc-network-mining-race__slot--a,
+.msc-network-mining-race__winner--a {
+  animation-delay: 0s;
+}
+
+.msc-network-mining-race__slot--b,
+.msc-network-mining-race__winner--b {
+  animation-delay: -24s;
+}
+
+.msc-network-mining-race__slot--c,
+.msc-network-mining-race__winner--c {
+  animation-delay: -16s;
+}
+
+.msc-network-mining-race__slot--d,
+.msc-network-mining-race__winner--d {
+  animation-delay: -8s;
+}
+
+.msc-network-mining-race__winner--a {
+  --msc-winner-x: 404px;
+  --msc-winner-y: 81px;
+}
+
+.msc-network-mining-race__winner--b {
+  --msc-winner-x: 344px;
+  --msc-winner-y: -79px;
+}
+
+.msc-network-mining-race__winner--c {
+  --msc-winner-x: 254px;
+  --msc-winner-y: 1px;
+}
+
+.msc-network-mining-race__winner--d {
+  --msc-winner-x: 194px;
+  --msc-winner-y: -39px;
 }
 
 .msc-network-mining-race__block {
   opacity: .58;
-  animation: msc-network-mining-race-block 9.6s ease-in-out infinite;
+  animation: msc-network-mining-race-block 8s ease-in-out infinite;
 }
 
 .msc-network-mining-race__block-halo {
   opacity: 0;
-  stroke-width: 1.1;
-  animation: msc-network-mining-race-halo 9.6s ease-in-out infinite;
+  stroke-width: 1.05;
+  animation: msc-network-mining-race-halo 8s ease-in-out infinite;
 }
 
-@keyframes msc-network-mining-race-rest {
-  0%, 26% { opacity: .8; }
-  36%, 90% { opacity: .18; }
-  100% { opacity: .8; }
+@keyframes msc-network-mining-race-field {
+  0%, 24% { opacity: .8; }
+  30%, 82% { opacity: .28; }
+  92%, 100% { opacity: .8; }
+}
+
+@keyframes msc-network-mining-race-slot {
+  0%, 5.9% { opacity: 1; }
+  6.5%, 20.5% { opacity: 0; }
+  23%, 100% { opacity: 1; }
 }
 
 @keyframes msc-network-mining-race-winner {
-  0%, 26% {
-    opacity: .8;
+  0%, 6% {
+    opacity: 0;
+    transform: translate(0, 0);
     filter: none;
   }
-  36%, 82% {
+  6.5%, 8.5% {
     opacity: 1;
+    transform: translate(0, 0);
     filter: drop-shadow(0 0 5px rgba(212, 190, 153, .42));
   }
-  90% {
-    opacity: .14;
+  9% {
+    opacity: 1;
+    transform: translate(0, 0);
+    filter: drop-shadow(0 0 5px rgba(212, 190, 153, .42));
+  }
+  14.5% {
+    opacity: 1;
+    transform: translate(var(--msc-winner-x), 0);
+    filter: drop-shadow(0 0 5px rgba(212, 190, 153, .42));
+  }
+  17.5%, 18.5% {
+    opacity: 1;
+    transform: translate(var(--msc-winner-x), var(--msc-winner-y));
+    filter: drop-shadow(0 0 6px rgba(212, 190, 153, .5));
+  }
+  20.5% {
+    opacity: 0;
+    transform: translate(var(--msc-winner-x), var(--msc-winner-y));
     filter: none;
   }
-  100% {
-    opacity: .8;
+  23%, 100% {
+    opacity: 0;
+    transform: translate(0, 0);
     filter: none;
-  }
-}
-
-@keyframes msc-network-mining-race-connect {
-  0%, 48% {
-    opacity: 0;
-    stroke-dashoffset: 54;
-  }
-  60%, 82% {
-    opacity: .82;
-    stroke-dashoffset: 0;
-  }
-  90%, 100% {
-    opacity: 0;
-    stroke-dashoffset: 54;
   }
 }
 
 @keyframes msc-network-mining-race-block {
-  0%, 55% {
+  0%, 68% {
     opacity: .58;
     filter: none;
   }
-  66%, 82% {
+  72%, 74% {
     opacity: 1;
     filter: drop-shadow(0 0 7px rgba(212, 190, 153, .46));
   }
-  90% {
-    opacity: .12;
+  82%, 88% {
+    opacity: 0;
     filter: none;
   }
-  100% {
+  92%, 100% {
     opacity: .58;
     filter: none;
   }
 }
 
 @keyframes msc-network-mining-race-halo {
-  0%, 58% { opacity: 0; }
-  68% { opacity: .72; }
-  80% { opacity: .32; }
-  88%, 100% { opacity: 0; }
-}
-
-@keyframes msc-network-mining-race-reset {
-  0%, 84% { opacity: 1; }
-  91% { opacity: .14; }
-  97%, 100% { opacity: 1; }
+  0%, 66% { opacity: 0; }
+  72% { opacity: .52; }
+  74% { opacity: .72; }
+  82%, 100% { opacity: 0; }
 }
 
 .msc-learn-page[data-msc-registry-id="MSC-HUB-NETWORK"]
@@ -353,24 +393,36 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .msc-network-mining-race__sequence,
-  .msc-network-mining-race__miner--rest,
-  .msc-network-mining-race__miner--winner,
-  .msc-network-mining-race__connection,
+  .msc-network-mining-race__miner-field,
+  .msc-network-mining-race__slot--a,
+  .msc-network-mining-race__slot--b,
+  .msc-network-mining-race__slot--c,
+  .msc-network-mining-race__slot--d,
+  .msc-network-mining-race__winner,
   .msc-network-mining-race__block,
   .msc-network-mining-race__block-halo {
     animation: none;
-    filter: none;
   }
 
-  .msc-network-mining-race__miner--rest { opacity: .32; }
-  .msc-network-mining-race__miner--winner { opacity: 1; }
-  .msc-network-mining-race__connection {
-    opacity: .72;
-    stroke-dashoffset: 0;
+  .msc-network-mining-race__miner-field { opacity: .7; }
+  .msc-network-mining-race__slot--a { opacity: 0; }
+  .msc-network-mining-race__slot--b,
+  .msc-network-mining-race__slot--c,
+  .msc-network-mining-race__slot--d { opacity: 1; }
+  .msc-network-mining-race__winner {
+    opacity: 0;
+    transform: none;
+    filter: none;
   }
-  .msc-network-mining-race__block { opacity: 1; }
-  .msc-network-mining-race__block-halo { opacity: .22; }
+  .msc-network-mining-race__winner--a {
+    opacity: 1;
+    filter: drop-shadow(0 0 4px rgba(212, 190, 153, .32));
+  }
+  .msc-network-mining-race__block {
+    opacity: .64;
+    filter: none;
+  }
+  .msc-network-mining-race__block-halo { opacity: .16; }
 
   .msc-network-retarget-gauge__marker {
     left: 50%;
