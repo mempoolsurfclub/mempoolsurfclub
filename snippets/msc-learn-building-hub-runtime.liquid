@@ -184,3 +184,217 @@
     }
   }
 </style>
+
+<style>
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
+    .msc-guide033-route-map__frame {
+    opacity: .2;
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
+    .msc-guide033-route-map__secondary {
+    opacity: .24;
+    stroke-dasharray: 4 8;
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
+    .msc-guide033-route-map__primary {
+    opacity: .96;
+    stroke-width: 1.7;
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
+    .msc-guide033-route-map__anchor {
+    opacity: .42;
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
+    .msc-guide033-route-map__node-ring {
+    fill: rgba(9, 30, 35, .72);
+    stroke-width: 1.45;
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
+    .msc-guide033-route-map__node-core {
+    fill: currentColor;
+    stroke: none;
+    opacity: .72;
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
+    .msc-guide033-route-map__packet {
+    fill: rgba(236, 218, 183, 1);
+    stroke: none;
+    filter: drop-shadow(0 0 5px rgba(212, 190, 153, .65));
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
+    .msc-guide033-route-map__pulse-one {
+    animation: msc-guide033-route-node-one 7.2s ease-in-out infinite;
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
+    .msc-guide033-route-map__pulse-two {
+    animation: msc-guide033-route-node-two 7.2s ease-in-out infinite;
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
+    .msc-guide033-route-map__destination {
+    animation: msc-guide033-route-destination 7.2s ease-in-out infinite;
+  }
+
+  @keyframes msc-guide033-route-node-one {
+    0%, 26%, 43%, 100% { opacity: .72; filter: none; }
+    34% { opacity: 1; filter: drop-shadow(0 0 4px rgba(212, 190, 153, .34)); }
+  }
+
+  @keyframes msc-guide033-route-node-two {
+    0%, 48%, 66%, 100% { opacity: .72; filter: none; }
+    57% { opacity: 1; filter: drop-shadow(0 0 4px rgba(212, 190, 153, .34)); }
+  }
+
+  @keyframes msc-guide033-route-destination {
+    0%, 68%, 88%, 100% { opacity: .76; filter: none; }
+    79% { opacity: 1; filter: drop-shadow(0 0 7px rgba(212, 190, 153, .48)); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
+      .msc-guide033-route-map__packet {
+      display: none;
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
+      .msc-guide033-route-map__pulse-one,
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
+      .msc-guide033-route-map__pulse-two,
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
+      .msc-guide033-route-map__destination {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  (() => {
+    const script = document.currentScript;
+    const scope = script.closest('.shopify-section') || document;
+    const svgNamespace = 'http://www.w3.org/2000/svg';
+
+    const renderRouteMap = () => {
+      const companion = scope.querySelector(
+        '.msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"] .msc-building-lightning-companion'
+      );
+      const current = companion?.querySelector('.msc-building-lightning-system');
+
+      if (!current || current.dataset.mscRouteMap === 'true') return false;
+
+      const routeMap = document.createElementNS(svgNamespace, 'svg');
+      routeMap.setAttribute('class', 'msc-building-lightning-system');
+      routeMap.setAttribute('viewBox', '0 0 560 280');
+      routeMap.setAttribute('role', 'img');
+      routeMap.setAttribute('aria-labelledby', 'msc-building-lightning-route-title msc-building-lightning-route-desc');
+      routeMap.dataset.mscRouteMap = 'true';
+      routeMap.innerHTML = `
+        <title id="msc-building-lightning-route-title">Lightning payment route map</title>
+        <desc id="msc-building-lightning-route-desc">A payment travels from a sender through two Lightning routing nodes to a receiver over off-chain payment channels, while channel funding and final settlement remain anchored to Bitcoin.</desc>
+
+        <g class="msc-guide033-route-map__frame" aria-hidden="true">
+          <path d="M34 38H526M34 224H526M58 26V238M502 26V238" />
+          <path d="M58 54H502M58 196H502" />
+        </g>
+
+        <g class="msc-guide033-route-map__secondary" aria-hidden="true">
+          <path d="M101 136C162 169 230 179 322 154S428 96 458 105" />
+          <path d="M101 122C168 79 239 61 318 73S419 101 458 105" />
+          <path d="M217 93C274 72 379 72 458 105" />
+          <path d="M217 93C261 127 292 145 324 151" />
+        </g>
+
+        <path class="msc-guide033-route-map__primary" aria-hidden="true" d="M103 128C144 113 176 100 202 96C253 91 291 121 326 145C377 178 420 136 456 113" />
+
+        <g class="msc-guide033-route-map__anchor" aria-hidden="true">
+          <path d="M78 158V226M482 132V226M58 226H502" />
+          <rect x="210" y="226" width="42" height="18" rx="3" />
+          <rect x="259" y="226" width="42" height="18" rx="3" />
+          <rect x="308" y="226" width="42" height="18" rx="3" />
+          <text x="280" y="264" text-anchor="middle">BITCOIN SETTLEMENT LAYER</text>
+        </g>
+
+        <g aria-hidden="true">
+          <circle class="msc-guide033-route-map__node-ring" cx="78" cy="132" r="26" />
+          <circle class="msc-guide033-route-map__node-core" cx="78" cy="132" r="3" />
+          <path d="M67 132H89M78 121V143" />
+          <text x="78" y="176" text-anchor="middle">SENDER</text>
+        </g>
+
+        <g aria-hidden="true">
+          <circle class="msc-guide033-route-map__node-ring msc-guide033-route-map__pulse-one" cx="217" cy="93" r="19" />
+          <circle class="msc-guide033-route-map__node-core" cx="217" cy="93" r="2.5" />
+          <path d="M209 93H225M217 85V101" />
+          <text x="217" y="126" text-anchor="middle">ROUTE 01</text>
+        </g>
+
+        <g aria-hidden="true">
+          <circle class="msc-guide033-route-map__node-ring msc-guide033-route-map__pulse-two" cx="342" cy="151" r="19" />
+          <circle class="msc-guide033-route-map__node-core" cx="342" cy="151" r="2.5" />
+          <path d="M334 151H350M342 143V159" />
+          <text x="342" y="184" text-anchor="middle">ROUTE 02</text>
+        </g>
+
+        <g aria-hidden="true">
+          <circle class="msc-guide033-route-map__node-ring msc-guide033-route-map__destination" cx="482" cy="106" r="26" />
+          <circle class="msc-guide033-route-map__node-core" cx="482" cy="106" r="3" />
+          <path d="M471 106H493M482 95V117" />
+          <text x="482" y="150" text-anchor="middle">RECEIVER</text>
+        </g>
+
+        <text x="58" y="62" aria-hidden="true">SELECTED PAYMENT ROUTE</text>
+
+        <circle class="msc-guide033-route-map__packet" r="4" opacity="0" aria-hidden="true">
+          <animateMotion
+            dur="7.2s"
+            repeatCount="indefinite"
+            calcMode="linear"
+            keyPoints="0;0;1;1"
+            keyTimes="0;.1;.8;1"
+            path="M103 128C144 113 176 100 202 96C253 91 291 121 326 145C377 178 420 136 456 113"
+          />
+          <animate
+            attributeName="opacity"
+            values="0;1;1;0;0"
+            keyTimes="0;.1;.77;.86;1"
+            dur="7.2s"
+            repeatCount="indefinite"
+          />
+        </circle>
+      `;
+
+      current.replaceWith(routeMap);
+      return true;
+    };
+
+    if (renderRouteMap()) return;
+
+    const observer = new MutationObserver(() => {
+      if (renderRouteMap()) observer.disconnect();
+    });
+
+    observer.observe(scope, { childList: true, subtree: true });
+    window.setTimeout(() => observer.disconnect(), 5000);
+  })();
+</script>
