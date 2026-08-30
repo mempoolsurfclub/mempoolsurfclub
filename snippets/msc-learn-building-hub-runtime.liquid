@@ -188,13 +188,6 @@
 <style>
   .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
     .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
-    .msc-guide033-route-map__secondary {
-    opacity: .14;
-    stroke-dasharray: 5 10;
-  }
-
-  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
-    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
     .msc-guide033-route-map__primary {
     opacity: .94;
     stroke-width: 1.7;
@@ -203,13 +196,13 @@
   .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
     .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
     .msc-guide033-route-map__anchor {
-    opacity: .34;
+    opacity: .46;
   }
 
   .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
     .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
     .msc-guide033-route-map__bitcoin-mark {
-    fill: rgba(212, 190, 153, .72);
+    fill: rgba(212, 190, 153, .82);
     stroke: none;
     font-size: 15px;
     letter-spacing: 0;
@@ -302,8 +295,7 @@
         <title id="msc-building-lightning-route-title">Lightning payment route map</title>
         <desc id="msc-building-lightning-route-desc">A payment travels from a sender through one Lightning routing node to a receiver over off-chain payment channels, with Bitcoin shown beneath as the settlement layer.</desc>
 
-        <path class="msc-guide033-route-map__secondary" aria-hidden="true" d="M116 145C208 181 352 181 444 145" />
-        <path class="msc-guide033-route-map__primary" aria-hidden="true" d="M116 133C172 113 224 96 259 96C320 96 382 113 444 133" />
+        <path class="msc-guide033-route-map__primary" aria-hidden="true" d="M116 133C172 118 224 106 259 106C320 106 382 118 444 133" />
 
         <g class="msc-guide033-route-map__anchor" aria-hidden="true">
           <path d="M112 222H448" />
@@ -320,10 +312,10 @@
         </g>
 
         <g aria-hidden="true">
-          <circle class="msc-guide033-route-map__node-ring msc-guide033-route-map__router" cx="280" cy="96" r="21" />
-          <circle class="msc-guide033-route-map__node-core" cx="280" cy="96" r="2.7" />
-          <path d="M271 96H289M280 87V105" />
-          <text x="280" y="132" text-anchor="middle">ROUTING NODE</text>
+          <circle class="msc-guide033-route-map__node-ring msc-guide033-route-map__router" cx="280" cy="106" r="21" />
+          <circle class="msc-guide033-route-map__node-core" cx="280" cy="106" r="2.7" />
+          <path d="M271 106H289M280 97V115" />
+          <text x="280" y="142" text-anchor="middle">ROUTING NODE</text>
         </g>
 
         <g aria-hidden="true">
@@ -340,7 +332,7 @@
             calcMode="linear"
             keyPoints="0;0;1;1"
             keyTimes="0;.1;.8;1"
-            path="M116 133C172 113 224 96 259 96C320 96 382 113 444 133"
+            path="M116 133C172 118 224 106 259 106C320 106 382 118 444 133"
           />
           <animate
             attributeName="opacity"
