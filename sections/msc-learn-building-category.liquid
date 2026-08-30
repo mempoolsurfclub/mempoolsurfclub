@@ -18,6 +18,21 @@
     line-height: 1.1;
     letter-spacing: .035em;
   }
+
+  @media screen and (min-width: 750px) {
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-system {
+      grid-template-rows: auto minmax(0, 1fr) auto;
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-notes {
+      grid-row: 3;
+      align-self: end;
+    }
+  }
 </style>
 <script src="{{ 'msc-learn-hub-progress.js' | asset_url }}" defer="defer"></script>
 
