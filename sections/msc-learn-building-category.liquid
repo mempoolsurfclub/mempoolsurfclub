@@ -2,35 +2,112 @@
 {{ 'msc-learn-hub-progress.css' | asset_url | stylesheet_tag }}
 {{ 'msc-learn-building-hub.css' | asset_url | stylesheet_tag }}
 <style>
-  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
-    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
-    .msc-building-peg-note {
-    font-size: .9rem;
-    line-height: 1.15;
-    letter-spacing: .045em;
-  }
-
-  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
-    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
-    .msc-building-peg-note strong {
-    font-size: 1.08rem;
-    font-weight: 820;
-    line-height: 1.1;
-    letter-spacing: .035em;
-  }
-
   @media screen and (min-width: 750px) {
     .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
       .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
-      .msc-building-peg-system {
-      grid-template-rows: auto minmax(0, 1fr) auto;
+      > .msc-building-sidechain-companion {
+      grid-row: 1 / 4;
+      grid-template-rows: auto auto minmax(0, 1fr);
+      row-gap: .7rem;
+      min-height: 0;
     }
 
     .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
       .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
-      .msc-building-peg-notes {
+      .msc-building-sidechain-companion__title {
+      margin-top: 0;
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-system {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: auto 1.2rem auto;
+      gap: .6rem;
+      align-content: center;
+      min-height: 0;
+      transform: none;
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-ledger {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 2rem;
+      min-height: 4.5rem;
+      padding: .75rem .2rem;
+      border: 0;
+      border-top: 1px solid rgba(212, 190, 153, .22);
+      border-bottom: 1px solid rgba(212, 190, 153, .22);
+      border-radius: 0;
+      background: transparent;
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-ledger:first-child {
+      grid-row: 1;
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-ledger:last-child {
       grid-row: 3;
-      align-self: end;
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-ledger strong {
+      font-size: clamp(1.15rem, 1.45vw, 1.5rem);
+      line-height: 1.1;
+      text-align: right;
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-bridge {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      gap: .3rem;
+      width: 6.5rem;
+      padding: .45rem .65rem;
+      transform: translate(-50%, -50%);
+      background: rgba(23, 60, 67, .98);
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-bridge::before,
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-bridge::after {
+      height: 1.4rem;
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-bridge::before {
+      top: -1.4rem;
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-bridge::after {
+      bottom: -1.4rem;
+    }
+
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+      .msc-building-peg-bridge strong {
+      font-size: .9rem;
     }
   }
 </style>
@@ -195,20 +272,13 @@
       </div>
 
       <div class="msc-building-peg-bridge" aria-hidden="true">
-        <span>PEG-IN</span>
         <span class="msc-building-peg-bridge__pulse"></span>
         <strong>PEG</strong>
-        <span>PEG-OUT</span>
       </div>
 
       <div class="msc-building-peg-ledger">
         <span class="msc-building-peg-ledger__label">Sidechain ledger</span>
         <strong>Representation issued</strong>
-      </div>
-
-      <div class="msc-building-peg-notes">
-        <div class="msc-building-peg-note"><strong>Chain security:</strong> validates sidechain state</div>
-        <div class="msc-building-peg-note"><strong>Peg security:</strong> authorizes BTC release</div>
       </div>
     </div>
   </aside>
