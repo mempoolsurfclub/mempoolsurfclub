@@ -101,40 +101,99 @@
   <aside class="msc-network-mining-companion" aria-label="Animated Bitcoin mining competition">
     <svg class="msc-network-mining-race" viewBox="0 0 560 280" role="img" aria-labelledby="msc-network-mining-title msc-network-mining-desc">
       <title id="msc-network-mining-title">Miners competing for a Bitcoin block</title>
-      <desc id="msc-network-mining-desc">Four identical miners compete for one block. Three fade back, one miner remains highlighted and moves toward the block, and the block glows when it is found.</desc>
+      <desc id="msc-network-mining-desc">A grid of Bitcoin miners competes for one block. One miner is highlighted, moves horizontally and then vertically to the block, and both fade when the block is found.</desc>
 
       <defs>
         <g id="msc-network-miner-icon">
-          <rect x="0" y="0" width="58" height="48" rx="7" />
-          <circle cx="18" cy="24" r="9" />
-          <circle cx="40" cy="24" r="9" />
-          <circle cx="18" cy="24" r="2.2" class="msc-network-mining-race__solid" />
-          <circle cx="40" cy="24" r="2.2" class="msc-network-mining-race__solid" />
-          <path d="M8 9H50M8 39H50" />
+          <rect x="0" y="0" width="24" height="18" rx="3" />
+          <circle cx="7" cy="9" r="3.6" />
+          <circle cx="17" cy="9" r="3.6" />
+          <circle cx="7" cy="9" r="1" class="msc-network-mining-race__solid" />
+          <circle cx="17" cy="9" r="1" class="msc-network-mining-race__solid" />
+          <path d="M4 4H20M4 14H20" />
         </g>
       </defs>
 
-      <g class="msc-network-mining-race__sequence" aria-hidden="true">
-        <g class="msc-network-mining-race__miner msc-network-mining-race__miner--rest" transform="translate(66 116)">
-          <use href="#msc-network-miner-icon" />
-        </g>
-        <g class="msc-network-mining-race__miner msc-network-mining-race__miner--rest" transform="translate(136 116)">
-          <use href="#msc-network-miner-icon" />
-        </g>
-        <g class="msc-network-mining-race__miner msc-network-mining-race__miner--rest" transform="translate(206 116)">
-          <use href="#msc-network-miner-icon" />
-        </g>
-        <g class="msc-network-mining-race__miner msc-network-mining-race__miner--winner" transform="translate(276 116)">
-          <use href="#msc-network-miner-icon" />
-        </g>
+      <g class="msc-network-mining-race__miner-field" aria-hidden="true">
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(36 48)" />
+        <use class="msc-network-mining-race__slot msc-network-mining-race__slot--a" href="#msc-network-miner-icon" transform="translate(66 48)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(96 48)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(126 48)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(156 48)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(186 48)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(216 48)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(246 48)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(276 48)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(306 48)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(36 88)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(66 88)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(96 88)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(126 88)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(156 88)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(186 88)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(216 88)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(246 88)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(276 88)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(306 88)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(36 128)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(66 128)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(96 128)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(126 128)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(156 128)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(186 128)" />
+        <use class="msc-network-mining-race__slot msc-network-mining-race__slot--c" href="#msc-network-miner-icon" transform="translate(216 128)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(246 128)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(276 128)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(306 128)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(36 168)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(66 168)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(96 168)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(126 168)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(156 168)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(186 168)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(216 168)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(246 168)" />
+        <use class="msc-network-mining-race__slot msc-network-mining-race__slot--d" href="#msc-network-miner-icon" transform="translate(276 168)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(306 168)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(36 208)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(66 208)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(96 208)" />
+        <use class="msc-network-mining-race__slot msc-network-mining-race__slot--b" href="#msc-network-miner-icon" transform="translate(126 208)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(156 208)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(186 208)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(216 208)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(246 208)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(276 208)" />
+        <use class="msc-network-mining-race__slot" href="#msc-network-miner-icon" transform="translate(306 208)" />
+      </g>
 
-        <path class="msc-network-mining-race__connection" d="M376 140H430" />
+      <g class="msc-network-mining-race__block" aria-hidden="true">
+        <rect class="msc-network-mining-race__block-halo" x="438" y="94" width="88" height="88" rx="14" />
+        <rect x="448" y="104" width="68" height="68" rx="8" />
+        <rect x="459" y="115" width="46" height="46" rx="5" />
+        <path d="M468 127H496M468 138H491M468 149H498" />
+      </g>
 
-        <g class="msc-network-mining-race__block">
-          <rect class="msc-network-mining-race__block-halo" x="420" y="96" width="94" height="88" rx="14" />
-          <rect x="430" y="106" width="74" height="68" rx="8" />
-          <rect x="442" y="118" width="50" height="44" rx="5" />
-          <path d="M452 130H482M452 140H476M452 150H484" />
+      <g class="msc-network-mining-race__winner-layer" aria-hidden="true">
+        <g transform="translate(66 48)">
+          <g class="msc-network-mining-race__winner msc-network-mining-race__winner--a">
+            <use href="#msc-network-miner-icon" />
+          </g>
+        </g>
+        <g transform="translate(126 208)">
+          <g class="msc-network-mining-race__winner msc-network-mining-race__winner--b">
+            <use href="#msc-network-miner-icon" />
+          </g>
+        </g>
+        <g transform="translate(216 128)">
+          <g class="msc-network-mining-race__winner msc-network-mining-race__winner--c">
+            <use href="#msc-network-miner-icon" />
+          </g>
+        </g>
+        <g transform="translate(276 168)">
+          <g class="msc-network-mining-race__winner msc-network-mining-race__winner--d">
+            <use href="#msc-network-miner-icon" />
+          </g>
         </g>
       </g>
     </svg>
