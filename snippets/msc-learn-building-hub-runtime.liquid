@@ -189,27 +189,14 @@
   .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
     .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
     .msc-guide033-route-map__leg {
-    opacity: .16;
+    opacity: .12;
     stroke-width: 1.7;
   }
 
   .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
     .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
-    .msc-guide033-route-map__left-leg {
-    animation: msc-guide033-left-leg 8s ease-in-out infinite;
-  }
-
-  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
-    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
-    .msc-guide033-route-map__right-leg {
-    animation: msc-guide033-right-leg 8s ease-in-out infinite;
-  }
-
-  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
-    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
     .msc-guide033-route-map__anchor-line {
-    opacity: .38;
-    animation: msc-guide033-anchor-line 8s ease-in-out infinite;
+    opacity: .16;
   }
 
   .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
@@ -251,60 +238,6 @@
     filter: drop-shadow(0 0 5px rgba(212, 190, 153, .68));
   }
 
-  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
-    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
-    .msc-guide033-route-map__sender {
-    animation: msc-guide033-sender 8s ease-in-out infinite;
-  }
-
-  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
-    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
-    .msc-guide033-route-map__router {
-    animation: msc-guide033-router 8s ease-in-out infinite;
-  }
-
-  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
-    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
-    .msc-guide033-route-map__destination {
-    animation: msc-guide033-destination 8s ease-in-out infinite;
-  }
-
-  @keyframes msc-guide033-left-leg {
-    0%, 4%, 100% { opacity: .12; }
-    10%, 39% { opacity: .96; filter: drop-shadow(0 0 3px rgba(212, 190, 153, .24)); }
-    49%, 92% { opacity: .12; filter: none; }
-  }
-
-  @keyframes msc-guide033-right-leg {
-    0%, 45%, 100% { opacity: .12; }
-    54%, 84% { opacity: .96; filter: drop-shadow(0 0 3px rgba(212, 190, 153, .24)); }
-    94% { opacity: .12; filter: none; }
-  }
-
-  @keyframes msc-guide033-sender {
-    0%, 3%, 100% { opacity: .58; filter: none; }
-    8%, 16% { opacity: 1; filter: drop-shadow(0 0 6px rgba(212, 190, 153, .44)); }
-    28%, 92% { opacity: .58; filter: none; }
-  }
-
-  @keyframes msc-guide033-router {
-    0%, 39%, 100% { opacity: .58; filter: none; }
-    46%, 53% { opacity: 1; filter: drop-shadow(0 0 7px rgba(212, 190, 153, .5)); }
-    62%, 92% { opacity: .58; filter: none; }
-  }
-
-  @keyframes msc-guide033-destination {
-    0%, 78%, 100% { opacity: .58; filter: none; }
-    86%, 91% { opacity: 1; filter: drop-shadow(0 0 8px rgba(212, 190, 153, .52)); }
-    97% { opacity: .22; filter: none; }
-  }
-
-  @keyframes msc-guide033-anchor-line {
-    0%, 4%, 100% { opacity: .16; }
-    10%, 88% { opacity: .48; }
-    96% { opacity: .12; }
-  }
-
   @media (prefers-reduced-motion: reduce) {
     .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
       .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
@@ -313,28 +246,6 @@
       .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
       .msc-guide033-route-map__bitcoin-runner {
       display: none;
-    }
-
-    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
-      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
-      .msc-guide033-route-map__left-leg,
-    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
-      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
-      .msc-guide033-route-map__right-leg,
-    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
-      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
-      .msc-guide033-route-map__anchor-line,
-    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
-      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
-      .msc-guide033-route-map__sender,
-    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
-      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
-      .msc-guide033-route-map__router,
-    .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
-      .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-033"]
-      .msc-guide033-route-map__destination {
-      animation: none;
-      filter: none;
     }
 
     .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
@@ -363,45 +274,54 @@
       );
       const current = companion?.querySelector('.msc-building-lightning-system');
 
-      if (!current || current.dataset.mscRouteMap === 'relay-sync') return false;
+      if (!current || current.dataset.mscRouteMap === 'single-clock') return false;
 
       const routeMap = document.createElementNS(svgNamespace, 'svg');
       routeMap.setAttribute('class', 'msc-building-lightning-system');
       routeMap.setAttribute('viewBox', '0 0 560 280');
       routeMap.setAttribute('role', 'img');
       routeMap.setAttribute('aria-labelledby', 'msc-building-lightning-route-title msc-building-lightning-route-desc');
-      routeMap.dataset.mscRouteMap = 'relay-sync';
+      routeMap.dataset.mscRouteMap = 'single-clock';
       routeMap.innerHTML = `
         <title id="msc-building-lightning-route-title">Lightning payment route map</title>
-        <desc id="msc-building-lightning-route-desc">A synchronized Lightning payment signal moves from sender to routing node to receiver while a Bitcoin settlement marker moves left to right beneath it.</desc>
+        <desc id="msc-building-lightning-route-desc">A Lightning payment signal moves from sender to routing node to receiver on one shared animation clock while a Bitcoin settlement marker moves left to right beneath it at the same pace.</desc>
 
-        <path class="msc-guide033-route-map__leg msc-guide033-route-map__left-leg" aria-hidden="true" d="M116 133C166 121 218 109 259 106" />
-        <path class="msc-guide033-route-map__leg msc-guide033-route-map__right-leg" aria-hidden="true" d="M301 106C342 109 394 121 444 133" />
+        <path class="msc-guide033-route-map__leg msc-guide033-route-map__left-leg" aria-hidden="true" d="M116 133C166 121 218 109 259 106">
+          <animate attributeName="opacity" values=".12;.12;.96;.96;.12;.12" keyTimes="0;.05;.38;.43;.50;1" dur="8s" repeatCount="indefinite" />
+        </path>
+        <path class="msc-guide033-route-map__leg msc-guide033-route-map__right-leg" aria-hidden="true" d="M301 106C342 109 394 121 444 133">
+          <animate attributeName="opacity" values=".12;.12;.12;.96;.96;.12;.12" keyTimes="0;.43;.50;.84;.90;.96;1" dur="8s" repeatCount="indefinite" />
+        </path>
 
         <g aria-hidden="true">
-          <path class="msc-guide033-route-map__anchor-line" d="M112 222H448" />
+          <path class="msc-guide033-route-map__anchor-line" d="M112 222H448">
+            <animate attributeName="opacity" values=".16;.16;.48;.48;.12;.16" keyTimes="0;.05;.20;.88;.96;1" dur="8s" repeatCount="indefinite" />
+          </path>
           <text x="280" y="252" text-anchor="middle">BITCOIN SETTLEMENT</text>
         </g>
 
-        <g class="msc-guide033-route-map__sender" aria-hidden="true">
+        <g class="msc-guide033-route-map__sender" opacity=".58" aria-hidden="true">
           <circle class="msc-guide033-route-map__node-ring" cx="90" cy="137" r="26" />
           <circle class="msc-guide033-route-map__node-core" cx="90" cy="137" r="3" />
           <path d="M79 137H101M90 126V148" />
           <text x="90" y="180" text-anchor="middle">SENDER</text>
+          <animate attributeName="opacity" values=".22;1;1;.58;.58;.22" keyTimes="0;.05;.12;.22;.94;1" dur="8s" repeatCount="indefinite" />
         </g>
 
-        <g class="msc-guide033-route-map__router" aria-hidden="true">
+        <g class="msc-guide033-route-map__router" opacity=".58" aria-hidden="true">
           <circle class="msc-guide033-route-map__node-ring" cx="280" cy="106" r="21" />
           <circle class="msc-guide033-route-map__node-core" cx="280" cy="106" r="2.7" />
           <path d="M271 106H289M280 97V115" />
           <text x="280" y="142" text-anchor="middle">ROUTING NODE</text>
+          <animate attributeName="opacity" values=".58;.58;1;1;.58;.58;.22" keyTimes="0;.38;.43;.50;.58;.94;1" dur="8s" repeatCount="indefinite" />
         </g>
 
-        <g class="msc-guide033-route-map__destination" aria-hidden="true">
+        <g class="msc-guide033-route-map__destination" opacity=".58" aria-hidden="true">
           <circle class="msc-guide033-route-map__node-ring" cx="470" cy="137" r="26" />
           <circle class="msc-guide033-route-map__node-core" cx="470" cy="137" r="3" />
           <path d="M459 137H481M470 126V148" />
           <text x="470" y="180" text-anchor="middle">RECEIVER</text>
+          <animate attributeName="opacity" values=".58;.58;1;1;.22;.22" keyTimes="0;.84;.88;.92;.97;1" dur="8s" repeatCount="indefinite" />
         </g>
 
         <circle class="msc-guide033-route-map__packet" r="4" opacity="0" aria-hidden="true">
@@ -409,42 +329,35 @@
             dur="8s"
             repeatCount="indefinite"
             calcMode="linear"
-            keyPoints="0;0;1;1"
-            keyTimes="0;.05;.88;1"
+            keyPoints="0;0;.5;1;1"
+            keyTimes="0;.05;.43;.88;1"
             path="M116 133C166 121 218 109 259 106C266 105 273 105 280 106C287 105 294 105 301 106C342 109 394 121 444 133"
           />
-          <animate
-            attributeName="opacity"
-            values="0;1;1;0;0"
-            keyTimes="0;.05;.88;.96;1"
-            dur="8s"
-            repeatCount="indefinite"
-          />
+          <animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;.05;.88;.96;1" dur="8s" repeatCount="indefinite" />
         </circle>
 
-        <g class="msc-guide033-route-map__bitcoin-runner" aria-hidden="true">
+        <g class="msc-guide033-route-map__bitcoin-runner" opacity="0" aria-hidden="true">
           <circle cx="112" cy="222" r="12" />
           <text class="msc-guide033-route-map__bitcoin-mark" x="112" y="227" text-anchor="middle">₿</text>
           <animateTransform
             attributeName="transform"
             type="translate"
-            values="0 0;0 0;336 0;336 0"
-            keyTimes="0;.05;.88;1"
+            values="0 0;0 0;168 0;336 0;336 0"
+            keyTimes="0;.05;.43;.88;1"
             dur="8s"
             repeatCount="indefinite"
             calcMode="linear"
           />
-          <animate
-            attributeName="opacity"
-            values="0;1;1;0;0"
-            keyTimes="0;.05;.88;.96;1"
-            dur="8s"
-            repeatCount="indefinite"
-          />
+          <animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;.05;.88;.96;1" dur="8s" repeatCount="indefinite" />
         </g>
       `;
 
       current.replaceWith(routeMap);
+
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        routeMap.querySelectorAll('animate, animateMotion, animateTransform').forEach((node) => node.remove());
+      }
+
       return true;
     };
 
