@@ -109,7 +109,7 @@
         label: 'Deep',
         key: 'development',
         guideCount: 16,
-        displayTitle: 'Bitcoin Protocols',
+        displayTitle: 'Bitcoin Development',
         brief: 'Go inside Bitcoin’s protocol. Learn Core, BIPs, Script, cryptography, and testing.',
         fallbackHref: '/pages/learn-bitcoin-development'
       },
