@@ -558,3 +558,39 @@
     line-height: 1.1;
   }
 }
+
+/* Guide 020 — lift the instrument to align its bottom with the left metadata baseline. */
+@media screen and (min-width: 750px) {
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-NETWORK"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-020"]
+    .msc-network-retarget-instrument {
+    transform: translateY(-1.5rem);
+    gap: .2rem;
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-NETWORK"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-020"]
+    .msc-network-retarget-instrument__window {
+    padding: .25rem 0 .3rem;
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-NETWORK"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-020"]
+    .msc-network-retarget-effect {
+    gap: .06rem;
+    padding: .3rem .65rem;
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-NETWORK"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-020"]
+    .msc-network-retarget-effect span {
+    line-height: 1.15;
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-NETWORK"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-020"]
+    .msc-network-retarget-metrics {
+    gap: .1rem .65rem;
+    line-height: 1;
+  }
+}
