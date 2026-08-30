@@ -521,3 +521,12 @@
   .msc-building-peg-bridge::after { bottom: 0; height: 22%; }
   .msc-building-peg-notes { grid-template-columns: 1fr; }
 }
+
+/* Guide 036 — lift the lower peg model within the existing fixed card geometry. */
+@media screen and (min-width: 750px) {
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]
+    .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-036"]
+    .msc-building-peg-system {
+    transform: translateY(-1.5rem);
+  }
+}
