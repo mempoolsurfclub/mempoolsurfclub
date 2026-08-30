@@ -101,7 +101,7 @@
   <aside class="msc-network-mining-companion" aria-label="Animated Bitcoin mining competition">
     <svg class="msc-network-mining-race" viewBox="0 0 560 280" role="img" aria-labelledby="msc-network-mining-title msc-network-mining-desc">
       <title id="msc-network-mining-title">Miners competing for a Bitcoin block</title>
-      <desc id="msc-network-mining-desc">A grid of Bitcoin miners competes for one block. One miner is highlighted, moves horizontally and then vertically to the block, and both fade when the block is found.</desc>
+      <desc id="msc-network-mining-desc">A grid of Bitcoin miners competes for one block. The block fades into a Bitcoin symbol, one highlighted miner moves horizontally and then vertically to it, and both fade together on contact.</desc>
 
       <defs>
         <g id="msc-network-miner-icon">
@@ -173,6 +173,8 @@
         <rect x="459" y="115" width="46" height="46" rx="5" />
         <path d="M468 127H496M468 138H491M468 149H498" />
       </g>
+
+      <text class="msc-network-mining-race__bitcoin-mark" x="482" y="158" text-anchor="middle" aria-hidden="true">₿</text>
 
       <g class="msc-network-mining-race__winner-layer" aria-hidden="true">
         <g transform="translate(66 48)">
