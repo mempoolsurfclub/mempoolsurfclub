@@ -343,6 +343,12 @@
 .msc-development-release-boundary span:last-child { text-align:right; }
 .msc-development-release-boundary strong { color:var(--msc-hub-sand); font-size:1.25rem; }
 
+@media screen and (min-width: 750px) {
+  .msc-development-release-companion { grid-template-rows:auto auto minmax(0,1fr) auto; min-height:0; }
+  .msc-development-release-pipeline { grid-template-rows:repeat(2,minmax(0,1fr)); min-height:0; }
+  .msc-development-release-pipeline li { min-height:0; padding:.5rem .75rem; }
+}
+
 @keyframes msc-development-release-scan { 0%,14%{opacity:1;border-color:rgba(212,190,153,.36);filter:brightness(1.14)} 20%,100%{opacity:.38;border-color:rgba(212,190,153,.14);filter:none} }
 
 @media (prefers-reduced-motion: reduce) {
