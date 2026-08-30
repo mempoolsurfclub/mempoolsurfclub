@@ -24,15 +24,93 @@
 </template>
 
 <template data-msc-development-core-companion>
-  <aside class="msc-development-core-companion" aria-label="Bitcoin Core implementation map">
+  <aside class="msc-development-core-companion" aria-label="Bitcoin Core peer network">
     <svg class="msc-development-core-system" viewBox="0 0 560 280" role="img" aria-labelledby="msc-dev-core-title msc-dev-core-desc">
-      <title id="msc-dev-core-title">Bitcoin Core implementation map</title>
-      <desc id="msc-dev-core-desc">Bitcoin Core connects validation, networking, policy, wallet, indexes, and interfaces while remaining an implementation rather than Bitcoin itself.</desc>
-      <g class="msc-development-system__muted" aria-hidden="true"><path d="M30 34H530M30 246H530M52 22V258M508 22V258"/><circle cx="280" cy="140" r="112"/></g>
-      <g aria-hidden="true"><rect x="210" y="88" width="140" height="104" rx="10"/><text x="280" y="123" text-anchor="middle">BITCOIN CORE</text><text x="280" y="145" text-anchor="middle">IMPLEMENTATION</text><path d="M232 163H328"/><text x="280" y="181" text-anchor="middle">VERSIONED SOFTWARE</text></g>
-      <g class="msc-development-system__nodes" aria-hidden="true"><rect x="48" y="60" width="106" height="52" rx="7"/><text x="101" y="82" text-anchor="middle">VALIDATION</text><text x="101" y="99" text-anchor="middle">CHAINSTATE</text><rect x="406" y="60" width="106" height="52" rx="7"/><text x="459" y="82" text-anchor="middle">NETWORKING</text><text x="459" y="99" text-anchor="middle">POLICY</text><rect x="48" y="178" width="106" height="52" rx="7"/><text x="101" y="200" text-anchor="middle">WALLET</text><text x="101" y="217" text-anchor="middle">OPTIONAL</text><rect x="406" y="178" width="106" height="52" rx="7"/><text x="459" y="200" text-anchor="middle">RPC · INDEXES</text><text x="459" y="217" text-anchor="middle">INTERFACES</text></g>
-      <g class="msc-development-system__links" aria-hidden="true"><path d="M154 86L210 116M350 116L406 86M154 204L210 166M350 166L406 204"/></g>
-      <text class="msc-development-system__caption" x="280" y="30" text-anchor="middle">IMPLEMENTATION LAYERS ≠ BITCOIN ITSELF</text>
+      <title id="msc-dev-core-title">Bitcoin Core in a peer-to-peer network</title>
+      <desc id="msc-dev-core-desc">A Bitcoin Core validating node receives information from one peer, validates it locally, and relays valid information to a small number of other peers in the Bitcoin peer-to-peer network.</desc>
+      <style>
+        .msc-dev-core-link { opacity: .22; }
+        .msc-dev-core-peer { fill: rgba(9,30,35,.96); stroke: rgba(212,190,153,.72); }
+        .msc-dev-core-peer--quiet { opacity: .72; }
+        .msc-dev-core-module { fill: rgba(16,40,45,.98); stroke: rgba(212,190,153,.94); stroke-width: 1.3; }
+        .msc-dev-core-module-line { opacity: .42; }
+        .msc-dev-core-label { fill: rgba(236,218,183,.96); font-size: 11px; letter-spacing: .14em; }
+        .msc-dev-core-sublabel { fill: rgba(212,190,153,.62); font-size: 7px; letter-spacing: .16em; }
+        .msc-dev-core-caption { fill: rgba(212,190,153,.6); font-size: 7px; letter-spacing: .18em; }
+        .msc-dev-core-active-link { stroke: rgba(236,218,183,.96); stroke-width: 1.45; }
+        .msc-dev-core-validation-ring { fill: none; stroke: rgba(236,218,183,.72); }
+        .msc-dev-core-signal { fill: rgba(236,218,183,1); stroke: none; filter: drop-shadow(0 0 3px rgba(212,190,153,.42)); }
+      </style>
+
+      <text class="msc-dev-core-caption" x="280" y="24" text-anchor="middle">PEER-TO-PEER NETWORK</text>
+
+      <g aria-hidden="true">
+        <path class="msc-dev-core-link" d="M89 74L206 116M186 55L231 92M280 50V92M376 58L334 92M464 74L354 112M492 140H354M460 210L354 170M377 225L333 188M276 230V188M180 222L226 188M112 212L218 188M70 140H206"/>
+        <path class="msc-dev-core-active-link" d="M70 140H206" opacity="0">
+          <animate attributeName="opacity" values="0;0;.8;.8;0;0" keyTimes="0;.08;.12;.30;.34;1" dur="8s" repeatCount="indefinite"/>
+        </path>
+        <path class="msc-dev-core-active-link" d="M354 140H492M354 112L464 74M218 188L112 212" opacity="0">
+          <animate attributeName="opacity" values="0;0;.72;.72;0;0" keyTimes="0;.48;.54;.73;.80;1" dur="8s" repeatCount="indefinite"/>
+        </path>
+      </g>
+
+      <rect class="msc-dev-core-validation-ring" x="196" y="82" width="168" height="116" rx="17" opacity="0" aria-hidden="true">
+        <animate attributeName="opacity" values="0;0;.5;.5;0;0" keyTimes="0;.31;.38;.43;.50;1" dur="8s" repeatCount="indefinite"/>
+      </rect>
+
+      <g aria-hidden="true">
+        <circle class="msc-dev-core-peer msc-dev-core-peer--quiet" cx="82" cy="70" r="8"/>
+        <circle class="msc-dev-core-peer msc-dev-core-peer--quiet" cx="182" cy="48" r="8"/>
+        <circle class="msc-dev-core-peer msc-dev-core-peer--quiet" cx="280" cy="42" r="8"/>
+        <circle class="msc-dev-core-peer msc-dev-core-peer--quiet" cx="382" cy="52" r="8"/>
+        <circle class="msc-dev-core-peer" cx="472" cy="70" r="8" stroke-opacity=".72">
+          <animate attributeName="stroke-opacity" values=".72;.72;1;1;.72;.72" keyTimes="0;.65;.72;.77;.82;1" dur="8s" repeatCount="indefinite"/>
+        </circle>
+        <circle class="msc-dev-core-peer" cx="500" cy="140" r="8" stroke-opacity=".72">
+          <animate attributeName="stroke-opacity" values=".72;.72;1;1;.72;.72" keyTimes="0;.65;.72;.77;.82;1" dur="8s" repeatCount="indefinite"/>
+        </circle>
+        <circle class="msc-dev-core-peer msc-dev-core-peer--quiet" cx="468" cy="214" r="8"/>
+        <circle class="msc-dev-core-peer msc-dev-core-peer--quiet" cx="382" cy="232" r="8"/>
+        <circle class="msc-dev-core-peer msc-dev-core-peer--quiet" cx="276" cy="238" r="8"/>
+        <circle class="msc-dev-core-peer msc-dev-core-peer--quiet" cx="174" cy="228" r="8"/>
+        <circle class="msc-dev-core-peer" cx="104" cy="216" r="8" stroke-opacity=".72">
+          <animate attributeName="stroke-opacity" values=".72;.72;1;1;.72;.72" keyTimes="0;.65;.72;.77;.82;1" dur="8s" repeatCount="indefinite"/>
+        </circle>
+        <circle class="msc-dev-core-peer" cx="62" cy="140" r="8"/>
+      </g>
+
+      <g aria-hidden="true">
+        <rect class="msc-dev-core-module" x="206" y="92" width="148" height="96" rx="11" stroke-opacity=".94">
+          <animate attributeName="stroke-opacity" values=".94;.94;1;1;.94;.94" keyTimes="0;.30;.36;.46;.52;1" dur="8s" repeatCount="indefinite"/>
+        </rect>
+        <text class="msc-dev-core-label" x="280" y="126" text-anchor="middle">BITCOIN CORE</text>
+        <text class="msc-dev-core-sublabel" x="280" y="146" text-anchor="middle">VALIDATING NODE</text>
+        <path class="msc-dev-core-module-line" d="M238 158H322"/>
+        <text class="msc-dev-core-sublabel" x="280" y="176" text-anchor="middle" opacity=".62">RECEIVE · VALIDATE · RELAY
+          <animate attributeName="opacity" values=".62;.62;1;1;.62;.62" keyTimes="0;.31;.37;.46;.52;1" dur="8s" repeatCount="indefinite"/>
+        </text>
+      </g>
+
+      <g aria-hidden="true">
+        <circle class="msc-dev-core-signal" r="3.2" opacity="0">
+          <animateMotion path="M70 140H203" keyPoints="0;0;1;1" keyTimes="0;.10;.30;1" calcMode="linear" dur="8s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;.08;.11;.28;.33;1" dur="8s" repeatCount="indefinite"/>
+        </circle>
+        <circle class="msc-dev-core-signal" r="3" opacity="0">
+          <animateMotion path="M357 140H489" keyPoints="0;0;1;1" keyTimes="0;.54;.72;1" calcMode="linear" dur="8s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;.51;.54;.70;.75;1" dur="8s" repeatCount="indefinite"/>
+        </circle>
+        <circle class="msc-dev-core-signal" r="2.8" opacity="0">
+          <animateMotion path="M357 111L461 75" keyPoints="0;0;1;1" keyTimes="0;.57;.74;1" calcMode="linear" dur="8s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;.54;.57;.72;.77;1" dur="8s" repeatCount="indefinite"/>
+        </circle>
+        <circle class="msc-dev-core-signal" r="2.8" opacity="0">
+          <animateMotion path="M215 189L115 211" keyPoints="0;0;1;1" keyTimes="0;.60;.76;1" calcMode="linear" dur="8s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;.57;.60;.74;.79;1" dur="8s" repeatCount="indefinite"/>
+        </circle>
+      </g>
+
+      <text class="msc-dev-core-caption" x="280" y="260" text-anchor="middle">ONE NODE · MANY PEERS · LOCAL VALIDATION</text>
     </svg>
   </aside>
 </template>
@@ -61,7 +139,12 @@
     const featuredTemplate = scope.querySelector('template[data-msc-development-core-companion]');
     const release = scope.querySelector('.msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-052"]');
     const releaseTemplate = scope.querySelector('template[data-msc-development-release-companion]');
-    if (featured && featuredTemplate && !featured.querySelector('.msc-development-core-companion')) featured.appendChild(featuredTemplate.content.cloneNode(true));
+    if (featured && featuredTemplate && !featured.querySelector('.msc-development-core-companion')) {
+      featured.appendChild(featuredTemplate.content.cloneNode(true));
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        featured.querySelectorAll('.msc-development-core-companion animate, .msc-development-core-companion animateMotion, .msc-development-core-companion animateTransform').forEach((node) => node.remove());
+      }
+    }
     if (release && releaseTemplate && !release.querySelector('.msc-development-release-companion')) release.appendChild(releaseTemplate.content.cloneNode(true));
   })();
 </script>
