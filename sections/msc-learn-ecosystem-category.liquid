@@ -28,6 +28,7 @@
       <desc id="msc-eco-builders-desc">Different roles contribute to Bitcoin-related research, software, infrastructure, products, education, policy, media, design, and culture without forming one central builder organization.</desc>
       <g class="msc-ecosystem-system__muted" aria-hidden="true"><circle cx="280" cy="140" r="112"/><circle cx="280" cy="140" r="76"/><path d="M32 34H528M32 246H528M52 22V258M508 22V258"/></g>
       <g class="msc-ecosystem-system__core" aria-hidden="true"><circle cx="280" cy="140" r="46"/><text x="280" y="137" text-anchor="middle">BITCOIN</text><text x="280" y="154" text-anchor="middle">BASE SYSTEM</text></g>
+      <circle class="msc-ecosystem-system__response-ring" cx="280" cy="140" r="53" aria-hidden="true"/>
       <g class="msc-ecosystem-system__roles" aria-hidden="true">
         <g class="msc-ecosystem-system__role msc-ecosystem-system__role--1"><rect x="52" y="48" width="108" height="42" rx="7"/><text x="106" y="74" text-anchor="middle">RESEARCH · CODE</text></g>
         <g class="msc-ecosystem-system__role msc-ecosystem-system__role--2"><rect x="400" y="48" width="108" height="42" rx="7"/><text x="454" y="74" text-anchor="middle">INFRASTRUCTURE</text></g>
@@ -45,80 +46,86 @@
         <path class="msc-ecosystem-system__signal msc-ecosystem-system__signal--5" d="M160 211L244 167"/>
         <path class="msc-ecosystem-system__signal msc-ecosystem-system__signal--6" d="M400 211L316 167"/>
       </g>
-      <g class="msc-ecosystem-system__collaboration" aria-hidden="true">
-        <path class="msc-ecosystem-system__collaboration-path msc-ecosystem-system__collaboration-path--1" d="M106 90C106 103 99 111 92 119"/>
-        <path class="msc-ecosystem-system__collaboration-path msc-ecosystem-system__collaboration-path--2" d="M454 90C454 103 461 111 468 119"/>
-        <path class="msc-ecosystem-system__collaboration-path msc-ecosystem-system__collaboration-path--3" d="M92 161C92 174 99 182 106 190"/>
-      </g>
-      <text class="msc-ecosystem-system__caption" x="280" y="28" text-anchor="middle">OVERLAPPING ROLES · NO CENTRAL BUILDER ORGANIZATION</text>
     </svg>
   </aside>
 </template>
 
 <style>
-  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__role {
-    opacity: 1;
-    animation: msc-ecosystem-role-signal 12s ease-in-out infinite;
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-builders-companion {
+    border-color: transparent;
+    background: transparent;
   }
 
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__role,
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__signal {
+    animation-delay: var(--msc-eco-delay, 0s);
+  }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__role--1,
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__signal--1 { --msc-eco-delay: 0s; }
   .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__role--2,
-  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__signal--2 { animation-delay: 2s; }
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__signal--2 { --msc-eco-delay: 2s; }
   .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__role--3,
-  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__signal--3 { animation-delay: 4s; }
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__signal--3 { --msc-eco-delay: 4s; }
   .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__role--4,
-  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__signal--4 { animation-delay: 6s; }
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__signal--4 { --msc-eco-delay: 6s; }
   .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__role--5,
-  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__signal--5 { animation-delay: 8s; }
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__signal--5 { --msc-eco-delay: 8s; }
   .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__role--6,
-  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__signal--6 { animation-delay: 10s; }
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__signal--6 { --msc-eco-delay: 10s; }
+
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__role {
+    opacity: 1;
+    animation-name: msc-ecosystem-role-signal;
+    animation-duration: 12s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+  }
 
   .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__signal {
     opacity: 0;
-    stroke-width: 1.7;
-    stroke-dasharray: 15 120;
-    stroke-dashoffset: 100;
-    animation: msc-ecosystem-contribution-signal 12s ease-in-out infinite;
+    stroke-width: 2.1;
+    stroke-dasharray: 18 108;
+    stroke-dashoffset: 108;
+    animation-name: msc-ecosystem-contribution-signal;
+    animation-duration: 12s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
   }
 
-  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__collaboration-path {
+  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__response-ring {
     opacity: 0;
-    stroke-width: .8;
-    stroke-dasharray: 3 5;
-    animation: msc-ecosystem-collaboration-current 18s ease-in-out infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: msc-ecosystem-core-response 2s ease-in-out infinite;
   }
-  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__collaboration-path--2 { animation-delay: 6s; }
-  .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__collaboration-path--3 { animation-delay: 12s; }
 
   @keyframes msc-ecosystem-role-signal {
-    0%, 14%, 100% { opacity: 1; filter: none; }
-    4%, 9% { opacity: 1; filter: brightness(1.22); }
+    0%, 15%, 100% { filter: none; }
+    3%, 10% { filter: brightness(1.55); }
   }
 
   @keyframes msc-ecosystem-contribution-signal {
-    0%, 100% { opacity: 0; stroke-dashoffset: 100; }
-    3% { opacity: .16; }
-    8% { opacity: .9; }
-    14% { opacity: 0; stroke-dashoffset: 0; }
-    15%, 100% { opacity: 0; stroke-dashoffset: 0; }
+    0%, 2%, 15%, 100% { opacity: 0; stroke-dashoffset: 108; }
+    4% { opacity: .35; }
+    8% { opacity: 1; }
+    13% { opacity: 0; stroke-dashoffset: 0; }
   }
 
-  @keyframes msc-ecosystem-collaboration-current {
-    0%, 7%, 100% { opacity: 0; }
-    2%, 5% { opacity: .16; }
+  @keyframes msc-ecosystem-core-response {
+    0%, 48%, 100% { opacity: 0; transform: scale(.96); }
+    58% { opacity: .48; transform: scale(1); }
+    76% { opacity: 0; transform: scale(1.08); }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__role {
-      opacity: 1;
       animation: none;
       filter: none;
     }
-    .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__signal {
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__signal,
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__response-ring {
       display: none;
-      animation: none;
-    }
-    .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-ecosystem-system__collaboration-path {
-      opacity: .1;
       animation: none;
     }
   }
