@@ -67,32 +67,30 @@
 .msc-ecosystem-builders-system text { fill:rgba(212,190,153,.76);font-family:var(--font-body-family,sans-serif);font-size:12px;font-weight:800;letter-spacing:.06em; }
 .msc-ecosystem-system__muted { opacity:.18; }.msc-ecosystem-system__core { opacity:.95; }.msc-ecosystem-system__roles { opacity:.78; }.msc-ecosystem-system__links { opacity:.5; }.msc-ecosystem-system__caption { opacity:.72; }
 
-/* Guide 068 — practical industry influence stops at protocol rules. */
+/* Guide 068 — influence soundings map. */
 .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-068"] { grid-column:1 / -1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:auto auto minmax(0,1fr) auto;column-gap:0;row-gap:1rem;height:25rem;min-height:25rem; }
 .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-068"] > *:not(.msc-ecosystem-influence-companion) { grid-column:1;margin-right:clamp(2.4rem,3.5vw,4rem); }
 .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-068"] > .msc-ecosystem-influence-companion { grid-column:2;grid-row:1 / -1; }
 .msc-ecosystem-influence-companion { align-self:stretch;min-width:0;min-height:0; }
 .msc-ecosystem-influence-companion__eyebrow { margin:0;color:rgba(212,190,153,.72);font-size:.98rem;font-weight:850;letter-spacing:.14em;text-transform:uppercase; }
 .msc-ecosystem-influence-companion__title { margin:.15rem 0 0;color:var(--msc-hub-sand);font-size:clamp(2.2rem,2.4vw,2.9rem);line-height:1.08;letter-spacing:-.04em; }
-.msc-ecosystem-influence-map__statement { display:none; }
 
 .msc-ecosystem-influence-map {
   position:relative;
   overflow:hidden;
   display:grid;
-  grid-template-columns:minmax(0,1fr) 6.8rem;
-  grid-template-rows:1fr;
-  gap:1rem;
-  align-items:stretch;
+  grid-template-columns:minmax(0,1fr) 9.2rem;
+  grid-template-rows:minmax(0,1fr) auto;
+  gap:.65rem 1rem;
   min-width:0;
   min-height:0;
   height:100%;
-  padding:.8rem 1rem;
+  padding:.9rem 1rem .75rem;
   border:1px solid rgba(212,190,153,.18);
   border-radius:14px;
   background:
-    linear-gradient(rgba(212,190,153,.025) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(212,190,153,.025) 1px,transparent 1px),
+    linear-gradient(rgba(212,190,153,.028) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(212,190,153,.028) 1px,transparent 1px),
     rgba(6,28,32,.14);
   background-size:24px 24px,24px 24px,auto;
 }
@@ -101,105 +99,136 @@
   position:relative;
   grid-column:1;
   grid-row:1;
-  display:flex;
-  flex-wrap:wrap;
-  align-content:flex-start;
-  gap:.35rem .65rem;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  align-content:start;
+  gap:.4rem .45rem;
   min-width:0;
   min-height:0;
-  padding:.15rem .25rem 0;
-  overflow:hidden;
+  padding:.1rem .2rem 0;
 }
 .msc-ecosystem-influence-map__signals span {
-  display:inline-flex;
+  display:flex;
   align-items:center;
-  padding:0;
-  border:0;
-  background:none;
+  justify-content:center;
+  min-width:0;
+  padding:.3rem .25rem;
+  border:1px solid rgba(212,190,153,.15);
+  border-radius:6px;
+  background:rgba(9,30,35,.16);
   color:rgba(212,190,153,.64);
-  font-size:.68rem;
-  font-weight:800;
-  letter-spacing:.08em;
-  line-height:1.2;
+  font-size:.62rem;
+  font-weight:820;
+  letter-spacing:.065em;
+  line-height:1.1;
   text-transform:uppercase;
-  opacity:1;
-  animation:none;
+  white-space:nowrap;
 }
-.msc-ecosystem-influence-map__signals span:nth-child(n+6) { display:none; }
+.msc-ecosystem-influence-map__signals span:nth-child(5) { display:none; }
 .msc-ecosystem-influence-map__signals::before {
   content:"";
   position:absolute;
   left:.2rem;
-  right:.2rem;
-  top:3.1rem;
-  bottom:.35rem;
+  right:.1rem;
+  top:4.2rem;
+  bottom:.2rem;
   background:
-    linear-gradient(90deg,rgba(212,190,153,.14),rgba(212,190,153,.52) 78%,rgba(212,190,153,.12)) 0 20% / 100% 1px no-repeat,
-    linear-gradient(90deg,rgba(212,190,153,.12),rgba(212,190,153,.44) 72%,rgba(212,190,153,.1)) 0 50% / 100% 1px no-repeat,
-    linear-gradient(90deg,rgba(212,190,153,.1),rgba(212,190,153,.36) 68%,rgba(212,190,153,.08)) 0 80% / 100% 1px no-repeat;
+    linear-gradient(90deg,rgba(212,190,153,.12),rgba(212,190,153,.5) 78%,rgba(212,190,153,.2)) 0 18% / 100% 1px no-repeat,
+    linear-gradient(90deg,rgba(212,190,153,.1),rgba(212,190,153,.42) 72%,rgba(212,190,153,.18)) 0 50% / 100% 1px no-repeat,
+    linear-gradient(90deg,rgba(212,190,153,.08),rgba(212,190,153,.34) 68%,rgba(212,190,153,.14)) 0 82% / 100% 1px no-repeat;
 }
 .msc-ecosystem-influence-map__signals::after {
   content:"";
   position:absolute;
   left:.2rem;
-  top:3.1rem;
-  width:.52rem;
-  bottom:.35rem;
+  top:4.2rem;
+  width:.55rem;
+  bottom:.2rem;
   opacity:0;
   background:
-    radial-gradient(circle at 50% 20%,var(--msc-hub-sand) 0 2px,transparent 2.6px),
-    radial-gradient(circle at 50% 50%,var(--msc-hub-sand) 0 2px,transparent 2.6px),
-    radial-gradient(circle at 50% 80%,var(--msc-hub-sand) 0 2px,transparent 2.6px);
-  animation:msc-ecosystem-influence-flow 6.8s ease-in-out infinite;
+    radial-gradient(circle at 50% 18%,var(--msc-hub-sand) 0 2px,transparent 2.7px),
+    radial-gradient(circle at 50% 50%,var(--msc-hub-sand) 0 2px,transparent 2.7px),
+    radial-gradient(circle at 50% 82%,var(--msc-hub-sand) 0 2px,transparent 2.7px);
+  animation:msc-ecosystem-influence-sounding 7.2s ease-in-out infinite;
 }
 
 .msc-ecosystem-influence-map__boundary {
-  position:relative;
   grid-column:2;
   grid-row:1;
-  display:flex;
-  align-items:center;
-  justify-content:flex-start;
+  display:grid;
+  grid-template-rows:repeat(3,minmax(0,1fr));
+  gap:.42rem;
+  align-self:stretch;
   min-width:0;
   min-height:0;
-  width:auto;
-  height:100%;
-  aspect-ratio:auto;
-  padding-left:1rem;
+  padding:.05rem 0;
   border:0;
-  border-left:1px dashed rgba(212,190,153,.48);
-  border-radius:0;
   background:none;
   box-shadow:none;
-  text-align:left;
 }
 .msc-ecosystem-influence-map__boundary::before,
 .msc-ecosystem-influence-map__boundary::after { display:none;content:none; }
-.msc-ecosystem-influence-map__boundary strong,
-.msc-ecosystem-influence-map__boundary > span:not(.msc-ecosystem-influence-map__ring) { display:none; }
-.msc-ecosystem-influence-map__boundary .msc-ecosystem-influence-map__ring {
-  display:block;
-  width:5rem;
+.msc-ecosystem-influence-map__boundary > * {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-width:0;
+  min-height:0;
+  padding:.28rem .35rem;
+  border:1px solid rgba(212,190,153,.22);
+  border-radius:7px;
+  background:rgba(212,190,153,.035);
   color:transparent;
   font-size:0;
   line-height:1;
+  box-shadow:inset 0 0 0 1px rgba(212,190,153,.025);
 }
-.msc-ecosystem-influence-map__boundary .msc-ecosystem-influence-map__ring::before {
-  content:"PROTOCOL RULES";
-  display:block;
-  color:rgba(212,190,153,.78);
-  font-size:.7rem;
+.msc-ecosystem-influence-map__boundary .msc-ecosystem-influence-map__ring::after,
+.msc-ecosystem-influence-map__boundary strong::after,
+.msc-ecosystem-influence-map__boundary > span:last-child::after {
+  color:rgba(212,190,153,.76);
+  font-size:.68rem;
   font-weight:850;
-  line-height:1.25;
-  letter-spacing:.11em;
+  letter-spacing:.08em;
   text-transform:uppercase;
 }
+.msc-ecosystem-influence-map__boundary .msc-ecosystem-influence-map__ring::after { content:"COMPANIES"; }
+.msc-ecosystem-influence-map__boundary strong::after { content:"PROJECTS"; }
+.msc-ecosystem-influence-map__boundary > span:last-child::after { content:"MARKETS"; }
 
-@keyframes msc-ecosystem-influence-flow {
+.msc-ecosystem-influence-map__statement {
+  grid-column:1 / -1;
+  grid-row:2;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:.7rem;
+  align-items:center;
+  padding-top:.55rem;
+  border-top:1px solid rgba(212,190,153,.16);
+}
+.msc-ecosystem-influence-map__statement > * {
+  color:transparent;
+  font-size:0;
+  line-height:1;
+  text-align:center;
+}
+.msc-ecosystem-influence-map__statement > *::after {
+  color:rgba(212,190,153,.58);
+  font-size:.62rem;
+  font-weight:820;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+}
+.msc-ecosystem-influence-map__statement span:first-child::after { content:"ACCOUNTABILITY"; }
+.msc-ecosystem-influence-map__statement strong::after { content:"CONCENTRATION"; }
+.msc-ecosystem-influence-map__statement span:last-child::after { content:"EXIT"; }
+
+@keyframes msc-ecosystem-influence-sounding {
   0% { left:.2rem;opacity:0; }
-  12% { opacity:.9; }
-  74% { left:calc(100% - .8rem);opacity:1; }
-  86%,100% { left:calc(100% - .8rem);opacity:0; }
+  12% { opacity:.28; }
+  28% { opacity:.9; }
+  74% { left:calc(100% - .7rem);opacity:1; }
+  88%,100% { left:calc(100% - .7rem);opacity:0; }
 }
 
 @media screen and (min-width:750px) {
@@ -213,12 +242,12 @@
   }
   .msc-ecosystem-influence-companion__eyebrow { grid-column:1;grid-row:1; }
   .msc-ecosystem-influence-companion__title { grid-column:1;grid-row:2; }
-  .msc-ecosystem-influence-map { grid-column:1;grid-row:3;align-self:stretch; }
+  .msc-ecosystem-influence-map { grid-column:1;grid-row:3 / 5;align-self:stretch; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .msc-ecosystem-influence-map__signals::after {
-    left:calc(100% - .8rem);
+    left:calc(100% - .7rem);
     opacity:.42;
     animation:none;
   }
@@ -240,11 +269,14 @@
   .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-068"] { display:flex;grid-column:auto;height:auto;min-height:0; }
   .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-068"] > *:not(.msc-ecosystem-influence-companion) { margin-right:0; }
   .msc-ecosystem-influence-companion { display:grid;grid-template-rows:auto auto auto;gap:.9rem;margin-top:1rem;padding:2rem 0 0;border-top:1px solid rgba(212,190,153,.16); }
-  .msc-ecosystem-influence-map { grid-template-columns:minmax(0,1fr) 5.8rem;grid-template-rows:1fr;gap:.8rem;height:9.5rem;margin-top:.2rem;padding:.75rem .8rem; }
-  .msc-ecosystem-influence-map__signals { gap:.3rem .5rem; }
-  .msc-ecosystem-influence-map__signals span { font-size:.6rem; }
+  .msc-ecosystem-influence-map { grid-template-columns:minmax(0,1fr) 7rem;grid-template-rows:minmax(8.4rem,1fr) auto;gap:.6rem .75rem;height:auto;min-height:10.5rem;margin-top:.2rem;padding:.75rem .8rem .65rem; }
+  .msc-ecosystem-influence-map__signals { grid-template-columns:repeat(2,minmax(0,1fr));gap:.32rem; }
+  .msc-ecosystem-influence-map__signals span { font-size:.56rem;padding:.26rem .18rem; }
   .msc-ecosystem-influence-map__signals::before,
-  .msc-ecosystem-influence-map__signals::after { top:3rem; }
-  .msc-ecosystem-influence-map__boundary { padding-left:.75rem; }
-  .msc-ecosystem-influence-map__boundary .msc-ecosystem-influence-map__ring::before { font-size:.6rem;letter-spacing:.09em; }
+  .msc-ecosystem-influence-map__signals::after { top:5rem; }
+  .msc-ecosystem-influence-map__boundary { gap:.34rem; }
+  .msc-ecosystem-influence-map__boundary .msc-ecosystem-influence-map__ring::after,
+  .msc-ecosystem-influence-map__boundary strong::after,
+  .msc-ecosystem-influence-map__boundary > span:last-child::after { font-size:.58rem; }
+  .msc-ecosystem-influence-map__statement > *::after { font-size:.54rem;letter-spacing:.07em; }
 }
