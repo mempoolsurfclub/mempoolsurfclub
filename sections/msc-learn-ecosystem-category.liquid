@@ -131,56 +131,51 @@
     <p class="msc-ecosystem-influence-companion__eyebrow">Influence map</p>
     <h4 class="msc-ecosystem-influence-companion__title">How Industry Influence Travels</h4>
     <div class="msc-ecosystem-influence-field">
-      <svg class="msc-ecosystem-influence-system" viewBox="0 0 620 190" role="img" aria-labelledby="msc-eco-influence-title msc-eco-influence-desc">
+      <svg class="msc-ecosystem-influence-system" viewBox="0 0 620 150" role="img" aria-labelledby="msc-eco-influence-title msc-eco-influence-desc">
         <title id="msc-eco-influence-title">How industry influence travels through the Bitcoin ecosystem</title>
-        <desc id="msc-eco-influence-desc">Capital, products, systems, funding, and media can strengthen industry influence. That influence then reaches companies, projects, and markets, while accountability, concentration, and exit affect its practical power.</desc>
+        <desc id="msc-eco-influence-desc">Sources such as capital, products, infrastructure, funding, and media can create industry influence. That influence can shape companies, projects, and markets.</desc>
+
+        <text class="msc-ecosystem-influence-system__section-label" x="26" y="18">SOURCES OF INFLUENCE</text>
+        <text class="msc-ecosystem-influence-system__section-label" x="492" y="18">WHERE IT SHOWS UP</text>
 
         <g class="msc-ecosystem-influence-system__inputs" aria-hidden="true">
-          <text x="28" y="34">CAPITAL</text>
-          <text x="28" y="62">PRODUCTS</text>
-          <text x="28" y="90">SYSTEMS</text>
-          <text x="28" y="118">FUNDING</text>
-          <text x="28" y="146">MEDIA</text>
+          <text x="28" y="43">CAPITAL</text>
+          <text x="28" y="63">PRODUCTS</text>
+          <text x="28" y="83">INFRASTRUCTURE</text>
+          <text x="28" y="103">FUNDING</text>
+          <text x="28" y="123">MEDIA</text>
         </g>
 
         <g class="msc-ecosystem-influence-system__inbound" aria-hidden="true">
-          <path d="M118 30C164 30 188 52 234 68"/>
-          <path d="M118 58C168 58 192 67 234 78"/>
-          <path d="M118 86H234"/>
-          <path d="M118 114C168 114 192 105 234 94"/>
-          <path d="M118 142C164 142 188 120 234 104"/>
+          <path d="M154 39C193 39 214 52 248 62"/>
+          <path d="M154 59C198 59 218 65 248 70"/>
+          <path d="M154 79H248"/>
+          <path d="M154 99C198 99 218 93 248 88"/>
+          <path d="M154 119C193 119 214 106 248 96"/>
         </g>
 
         <g class="msc-ecosystem-influence-system__core" aria-hidden="true">
-          <rect x="234" y="48" width="158" height="76" rx="10"/>
-          <text class="msc-ecosystem-influence-system__core-title" x="313" y="78" text-anchor="middle">INDUSTRY</text>
-          <text class="msc-ecosystem-influence-system__core-title" x="313" y="99" text-anchor="middle">INFLUENCE</text>
-          <text class="msc-ecosystem-influence-system__core-note" x="313" y="114" text-anchor="middle">PRACTICAL POWER</text>
+          <rect x="248" y="40" width="156" height="72" rx="10"/>
+          <text class="msc-ecosystem-influence-system__core-title" x="326" y="72" text-anchor="middle">INDUSTRY</text>
+          <text class="msc-ecosystem-influence-system__core-title" x="326" y="94" text-anchor="middle">INFLUENCE</text>
         </g>
 
         <g class="msc-ecosystem-influence-system__outbound" aria-hidden="true">
-          <path d="M392 70C438 70 463 54 510 48"/>
-          <path d="M392 86H510"/>
-          <path d="M392 102C438 102 463 118 510 124"/>
+          <path d="M404 60C444 60 457 50 490 47"/>
+          <path d="M404 76H490"/>
+          <path d="M404 92C444 92 457 102 490 105"/>
         </g>
 
         <g class="msc-ecosystem-influence-system__destinations" aria-hidden="true">
-          <text x="592" y="52" text-anchor="end">COMPANIES</text>
-          <text x="592" y="90" text-anchor="end">PROJECTS</text>
-          <text x="592" y="128" text-anchor="end">MARKETS</text>
+          <rect x="490" y="35" width="104" height="24" rx="6"/><text x="542" y="51" text-anchor="middle">COMPANIES</text>
+          <rect x="490" y="64" width="104" height="24" rx="6"/><text x="542" y="80" text-anchor="middle">PROJECTS</text>
+          <rect x="490" y="93" width="104" height="24" rx="6"/><text x="542" y="109" text-anchor="middle">MARKETS</text>
         </g>
 
-        <g class="msc-ecosystem-influence-system__signals" aria-hidden="true">
-          <circle class="msc-ecosystem-influence-system__signal msc-ecosystem-influence-system__signal--in" r="3" cx="118" cy="86"/>
-          <circle class="msc-ecosystem-influence-system__signal msc-ecosystem-influence-system__signal--out" r="3" cx="392" cy="86"/>
-        </g>
-
-        <g class="msc-ecosystem-influence-system__checks" aria-hidden="true">
-          <line x1="86" y1="166" x2="86" y2="173"/><text x="102" y="172">ACCOUNTABILITY</text>
-          <line x1="274" y1="166" x2="274" y2="173"/><text x="290" y="172">CONCENTRATION</text>
-          <line x1="486" y1="166" x2="486" y2="173"/><text x="502" y="172">EXIT</text>
-        </g>
+        <circle class="msc-ecosystem-influence-system__signal msc-ecosystem-influence-system__signal--in" r="3" cx="154" cy="79" aria-hidden="true"/>
+        <circle class="msc-ecosystem-influence-system__signal msc-ecosystem-influence-system__signal--out" r="3" cx="404" cy="76" aria-hidden="true"/>
       </svg>
+      <p class="msc-ecosystem-influence-caption">Influence grows with concentration and weakens when people can exit.</p>
     </div>
   </aside>
 </template>
@@ -190,6 +185,8 @@
     min-width:0;
     min-height:0;
     overflow:hidden;
+    display:grid;
+    grid-template-rows:minmax(0,1fr) auto;
     border:1px solid rgba(212,190,153,.2);
     border-radius:14px;
     background:linear-gradient(rgba(212,190,153,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(212,190,153,.028) 1px,transparent 1px),rgba(6,28,32,.14);
@@ -198,39 +195,37 @@
   .msc-ecosystem-influence-system { display:block;width:100%;height:100%;min-height:0;color:var(--msc-hub-sand); }
   .msc-ecosystem-influence-system path,
   .msc-ecosystem-influence-system rect,
-  .msc-ecosystem-influence-system line,
   .msc-ecosystem-influence-system circle { fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke; }
-  .msc-ecosystem-influence-system text { fill:rgba(212,190,153,.72);font-family:var(--font-body-family,sans-serif);font-size:10px;font-weight:800;letter-spacing:.075em; }
-  .msc-ecosystem-influence-system__inputs text { fill:rgba(212,190,153,.64); }
+  .msc-ecosystem-influence-system text { fill:rgba(212,190,153,.76);font-family:var(--font-body-family,sans-serif);font-size:10px;font-weight:800;letter-spacing:.065em; }
+  .msc-ecosystem-influence-system__section-label { fill:rgba(212,190,153,.5)!important;font-size:7px!important;letter-spacing:.12em!important; }
+  .msc-ecosystem-influence-system__inputs text { fill:rgba(212,190,153,.7); }
   .msc-ecosystem-influence-system__inbound,
   .msc-ecosystem-influence-system__outbound { opacity:.42; }
-  .msc-ecosystem-influence-system__core rect { fill:rgba(212,190,153,.035);stroke:rgba(212,190,153,.54); }
-  .msc-ecosystem-influence-system__core-title { fill:rgba(212,190,153,.94)!important;font-size:14px!important;letter-spacing:.09em!important; }
-  .msc-ecosystem-influence-system__core-note { fill:rgba(212,190,153,.5)!important;font-size:7px!important;letter-spacing:.12em!important; }
-  .msc-ecosystem-influence-system__destinations text { fill:rgba(212,190,153,.82);font-size:11px; }
-  .msc-ecosystem-influence-system__checks { opacity:.64; }
-  .msc-ecosystem-influence-system__checks text { font-size:7px; }
-  .msc-ecosystem-influence-system__checks line { stroke-width:1.4; }
+  .msc-ecosystem-influence-system__core rect { fill:rgba(212,190,153,.045);stroke:rgba(212,190,153,.58); }
+  .msc-ecosystem-influence-system__core-title { fill:rgba(212,190,153,.95)!important;font-size:14px!important;letter-spacing:.09em!important; }
+  .msc-ecosystem-influence-system__destinations rect { fill:rgba(212,190,153,.035);stroke:rgba(212,190,153,.32); }
+  .msc-ecosystem-influence-system__destinations text { fill:rgba(212,190,153,.84);font-size:9px; }
+  .msc-ecosystem-influence-caption { margin:0;padding:.55rem .8rem .6rem;border-top:1px solid rgba(212,190,153,.16);color:rgba(212,190,153,.68);font-size:.68rem;font-weight:760;line-height:1.25;letter-spacing:.035em;text-align:center; }
   .msc-ecosystem-influence-system__signal { fill:var(--msc-hub-sand)!important;stroke:none!important;opacity:0; }
-  .msc-ecosystem-influence-system__signal--in { animation:msc-ecosystem-influence-in 6.6s ease-in-out infinite; }
-  .msc-ecosystem-influence-system__signal--out { animation:msc-ecosystem-influence-out 6.6s ease-in-out infinite; }
-  .msc-ecosystem-influence-system__core { transform-box:fill-box;transform-origin:center;animation:msc-ecosystem-influence-core 6.6s ease-in-out infinite; }
+  .msc-ecosystem-influence-system__signal--in { animation:msc-ecosystem-influence-in 6.4s ease-in-out infinite; }
+  .msc-ecosystem-influence-system__signal--out { animation:msc-ecosystem-influence-out 6.4s ease-in-out infinite; }
+  .msc-ecosystem-influence-system__core { transform-box:fill-box;transform-origin:center;animation:msc-ecosystem-influence-core 6.4s ease-in-out infinite; }
 
   @keyframes msc-ecosystem-influence-in {
     0%,8% { opacity:0;transform:translateX(0); }
-    13% { opacity:.9; }
-    34% { opacity:1;transform:translateX(116px); }
-    40%,100% { opacity:0;transform:translateX(116px); }
+    14% { opacity:.9; }
+    34% { opacity:1;transform:translateX(94px); }
+    40%,100% { opacity:0;transform:translateX(94px); }
   }
   @keyframes msc-ecosystem-influence-core {
     0%,32%,58%,100% { filter:none; }
-    39%,50% { filter:brightness(1.32); }
+    39%,50% { filter:brightness(1.28); }
   }
   @keyframes msc-ecosystem-influence-out {
     0%,46% { opacity:0;transform:translateX(0); }
     52% { opacity:.9; }
-    76% { opacity:1;transform:translateX(118px); }
-    84%,100% { opacity:0;transform:translateX(118px); }
+    76% { opacity:1;transform:translateX(86px); }
+    84%,100% { opacity:0;transform:translateX(86px); }
   }
 
   @media screen and (min-width:750px) {
@@ -249,6 +244,7 @@
 
   @media screen and (max-width:749px) {
     .msc-ecosystem-influence-field { min-height:13rem;margin-top:.2rem; }
+    .msc-ecosystem-influence-caption { font-size:.64rem; }
   }
 
   @media (prefers-reduced-motion: reduce) {
