@@ -127,19 +127,28 @@
 </style>
 
 <template data-msc-ecosystem-influence-companion>
-  <aside class="msc-ecosystem-influence-companion" aria-label="Bitcoin ecosystem influence map">
+  <aside class="msc-ecosystem-influence-companion" aria-label="Bitcoin ecosystem influence routes">
     <p class="msc-ecosystem-influence-companion__eyebrow">Influence map</p>
-    <h4 class="msc-ecosystem-influence-companion__title">Influence does not equal protocol control</h4>
-    <div class="msc-ecosystem-influence-map" aria-label="Capital, products, infrastructure, funding, distribution, policy access, and media can influence the ecosystem but do not cross the consensus boundary">
-      <div class="msc-ecosystem-influence-map__signals" aria-hidden="true">
-        <span>Capital</span><span>Products</span><span>Infrastructure</span><span>Funding</span><span>Distribution</span><span>Policy</span><span>Media</span>
+    <h4 class="msc-ecosystem-influence-companion__title">How Industry Influence Travels</h4>
+    <div class="msc-ecosystem-influence-map" aria-label="Capital and products influence companies, infrastructure and funding influence projects, and policy and media influence markets. Accountability, concentration, and exit help determine the practical power of those relationships.">
+      <div class="msc-ecosystem-influence-map__routes" aria-hidden="true">
+        <div class="msc-ecosystem-influence-route msc-ecosystem-influence-route--1">
+          <div class="msc-ecosystem-influence-route__sources"><span>Capital</span><span>Products</span></div>
+          <span class="msc-ecosystem-influence-route__current"></span>
+          <strong>Companies</strong>
+        </div>
+        <div class="msc-ecosystem-influence-route msc-ecosystem-influence-route--2">
+          <div class="msc-ecosystem-influence-route__sources"><span>Infrastructure</span><span>Funding</span></div>
+          <span class="msc-ecosystem-influence-route__current"></span>
+          <strong>Projects</strong>
+        </div>
+        <div class="msc-ecosystem-influence-route msc-ecosystem-influence-route--3">
+          <div class="msc-ecosystem-influence-route__sources"><span>Policy</span><span>Media</span></div>
+          <span class="msc-ecosystem-influence-route__current"></span>
+          <strong>Markets</strong>
+        </div>
       </div>
-      <div class="msc-ecosystem-influence-map__boundary">
-        <span class="msc-ecosystem-influence-map__ring">CONSENSUS RULES</span>
-        <strong>BITCOIN</strong>
-        <span>Independent node enforcement</span>
-      </div>
-      <div class="msc-ecosystem-influence-map__statement"><span>Practical influence</span><strong>≠</strong><span>Unilateral authority</span></div>
+      <div class="msc-ecosystem-influence-map__statement" aria-hidden="true"><span>Accountability</span><span>Concentration</span><span>Exit</span></div>
     </div>
   </aside>
 </template>
