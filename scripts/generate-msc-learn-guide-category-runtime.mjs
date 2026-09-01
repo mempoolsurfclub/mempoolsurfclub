@@ -52,6 +52,31 @@ function configFor(number) {
   };
 }
 
+const strictKeyTermParser = String.raw`function parseKeyTerms(markdown) {
+  return normalize(markdown).split(/\n\n+/).map((block) => {
+    const match = block.match(/^\*\*(.+?):\*\*\s+([\s\S]+)$/);
+    if (!match) throw new Error(\`Invalid key term block: \${block}\`);
+    return { term: match[1], definition: normalize(match[2]) };
+  });
+}`;
+
+const flexibleKeyTermParser = String.raw`function parseKeyTerms(markdown) {
+  const normalized = normalize(markdown);
+  if (/^-\s+\*\*/.test(normalized)) {
+    return normalized.split(/\n(?=-\s+\*\*)/).map((block) => {
+      const clean = normalize(block);
+      const match = clean.match(/^-\s+\*\*(.+?):\*\*\s+([\s\S]+)$/);
+      if (!match) throw new Error('Invalid key term bullet: ' + clean);
+      return { term: match[1], definition: normalize(match[2]) };
+    });
+  }
+  return normalized.split(/\n\n+/).map((block) => {
+    const match = block.match(/^\*\*(.+?):\*\*\s+([\s\S]+)$/);
+    if (!match) throw new Error('Invalid key term block: ' + block);
+    return { term: match[1], definition: normalize(match[2]) };
+  });
+}`;
+
 function transformedGenerator(config, tempJson, tempSnippet) {
   let source = read(BASE_GENERATOR);
   source = replaceOnce(
@@ -78,6 +103,7 @@ function transformedGenerator(config, tempJson, tempSnippet) {
     `const EXPECTED_ID = '${config.id}';`,
     'EXPECTED_ID',
   );
+  source = replaceOnce(source, strictKeyTermParser, flexibleKeyTermParser, 'parseKeyTerms');
   source = source
     .replaceAll('MscGuide001Terms', `${config.dom}Terms`)
     .replaceAll('MscGuide001Sources', `${config.dom}Sources`)
