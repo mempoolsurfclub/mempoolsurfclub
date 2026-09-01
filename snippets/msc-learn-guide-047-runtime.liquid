@@ -1,0 +1,130 @@
+{% comment %}
+  Generated from docs/learn/content/guides/MSC-GUIDE-047-bitcoin-op-cat.md.
+  Registry binding: MSC-GUIDE-047.
+  Preview only. Do not edit manually.
+  Rebuild with node scripts/generate-msc-learn-guide-category-runtime.mjs --start=33 --end=48 --write.
+{% endcomment %}
+<section class="msc-shell msc-learn-page" data-msc-registry-id="MSC-GUIDE-047" data-msc-preview-only="true">
+  <div class="msc-container msc-learn-page__container">
+    <nav class="msc-learn-breadcrumbs" aria-label="Learn breadcrumbs"><ol><li><span>Learn</span></li><li><span>Building on Bitcoin</span></li><li aria-current="page"><span>What Is OP_CAT?</span></li></ol></nav>
+    <header class="msc-learn-page__header">
+      <p class="msc-section-kicker">Building on Bitcoin</p>
+      <h1>What Is OP_CAT?</h1>
+      <p class="msc-learn-page__deck">OP_CAT is a proposed Tapscript opcode that joins two stack values. Learn how its simple byte-concatenation rule differs from the higher-level systems built with it, why current mainnet Tapscript still treats `0x7e` as OP_SUCCESS126, and why BIP 347&#39;s Complete status is not deployment.</p>
+      <ul class="msc-learn-page-meta"><li>Innovation</li><li>Deep</li><li>Technical Analysis</li><li>16 to 19 minutes</li><li>Reviewed null</li></ul>
+      <p class="msc-learn-preview-note">Preview only. Publication records and confirmed URLs do not exist; all navigation remains inactive.</p>
+    </header>
+    <article class="msc-learn-article rte" data-msc-content-source="structured-runtime">
+<section class="msc-learn-article__section">
+<p>OP_CAT is a proposed Bitcoin Script operation that concatenates two stack elements. If the stack contains <code>x1</code> followed by <code>x2</code>, OP_CAT produces <code>x1 || x2</code>: the bytes of the first value followed by the bytes of the second.</p>
+<p>The operation is simple. Its status is not. OP_CAT existed in early Bitcoin software, was disabled in 2010, and is not an active concatenation operation under Bitcoin&#39;s current mainnet consensus rules. BIP 347 proposes enabling it only in Tapscript through a soft fork.</p>
+<p>As of July 24, 2026, BIP 347 is marked <code>Complete</code>, not <code>Deployed</code>. Under the current BIP process, Complete means the authors consider the proposal finished and recommend adoption; it does not mean activation criteria have been met or the network enforces the proposal.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Concatenation is a general building block</h2>
+<p>Bitcoin Script operates on byte arrays placed on a stack. Many useful constructions require building a larger byte sequence from smaller pieces before hashing or checking it. OP_CAT supplies that primitive.</p>
+<p>For example, a script could concatenate two child hashes before hashing the result to verify one level of a Merkle tree. A script could combine fields that form a committed message. More elaborate constructions can use concatenation with signatures and hashes to reason about transaction data or enforce relationships among values.</p>
+<p>OP_CAT does not understand Merkle trees, vaults, covenants, signatures, or bridges. It only joins bytes. The higher-level behavior comes from the complete script, transaction structure, signing rules, and application protocol.</p>
+<p>This is why a small opcode can have a large design surface. General primitives can be composed in ways that are useful, inefficient, subtle, or unsafe.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Early Bitcoin had OP_CAT</h2>
+<p>The original Bitcoin Script implementation included OP_CAT. In August 2010, a commit disabled OP_CAT together with several other opcodes.</p>
+<p>The BIP describes a historical concern that repeated duplication and concatenation could grow a stack item rapidly. Early software already had a stack-element limit, but disabling the opcode removed that construction from active script evaluation.</p>
+<p>History should not be used as proof that the current proposal is automatically safe or unsafe. Today&#39;s Tapscript has different upgrade mechanics and explicit resource limits. BIP 347 specifies a 520-byte maximum resulting element, so a concatenation that would exceed that size fails.</p>
+<p>The proposal is therefore a new activation decision with current semantics, not simply a switch that restores every aspect of a 2009 implementation.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Current legacy and SegWit v0 behavior</h2>
+<p>In current Bitcoin Core v31.1, OP_CAT remains in the list of disabled opcodes for legacy Script and SegWit version-zero execution. Encountering it causes script failure with <code>SCRIPT_ERR_DISABLED_OPCODE</code>.</p>
+<p>BIP 347 explicitly preserves that behavior. Its proposed change applies only to Tapscript, the script language used for Taproot script-path spends.</p>
+<p>That boundary prevents a successful soft fork from silently changing old script versions. A transaction using OP_CAT in a legacy or P2WSH script would remain invalid under the proposal.</p>
+<p>Bitcoin Core source is evidence of one current implementation&#39;s enforcement of active rules. The consensus definition also comes from the behavior compatible nodes jointly enforce. A pull request or experimental branch that implements OP_CAT does not change mainnet consensus by itself.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Current Tapscript treats byte 0x7e as OP_SUCCESS126</h2>
+<p>Tapscript reserves a set of opcode values called OP_SUCCESSx. Under BIP 342, validation succeeds immediately if decoding encounters any OP_SUCCESSx byte, even in an unexecuted branch, before ordinary execution or later resource checks.</p>
+<p>The historical OP_CAT byte value is decimal 126, or hexadecimal <code>0x7e</code>. In current Tapscript that value is OP_SUCCESS126, not an active concatenation instruction.</p>
+<p>BIP 347 proposes redefining OP_SUCCESS126 as OP_CAT. That is a soft-fork pattern because some spends that are valid under the old OP_SUCCESS behavior would become invalid unless they satisfy the new OP_CAT rules. Upgraded nodes would enforce the additional restrictions.</p>
+<p>Before activation, developers must not construct a mainnet Tapscript expecting <code>0x7e</code> to concatenate data. Its current success behavior is materially different and could make an output spendable under conditions the author did not intend.</p>
+</section>
+<section class="msc-learn-article__section"><h2>The proposed operation has narrow semantics</h2>
+<p>Under BIP 347, OP_CAT would:</p>
+<ol><li>require at least two stack elements;</li><li>remove the top two elements;</li><li>concatenate them in stack order;</li><li>reject a result larger than 520 bytes; and</li><li>push the result back onto the stack.</li></ol>
+<p>The proposal does not increase the 520-byte stack-element limit. It does not activate OP_CAT in non-Tapscript scripts. It does not define a new signature hash, inspect a transaction directly, or create persistent contract state.</p>
+<p>The reference implementation and test vectors are part of the BIP&#39;s Complete status. Those artifacts support implementability and edge-case review. They do not supply network activation.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Complete is not Deployed</h2>
+<p>BIP 3 defines the current BIP workflow. It says that individual BIPs do not define Bitcoin or represent community consensus. A Specification BIP may move to Complete after planned work, a reference implementation, and comprehensive test vectors are available.</p>
+<p>A Complete BIP can remain Complete indefinitely. To move to Deployed, evidence of active use is required. For a consensus soft fork, relevant evidence can include activation criteria having been met on the network.</p>
+<p>BIP 347&#39;s changelog records that it was marked Complete on March 1, 2026. Its header still says Complete as of July 24, 2026. Therefore the accurate description is “a complete soft-fork proposal,” not “an activated Bitcoin opcode.”</p>
+<p>Discussion, code review, signet experiments, alternative clients, or miner signaling can all be relevant to evaluation. None should be collapsed into deployment unless the actual activation mechanism and active-chain state support that claim.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Why developers are interested in OP_CAT</h2>
+<p>Concatenation can help scripts verify hashed data structures. A Merkle proof, for example, repeatedly combines a current hash with a sibling hash before hashing the pair. Native concatenation can make such verification more direct.</p>
+<p>BIP 347 also lists tree signatures, non-equivocation contracts, Lamport-signature constructions, Bitstream, vaults, covenant techniques, and BitVM improvements as possible uses.</p>
+<p>These are capability arguments, not deployed applications. Each construction has additional assumptions, transaction formats, limits, and security analysis. A proposal enabling one primitive does not guarantee that every cited use is practical, private, efficient, or safe.</p>
+<p>Some examples rely on cryptographic techniques that may be difficult to review. Others can create scripts or witnesses that are large enough to be costly despite remaining within consensus limits. Application-level feasibility should be measured with concrete transactions and adversarial tests.</p>
+</section>
+<section class="msc-learn-article__section"><h2>OP_CAT and covenants</h2>
+<p>A covenant restricts how a Bitcoin output may be spent, often by constraining properties of later transactions. OP_CAT is frequently discussed as a path to covenant-like constructions because concatenation can help scripts assemble messages checked by signature or hash operations.</p>
+<p>OP_CAT is not itself a covenant opcode. It does not directly expose all fields of the spending transaction. Covenant behavior arises only when OP_CAT is combined with existing signature semantics and a carefully designed script.</p>
+<p>This matters for both capability and risk claims. Saying “OP_CAT enables covenants” can hide which covenant pattern, what transaction commitments it relies on, whether key-path spending is disabled, how fees are handled, and whether the construction is usable within resource limits.</p>
+<p>Competing covenant proposals may offer more specialized semantics. The tradeoff is not simply more versus less expressiveness. Reviewers compare analyzability, implementation complexity, composability, resource cost, accidental behavior, and interaction with existing Script rules.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Resource limits still shape applications</h2>
+<p>The proposed 520-byte result limit prevents unbounded stack-item growth inside one operation. Tapscript also has stack-element count, witness-weight, and signature-operation constraints.</p>
+<p>A script can be consensus-valid yet expensive to create or spend. More witness data increases transaction weight and fees. More complicated scripts create more opportunities for implementation mistakes, wallet incompatibility, and poor recovery behavior.</p>
+<p>Consensus resource limits are not a performance guarantee. Nodes still parse and execute scripts, wallets still construct witnesses, and users still need transactions to relay and confirm under current policy and fee conditions.</p>
+<p>The BIP&#39;s safety argument should therefore be considered alongside benchmark results, code review, fuzzing, test vectors, and analysis of realistic applications.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Experimental implementations do not change mainnet</h2>
+<p>A Bitcoin Core pull request, fork, signet, or testing environment can implement BIP 347 so developers can build test scripts and measure behavior. Such software is useful evidence.</p>
+<p>It remains implementation behavior on that environment. Mainnet users running ordinary current software do not gain OP_CAT semantics because a test branch exists.</p>
+<p>Applications should pin the network and rules they expect. A script created for a custom signet can be misleading or unsafe if copied to mainnet. Wallets and explorers also need context-aware disassembly so they do not label current OP_SUCCESS126 behavior as activated OP_CAT.</p>
+<p>The same byte can have different meaning across script versions and networks. Tooling must display that context rather than showing only the mnemonic preferred by one experimental implementation.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Activation would require coordinated rule enforcement</h2>
+<p>BIP 347 specifies semantics but contains no activation height, signaling threshold, start time, or deployment parameters. Bitcoin Core v31.1 sources reviewed for this guide preserve active OP_SUCCESSx Tapscript behavior and legacy or SegWit v0 disabled-opcode behavior; they do not document a mainnet BIP 347 deployment. Any mainnet deployment would need a concrete soft-fork activation process, implementation releases, ecosystem review, and a point at which upgraded nodes begin enforcing the new rule.</p>
+<p>A soft fork is backward-compatible in the limited sense that old nodes can continue accepting blocks that upgraded nodes accept. Old nodes would not enforce the new OP_CAT restrictions and could not independently validate that a Tapscript spend complied with them.</p>
+<p>That creates the ordinary soft-fork dependence on sufficient enforcement by the economic network. The risks and decision process are broader than whether the opcode implementation passes unit tests.</p>
+<p>No guide should predict activation dates, claim consensus, or describe a proposal as inevitable. Bitcoin has no central body that can approve a BIP into consensus.</p>
+</section>
+<section class="msc-learn-article__section"><h2>The practical evaluation</h2>
+<p>When evaluating OP_CAT, begin with the active network rule: current mainnet Tapscript uses OP_SUCCESS126, while legacy and SegWit v0 OP_CAT remain disabled.</p>
+<p>Then read the exact BIP version and status. BIP 347 version 1.0.0 is Complete as of the review date, which establishes proposal maturity under the BIP process but not deployment.</p>
+<p>Next examine the reference implementation, tests, benchmarks, and specific use case. Verify witness sizes, fees, key paths, recovery paths, and behavior if a transaction is delayed or replaced.</p>
+<p>Finally separate the primitive from the product claim. OP_CAT concatenates bytes. A vault, bridge, post-quantum fallback, BitVM optimization, or covenant system must be evaluated as its own protocol.</p>
+<p>That disciplined description leaves room for serious interest without presenting a proposed consensus change as a feature users can rely on today.</p>
+</section>
+    </article>
+    <section class="msc-learn-key-terms" aria-labelledby="MscGuide047Terms"><h2 id="MscGuide047Terms">Key Terms</h2><dl><div class="msc-learn-term"><dt>OP_CAT</dt><dd>A Script operation that concatenates two stack byte arrays under the semantics proposed by BIP 347.</dd></div>
+<div class="msc-learn-term"><dt>Concatenation</dt><dd>Joining byte sequence `x1` and byte sequence `x2` to produce `x1 || x2`.</dd></div>
+<div class="msc-learn-term"><dt>Tapscript</dt><dd>The script language and validation rules for Taproot script-path spends defined by BIP 342.</dd></div>
+<div class="msc-learn-term"><dt>OP_SUCCESSx</dt><dd>Reserved Tapscript opcodes that currently cause successful validation and provide a path for future soft-fork restrictions.</dd></div>
+<div class="msc-learn-term"><dt>OP_SUCCESS126</dt><dd>The current Tapscript meaning of byte `0x7e`, which BIP 347 proposes redefining as OP_CAT.</dd></div>
+<div class="msc-learn-term"><dt>Disabled opcode</dt><dd>An opcode that causes failure in the script versions where it remains disabled.</dd></div>
+<div class="msc-learn-term"><dt>Stack element</dt><dd>A byte array held on Bitcoin Script&#39;s execution stack.</dd></div>
+<div class="msc-learn-term"><dt>520-byte limit</dt><dd>The maximum stack-element size retained by the BIP 347 proposal.</dd></div>
+<div class="msc-learn-term"><dt>Soft fork</dt><dd>A consensus-rule change that makes some previously valid blocks or spends invalid under upgraded rules.</dd></div>
+<div class="msc-learn-term"><dt>Complete BIP</dt><dd>A proposal whose authors have completed planned work and recommend adoption under BIP 3; it is not necessarily deployed.</dd></div>
+<div class="msc-learn-term"><dt>Deployed BIP</dt><dd>A BIP status requiring evidence of active use or, for a soft fork, applicable network activation evidence.</dd></div>
+<div class="msc-learn-term"><dt>Covenant</dt><dd>A spending condition that constrains properties of later transactions.</dd></div>
+<div class="msc-learn-term"><dt>Reference implementation</dt><dd>Code demonstrating the proposed specification; it is not activation by itself.</dd></div>
+<div class="msc-learn-term"><dt>Consensus activation</dt><dd>The point at which the network&#39;s enforced rules include the proposed restriction.</dd></div></dl></section>
+    <section class="msc-learn-sources" aria-labelledby="MscGuide047Sources"><h2 id="MscGuide047Sources">Sources</h2><article class="msc-learn-source"><h3>BIP 347: OP_CAT in Tapscript</h3><ul><li><strong>author or publisher:</strong> Ethan Heilman and Armin Sabouri</li><li><strong>url:</strong> https://github.com/bitcoin/bips/blob/master/bip-0347.mediawiki</li><li><strong>supports:</strong> The proposed OP_CAT semantics, OP_SUCCESS126 redefinition, 520-byte result limit, Tapscript-only scope, use cases, reference implementation, test vectors, Complete status, and 2026-03-01 changelog.</li></ul></article>
+<article class="msc-learn-source"><h3>BIP 3: Updated BIP Process</h3><ul><li><strong>author or publisher:</strong> Murch</li><li><strong>url:</strong> https://github.com/bitcoin/bips/blob/master/bip-0003.md</li><li><strong>supports:</strong> The meaning of BIP ownership, Complete and Deployed statuses, evidence expectations, and the statement that BIPs do not define Bitcoin or represent community consensus.</li></ul></article>
+<article class="msc-learn-source"><h3>BIP 342: Validation of Taproot Scripts</h3><ul><li><strong>author or publisher:</strong> Pieter Wuille, Jonas Nick, and Anthony Towns</li><li><strong>url:</strong> https://github.com/bitcoin/bips/blob/master/bip-0342.mediawiki</li><li><strong>supports:</strong> Current Tapscript execution, OP_SUCCESSx behavior, signature operations, and resource limits.</li></ul></article>
+<article class="msc-learn-source"><h3>BIP 341: Taproot</h3><ul><li><strong>author or publisher:</strong> Pieter Wuille, Jonas Nick, and Anthony Towns</li><li><strong>url:</strong> https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki</li><li><strong>supports:</strong> Taproot outputs and script-path commitments that provide the context for Tapscript.</li></ul></article>
+<article class="msc-learn-source"><h3>BIP 340: Schnorr Signatures for secp256k1</h3><ul><li><strong>author or publisher:</strong> Pieter Wuille, Jonas Nick, and Tim Ruffing</li><li><strong>url:</strong> https://github.com/bitcoin/bips/blob/master/bip-0340.mediawiki</li><li><strong>supports:</strong> Schnorr signature rules used by Tapscript and cited OP_CAT constructions.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core v31.1 Script Interpreter</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/src/script/interpreter.cpp</li><li><strong>supports:</strong> Current implementation behavior that rejects OP_CAT as disabled in legacy and SegWit v0 script evaluation.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core PR 29247: OP_CAT</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/pull/29247</li><li><strong>supports:</strong> The referenced experimental implementation and test discussion; a pull request is not mainnet activation.</li></ul></article>
+<article class="msc-learn-source"><h3>Satoshi Nakamoto Commit 4bd188c</h3><ul><li><strong>author or publisher:</strong> Satoshi Nakamoto</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/commit/4bd188c4383d6e614e18f79dc337fbabe8464c82</li><li><strong>supports:</strong> The August 2010 source change that disabled OP_CAT and other opcodes.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Script Opcode Definitions</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/src/script/script.h</li><li><strong>supports:</strong> Current opcode values and names used by Bitcoin Core.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Script Tests</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/tree/v31.1/src/test/data</li><li><strong>supports:</strong> Current script test-vector context for active Bitcoin Core behavior.</li></ul></article>
+<article class="msc-learn-source"><h3>CAT and Schnorr Tricks I</h3><ul><li><strong>author or publisher:</strong> Andrew Poelstra</li><li><strong>url:</strong> https://www.wpsoftware.net/andrew/blog/cat-and-schnorr-tricks-i.html</li><li><strong>supports:</strong> A cited construction showing how concatenation and Schnorr signatures can emulate check-signature-from-stack-like behavior.</li></ul></article>
+<article class="msc-learn-source"><h3>CAT and Schnorr Tricks II</h3><ul><li><strong>author or publisher:</strong> Andrew Poelstra</li><li><strong>url:</strong> https://www.wpsoftware.net/andrew/blog/cat-and-schnorr-tricks-ii.html</li><li><strong>supports:</strong> A cited exploration of covenant and vault constructions using CAT and Schnorr techniques.</li></ul></article>
+<article class="msc-learn-source"><h3>BitVM2: Bridging Bitcoin to Second Layers</h3><ul><li><strong>author or publisher:</strong> Robin Linus and coauthors</li><li><strong>url:</strong> https://bitvm.org/bitvm_bridge.pdf</li><li><strong>supports:</strong> The BitVM2 design referenced by BIP 347 when discussing possible efficiency and setup improvements.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitstream</h3><ul><li><strong>author or publisher:</strong> Robin Linus</li><li><strong>url:</strong> https://robinlinus.com/bitstream.pdf</li><li><strong>supports:</strong> The fair-exchange protocol cited as a possible OP_CAT application; it is a separate protocol requiring independent evaluation.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Covenants</h3><ul><li><strong>author or publisher:</strong> Malte Möser, Ittay Eyal, and Emin Gün Sirer</li><li><strong>url:</strong> https://fc16.ifca.ai/bitcoin/papers/MES16.pdf</li><li><strong>supports:</strong> Covenant and vault background cited by the BIP; it does not establish OP_CAT deployment.</li></ul></article>
+<article class="msc-learn-source"><h3>BIP 141: Segregated Witness</h3><ul><li><strong>author or publisher:</strong> Eric Lombrozo, Johnson Lau, and Pieter Wuille</li><li><strong>url:</strong> https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki</li><li><strong>supports:</strong> The SegWit version-zero script and witness context kept separate from Tapscript.</li></ul></article>
+<article class="msc-learn-source"><h3>BIP 123: BIP Classification</h3><ul><li><strong>author or publisher:</strong> Eric Lombrozo</li><li><strong>url:</strong> https://github.com/bitcoin/bips/blob/master/bip-0123.mediawiki</li><li><strong>supports:</strong> The layer classifications used to identify BIP 347 as a consensus soft-fork proposal.</li></ul></article></section>
+    <nav class="msc-learn-prev-next" aria-label="Guide navigation preview"><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Previous</span><strong>How Discreet Log Contracts Work</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Category</span><strong>Building on Bitcoin</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Next</span><strong>Emerging Protocols on Bitcoin: How to Evaluate Them</strong><small>Link inactive</small></span></nav>
+  </div>
+</section>

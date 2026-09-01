@@ -1,0 +1,354 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-034-ark-bitcoin.md",
+  "source_sha256": "3ca8e31929a9d868318dfa91daf7ac3bccf9a221d3b114a5a921d35e1358c437",
+  "registry_id": "MSC-GUIDE-034",
+  "status": "COPY_LOCKED",
+  "h1": "What Is Ark on Bitcoin?",
+  "introductory_deck": "Ark is an evolving family of off-chain Bitcoin designs that represents user claims as virtual transaction outputs, coordinates them through shared batch outputs, and preserves defined paths back to ordinary Bitcoin UTXOs. Current Arkade software implements one version of this model, with important operator, expiry, liquidity, backup, and exit assumptions that must remain visible.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "Ark is an evolving family of off-chain Bitcoin protocols built around virtual transaction outputs, shared on-chain commitments, and coordinated settlement. The general idea is to let users receive and transfer bitcoin-denominated claims without publishing every change as a separate Bitcoin transaction, while retaining defined transaction paths that can bring those claims on-chain.\n\nThat working definition is broader than any one product. Ark is the protocol concept. Arkade is a currently maintained implementation project and execution environment. The Arkade Operator coordinates that environment. `arkd` is the maintained server implementation. The Arkade TypeScript SDK and Arkade Wallet are client products that interact with compatible operators. Older Ark proposals and earlier implementations used related but not identical transaction constructions and terminology.\n\nArk is not a separate coin, a separate proof-of-work blockchain, a sidechain, or a Lightning channel network. Bitcoin nodes validate Ark transactions only when those transactions are actually broadcast to Bitcoin. The Bitcoin network does not validate Ark's complete off-chain history or certify every operator preconfirmation.",
+      "body_html": "<p>Ark is an evolving family of off-chain Bitcoin protocols built around virtual transaction outputs, shared on-chain commitments, and coordinated settlement. The general idea is to let users receive and transfer bitcoin-denominated claims without publishing every change as a separate Bitcoin transaction, while retaining defined transaction paths that can bring those claims on-chain.</p>\n<p>That working definition is broader than any one product. Ark is the protocol concept. Arkade is a currently maintained implementation project and execution environment. The Arkade Operator coordinates that environment. <code>arkd</code> is the maintained server implementation. The Arkade TypeScript SDK and Arkade Wallet are client products that interact with compatible operators. Older Ark proposals and earlier implementations used related but not identical transaction constructions and terminology.</p>\n<p>Ark is not a separate coin, a separate proof-of-work blockchain, a sidechain, or a Lightning channel network. Bitcoin nodes validate Ark transactions only when those transactions are actually broadcast to Bitcoin. The Bitcoin network does not validate Ark&#39;s complete off-chain history or certify every operator preconfirmation.</p>"
+    },
+    {
+      "heading": "The problem Ark is designed to address",
+      "body_markdown": "Bitcoin block space is limited, and every confirmed transaction is replicated and checked by validating nodes. That provides a strong common settlement layer, but it makes frequent individual on-chain updates expensive in block space.\n\nLightning reduces routine on-chain use through bilateral payment channels and routed HTLC payments. That model introduces channel setup, directional liquidity, route discovery, and channel-state monitoring.\n\nArk explores a different structure. An operator can group many user claims under a shared Bitcoin output, represent those claims as VTXOs, and coordinate later off-chain transfers or periodic settlements. A receiver does not need a pre-existing bilateral channel with the sender. The tradeoff is a different set of dependencies involving an operator, batch timing, preconfirmation trust, liquidity, data availability, and expiry.",
+      "body_html": "<p>Bitcoin block space is limited, and every confirmed transaction is replicated and checked by validating nodes. That provides a strong common settlement layer, but it makes frequent individual on-chain updates expensive in block space.</p>\n<p>Lightning reduces routine on-chain use through bilateral payment channels and routed HTLC payments. That model introduces channel setup, directional liquidity, route discovery, and channel-state monitoring.</p>\n<p>Ark explores a different structure. An operator can group many user claims under a shared Bitcoin output, represent those claims as VTXOs, and coordinate later off-chain transfers or periodic settlements. A receiver does not need a pre-existing bilateral channel with the sender. The tradeoff is a different set of dependencies involving an operator, batch timing, preconfirmation trust, liquidity, data availability, and expiry.</p>"
+    },
+    {
+      "heading": "A VTXO mirrors a UTXO without being the same thing",
+      "body_markdown": "A Bitcoin UTXO is an output of a confirmed or otherwise available Bitcoin transaction that can be spent as an input under its locking conditions.\n\nA VTXO, or virtual transaction output, is an output represented by presigned Bitcoin transaction data inside an Ark construction. It mirrors the value and spending-condition model of a UTXO, but it is normally kept off-chain. A VTXO may be preconfirmed by an operator and usable inside an Arkade environment before the commitment transaction anchoring its batch has confirmed.\n\nThat distinction matters. A preconfirmed VTXO is not automatically equivalent to a confirmed on-chain UTXO. Its enforceability depends on the transaction chain behind it, the operator or signer behavior associated with its preconfirmation, the availability of complete exit data, and whether the relevant batch output is confirmed and unexpired.\n\nA VTXO is not a global account balance. It is a specific transaction output with an owner, value, spending conditions, history, and expiry context.",
+      "body_html": "<p>A Bitcoin UTXO is an output of a confirmed or otherwise available Bitcoin transaction that can be spent as an input under its locking conditions.</p>\n<p>A VTXO, or virtual transaction output, is an output represented by presigned Bitcoin transaction data inside an Ark construction. It mirrors the value and spending-condition model of a UTXO, but it is normally kept off-chain. A VTXO may be preconfirmed by an operator and usable inside an Arkade environment before the commitment transaction anchoring its batch has confirmed.</p>\n<p>That distinction matters. A preconfirmed VTXO is not automatically equivalent to a confirmed on-chain UTXO. Its enforceability depends on the transaction chain behind it, the operator or signer behavior associated with its preconfirmation, the availability of complete exit data, and whether the relevant batch output is confirmed and unexpired.</p>\n<p>A VTXO is not a global account balance. It is a specific transaction output with an owner, value, spending conditions, history, and expiry context.</p>"
+    },
+    {
+      "heading": "Commitment transactions create batch outputs",
+      "body_markdown": "In the current Arkade design, a commitment transaction is an on-chain Bitcoin transaction that creates one batch output and one connector output, with the connector output committed to a tree of connector leaves used for atomic coordination.\n\nThe batch output consolidates many user claims into one Bitcoin output. A presigned virtual transaction tree can unroll that shared output into branches whose leaves are user VTXOs. Users participating in the batch verify the proposed structure and contribute signatures required by the construction.\n\nThe commitment transaction does not publish each prior off-chain transfer as a separate Bitcoin transaction. Its confirmation anchors the new batch structure. It gives the VTXOs included in that structure a stronger on-chain basis, but it does not cause Bitcoin nodes to replay or validate every earlier Arkade interaction.\n\nA confirmed commitment transaction should therefore be described as settlement of the batch state it commits to, not as individual Bitcoin confirmation of every previous off-chain event.",
+      "body_html": "<p>In the current Arkade design, a commitment transaction is an on-chain Bitcoin transaction that creates one batch output and one connector output, with the connector output committed to a tree of connector leaves used for atomic coordination.</p>\n<p>The batch output consolidates many user claims into one Bitcoin output. A presigned virtual transaction tree can unroll that shared output into branches whose leaves are user VTXOs. Users participating in the batch verify the proposed structure and contribute signatures required by the construction.</p>\n<p>The commitment transaction does not publish each prior off-chain transfer as a separate Bitcoin transaction. Its confirmation anchors the new batch structure. It gives the VTXOs included in that structure a stronger on-chain basis, but it does not cause Bitcoin nodes to replay or validate every earlier Arkade interaction.</p>\n<p>A confirmed commitment transaction should therefore be described as settlement of the batch state it commits to, not as individual Bitcoin confirmation of every previous off-chain event.</p>"
+    },
+    {
+      "heading": "Batch coordination uses intents, signatures, and forfeits",
+      "body_markdown": "A current Arkade batch swap begins when users register intents describing the VTXOs they will provide and the outputs they expect in return. The operator selects participants, constructs the commitment transaction, batch output, connector structure, and virtual transaction tree, then coordinates signing.\n\nUsers must verify the transaction data before signing. For VTXOs being replaced, users create forfeit transactions tied to connector outputs. This design makes surrender of an old claim conditional on confirmation of the commitment transaction that creates the replacement claim.\n\nThe operator broadcasts the completed commitment transaction. If it confirms, the new batch becomes anchored on Bitcoin. If a user is not selected, does not confirm participation, or does not complete the required signing steps, that user's intended replacement is not settled in that batch. The user must try a later batch or use another valid path, and an expiring VTXO still must be renewed or exited before its deadline.\n\nThis coordinated process is sometimes described historically as a round. Current Arkade documentation more often uses batch, batch swap, commitment transaction, and intent terminology. Older terms such as Ark service provider, ASP, round, Ark transaction, and out-of-round payment should be tied to the proposal or implementation that uses them rather than assumed to describe every current Ark system.",
+      "body_html": "<p>A current Arkade batch swap begins when users register intents describing the VTXOs they will provide and the outputs they expect in return. The operator selects participants, constructs the commitment transaction, batch output, connector structure, and virtual transaction tree, then coordinates signing.</p>\n<p>Users must verify the transaction data before signing. For VTXOs being replaced, users create forfeit transactions tied to connector outputs. This design makes surrender of an old claim conditional on confirmation of the commitment transaction that creates the replacement claim.</p>\n<p>The operator broadcasts the completed commitment transaction. If it confirms, the new batch becomes anchored on Bitcoin. If a user is not selected, does not confirm participation, or does not complete the required signing steps, that user&#39;s intended replacement is not settled in that batch. The user must try a later batch or use another valid path, and an expiring VTXO still must be renewed or exited before its deadline.</p>\n<p>This coordinated process is sometimes described historically as a round. Current Arkade documentation more often uses batch, batch swap, commitment transaction, and intent terminology. Older terms such as Ark service provider, ASP, round, Ark transaction, and out-of-round payment should be tied to the proposal or implementation that uses them rather than assumed to describe every current Ark system.</p>"
+    },
+    {
+      "heading": "Boarding moves on-chain funds into the system",
+      "body_markdown": "Boarding is the native process for moving an ordinary Bitcoin UTXO into an Ark system.\n\nIn the maintained Arkade workflow, the user first creates a boarding output with spending conditions that protect both the intended batch participation and a delayed fallback path. The operator later includes that boarding input in a commitment transaction that creates the user's VTXO.\n\nThis native route can require multiple on-chain transactions and confirmation waits. A service may also offer swaps or credits that produce a faster interface, but those are additional products with their own liquidity and trust assumptions.\n\nBoarding does not make the original on-chain bitcoin disappear. It moves value into a transaction structure whose ordinary use is off-chain and whose final enforcement remains based on Bitcoin transactions.",
+      "body_html": "<p>Boarding is the native process for moving an ordinary Bitcoin UTXO into an Ark system.</p>\n<p>In the maintained Arkade workflow, the user first creates a boarding output with spending conditions that protect both the intended batch participation and a delayed fallback path. The operator later includes that boarding input in a commitment transaction that creates the user&#39;s VTXO.</p>\n<p>This native route can require multiple on-chain transactions and confirmation waits. A service may also offer swaps or credits that produce a faster interface, but those are additional products with their own liquidity and trust assumptions.</p>\n<p>Boarding does not make the original on-chain bitcoin disappear. It moves value into a transaction structure whose ordinary use is off-chain and whose final enforcement remains based on Bitcoin transactions.</p>"
+    },
+    {
+      "heading": "Off-chain transfers create new VTXOs",
+      "body_markdown": "Inside Arkade, users can spend VTXOs through presigned Bitcoin transactions that are normally not broadcast. A transfer consumes one or more VTXOs and creates new VTXOs under new spending conditions.\n\nCurrent Arkade documentation distinguishes preconfirmed activity in its virtual mempool from VTXOs anchored through a confirmed commitment transaction. A preconfirmation allows the recipient to continue using the resulting VTXO inside the system, but it carries operator or signer integrity assumptions until the state is settled into a confirmed batch.\n\nThis is different from the earliest Ark descriptions of out-of-round, or arkoor, transfers. Earlier constructions often emphasized a sender and server non-collusion assumption for transfers between rounds. Current Arkade uses a broader preconfirmation and virtual-mempool model with a separated signer architecture. The security claims of one model should not be copied onto the other without version-specific evidence.",
+      "body_html": "<p>Inside Arkade, users can spend VTXOs through presigned Bitcoin transactions that are normally not broadcast. A transfer consumes one or more VTXOs and creates new VTXOs under new spending conditions.</p>\n<p>Current Arkade documentation distinguishes preconfirmed activity in its virtual mempool from VTXOs anchored through a confirmed commitment transaction. A preconfirmation allows the recipient to continue using the resulting VTXO inside the system, but it carries operator or signer integrity assumptions until the state is settled into a confirmed batch.</p>\n<p>This is different from the earliest Ark descriptions of out-of-round, or arkoor, transfers. Earlier constructions often emphasized a sender and server non-collusion assumption for transfers between rounds. Current Arkade uses a broader preconfirmation and virtual-mempool model with a separated signer architecture. The security claims of one model should not be copied onto the other without version-specific evidence.</p>"
+    },
+    {
+      "heading": "Cooperative spending is the normal path",
+      "body_markdown": "A VTXO normally includes a cooperative path requiring the user and the Arkade signing system to authorize the spend. This path supports off-chain transfers, batch swaps, collaborative exits, and other normal operations.\n\nThe operator coordinates transaction flow and may enforce amount limits, fees, timing rules, and service policy. The signer may be a separate component with its own key protection and attestation design. These separations can reduce some operator powers, but they remain implementation-specific security mechanisms rather than Bitcoin consensus guarantees.\n\nIf the operator or required signer service is unavailable, cooperative activity can stop even when users still possess unilateral exit data. That is operator liveness risk without necessarily being operator custody.",
+      "body_html": "<p>A VTXO normally includes a cooperative path requiring the user and the Arkade signing system to authorize the spend. This path supports off-chain transfers, batch swaps, collaborative exits, and other normal operations.</p>\n<p>The operator coordinates transaction flow and may enforce amount limits, fees, timing rules, and service policy. The signer may be a separate component with its own key protection and attestation design. These separations can reduce some operator powers, but they remain implementation-specific security mechanisms rather than Bitcoin consensus guarantees.</p>\n<p>If the operator or required signer service is unavailable, cooperative activity can stop even when users still possess unilateral exit data. That is operator liveness risk without necessarily being operator custody.</p>"
+    },
+    {
+      "heading": "Collaborative exits return value efficiently",
+      "body_markdown": "A collaborative exit converts VTXOs into ordinary Bitcoin outputs with operator participation.\n\nThe user specifies an on-chain destination, and the operator includes the exit in a commitment transaction or related settlement batch. Multiple users can be handled together, reducing repeated overhead compared with separate unilateral exits.\n\nA collaborative exit depends on operator availability, liquidity, service policy, and successful Bitcoin confirmation. It can be cheaper or simpler than a unilateral exit, but it can also be delayed, refused, or unavailable.\n\nThe output becomes an ordinary Bitcoin UTXO only when the relevant transaction is valid and reaches the confirmation depth the user requires.",
+      "body_html": "<p>A collaborative exit converts VTXOs into ordinary Bitcoin outputs with operator participation.</p>\n<p>The user specifies an on-chain destination, and the operator includes the exit in a commitment transaction or related settlement batch. Multiple users can be handled together, reducing repeated overhead compared with separate unilateral exits.</p>\n<p>A collaborative exit depends on operator availability, liquidity, service policy, and successful Bitcoin confirmation. It can be cheaper or simpler than a unilateral exit, but it can also be delayed, refused, or unavailable.</p>\n<p>The output becomes an ordinary Bitcoin UTXO only when the relevant transaction is valid and reaches the confirmation depth the user requires.</p>"
+    },
+    {
+      "heading": "Unilateral exits are enforceable but operationally demanding",
+      "body_markdown": "A unilateral exit allows a VTXO holder to publish the presigned transaction path from the confirmed batch output toward an individually spendable on-chain output without operator cooperation.\n\nThe user may need to broadcast several transactions in sequence. Relative timelocks can require confirmation and waiting between steps. Each transaction needs fees, and the wallet may need separate on-chain funds to fee-bump or sponsor the exit. Bitcoin relay policy, package limits, congestion, and reorganizations can affect execution.\n\nA cryptographically available exit is therefore not necessarily easy, instant, cheap, or guaranteed to confirm on a preferred schedule. A small VTXO can become uneconomical to exit when fees are high or the transaction chain is deep.\n\nThe operator cannot alter a user's already valid presigned exit transaction at will. However, the user must actually possess the correct transaction chain, signatures, metadata, and keys before trouble begins.",
+      "body_html": "<p>A unilateral exit allows a VTXO holder to publish the presigned transaction path from the confirmed batch output toward an individually spendable on-chain output without operator cooperation.</p>\n<p>The user may need to broadcast several transactions in sequence. Relative timelocks can require confirmation and waiting between steps. Each transaction needs fees, and the wallet may need separate on-chain funds to fee-bump or sponsor the exit. Bitcoin relay policy, package limits, congestion, and reorganizations can affect execution.</p>\n<p>A cryptographically available exit is therefore not necessarily easy, instant, cheap, or guaranteed to confirm on a preferred schedule. A small VTXO can become uneconomical to exit when fees are high or the transaction chain is deep.</p>\n<p>The operator cannot alter a user&#39;s already valid presigned exit transaction at will. However, the user must actually possess the correct transaction chain, signatures, metadata, and keys before trouble begins.</p>"
+    },
+    {
+      "heading": "Batch expiry creates user liveness requirements",
+      "body_markdown": "Batch outputs expire under defined timelocks. Before expiry, VTXO holders must renew through a batch swap or begin an enforceable exit if they want to preserve unilateral control. An ordinary off-chain transfer does not by itself guarantee a fresh expiry window; the resulting VTXO's settlement and expiry context must still be checked.\n\nIn the current Arkade terminology, renewal is performed through a batch swap. The old VTXOs are exchanged for fresh VTXOs in a new batch, resetting the expiry window and, when confirmed, refreshing their Bitcoin settlement anchor.\n\nWallet automation can monitor expiry and submit renewals. Intent delegation can let a third party submit a presigned renewal request without receiving unrestricted control over the funds. These tools reduce manual burden, but they do not erase the timing assumption. Software, connectivity, operator service, and the delegated workflow must still function before the deadline.\n\nOlder Ark material may call the same broad maintenance process refresh, rollover, or round participation. Those terms are useful historical context, but the current maintained Arkade design uses renewal and batch swap as the primary terms.",
+      "body_html": "<p>Batch outputs expire under defined timelocks. Before expiry, VTXO holders must renew through a batch swap or begin an enforceable exit if they want to preserve unilateral control. An ordinary off-chain transfer does not by itself guarantee a fresh expiry window; the resulting VTXO&#39;s settlement and expiry context must still be checked.</p>\n<p>In the current Arkade terminology, renewal is performed through a batch swap. The old VTXOs are exchanged for fresh VTXOs in a new batch, resetting the expiry window and, when confirmed, refreshing their Bitcoin settlement anchor.</p>\n<p>Wallet automation can monitor expiry and submit renewals. Intent delegation can let a third party submit a presigned renewal request without receiving unrestricted control over the funds. These tools reduce manual burden, but they do not erase the timing assumption. Software, connectivity, operator service, and the delegated workflow must still function before the deadline.</p>\n<p>Older Ark material may call the same broad maintenance process refresh, rollover, or round participation. Those terms are useful historical context, but the current maintained Arkade design uses renewal and batch swap as the primary terms.</p>"
+    },
+    {
+      "heading": "Expiry changes the user's rights",
+      "body_markdown": "After batch expiry, the operator gains a valid sweep path for the remaining value in the batch output. A user who allowed a VTXO to expire without renewing or exiting loses the prior unilateral claim against that batch.\n\nCurrent Arkade wallet and SDK documentation describes a cooperative recovery mechanism for VTXOs that have expired and been swept. The operator can include recoverable value in a later batch and return a new VTXO to the wallet.\n\nThat recovery is an implementation-supported service path, not the same as an enforceable unilateral right after expiry. It depends on operator policy, records, software behavior, liquidity, and continued service. The operator's ability to sweep an expired batch is also not equivalent to theft of an unexpired VTXO whose valid exit conditions remain enforceable.\n\nThis is one of Ark's most important operational boundaries: expiry creates a real user-liveness obligation.",
+      "body_html": "<p>After batch expiry, the operator gains a valid sweep path for the remaining value in the batch output. A user who allowed a VTXO to expire without renewing or exiting loses the prior unilateral claim against that batch.</p>\n<p>Current Arkade wallet and SDK documentation describes a cooperative recovery mechanism for VTXOs that have expired and been swept. The operator can include recoverable value in a later batch and return a new VTXO to the wallet.</p>\n<p>That recovery is an implementation-supported service path, not the same as an enforceable unilateral right after expiry. It depends on operator policy, records, software behavior, liquidity, and continued service. The operator&#39;s ability to sweep an expired batch is also not equivalent to theft of an unexpired VTXO whose valid exit conditions remain enforceable.</p>\n<p>This is one of Ark&#39;s most important operational boundaries: expiry creates a real user-liveness obligation.</p>"
+    },
+    {
+      "heading": "Operator liquidity and capital matter",
+      "body_markdown": "The operator builds commitment transactions and commonly provides liquidity while old batch outputs remain locked until expiry or settlement.\n\nThat capital can be tied up across overlapping batches. Batch size, frequency, expiry length, user demand, collaborative exits, and recovery obligations all affect the operator's liquidity needs.\n\nInsufficient liquidity can delay settlement, reduce accepted amounts, increase fees, or make ordinary cooperative service unavailable. The user may still have an exit path, but operational dependence can become visible precisely when service conditions deteriorate.\n\nOperator dependence is not automatically operator custody. It means ordinary usability, settlement coordination, and capital-efficient operation rely on infrastructure the user does not fully control.",
+      "body_html": "<p>The operator builds commitment transactions and commonly provides liquidity while old batch outputs remain locked until expiry or settlement.</p>\n<p>That capital can be tied up across overlapping batches. Batch size, frequency, expiry length, user demand, collaborative exits, and recovery obligations all affect the operator&#39;s liquidity needs.</p>\n<p>Insufficient liquidity can delay settlement, reduce accepted amounts, increase fees, or make ordinary cooperative service unavailable. The user may still have an exit path, but operational dependence can become visible precisely when service conditions deteriorate.</p>\n<p>Operator dependence is not automatically operator custody. It means ordinary usability, settlement coordination, and capital-efficient operation rely on infrastructure the user does not fully control.</p>"
+    },
+    {
+      "heading": "Data availability and backups affect enforceable recovery",
+      "body_markdown": "A seed phrase may recover keys, but keys alone may not reconstruct every VTXO transaction chain.\n\nA wallet needs enough information to identify current VTXOs, verify their origin, know their expiry, obtain the presigned transactions needed for an exit, and track whether they were replaced, settled, swept, or recovered. The exact backup format is implementation-specific.\n\nThe current Arkade indexer can provide commitment, VTXO-tree, virtual-transaction, connector, and sweep information. Depending only on one operator's indexer creates an availability risk. A robust wallet should preserve necessary local data and verify remote responses.\n\nData loss can turn a cryptographic right into an unusable one. Backup and recovery claims should therefore identify whether they restore keys only, complete exit data, transaction history, or merely operator-assisted account information.",
+      "body_html": "<p>A seed phrase may recover keys, but keys alone may not reconstruct every VTXO transaction chain.</p>\n<p>A wallet needs enough information to identify current VTXOs, verify their origin, know their expiry, obtain the presigned transactions needed for an exit, and track whether they were replaced, settled, swept, or recovered. The exact backup format is implementation-specific.</p>\n<p>The current Arkade indexer can provide commitment, VTXO-tree, virtual-transaction, connector, and sweep information. Depending only on one operator&#39;s indexer creates an availability risk. A robust wallet should preserve necessary local data and verify remote responses.</p>\n<p>Data loss can turn a cryptographic right into an unusable one. Backup and recovery claims should therefore identify whether they restore keys only, complete exit data, transaction history, or merely operator-assisted account information.</p>"
+    },
+    {
+      "heading": "Fees and block-space use have normal and worst cases",
+      "body_markdown": "Ark can compress many users into one commitment transaction and one shared batch output. Cooperative operation can reduce average on-chain overhead per user.\n\nThat efficiency does not eliminate Bitcoin fees. Boarding, commitment transactions, collaborative exits, unilateral unrolling, sweeps, and recovery all consume block space. The operator may also charge coordination, liquidity, or service fees.\n\nWorst-case costs differ from ordinary costs. A mass exit can require many users to publish several transactions while competing for the same block space. Longer VTXO chains and deeper tree positions can increase exit cost.\n\nClaims about low fees or constant-sized batch commitments must not be mistaken for a guarantee that every user exit has constant, negligible, or predictable cost.",
+      "body_html": "<p>Ark can compress many users into one commitment transaction and one shared batch output. Cooperative operation can reduce average on-chain overhead per user.</p>\n<p>That efficiency does not eliminate Bitcoin fees. Boarding, commitment transactions, collaborative exits, unilateral unrolling, sweeps, and recovery all consume block space. The operator may also charge coordination, liquidity, or service fees.</p>\n<p>Worst-case costs differ from ordinary costs. A mass exit can require many users to publish several transactions while competing for the same block space. Longer VTXO chains and deeper tree positions can increase exit cost.</p>\n<p>Claims about low fees or constant-sized batch commitments must not be mistaken for a guarantee that every user exit has constant, negligible, or predictable cost.</p>"
+    },
+    {
+      "heading": "Security depends on several distinct assumptions",
+      "body_markdown": "Bitcoin consensus protects only the on-chain transactions that nodes validate. Ark adds off-chain transaction data, operator coordination, signer behavior, liveness windows, and data storage.\n\nFor a settled, unexpired VTXO, the user relies on correct presigned transactions, enforceable scripts, sufficient data, timely action, and Bitcoin block space. For a preconfirmed VTXO, the user also relies on the operator or signer not authorizing conflicting ownership chains before settlement.\n\nCurrent Arkade documentation describes a separated signer, trusted execution environments, remote attestation, encrypted communication, and detection of conflicting signatures. These features aim to constrain or expose double-signing and transaction-level censorship. They introduce hardware, software, deployment, and attestation assumptions and should not be presented as universal properties of every Ark protocol or operator.\n\nNo design eliminates availability risk, signer compromise, software bugs, malicious policy, or mass-exit pressure.",
+      "body_html": "<p>Bitcoin consensus protects only the on-chain transactions that nodes validate. Ark adds off-chain transaction data, operator coordination, signer behavior, liveness windows, and data storage.</p>\n<p>For a settled, unexpired VTXO, the user relies on correct presigned transactions, enforceable scripts, sufficient data, timely action, and Bitcoin block space. For a preconfirmed VTXO, the user also relies on the operator or signer not authorizing conflicting ownership chains before settlement.</p>\n<p>Current Arkade documentation describes a separated signer, trusted execution environments, remote attestation, encrypted communication, and detection of conflicting signatures. These features aim to constrain or expose double-signing and transaction-level censorship. They introduce hardware, software, deployment, and attestation assumptions and should not be presented as universal properties of every Ark protocol or operator.</p>\n<p>No design eliminates availability risk, signer compromise, software bugs, malicious policy, or mass-exit pressure.</p>"
+    },
+    {
+      "heading": "Ark and Lightning use different state models",
+      "body_markdown": "Lightning uses bilateral channels. Each channel has a fixed capacity divided into local and remote balances. Routed payments move value through multiple channels using directional liquidity, onion routing, and conditional HTLC behavior.\n\nArk uses shared batch outputs and VTXOs coordinated by an operator. Transfers do not require a routed path through bilateral channels. Liquidity is concentrated differently: the operator needs capital for batches and settlement, while users need timely renewal and complete exit data.\n\nLightning users monitor revocable channel state and may use watchtowers for breach response. Ark users monitor VTXO expiry and may delegate renewal intents. These are not interchangeable monitoring problems.\n\nBoth systems rely on enforceable Bitcoin transactions. Neither is a separate coin or proof-of-work chain. Their coordination, liquidity, privacy, failure, and exit models remain distinct.",
+      "body_html": "<p>Lightning uses bilateral channels. Each channel has a fixed capacity divided into local and remote balances. Routed payments move value through multiple channels using directional liquidity, onion routing, and conditional HTLC behavior.</p>\n<p>Ark uses shared batch outputs and VTXOs coordinated by an operator. Transfers do not require a routed path through bilateral channels. Liquidity is concentrated differently: the operator needs capital for batches and settlement, while users need timely renewal and complete exit data.</p>\n<p>Lightning users monitor revocable channel state and may use watchtowers for breach response. Ark users monitor VTXO expiry and may delegate renewal intents. These are not interchangeable monitoring problems.</p>\n<p>Both systems rely on enforceable Bitcoin transactions. Neither is a separate coin or proof-of-work chain. Their coordination, liquidity, privacy, failure, and exit models remain distinct.</p>"
+    },
+    {
+      "heading": "Privacy and censorship claims need implementation evidence",
+      "body_markdown": "Ark can reduce the number of user actions visible as separate Bitcoin transactions in cooperative operation. Shared outputs and off-chain transfers can obscure some relationships from public chain observers.\n\nThe operator, signer, indexer, wallet provider, network observers, or swap service may still learn transaction metadata. A unilateral exit reveals the relevant transaction path. Recovery and account-like services can create additional linkability.\n\nLikewise, an operator may be unable to steal an unexpired enforceable output but still refuse batch participation, withhold cooperative exits, impose limits, or stop serving data. A separated encrypted signer may reduce transaction-level censorship in one deployment without removing all service-level censorship.\n\nPrivacy and censorship resistance are properties of a complete implementation and threat model, not automatic consequences of using Ark.",
+      "body_html": "<p>Ark can reduce the number of user actions visible as separate Bitcoin transactions in cooperative operation. Shared outputs and off-chain transfers can obscure some relationships from public chain observers.</p>\n<p>The operator, signer, indexer, wallet provider, network observers, or swap service may still learn transaction metadata. A unilateral exit reveals the relevant transaction path. Recovery and account-like services can create additional linkability.</p>\n<p>Likewise, an operator may be unable to steal an unexpired enforceable output but still refuse batch participation, withhold cooperative exits, impose limits, or stop serving data. A separated encrypted signer may reduce transaction-level censorship in one deployment without removing all service-level censorship.</p>\n<p>Privacy and censorship resistance are properties of a complete implementation and threat model, not automatic consequences of using Ark.</p>"
+    },
+    {
+      "heading": "Current maturity remains experimental",
+      "body_markdown": "As of July 19, 2026, the maintained Arkade server implementation is `arkd`. Its repository labels the software alpha, experimental, under active development, and unsuitable for production use. The latest listed release is v0.9.6, published May 26, 2026.\n\nThe maintained TypeScript client is the Arkade SDK, and Arkade Wallet is a separate progressive web application built with the protocol and SDK. Documentation covers mainnet configuration, batch settlement, VTXO recovery, unilateral exits, and delegated renewal, but documented availability does not prove uniform deployment, completed audit coverage, or mature operational reliability.\n\nIndependent formal research published in May 2026 analyzes an Ark protocol model and reports disclosed implementation attacks that were addressed. That is meaningful evidence, but it does not make every later implementation, optional feature, signer deployment, wallet, or operator equivalent to the analyzed model.\n\nOpen questions include mass-exit fee behavior, backup portability, recovery guarantees, operator and signer decentralization, cross-operator transfers, client interoperability, liquidity under stress, mobile liveness, policy compatibility, and long-term security review.\n\nThe appropriate maturity label for this guide is alpha and experimental, not universally production-ready.",
+      "body_html": "<p>As of July 19, 2026, the maintained Arkade server implementation is <code>arkd</code>. Its repository labels the software alpha, experimental, under active development, and unsuitable for production use. The latest listed release is v0.9.6, published May 26, 2026.</p>\n<p>The maintained TypeScript client is the Arkade SDK, and Arkade Wallet is a separate progressive web application built with the protocol and SDK. Documentation covers mainnet configuration, batch settlement, VTXO recovery, unilateral exits, and delegated renewal, but documented availability does not prove uniform deployment, completed audit coverage, or mature operational reliability.</p>\n<p>Independent formal research published in May 2026 analyzes an Ark protocol model and reports disclosed implementation attacks that were addressed. That is meaningful evidence, but it does not make every later implementation, optional feature, signer deployment, wallet, or operator equivalent to the analyzed model.</p>\n<p>Open questions include mass-exit fee behavior, backup portability, recovery guarantees, operator and signer decentralization, cross-operator transfers, client interoperability, liquidity under stress, mobile liveness, policy compatibility, and long-term security review.</p>\n<p>The appropriate maturity label for this guide is alpha and experimental, not universally production-ready.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Ark",
+      "definition": "An off-chain Bitcoin protocol that organizes shared UTXO structures and operator-coordinated transactions."
+    },
+    {
+      "term": "VTXO",
+      "definition": "A virtual transaction output used in Ark-style off-chain constructions."
+    },
+    {
+      "term": "Batch output",
+      "definition": "A single Bitcoin output that consolidates multiple user claims through a presigned virtual transaction tree."
+    },
+    {
+      "term": "Commitment transaction",
+      "definition": "An on-chain Bitcoin transaction that creates and anchors a batch output and related settlement data."
+    },
+    {
+      "term": "Ark operator",
+      "definition": "The service role that coordinates off-chain activity, constructs batches, supplies liquidity, and broadcasts commitment transactions."
+    },
+    {
+      "term": "Boarding",
+      "definition": "The process of moving an ordinary Bitcoin UTXO into an Ark transaction structure and receiving a VTXO."
+    },
+    {
+      "term": "Collaborative exit",
+      "definition": "An operator-assisted conversion of one or more VTXOs into ordinary on-chain Bitcoin outputs."
+    },
+    {
+      "term": "Unilateral exit",
+      "definition": "A user-initiated broadcast path that converts a VTXO into an on-chain output without operator cooperation."
+    },
+    {
+      "term": "Batch expiry",
+      "definition": "The timeout after which the operator can use the batch output's sweep path."
+    },
+    {
+      "term": "Renewal",
+      "definition": "A batch swap that replaces existing VTXOs with fresh VTXOs and a new expiry window."
+    },
+    {
+      "term": "Operator liveness",
+      "definition": "The availability required from the operator for cooperative transfers, batches, renewals, and exits."
+    },
+    {
+      "term": "User liveness",
+      "definition": "The requirement that a user or delegated service act before expiry to retain enforceable unilateral rights."
+    },
+    {
+      "term": "Liquidity",
+      "definition": "Bitcoin capital available to support batches, settlement, exits, and service obligations."
+    },
+    {
+      "term": "Presigned transaction",
+      "definition": "A validly signed Bitcoin transaction prepared before broadcast so it can enforce a later protocol outcome."
+    },
+    {
+      "term": "UTXO",
+      "definition": "An unspent transaction output that can be used as an input in a later transaction."
+    },
+    {
+      "term": "Consensus",
+      "definition": "The shared validation rules independently enforced by Bitcoin nodes."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Technical Primer",
+      "author_or_publisher": "Arkade OS contributors",
+      "url": "https://docs.arkadeos.com/primer",
+      "supports": "Current Arkade architecture, VTXOs, virtual execution, batch settlement, expiry, renewal, operator coordination, and the project's current implementation terminology."
+    },
+    {
+      "title": "What Are VTXOs?",
+      "author_or_publisher": "Arkade OS contributors",
+      "url": "https://docs.arkadeos.com/learn/faq/what-are-vtxos",
+      "supports": "VTXOs as outputs of presigned Bitcoin transactions, preconfirmed, settled, and expired states, and collaborative and unilateral spending paths."
+    },
+    {
+      "title": "Batch Outputs",
+      "author_or_publisher": "Arkade OS contributors",
+      "url": "https://docs.arkadeos.com/learn/pillars/batch-outputs",
+      "supports": "Batch-output scripts, virtual transaction trees, selective unrolling, operator sweep paths, MuSig2 coordination, and user-specific VTXO leaves."
+    },
+    {
+      "title": "Onchain Settlement",
+      "author_or_publisher": "Arkade OS contributors",
+      "url": "https://docs.arkadeos.com/arkd/transactions/onchain-settlement",
+      "supports": "Current intent registration, commitment construction, connector outputs, tree signing, forfeit transactions, batch swaps, renewal, and broadcast workflow."
+    },
+    {
+      "title": "Settlement and Finality",
+      "author_or_publisher": "Arkade OS contributors",
+      "url": "https://docs.arkadeos.com/learn/core-concepts/settlement-and-finality",
+      "supports": "The distinction between preconfirmation and Bitcoin settlement, batch swaps, renewal, exit-cost management, and commitment-transaction finality."
+    },
+    {
+      "title": "VTXO Lifecycle and Liveness",
+      "author_or_publisher": "Arkade OS contributors",
+      "url": "https://docs.arkadeos.com/learn/core-concepts/vtxo-lifecycle-and-liveness#batch-expiry",
+      "supports": "Batch expiry, operator sweep authority, user and operator liveness, renewal timing, delegation, and loss of unilateral rights after expiry."
+    },
+    {
+      "title": "VTXO Management",
+      "author_or_publisher": "Arkade OS contributors",
+      "url": "https://docs.arkadeos.com/wallets/advanced/vtxo-management",
+      "supports": "Implemented SDK renewal, expiry monitoring, recoverable balance, cooperative recovery of swept VTXOs, and current settlement configuration."
+    },
+    {
+      "title": "Exiting Arkade",
+      "author_or_publisher": "Arkade OS contributors",
+      "url": "https://docs.arkadeos.com/arkd/transactions/exiting-arkade",
+      "supports": "Collaborative exits, force redemption, operator parameters, unilateral unrolling, exit delays, and the distinction between Arkade VTXOs and ordinary Bitcoin UTXOs."
+    },
+    {
+      "title": "Security and Trust Model",
+      "author_or_publisher": "Arkade OS contributors",
+      "url": "https://docs.arkadeos.com/learn/core-concepts/security-and-trust-model",
+      "supports": "Presigned exit paths, mass-exit costs, signer separation, trusted execution environments, attestation, compromise risks, and implementation-specific security claims."
+    },
+    {
+      "title": "Boarding Arkade",
+      "author_or_publisher": "Arkade OS contributors",
+      "url": "https://docs.arkadeos.com/arkd/transactions/boarding-arkade",
+      "supports": "Current boarding-address script paths, on-chain funding, intent registration, MuSig2 participation, forfeit-transaction submission, and conversion of boarding inputs into VTXOs through a commitment transaction."
+    },
+    {
+      "title": "arkd Repository and Release History",
+      "author_or_publisher": "Arkade OS contributors",
+      "url": "https://github.com/arkade-os/arkd",
+      "supports": "The maintained Arkade server implementation, operator responsibilities, mainnet support, latest listed v0.9.6 release dated May 26, 2026, and the explicit alpha and experimental maturity warning."
+    },
+    {
+      "title": "Arkade TypeScript SDK Repository",
+      "author_or_publisher": "Arkade OS contributors",
+      "url": "https://github.com/arkade-os/ts-sdk",
+      "supports": "The maintained client SDK, wallet and settlement interfaces, package structure, release process, VTXO handling, and delegated or automated client workflows."
+    },
+    {
+      "title": "Arkade Wallet Repository",
+      "author_or_publisher": "Arkade OS contributors",
+      "url": "https://github.com/arkade-os/wallet",
+      "supports": "The separate Arkade Wallet product, operator configuration, client behavior, wallet integration, and the boundary between protocol, SDK, and end-user application."
+    },
+    {
+      "title": "Original Ark Proposal",
+      "author_or_publisher": "Burak",
+      "url": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-May/021694.html",
+      "supports": "Historical Ark motivation, early ASP, round, VTXO, and out-of-round terminology, used only to distinguish the original proposal from the current maintained Arkade design."
+    },
+    {
+      "title": "Ark: Offchain Transaction Batching in Bitcoin",
+      "author_or_publisher": "Pim Keer, Ioannis Alexopoulos, Matteo Maffei, Marco Argentieri, Andrew Camilleri, and Zeta Avarikioti",
+      "url": "https://arxiv.org/abs/2605.20952",
+      "supports": "Independent May 2026 formal protocol analysis, operator model, VTXO security, disclosed implementation attacks, fixes, batch footprint, and cooperative and unilateral exit cost findings."
+    },
+    {
+      "title": "BIP 68: Relative Lock-Time Using Consensus-Enforced Sequence Numbers",
+      "author_or_publisher": "Mark Friedenbach, BtcDrak, Nicolas Dorier, and kinoshitajona",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0068.mediawiki",
+      "supports": "Relative locktime semantics used to explain delayed Bitcoin spending paths and why unilateral exits can require confirmed waiting periods."
+    },
+    {
+      "title": "BIP 112: CHECKSEQUENCEVERIFY",
+      "author_or_publisher": "BtcDrak, Mark Friedenbach, and Eric Lombrozo",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0112.mediawiki",
+      "supports": "Script-enforced relative-delay behavior relevant to Arkade exit, boarding, and sweep paths."
+    }
+  ],
+  "seo_title": "What Is Ark on Bitcoin? VTXOs, Batches, and Exits",
+  "meta_description": "Learn how Ark and Arkade use VTXOs, batch outputs, commitment transactions, renewal, operator liquidity, and unilateral Bitcoin exits.",
+  "excerpt": "Ark coordinates VTXOs through shared Bitcoin batch outputs, but its off-chain efficiency depends on operator service, liquidity, complete exit data, and action before expiry.",
+  "reading_time": "20 to 24 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-BUILDING",
+    "label": "Building on Bitcoin",
+    "subcategory": "Layer 2",
+    "depth": "Deep",
+    "format": "Technical Analysis"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-033",
+      "title": "How the Lightning Network Works",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-035",
+      "title": "How RGB Works on Bitcoin",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": []
+  },
+  "review_dates": {
+    "reviewed": "2026-07-22",
+    "copy_locked": "2026-07-22",
+    "human_verification": "2026-07-22"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "VTXO Tree Beneath a Batch Anchor",
+      "educational_purpose": "Show how one confirmed commitment transaction and batch output can support several user VTXOs through presigned virtual transactions.",
+      "recommended_placement": "After the section Commitment transactions create batch outputs.",
+      "visual_description": "Vintage harbor engineering chart with one Bitcoin commitment vessel anchoring a batch-output platform. A branching submerged transaction tree divides into four labeled VTXO berths without depicting the operator as owner of every berth.",
+      "required_labels": "Commitment transaction, Batch output, Virtual transaction tree, Presigned transactions, VTXO A, VTXO B, VTXO C, VTXO D, Sweep path, Unroll path",
+      "caption": "A batch output anchors a presigned transaction tree whose leaves represent individual VTXOs.",
+      "alt_text": "Technical nautical diagram showing a Bitcoin commitment transaction, shared batch output, branching virtual transaction tree, and four user VTXOs.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Keep the commitment anchor centered above two tree levels and stack the four VTXO leaves in two rows.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "Cooperative Route and Unilateral Exit Route",
+      "educational_purpose": "Separate normal operator-assisted transfers and exits from the slower Bitcoin enforcement path available without operator cooperation.",
+      "recommended_placement": "After the section Unilateral exits are enforceable but operationally demanding.",
+      "visual_description": "Split cartographic route from one VTXO harbor. The upper route passes through an operator coordination station to a new VTXO or collaborative Bitcoin output. The lower route descends through several presigned transactions, confirmation gates, and a timelock before reaching a user-controlled UTXO.",
+      "required_labels": "VTXO, Cooperative path, Arkade Operator, New VTXO, Collaborative exit, Unilateral path, Broadcast, Confirmation, Exit delay, Bitcoin UTXO, Miner fees",
+      "caption": "The cooperative path is simpler when service is available, while the unilateral path preserves enforcement through a longer on-chain process.",
+      "alt_text": "Split technical map comparing an operator-assisted Ark transfer or exit with a multi-step unilateral Bitcoin exit.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack the cooperative route above the unilateral route and keep each route readable as a separate horizontal band.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Expiry, Renewal, Sweep, and Recovery Timeline",
+      "educational_purpose": "Explain the user-liveness deadline and distinguish renewal before expiry from operator sweep and cooperative recovery afterward.",
+      "recommended_placement": "After the section Expiry changes the user's rights.",
+      "visual_description": "Vintage tide and lighthouse timeline. Before the marked expiry tide, a VTXO can enter a batch-swap renewal channel or begin an exit. After the deadline, an operator sweep route opens. A separate dashed recovery route returns value through a later batch but is clearly marked cooperative and implementation-supported.",
+      "required_labels": "Active VTXO, Renewal window, Delegated intent, Batch swap, Unilateral exit start, Batch expiry, Operator sweep path, Expired VTXO, Cooperative recovery, New VTXO, Unilateral right lost after expiry",
+      "caption": "Renewal or exit preserves enforceable rights before expiry; recovery after an operator sweep is a separate cooperative workflow.",
+      "alt_text": "Nautical lifecycle timeline showing VTXO renewal and exit before expiry, operator sweep after expiry, and a separate cooperative recovery path.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Use a vertical timeline with the expiry marker centered and recovery shown as a clearly separate branch below it.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}

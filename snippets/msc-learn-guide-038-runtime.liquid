@@ -1,0 +1,155 @@
+{% comment %}
+  Generated from docs/learn/content/guides/MSC-GUIDE-038-bitcoin-runes.md.
+  Registry binding: MSC-GUIDE-038.
+  Preview only. Do not edit manually.
+  Rebuild with node scripts/generate-msc-learn-guide-category-runtime.mjs --start=33 --end=48 --write.
+{% endcomment %}
+<section class="msc-shell msc-learn-page" data-msc-registry-id="MSC-GUIDE-038" data-msc-preview-only="true">
+  <div class="msc-container msc-learn-page__container">
+    <nav class="msc-learn-breadcrumbs" aria-label="Learn breadcrumbs"><ol><li><span>Learn</span></li><li><span>Building on Bitcoin</span></li><li aria-current="page"><span>How the Runes Protocol Works</span></li></ol></nav>
+    <header class="msc-learn-page__header">
+      <p class="msc-section-kicker">Building on Bitcoin</p>
+      <h1>How the Runes Protocol Works</h1>
+      <p class="msc-learn-page__deck">Runes is an indexer-interpreted protocol for etching, minting, assigning, transferring, and burning fungible units through Bitcoin transactions. Learn how runestones, Rune IDs, mint terms, edicts, UTXO-associated balances, cenotaphs, reorganizations, wallet construction, and Bitcoin validation interact without treating Rune balances as native Bitcoin consensus state.</p>
+      <ul class="msc-learn-page-meta"><li>Digital Assets</li><li>Deep</li><li>Technical Analysis</li><li>17 to 20 minutes</li><li>Reviewed 2026-07-23</li></ul>
+      <p class="msc-learn-preview-note">Preview only. Publication records and confirmed URLs do not exist; all navigation remains inactive.</p>
+    </header>
+    <article class="msc-learn-article rte" data-msc-content-source="structured-runtime">
+<section class="msc-learn-article__section">
+<p>Runes is an application protocol implemented by the maintained <code>ord</code> project for creating and moving fungible units with messages embedded in Bitcoin transactions. Its messages are called runestones. A Rune-aware indexer reads the accepted Bitcoin chain, decodes those messages, and derives etchings, mints, allocations, balances, and burns.</p>
+<p>Bitcoin nodes do not maintain that Rune ledger. They validate the underlying Bitcoin transaction: its inputs, outputs, scripts, amounts, witness data, proof-of-work context, and UTXO spends. A transaction can be valid under Bitcoin consensus while its runestone is malformed, ignored, or interpreted as a cenotaph under the Runes protocol.</p>
+<p>The current Ordinal Theory Handbook makes an unusually important maturity statement: the <code>ord</code> code is the normative specification. Its prose Runes documentation is a guide to that code, not an independent specification. Current behavior must therefore be dated to a maintained software version and checked against implementation changes. This guide reviewed Ord release 0.27.1 as of 2026-07-22.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Purpose and current status</h2>
+<p>Runes provides a compact application convention for fungible units associated with Bitcoin UTXOs. It supports four broad operations: etching a Rune, minting units when an etching permits it, assigning units among transaction outputs, and burning units under defined conditions.</p>
+<p>The protocol activated at Bitcoin block 840,000. According to the maintained Ord documentation, runestones in earlier blocks are ignored. This is a Runes activation boundary enforced by Rune-aware software, not a new Bitcoin consensus activation. Bitcoin nodes accepted valid transactions before and after that height without evaluating Rune balances.</p>
+<p>Runes does not add a smart-contract virtual machine to Bitcoin. It does not require Bitcoin Core to parse Rune names or prevent an over-mint. It uses ordinary Bitcoin outputs and an <code>OP_RETURN</code> data output as inputs to an external state machine.</p>
+<p>Because <code>ord</code> is the normative implementation, alternative indexers must reproduce its behavior to claim compatibility. A service that changes decoding, activation, flaw handling, or state transitions can disagree even while following the same Bitcoin chain.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Runestones carry protocol messages</h2>
+<p>A runestone is encoded in a transaction output whose script begins with <code>OP_RETURN</code>, then <code>OP_13</code>, followed by zero or more data pushes. Compatible software concatenates the pushed bytes, decodes a sequence of 128-bit integers, and interprets fields and edicts.</p>
+<p>Current <code>ord</code> interprets the first transaction output whose script begins with <code>OP_RETURN OP_13</code> as the runestone candidate. Later matching outputs are ignored, even if the first candidate is flawed. The runestone can etch a new Rune, request a mint of an existing Rune, and allocate available Rune units from the transaction&#39;s inputs and permitted creation operations to its outputs.</p>
+<p>The <code>OP_RETURN</code> output is provably unspendable under ordinary Bitcoin script behavior. Bitcoin nodes may recognize the transaction as a data-carrier transaction under implementation policy, but they do not know that the payload is a runestone. Relay and mining policy can change independently from consensus validity and independently across implementations.</p>
+<p>The marker and integer encoding reduce the amount of application data compared with a human-readable JSON inscription. Compactness does not make the message part of Bitcoin&#39;s native monetary ledger. It remains an interpretation performed by Rune-aware software.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Etching creates a Rune definition</h2>
+<p>An etching introduces a Rune and its parameters. The transaction containing the valid etching determines the Rune&#39;s identifier and can define its name, divisibility, symbol, premine, and open-mint terms.</p>
+<p>Etching does not prove that the creator is trustworthy or has legal rights to a name. A successfully parsed name does not certify authenticity, uniqueness outside the Runes namespace, redeemability, or value. It establishes an indexer-recognized definition under the current protocol.</p>
+<p>An etching can include a premine. A premine creates a defined number of units as part of the etching operation. Those units must still be allocated through the transaction&#39;s edicts or default assignment behavior. “Premine” describes protocol issuance timing; it is not a statement about distribution quality or legitimacy.</p>
+<p>The transaction must also satisfy ordinary Bitcoin fees, output construction, and wallet requirements. A valid Bitcoin confirmation does not prove the etching was valid under the current Rune parser.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Rune identifiers and names are different</h2>
+<p>Every Rune is identified by a Rune ID consisting of the block height and transaction index of its etching, written as <code>BLOCK:TX</code>. The identifier anchors the application object to an ordered location in Bitcoin history.</p>
+<p>The Rune ID is usually the precise protocol reference. A displayed name is an application-facing label subject to the protocol&#39;s naming, reservation, and unlock rules. Spacers can affect how a name is displayed without changing the underlying encoded Rune value.</p>
+<p>If an etching omits the <code>Rune</code> field, the current protocol assigns a reserved name derived from the etching&#39;s Rune ID. A non-reserved name must be unlocked at the etching block and must have a valid prior commitment. The commitment is a data push of the Rune name encoded as a little-endian integer with trailing zero bytes removed, revealed in an input witness tapscript whose spent output has at least six confirmations. Without that commitment, the etching is ignored. Name lengths unlock on the protocol&#39;s 17,500-block schedule, so availability depends on the etching height.</p>
+<p>A name therefore should not be treated as an independent proof of identity. Interfaces should verify the Rune ID, the accepted chain, and the same indexer rules used by the counterparty. A look-alike symbol, spaced rendering, or copied name in unrelated content can mislead users.</p>
+<p>A reorganization that removes the etching transaction can remove the Rune from the indexer&#39;s accepted state. If the transaction confirms later in another block or position, its Rune ID can change because the ID depends on block and transaction index.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Divisibility and symbols affect display</h2>
+<p>Divisibility specifies how many decimal places an interface may use when displaying Rune units. The protocol accounts in indivisible base units; divisibility determines presentation.</p>
+<p>For example, a divisibility of two allows a base-unit amount of 12,345 to be displayed as 123.45. The decimal point does not create fractional base units. Wallets and APIs must agree on the Rune&#39;s divisibility and avoid floating-point assumptions that can alter amounts.</p>
+<p>A symbol is an optional display character associated with the Rune. It can help an interface present amounts, but it is not a Bitcoin ticker, ownership mark, or security feature. Software may omit, replace, or fail to render it.</p>
+<p>Display fields should never substitute for the Rune ID and exact integer amount. A user-facing decimal string can be rounded or formatted incorrectly even when the underlying indexed state is correct.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Open mint terms</h2>
+<p>An etching may define terms that permit later transactions to mint units. Current protocol fields can constrain the amount created by each mint and the number of mints, and can limit minting to a range of block heights or offsets relative to the etching block.</p>
+<p>These are application rules enforced by Rune indexers. Bitcoin miners do not reject a transaction because it attempts to mint outside a Rune&#39;s terms. Bitcoin nodes do not count successful Rune mints.</p>
+<p>A valid mint request references the Rune ID. The indexer checks the etching, the current block, applicable caps and timing, and the current protocol&#39;s flaw rules. If the request is valid, the minted units become available for allocation in that transaction.</p>
+<p>Mint terms do not guarantee that a user can get a transaction confirmed before a window closes. Mempool acceptance, fee competition, miner selection, transaction replacement, and reorganizations can all affect whether a mint lands at a qualifying height and order.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Minting is a state transition, not a Bitcoin issuance</h2>
+<p>Rune minting creates units in the Runes application state. It does not create bitcoin and does not change Bitcoin&#39;s block subsidy, UTXO value, or consensus monetary rules.</p>
+<p>The Bitcoin transaction pays normal fees in bitcoin and may move ordinary bitcoin alongside the runestone. The Rune-aware indexer derives a separate result from that transaction.</p>
+<p>This distinction matters when an interface shows both BTC amounts and Rune amounts. The BTC outputs are consensus amounts. The Rune balances are application allocations associated with those outputs. Spending authority for the output is enforced by Bitcoin script; the meaning and quantity of its Rune balance are derived by indexers.</p>
+<p>A mint can be valid under one indexed protocol version and unsupported under another if implementations have diverged. Services need a documented compatibility target rather than assuming that any parser labeled “Runes” is interchangeable.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Balances are associated with UTXOs</h2>
+<p>Under Runes, balances are associated with Bitcoin transaction outputs rather than maintained as native address-account balances. A Rune-aware indexer records which unspent outputs hold units of each Rune.</p>
+<p>When a transaction spends those outputs, the indexed Rune balances from all inputs become available to that transaction&#39;s runestone. The protocol then assigns them among eligible outputs. Bitcoin consensus only sees that the UTXOs were spent; it does not verify the derived Rune amounts.</p>
+<p>Wallets often aggregate UTXO state into an address or account display. That is a convenience view. It can hide which specific UTXOs carry which Rune balances and whether selecting one as a fee input will require a valid allocation.</p>
+<p>A wallet that is unaware of Runes can spend a Rune-bearing UTXO in a completely valid Bitcoin transaction. Under the Runes protocol, the absence of a valid allocation can cause units to be assigned by default or burned, depending on the transaction structure and current rules.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Edicts assign units to outputs</h2>
+<p>Edicts are runestone instructions that allocate amounts of a Rune to transaction outputs. An edict identifies a Rune, an amount, and an output index.</p>
+<p>The indexer begins with Rune balances from spent inputs plus any valid premine or mint in the transaction. It then processes the edicts according to the current protocol and assigns units to eligible outputs.</p>
+<p>Output indexes are Bitcoin transaction positions. Construction errors can therefore send Rune units to an unintended Bitcoin output even when every signature and amount is valid. Wallets must coordinate ordinary BTC outputs, change, data output placement, and Rune edicts.</p>
+<p>Current rules also define special allocation behavior when an edict uses the transaction&#39;s output count as its output number. This can distribute units across eligible non-<code>OP_RETURN</code> outputs according to the implementation&#39;s algorithm. Because this is a detailed implementation rule, software should verify it against the current <code>ord</code> code rather than relying on a simplified interface description.</p>
+<p>An edict does not give the output more bitcoin. It attaches indexed Rune units to that output in the application state.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Change handling and the pointer</h2>
+<p>Not every available Rune unit must be explicitly allocated by an edict. Remaining unallocated units are assigned to a default output.</p>
+<p>A runestone may include a pointer specifying the default output index. If no valid pointer is present, current behavior assigns remaining units to the first non-<code>OP_RETURN</code> output. This is commonly treated as Rune change.</p>
+<p>The default is a protocol convention, not wallet intent. A wallet that reorders outputs, inserts another output first, or miscalculates the pointer can direct Rune change elsewhere. Transaction preview must identify the output indexes after final construction, not before later fee or change adjustments.</p>
+<p>There is no Bitcoin-level error if the default output is not what the user expected. Bitcoin validates the output and its spending condition. The Rune indexer applies the pointer and allocation rule.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Burning conditions</h2>
+<p>Burning removes Rune units from the spendable application state. Units allocated to an <code>OP_RETURN</code> output are burned because that output is unspendable. Other protocol flaws can also burn units.</p>
+<p>A burn does not destroy bitcoin unless the Bitcoin transaction itself assigns bitcoin to an unspendable output. Rune units and satoshi values are separate dimensions. An <code>OP_RETURN</code> output commonly has zero satoshis while the indexer records Rune units as burned.</p>
+<p>Wallet interfaces should distinguish deliberate burns from accidental loss caused by unsupported transaction construction. A confirmed transaction cannot generally be reversed merely because the sender misunderstood the Rune outcome.</p>
+<p>An indexer must also reverse burns from disconnected blocks during a reorganization and apply the result from the new accepted branch.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Cenotaph behavior</h2>
+<p>A cenotaph is the Runes interpretation of a flawed runestone under the current protocol. Flaws can arise from malformed encoding, invalid fields, bad edicts, or other conditions defined by <code>ord</code>.</p>
+<p>A cenotaph burns all unallocated input balances and any amount created by an otherwise-valid mint; that mint still increments the Rune’s mint count. A cenotaph etching creates an unmintable zero-supply Rune only when it carries a valid explicit Rune name that passes the normal etching checks. An unnamed cenotaph etching does not receive a reserved name.</p>
+<p>These consequences are application state transitions. Bitcoin nodes do not reject the transaction because the runestone became a cenotaph. They may confirm it as an ordinary valid Bitcoin transaction.</p>
+<p>Cenotaph behavior is a high-risk area for compatibility. The exact list of flaws and parser treatment can change or reveal implementation edge cases. Integrators should test vectors against the current <code>ord</code> release and should not implement from this summary alone.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Bitcoin validity and Rune validity</h2>
+<p>A useful review sequence has two separate questions.</p>
+<p>First: Is the transaction valid under Bitcoin consensus? Nodes check that inputs exist and are unspent, signatures and scripts pass, amounts do not exceed inputs, and the containing block satisfies the consensus rules.</p>
+<p>Second: What does the current Runes implementation derive from it? The indexer locates the runestone, decodes the payload, identifies fields and edicts, checks etching or mint rules, allocates balances, and applies burn or cenotaph behavior.</p>
+<p>The answers can be “valid Bitcoin transaction” and “invalid Rune operation.” Confirmation is evidence for the first answer, not automatically the second.</p>
+<p>Bitcoin Core mempool acceptance adds a third layer: implementation policy. A transaction can be consensus-valid but not accepted or relayed by a particular node&#39;s current policy. A miner may use different policy and include it. Neither policy result decides the Runes interpretation.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Indexers and reorganizations</h2>
+<p>A Rune indexer must process Bitcoin blocks in order and maintain enough undo or reconstruction data to handle reorganizations. When blocks are disconnected, their etchings, mints, transfers, burns, and balances must be removed. Replacement blocks are then applied in their new order.</p>
+<p>Unconfirmed state is more fragile. Competing transactions can spend the same UTXO, and fee replacement or package behavior can change what ultimately confirms. A wallet should not treat a displayed unconfirmed Rune receipt as settled merely because an indexer has seen it.</p>
+<p>Alternative indexers can diverge because of software versions, parsing bugs, activation handling, integer decoding, flaw classification, or chain-tip differences. The Ord documentation explicitly warns that <code>ord</code> is normative for Runes. Compatibility claims should therefore include the exact implementation and version tested.</p>
+<p>A user can independently validate Bitcoin with a full node yet still rely on a Rune indexer for application state. Running the indexer reduces reliance on a hosted service but does not eliminate the need to trust that the software matches the intended protocol.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Wallet compatibility, fees, and UTXO management</h2>
+<p>A Rune-compatible wallet must know which UTXOs hold Rune balances, construct a valid runestone, preserve intended output indexes, allocate all relevant units, create correct BTC change, and pay an adequate Bitcoin fee.</p>
+<p>An ordinary Bitcoin wallet may select a Rune-bearing UTXO without understanding the consequences. It may omit the runestone or move outputs during fee adjustment. The Bitcoin transaction can confirm while Rune units are assigned unexpectedly or burned.</p>
+<p>Fees are paid in bitcoin. The runestone adds transaction data and can increase weight, while isolating UTXOs or creating recipient and change outputs can add more weight. Fee rate affects confirmation probability, not Rune legitimacy.</p>
+<p>Wallet and hardware-signing displays may not decode runestones. A device can accurately show BTC inputs and outputs while remaining blind to the Rune operation. Users need a trusted pre-signing interpretation and should verify the finalized transaction after any fee bump or output change.</p>
+<p>Custodial services add another boundary. An internal Rune balance may be a provider database entry rather than a user-controlled UTXO. Withdrawal availability, indexing, and supported Runes depend on the provider.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Runes compared with BRC-20</h2>
+<p>Runes and BRC-20 both derive fungible application state from Bitcoin transactions, but they use different message and balance models.</p>
+<p>Runes uses compact runestones in <code>OP_RETURN</code> outputs, Rune IDs, edicts, and UTXO-associated balances. BRC-20 began as an experimental JSON inscription convention with deploy, mint, and transfer operations interpreted by indexers. BRC-20 transfers include a separate transfer-inscription workflow.</p>
+<p>Neither is a native Bitcoin token ledger. Bitcoin nodes do not enforce the balances of either protocol. A wallet or indexer supporting one does not automatically support the other.</p>
+<p>The protocols also have different activation, parsing, issuance, invalid-operation, and transfer rules. A name or ticker displayed in both systems does not connect them. Moving units across them would require an application arrangement outside their base rules.</p>
+</section>
+<section class="msc-learn-article__section"><h2>The working model</h2>
+<p>A Rune is an application object defined by a valid etching. A runestone can etch, mint, and allocate Rune units. Rune IDs refer to an etching&#39;s block and transaction position. Divisibility and symbols affect display. Terms govern open mints. Edicts assign input, premine, and minted balances to outputs. A pointer or default output receives unallocated change. Burns and cenotaphs remove units under current rules.</p>
+<p>Bitcoin provides the ordered transaction history, UTXO spending authority, confirmation, and proof-of-work settlement. <code>ord</code> provides the normative Rune interpretation. Wallets construct transactions that must satisfy both ordinary Bitcoin requirements and intended Rune outcomes. Indexers maintain the derived state and reverse it during reorganizations.</p>
+<p>Keeping those layers separate avoids the central error: a Rune balance can be anchored to and transferred through valid Bitcoin transactions without being a balance maintained or enforced by Bitcoin Core.</p>
+</section>
+    </article>
+    <section class="msc-learn-key-terms" aria-labelledby="MscGuide038Terms"><h2 id="MscGuide038Terms">Key Terms</h2><dl><div class="msc-learn-term"><dt>Rune</dt><dd>A fungible application unit defined by an etching and interpreted under the current Runes implementation.</dd></div>
+<div class="msc-learn-term"><dt>Runestone</dt><dd>A Runes protocol message encoded in an `OP_RETURN OP_13` transaction output.</dd></div>
+<div class="msc-learn-term"><dt>Etching</dt><dd>The operation that defines a Rune and its parameters.</dd></div>
+<div class="msc-learn-term"><dt>Rune ID</dt><dd>The etching&#39;s block height and transaction index, written `BLOCK:TX`.</dd></div>
+<div class="msc-learn-term"><dt>Divisibility</dt><dd>The number of decimal places used to display an integer Rune amount.</dd></div>
+<div class="msc-learn-term"><dt>Premine</dt><dd>Rune units created in the etching transaction before later open mints.</dd></div>
+<div class="msc-learn-term"><dt>Mint terms</dt><dd>Optional conditions governing later creation of Rune units.</dd></div>
+<div class="msc-learn-term"><dt>Edict</dt><dd>An instruction allocating an amount of a Rune to a transaction output.</dd></div>
+<div class="msc-learn-term"><dt>Pointer</dt><dd>The output index used for remaining unallocated Rune units.</dd></div>
+<div class="msc-learn-term"><dt>Cenotaph</dt><dd>A flawed runestone whose current application consequences include defined burns and failed issuance behavior.</dd></div>
+<div class="msc-learn-term"><dt>Burn</dt><dd>Removal of Rune units from spendable indexed state.</dd></div>
+<div class="msc-learn-term"><dt>UTXO-associated balance</dt><dd>Rune state assigned by an indexer to a specific unspent Bitcoin output.</dd></div>
+<div class="msc-learn-term"><dt>Indexer</dt><dd>Software that derives Rune operations and balances from ordered Bitcoin history.</dd></div>
+<div class="msc-learn-term"><dt>Bitcoin policy</dt><dd>Implementation rules for transaction creation, mempool acceptance, relay, or mining that are distinct from consensus.</dd></div></dl></section>
+    <section class="msc-learn-sources" aria-labelledby="MscGuide038Sources"><h2 id="MscGuide038Sources">Sources</h2><article class="msc-learn-source"><h3>Ordinal Theory Handbook: Runes</h3><ul><li><strong>author or publisher:</strong> Ord project contributors</li><li><strong>url:</strong> https://docs.ordinals.com/runes.html</li><li><strong>supports:</strong> Runestones, `OP_RETURN OP_13` encoding, Rune IDs, etching, minting, edicts, UTXO-associated balances, and high-level transfer behavior.</li></ul></article>
+<article class="msc-learn-source"><h3>Ordinal Theory Handbook: Runes Specification Guide</h3><ul><li><strong>author or publisher:</strong> Ord project contributors</li><li><strong>url:</strong> https://docs.ordinals.com/runes/specification.html</li><li><strong>supports:</strong> The statement that `ord` code is normative, activation at block 840,000, reserved-name allocation, the name-unlock schedule, non-reserved-name commitment requirements, integer decoding, fields, terms, pointers, edicts, burns, and cenotaph behavior.</li></ul></article>
+<article class="msc-learn-source"><h3>Ord 0.27.1 Source</h3><ul><li><strong>author or publisher:</strong> Ord project contributors</li><li><strong>url:</strong> https://github.com/ordinals/ord/tree/0.27.1</li><li><strong>supports:</strong> The normative reviewed implementation of first-candidate runestone selection, parsing, cenotaph etching and mint processing, allocations, burns, indexing, wallet construction, and reorganization handling.</li></ul></article>
+<article class="msc-learn-source"><h3>Ord Releases</h3><ul><li><strong>author or publisher:</strong> Ord project contributors</li><li><strong>url:</strong> https://github.com/ordinals/ord/releases</li><li><strong>supports:</strong> Current implementation versioning and maturity; latest release reviewed was 0.27.1 as of 2026-07-22.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Improvement Proposal 141: Segregated Witness</h3><ul><li><strong>author or publisher:</strong> Eric Lombrozo, Johnson Lau, and Pieter Wuille</li><li><strong>url:</strong> https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki</li><li><strong>supports:</strong> Transaction witness and weight rules relevant to Bitcoin transaction construction and fees.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Improvement Proposal 341: Taproot</h3><ul><li><strong>author or publisher:</strong> Pieter Wuille, Jonas Nick, and Anthony Towns</li><li><strong>url:</strong> https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki</li><li><strong>supports:</strong> Taproot&#39;s Bitcoin consensus context and the separation between Bitcoin script validation and application-level protocol interpretation.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core v31.1 Source Tree</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/tree/v31.1/src</li><li><strong>supports:</strong> One current implementation&#39;s transaction, script, UTXO, mempool, relay, wallet, and block-validation behavior; this is implementation evidence, not a definition of Runes.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core v31.1 Release Notes</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/master/doc/release-notes/release-notes-31.1.md</li><li><strong>supports:</strong> Bitcoin Core 31.1 as the current implementation release used to date Bitcoin Core behavior discussed in the guide.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Policy Source: Data Carrier and Relay Options</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/src/init.cpp</li><li><strong>supports:</strong> Current Bitcoin Core data-carrier, relay, mining, fee, and pruning configuration as implementation policy rather than Bitcoin consensus.</li></ul></article>
+<article class="msc-learn-source"><h3>Ord Test Vectors and Source Tests</h3><ul><li><strong>author or publisher:</strong> Ord project contributors</li><li><strong>url:</strong> https://github.com/ordinals/ord/tree/master/tests</li><li><strong>supports:</strong> Implementation-specific transaction behavior and the need to validate detailed Runes integrations against current code and tests.</li></ul></article></section>
+    <nav class="msc-learn-prev-next" aria-label="Guide navigation preview"><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Previous</span><strong>What Are Bitcoin Ordinals?</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Category</span><strong>Building on Bitcoin</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Next</span><strong>What Is BRC-20 on Bitcoin?</strong><small>Link inactive</small></span></nav>
+  </div>
+</section>

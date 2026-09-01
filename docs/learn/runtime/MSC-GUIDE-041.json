@@ -1,0 +1,407 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-041-bitcoin-developer-tools.md",
+  "source_sha256": "6b1bacf7af4db97a0f08381c6f0e2cd7aa8034e4c191e78c17172807390609f4",
+  "registry_id": "MSC-GUIDE-041",
+  "status": "COPY_LOCKED",
+  "h1": "Bitcoin Developer Tools: A Practical Overview",
+  "introductory_deck": "Bitcoin development is not one toolkit or one API. It is a set of layers for validation, chain data, transaction construction, signing, testing, and application logic. This guide maps those layers, explains their trust boundaries, and provides a practical workflow for selecting maintained tools without treating any library, node, indexer, or hosted service as universally authoritative.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "Bitcoin software is built from components that do different jobs. A validating node checks blocks and transactions against consensus rules. A wallet tracks scripts and UTXOs, constructs transactions, and may hold or coordinate keys. A library serializes data, derives scripts, creates signatures, or implements protocol messages. An indexer builds searchable views over chain history. An API transports requests and responses. An application adds business rules, user interfaces, permissions, and operational controls.\n\nThose roles can be combined in one program, but they should not be confused. A full node does not automatically provide every address-history query. A transaction library does not independently validate the chain. An indexer can produce useful balances while remaining outside consensus. A hosted API can return accurate data while still introducing privacy, availability, policy, and version dependencies.\n\nThe practical task is therefore not to find “the Bitcoin developer toolkit.” It is to choose a set of tools whose responsibilities and trust assumptions match the system being built.",
+      "body_html": "<p>Bitcoin software is built from components that do different jobs. A validating node checks blocks and transactions against consensus rules. A wallet tracks scripts and UTXOs, constructs transactions, and may hold or coordinate keys. A library serializes data, derives scripts, creates signatures, or implements protocol messages. An indexer builds searchable views over chain history. An API transports requests and responses. An application adds business rules, user interfaces, permissions, and operational controls.</p>\n<p>Those roles can be combined in one program, but they should not be confused. A full node does not automatically provide every address-history query. A transaction library does not independently validate the chain. An indexer can produce useful balances while remaining outside consensus. A hosted API can return accurate data while still introducing privacy, availability, policy, and version dependencies.</p>\n<p>The practical task is therefore not to find “the Bitcoin developer toolkit.” It is to choose a set of tools whose responsibilities and trust assumptions match the system being built.</p>"
+    },
+    {
+      "heading": "There is no universal Bitcoin development stack",
+      "body_markdown": "Bitcoin has protocol specifications, multiple implementations, language libraries, wallet projects, hardware-signing tools, indexers, explorers, and hosted services. They differ in scope, maintenance, licensing, release cadence, supported networks, descriptor support, PSBT support, and operational model.\n\nA project that only decodes blocks needs a different stack from a self-custodial wallet. A payment processor needs different controls from a block explorer. A hardware-signing coordinator has different security boundaries from a watch-only analytics service. Popularity does not resolve those differences.\n\nTool selection should begin with questions such as:\n\n- Which component validates the chain?\n- Which component learns about wallet-relevant transactions?\n- Where are keys generated and stored?\n- Which component constructs transaction inputs, outputs, change, and fees?\n- Which component signs?\n- Which data is confirmed, mempool-derived, cached, estimated, or application-derived?\n- What must keep working if a hosted provider is unavailable?\n- Which versions and policies are assumed?\n\nA clear answer to those questions is more valuable than a long list of packages.",
+      "body_html": "<p>Bitcoin has protocol specifications, multiple implementations, language libraries, wallet projects, hardware-signing tools, indexers, explorers, and hosted services. They differ in scope, maintenance, licensing, release cadence, supported networks, descriptor support, PSBT support, and operational model.</p>\n<p>A project that only decodes blocks needs a different stack from a self-custodial wallet. A payment processor needs different controls from a block explorer. A hardware-signing coordinator has different security boundaries from a watch-only analytics service. Popularity does not resolve those differences.</p>\n<p>Tool selection should begin with questions such as:</p>\n<ul><li>Which component validates the chain?</li><li>Which component learns about wallet-relevant transactions?</li><li>Where are keys generated and stored?</li><li>Which component constructs transaction inputs, outputs, change, and fees?</li><li>Which component signs?</li><li>Which data is confirmed, mempool-derived, cached, estimated, or application-derived?</li><li>What must keep working if a hosted provider is unavailable?</li><li>Which versions and policies are assumed?</li></ul>\n<p>A clear answer to those questions is more valuable than a long list of packages.</p>"
+    },
+    {
+      "heading": "Consensus specifications and implementation code",
+      "body_markdown": "Bitcoin consensus is the set of rules that participating nodes apply when deciding whether blocks and transactions belong to the accepted chain. Bitcoin Improvement Proposals document many deployed rules and application standards, but no single document is a complete executable definition of Bitcoin.\n\nBitcoin Core is an implementation and an important reference for deployed behavior, tests, RPCs, wallet features, policy, and network operation. It is still an implementation, not a declaration that every Bitcoin implementation must expose the same interfaces, defaults, database layout, or mempool policy.\n\nDevelopers should distinguish at least four kinds of evidence:\n\n- A BIP may specify a consensus rule, peer protocol, or application format.\n- Bitcoin Core source and tests show how one current implementation behaves.\n- Release notes identify version changes but do not replace detailed source or RPC documentation.\n- Library documentation describes that library’s API and compatibility, not universal Bitcoin behavior.\n\nDated implementation claims matter because node policy, wallet features, RPC fields, test networks, and default behavior can change across releases.",
+      "body_html": "<p>Bitcoin consensus is the set of rules that participating nodes apply when deciding whether blocks and transactions belong to the accepted chain. Bitcoin Improvement Proposals document many deployed rules and application standards, but no single document is a complete executable definition of Bitcoin.</p>\n<p>Bitcoin Core is an implementation and an important reference for deployed behavior, tests, RPCs, wallet features, policy, and network operation. It is still an implementation, not a declaration that every Bitcoin implementation must expose the same interfaces, defaults, database layout, or mempool policy.</p>\n<p>Developers should distinguish at least four kinds of evidence:</p>\n<ul><li>A BIP may specify a consensus rule, peer protocol, or application format.</li><li>Bitcoin Core source and tests show how one current implementation behaves.</li><li>Release notes identify version changes but do not replace detailed source or RPC documentation.</li><li>Library documentation describes that library’s API and compatibility, not universal Bitcoin behavior.</li></ul>\n<p>Dated implementation claims matter because node policy, wallet features, RPC fields, test networks, and default behavior can change across releases.</p>"
+    },
+    {
+      "heading": "Bitcoin Core as a development reference",
+      "body_markdown": "As of July 23, 2026, Bitcoin Core 31.1 is the current release listed by the Bitcoin Core project. It can serve several development roles:\n\n- `bitcoind` runs the node daemon, validates chain data, participates in the peer-to-peer network, maintains chainstate, and can expose RPC, REST, and ZMQ interfaces when configured.\n- The optional Bitcoin Core wallet manages descriptors, keys or watch-only data, transaction creation, signing, balances, and fee-bumping behavior.\n- `bitcoin-cli` is a command-line client for calling Bitcoin Core RPC methods.\n- Functional and unit tests provide examples of regtest, policy, wallet, reorganization, and network behavior.\n- Source code provides dated implementation evidence for validation, policy, indexes, and interfaces.\n\nThese roles are related but separable. Calling an RPC does not mean the calling application validates the response. Running `bitcoind` without the wallet component does not provide application wallet state. Enabling a full transaction index does not create an address-history index.\n\nBitcoin Core’s JSON-RPC interface is the primary request-response administration and query interface. The root endpoint serves node RPCs, while wallet-specific endpoints address loaded wallets. The interface is implicitly versioned by Bitcoin Core’s major version, so production clients should pin and test against exact releases.",
+      "body_html": "<p>As of July 23, 2026, Bitcoin Core 31.1 is the current release listed by the Bitcoin Core project. It can serve several development roles:</p>\n<ul><li><code>bitcoind</code> runs the node daemon, validates chain data, participates in the peer-to-peer network, maintains chainstate, and can expose RPC, REST, and ZMQ interfaces when configured.</li><li>The optional Bitcoin Core wallet manages descriptors, keys or watch-only data, transaction creation, signing, balances, and fee-bumping behavior.</li><li><code>bitcoin-cli</code> is a command-line client for calling Bitcoin Core RPC methods.</li><li>Functional and unit tests provide examples of regtest, policy, wallet, reorganization, and network behavior.</li><li>Source code provides dated implementation evidence for validation, policy, indexes, and interfaces.</li></ul>\n<p>These roles are related but separable. Calling an RPC does not mean the calling application validates the response. Running <code>bitcoind</code> without the wallet component does not provide application wallet state. Enabling a full transaction index does not create an address-history index.</p>\n<p>Bitcoin Core’s JSON-RPC interface is the primary request-response administration and query interface. The root endpoint serves node RPCs, while wallet-specific endpoints address loaded wallets. The interface is implicitly versioned by Bitcoin Core’s major version, so production clients should pin and test against exact releases.</p>"
+    },
+    {
+      "heading": "RPC, REST, ZMQ, and P2P are different interfaces",
+      "body_markdown": "Bitcoin-related interfaces are often grouped together as “APIs,” but they have different purposes.\n\n**JSON-RPC** is a two-way request-response interface. Applications can query node state, submit transactions, manage wallets, and call administrative methods according to authorization. Bitcoin Core warns against exposing RPC directly to the public internet because authentication does not provide transport encryption and the interface is not hardened as a public application API.\n\n**REST** exposes a limited read-oriented HTTP interface when enabled. It is not a replacement for all RPC methods, and an application still needs to define authentication, network exposure, caching, and data-validation boundaries around it.\n\n**ZMQ** publishes notifications for events such as blocks, transactions, and sequence changes. It is a one-way notification channel, not a query database. Messages can be lost, delayed, incomplete, or stale, so subscribers must reconcile notifications against authoritative node queries and handle reorganizations.\n\n**The Bitcoin P2P protocol** is how nodes exchange peer, block, header, and transaction messages. It is not an ordinary application REST API. Implementing a P2P client requires message framing, network negotiation, validation strategy, denial-of-service controls, transport behavior, and chain selection. A peer message is not trusted merely because it arrived over the Bitcoin network.\n\nA system may use more than one interface: ZMQ for low-latency notification, RPC for reconciliation, and P2P for node participation. Each interface should have its own authorization and failure model.",
+      "body_html": "<p>Bitcoin-related interfaces are often grouped together as “APIs,” but they have different purposes.</p>\n<p><strong>JSON-RPC</strong> is a two-way request-response interface. Applications can query node state, submit transactions, manage wallets, and call administrative methods according to authorization. Bitcoin Core warns against exposing RPC directly to the public internet because authentication does not provide transport encryption and the interface is not hardened as a public application API.</p>\n<p><strong>REST</strong> exposes a limited read-oriented HTTP interface when enabled. It is not a replacement for all RPC methods, and an application still needs to define authentication, network exposure, caching, and data-validation boundaries around it.</p>\n<p><strong>ZMQ</strong> publishes notifications for events such as blocks, transactions, and sequence changes. It is a one-way notification channel, not a query database. Messages can be lost, delayed, incomplete, or stale, so subscribers must reconcile notifications against authoritative node queries and handle reorganizations.</p>\n<p><strong>The Bitcoin P2P protocol</strong> is how nodes exchange peer, block, header, and transaction messages. It is not an ordinary application REST API. Implementing a P2P client requires message framing, network negotiation, validation strategy, denial-of-service controls, transport behavior, and chain selection. A peer message is not trusted merely because it arrived over the Bitcoin network.</p>\n<p>A system may use more than one interface: ZMQ for low-latency notification, RPC for reconciliation, and P2P for node participation. Each interface should have its own authorization and failure model.</p>"
+    },
+    {
+      "heading": "Mainnet, testnet4, signet, and regtest",
+      "body_markdown": "Development networks provide different tradeoffs.\n\n**Mainnet** carries real economic value and adversarial traffic. It is the production environment, not the first place to test transaction construction, key handling, policy assumptions, or recovery procedures.\n\n**Testnet4** is the current public test network specified by BIP 94 and supported by Bitcoin Core since version 28.0. It replaces many uses of the older testnet3 environment, but public test networks still have unstable block production, freely available coins, spam, reorganizations, and behavior that may not resemble mainnet fee markets. Software and infrastructure may migrate at different speeds, so network identifiers and provider support must be checked explicitly.\n\n**Signet**, specified by BIP 325, adds a block-signing challenge to a test network. The default signet uses coordinated block production, which can provide more predictable operation than an open proof-of-work testnet. Custom signets can use their own challenge and participants. Signet is useful for multi-party and internet-connected testing, but its controlled block-production model is not the same as mainnet mining.\n\n**Regtest** is a local regression-test network. Blocks can be generated on demand, balances can be created deterministically, and chain reorganizations can be constructed in controlled tests. Regtest is ideal for repeatable unit, integration, and end-to-end testing. It does not reproduce public peer behavior, organic fee markets, provider outages, or mainnet operational risk.\n\nA mature development process usually begins with regtest, adds signet or testnet4 where public interoperability matters, and reaches mainnet only after signing, monitoring, recovery, and policy cases have been tested.",
+      "body_html": "<p>Development networks provide different tradeoffs.</p>\n<p><strong>Mainnet</strong> carries real economic value and adversarial traffic. It is the production environment, not the first place to test transaction construction, key handling, policy assumptions, or recovery procedures.</p>\n<p><strong>Testnet4</strong> is the current public test network specified by BIP 94 and supported by Bitcoin Core since version 28.0. It replaces many uses of the older testnet3 environment, but public test networks still have unstable block production, freely available coins, spam, reorganizations, and behavior that may not resemble mainnet fee markets. Software and infrastructure may migrate at different speeds, so network identifiers and provider support must be checked explicitly.</p>\n<p><strong>Signet</strong>, specified by BIP 325, adds a block-signing challenge to a test network. The default signet uses coordinated block production, which can provide more predictable operation than an open proof-of-work testnet. Custom signets can use their own challenge and participants. Signet is useful for multi-party and internet-connected testing, but its controlled block-production model is not the same as mainnet mining.</p>\n<p><strong>Regtest</strong> is a local regression-test network. Blocks can be generated on demand, balances can be created deterministically, and chain reorganizations can be constructed in controlled tests. Regtest is ideal for repeatable unit, integration, and end-to-end testing. It does not reproduce public peer behavior, organic fee markets, provider outages, or mainnet operational risk.</p>\n<p>A mature development process usually begins with regtest, adds signet or testnet4 where public interoperability matters, and reaches mainnet only after signing, monitoring, recovery, and policy cases have been tested.</p>"
+    },
+    {
+      "heading": "Transaction and script libraries",
+      "body_markdown": "Libraries reduce the need to reimplement serialization, hashing, script parsing, address encoding, signature handling, descriptors, PSBT, and peer messages. They also create dependency and compatibility risk.\n\nRepresentative maintained projects include the `bitcoin` crate from rust-bitcoin in Rust and `bitcoinjs-lib` in TypeScript and JavaScript. As of July 23, 2026, the latest stable documentation reviewed lists rust-bitcoin `bitcoin` 0.32.101 and bitcoinjs-lib 7.0.1; rust-bitcoin also has a 0.33 beta line that should not be confused with its stable release. A library name is not an endorsement. Maintainers, release tags, supported BIPs, unsafe interfaces, cryptographic dependencies, package-registry provenance, and test coverage should be reviewed for the exact version selected.\n\nTransaction construction deserves particular care. A library can serialize a valid transaction while the application chooses the wrong recipient, amount, fee, change address, sequence value, locktime, or sighash. Cryptographic validity does not prove user intent.\n\nDevelopers should prefer integer amounts in satoshis, explicit fee-rate units, network-aware address parsing, and typed structures where available. Floating-point bitcoin values, ambiguous byte-versus-vbyte units, and silent network conversion are common sources of errors.",
+      "body_html": "<p>Libraries reduce the need to reimplement serialization, hashing, script parsing, address encoding, signature handling, descriptors, PSBT, and peer messages. They also create dependency and compatibility risk.</p>\n<p>Representative maintained projects include the <code>bitcoin</code> crate from rust-bitcoin in Rust and <code>bitcoinjs-lib</code> in TypeScript and JavaScript. As of July 23, 2026, the latest stable documentation reviewed lists rust-bitcoin <code>bitcoin</code> 0.32.101 and bitcoinjs-lib 7.0.1; rust-bitcoin also has a 0.33 beta line that should not be confused with its stable release. A library name is not an endorsement. Maintainers, release tags, supported BIPs, unsafe interfaces, cryptographic dependencies, package-registry provenance, and test coverage should be reviewed for the exact version selected.</p>\n<p>Transaction construction deserves particular care. A library can serialize a valid transaction while the application chooses the wrong recipient, amount, fee, change address, sequence value, locktime, or sighash. Cryptographic validity does not prove user intent.</p>\n<p>Developers should prefer integer amounts in satoshis, explicit fee-rate units, network-aware address parsing, and typed structures where available. Floating-point bitcoin values, ambiguous byte-versus-vbyte units, and silent network conversion are common sources of errors.</p>"
+    },
+    {
+      "heading": "Descriptors, Miniscript, and PSBT",
+      "body_markdown": "Output descriptors provide a structured way to describe script templates, key origins, derivation paths, and wallet output sets. The descriptor BIPs define families of expressions for common script types. Descriptor checksums help detect transcription errors, but they do not prove that a descriptor matches the intended keys or policy.\n\nMiniscript is a structured language and analysis framework for a subset of Bitcoin Script. It can help software compose and reason about spending conditions, satisfaction requirements, timelocks, and resource limits. Miniscript support varies by language, library, script context, and version. A library saying it supports Miniscript does not guarantee compatibility with every wallet, signer, or descriptor expression.\n\nPartially Signed Bitcoin Transactions, or PSBTs, separate transaction coordination from signing. BIP 174 defines PSBT version 0, while BIP 370 defines PSBT version 2. Additional BIPs define fields for Taproot and MuSig2. Applications must negotiate exact PSBT versions and fields with signers. Unknown fields should not be discarded casually, and conversion between versions can lose information if software does not preserve required data.\n\nPSBT is a container format, not an approval system. Every signer should verify the transaction’s inputs, outputs, amounts, fees, change, scripts, and policy before authorizing signatures.",
+      "body_html": "<p>Output descriptors provide a structured way to describe script templates, key origins, derivation paths, and wallet output sets. The descriptor BIPs define families of expressions for common script types. Descriptor checksums help detect transcription errors, but they do not prove that a descriptor matches the intended keys or policy.</p>\n<p>Miniscript is a structured language and analysis framework for a subset of Bitcoin Script. It can help software compose and reason about spending conditions, satisfaction requirements, timelocks, and resource limits. Miniscript support varies by language, library, script context, and version. A library saying it supports Miniscript does not guarantee compatibility with every wallet, signer, or descriptor expression.</p>\n<p>Partially Signed Bitcoin Transactions, or PSBTs, separate transaction coordination from signing. BIP 174 defines PSBT version 0, while BIP 370 defines PSBT version 2. Additional BIPs define fields for Taproot and MuSig2. Applications must negotiate exact PSBT versions and fields with signers. Unknown fields should not be discarded casually, and conversion between versions can lose information if software does not preserve required data.</p>\n<p>PSBT is a container format, not an approval system. Every signer should verify the transaction’s inputs, outputs, amounts, fees, change, scripts, and policy before authorizing signatures.</p>"
+    },
+    {
+      "heading": "Hardware Wallet Interface tooling",
+      "body_markdown": "The Bitcoin Core Hardware Wallet Interface project provides a common command-line and Python interface for communicating with supported hardware wallets. As of the current project releases reviewed on July 23, 2026, HWI 3.2.0 is the latest listed release and includes testnet4 support, device additions, native PSBT capabilities for some devices, and MuSig2 PSBT fields.\n\nHWI does not make all devices equivalent. Device firmware, host libraries, descriptor support, PSBT fields, script policies, and user-confirmation screens differ. Hardware wallets also do not automatically understand every application-level protocol represented by a Bitcoin transaction.\n\nProduction systems should isolate device communication, verify device and firmware compatibility, avoid logging sensitive payloads, and treat host-to-device responses as part of a larger signing policy.",
+      "body_html": "<p>The Bitcoin Core Hardware Wallet Interface project provides a common command-line and Python interface for communicating with supported hardware wallets. As of the current project releases reviewed on July 23, 2026, HWI 3.2.0 is the latest listed release and includes testnet4 support, device additions, native PSBT capabilities for some devices, and MuSig2 PSBT fields.</p>\n<p>HWI does not make all devices equivalent. Device firmware, host libraries, descriptor support, PSBT fields, script policies, and user-confirmation screens differ. Hardware wallets also do not automatically understand every application-level protocol represented by a Bitcoin transaction.</p>\n<p>Production systems should isolate device communication, verify device and firmware compatibility, avoid logging sensitive payloads, and treat host-to-device responses as part of a larger signing policy.</p>"
+    },
+    {
+      "heading": "Wallet libraries and SDKs",
+      "body_markdown": "Wallet libraries combine several responsibilities: descriptor management, address derivation, chain synchronization, transaction graph maintenance, coin selection, fee calculation, PSBT creation, signing coordination, and persistence.\n\nThe Bitcoin Dev Kit project is a prominent Rust wallet toolkit. The older `bdk` 0.x crate is deprecated in favor of `bdk_wallet` and related chain-source crates. The maintained `bdk_wallet` documentation reviewed on July 23, 2026 lists version 3.1.0. BDK’s components have separate versions, so developers should pin every crate and backend they use rather than cite “BDK” as one version.\n\nEmbedded wallet libraries can keep wallet logic inside an application process. External wallet services can isolate custody and provide a narrower API. Neither model is automatically safer. Embedded libraries increase dependency and secret-handling responsibilities inside the application. External services introduce network, authentication, availability, and authorization boundaries.",
+      "body_html": "<p>Wallet libraries combine several responsibilities: descriptor management, address derivation, chain synchronization, transaction graph maintenance, coin selection, fee calculation, PSBT creation, signing coordination, and persistence.</p>\n<p>The Bitcoin Dev Kit project is a prominent Rust wallet toolkit. The older <code>bdk</code> 0.x crate is deprecated in favor of <code>bdk_wallet</code> and related chain-source crates. The maintained <code>bdk_wallet</code> documentation reviewed on July 23, 2026 lists version 3.1.0. BDK’s components have separate versions, so developers should pin every crate and backend they use rather than cite “BDK” as one version.</p>\n<p>Embedded wallet libraries can keep wallet logic inside an application process. External wallet services can isolate custody and provide a narrower API. Neither model is automatically safer. Embedded libraries increase dependency and secret-handling responsibilities inside the application. External services introduce network, authentication, availability, and authorization boundaries.</p>"
+    },
+    {
+      "heading": "Chain-data backends",
+      "body_markdown": "Wallets and applications need a way to learn about blocks and transactions relevant to their scripts. Common models include:\n\n- Direct Bitcoin Core RPC and wallet RPC\n- Electrum-protocol servers that index script hashes\n- Esplora-style HTTP services backed by an indexer\n- Compact block filters under BIP 157 and BIP 158\n- Application-specific indexers\n- Hosted infrastructure APIs\n\nAn Electrum-style server provides script-history and subscription methods that ordinary Bitcoin Core does not expose by default. An Esplora-style service provides HTTP endpoints for blocks, transactions, addresses, scripts, fee estimates, and mempool information according to the backend implementation. Compact block filters allow clients to download filters and identify blocks that may contain relevant scripts, then retrieve and inspect matching blocks.\n\nThese models differ in privacy and trust. Querying a hosted server for an address or script hash reveals interest in that identifier. Compact-filter scanning can reduce direct address disclosure but still requires correct header, filter, and block handling. Running a local indexer reduces provider trust but adds storage, maintenance, and monitoring responsibilities.",
+      "body_html": "<p>Wallets and applications need a way to learn about blocks and transactions relevant to their scripts. Common models include:</p>\n<ul><li>Direct Bitcoin Core RPC and wallet RPC</li><li>Electrum-protocol servers that index script hashes</li><li>Esplora-style HTTP services backed by an indexer</li><li>Compact block filters under BIP 157 and BIP 158</li><li>Application-specific indexers</li><li>Hosted infrastructure APIs</li></ul>\n<p>An Electrum-style server provides script-history and subscription methods that ordinary Bitcoin Core does not expose by default. An Esplora-style service provides HTTP endpoints for blocks, transactions, addresses, scripts, fee estimates, and mempool information according to the backend implementation. Compact block filters allow clients to download filters and identify blocks that may contain relevant scripts, then retrieve and inspect matching blocks.</p>\n<p>These models differ in privacy and trust. Querying a hosted server for an address or script hash reveals interest in that identifier. Compact-filter scanning can reduce direct address disclosure but still requires correct header, filter, and block handling. Running a local indexer reduces provider trust but adds storage, maintenance, and monitoring responsibilities.</p>"
+    },
+    {
+      "heading": "Indexers, explorers, and derived state",
+      "body_markdown": "A validating node maintains chainstate, a block index, and other internal data needed for validation. Optional Bitcoin Core indexes can add transaction lookup, compact filters, UTXO-set statistics, and transaction-output spender lookup in current releases. External indexers may add address history, script history, explorer pages, token balances, inscription state, or application-specific events.\n\nAn explorer is usually a presentation and API layer over one or more indexes. Its page is not independent proof that a transaction is valid or confirmed. Developers should identify the backing node, chain tip, index version, reorganization behavior, and cache policy.\n\nApplication protocols such as Ordinals, Runes, and BRC-20 make the distinction especially visible. Bitcoin validates the underlying transactions. Separate software derives additional identities, balances, or events. Two indexers can accept the same Bitcoin chain and still disagree because their application rules, versions, or rollback behavior differ.",
+      "body_html": "<p>A validating node maintains chainstate, a block index, and other internal data needed for validation. Optional Bitcoin Core indexes can add transaction lookup, compact filters, UTXO-set statistics, and transaction-output spender lookup in current releases. External indexers may add address history, script history, explorer pages, token balances, inscription state, or application-specific events.</p>\n<p>An explorer is usually a presentation and API layer over one or more indexes. Its page is not independent proof that a transaction is valid or confirmed. Developers should identify the backing node, chain tip, index version, reorganization behavior, and cache policy.</p>\n<p>Application protocols such as Ordinals, Runes, and BRC-20 make the distinction especially visible. Bitcoin validates the underlying transactions. Separate software derives additional identities, balances, or events. Two indexers can accept the same Bitcoin chain and still disagree because their application rules, versions, or rollback behavior differ.</p>"
+    },
+    {
+      "heading": "Fee-estimation and mempool tools",
+      "body_markdown": "Fee estimators analyze local confirmation history, mempool conditions, or provider data. Their outputs are estimates, not guarantees. Bitcoin Core’s fee estimates reflect one node’s implementation and observations. Public mempool services reflect their own nodes, indexes, and policies.\n\nMempool contents are local and provisional. Nodes can differ because of arrival order, policy settings, package acceptance, replacement, eviction, limits, and connectivity. A transaction visible to one service may be absent from another.\n\nUseful developer tools include raw transaction decoders, block inspectors, script analyzers, mempool visualizers, and policy test endpoints. These tools help explain behavior, but production logic should not trust a visual display or single provider as consensus evidence.",
+      "body_html": "<p>Fee estimators analyze local confirmation history, mempool conditions, or provider data. Their outputs are estimates, not guarantees. Bitcoin Core’s fee estimates reflect one node’s implementation and observations. Public mempool services reflect their own nodes, indexes, and policies.</p>\n<p>Mempool contents are local and provisional. Nodes can differ because of arrival order, policy settings, package acceptance, replacement, eviction, limits, and connectivity. A transaction visible to one service may be absent from another.</p>\n<p>Useful developer tools include raw transaction decoders, block inspectors, script analyzers, mempool visualizers, and policy test endpoints. These tools help explain behavior, but production logic should not trust a visual display or single provider as consensus evidence.</p>"
+    },
+    {
+      "heading": "Testing beyond the happy path",
+      "body_markdown": "A transaction that works once on regtest is not enough. Testing should cover:\n\n- Correct and incorrect network identifiers\n- Address and script-type handling\n- Input selection, change, dust, and fee calculation\n- Consensus-valid transactions rejected by current node policy\n- Replacement and fee-bumping paths\n- Mempool eviction and rebroadcast\n- Conflicting transactions\n- Blocks that confirm transactions in different orders\n- Reorganizations that disconnect confirmed transactions\n- Pruned-node and unavailable-history behavior\n- Index lag and rebuilds\n- Lost ZMQ notifications\n- API timeouts, retries, duplicate requests, and stale caches\n- Hardware signer rejection and PSBT incompatibility\n- Backup restoration and descriptor recovery\n\nRegtest makes many of these cases deterministic. Tests should assert both Bitcoin state and application state, because an application database can remain wrong even when the node is correct.",
+      "body_html": "<p>A transaction that works once on regtest is not enough. Testing should cover:</p>\n<ul><li>Correct and incorrect network identifiers</li><li>Address and script-type handling</li><li>Input selection, change, dust, and fee calculation</li><li>Consensus-valid transactions rejected by current node policy</li><li>Replacement and fee-bumping paths</li><li>Mempool eviction and rebroadcast</li><li>Conflicting transactions</li><li>Blocks that confirm transactions in different orders</li><li>Reorganizations that disconnect confirmed transactions</li><li>Pruned-node and unavailable-history behavior</li><li>Index lag and rebuilds</li><li>Lost ZMQ notifications</li><li>API timeouts, retries, duplicate requests, and stale caches</li><li>Hardware signer rejection and PSBT incompatibility</li><li>Backup restoration and descriptor recovery</li></ul>\n<p>Regtest makes many of these cases deterministic. Tests should assert both Bitcoin state and application state, because an application database can remain wrong even when the node is correct.</p>"
+    },
+    {
+      "heading": "Version pinning and supply-chain review",
+      "body_markdown": "Bitcoin development dependencies are security-sensitive. Production systems should pin versions, record checksums or lockfiles, review release notes, and define an upgrade process. Reproducible builds are valuable where projects support them, but reproducibility does not prove that source code is safe or correctly configured.\n\nDependency review should include:\n\n- Maintainer and release activity\n- Signed tags or release verification where available\n- Open security advisories\n- Transitive cryptographic and networking dependencies\n- Build scripts and binary downloads\n- Licensing obligations\n- Platform support\n- Database migration behavior\n- Backward-compatibility promises\n- Recovery from failed upgrades\n\nA default branch can contain unreleased behavior. A release tag can be old even while development continues. A package registry version can lag a repository. Each claim should be tied to the exact artifact used.",
+      "body_html": "<p>Bitcoin development dependencies are security-sensitive. Production systems should pin versions, record checksums or lockfiles, review release notes, and define an upgrade process. Reproducible builds are valuable where projects support them, but reproducibility does not prove that source code is safe or correctly configured.</p>\n<p>Dependency review should include:</p>\n<ul><li>Maintainer and release activity</li><li>Signed tags or release verification where available</li><li>Open security advisories</li><li>Transitive cryptographic and networking dependencies</li><li>Build scripts and binary downloads</li><li>Licensing obligations</li><li>Platform support</li><li>Database migration behavior</li><li>Backward-compatibility promises</li><li>Recovery from failed upgrades</li></ul>\n<p>A default branch can contain unreleased behavior. A release tag can be old even while development continues. A package registry version can lag a repository. Each claim should be tied to the exact artifact used.</p>"
+    },
+    {
+      "heading": "Separate validation, retrieval, construction, and signing",
+      "body_markdown": "Where practical, production systems should separate four boundaries.\n\n**Validation** decides which chain and transactions satisfy Bitcoin rules.\n\n**Data retrieval** finds blocks, transactions, UTXOs, histories, estimates, and derived fields.\n\n**Transaction construction** selects inputs and creates recipients, change, fees, sequences, and locktimes.\n\n**Signing** authorizes spends under key and policy controls.\n\nSeparation limits the damage from one compromised component. A hosted indexer may suggest UTXOs, while a validating node confirms that they exist. An online coordinator may construct a PSBT, while an external signer verifies and signs it. An application API may expose payment status without exposing node administration.\n\nSeparation is not absolute isolation. Components must still agree on network, chain tip, descriptors, transaction format, and policy. The goal is to make authority explicit rather than accidental.",
+      "body_html": "<p>Where practical, production systems should separate four boundaries.</p>\n<p><strong>Validation</strong> decides which chain and transactions satisfy Bitcoin rules.</p>\n<p><strong>Data retrieval</strong> finds blocks, transactions, UTXOs, histories, estimates, and derived fields.</p>\n<p><strong>Transaction construction</strong> selects inputs and creates recipients, change, fees, sequences, and locktimes.</p>\n<p><strong>Signing</strong> authorizes spends under key and policy controls.</p>\n<p>Separation limits the damage from one compromised component. A hosted indexer may suggest UTXOs, while a validating node confirms that they exist. An online coordinator may construct a PSBT, while an external signer verifies and signs it. An application API may expose payment status without exposing node administration.</p>\n<p>Separation is not absolute isolation. Components must still agree on network, chain tip, descriptors, transaction format, and policy. The goal is to make authority explicit rather than accidental.</p>"
+    },
+    {
+      "heading": "A practical development workflow",
+      "body_markdown": "1. **Define the security and custody model.** Decide who controls keys, who can request transactions, which approvals are required, and what must be recoverable.\n2. **Choose validation and chain-data sources.** Identify the validating node, optional indexes, remote services, and fallback behavior. Document which responses are trusted and which are cross-checked.\n3. **Select maintained libraries.** Verify current releases, supported BIPs, licenses, test coverage, and compatibility with the chosen node, wallet, and signer.\n4. **Build against regtest.** Make addresses, confirmations, replacements, and reorganizations reproducible.\n5. **Test policy and reorganization cases.** Include transactions that are valid under consensus but rejected by current policy, plus rollback and replay behavior.\n6. **Test signing boundaries.** Confirm exact PSBT, descriptor, script, and hardware compatibility. Verify that signers display or validate critical transaction details.\n7. **Pin and document versions.** Record node, wallet, library, indexer, firmware, API, and database-schema versions.\n8. **Observe and review production behavior.** Monitor chain-tip agreement, mempool assumptions, index lag, failed broadcasts, signing errors, retries, and recovery drills.\n\nThe outcome should be a system map, not merely a dependency list.",
+      "body_html": "<ol><li><strong>Define the security and custody model.</strong> Decide who controls keys, who can request transactions, which approvals are required, and what must be recoverable.</li><li><strong>Choose validation and chain-data sources.</strong> Identify the validating node, optional indexes, remote services, and fallback behavior. Document which responses are trusted and which are cross-checked.</li><li><strong>Select maintained libraries.</strong> Verify current releases, supported BIPs, licenses, test coverage, and compatibility with the chosen node, wallet, and signer.</li><li><strong>Build against regtest.</strong> Make addresses, confirmations, replacements, and reorganizations reproducible.</li><li><strong>Test policy and reorganization cases.</strong> Include transactions that are valid under consensus but rejected by current policy, plus rollback and replay behavior.</li><li><strong>Test signing boundaries.</strong> Confirm exact PSBT, descriptor, script, and hardware compatibility. Verify that signers display or validate critical transaction details.</li><li><strong>Pin and document versions.</strong> Record node, wallet, library, indexer, firmware, API, and database-schema versions.</li><li><strong>Observe and review production behavior.</strong> Monitor chain-tip agreement, mempool assumptions, index lag, failed broadcasts, signing errors, retries, and recovery drills.</li></ol>\n<p>The outcome should be a system map, not merely a dependency list.</p>"
+    },
+    {
+      "heading": "The working model",
+      "body_markdown": "Bitcoin developer tools form a layered system. Consensus rules govern valid chain history. Bitcoin Core and other nodes implement validation and policy. Libraries encode transactions and scripts. Wallets derive addresses, track UTXOs, construct transactions, and coordinate signing. APIs transport data and commands. Indexers create searchable or application-specific state. Hosted services add operational convenience and external dependencies.\n\nNo layer should silently inherit authority from another. A library is not a validating node. An index is not consensus. A successful broadcast is not confirmation. A test network is not mainnet. A hardware signer is not proof of user intent. A current release is not permanently current.\n\nA credible Bitcoin application makes those boundaries visible, tests them under failure, and records the exact versions on which its behavior depends.",
+      "body_html": "<p>Bitcoin developer tools form a layered system. Consensus rules govern valid chain history. Bitcoin Core and other nodes implement validation and policy. Libraries encode transactions and scripts. Wallets derive addresses, track UTXOs, construct transactions, and coordinate signing. APIs transport data and commands. Indexers create searchable or application-specific state. Hosted services add operational convenience and external dependencies.</p>\n<p>No layer should silently inherit authority from another. A library is not a validating node. An index is not consensus. A successful broadcast is not confirmation. A test network is not mainnet. A hardware signer is not proof of user intent. A current release is not permanently current.</p>\n<p>A credible Bitcoin application makes those boundaries visible, tests them under failure, and records the exact versions on which its behavior depends.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Consensus",
+      "definition": "The rules nodes apply when validating Bitcoin blocks and transactions and selecting an accepted chain."
+    },
+    {
+      "term": "Policy",
+      "definition": "Implementation rules for mempool acceptance, relay, mining selection, wallet behavior, or local operation that are not necessarily consensus rules."
+    },
+    {
+      "term": "RPC",
+      "definition": "A request-response interface for calling methods on another process, such as Bitcoin Core JSON-RPC."
+    },
+    {
+      "term": "REST",
+      "definition": "An HTTP resource interface; Bitcoin Core provides a limited optional REST interface, while external services may provide broader APIs."
+    },
+    {
+      "term": "ZMQ",
+      "definition": "A notification transport used by Bitcoin Core to publish block, transaction, and sequence events."
+    },
+    {
+      "term": "P2P",
+      "definition": "Bitcoin’s peer-to-peer wire protocol for exchanging network, transaction, header, and block messages."
+    },
+    {
+      "term": "Descriptor",
+      "definition": "A structured expression describing scripts, keys, derivation, and wallet output sets."
+    },
+    {
+      "term": "Miniscript",
+      "definition": "A structured language and analysis framework for a subset of Bitcoin Script spending conditions."
+    },
+    {
+      "term": "PSBT",
+      "definition": "A container for coordinating partially signed Bitcoin transactions and related metadata."
+    },
+    {
+      "term": "Regtest",
+      "definition": "A local Bitcoin test network where blocks can be generated on demand."
+    },
+    {
+      "term": "Signet",
+      "definition": "A test network whose blocks must satisfy a defined signing challenge."
+    },
+    {
+      "term": "Testnet4",
+      "definition": "The current public Bitcoin test network specified by BIP 94."
+    },
+    {
+      "term": "Indexer",
+      "definition": "Software that derives searchable or application-specific state from ordered Bitcoin data."
+    },
+    {
+      "term": "Compact block filter",
+      "definition": "A probabilistic per-block filter specified by BIP 158 and transported under BIP 157."
+    },
+    {
+      "term": "Chain tip",
+      "definition": "The block a node currently considers the end of its active chain."
+    },
+    {
+      "term": "Mempool",
+      "definition": "A node’s local set of unconfirmed transactions accepted under its current policy."
+    },
+    {
+      "term": "Trust boundary",
+      "definition": "A point where data or authority crosses between components with different security assumptions."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bitcoin Core Downloads",
+      "author_or_publisher": "Bitcoin Core project",
+      "url": "https://bitcoincore.org/en/download/",
+      "supports": "Bitcoin Core 31.1 as the current release listed on July 23, 2026."
+    },
+    {
+      "title": "Bitcoin Core v31.1 Source Tree",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/tree/v31.1",
+      "supports": "Dated implementation evidence for node, wallet, validation, policy, testing, indexes, and interfaces."
+    },
+    {
+      "title": "Bitcoin Core JSON-RPC Interface",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/doc/JSON-RPC-interface.md",
+      "supports": "RPC endpoints, versioning, authentication context, and the warning against public-internet exposure."
+    },
+    {
+      "title": "Bitcoin Core REST Interface",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/doc/REST-interface.md",
+      "supports": "The optional read-oriented REST endpoints and their limited scope."
+    },
+    {
+      "title": "Bitcoin Core ZMQ Documentation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/doc/zmq.md",
+      "supports": "ZMQ notification topics, loss and reorganization handling, and the absence of built-in authentication."
+    },
+    {
+      "title": "Bitcoin Core Developer Notes",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/doc/developer-notes.md",
+      "supports": "Recommended uses of regtest, signet, and testnet4 for development and current RPC development guidance."
+    },
+    {
+      "title": "Bitcoin Core Supported BIPs",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/doc/bips.md",
+      "supports": "Dated Bitcoin Core support for testnet4, signet, descriptors, Miniscript, PSBT fields, and related BIPs."
+    },
+    {
+      "title": "BIP 94: Testnet 4",
+      "author_or_publisher": "Fabian Jahr",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0094.mediawiki",
+      "supports": "The design and deployed specification of testnet4."
+    },
+    {
+      "title": "BIP 325: Signet",
+      "author_or_publisher": "Karl-Johan Alm and Anthony Towns",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0325.mediawiki",
+      "supports": "Signet’s challenge-based block-validity model and custom-network design."
+    },
+    {
+      "title": "BIP 157: Client Side Block Filtering",
+      "author_or_publisher": "Olaoluwa Osuntokun, Alex Akselrod, and Jim Posen",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0157.mediawiki",
+      "supports": "Peer transport and client use of compact block filters."
+    },
+    {
+      "title": "BIP 158: Compact Block Filters",
+      "author_or_publisher": "Olaoluwa Osuntokun and Alex Akselrod",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0158.mediawiki",
+      "supports": "Compact block-filter construction and matching semantics."
+    },
+    {
+      "title": "BIP 174: Partially Signed Bitcoin Transaction Format",
+      "author_or_publisher": "Andrew Chow",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0174.mediawiki",
+      "supports": "PSBT version 0 structure and signing-coordination fields."
+    },
+    {
+      "title": "BIP 370: PSBT Version 2",
+      "author_or_publisher": "Andrew Chow",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0370.mediawiki",
+      "supports": "PSBT version 2 structure and version boundaries."
+    },
+    {
+      "title": "Output Script Descriptors BIPs 380–386",
+      "author_or_publisher": "Bitcoin BIPs contributors",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0380.mediawiki",
+      "supports": "Descriptor expression foundations and the linked descriptor specification family."
+    },
+    {
+      "title": "Miniscript Website and Specification",
+      "author_or_publisher": "Miniscript contributors",
+      "url": "https://bitcoin.sipa.be/miniscript/",
+      "supports": "Miniscript’s structured policy language, analysis goals, and script-context distinctions."
+    },
+    {
+      "title": "Bitcoin Dev Kit Releases",
+      "author_or_publisher": "Bitcoin Dev Kit contributors",
+      "url": "https://github.com/bitcoindevkit/bdk/releases",
+      "supports": "BDK’s component-specific release history and the deprecation of the legacy `bdk` 0.x crate."
+    },
+    {
+      "title": "bdk_wallet 3.1.0 Documentation",
+      "author_or_publisher": "Bitcoin Dev Kit contributors",
+      "url": "https://docs.rs/bdk_wallet/3.1.0/bdk_wallet/",
+      "supports": "`bdk_wallet` 3.1.0 as the current documented release reviewed on July 23, 2026 and its descriptor, transaction-building, signing, persistence, and wallet-state scope."
+    },
+    {
+      "title": "rust-bitcoin `bitcoin` 0.32.101 Documentation",
+      "author_or_publisher": "rust-bitcoin contributors",
+      "url": "https://docs.rs/bitcoin/0.32.101/bitcoin/",
+      "supports": "`bitcoin` 0.32.101 as the current stable rust-bitcoin crate reviewed on July 23, 2026 and its Bitcoin data structures, consensus encoding, scripts, addresses, PSBT, and protocol primitives."
+    },
+    {
+      "title": "bitcoinjs-lib 7.0.1 Package Documentation",
+      "author_or_publisher": "bitcoinjs contributors",
+      "url": "https://www.npmjs.com/package/bitcoinjs-lib",
+      "supports": "bitcoinjs-lib 7.0.1 as the current published package reviewed on July 23, 2026, its TypeScript and JavaScript scope, tagged-release guidance, dependency separation, and package-verification warning."
+    },
+    {
+      "title": "Bitcoin Core Hardware Wallet Interface Releases",
+      "author_or_publisher": "HWI contributors",
+      "url": "https://github.com/bitcoin-core/HWI/releases",
+      "supports": "HWI 3.2.0 as the latest listed release reviewed on July 23, 2026 and its stated testnet4, device, PSBT, and MuSig2 additions."
+    },
+    {
+      "title": "Electrum Protocol Documentation",
+      "author_or_publisher": "Electrum protocol contributors",
+      "url": "https://electrum-protocol.readthedocs.io/en/latest/",
+      "supports": "Electrum JSON-RPC transport, version negotiation, script-hash history, subscriptions, and protocol-version behavior."
+    },
+    {
+      "title": "Esplora Repository",
+      "author_or_publisher": "Blockstream contributors",
+      "url": "https://github.com/Blockstream/esplora",
+      "supports": "The Esplora explorer interface and its dependence on an indexed HTTP backend."
+    },
+    {
+      "title": "electrs Repository",
+      "author_or_publisher": "Roman Zeyde and contributors",
+      "url": "https://github.com/romanz/electrs",
+      "supports": "A maintained Rust Electrum server model that indexes Bitcoin data for script-history queries."
+    },
+    {
+      "title": "Fulcrum Repository",
+      "author_or_publisher": "Calin Culianu and contributors",
+      "url": "https://github.com/cculianu/Fulcrum",
+      "supports": "An independently maintained Electrum server implementation and a separate indexer architecture."
+    },
+    {
+      "title": "Bitcoin Core Functional Tests",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/tree/v31.1/test/functional",
+      "supports": "Current implementation test patterns for regtest, wallet behavior, mempool policy, interfaces, pruning, indexes, and reorganizations."
+    },
+    {
+      "title": "Reproducible Builds Documentation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/doc/release-process.md",
+      "supports": "Bitcoin Core’s release-build and verification process as one example of reproducible-build practice."
+    }
+  ],
+  "seo_title": "Bitcoin Developer Tools: Practical Stack Guide | Mempool Surf Club",
+  "meta_description": "Map the Bitcoin development stack, from nodes and test networks to descriptors, PSBTs, wallets, APIs, indexers, and signing boundaries.",
+  "excerpt": "A systems-oriented overview of Bitcoin developer tools, including Bitcoin Core, regtest, signet, libraries, descriptors, PSBT, HWI, wallet backends, indexers, testing, and supply-chain review.",
+  "reading_time": "19 to 23 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-BUILDING",
+    "label": "Building on Bitcoin",
+    "subcategory": "Development",
+    "depth": "Deep",
+    "format": "Technical Analysis"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-040",
+      "title": "What Is a Bitcoin Inscription?",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-042",
+      "title": "How Bitcoin Wallet Integrations Work",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": []
+  },
+  "review_dates": {
+    "reviewed": "2026-07-24",
+    "copy_locked": "2026-07-24",
+    "human_verification": "2026-07-24"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "The Layered Bitcoin Development Stack",
+      "educational_purpose": "Show how consensus validation, node interfaces, chain-data services, wallet logic, signing, and application behavior form separate layers.",
+      "recommended_placement": "After the section There is no universal Bitcoin development stack.",
+      "visual_description": "Vintage nautical systems chart with a validating-node hull at the base and transparent layers above for RPC and P2P interfaces, indexes, wallet logic, signing devices, and application services.",
+      "required_labels": "Consensus validation, Bitcoin Core implementation, RPC and P2P, Chain data, Wallet logic, Signing boundary, Application logic, Derived state",
+      "caption": "Bitcoin applications combine layers with different authority; no single tool supplies every function.",
+      "alt_text": "Layered technical diagram separating Bitcoin validation, interfaces, indexes, wallet logic, signing, and application services.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack the layers vertically with the validation layer fixed at the bottom.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "Regtest-to-Production Navigation Route",
+      "educational_purpose": "Present a staged workflow from deterministic local tests through public test networks and controlled production release.",
+      "recommended_placement": "After the section A practical development workflow.",
+      "visual_description": "Muted cartographic route beginning in a regtest harbor, passing signet and testnet4 waypoints, then reaching a mainnet coastline with checkpoints for policy, reorganization, signing, version pinning, and monitoring.",
+      "required_labels": "Regtest, Signet, Testnet4, Mainnet, Policy tests, Reorganization tests, Signing tests, Version pinning, Monitoring",
+      "caption": "Production readiness depends on staged testing of failure and trust boundaries, not only successful transaction creation.",
+      "alt_text": "Nautical workflow map moving from regtest to signet, testnet4, and mainnet through testing and review checkpoints.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Use a vertical route with each network as one checkpoint card.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Tool-Selection Trust Boundary Map",
+      "educational_purpose": "Help readers choose tools by authority, custody, privacy, and failure behavior rather than popularity.",
+      "recommended_placement": "After the section Separate validation, retrieval, construction, and signing.",
+      "visual_description": "Technical network map with four stations for validation, data retrieval, transaction construction, and signing, connected by labeled routes to local nodes, hosted APIs, indexers, libraries, and hardware devices.",
+      "required_labels": "Validation, Retrieval, Construction, Signing, Local node, Hosted API, Indexer, Library, Hardware signer, Trust boundary",
+      "caption": "Each tool should be selected for a defined responsibility and an explicit failure model.",
+      "alt_text": "Network map showing validation, retrieval, transaction construction, and signing as separate stations linked across trust boundaries.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Present the four responsibilities as a two-by-two grid with boundary labels.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}

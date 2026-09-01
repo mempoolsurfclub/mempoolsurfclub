@@ -1,0 +1,305 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-046-bitcoin-discreet-log-contracts.md",
+  "source_sha256": "572471bfbb9d1616ea6dcf8c0bd50139c433ede9b457d6195a6e53b7be593569",
+  "registry_id": "MSC-GUIDE-046",
+  "status": "COPY_LOCKED",
+  "h1": "How Discreet Log Contracts Work",
+  "introductory_deck": "Discreet Log Contracts use preconstructed Bitcoin transactions and oracle signatures to settle event-dependent payouts without making the oracle a custodian. Learn how announcements, event descriptors, funding transactions, CETs, adaptor signatures, refunds, multi-oracle designs, privacy, fees, and implementation maturity fit together.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "A Discreet Log Contract, or DLC, is an application protocol for constructing Bitcoin transactions whose payout depends on an event attested to by an oracle. Two contracting parties agree on the possible outcomes and payout rules, lock collateral in a jointly controlled Bitcoin output, and exchange signatures for possible closing transactions before funding the contract.\n\nBitcoin does not have a DLC consensus object. Nodes validate the funding transaction, the eventual closing transaction, its signatures, locktime, scripts, amounts, and UTXO spend. DLC software supplies the contract messages, oracle format, payout mapping, adaptor signatures, transaction construction, storage, and recovery logic.",
+      "body_html": "<p>A Discreet Log Contract, or DLC, is an application protocol for constructing Bitcoin transactions whose payout depends on an event attested to by an oracle. Two contracting parties agree on the possible outcomes and payout rules, lock collateral in a jointly controlled Bitcoin output, and exchange signatures for possible closing transactions before funding the contract.</p>\n<p>Bitcoin does not have a DLC consensus object. Nodes validate the funding transaction, the eventual closing transaction, its signatures, locktime, scripts, amounts, and UTXO spend. DLC software supplies the contract messages, oracle format, payout mapping, adaptor signatures, transaction construction, storage, and recovery logic.</p>"
+    },
+    {
+      "heading": "The oracle reports; it does not normally hold the funds",
+      "body_markdown": "A DLC oracle publishes signed information about an event. Examples could include an election result, weather observation, asset-price fixing, or another objectively encoded outcome. The oracle is not normally a co-signer of the DLC funding output and does not need to learn which parties used its announcement.\n\nBefore the event, the oracle publishes an announcement. The current specification describes an announcement containing the oracle public key, event identifier, expected attestation time, event descriptor, and one or more public nonces. The announcement is signed so clients can verify that it came from the stated oracle.\n\nAfter the event, the oracle publishes an attestation: a signature over the encoded outcome using the previously announced nonce material. Contract participants use that signature data to complete the closing signature associated with the attested outcome.\n\nThis design can keep the oracle unaware of specific contracts, but “discreet” is not a guarantee of complete privacy. Network observation, counterparties, wallet behavior, reused addresses, distinctive transaction structures, or an oracle service's access logs can still reveal information.",
+      "body_html": "<p>A DLC oracle publishes signed information about an event. Examples could include an election result, weather observation, asset-price fixing, or another objectively encoded outcome. The oracle is not normally a co-signer of the DLC funding output and does not need to learn which parties used its announcement.</p>\n<p>Before the event, the oracle publishes an announcement. The current specification describes an announcement containing the oracle public key, event identifier, expected attestation time, event descriptor, and one or more public nonces. The announcement is signed so clients can verify that it came from the stated oracle.</p>\n<p>After the event, the oracle publishes an attestation: a signature over the encoded outcome using the previously announced nonce material. Contract participants use that signature data to complete the closing signature associated with the attested outcome.</p>\n<p>This design can keep the oracle unaware of specific contracts, but “discreet” is not a guarantee of complete privacy. Network observation, counterparties, wallet behavior, reused addresses, distinctive transaction structures, or an oracle service&#39;s access logs can still reveal information.</p>"
+    },
+    {
+      "heading": "Event descriptors define the outcome language",
+      "body_markdown": "The parties must agree on exactly what the oracle can attest to. An event descriptor defines the outcome encoding.\n\nAn enumerated event lists a finite set of strings, such as `sunny`, `cloudy`, or `rainy`. A numeric event can use digit decomposition, in which an oracle signs digits in a specified base with a unit, precision, sign rule, and number of digits.\n\nEncoding is part of the contract. Differences in capitalization, normalization, precision, time source, rounding, overflow behavior, or event identifiers can make an attestation unusable for a contract even when humans believe the oracle reported the expected fact.\n\nThe oracle announcement should therefore be treated as a cryptographic interface, not a natural-language promise. Wallets need to verify the exact serialized event, public key, nonces, and descriptor before accepting collateral terms.",
+      "body_html": "<p>The parties must agree on exactly what the oracle can attest to. An event descriptor defines the outcome encoding.</p>\n<p>An enumerated event lists a finite set of strings, such as <code>sunny</code>, <code>cloudy</code>, or <code>rainy</code>. A numeric event can use digit decomposition, in which an oracle signs digits in a specified base with a unit, precision, sign rule, and number of digits.</p>\n<p>Encoding is part of the contract. Differences in capitalization, normalization, precision, time source, rounding, overflow behavior, or event identifiers can make an attestation unusable for a contract even when humans believe the oracle reported the expected fact.</p>\n<p>The oracle announcement should therefore be treated as a cryptographic interface, not a natural-language promise. Wallets need to verify the exact serialized event, public key, nonces, and descriptor before accepting collateral terms.</p>"
+    },
+    {
+      "heading": "Negotiation produces one shared transaction view",
+      "body_markdown": "The current peer-protocol specification uses an offer, accept, and sign exchange. The offerer proposes contract information, oracle information, collateral, inputs, payout and change scripts, fee rate, and locktimes. The accepter validates those terms, contributes its own inputs and collateral, and returns adaptor signatures for the possible Contract Execution Transactions, or CETs, plus a signature for the refund transaction.\n\nThe offerer then sends its signatures. Only after both parties possess the signatures needed for safe closure should the funding transaction be broadcast.\n\nThis ordering protects against locking funds before a usable exit exists. A wallet that broadcasts too early can create a jointly controlled UTXO without having every required CET or refund signature. DLC implementations must persist negotiation state and verify the complete transaction set before funding.\n\nThe contract identifier and transaction ordering rules also matter. Both parties must construct byte-identical funding and closing transactions for signatures to verify. Input order, output order, serial identifiers, amounts, scripts, and locktimes cannot be treated as display-only metadata.",
+      "body_html": "<p>The current peer-protocol specification uses an offer, accept, and sign exchange. The offerer proposes contract information, oracle information, collateral, inputs, payout and change scripts, fee rate, and locktimes. The accepter validates those terms, contributes its own inputs and collateral, and returns adaptor signatures for the possible Contract Execution Transactions, or CETs, plus a signature for the refund transaction.</p>\n<p>The offerer then sends its signatures. Only after both parties possess the signatures needed for safe closure should the funding transaction be broadcast.</p>\n<p>This ordering protects against locking funds before a usable exit exists. A wallet that broadcasts too early can create a jointly controlled UTXO without having every required CET or refund signature. DLC implementations must persist negotiation state and verify the complete transaction set before funding.</p>\n<p>The contract identifier and transaction ordering rules also matter. Both parties must construct byte-identical funding and closing transactions for signatures to verify. Input order, output order, serial identifiers, amounts, scripts, and locktimes cannot be treated as display-only metadata.</p>"
+    },
+    {
+      "heading": "The funding transaction locks collateral",
+      "body_markdown": "Under the current version-zero transaction specification, the funding transaction combines participant inputs and creates a two-of-two P2WSH funding output. Each party may also receive change. SegWit inputs are required by that specification to avoid transaction-ID malleability that could invalidate precomputed closing transactions.\n\nOnce confirmed, the funding output can be spent cooperatively by signatures from both funding keys. The parties have already prepared signatures for outcome-specific CETs and a time-locked refund.\n\nBitcoin consensus sees a standard Bitcoin output and later spend. It does not see the event descriptor or payout curve unless an application reconstructs them from the parties' stored contract data.\n\nCollateral remains exposed to ordinary Bitcoin risks: lost keys, corrupted contract records, inadequate backups, fee miscalculation, confirmation delays, reorganizations, and implementation bugs. “Non-custodial” does not mean that recovery is automatic.",
+      "body_html": "<p>Under the current version-zero transaction specification, the funding transaction combines participant inputs and creates a two-of-two P2WSH funding output. Each party may also receive change. SegWit inputs are required by that specification to avoid transaction-ID malleability that could invalidate precomputed closing transactions.</p>\n<p>Once confirmed, the funding output can be spent cooperatively by signatures from both funding keys. The parties have already prepared signatures for outcome-specific CETs and a time-locked refund.</p>\n<p>Bitcoin consensus sees a standard Bitcoin output and later spend. It does not see the event descriptor or payout curve unless an application reconstructs them from the parties&#39; stored contract data.</p>\n<p>Collateral remains exposed to ordinary Bitcoin risks: lost keys, corrupted contract records, inadequate backups, fee miscalculation, confirmation delays, reorganizations, and implementation bugs. “Non-custodial” does not mean that recovery is automatic.</p>"
+    },
+    {
+      "heading": "CETs encode possible payouts",
+      "body_markdown": "A Contract Execution Transaction spends the funding output and pays the parties according to one possible outcome. For a simple enumerated event, the parties can construct one CET per outcome. Numeric contracts can require many possible payout points, so the specification includes compression and interpolation techniques to reduce the transaction and signature set.\n\nBefore the oracle attests, neither party should possess a complete ordinary signature that allows unilateral broadcast of an outcome CET. Instead, each party exchanges adaptor signatures. An adaptor signature is a cryptographic object that can be completed with a secret related to the oracle's eventual signature.\n\nThe oracle's public announcement lets the parties compute the adaptor points needed during setup. The later attestation reveals the value that completes the adaptor signature for the corresponding CET. The party with the completed signatures can broadcast that transaction.\n\nThe oracle does not choose a payout transaction after seeing the contract. Its signed outcome unlocks the pre-negotiated outcome path. If the parties disagreed about the payout curve during setup, the oracle's later signature does not repair the contract.",
+      "body_html": "<p>A Contract Execution Transaction spends the funding output and pays the parties according to one possible outcome. For a simple enumerated event, the parties can construct one CET per outcome. Numeric contracts can require many possible payout points, so the specification includes compression and interpolation techniques to reduce the transaction and signature set.</p>\n<p>Before the oracle attests, neither party should possess a complete ordinary signature that allows unilateral broadcast of an outcome CET. Instead, each party exchanges adaptor signatures. An adaptor signature is a cryptographic object that can be completed with a secret related to the oracle&#39;s eventual signature.</p>\n<p>The oracle&#39;s public announcement lets the parties compute the adaptor points needed during setup. The later attestation reveals the value that completes the adaptor signature for the corresponding CET. The party with the completed signatures can broadcast that transaction.</p>\n<p>The oracle does not choose a payout transaction after seeing the contract. Its signed outcome unlocks the pre-negotiated outcome path. If the parties disagreed about the payout curve during setup, the oracle&#39;s later signature does not repair the contract.</p>"
+    },
+    {
+      "heading": "The attestation is an input to signature completion",
+      "body_markdown": "It is tempting to say the oracle “executes” the contract. More precisely, the oracle publishes signed outcome data. DLC software verifies the announcement and attestation, identifies the applicable CET, and uses the attestation secret to complete an adaptor signature.\n\nBitcoin nodes verify the resulting ordinary signatures and transaction. They do not verify that the oracle was an appropriate source, followed a correct measurement method, or reported reality honestly.\n\nThis boundary explains the principal oracle risk. A cryptographically valid attestation can still be factually wrong. An oracle can also fail to publish, publish late, use inconsistent event parameters, or compromise its signing key.\n\nUnder the construction described by the DLC introduction, signing conflicting outcomes with the same committed nonce can expose the oracle's private key. That creates accountability and severe consequences, but it does not reverse an already confirmed incorrect payout.",
+      "body_html": "<p>It is tempting to say the oracle “executes” the contract. More precisely, the oracle publishes signed outcome data. DLC software verifies the announcement and attestation, identifies the applicable CET, and uses the attestation secret to complete an adaptor signature.</p>\n<p>Bitcoin nodes verify the resulting ordinary signatures and transaction. They do not verify that the oracle was an appropriate source, followed a correct measurement method, or reported reality honestly.</p>\n<p>This boundary explains the principal oracle risk. A cryptographically valid attestation can still be factually wrong. An oracle can also fail to publish, publish late, use inconsistent event parameters, or compromise its signing key.</p>\n<p>Under the construction described by the DLC introduction, signing conflicting outcomes with the same committed nonce can expose the oracle&#39;s private key. That creates accountability and severe consequences, but it does not reverse an already confirmed incorrect payout.</p>"
+    },
+    {
+      "heading": "The refund path handles non-attestation",
+      "body_markdown": "The parties also sign a refund transaction during setup. It returns their respective collateral after a later locktime. The refund is intended for a situation in which the oracle does not provide a usable attestation.\n\nThe refund locktime must leave enough time for the event and expected oracle publication. If it is too early, a participant may attempt a refund before a delayed but legitimate outcome path is used. If it is too late, funds remain locked longer during oracle failure.\n\nFee planning is equally important. A fully signed refund that cannot confirm economically or before another valid spend is not a complete operational recovery plan. Implementations need current fee-management and rebroadcast procedures rather than assuming the fee rate chosen at setup will remain adequate.\n\nA refund protects against non-attestation. It does not protect against an oracle signing the wrong outcome or colluding with one participant. The current DLC introduction explicitly notes that its described version does not prevent participant-oracle collusion.",
+      "body_html": "<p>The parties also sign a refund transaction during setup. It returns their respective collateral after a later locktime. The refund is intended for a situation in which the oracle does not provide a usable attestation.</p>\n<p>The refund locktime must leave enough time for the event and expected oracle publication. If it is too early, a participant may attempt a refund before a delayed but legitimate outcome path is used. If it is too late, funds remain locked longer during oracle failure.</p>\n<p>Fee planning is equally important. A fully signed refund that cannot confirm economically or before another valid spend is not a complete operational recovery plan. Implementations need current fee-management and rebroadcast procedures rather than assuming the fee rate chosen at setup will remain adequate.</p>\n<p>A refund protects against non-attestation. It does not protect against an oracle signing the wrong outcome or colluding with one participant. The current DLC introduction explicitly notes that its described version does not prevent participant-oracle collusion.</p>"
+    },
+    {
+      "heading": "Multiple oracles change the assumption, not eliminate it",
+      "body_markdown": "A DLC can combine multiple oracles and require a threshold of attestations. This can reduce dependence on any single source, but it introduces coordination and agreement questions.\n\nThe contract must specify whether oracles use corresponding outcome sets, how numeric differences are tolerated, what threshold is required, and how conflicting or missing attestations map to CETs. More oracles can mean more announcements, nonces, adaptor signatures, storage, and closing possibilities.\n\nA federation is only as useful as its independence and measurement design. Several public keys controlled by one operator do not provide the same failure resistance as genuinely independent sources. Correlated data feeds, shared infrastructure, legal pressure, or common software bugs can defeat a nominal threshold.\n\nThe current specification repository documents multi-oracle work but also preserves roadmap material and in-progress areas. Support must be checked against the exact implementation pair, not inferred from a general feature list.",
+      "body_html": "<p>A DLC can combine multiple oracles and require a threshold of attestations. This can reduce dependence on any single source, but it introduces coordination and agreement questions.</p>\n<p>The contract must specify whether oracles use corresponding outcome sets, how numeric differences are tolerated, what threshold is required, and how conflicting or missing attestations map to CETs. More oracles can mean more announcements, nonces, adaptor signatures, storage, and closing possibilities.</p>\n<p>A federation is only as useful as its independence and measurement design. Several public keys controlled by one operator do not provide the same failure resistance as genuinely independent sources. Correlated data feeds, shared infrastructure, legal pressure, or common software bugs can defeat a nominal threshold.</p>\n<p>The current specification repository documents multi-oracle work but also preserves roadmap material and in-progress areas. Support must be checked against the exact implementation pair, not inferred from a general feature list.</p>"
+    },
+    {
+      "heading": "Cooperative close can avoid revealing the contract path",
+      "body_markdown": "If both parties agree, they can cooperatively spend the funding output with a mutually signed transaction rather than using an oracle-conditioned CET. This can reduce on-chain fingerprinting and permit a mutually accepted settlement.\n\nA cooperative close depends on continued cooperation. It cannot be the only exit. The pre-signed CETs and refund transaction are what allow unilateral closure under the agreed conditions.\n\nOn-chain privacy is also relative. The current v0 funding output is designed to resemble other two-of-two P2WSH constructions, but spending patterns, timing, output amounts, and later analysis may distinguish it. Taproot DLC designs could change the fingerprint, yet the DLC specification lists Taproot support as future work rather than a universal current property.",
+      "body_html": "<p>If both parties agree, they can cooperatively spend the funding output with a mutually signed transaction rather than using an oracle-conditioned CET. This can reduce on-chain fingerprinting and permit a mutually accepted settlement.</p>\n<p>A cooperative close depends on continued cooperation. It cannot be the only exit. The pre-signed CETs and refund transaction are what allow unilateral closure under the agreed conditions.</p>\n<p>On-chain privacy is also relative. The current v0 funding output is designed to resemble other two-of-two P2WSH constructions, but spending patterns, timing, output amounts, and later analysis may distinguish it. Taproot DLC designs could change the fingerprint, yet the DLC specification lists Taproot support as future work rather than a universal current property.</p>"
+    },
+    {
+      "heading": "Fees, dust, and payout curves are contract behavior",
+      "body_markdown": "DLC transaction sets must account for funding fees, closing fees, and outputs that fall below the implementation's dust threshold. The current transaction specification describes fee allocation and omits a participant output from a CET when its payout would be below the stated threshold.\n\nThat can create a sharp difference between an economic curve and actual transaction outputs. Rounding, interpolation, dust handling, and fee assumptions should be shown to users before signing.\n\nNumeric contracts can create large computational and storage requirements. Compression techniques reduce the number of CETs or signatures, but they also add algorithms that independently developed implementations must match exactly.\n\nThe funding transaction itself can remain unconfirmed, be replaced under applicable conditions, or be affected by a reorganization. A contract should define when it becomes active and how many confirmations are required before participants rely on it.",
+      "body_html": "<p>DLC transaction sets must account for funding fees, closing fees, and outputs that fall below the implementation&#39;s dust threshold. The current transaction specification describes fee allocation and omits a participant output from a CET when its payout would be below the stated threshold.</p>\n<p>That can create a sharp difference between an economic curve and actual transaction outputs. Rounding, interpolation, dust handling, and fee assumptions should be shown to users before signing.</p>\n<p>Numeric contracts can create large computational and storage requirements. Compression techniques reduce the number of CETs or signatures, but they also add algorithms that independently developed implementations must match exactly.</p>\n<p>The funding transaction itself can remain unconfirmed, be replaced under applicable conditions, or be affected by a reorganization. A contract should define when it becomes active and how many confirmations are required before participants rely on it.</p>"
+    },
+    {
+      "heading": "DLCs are an application protocol with uneven maturity",
+      "body_markdown": "DLC papers, specifications, libraries, wallets, and applications have existed for years. That is evidence of implementation work, not evidence that every component is standardized, production-ready, or interoperable across current releases.\n\nAs of July 24, 2026, the official `dlcspecs` master branch at commit `9cd9148938c616690c79d99ec6f330e213c246c5` still labels the specification work in progress. Its README and roadmap describe future work including transfers, option-style DLCs, Taproot DLCs, and Lightning DLCs. Older roadmap sections record features as done or in progress at the time they were written, so they are historical development evidence rather than a current compatibility matrix.\n\nThe current `rust-dlc` master branch at commit `8e6a75fbc9685e6eafa348edd45a793fcb63fa4d` implements transaction, numeric-contract, manager, message, Bitcoin-RPC, oracle-client, and storage components. Its README also says the library is early-stage, has not been thoroughly tested in production, recommends avoiding mainnet, and is not yet fully compliant with the DLC specification.\n\nBitcoin-S documentation provides evidence of another DLC implementation family. The official materials reviewed for this guide do not provide a current comprehensive cross-implementation report showing that present Bitcoin-S, `rust-dlc`, and other implementations interoperate across every message version, oracle format, numeric contract, fee path, and recovery case. Shared specifications and test vectors are interoperability targets; exact implementation pairs still require versioned cross-testing.\n\nThe reviewed `dlcspecs`, `rust-dlc`, and Bitcoin-S materials also do not identify a project-wide independent security assessment covering the entire current DLC stack. The original paper, specifications, adaptor-signature work, test vectors, implementation tests, and code review are relevant security evidence, but they are not equivalent to an audit of current wallet storage, oracle operations, key management, fee recovery, or released binaries.\n\nA careful evaluation records the exact specification commit, implementation release, oracle software, network, contract type, and test vectors. It verifies backup and recovery, simulates oracle failure, confirms refunds and CETs, and does not put significant funds at risk merely because the protocol design is non-custodial.\n\nDLCs demonstrate how existing Bitcoin transactions and cryptography can coordinate event-dependent payouts. Their security remains the combined result of Bitcoin validation, correct transaction preparation, sound adaptor-signature code, usable oracle attestations, safe key management, compatible software, and robust operations.",
+      "body_html": "<p>DLC papers, specifications, libraries, wallets, and applications have existed for years. That is evidence of implementation work, not evidence that every component is standardized, production-ready, or interoperable across current releases.</p>\n<p>As of July 24, 2026, the official <code>dlcspecs</code> master branch at commit <code>9cd9148938c616690c79d99ec6f330e213c246c5</code> still labels the specification work in progress. Its README and roadmap describe future work including transfers, option-style DLCs, Taproot DLCs, and Lightning DLCs. Older roadmap sections record features as done or in progress at the time they were written, so they are historical development evidence rather than a current compatibility matrix.</p>\n<p>The current <code>rust-dlc</code> master branch at commit <code>8e6a75fbc9685e6eafa348edd45a793fcb63fa4d</code> implements transaction, numeric-contract, manager, message, Bitcoin-RPC, oracle-client, and storage components. Its README also says the library is early-stage, has not been thoroughly tested in production, recommends avoiding mainnet, and is not yet fully compliant with the DLC specification.</p>\n<p>Bitcoin-S documentation provides evidence of another DLC implementation family. The official materials reviewed for this guide do not provide a current comprehensive cross-implementation report showing that present Bitcoin-S, <code>rust-dlc</code>, and other implementations interoperate across every message version, oracle format, numeric contract, fee path, and recovery case. Shared specifications and test vectors are interoperability targets; exact implementation pairs still require versioned cross-testing.</p>\n<p>The reviewed <code>dlcspecs</code>, <code>rust-dlc</code>, and Bitcoin-S materials also do not identify a project-wide independent security assessment covering the entire current DLC stack. The original paper, specifications, adaptor-signature work, test vectors, implementation tests, and code review are relevant security evidence, but they are not equivalent to an audit of current wallet storage, oracle operations, key management, fee recovery, or released binaries.</p>\n<p>A careful evaluation records the exact specification commit, implementation release, oracle software, network, contract type, and test vectors. It verifies backup and recovery, simulates oracle failure, confirms refunds and CETs, and does not put significant funds at risk merely because the protocol design is non-custodial.</p>\n<p>DLCs demonstrate how existing Bitcoin transactions and cryptography can coordinate event-dependent payouts. Their security remains the combined result of Bitcoin validation, correct transaction preparation, sound adaptor-signature code, usable oracle attestations, safe key management, compatible software, and robust operations.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Discreet Log Contract",
+      "definition": "An application protocol for Bitcoin payouts that depend on an oracle-attested event."
+    },
+    {
+      "term": "Oracle",
+      "definition": "An entity that announces an event and later signs its encoded outcome."
+    },
+    {
+      "term": "Oracle announcement",
+      "definition": "A signed commitment describing the event, oracle key, public nonces, timing, and outcome format."
+    },
+    {
+      "term": "Oracle attestation",
+      "definition": "The oracle's signed statement of the event outcome."
+    },
+    {
+      "term": "Event descriptor",
+      "definition": "The machine-readable definition of the outcomes an oracle can attest to."
+    },
+    {
+      "term": "Enumerated outcome",
+      "definition": "An outcome selected from a finite list of strings."
+    },
+    {
+      "term": "Numeric outcome",
+      "definition": "A number represented under agreed base, precision, unit, sign, and digit rules."
+    },
+    {
+      "term": "Funding transaction",
+      "definition": "The Bitcoin transaction locking both parties' collateral in the contract output."
+    },
+    {
+      "term": "Contract Execution Transaction (CET)",
+      "definition": "A preconstructed transaction whose outputs represent one contract outcome."
+    },
+    {
+      "term": "Adaptor signature",
+      "definition": "A signature-like object that can be completed when a related secret becomes known."
+    },
+    {
+      "term": "Refund transaction",
+      "definition": "A pre-signed, time-locked transaction returning collateral if no usable outcome path executes."
+    },
+    {
+      "term": "Cooperative close",
+      "definition": "A mutually signed spend that closes the funding output without using a CET or refund."
+    },
+    {
+      "term": "Multi-oracle DLC",
+      "definition": "A contract whose execution depends on a defined threshold or combination of oracle attestations."
+    },
+    {
+      "term": "Application protocol",
+      "definition": "Rules implemented by DLC software above Bitcoin consensus."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Discreet Log Contracts",
+      "author_or_publisher": "Thaddeus Dryja",
+      "url": "https://adiabat.github.io/dlc.pdf",
+      "supports": "The original DLC proposal, oracle-signature construction, adaptor-signature concept, privacy motivation, and event-dependent payout model."
+    },
+    {
+      "title": "DLC Specifications README",
+      "author_or_publisher": "DLC specification contributors",
+      "url": "https://github.com/discreetlogcontracts/dlcspecs/blob/master/README.md",
+      "supports": "The repository's work-in-progress status at master commit `9cd9148938c616690c79d99ec6f330e213c246c5`, implementation links, roadmap, and future-work categories reviewed on 2026-07-24."
+    },
+    {
+      "title": "DLC Specifications Introduction",
+      "author_or_publisher": "DLC specification contributors",
+      "url": "https://github.com/discreetlogcontracts/dlcspecs/blob/master/Introduction.md",
+      "supports": "Oracle announcements and signatures, adaptor signatures, CETs, funding and refund concepts, unilateral close, non-attestation protection, collusion limitation, and terminology."
+    },
+    {
+      "title": "DLC Peer Protocol",
+      "author_or_publisher": "DLC specification contributors",
+      "url": "https://github.com/discreetlogcontracts/dlcspecs/blob/master/Protocol.md",
+      "supports": "Offer, accept, and sign negotiation; contract identifiers; collateral; fee rates; locktimes; adaptor signatures; validation requirements; and funding broadcast order."
+    },
+    {
+      "title": "DLC Transactions",
+      "author_or_publisher": "DLC specification contributors",
+      "url": "https://github.com/discreetlogcontracts/dlcspecs/blob/master/Transactions.md",
+      "supports": "Funding output, CET, refund, transaction ordering, SegWit-input requirement, fee allocation, dust treatment, and transaction weights in the current v0 specification."
+    },
+    {
+      "title": "DLC Oracle Specifications",
+      "author_or_publisher": "DLC specification contributors",
+      "url": "https://github.com/discreetlogcontracts/dlcspecs/blob/master/Oracle.md",
+      "supports": "Event descriptors, enumerated and digit-decomposed numeric outcomes, oracle announcements, attestations, nonces, serialization, and BIP 340 signing."
+    },
+    {
+      "title": "DLC Messaging Specification",
+      "author_or_publisher": "DLC specification contributors",
+      "url": "https://github.com/discreetlogcontracts/dlcspecs/blob/master/Messaging.md",
+      "supports": "Current TLV messages and serialization for contract, oracle, and negotiation data."
+    },
+    {
+      "title": "DLC v0 Milestone",
+      "author_or_publisher": "DLC specification contributors",
+      "url": "https://github.com/discreetlogcontracts/dlcspecs/blob/master/v0Milestone.md",
+      "supports": "Historical roadmap status for enumerated, numeric, multi-oracle, test-vector, oracle-interface, Taproot, Lightning, and other work; this roadmap must be dated rather than treated as a current release list."
+    },
+    {
+      "title": "BIP 340: Schnorr Signatures for secp256k1",
+      "author_or_publisher": "Pieter Wuille, Jonas Nick, and Tim Ruffing",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0340.mediawiki",
+      "supports": "The Schnorr signing algorithm referenced by the oracle specification."
+    },
+    {
+      "title": "BIP 141: Segregated Witness",
+      "author_or_publisher": "Eric Lombrozo, Johnson Lau, and Pieter Wuille",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki",
+      "supports": "SegWit transaction identifiers, witness commitments, and the malleability context for precomputed transactions."
+    },
+    {
+      "title": "BIP 65: OP_CHECKLOCKTIMEVERIFY",
+      "author_or_publisher": "Peter Todd",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0065.mediawiki",
+      "supports": "Absolute locktime enforcement used in refund and contract timeout reasoning."
+    },
+    {
+      "title": "BIP 67: Deterministic Pay-to-script-hash multi-signature addresses",
+      "author_or_publisher": "Pieter Wuille",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0067.mediawiki",
+      "supports": "Lexicographic public-key ordering referenced by the current DLC funding-output specification."
+    },
+    {
+      "title": "Bitcoin Core v31.1 Script Interpreter",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/src/script/interpreter.cpp",
+      "supports": "Current Bitcoin signature, multisignature, and locktime script validation behavior separate from DLC application rules."
+    },
+    {
+      "title": "Bitcoin Core v31.1 Transaction Policy",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/tree/v31.1/src/policy",
+      "supports": "Current standardness, dust, and relay-policy implementation that can affect DLC transactions separately from consensus."
+    },
+    {
+      "title": "rust-dlc Repository",
+      "author_or_publisher": "rust-dlc contributors",
+      "url": "https://github.com/p2pderivatives/rust-dlc",
+      "supports": "One current Rust implementation family at master commit `8e6a75fbc9685e6eafa348edd45a793fcb63fa4d`; its README identifies implemented components, early-stage status, incomplete specification compliance, limited production testing, and a recommendation to avoid mainnet."
+    },
+    {
+      "title": "Bitcoin-S DLC Documentation",
+      "author_or_publisher": "Bitcoin-S contributors",
+      "url": "https://bitcoin-s.org/docs/wallet/dlc",
+      "supports": "One implementation's DLC wallet behavior and user-facing workflow; it is not the universal DLC specification."
+    }
+  ],
+  "seo_title": "How Discreet Log Contracts Work | Mempool Surf Club",
+  "meta_description": "Learn how Bitcoin DLCs use oracle announcements, adaptor signatures, funding transactions, CETs, and time-locked refunds.",
+  "excerpt": "Understand DLC negotiation, oracle attestations, event descriptors, payout transactions, refunds, privacy, and trust boundaries.",
+  "reading_time": "17 to 20 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-BUILDING",
+    "label": "Building on Bitcoin",
+    "subcategory": "Innovation",
+    "depth": "Deep",
+    "format": "Technical Analysis"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-045",
+      "title": "What Is BitVM?",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-047",
+      "title": "What Is OP_CAT?",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": []
+  },
+  "review_dates": {
+    "reviewed": "null",
+    "copy_locked": "2026-07-24",
+    "human_verification": "2026-07-24"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "DLC Transaction Lighthouse",
+      "educational_purpose": "Show the funding transaction, outcome CETs, and refund as prearranged Bitcoin paths.",
+      "recommended_placement": "After the section CETs encode possible payouts.",
+      "visual_description": "Vintage lighthouse lens splitting one funding beam into several labeled CET beams and one delayed refund beam.",
+      "required_labels": "Funding transaction, 2-of-2 output, CET A, CET B, Numeric CETs, Oracle attestation, Refund locktime",
+      "caption": "Participants prepare outcome transactions and a delayed refund before they lock collateral.",
+      "alt_text": "Technical diagram showing one DLC funding output branching into oracle-enabled contract execution transactions and a time-locked refund.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Place funding at top, outcome paths in the middle, and refund at bottom.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "Oracle Announcement and Attestation Signals",
+      "educational_purpose": "Explain how public nonce commitments precede a later signed outcome.",
+      "recommended_placement": "After the section The attestation is an input to signature completion.",
+      "visual_description": "Nautical signal station publishing an event chart and public nonce before a storm, then transmitting a signed outcome afterward to two ships holding adaptor signatures.",
+      "required_labels": "Oracle key, Event descriptor, Public nonce, Announcement, Outcome, Attestation, Adaptor signature, Completed CET signature",
+      "caption": "The oracle announces its event interface first and later publishes the signed outcome used to complete the applicable CET signature.",
+      "alt_text": "Nautical signal diagram showing an oracle announcement before an event and an attestation completing an adaptor signature after the event.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Use a two-stage before-and-after vertical layout.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "DLC Trust Boundary Map",
+      "educational_purpose": "Separate Bitcoin validation, counterparty behavior, oracle correctness, and application operations.",
+      "recommended_placement": "After the section DLCs are an application protocol with uneven maturity.",
+      "visual_description": "Layered nautical map with Bitcoin consensus seabed, DLC transaction machinery, oracle signal tower, two counterparties, wallet storage, fees, and recovery routes.",
+      "required_labels": "Bitcoin consensus, DLC software, Counterparty, Oracle correctness, Oracle availability, Contract backup, Fee policy, Refund path",
+      "caption": "A DLC combines Bitcoin-enforced spending with application, oracle, storage, and operational assumptions.",
+      "alt_text": "Layered systems map separating Bitcoin consensus from DLC software, oracle, counterparties, backup, fees, and recovery.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack consensus, application, participants, and oracle as four bands.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}

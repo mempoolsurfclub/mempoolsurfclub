@@ -1,0 +1,300 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-033-lightning-network.md",
+  "source_sha256": "09000e0d349193096d76bcb413f1d3a2fac63472072a167ec6d08857d6dea60e",
+  "registry_id": "MSC-GUIDE-033",
+  "status": "COPY_LOCKED",
+  "h1": "How the Lightning Network Works",
+  "introductory_deck": "Lightning moves bitcoin through bilateral payment channels anchored to enforceable Bitcoin transactions. Learn how channel states, routed HTLC payments, onion routing, liquidity, fees, custody arrangements, privacy limits, and on-chain settlement fit together without treating fast payments, privacy, or self-custody as guarantees.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "Lightning is a protocol for moving bitcoin through a network of bilateral payment channels. It does not create a separate coin or a separate proof-of-work blockchain. Instead, it uses Bitcoin transactions to lock funds into channel structures, then lets channel participants update how those funds could be settled without publishing every update to the Bitcoin blockchain.",
+      "body_html": "<p>Lightning is a protocol for moving bitcoin through a network of bilateral payment channels. It does not create a separate coin or a separate proof-of-work blockchain. Instead, it uses Bitcoin transactions to lock funds into channel structures, then lets channel participants update how those funds could be settled without publishing every update to the Bitcoin blockchain.</p>"
+    },
+    {
+      "heading": "Why Lightning exists",
+      "body_markdown": "Bitcoin block space is limited and globally replicated. Every confirmed on-chain transaction must be validated by nodes and included in a block. That design supports independent verification, but it also means that frequent small payments compete for the same block space as other transactions.\n\nLightning changes the payment workflow. Two parties can create one on-chain funding transaction, exchange many off-chain state updates, and later close the channel with another on-chain transaction. When payments cross several channels, the participants can transfer value without each pair needing a direct channel.\n\nThis can reduce routine on-chain use and shorten the time between payment initiation and an off-chain result. It does not eliminate Bitcoin fees, confirmation risk, channel management, or the possibility that a payment fails.",
+      "body_html": "<p>Bitcoin block space is limited and globally replicated. Every confirmed on-chain transaction must be validated by nodes and included in a block. That design supports independent verification, but it also means that frequent small payments compete for the same block space as other transactions.</p>\n<p>Lightning changes the payment workflow. Two parties can create one on-chain funding transaction, exchange many off-chain state updates, and later close the channel with another on-chain transaction. When payments cross several channels, the participants can transfer value without each pair needing a direct channel.</p>\n<p>This can reduce routine on-chain use and shorten the time between payment initiation and an off-chain result. It does not eliminate Bitcoin fees, confirmation risk, channel management, or the possibility that a payment fails.</p>"
+    },
+    {
+      "heading": "A channel is anchored to Bitcoin",
+      "body_markdown": "A Lightning channel begins with a Bitcoin funding output. In the common design, that output can be spent only under the channel's agreed transaction and signature rules. The funding transaction must reach the confirmation state required by the participants or their software before the channel is treated as usable.\n\nThe amount locked into the funding output limits the channel's total capacity. Capacity is not the same as either participant's spendable balance. If Alice and Bob open a channel with 1,000,000 satoshis, the local and remote balances describe how that capacity is currently allocated from one participant's viewpoint.\n\nA channel balance is not a global account balance stored by the Lightning Network. It is a local interpretation of the latest enforceable channel state held by the two channel peers.",
+      "body_html": "<p>A Lightning channel begins with a Bitcoin funding output. In the common design, that output can be spent only under the channel&#39;s agreed transaction and signature rules. The funding transaction must reach the confirmation state required by the participants or their software before the channel is treated as usable.</p>\n<p>The amount locked into the funding output limits the channel&#39;s total capacity. Capacity is not the same as either participant&#39;s spendable balance. If Alice and Bob open a channel with 1,000,000 satoshis, the local and remote balances describe how that capacity is currently allocated from one participant&#39;s viewpoint.</p>\n<p>A channel balance is not a global account balance stored by the Lightning Network. It is a local interpretation of the latest enforceable channel state held by the two channel peers.</p>"
+    },
+    {
+      "heading": "Commitment states update the allocation",
+      "body_markdown": "Each participant holds a commitment transaction representing a current settlement state. As the channel balance changes, the peers exchange messages and signatures that make a newer state enforceable and make an older state unsafe to publish.\n\nIn the traditional penalty-based channel design described by the BOLT specifications, old commitment states can be punished if broadcast. Revocation secrets allow the honest peer to claim funds from a revoked state during a defined contest window. This is why channel software must preserve current state and respond to chain events.\n\nThe exact transaction format can vary with negotiated features and implementation support. Proposed channel types, including designs that change how old states are invalidated, should not be treated as universally deployed.",
+      "body_html": "<p>Each participant holds a commitment transaction representing a current settlement state. As the channel balance changes, the peers exchange messages and signatures that make a newer state enforceable and make an older state unsafe to publish.</p>\n<p>In the traditional penalty-based channel design described by the BOLT specifications, old commitment states can be punished if broadcast. Revocation secrets allow the honest peer to claim funds from a revoked state during a defined contest window. This is why channel software must preserve current state and respond to chain events.</p>\n<p>The exact transaction format can vary with negotiated features and implementation support. Proposed channel types, including designs that change how old states are invalidated, should not be treated as universally deployed.</p>"
+    },
+    {
+      "heading": "Cooperative and unilateral closes",
+      "body_markdown": "A cooperative close happens when both peers agree on a final allocation and sign a closing transaction. It can usually avoid the delay and extra script paths associated with a disputed close.\n\nA unilateral close happens when one peer publishes an enforceable commitment transaction without the other's cooperation. This may be necessary when a peer is offline, unresponsive, or disputed. The resulting outputs can have time delays and additional on-chain transactions. The user must account for Bitcoin fees and confirmation uncertainty.\n\nA unilateral close is not a protocol failure. It is part of the enforcement model. Off-chain updates remain credible because either participant can ultimately use Bitcoin transactions and script conditions to settle.",
+      "body_html": "<p>A cooperative close happens when both peers agree on a final allocation and sign a closing transaction. It can usually avoid the delay and extra script paths associated with a disputed close.</p>\n<p>A unilateral close happens when one peer publishes an enforceable commitment transaction without the other&#39;s cooperation. This may be necessary when a peer is offline, unresponsive, or disputed. The resulting outputs can have time delays and additional on-chain transactions. The user must account for Bitcoin fees and confirmation uncertainty.</p>\n<p>A unilateral close is not a protocol failure. It is part of the enforcement model. Off-chain updates remain credible because either participant can ultimately use Bitcoin transactions and script conditions to settle.</p>"
+    },
+    {
+      "heading": "Routed payments connect channels",
+      "body_markdown": "A payer does not need a direct channel with the recipient. A payment can travel through a sequence of channels. The sender or sender's software selects one or more candidate paths using known public channel information, private channel hints, local observations, and prior failures.\n\nSuppose Alice has a channel with Bob, Bob has a channel with Carol, and Carol has a channel with Dana. Alice can attempt to pay Dana through Bob and Carol. The intermediaries forward conditional transfers rather than trusting Alice or Dana.\n\nPublic gossip can describe channels, advertised capacities, fee policies, and time-lock parameters. It cannot reveal exact usable liquidity in each direction. A public channel may have enough total capacity but insufficient outbound balance for the attempted direction.",
+      "body_html": "<p>A payer does not need a direct channel with the recipient. A payment can travel through a sequence of channels. The sender or sender&#39;s software selects one or more candidate paths using known public channel information, private channel hints, local observations, and prior failures.</p>\n<p>Suppose Alice has a channel with Bob, Bob has a channel with Carol, and Carol has a channel with Dana. Alice can attempt to pay Dana through Bob and Carol. The intermediaries forward conditional transfers rather than trusting Alice or Dana.</p>\n<p>Public gossip can describe channels, advertised capacities, fee policies, and time-lock parameters. It cannot reveal exact usable liquidity in each direction. A public channel may have enough total capacity but insufficient outbound balance for the attempted direction.</p>"
+    },
+    {
+      "heading": "Onion routing limits what intermediaries learn",
+      "body_markdown": "Lightning uses onion routing so each forwarding node learns the instructions needed for its own hop rather than the complete route. The sender constructs an encrypted packet whose layers are removed one at a time.\n\nAn intermediary can generally identify the peer from which it received a forwarding request and the peer to which it should forward. It does not automatically learn the full route. However, privacy is not absolute. Timing, amounts, network topology, repeated attempts, route position, wallet behavior, and observation by coordinated parties can reveal information.\n\nA custodial provider may also know more about a payment because it controls the user's account and payment execution.",
+      "body_html": "<p>Lightning uses onion routing so each forwarding node learns the instructions needed for its own hop rather than the complete route. The sender constructs an encrypted packet whose layers are removed one at a time.</p>\n<p>An intermediary can generally identify the peer from which it received a forwarding request and the peer to which it should forward. It does not automatically learn the full route. However, privacy is not absolute. Timing, amounts, network topology, repeated attempts, route position, wallet behavior, and observation by coordinated parties can reveal information.</p>\n<p>A custodial provider may also know more about a payment because it controls the user&#39;s account and payment execution.</p>"
+    },
+    {
+      "heading": "HTLCs make forwarding atomic",
+      "body_markdown": "Hashed Time Locked Contracts, or HTLCs, coordinate conditional payments across channels. The recipient releases a preimage whose hash matches the payment hash. Each forwarding node receives that preimage from its outgoing peer, uses it to fulfill the corresponding incoming HTLC from its upstream peer, and relays the fulfillment upstream.\n\nIf a route fails before fulfillment, nodes can return failure messages and remove the HTLCs through off-chain state updates. If an HTLC remains unresolved, staggered time locks provide timeout paths and enough margin for intermediaries to act on-chain when necessary.\n\nThe intended result is atomic payment behavior across the route: the payment settles through the path, or the linked conditional transfers are removed or timed out. Failure handling is not always immediate, and on-chain resolution can take longer when a channel closes.\n\nNewer payment constructions may change some details, but an educational model should not assume they are universally supported.",
+      "body_html": "<p>Hashed Time Locked Contracts, or HTLCs, coordinate conditional payments across channels. The recipient releases a preimage whose hash matches the payment hash. Each forwarding node receives that preimage from its outgoing peer, uses it to fulfill the corresponding incoming HTLC from its upstream peer, and relays the fulfillment upstream.</p>\n<p>If a route fails before fulfillment, nodes can return failure messages and remove the HTLCs through off-chain state updates. If an HTLC remains unresolved, staggered time locks provide timeout paths and enough margin for intermediaries to act on-chain when necessary.</p>\n<p>The intended result is atomic payment behavior across the route: the payment settles through the path, or the linked conditional transfers are removed or timed out. Failure handling is not always immediate, and on-chain resolution can take longer when a channel closes.</p>\n<p>Newer payment constructions may change some details, but an educational model should not assume they are universally supported.</p>"
+    },
+    {
+      "heading": "Invoices and payment requests",
+      "body_markdown": "A Lightning invoice is a payment request that can include a destination, payment hash, amount, expiry, description information, feature bits, and routing hints. BOLT 11 defines the widely used invoice format. BOLT 12 defines a separate negotiation flow using offers, invoice requests, and invoices. Wallet and implementation support must be checked rather than assumed.\n\nAn invoice is not proof that the recipient is trustworthy. It is structured payment data. Wallet software must validate the invoice, supported features, expiry, amount, and network before attempting payment.\n\nSome payments use spontaneous or keysend-style behavior supported by particular implementations. That is not a substitute for describing the standard invoice workflow.",
+      "body_html": "<p>A Lightning invoice is a payment request that can include a destination, payment hash, amount, expiry, description information, feature bits, and routing hints. BOLT 11 defines the widely used invoice format. BOLT 12 defines a separate negotiation flow using offers, invoice requests, and invoices. Wallet and implementation support must be checked rather than assumed.</p>\n<p>An invoice is not proof that the recipient is trustworthy. It is structured payment data. Wallet software must validate the invoice, supported features, expiry, amount, and network before attempting payment.</p>\n<p>Some payments use spontaneous or keysend-style behavior supported by particular implementations. That is not a substitute for describing the standard invoice workflow.</p>"
+    },
+    {
+      "heading": "Routing fees",
+      "body_markdown": "Forwarding nodes can advertise a base fee and a proportional fee. They may also set minimum and maximum HTLC values and a required time-lock delta. The sender estimates the total route cost from these policies.\n\nLightning fees are not universally zero. A payment may also create indirect costs from channel opening, closing, rebalancing, swaps, service charges, or failed attempts. Fee policy can change, and an advertised fee does not guarantee that the route has liquidity.",
+      "body_html": "<p>Forwarding nodes can advertise a base fee and a proportional fee. They may also set minimum and maximum HTLC values and a required time-lock delta. The sender estimates the total route cost from these policies.</p>\n<p>Lightning fees are not universally zero. A payment may also create indirect costs from channel opening, closing, rebalancing, swaps, service charges, or failed attempts. Fee policy can change, and an advertised fee does not guarantee that the route has liquidity.</p>"
+    },
+    {
+      "heading": "Inbound and outbound liquidity",
+      "body_markdown": "Outbound liquidity is the amount a node can send from its side of channels, subject to reserves, pending HTLCs, fees, and implementation rules. Inbound liquidity is the amount that remote channel balances can deliver toward the node.\n\nReceiving bitcoin over Lightning often requires inbound liquidity. Opening a channel by funding it entirely from the user's wallet usually creates outbound liquidity first. Inbound liquidity can arise when the user spends through the channel, receives a channel opened by another party, uses a swap or liquidity service, or participates in another rebalancing arrangement.\n\nCapacity does not reveal direction. A channel advertised as 2,000,000 satoshis may have almost all usable balance on one side.",
+      "body_html": "<p>Outbound liquidity is the amount a node can send from its side of channels, subject to reserves, pending HTLCs, fees, and implementation rules. Inbound liquidity is the amount that remote channel balances can deliver toward the node.</p>\n<p>Receiving bitcoin over Lightning often requires inbound liquidity. Opening a channel by funding it entirely from the user&#39;s wallet usually creates outbound liquidity first. Inbound liquidity can arise when the user spends through the channel, receives a channel opened by another party, uses a swap or liquidity service, or participates in another rebalancing arrangement.</p>\n<p>Capacity does not reveal direction. A channel advertised as 2,000,000 satoshis may have almost all usable balance on one side.</p>"
+    },
+    {
+      "heading": "Pathfinding is uncertain",
+      "body_markdown": "The sender constructs routes from incomplete information. Public gossip does not publish balances. Private channels may be disclosed only through invoice hints or other route information. Pending payments can temporarily reduce available liquidity.\n\nA payment may fail because a channel lacks directional liquidity, a peer is offline, a fee changed, a time-lock condition is unacceptable, a channel update is stale, the recipient invoice expired, or an implementation rejected a feature.\n\nWallets may retry with another route, split a payment into parts, or ask for updated information. Fast payment interfaces do not guarantee successful payment. A successful payment also does not prove that every attempted route was private.",
+      "body_html": "<p>The sender constructs routes from incomplete information. Public gossip does not publish balances. Private channels may be disclosed only through invoice hints or other route information. Pending payments can temporarily reduce available liquidity.</p>\n<p>A payment may fail because a channel lacks directional liquidity, a peer is offline, a fee changed, a time-lock condition is unacceptable, a channel update is stale, the recipient invoice expired, or an implementation rejected a feature.</p>\n<p>Wallets may retry with another route, split a payment into parts, or ask for updated information. Fast payment interfaces do not guarantee successful payment. A successful payment also does not prove that every attempted route was private.</p>"
+    },
+    {
+      "heading": "On-chain enforcement connects Lightning to Bitcoin consensus",
+      "body_markdown": "Lightning nodes enforce channel agreements by holding valid Bitcoin transactions, signatures, secrets, and timing information. If cooperation stops, a participant can publish a transaction and rely on Bitcoin nodes to validate it under Bitcoin consensus rules.\n\nBitcoin consensus does not validate the full history of ordinary Lightning state updates. It validates the funding, closing, and enforcement transactions that reach the blockchain. The Lightning protocol defines how peers create and update those possible Bitcoin spends.\n\nThis boundary matters. Lightning implementations can change routing, gossip, invoices, channel management, and user interfaces without changing Bitcoin consensus. A proposed Lightning feature that needs a new Bitcoin opcode or transaction behavior would require a separate Bitcoin upgrade process.",
+      "body_html": "<p>Lightning nodes enforce channel agreements by holding valid Bitcoin transactions, signatures, secrets, and timing information. If cooperation stops, a participant can publish a transaction and rely on Bitcoin nodes to validate it under Bitcoin consensus rules.</p>\n<p>Bitcoin consensus does not validate the full history of ordinary Lightning state updates. It validates the funding, closing, and enforcement transactions that reach the blockchain. The Lightning protocol defines how peers create and update those possible Bitcoin spends.</p>\n<p>This boundary matters. Lightning implementations can change routing, gossip, invoices, channel management, and user interfaces without changing Bitcoin consensus. A proposed Lightning feature that needs a new Bitcoin opcode or transaction behavior would require a separate Bitcoin upgrade process.</p>"
+    },
+    {
+      "heading": "Custody and service arrangements differ",
+      "body_markdown": "A custodial Lightning wallet records a provider-managed account. The provider controls the relevant keys or channels and decides how payments are executed. The user depends on the provider's solvency, availability, policy, and withdrawal process.\n\nA self-custodial Lightning arrangement gives the user control of the signing authority needed to enforce or recover channel funds without a provider's permission. Operations can still vary. The wallet may run a node on the device, connect to a user-controlled remote node, or use third parties for liquidity, swaps, routing data, encrypted backups, or infrastructure that does not take control of the user's signing authority. Provider-controlled accounts and hosted balances belong in the custodial category because the provider can control payment execution or withdrawal.\n\nA Lightning node maintains channels and protocol state. A Lightning service provider may supply liquidity, routing, channel opening, node hosting, swaps, or payment processing. These roles should not be collapsed into one label.\n\nA wallet interface alone does not prove self-custody. Users must examine who controls keys, who can close channels, where backups live, and which service can block or observe activity.",
+      "body_html": "<p>A custodial Lightning wallet records a provider-managed account. The provider controls the relevant keys or channels and decides how payments are executed. The user depends on the provider&#39;s solvency, availability, policy, and withdrawal process.</p>\n<p>A self-custodial Lightning arrangement gives the user control of the signing authority needed to enforce or recover channel funds without a provider&#39;s permission. Operations can still vary. The wallet may run a node on the device, connect to a user-controlled remote node, or use third parties for liquidity, swaps, routing data, encrypted backups, or infrastructure that does not take control of the user&#39;s signing authority. Provider-controlled accounts and hosted balances belong in the custodial category because the provider can control payment execution or withdrawal.</p>\n<p>A Lightning node maintains channels and protocol state. A Lightning service provider may supply liquidity, routing, channel opening, node hosting, swaps, or payment processing. These roles should not be collapsed into one label.</p>\n<p>A wallet interface alone does not prove self-custody. Users must examine who controls keys, who can close channels, where backups live, and which service can block or observe activity.</p>"
+    },
+    {
+      "heading": "Monitoring and watchtowers",
+      "body_markdown": "Penalty-based channels require attention to the Bitcoin chain because an old commitment transaction could be published. A node can monitor directly or delegate limited detection and response data to a watchtower.\n\nA watchtower is designed to help broadcast a remedy transaction when it detects a revoked state. The design can limit what the tower learns before a breach, but privacy and availability depend on the specific protocol and implementation.\n\nWatchtowers do not remove the need for backups or guarantee recovery from every failure. Channel state loss, incompatible backups, fee conditions, data corruption, and unavailable services can still create risk.",
+      "body_html": "<p>Penalty-based channels require attention to the Bitcoin chain because an old commitment transaction could be published. A node can monitor directly or delegate limited detection and response data to a watchtower.</p>\n<p>A watchtower is designed to help broadcast a remedy transaction when it detects a revoked state. The design can limit what the tower learns before a breach, but privacy and availability depend on the specific protocol and implementation.</p>\n<p>Watchtowers do not remove the need for backups or guarantee recovery from every failure. Channel state loss, incompatible backups, fee conditions, data corruption, and unavailable services can still create risk.</p>"
+    },
+    {
+      "heading": "Practical privacy limits",
+      "body_markdown": "Lightning avoids placing every payment on the public Bitcoin ledger, but off-chain does not mean invisible. Route participants see local information. Recipients learn payment details. Senders choose routes and may learn failure locations. Service providers can collect network and account metadata.\n\nChannel openings and closes are on-chain and can sometimes be identified or correlated. Probing can estimate channel liquidity. Reused invoices, repeated amounts, IP exposure, and centralized service use can weaken privacy.\n\nPrivacy depends on implementation behavior, network position, wallet configuration, routing choices, and adversary capabilities. It should be treated as a set of tradeoffs rather than an automatic guarantee.",
+      "body_html": "<p>Lightning avoids placing every payment on the public Bitcoin ledger, but off-chain does not mean invisible. Route participants see local information. Recipients learn payment details. Senders choose routes and may learn failure locations. Service providers can collect network and account metadata.</p>\n<p>Channel openings and closes are on-chain and can sometimes be identified or correlated. Probing can estimate channel liquidity. Reused invoices, repeated amounts, IP exposure, and centralized service use can weaken privacy.</p>\n<p>Privacy depends on implementation behavior, network position, wallet configuration, routing choices, and adversary capabilities. It should be treated as a set of tradeoffs rather than an automatic guarantee.</p>"
+    },
+    {
+      "heading": "The working model",
+      "body_markdown": "Lightning is a network of bilateral Bitcoin channels. Channel peers update enforceable settlement states. Senders route conditional payments through channels using onion-encrypted instructions. HTLCs and timeouts coordinate atomic behavior. Liquidity direction and path uncertainty determine whether an attempted route works.\n\nThe system can make frequent payments without publishing every state update. It remains connected to Bitcoin through funding, closing, and enforcement transactions. That connection supplies the settlement boundary, while Lightning's own peer protocols govern the off-chain work.",
+      "body_html": "<p>Lightning is a network of bilateral Bitcoin channels. Channel peers update enforceable settlement states. Senders route conditional payments through channels using onion-encrypted instructions. HTLCs and timeouts coordinate atomic behavior. Liquidity direction and path uncertainty determine whether an attempted route works.</p>\n<p>The system can make frequent payments without publishing every state update. It remains connected to Bitcoin through funding, closing, and enforcement transactions. That connection supplies the settlement boundary, while Lightning&#39;s own peer protocols govern the off-chain work.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Bitcoin",
+      "definition": "An open monetary network and asset governed by independently verified consensus rules."
+    },
+    {
+      "term": "Layer 2",
+      "definition": "A system built above Bitcoin that changes transaction flow or settlement while relying on Bitcoin in a defined way."
+    },
+    {
+      "term": "Lightning Network",
+      "definition": "A payment-channel network that routes off-chain Bitcoin payments and settles channels on-chain."
+    },
+    {
+      "term": "Payment channel",
+      "definition": "An off-chain relationship that lets parties update balances before final settlement on Bitcoin."
+    },
+    {
+      "term": "Channel capacity",
+      "definition": "The bitcoin amount committed to a channel, distinct from the directional balance currently available to either side."
+    },
+    {
+      "term": "Commitment transaction",
+      "definition": "A Bitcoin transaction representing an enforceable channel settlement state."
+    },
+    {
+      "term": "HTLC",
+      "definition": "A conditional transfer using a payment hash and timeout to coordinate atomic forwarding."
+    },
+    {
+      "term": "Onion routing",
+      "definition": "Layered encryption that gives each forwarding node only the instructions needed for its hop."
+    },
+    {
+      "term": "Inbound liquidity",
+      "definition": "Channel balance available for receiving toward a node."
+    },
+    {
+      "term": "Outbound liquidity",
+      "definition": "Channel balance available for sending away from a node."
+    },
+    {
+      "term": "Watchtower",
+      "definition": "A service that can monitor for revoked channel states and publish a remedy transaction under a supported channel design."
+    }
+  ],
+  "sources": [
+    {
+      "title": "BOLT #0: Introduction and Index",
+      "author_or_publisher": "Lightning specification contributors",
+      "url": "https://github.com/lightning/bolts/blob/master/00-introduction.md",
+      "supports": "Implementation-neutral definition of Lightning channels, forwarding, network topology, and invoices."
+    },
+    {
+      "title": "BOLT #2: Peer Protocol for Channel Management",
+      "author_or_publisher": "Lightning specification contributors",
+      "url": "https://github.com/lightning/bolts/blob/master/02-peer-protocol.md",
+      "supports": "Channel establishment, commitment updates, HTLC forwarding, fee and timeout handling, and cooperative closing."
+    },
+    {
+      "title": "BOLT #3: Bitcoin Transaction and Script Formats",
+      "author_or_publisher": "Lightning specification contributors",
+      "url": "https://github.com/lightning/bolts/blob/master/03-transactions.md",
+      "supports": "Funding outputs, commitment transactions, revocation, HTLC outputs, and unilateral close enforcement."
+    },
+    {
+      "title": "BOLT #4: Onion Routing Protocol",
+      "author_or_publisher": "Lightning specification contributors",
+      "url": "https://github.com/lightning/bolts/blob/master/04-onion-routing.md",
+      "supports": "Sender-constructed onion packets, per-hop payloads, and failure messages."
+    },
+    {
+      "title": "BOLT #5: Recommendations for On-chain Transaction Handling",
+      "author_or_publisher": "Lightning specification contributors",
+      "url": "https://github.com/lightning/bolts/blob/master/05-onchain.md",
+      "supports": "On-chain monitoring, close handling, and transaction response behavior."
+    },
+    {
+      "title": "BOLT #7: P2P Node and Channel Discovery",
+      "author_or_publisher": "Lightning specification contributors",
+      "url": "https://github.com/lightning/bolts/blob/master/07-routing-gossip.md",
+      "supports": "Public channel announcements, fee policies, topology discovery, and limits of gossip data."
+    },
+    {
+      "title": "BOLT #11: Invoice Protocol for Lightning Payments",
+      "author_or_publisher": "Lightning specification contributors",
+      "url": "https://github.com/lightning/bolts/blob/master/11-payment-encoding.md",
+      "supports": "Invoice fields, expiry, payment hashes, routing hints, and feature signaling."
+    },
+    {
+      "title": "BOLT #12: Negotiation Protocol for Lightning Payments",
+      "author_or_publisher": "Lightning specification contributors",
+      "url": "https://github.com/lightning/bolts/blob/master/12-offer-encoding.md",
+      "supports": "The offer, invoice-request, and invoice negotiation flow without implying universal implementation or wallet support."
+    },
+    {
+      "title": "The Bitcoin Lightning Network: Scalable Off-Chain Instant Payments",
+      "author_or_publisher": "Joseph Poon and Thaddeus Dryja",
+      "url": "https://lightning.network/lightning-network-paper.pdf",
+      "supports": "Original payment-channel network design, hashed timelock contracts, routing, and Bitcoin enforcement."
+    },
+    {
+      "title": "Lightning Network Daemon Repository",
+      "author_or_publisher": "Lightning Labs",
+      "url": "https://github.com/lightningnetwork/lnd",
+      "supports": "A current major implementation and evidence that wallet, node, watchtower, routing, and channel features are implementation-specific."
+    },
+    {
+      "title": "Core Lightning Repository",
+      "author_or_publisher": "Blockstream and Core Lightning contributors",
+      "url": "https://github.com/ElementsProject/lightning",
+      "supports": "A separate interoperable implementation and implementation-specific operational behavior."
+    },
+    {
+      "title": "LDK Documentation",
+      "author_or_publisher": "Spiral",
+      "url": "https://lightningdevkit.org/",
+      "supports": "Modular Lightning integration, custody boundaries, channel management, routing, and wallet responsibility."
+    },
+    {
+      "title": "Bitcoin Core v31.0 Source Tree",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/tree/v31.0/src",
+      "supports": "One current Bitcoin Core implementation's validation of Bitcoin transactions and scripts that Lightning funding, closing, and enforcement transactions must satisfy. This is implementation evidence, not a definition of the Bitcoin protocol."
+    }
+  ],
+  "seo_title": "How the Lightning Network Works | Mempool Surf Club",
+  "meta_description": "Learn how Lightning payment channels, HTLC routing, liquidity, fees, custody, privacy limits, and Bitcoin settlement work together.",
+  "excerpt": "Build a working model of Lightning as a network of bilateral Bitcoin payment channels, from funding and commitment states to routed payments and on-chain enforcement.",
+  "reading_time": "14 to 17 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-BUILDING",
+    "label": "Building on Bitcoin",
+    "subcategory": "Layer 2",
+    "depth": "Shallow",
+    "format": "Explainer"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-032",
+      "title": "How Bitcoin Network Upgrades Happen",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-034",
+      "title": "What Is Ark on Bitcoin?",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": []
+  },
+  "review_dates": {
+    "reviewed": "2026-07-22",
+    "copy_locked": "2026-07-22",
+    "human_verification": "2026-07-22"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "Channel State Navigation Chart",
+      "educational_purpose": "Show how one funding output supports many off-chain balance updates and two closing paths.",
+      "recommended_placement": "After the section A channel is anchored to Bitcoin.",
+      "visual_description": "Vintage nautical ledger with one Bitcoin funding anchor, a sequence of signed state cards, and cooperative or unilateral channels returning to the chain.",
+      "required_labels": "Funding output, Channel capacity, Local balance, Remote balance, Commitment state, Cooperative close, Unilateral close",
+      "caption": "A Lightning channel updates enforceable settlement states while only funding and closing transactions need to reach Bitcoin.",
+      "alt_text": "Technical chart showing a Bitcoin funding output, multiple Lightning commitment states, and cooperative or unilateral closing paths.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack the funding anchor, state cards, and two close routes vertically.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "Onion Routed Payment Across Channels",
+      "educational_purpose": "Explain sender-selected paths, per-hop instructions, HTLC conditions, and decreasing timeouts.",
+      "recommended_placement": "After the section HTLCs make forwarding atomic.",
+      "visual_description": "Cartographic sea route through four channel ports. Each hop opens one onion layer and forwards a conditional payment with a shorter clock.",
+      "required_labels": "Sender, Forwarder 1, Forwarder 2, Recipient, Payment hash, Preimage, Timeout, Routing fee",
+      "caption": "The sender builds a route and each forwarding node receives only its own conditional instructions.",
+      "alt_text": "Nautical route diagram of a Lightning payment moving through multiple channels with onion layers, HTLCs, fees, and decreasing timeouts.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Use one left-to-right route that can stack into four vertical ports.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Liquidity Is Directional",
+      "educational_purpose": "Separate channel capacity from inbound and outbound liquidity and show why routes can fail.",
+      "recommended_placement": "After the section Inbound and outbound liquidity.",
+      "visual_description": "Two connected reservoirs inside a channel hull, with directional gauges and several candidate routes marked available, uncertain, or failed.",
+      "required_labels": "Capacity, Outbound liquidity, Inbound liquidity, Reserve, Pending HTLC, Route attempt, Failure",
+      "caption": "Public capacity does not reveal the exact directional liquidity available for a payment.",
+      "alt_text": "Technical liquidity diagram showing a Lightning channel's total capacity divided into inbound and outbound balances with uncertain route attempts.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Center the channel reservoir and place route outcomes below it.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}

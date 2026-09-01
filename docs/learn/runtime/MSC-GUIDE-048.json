@@ -1,0 +1,355 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-048-emerging-bitcoin-protocols.md",
+  "source_sha256": "0bc13bb300a9882711ba37bd5a33faf459b3ed0dd1216fe1b90f8c39e210cecb",
+  "registry_id": "MSC-GUIDE-048",
+  "status": "COPY_LOCKED",
+  "h1": "Emerging Protocols on Bitcoin: How to Evaluate Them",
+  "introductory_deck": "Emerging Bitcoin systems can be consensus proposals, software behavior, application protocols, indexed state, bridges, or experiments. Use a repeatable framework to identify enforcement, custody, data availability, exits, cryptographic and economic assumptions, implementation maturity, governance, interoperability, and evidence quality.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "An emerging Bitcoin protocol should be evaluated by asking what it changes, who enforces it, what evidence exists, and what happens when its assumptions fail. The name of a project, the presence of transactions on Bitcoin, or the publication of a BIP does not answer those questions.\n\n“Built on Bitcoin” can describe many different systems: a consensus proposal, a node-policy change, an application protocol using ordinary transactions, an indexer-derived ledger, a bridge, a sidechain, a wallet convention, an experimental proof system, or software that merely anchors data to Bitcoin. Bitcoin enforces different, often narrow parts of these systems. Their remaining security, custody, availability, governance, and operational properties come from other components rather than being inherited automatically from Bitcoin.\n\nA useful evaluation therefore begins by separating layers before comparing features.",
+      "body_html": "<p>An emerging Bitcoin protocol should be evaluated by asking what it changes, who enforces it, what evidence exists, and what happens when its assumptions fail. The name of a project, the presence of transactions on Bitcoin, or the publication of a BIP does not answer those questions.</p>\n<p>“Built on Bitcoin” can describe many different systems: a consensus proposal, a node-policy change, an application protocol using ordinary transactions, an indexer-derived ledger, a bridge, a sidechain, a wallet convention, an experimental proof system, or software that merely anchors data to Bitcoin. Bitcoin enforces different, often narrow parts of these systems. Their remaining security, custody, availability, governance, and operational properties come from other components rather than being inherited automatically from Bitcoin.</p>\n<p>A useful evaluation therefore begins by separating layers before comparing features.</p>"
+    },
+    {
+      "heading": "Start with the exact artifact and date",
+      "body_markdown": "Record what is being evaluated: a paper, BIP, specification commit, software release, pull request, testnet deployment, mainnet application, hosted service, or marketing page. Record the date, version, commit, and network.\n\nThis prevents “the protocol” from becoming a moving target. A paper can describe a design not yet implemented. A repository's default branch can differ from its latest release. A public demo can use signet parameters that do not exist on mainnet. A website can summarize capabilities more broadly than the code supports.\n\nPrimary evidence should be preferred. For consensus proposals, use the current BIP and implementation discussion. For software behavior, inspect release notes, source, tests, and configuration. For a deployed application, inspect its actual contracts, transactions, binaries, operator documentation, audits, and incident record.\n\nDate every maturity or adoption statement. “Currently,” “supported,” and “live” become unreliable without a review date and a defined environment.",
+      "body_html": "<p>Record what is being evaluated: a paper, BIP, specification commit, software release, pull request, testnet deployment, mainnet application, hosted service, or marketing page. Record the date, version, commit, and network.</p>\n<p>This prevents “the protocol” from becoming a moving target. A paper can describe a design not yet implemented. A repository&#39;s default branch can differ from its latest release. A public demo can use signet parameters that do not exist on mainnet. A website can summarize capabilities more broadly than the code supports.</p>\n<p>Primary evidence should be preferred. For consensus proposals, use the current BIP and implementation discussion. For software behavior, inspect release notes, source, tests, and configuration. For a deployed application, inspect its actual contracts, transactions, binaries, operator documentation, audits, and incident record.</p>\n<p>Date every maturity or adoption statement. “Currently,” “supported,” and “live” become unreliable without a review date and a defined environment.</p>"
+    },
+    {
+      "heading": "Classify the layer",
+      "body_markdown": "The first classification is what kind of rule or system is involved.\n\nA Bitcoin consensus rule is enforced by validating nodes when they accept transactions and blocks. Changing it requires a network rule change, not merely an application release.\n\nBitcoin Core behavior can include consensus implementation, wallet behavior, mempool policy, relay defaults, mining interfaces, and RPCs. Not every Bitcoin Core default is a Bitcoin consensus rule. Other compatible implementations may make different policy or interface choices while enforcing the same active consensus rules.\n\nA BIP is a proposal or standard document. BIP 3 states that BIPs do not define Bitcoin or represent community consensus. Its workflow distinguishes Draft, Complete, Deployed, and Closed. A Complete consensus proposal can remain undeployed indefinitely.\n\nAn application protocol uses active Bitcoin rules without changing them. DLCs are one example: Bitcoin validates funding and closing transactions, while DLC software interprets oracle announcements, adaptor signatures, contract messages, and payout mappings.\n\nAn application-derived system reconstructs state from Bitcoin data according to additional rules. Ordinals, Runes, and BRC-20 indexers are examples of the broader category. Bitcoin consensus validates the underlying transactions but does not maintain those application balances or identifiers.\n\nA bridge or sidechain adds another system and a custody or verification boundary. The bridge's Bitcoin transactions may be valid even if the external state machine, operator accounting, or wrapped asset fails.\n\nAn experimental project can have papers, code, and public transactions while remaining unsuitable for production. Classification should describe what exists, not what the roadmap intends.",
+      "body_html": "<p>The first classification is what kind of rule or system is involved.</p>\n<p>A Bitcoin consensus rule is enforced by validating nodes when they accept transactions and blocks. Changing it requires a network rule change, not merely an application release.</p>\n<p>Bitcoin Core behavior can include consensus implementation, wallet behavior, mempool policy, relay defaults, mining interfaces, and RPCs. Not every Bitcoin Core default is a Bitcoin consensus rule. Other compatible implementations may make different policy or interface choices while enforcing the same active consensus rules.</p>\n<p>A BIP is a proposal or standard document. BIP 3 states that BIPs do not define Bitcoin or represent community consensus. Its workflow distinguishes Draft, Complete, Deployed, and Closed. A Complete consensus proposal can remain undeployed indefinitely.</p>\n<p>An application protocol uses active Bitcoin rules without changing them. DLCs are one example: Bitcoin validates funding and closing transactions, while DLC software interprets oracle announcements, adaptor signatures, contract messages, and payout mappings.</p>\n<p>An application-derived system reconstructs state from Bitcoin data according to additional rules. Ordinals, Runes, and BRC-20 indexers are examples of the broader category. Bitcoin consensus validates the underlying transactions but does not maintain those application balances or identifiers.</p>\n<p>A bridge or sidechain adds another system and a custody or verification boundary. The bridge&#39;s Bitcoin transactions may be valid even if the external state machine, operator accounting, or wrapped asset fails.</p>\n<p>An experimental project can have papers, code, and public transactions while remaining unsuitable for production. Classification should describe what exists, not what the roadmap intends.</p>"
+    },
+    {
+      "heading": "Identify the enforcement point",
+      "body_markdown": "For every important rule, ask who rejects a violation.\n\nIf every fully validating Bitcoin node rejects it, it is an active consensus rule. If ordinary nodes accept the transaction but one application ignores it, the rule is application-derived. If a federation refuses a withdrawal, it is federation policy. If a wallet refuses to construct a transaction, it is wallet behavior. If a hosted API filters results, it is service behavior.\n\nThis exercise often exposes ambiguous claims. “Bitcoin verifies the proof” may mean a Tapscript spend checks a verifier script. It does not necessarily mean Bitcoin nodes understand the external program, bridge ledger, or destination chain.\n\nCreate an enforcement table listing each claim, the enforcing component, the data it reads, the failure response, and whether another implementation can disagree while remaining Bitcoin-consensus compatible.\n\nThen test disagreement. What happens when two indexers compute different balances, two wallets use different policy, or a bridge operator and challenger follow different external-chain tips? The protocol needs a resolution rule beyond saying that data is “on Bitcoin.”",
+      "body_html": "<p>For every important rule, ask who rejects a violation.</p>\n<p>If every fully validating Bitcoin node rejects it, it is an active consensus rule. If ordinary nodes accept the transaction but one application ignores it, the rule is application-derived. If a federation refuses a withdrawal, it is federation policy. If a wallet refuses to construct a transaction, it is wallet behavior. If a hosted API filters results, it is service behavior.</p>\n<p>This exercise often exposes ambiguous claims. “Bitcoin verifies the proof” may mean a Tapscript spend checks a verifier script. It does not necessarily mean Bitcoin nodes understand the external program, bridge ledger, or destination chain.</p>\n<p>Create an enforcement table listing each claim, the enforcing component, the data it reads, the failure response, and whether another implementation can disagree while remaining Bitcoin-consensus compatible.</p>\n<p>Then test disagreement. What happens when two indexers compute different balances, two wallets use different policy, or a bridge operator and challenger follow different external-chain tips? The protocol needs a resolution rule beyond saying that data is “on Bitcoin.”</p>"
+    },
+    {
+      "heading": "Separate active features from proposals",
+      "body_markdown": "Consensus proposals deserve especially careful language. A BIP number, reference implementation, test vectors, or Complete status is evidence of specification maturity. It is not activation.\n\nBIP 347 illustrates the distinction. As of July 24, 2026, it is a Complete soft-fork proposal for OP_CAT in Tapscript. Current mainnet Tapscript still treats the target byte as OP_SUCCESS126, and current legacy or SegWit v0 execution keeps OP_CAT disabled. A guide should not describe OP_CAT as an available mainnet opcode unless deployment evidence changes.\n\nThe same method applies to covenant proposals, new signature hashes, peer-to-peer features, or policy changes. State the proposal identifier, exact status, implementation branch, activation design if one exists, and observed network state.\n\nAvoid predicting inevitability. Bitcoin has no central approval body that turns a BIP into consensus. Deployment requires implementation and coordinated adoption appropriate to the proposal.",
+      "body_html": "<p>Consensus proposals deserve especially careful language. A BIP number, reference implementation, test vectors, or Complete status is evidence of specification maturity. It is not activation.</p>\n<p>BIP 347 illustrates the distinction. As of July 24, 2026, it is a Complete soft-fork proposal for OP_CAT in Tapscript. Current mainnet Tapscript still treats the target byte as OP_SUCCESS126, and current legacy or SegWit v0 execution keeps OP_CAT disabled. A guide should not describe OP_CAT as an available mainnet opcode unless deployment evidence changes.</p>\n<p>The same method applies to covenant proposals, new signature hashes, peer-to-peer features, or policy changes. State the proposal identifier, exact status, implementation branch, activation design if one exists, and observed network state.</p>\n<p>Avoid predicting inevitability. Bitcoin has no central approval body that turns a BIP into consensus. Deployment requires implementation and coordinated adoption appropriate to the proposal.</p>"
+    },
+    {
+      "heading": "Map custody and control",
+      "body_markdown": "For any system involving bitcoin, identify which keys or scripts control the actual UTXOs.\n\nIn self-custody, the user may hold keys satisfying the output's spending conditions. In a federation, threshold signers may control a shared output. In a bridge, operators may advance liquidity while another transaction system governs reimbursement. In a hosted account, the user may hold only a contractual claim against a custodian.\n\nTerms such as “trustless,” “non-custodial,” and “trust-minimized” should be replaced or supplemented with a concrete key and failure map. List who can move funds, freeze exits, delay transactions, upgrade rules, censor requests, or recover from lost keys.\n\nAlso identify setup assumptions. Some systems depend on pre-signed transactions, key deletion, a ceremony, a common reference string, hardware security modules, or an honest threshold at initialization. A design can reduce ongoing trust while retaining significant setup trust.\n\nControl can change over time. Emergency keys, upgrade keys, rotating federations, and recovery paths must be included, not treated as operational footnotes.",
+      "body_html": "<p>For any system involving bitcoin, identify which keys or scripts control the actual UTXOs.</p>\n<p>In self-custody, the user may hold keys satisfying the output&#39;s spending conditions. In a federation, threshold signers may control a shared output. In a bridge, operators may advance liquidity while another transaction system governs reimbursement. In a hosted account, the user may hold only a contractual claim against a custodian.</p>\n<p>Terms such as “trustless,” “non-custodial,” and “trust-minimized” should be replaced or supplemented with a concrete key and failure map. List who can move funds, freeze exits, delay transactions, upgrade rules, censor requests, or recover from lost keys.</p>\n<p>Also identify setup assumptions. Some systems depend on pre-signed transactions, key deletion, a ceremony, a common reference string, hardware security modules, or an honest threshold at initialization. A design can reduce ongoing trust while retaining significant setup trust.</p>\n<p>Control can change over time. Emergency keys, upgrade keys, rotating federations, and recovery paths must be included, not treated as operational footnotes.</p>"
+    },
+    {
+      "heading": "Define the state and data source",
+      "body_markdown": "Ask what state the protocol maintains and where that state comes from.\n\nBitcoin-native state includes the accepted block chain and UTXO set under active consensus. An application may derive additional balances, names, inscriptions, contract records, proof commitments, or bridge liabilities. A side system may maintain accounts or smart-contract storage not visible to Bitcoin nodes.\n\nDocument the canonical data source and ordering rules. Does the protocol follow Bitcoin block order, transaction order, output order, an external sequencer, oracle timestamps, or a hosted database? How are reorganizations rolled back? How are unconfirmed replacements handled?\n\nIf state depends on an indexer, specify the parser version, database schema, rollback logic, and rebuild process. If state depends on an oracle, define the event encoding, signing key, nonce handling, measurement method, and correction policy.\n\n“On-chain” is too broad to answer these questions. Data can be included in a Bitcoin transaction while its meaning remains entirely application-defined.",
+      "body_html": "<p>Ask what state the protocol maintains and where that state comes from.</p>\n<p>Bitcoin-native state includes the accepted block chain and UTXO set under active consensus. An application may derive additional balances, names, inscriptions, contract records, proof commitments, or bridge liabilities. A side system may maintain accounts or smart-contract storage not visible to Bitcoin nodes.</p>\n<p>Document the canonical data source and ordering rules. Does the protocol follow Bitcoin block order, transaction order, output order, an external sequencer, oracle timestamps, or a hosted database? How are reorganizations rolled back? How are unconfirmed replacements handled?</p>\n<p>If state depends on an indexer, specify the parser version, database schema, rollback logic, and rebuild process. If state depends on an oracle, define the event encoding, signing key, nonce handling, measurement method, and correction policy.</p>\n<p>“On-chain” is too broad to answer these questions. Data can be included in a Bitcoin transaction while its meaning remains entirely application-defined.</p>"
+    },
+    {
+      "heading": "Evaluate data availability",
+      "body_markdown": "A participant must be able to obtain the data needed to verify state, challenge a claim, or exit.\n\nA proof may demonstrate that some hidden witness exists without supplying the transaction history a user needs. A bridge may publish commitments to Bitcoin while keeping batch data elsewhere. An indexer may require old block data that a pruned node no longer serves. A rollup-like system may depend on a sequencer or data-availability network.\n\nList the minimum data required for each safety action. Identify who publishes it, where it is retained, how long it remains accessible, and whether users can reconstruct it independently.\n\nThen test withholding. If an operator stops publishing data, can users exit with locally retained information? Can a challenger prove fraud? Can a new node synchronize? Does the protocol become safe but unavailable, or can funds be lost?\n\nAvailability claims should distinguish Bitcoin block inclusion, archival retention, indexer access, hosted APIs, and user backups.",
+      "body_html": "<p>A participant must be able to obtain the data needed to verify state, challenge a claim, or exit.</p>\n<p>A proof may demonstrate that some hidden witness exists without supplying the transaction history a user needs. A bridge may publish commitments to Bitcoin while keeping batch data elsewhere. An indexer may require old block data that a pruned node no longer serves. A rollup-like system may depend on a sequencer or data-availability network.</p>\n<p>List the minimum data required for each safety action. Identify who publishes it, where it is retained, how long it remains accessible, and whether users can reconstruct it independently.</p>\n<p>Then test withholding. If an operator stops publishing data, can users exit with locally retained information? Can a challenger prove fraud? Can a new node synchronize? Does the protocol become safe but unavailable, or can funds be lost?</p>\n<p>Availability claims should distinguish Bitcoin block inclusion, archival retention, indexer access, hosted APIs, and user backups.</p>"
+    },
+    {
+      "heading": "Examine the exit and failure paths",
+      "body_markdown": "The normal path is rarely the security-critical path. Trace failure scenarios.\n\nWhat happens if counterparties disappear? If an oracle never attests? If a bridge operator refuses a withdrawal? If a challenger is offline? If a sequencer withholds a batch? If an external chain reorganizes? If a transaction misses its timelock window? If fees rise sharply?\n\nA credible design supplies unilateral or threshold exit procedures with concrete transactions, data, deadlines, and fee assumptions. It also states where no unilateral exit exists.\n\nTime-sensitive paths should be evaluated under realistic confirmation uncertainty. Consensus-valid transactions can still face relay-policy rejection, pinning, low fee rates, miner policy, or congestion. Pre-signed transactions may have limited fee-bumping options.\n\nRecovery procedures need tests. A diagram showing a refund or emergency path is weaker evidence than an implementation test that constructs, signs, broadcasts, and confirms it under the current network rules.",
+      "body_html": "<p>The normal path is rarely the security-critical path. Trace failure scenarios.</p>\n<p>What happens if counterparties disappear? If an oracle never attests? If a bridge operator refuses a withdrawal? If a challenger is offline? If a sequencer withholds a batch? If an external chain reorganizes? If a transaction misses its timelock window? If fees rise sharply?</p>\n<p>A credible design supplies unilateral or threshold exit procedures with concrete transactions, data, deadlines, and fee assumptions. It also states where no unilateral exit exists.</p>\n<p>Time-sensitive paths should be evaluated under realistic confirmation uncertainty. Consensus-valid transactions can still face relay-policy rejection, pinning, low fee rates, miner policy, or congestion. Pre-signed transactions may have limited fee-bumping options.</p>\n<p>Recovery procedures need tests. A diagram showing a refund or emergency path is weaker evidence than an implementation test that constructs, signs, broadcasts, and confirms it under the current network rules.</p>"
+    },
+    {
+      "heading": "List cryptographic and economic assumptions",
+      "body_markdown": "Bitcoin's proof of work and signature rules do not replace every assumption in a higher-layer protocol.\n\nUsing Bitcoin for settlement, timestamps, commitments, deposits, or data publication does not make an external state machine, bridge, indexer, sequencer, oracle, proof system, or operator set share Bitcoin's consensus security. State exactly which Bitcoin transaction or script rule is enforced and which failures remain outside that boundary.\n\nA project may rely on collision resistance, discrete-log hardness, a proof system's soundness, a trusted setup, adaptor-signature security, threshold-signature protocols, secure enclaves, or assumptions about an external virtual machine. Name each assumption and its implementation.\n\nEconomic security adds another layer. An optimistic system may assume a challenger will monitor and can profitably respond. A bridge may require operator collateral or liquidity. A channel system may require watchtower availability. Penalties must exceed plausible gains after fees and capital costs.\n\nModel who pays to remain honest and who profits from failure. Include fee spikes, locked capital, challenge rewards, liquidity shortages, and griefing attacks that impose costs without directly stealing funds.\n\n“Cryptographically verified” and “economically secured” are not complete descriptions unless the verified statement and incentive model are explicit.",
+      "body_html": "<p>Bitcoin&#39;s proof of work and signature rules do not replace every assumption in a higher-layer protocol.</p>\n<p>Using Bitcoin for settlement, timestamps, commitments, deposits, or data publication does not make an external state machine, bridge, indexer, sequencer, oracle, proof system, or operator set share Bitcoin&#39;s consensus security. State exactly which Bitcoin transaction or script rule is enforced and which failures remain outside that boundary.</p>\n<p>A project may rely on collision resistance, discrete-log hardness, a proof system&#39;s soundness, a trusted setup, adaptor-signature security, threshold-signature protocols, secure enclaves, or assumptions about an external virtual machine. Name each assumption and its implementation.</p>\n<p>Economic security adds another layer. An optimistic system may assume a challenger will monitor and can profitably respond. A bridge may require operator collateral or liquidity. A channel system may require watchtower availability. Penalties must exceed plausible gains after fees and capital costs.</p>\n<p>Model who pays to remain honest and who profits from failure. Include fee spikes, locked capital, challenge rewards, liquidity shortages, and griefing attacks that impose costs without directly stealing funds.</p>\n<p>“Cryptographically verified” and “economically secured” are not complete descriptions unless the verified statement and incentive model are explicit.</p>"
+    },
+    {
+      "heading": "Inspect code, tests, and release discipline",
+      "body_markdown": "A repository is evidence of implementation effort, not security.\n\nCheck whether the code corresponds to the current paper or specification. Look for tagged releases, reproducible builds, dependency pinning, test vectors, integration tests, fuzzing, static analysis, continuous integration, and documented upgrade procedures.\n\nSearch for explicit warnings. The official BitVM implementation repository, for example, warns not to use it in production as of the review date. That warning outweighs promotional interpretations of a public demo.\n\nAudits should be scoped precisely. Record the commit, components, assumptions, findings, remediation status, and whether the deployed binary matches the audited code. An audit of a cryptographic library is not an audit of bridge economics or operational key management.\n\nAlso review issue trackers, pull requests, and incident reports. Mature software can still be risky, but visible handling of failures is more informative than an unqualified “battle-tested” label.",
+      "body_html": "<p>A repository is evidence of implementation effort, not security.</p>\n<p>Check whether the code corresponds to the current paper or specification. Look for tagged releases, reproducible builds, dependency pinning, test vectors, integration tests, fuzzing, static analysis, continuous integration, and documented upgrade procedures.</p>\n<p>Search for explicit warnings. The official BitVM implementation repository, for example, warns not to use it in production as of the review date. That warning outweighs promotional interpretations of a public demo.</p>\n<p>Audits should be scoped precisely. Record the commit, components, assumptions, findings, remediation status, and whether the deployed binary matches the audited code. An audit of a cryptographic library is not an audit of bridge economics or operational key management.</p>\n<p>Also review issue trackers, pull requests, and incident reports. Mature software can still be risky, but visible handling of failures is more informative than an unqualified “battle-tested” label.</p>"
+    },
+    {
+      "heading": "Test interoperability and version boundaries",
+      "body_markdown": "Protocols with multiple implementations need shared test vectors and cross-implementation testing.\n\nTwo projects can use the same name while disagreeing on serialization, rounding, transaction ordering, fee handling, oracle formats, proof inputs, or reorganization behavior. A “compatible” claim should name the versions tested and the cases passed.\n\nVersion negotiation matters for long-lived contracts. A DLC oracle may announce an event far in advance. A bridge deposit may remain open across software upgrades. An indexer may need to reproduce historical rules after a parser change.\n\nAsk whether upgrades are backward-compatible, opt-in, centrally imposed, or coordinated by a federation. Determine what happens to existing funds and contracts when one participant upgrades first.\n\nApplication-derived systems should preserve historical interpretation rules or document migrations. Silent reinterpretation of old transactions can change displayed balances even though Bitcoin history is unchanged.",
+      "body_html": "<p>Protocols with multiple implementations need shared test vectors and cross-implementation testing.</p>\n<p>Two projects can use the same name while disagreeing on serialization, rounding, transaction ordering, fee handling, oracle formats, proof inputs, or reorganization behavior. A “compatible” claim should name the versions tested and the cases passed.</p>\n<p>Version negotiation matters for long-lived contracts. A DLC oracle may announce an event far in advance. A bridge deposit may remain open across software upgrades. An indexer may need to reproduce historical rules after a parser change.</p>\n<p>Ask whether upgrades are backward-compatible, opt-in, centrally imposed, or coordinated by a federation. Determine what happens to existing funds and contracts when one participant upgrades first.</p>\n<p>Application-derived systems should preserve historical interpretation rules or document migrations. Silent reinterpretation of old transactions can change displayed balances even though Bitcoin history is unchanged.</p>"
+    },
+    {
+      "heading": "Examine governance and upgrade authority",
+      "body_markdown": "Every evolving system has a change process, even when it avoids the word governance.\n\nFor Bitcoin consensus, no single maintainer or repository controls activation. For an application, maintainers may release new code, but users, operators, indexers, or signers decide what to run. A hosted service can change behavior unilaterally for its customers.\n\nIdentify who can change contracts, keys, fee parameters, oracle sets, sequencers, challenge periods, parsers, or supported assets. Check whether changes require user migration or apply automatically.\n\nEmergency authority deserves special attention. An emergency pause can reduce losses during an incident but creates censorship and custody power. An upgrade key can fix bugs but can also change rules or redirect funds.\n\nGovernance claims should be based on actual control paths and deployment procedures, not token voting pages, organizational labels, or informal community language.",
+      "body_html": "<p>Every evolving system has a change process, even when it avoids the word governance.</p>\n<p>For Bitcoin consensus, no single maintainer or repository controls activation. For an application, maintainers may release new code, but users, operators, indexers, or signers decide what to run. A hosted service can change behavior unilaterally for its customers.</p>\n<p>Identify who can change contracts, keys, fee parameters, oracle sets, sequencers, challenge periods, parsers, or supported assets. Check whether changes require user migration or apply automatically.</p>\n<p>Emergency authority deserves special attention. An emergency pause can reduce losses during an incident but creates censorship and custody power. An upgrade key can fix bugs but can also change rules or redirect funds.</p>\n<p>Governance claims should be based on actual control paths and deployment procedures, not token voting pages, organizational labels, or informal community language.</p>"
+    },
+    {
+      "heading": "Verify adoption and performance claims",
+      "body_markdown": "Adoption is not one number. A project can count addresses, transactions, deposits, wallets, nodes, or API requests, each with different meaning.\n\nPrefer reproducible on-chain or published operational data with a date and method. Separate testnet from mainnet, unique users from addresses, gross deposits from current liabilities, and peak throughput from sustained finalized throughput.\n\nPerformance claims need workload definitions. Transactions per second can exclude data publication, settlement, bridge exits, proof generation, or Bitcoin confirmation time. Low fees may be subsidized or depend on centralized batching.\n\nDo not infer safety from total value, transaction count, investors, partners, or longevity. Those can show use, not correctness. Conversely, low adoption does not disprove a design; it limits the operational evidence available.\n\nWhen evidence cannot be independently reproduced, label the claim as project-reported.",
+      "body_html": "<p>Adoption is not one number. A project can count addresses, transactions, deposits, wallets, nodes, or API requests, each with different meaning.</p>\n<p>Prefer reproducible on-chain or published operational data with a date and method. Separate testnet from mainnet, unique users from addresses, gross deposits from current liabilities, and peak throughput from sustained finalized throughput.</p>\n<p>Performance claims need workload definitions. Transactions per second can exclude data publication, settlement, bridge exits, proof generation, or Bitcoin confirmation time. Low fees may be subsidized or depend on centralized batching.</p>\n<p>Do not infer safety from total value, transaction count, investors, partners, or longevity. Those can show use, not correctness. Conversely, low adoption does not disprove a design; it limits the operational evidence available.</p>\n<p>When evidence cannot be independently reproduced, label the claim as project-reported.</p>"
+    },
+    {
+      "heading": "Use a claim-evidence matrix",
+      "body_markdown": "A practical review can be organized into a matrix with five columns:\n\n1. the exact claim;\n2. the layer or component;\n3. the primary evidence;\n4. the review date and version; and\n5. the remaining uncertainty.\n\nFor “OP_CAT is available,” the active-rule evidence contradicts the claim: BIP 347 is Complete but not Deployed. For “BitVM runs arbitrary programs on Bitcoin,” the more precise evidence says computation occurs off-chain and Bitcoin handles defined dispute verification; the implementation remains a developer preview. For “DLCs are Bitcoin smart contracts,” the matrix should explain that Bitcoin validates ordinary transactions while DLC software and oracles supply the contract semantics.\n\nThis format prevents a source from being stretched beyond what it supports. A paper can support the intended security model. A repository can support implementation status. A block explorer can support that transactions occurred. None alone proves the complete production claim.\n\nUncertainty is an output, not a failure. A good review identifies which questions remain open and what evidence would resolve them.",
+      "body_html": "<p>A practical review can be organized into a matrix with five columns:</p>\n<ol><li>the exact claim;</li><li>the layer or component;</li><li>the primary evidence;</li><li>the review date and version; and</li><li>the remaining uncertainty.</li></ol>\n<p>For “OP_CAT is available,” the active-rule evidence contradicts the claim: BIP 347 is Complete but not Deployed. For “BitVM runs arbitrary programs on Bitcoin,” the more precise evidence says computation occurs off-chain and Bitcoin handles defined dispute verification; the implementation remains a developer preview. For “DLCs are Bitcoin smart contracts,” the matrix should explain that Bitcoin validates ordinary transactions while DLC software and oracles supply the contract semantics.</p>\n<p>This format prevents a source from being stretched beyond what it supports. A paper can support the intended security model. A repository can support implementation status. A block explorer can support that transactions occurred. None alone proves the complete production claim.</p>\n<p>Uncertainty is an output, not a failure. A good review identifies which questions remain open and what evidence would resolve them.</p>"
+    },
+    {
+      "heading": "A repeatable evaluation sequence",
+      "body_markdown": "Begin with classification: name the artifact, network, version, layer, and enforcement point.\n\nContinue with control: map keys, custody, setup, upgrades, and emergency authority.\n\nThen map state and information: identify the canonical history, parser, oracle, sequencer, data-availability path, and reorganization behavior.\n\nTrace every exit: cooperative, unilateral, timeout, refund, challenge, recovery, and failure. Include fees and confirmation timing.\n\nReview security evidence: cryptographic assumptions, economic incentives, code quality, tests, audits, incidents, and cross-implementation results.\n\nFinally rewrite the project's main claims in precise language. Replace “secured by Bitcoin” with the exact rules Bitcoin enforces. Replace “decentralized” with the operator and key distribution. Replace “live” with the network, release, and date. Replace “trustless bridge” with its custody, challenger, setup, and data assumptions.\n\nThis process does not decide whether innovation is good or bad. It makes the system legible enough for readers to understand what is currently true, what is proposed, and what remains uncertain.",
+      "body_html": "<p>Begin with classification: name the artifact, network, version, layer, and enforcement point.</p>\n<p>Continue with control: map keys, custody, setup, upgrades, and emergency authority.</p>\n<p>Then map state and information: identify the canonical history, parser, oracle, sequencer, data-availability path, and reorganization behavior.</p>\n<p>Trace every exit: cooperative, unilateral, timeout, refund, challenge, recovery, and failure. Include fees and confirmation timing.</p>\n<p>Review security evidence: cryptographic assumptions, economic incentives, code quality, tests, audits, incidents, and cross-implementation results.</p>\n<p>Finally rewrite the project&#39;s main claims in precise language. Replace “secured by Bitcoin” with the exact rules Bitcoin enforces. Replace “decentralized” with the operator and key distribution. Replace “live” with the network, release, and date. Replace “trustless bridge” with its custody, challenger, setup, and data assumptions.</p>\n<p>This process does not decide whether innovation is good or bad. It makes the system legible enough for readers to understand what is currently true, what is proposed, and what remains uncertain.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Consensus rule",
+      "definition": "A rule validating Bitcoin nodes enforce when accepting transactions and blocks."
+    },
+    {
+      "term": "Implementation behavior",
+      "definition": "The behavior of specific software, which may include consensus enforcement, wallet logic, relay policy, APIs, and defaults."
+    },
+    {
+      "term": "Application protocol",
+      "definition": "Rules implemented above Bitcoin consensus using valid Bitcoin transactions and additional messages or state."
+    },
+    {
+      "term": "Application-derived state",
+      "definition": "State reconstructed from Bitcoin data according to rules not maintained by Bitcoin consensus."
+    },
+    {
+      "term": "Soft-fork proposal",
+      "definition": "A proposed consensus restriction that would require activation before upgraded rules are enforced on mainnet."
+    },
+    {
+      "term": "Enforcement point",
+      "definition": "The component that detects a rule violation and determines the consequence."
+    },
+    {
+      "term": "Custody map",
+      "definition": "A record of the keys, scripts, signers, and emergency authorities that can control funds."
+    },
+    {
+      "term": "Data availability",
+      "definition": "Access to the information required to verify state, challenge claims, synchronize, or exit."
+    },
+    {
+      "term": "Unilateral exit",
+      "definition": "A recovery or settlement path a user can exercise without ongoing counterparty cooperation."
+    },
+    {
+      "term": "Trusted setup",
+      "definition": "An initialization process whose integrity is required for the later security claim."
+    },
+    {
+      "term": "Economic security",
+      "definition": "A design relying on collateral, rewards, penalties, liquidity, or monitoring incentives."
+    },
+    {
+      "term": "Interoperability",
+      "definition": "The ability of independently developed implementations to agree on messages, transactions, state, and outcomes."
+    },
+    {
+      "term": "Claim-evidence matrix",
+      "definition": "A table linking each claim to its layer, primary source, date, version, and uncertainty."
+    },
+    {
+      "term": "Project-reported metric",
+      "definition": "A measurement supplied by the project that has not been independently reproduced."
+    }
+  ],
+  "sources": [
+    {
+      "title": "BIP 3: Updated BIP Process",
+      "author_or_publisher": "Murch",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0003.md",
+      "supports": "The purpose and limits of BIPs, author ownership, Complete and Deployed statuses, evidence expectations, and lack of a central Bitcoin adoption authority."
+    },
+    {
+      "title": "BIP 347: OP_CAT in Tapscript",
+      "author_or_publisher": "Ethan Heilman and Armin Sabouri",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0347.mediawiki",
+      "supports": "A current example of a Complete consensus soft-fork proposal that must remain separate from active mainnet rules."
+    },
+    {
+      "title": "BIP 341: Taproot",
+      "author_or_publisher": "Pieter Wuille, Jonas Nick, and Anthony Towns",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki",
+      "supports": "Active Taproot consensus rules and script-path commitments used by many emerging protocols."
+    },
+    {
+      "title": "BIP 342: Validation of Taproot Scripts",
+      "author_or_publisher": "Pieter Wuille, Jonas Nick, and Anthony Towns",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0342.mediawiki",
+      "supports": "Active Tapscript rules, OP_SUCCESSx upgrade behavior, and resource limits."
+    },
+    {
+      "title": "Bitcoin Core v31.1 Script Interpreter",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/src/script/interpreter.cpp",
+      "supports": "A dated implementation source used to distinguish active script behavior from proposed opcodes."
+    },
+    {
+      "title": "Bitcoin Core v31.1 Policy Source",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/tree/v31.1/src/policy",
+      "supports": "A dated example of implementation relay and standardness policy separate from consensus."
+    },
+    {
+      "title": "Bitcoin Core v31.1 Release Notes",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/master/doc/release-notes/release-notes-31.1.md",
+      "supports": "The current implementation release used to date Bitcoin Core behavior in this batch."
+    },
+    {
+      "title": "BitVM: Compute Anything on Bitcoin",
+      "author_or_publisher": "Robin Linus",
+      "url": "https://bitvm.org/bitvm.pdf",
+      "supports": "An example of a paper specifying off-chain computation and Bitcoin dispute verification without consensus changes."
+    },
+    {
+      "title": "BitVM2: Bridging Bitcoin to Second Layers",
+      "author_or_publisher": "Robin Linus and coauthors",
+      "url": "https://bitvm.org/bitvm_bridge.pdf",
+      "supports": "An example of an evolving bridge and optimistic verification design with operators, challengers, proofs, setup, and liveness assumptions."
+    },
+    {
+      "title": "BitVM Repository",
+      "author_or_publisher": "BitVM contributors",
+      "url": "https://github.com/BitVM/BitVM",
+      "supports": "An example of implementation evidence and an explicit production warning reviewed on 2026-07-24."
+    },
+    {
+      "title": "BitVM Developer Preview",
+      "author_or_publisher": "BitVM contributors",
+      "url": "https://bitvm.org/demo/",
+      "supports": "An example of public test transactions and developer-preview evidence that should not be equated with production deployment."
+    },
+    {
+      "title": "DLC Specifications README",
+      "author_or_publisher": "DLC specification contributors",
+      "url": "https://github.com/discreetlogcontracts/dlcspecs/blob/master/README.md",
+      "supports": "An example of an application-protocol specification that remains self-described as work in progress while implementations exist."
+    },
+    {
+      "title": "DLC Specifications Introduction",
+      "author_or_publisher": "DLC specification contributors",
+      "url": "https://github.com/discreetlogcontracts/dlcspecs/blob/master/Introduction.md",
+      "supports": "An example of separating Bitcoin transaction enforcement from oracle, adaptor-signature, refund, and collusion assumptions."
+    },
+    {
+      "title": "DLC Peer Protocol",
+      "author_or_publisher": "DLC specification contributors",
+      "url": "https://github.com/discreetlogcontracts/dlcspecs/blob/master/Protocol.md",
+      "supports": "An example of versioned application messages, transaction construction, validation requirements, fees, and locktimes."
+    },
+    {
+      "title": "BIP 141: Segregated Witness",
+      "author_or_publisher": "Eric Lombrozo, Johnson Lau, and Pieter Wuille",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki",
+      "supports": "Transaction identifiers, witness data, weight, and versioning background for evaluating application transaction designs."
+    },
+    {
+      "title": "Bitcoin Developer Guide: P2P Network",
+      "author_or_publisher": "Bitcoin Core project documentation contributors",
+      "url": "https://developer.bitcoin.org/devguide/p2p_network.html",
+      "supports": "Background for separating peer behavior and network relay from application protocols."
+    },
+    {
+      "title": "Bitcoin Developer Guide: Block Chain",
+      "author_or_publisher": "Bitcoin Core project documentation contributors",
+      "url": "https://developer.bitcoin.org/devguide/block_chain.html",
+      "supports": "Accepted-chain, confirmation, and reorganization background for evaluating derived state."
+    },
+    {
+      "title": "Ordinal Theory Handbook",
+      "author_or_publisher": "Ord project contributors",
+      "url": "https://docs.ordinals.com/",
+      "supports": "An example of application-derived identifiers, indexing, wallet handling, and interpretation above Bitcoin consensus."
+    },
+    {
+      "title": "Runes Specification",
+      "author_or_publisher": "Ord project contributors",
+      "url": "https://docs.ordinals.com/runes.html",
+      "supports": "An example of application-derived fungible state interpreted from Bitcoin transactions."
+    },
+    {
+      "title": "BRC-20 Experiment Documentation",
+      "author_or_publisher": "domo-2k",
+      "url": "https://domo-2.gitbook.io/brc-20-experiment/",
+      "supports": "An example of an experimental indexed protocol whose balance rules are not Bitcoin consensus."
+    },
+    {
+      "title": "NIST Secure Software Development Framework",
+      "author_or_publisher": "National Institute of Standards and Technology",
+      "url": "https://csrc.nist.gov/pubs/sp/800/218/final",
+      "supports": "Primary software-security guidance supporting review of releases, dependencies, testing, provenance, and vulnerability handling."
+    }
+  ],
+  "seo_title": "How to Evaluate Emerging Bitcoin Protocols | Mempool Surf Club",
+  "meta_description": "Learn how to assess Bitcoin protocols by layer, enforcement, custody, data availability, exits, maturity, and evidence.",
+  "excerpt": "Evaluate emerging Bitcoin protocols without confusing proposals, implementation behavior, application state, bridges, or experiments with consensus.",
+  "reading_time": "20 to 23 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-BUILDING",
+    "label": "Building on Bitcoin",
+    "subcategory": "Innovation",
+    "depth": "Deep",
+    "format": "Technical Analysis"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-047",
+      "title": "What Is OP_CAT?",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-049",
+      "title": "What Is Bitcoin Core?",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": []
+  },
+  "review_dates": {
+    "reviewed": "null",
+    "copy_locked": "2026-07-24",
+    "human_verification": "2026-07-24"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "Bitcoin Innovation Layer Chart",
+      "educational_purpose": "Separate consensus, implementation, application protocol, derived state, and external systems.",
+      "recommended_placement": "After the section Classify the layer.",
+      "visual_description": "Vintage ocean-depth chart with Bitcoin consensus at the seabed, node implementation and policy above it, application protocols and indexers at the surface, and bridges reaching an external island.",
+      "required_labels": "Bitcoin consensus, Node implementation, Wallet and policy, Application protocol, Derived state, Bridge, External system",
+      "caption": "Bitcoin enforces only the defined Bitcoin-layer rules; applications, indexers, bridges, and external systems add separate trust and failure assumptions.",
+      "alt_text": "Layered ocean chart separating Bitcoin consensus, implementations, applications, derived state, bridges, and external systems.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack the layers vertically with concise labels.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "Failure-Path Navigation Map",
+      "educational_purpose": "Center evaluation on exits, challenge windows, refunds, and unavailable operators.",
+      "recommended_placement": "After the section Examine the exit and failure paths.",
+      "visual_description": "Nautical emergency route map branching from normal operation into operator offline, oracle failure, data withholding, fee spike, reorganization, challenge, refund, and recovery routes.",
+      "required_labels": "Normal path, Operator offline, Oracle failure, Data withheld, Fee spike, Reorganization, Challenge, Refund, Unilateral exit",
+      "caption": "A protocol's security is revealed by the transactions, data, deadlines, and authority available when the normal path fails.",
+      "alt_text": "Emergency navigation map showing protocol failure scenarios and challenge, refund, and exit routes.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Use one normal-path trunk with short failure branches.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Claim-Evidence Sextant",
+      "educational_purpose": "Give readers a repeatable method for matching claims to primary evidence and uncertainty.",
+      "recommended_placement": "After the section Use a claim-evidence matrix.",
+      "visual_description": "Vintage navigation desk with a five-column chart and sextant aligning claim, layer, evidence, date and version, and uncertainty.",
+      "required_labels": "Claim, Layer, Primary evidence, Date and version, Remaining uncertainty, Verified, Project-reported",
+      "caption": "Precise evaluation connects each claim to the layer that enforces it and the dated evidence that supports it.",
+      "alt_text": "Technical review chart showing a claim aligned with layer, evidence, date, version, and remaining uncertainty.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Convert the five columns into stacked labeled cards.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}

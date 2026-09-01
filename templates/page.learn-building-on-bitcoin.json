@@ -3,9 +3,19 @@
     "main": {
       "type": "msc-learn-building-category",
       "settings": {}
+    },
+    "guidepreviews": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<style>.msc-learn-page[data-msc-registry-id=\"MSC-HUB-BUILDING\"] .msc-learn-guide-card.is-live-guide{cursor:pointer;transition:border-color .2s ease}.msc-learn-page[data-msc-registry-id=\"MSC-HUB-BUILDING\"] .msc-learn-guide-card.is-live-guide:hover,.msc-learn-page[data-msc-registry-id=\"MSC-HUB-BUILDING\"] .msc-learn-guide-card.is-live-guide:focus-within{border-color:rgba(212,190,153,.82)}.msc-learn-guide-card__link-cover{position:absolute;inset:0;z-index:5;border-radius:inherit;color:inherit;text-decoration:none;outline:none}</style><script>(()=>{const page=document.querySelector('.msc-learn-page[data-msc-registry-id=\"MSC-HUB-BUILDING\"]');if(!page)return;const guides=[[\"MSC-GUIDE-033\",\"How the Lightning Network Works\",\"/pages/learn-building-on-bitcoin?view=msc-learn-guide-033\"],[\"MSC-GUIDE-034\",\"What Is Ark on Bitcoin?\",\"/pages/learn-building-on-bitcoin?view=msc-learn-guide-034\"],[\"MSC-GUIDE-035\",\"How RGB Works on Bitcoin\",\"/pages/learn-building-on-bitcoin?view=msc-learn-guide-035\"],[\"MSC-GUIDE-036\",\"Bitcoin Sidechains Explained\",\"/pages/learn-building-on-bitcoin?view=msc-learn-guide-036\"],[\"MSC-GUIDE-037\",\"What Are Bitcoin Ordinals?\",\"/pages/learn-building-on-bitcoin?view=msc-learn-guide-037\"],[\"MSC-GUIDE-038\",\"How the Runes Protocol Works\",\"/pages/learn-building-on-bitcoin?view=msc-learn-guide-038\"],[\"MSC-GUIDE-039\",\"What Is BRC-20 on Bitcoin?\",\"/pages/learn-building-on-bitcoin?view=msc-learn-guide-039\"],[\"MSC-GUIDE-040\",\"What Is a Bitcoin Inscription?\",\"/pages/learn-building-on-bitcoin?view=msc-learn-guide-040\"],[\"MSC-GUIDE-041\",\"Bitcoin Developer Tools: A Practical Overview\",\"/pages/learn-building-on-bitcoin?view=msc-learn-guide-041\"],[\"MSC-GUIDE-042\",\"How Bitcoin Wallet Integrations Work\",\"/pages/learn-building-on-bitcoin?view=msc-learn-guide-042\"],[\"MSC-GUIDE-043\",\"Bitcoin APIs Explained\",\"/pages/learn-building-on-bitcoin?view=msc-learn-guide-043\"],[\"MSC-GUIDE-044\",\"How Bitcoin Indexers Work\",\"/pages/learn-building-on-bitcoin?view=msc-learn-guide-044\"],[\"MSC-GUIDE-045\",\"What Is BitVM?\",\"/pages/learn-building-on-bitcoin?view=msc-learn-guide-045\"],[\"MSC-GUIDE-046\",\"How Discreet Log Contracts Work\",\"/pages/learn-building-on-bitcoin?view=msc-learn-guide-046\"],[\"MSC-GUIDE-047\",\"What Is OP_CAT?\",\"/pages/learn-building-on-bitcoin?view=msc-learn-guide-047\"],[\"MSC-GUIDE-048\",\"Emerging Protocols on Bitcoin: How to Evaluate Them\",\"/pages/learn-building-on-bitcoin?view=msc-learn-guide-048\"]];guides.forEach(([id,title,url])=>{const card=page.querySelector(`.msc-learn-guide-card[data-msc-guide-id=\"${id}\"]`);if(!card||card.querySelector('.msc-learn-guide-card__link-cover'))return;card.removeAttribute('aria-disabled');card.classList.add('is-live-guide');const note=card.querySelector('.msc-learn-preview-note');if(note)note.remove();const link=document.createElement('a');link.href=url;link.className='msc-learn-guide-card__link-cover';link.setAttribute('aria-label',`Read ${title}`);const label=document.createElement('span');label.className='visually-hidden';label.textContent=`Read ${title}`;link.appendChild(label);card.appendChild(link);});})();</script>",
+        "color_scheme": "scheme-1",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "guidepreviews"
   ]
 }
