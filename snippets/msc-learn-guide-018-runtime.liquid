@@ -1,0 +1,172 @@
+{% comment %}
+  Generated from docs/learn/content/guides/MSC-GUIDE-018-bitcoin-mining-pools.md.
+  Registry binding: MSC-GUIDE-018.
+  Preview only. Do not edit manually.
+  Rebuild with node scripts/generate-msc-learn-guide-category-runtime.mjs --start=17 --end=32 --write.
+{% endcomment %}
+<section class="msc-shell msc-learn-page" data-msc-registry-id="MSC-GUIDE-018" data-msc-preview-only="true">
+  <div class="msc-container msc-learn-page__container">
+    <nav class="msc-learn-breadcrumbs" aria-label="Learn breadcrumbs"><ol><li><span>Learn</span></li><li><span>The Bitcoin Network</span></li><li aria-current="page"><span>How Bitcoin Mining Pools Work</span></li></ol></nav>
+    <header class="msc-learn-page__header">
+      <p class="msc-section-kicker">The Bitcoin Network</p>
+      <h1>How Bitcoin Mining Pools Work</h1>
+      <p class="msc-learn-page__deck">A Bitcoin mining pool coordinates work from many independent mining devices or operators and distributes payouts under an internal accounting method. Pool shares estimate contributed work, but they are not Bitcoin transactions, confirmations, or partially valid network blocks.</p>
+      <ul class="msc-learn-page-meta"><li>Mining</li><li>Shallow</li><li>Explainer</li><li>11 to 13 minutes</li><li>Reviewed 2026-07-18</li></ul>
+      <p class="msc-learn-preview-note">Preview only. Publication records and confirmed URLs do not exist; all navigation remains inactive.</p>
+    </header>
+    <article class="msc-learn-article rte" data-msc-content-source="structured-runtime">
+<section class="msc-learn-article__section">
+<p>Bitcoin block discovery is probabilistic. A miner can perform valid work for a long time without finding a network block, then find one unexpectedly.</p>
+<p>For a small solo miner, that variance can make revenue extremely irregular. A mining pool changes the payout pattern by coordinating work from many participants and measuring their contributions with easier proof-of-work targets.</p>
+<p>The pool does not fuse every machine into one physical computer. It operates a coordination and accounting system around many separate devices, farms, or operators.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Pools reduce payout variance through coordination</h2>
+<p>A solo miner receives network block revenue only when its own mining system finds and successfully submits a valid block.</p>
+<p>A pool gathers work from many participants. When the coordinated work finds a valid block, its coinbase transaction pays the destinations encoded by the template. Under a typical pool arrangement, the pool accounts for that revenue and later distributes internal payouts under its service rules.</p>
+<p>Because the participants submit measurable work more frequently than the pool finds network blocks, the pool can estimate each participant&#39;s contribution over time. The payout method then determines how block-discovery variance, transaction fees, fees charged by the pool, and counterparty exposure are distributed.</p>
+<p>Pooling does not remove randomness from block discovery. It changes how the financial results of that randomness are shared.</p>
+</section>
+<section class="msc-learn-article__section"><h2>A pool distributes mining jobs</h2>
+<p>A mining job contains enough information for downstream devices to search a defined area of candidate block-header space.</p>
+<p>Under a common architecture, a pool or associated template provider constructs a candidate block or template. The pool creates job data derived from that template and assigns distinct search space through extranonce values, channel information, version rolling, time ranges, nonce space, or related methods.</p>
+<p>Mining devices repeatedly hash their assigned candidates. They return results that meet the pool&#39;s submission threshold.</p>
+<p>The devices remain physically and operationally separate. The pool coordinates what they work on and how their results are counted.</p>
+<p>Other architectures divide these functions differently. A miner may create a template locally, use a proxy, declare a custom job through a compatible protocol, or submit work through an arrangement not described by one traditional pool pattern.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Pool targets are easier than the network target</h2>
+<p>The Bitcoin network target defines the proof-of-work threshold a block header must satisfy to be valid.</p>
+<p>A pool normally assigns an easier share target. That means a submitted hash can meet the pool threshold even though it does not meet the much harder Bitcoin network target.</p>
+<p>The easier threshold produces frequent evidence that a device is performing work. The pool can use accepted shares to estimate contribution without waiting for each participant to find a full network block.</p>
+<p>A share is an internal accounting signal. It is not:</p>
+<ul><li>A Bitcoin transaction.</li><li>A transaction confirmation.</li><li>A partially valid block.</li><li>A fractional ownership entry written to the blockchain.</li><li>A consensus vote.</li></ul>
+<p>Most shares are never broadcast to the Bitcoin peer-to-peer network. They are messages between mining participants and the pool system.</p>
+</section>
+<section class="msc-learn-article__section"><h2>A share can also be a block solution</h2>
+<p>Every accepted share represents a submitted hash result that met the pool threshold.</p>
+<p>Occasionally, the same result also satisfies the harder Bitcoin network target. In that case, the corresponding candidate block can be submitted as a possible network block.</p>
+<p>The pool or another authorized participant reconstructs the full block and broadcasts it to Bitcoin peers. Nodes then validate the block independently.</p>
+<p>Meeting the pool target alone is not enough. Only a result satisfying the applicable Bitcoin target can provide proof of work for a network block.</p>
+<p>Even then, the block must satisfy every other consensus rule. A pool share that exposes an invalid block template does not become valid because the hash is low enough.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Shares estimate work statistically</h2>
+<p>Pools use accepted shares to estimate contributed hashrate over time.</p>
+<p>If the share threshold corresponds to an expected amount of hashing work, the number and timing of shares provide a statistical estimate of a participant&#39;s rate. The estimate is noisy over short windows because share arrival is probabilistic.</p>
+<p>A device can submit more or fewer shares than its long-run expectation during a short reporting period. Pool dashboards may smooth the estimate across different windows, and their labels or calculations may differ.</p>
+<p>Reported hashrate should therefore be interpreted as an estimate based on observed share work, not a direct count of every attempted hash.</p>
+<p>A local device reading, a pool-side share estimate, and a network-wide hashrate estimate measure related but different things.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Rejected and stale shares need context</h2>
+<p>A pool may reject a submitted share for several reasons.</p>
+<p>The hash may not satisfy the assigned target. The share may contain malformed or inconsistent job data. It may duplicate an earlier submission. A new chain tip or template may have made the old job stale. Network latency can delay submission. The pool may apply protocol, authorization, timing, or service rules.</p>
+<p>The word stale usually refers to work tied to a job that is no longer current enough for the pool&#39;s accounting or block attempt. Exact treatment varies.</p>
+<p>A rejected share does not necessarily mean the hashing device is broken. It also does not prove the pool behaved correctly. Diagnosis depends on the job, protocol, timing, logs, and operator rules.</p>
+<p>Pool documentation should define how rejected, duplicate, invalid, and stale work affects accounting.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Template construction and hashing are different functions</h2>
+<p>A candidate block template includes transaction data, a coinbase arrangement, the previous-block reference, the required target, and other information needed to construct a block.</p>
+<p>Hashing devices do not necessarily choose that transaction set. Under many common pool arrangements, the pool or its template provider chooses transactions and constructs the work distributed to miners.</p>
+<p>That pattern is not universal. Protocols can separate template provision, job declaration, job distribution, share submission, and block publication.</p>
+<p>The important distinction is functional:</p>
+<ol><li>A node or template provider supplies validated chain and transaction information.</li><li>A block assembler chooses a valid candidate transaction set.</li><li>A pool or proxy divides search space and distributes jobs.</li><li>Devices perform hashes.</li><li>The pool accounts for submitted shares.</li><li>A valid network solution is assembled and broadcast.</li><li>Nodes validate the found block.</li></ol>
+<p>One company can operate several functions, but the functions should not be treated as identical.</p>
+</section>
+<section class="msc-learn-article__section"><h2>BIP 22 provides full block templates</h2>
+<p>BIP 22 defines the <code>getblocktemplate</code> RPC model for smart miners and proxies.</p>
+<p>Instead of returning only a header, the server can provide the block structure and transaction information needed to construct a candidate. The client may support defined mutations or customization while remaining responsible for creating a valid block.</p>
+<p>Bitcoin Core&#39;s current <code>getblocktemplate</code> implementation exposes template data, target and compact-target information, transaction dependencies, coinbase information, block limits, and proposal-validation behavior.</p>
+<p>BIP 22 does not require every pool to use one exact architecture. It defines an interface that can support solo mining, proxies, pools, and other block-template consumers.</p>
+</section>
+<section class="msc-learn-article__section"><h2>BIP 23 adds pooled-mining extensions</h2>
+<p>BIP 23 defines optional extensions to BIP 22 for pooled mining.</p>
+<p>Those extensions address matters such as long polling, share targets, work identifiers, coinbase mutation, abbreviated submissions, and other ways a pool server and mining client can coordinate.</p>
+<p>A pool can implement different support levels or use another protocol. The existence of BIP 23 does not prove that every current pool uses all of its extensions.</p>
+<p>The durable lesson is that pooled mining requires more than a block template. It needs a way to divide work, recognize participants, receive submissions, and account for results.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Stratum implementations distribute work differently</h2>
+<p>The name Stratum is used for mining protocols that distribute jobs and receive share submissions.</p>
+<p>Traditional Stratum V1 deployments are common, but implementation details have varied across pools and software. Claims about a particular message, extension, security property, or job format should be tied to the implementation or documentation being discussed.</p>
+<p>Stratum V2 defines a newer set of specifications with separate concepts for the Mining Protocol, Template Distribution Protocol, and Job Declaration Protocol.</p>
+<p>The Mining Protocol can be used alone in an arrangement where an upstream pool distributes work. Optional components can support template distribution and miner-declared custom jobs.</p>
+<p>It is inaccurate to say that every Stratum V2 deployment lets each individual device choose transactions. Transaction selection requires the relevant optional roles and protocol support, along with an architecture that actually enables custom templates.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Template control affects transaction selection</h2>
+<p>A party controlling the candidate template can influence which valid transactions it attempts to include.</p>
+<p>It may choose fee-paying transactions from its mempool, include direct submissions, omit some transactions, apply policy filters, or construct an unusual but valid transaction set.</p>
+<p>This influence does not make the template controller a consensus authority. Nodes validating the resulting block still enforce transaction validity, coinbase limits, proof of work, and all other consensus rules.</p>
+<p>A pool cannot turn an invalid transaction into a valid one by assigning it to many devices. It cannot choose an easier network target and force nodes to accept the block.</p>
+<p>Pool policy affects attempted block contents. Bitcoin consensus determines what nodes accept.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Network revenue enters through the coinbase transaction</h2>
+<p>When a pool-coordinated block is accepted, the block&#39;s coinbase transaction pays the destinations encoded by the block template.</p>
+<p>The permitted amount includes the block subsidy plus available transaction fees. The pool&#39;s internal accounting does not change that network rule.</p>
+<p>Coinbase outputs have a 100-block maturity requirement before they can be spent in a later block. A reorganization can also affect whether the block remains in the active chain.</p>
+<p>Internal pool payouts do not have to wait for each exact coinbase output to mature. Some payout methods may pay participants on another schedule and place maturity or block-luck risk on the pool operator. Other methods may wait for confirmed pool revenue or distribute only after a defined window.</p>
+<p>These are service and accounting choices, not changes to the consensus maturity rule.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Payout methods distribute variance differently</h2>
+<p>Mining pools use several families of payout methods.</p>
+<p>Pay per share, or PPS, generally pays for accepted share work without making the participant wait for the pool to find a block. This can shift more short-term block-luck and maturity risk to the operator.</p>
+<p>Full pay per share, often called FPPS, generally extends a PPS-style calculation to include an estimate or allocation for transaction fees. The exact fee calculation and timing are operator-specific.</p>
+<p>Pay per last N shares, or PPLNS, generally distributes realized pool revenue across a defined window of recent shares. Participants retain more exposure to when the pool actually finds blocks.</p>
+<p>Score-based methods weight shares using an operator-defined scoring system intended to manage timing or pool-hopping incentives.</p>
+<p>These descriptions are general. Formulas, fee treatment, windows, reserves, thresholds, and terminology differ by operator. A reader should use the pool&#39;s current documentation for the actual contract.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Pool terms create counterparty exposure</h2>
+<p>A pool can owe participants payouts even though Bitcoin nodes do not know those internal balances exist.</p>
+<p>Participants depend on the pool to:</p>
+<ul><li>Record accepted shares accurately.</li><li>Apply the published payout method.</li><li>Handle transaction-fee revenue as stated.</li><li>Maintain reserves or liquidity where required.</li><li>Secure payout systems.</li><li>Apply fees and thresholds correctly.</li><li>Remain available.</li><li>Communicate rule changes.</li><li>Pay on the stated schedule.</li></ul>
+<p>A pool can fail operationally, withhold payouts, reject work, change terms, or experience a security incident without causing a Bitcoin consensus failure.</p>
+<p>This is why a share balance is a service claim. It is not a UTXO controlled directly by the participant unless and until a payout transaction creates one under the participant&#39;s spending conditions.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Block luck changes short-term results</h2>
+<p>A pool with a known estimated share of network hashrate has an expected block-discovery rate over time. Actual discovery remains random.</p>
+<p>A pool can find more blocks than expected during one period and fewer during another. This difference is often called pool luck.</p>
+<p>Under methods tied closely to realized block revenue, participants feel more of that variation. Under PPS-style methods, the operator may absorb more of it and require sufficient fees, reserves, or risk management.</p>
+<p>No payout method removes economic tradeoffs. It reallocates variance, timing, and counterparty risk among the operator and participants.</p>
+<p>Past luck does not guarantee that the next period will reverse or continue.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Pool concentration is not one measurement</h2>
+<p>A pool&#39;s share of recently observed blocks is often used as an estimate of coordinated hashrate.</p>
+<p>That estimate does not prove the pool owns all participating hardware. Hashers may be independent companies, hosting customers, farms, or individuals that can redirect work.</p>
+<p>At the same time, hardware independence does not erase coordination influence. A pool may control templates, job distribution, block submission, or participant payouts.</p>
+<p>Concentration should therefore be separated into dimensions:</p>
+<ul><li>Hardware ownership.</li><li>Hashrate coordination.</li><li>Template control.</li><li>Job-distribution infrastructure.</li><li>Block-publication paths.</li><li>Payout dependency.</li><li>Geographic and energy infrastructure.</li></ul>
+<p>One block-label chart cannot answer all of those questions.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Switching pools can be possible but costly</h2>
+<p>Hashers can often redirect devices or proxies to another pool.</p>
+<p>The practical friction can include configuration changes, network latency, payout thresholds, unpaid balances, contracts, firmware compatibility, monitoring systems, jurisdiction, and operational procedures.</p>
+<p>A nominal ability to switch does not mean switching is instantaneous or costless. It does create an important boundary: coordinated hashrate may be more mobile than ownership of physical machines.</p>
+<p>Protocol designs that support independent template construction can change another boundary, but only where deployed and operated correctly.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Pools coordinate work, not consensus</h2>
+<p>A mining pool is a service and protocol arrangement.</p>
+<p>It can choose which valid transactions to attempt, distribute jobs, measure shares, submit blocks, and administer payouts. It cannot make an invalid block valid to independent nodes.</p>
+<p>Pool shares do not alter the blockchain. Pool dashboards do not set network difficulty. Pool payout rules do not change coinbase maturity. Pool policies do not become Bitcoin consensus simply because many miners use the service.</p>
+<p>The next guide moves down one layer to the specialized hardware performing most Bitcoin proof-of-work hashing: the ASIC miner.</p>
+</section>
+    </article>
+    <section class="msc-learn-key-terms" aria-labelledby="MscGuide018Terms"><h2 id="MscGuide018Terms">Key Terms</h2><dl><div class="msc-learn-term"><dt>Mining pool</dt><dd>A coordination system that combines miners&#39; work and distributes rewards under a payout method.</dd></div>
+<div class="msc-learn-term"><dt>Mining</dt><dd>The proof-of-work process that orders valid transactions into blocks and competes to extend the Bitcoin chain.</dd></div>
+<div class="msc-learn-term"><dt>Miner</dt><dd>An operator that constructs candidate blocks and performs proof of work.</dd></div>
+<div class="msc-learn-term"><dt>Hashrate</dt><dd>An estimate of the total proof-of-work computation being applied to Bitcoin mining.</dd></div>
+<div class="msc-learn-term"><dt>Proof of work</dt><dd>The computational process miners use to produce block hashes below the network target.</dd></div>
+<div class="msc-learn-term"><dt>Block</dt><dd>A valid batch of Bitcoin transactions linked to prior chain history through proof of work.</dd></div>
+<div class="msc-learn-term"><dt>Block subsidy</dt><dd>New bitcoin created under the issuance schedule and paid through a block&#39;s coinbase transaction.</dd></div>
+<div class="msc-learn-term"><dt>Transaction fee</dt><dd>The input value not reassigned to transaction outputs and available to the block&#39;s miner.</dd></div>
+<div class="msc-learn-term"><dt>Node</dt><dd>Bitcoin software that communicates with peers and may validate, relay, store, or serve network data.</dd></div>
+<div class="msc-learn-term"><dt>Validation</dt><dd>The process of checking transactions and blocks against applicable rules.</dd></div></dl></section>
+    <section class="msc-learn-sources" aria-labelledby="MscGuide018Sources"><h2 id="MscGuide018Sources">Sources</h2><article class="msc-learn-source"><h3>BIP 22: getblocktemplate Fundamentals</h3><ul><li><strong>author or publisher:</strong> Luke Dashjr</li><li><strong>supports:</strong> Full block-template delivery, template fields, transaction dependencies, compact target data, client customization, proposal mode, and block submission fundamentals.</li></ul><p><strong>Direct URL:</strong> <code>https://bips.dev/22/</code></p></article>
+<article class="msc-learn-source"><h3>BIP 23: getblocktemplate Pooled Mining</h3><ul><li><strong>author or publisher:</strong> Luke Dashjr</li><li><strong>supports:</strong> Optional pooled-mining extensions for long polling, share targets, coinbase mutation, work identifiers, and abbreviated submissions.</li></ul><p><strong>Direct URL:</strong> <code>https://bips.dev/23/</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Mining RPC</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core developers</li><li><strong>supports:</strong> Current Bitcoin Core `getblocktemplate`, template proposal, block submission, target, transaction, and network-hashrate RPC behavior.</li></ul><p><strong>Direct URL:</strong> <code>https://github.com/bitcoin/bitcoin/blob/master/src/rpc/mining.cpp</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Block Assembler</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core developers</li><li><strong>supports:</strong> Current Bitcoin Core transaction selection, dependency handling, block limits, coinbase construction, subsidy-plus-fee accounting, and candidate-header preparation.</li></ul><p><strong>Direct URL:</strong> <code>https://github.com/bitcoin/bitcoin/blob/master/src/node/miner.cpp</code></p></article>
+<article class="msc-learn-source"><h3>Stratum V2 Protocol Overview</h3><ul><li><strong>author or publisher:</strong> Stratum V2 specification contributors</li><li><strong>supports:</strong> Separation of the Mining, Job Declaration, and Template Distribution protocols and the optional roles used in different Stratum V2 architectures.</li></ul><p><strong>Direct URL:</strong> <code>https://stratumprotocol.org/specification/03-protocol-overview/</code></p></article>
+<article class="msc-learn-source"><h3>Stratum V2 Mining Protocol</h3><ul><li><strong>author or publisher:</strong> Stratum V2 specification contributors</li><li><strong>supports:</strong> Mining-job distribution, standard and extended jobs, unique search-space assignment, share submission, and optional custom-job use.</li></ul><p><strong>Direct URL:</strong> <code>https://stratumprotocol.org/specification/05-mining-protocol/</code></p></article>
+<article class="msc-learn-source"><h3>Stratum V2 Job Declaration Protocol</h3><ul><li><strong>author or publisher:</strong> Stratum V2 specification contributors</li><li><strong>supports:</strong> Optional miner-side custom-template declaration, pool acknowledgment, job tokens, and the roles required for miner-selected transaction templates.</li></ul><p><strong>Direct URL:</strong> <code>https://stratumprotocol.org/specification/06-job-declaration-protocol/</code></p></article>
+<article class="msc-learn-source"><h3>Stratum V2 Template Distribution Protocol</h3><ul><li><strong>author or publisher:</strong> Stratum V2 specification contributors</li><li><strong>supports:</strong> Template-provider communication, template identifiers, previous-block data, target information, and transaction-data exchange.</li></ul><p><strong>Direct URL:</strong> <code>https://stratumprotocol.org/specification/07-template-distribution-protocol/</code></p></article>
+<article class="msc-learn-source"><h3>Analysis of Bitcoin Pooled Mining Reward Systems</h3><ul><li><strong>author or publisher:</strong> Meni Rosenfeld</li><li><strong>supports:</strong> Solo-mining variance, pooled-mining accounting, PPS, score-based, PPLNS, and the tradeoffs among reward-sharing systems.</li></ul><p><strong>Direct URL:</strong> <code>https://arxiv.org/abs/1112.4980</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Consensus Constants</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core developers</li><li><strong>supports:</strong> The 100-block coinbase maturity rule that applies independently of a pool&#39;s internal payout schedule.</li></ul><p><strong>Direct URL:</strong> <code>https://github.com/bitcoin/bitcoin/blob/master/src/consensus/consensus.h</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin: A Peer-to-Peer Electronic Cash System</h3><ul><li><strong>author or publisher:</strong> Satoshi Nakamoto</li><li><strong>supports:</strong> Probabilistic proof-of-work discovery, network incentives, block subsidy and transaction-fee revenue, and independent verification context.</li></ul><p><strong>Direct URL:</strong> <code>https://bitcoin.org/bitcoin.pdf</code></p></article></section>
+    <nav class="msc-learn-prev-next" aria-label="Guide navigation preview"><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Previous</span><strong>How Bitcoin Mining Works</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Category</span><strong>The Bitcoin Network</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Next</span><strong>What Is an ASIC Miner?</strong><small>Link inactive</small></span></nav>
+  </div>
+</section>

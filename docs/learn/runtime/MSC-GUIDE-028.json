@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-028-bitcoin-hashrate.md",
+  "source_sha256": "186f4845e6afe4b6193e8656ee3a50e87067e10de2380c95b3e990d9cb1f3adb",
+  "registry_id": "MSC-GUIDE-028",
+  "status": "COPY_LOCKED",
+  "h1": "What Is Bitcoin Hashrate?",
+  "introductory_deck": "Bitcoin hashrate is an estimate of how much proof-of-work computation is being applied to mining. Individual machines and pools can measure or estimate their own performance, but total network hashrate is not directly observable. It is inferred from accumulated chainwork and the time blocks took to arrive, so the result depends on the measurement window and natural block-time variance.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "Hashrate describes how quickly proof-of-work hash attempts are being performed.\n\nFor a mining device, that rate can be measured or estimated from the machine's work. For a pool, it can be estimated from submitted shares. For the Bitcoin network, it is inferred from the blocks that were actually found.\n\nThose are related measurements, but they are not identical.",
+      "body_html": "<p>Hashrate describes how quickly proof-of-work hash attempts are being performed.</p>\n<p>For a mining device, that rate can be measured or estimated from the machine&#39;s work. For a pool, it can be estimated from submitted shares. For the Bitcoin network, it is inferred from the blocks that were actually found.</p>\n<p>Those are related measurements, but they are not identical.</p>"
+    },
+    {
+      "heading": "A hash is one proof-of-work attempt",
+      "body_markdown": "Bitcoin miners repeatedly hash block headers or equivalent header variants.\n\nEach hash produces a fixed-size result. The result is compared with the current network target. A valid block header hash must be at or below that target.\n\nOne hash per second is written as 1 H/s. Mining equipment operates at much larger scales:\n\n- 1 kilohash per second is 10^3 H/s.\n- 1 megahash per second is 10^6 H/s.\n- 1 gigahash per second is 10^9 H/s.\n- 1 terahash per second is 10^12 H/s.\n- 1 petahash per second is 10^15 H/s.\n- 1 exahash per second is 10^18 H/s.\n\nThe units count attempts per second. They do not measure the monetary value of those attempts, the amount of energy used, or the number of separate miners.",
+      "body_html": "<p>Bitcoin miners repeatedly hash block headers or equivalent header variants.</p>\n<p>Each hash produces a fixed-size result. The result is compared with the current network target. A valid block header hash must be at or below that target.</p>\n<p>One hash per second is written as 1 H/s. Mining equipment operates at much larger scales:</p>\n<ul><li>1 kilohash per second is 10^3 H/s.</li><li>1 megahash per second is 10^6 H/s.</li><li>1 gigahash per second is 10^9 H/s.</li><li>1 terahash per second is 10^12 H/s.</li><li>1 petahash per second is 10^15 H/s.</li><li>1 exahash per second is 10^18 H/s.</li></ul>\n<p>The units count attempts per second. They do not measure the monetary value of those attempts, the amount of energy used, or the number of separate miners.</p>"
+    },
+    {
+      "heading": "Hashrate is a rate, not a stock of work",
+      "body_markdown": "Hashrate describes activity over time.\n\nAccumulated proof of work, or chainwork, describes the work represented by a chain of accepted blocks. A miner can have a high hashrate for one minute without producing a block. Another miner can find a block quickly with less hashrate because each attempt is probabilistic.\n\nExpected outcomes become more stable over large numbers of attempts, but individual results remain random.\n\nThis distinction matters when people compare:\n\n- A machine's advertised hashrate.\n- A pool's effective hashrate.\n- The estimated network hashrate.\n- The accumulated work of a blockchain branch.\n\nThey answer different questions.",
+      "body_html": "<p>Hashrate describes activity over time.</p>\n<p>Accumulated proof of work, or chainwork, describes the work represented by a chain of accepted blocks. A miner can have a high hashrate for one minute without producing a block. Another miner can find a block quickly with less hashrate because each attempt is probabilistic.</p>\n<p>Expected outcomes become more stable over large numbers of attempts, but individual results remain random.</p>\n<p>This distinction matters when people compare:</p>\n<ul><li>A machine&#39;s advertised hashrate.</li><li>A pool&#39;s effective hashrate.</li><li>The estimated network hashrate.</li><li>The accumulated work of a blockchain branch.</li></ul>\n<p>They answer different questions.</p>"
+    },
+    {
+      "heading": "Device hashrate can be measured in several ways",
+      "body_markdown": "An ASIC miner may report a local hashrate calculated from its internal work.\n\nA pool can estimate that device's effective hashrate from the difficulty and frequency of accepted shares. A wall-level operator can compare hash output with electrical power, cooling, downtime, and rejected work.\n\nThese figures can differ.\n\nA machine's nameplate rating is a product specification under stated conditions. The controller's displayed rate may use a short rolling window. A pool estimate depends on share luck and the pool's accounting window. Effective delivered hashrate can be reduced by downtime, thermal throttling, network delay, rejected shares, configuration errors, or unstable power.\n\nNo one number fully describes a mining system unless its measurement method and time period are stated.",
+      "body_html": "<p>An ASIC miner may report a local hashrate calculated from its internal work.</p>\n<p>A pool can estimate that device&#39;s effective hashrate from the difficulty and frequency of accepted shares. A wall-level operator can compare hash output with electrical power, cooling, downtime, and rejected work.</p>\n<p>These figures can differ.</p>\n<p>A machine&#39;s nameplate rating is a product specification under stated conditions. The controller&#39;s displayed rate may use a short rolling window. A pool estimate depends on share luck and the pool&#39;s accounting window. Effective delivered hashrate can be reduced by downtime, thermal throttling, network delay, rejected shares, configuration errors, or unstable power.</p>\n<p>No one number fully describes a mining system unless its measurement method and time period are stated.</p>"
+    },
+    {
+      "heading": "Pool hashrate is usually estimated from shares",
+      "body_markdown": "Mining pools assign participants a share target that is easier than the Bitcoin network target.\n\nWhen a participant submits accepted shares, the pool has evidence that statistically significant hashing work was performed. The pool can estimate hashrate from the difficulty of those shares and how frequently they arrived.\n\nA share is not a partial Bitcoin block. Most accepted shares do not satisfy the network target and are never broadcast as blocks.\n\nShare-based hashrate is noisy over short windows. A miner can submit more or fewer shares than expected for a period without its physical hash rate changing. Longer windows generally smooth that variance but react more slowly to real changes.\n\nPools may display current, average, reported, and effective rates using different formulas. Those labels are service-specific, not Bitcoin consensus terms.",
+      "body_html": "<p>Mining pools assign participants a share target that is easier than the Bitcoin network target.</p>\n<p>When a participant submits accepted shares, the pool has evidence that statistically significant hashing work was performed. The pool can estimate hashrate from the difficulty of those shares and how frequently they arrived.</p>\n<p>A share is not a partial Bitcoin block. Most accepted shares do not satisfy the network target and are never broadcast as blocks.</p>\n<p>Share-based hashrate is noisy over short windows. A miner can submit more or fewer shares than expected for a period without its physical hash rate changing. Longer windows generally smooth that variance but react more slowly to real changes.</p>\n<p>Pools may display current, average, reported, and effective rates using different formulas. Those labels are service-specific, not Bitcoin consensus terms.</p>"
+    },
+    {
+      "heading": "Network hashrate cannot be counted directly",
+      "body_markdown": "Bitcoin has no message in which every miner reports its machines or hash attempts to full nodes.\n\nFailed hashes leave no on-chain record. Private miners do not need to identify themselves. Pools can publish estimates, but their reports do not cover every participant and are not required by consensus.\n\nWhat the blockchain reveals is:\n\n- Which valid blocks were found.\n- The targets those blocks had to satisfy.\n- Their chain positions.\n- Header timestamps.\n- The accumulated chainwork represented by the selected history.\n\nNetwork hashrate is inferred from those observations.\n\nIt should therefore be called an estimate rather than an exact live count.",
+      "body_html": "<p>Bitcoin has no message in which every miner reports its machines or hash attempts to full nodes.</p>\n<p>Failed hashes leave no on-chain record. Private miners do not need to identify themselves. Pools can publish estimates, but their reports do not cover every participant and are not required by consensus.</p>\n<p>What the blockchain reveals is:</p>\n<ul><li>Which valid blocks were found.</li><li>The targets those blocks had to satisfy.</li><li>Their chain positions.</li><li>Header timestamps.</li><li>The accumulated chainwork represented by the selected history.</li></ul>\n<p>Network hashrate is inferred from those observations.</p>\n<p>It should therefore be called an estimate rather than an exact live count.</p>"
+    },
+    {
+      "heading": "Bitcoin Core estimates from chainwork over time",
+      "body_markdown": "Bitcoin Core's `getnetworkhashps` RPC estimates hashes per second over a chosen block window.\n\nThe implementation selects a current or historical block, moves backward by the requested number of blocks, measures the accumulated chainwork difference, and divides it by the observed time difference across the window.\n\nBy default, the RPC uses a recent block window. An operator can request another positive window or use the blocks since the most recent difficulty adjustment.\n\nThis chainwork-based method has useful properties. It accounts for the actual proof-of-work targets represented by the blocks rather than assuming every compared block has the same difficulty.\n\nThe result still depends on the selected blocks and their timestamps. It is not a sensor reading from all mining machines.",
+      "body_html": "<p>Bitcoin Core&#39;s <code>getnetworkhashps</code> RPC estimates hashes per second over a chosen block window.</p>\n<p>The implementation selects a current or historical block, moves backward by the requested number of blocks, measures the accumulated chainwork difference, and divides it by the observed time difference across the window.</p>\n<p>By default, the RPC uses a recent block window. An operator can request another positive window or use the blocks since the most recent difficulty adjustment.</p>\n<p>This chainwork-based method has useful properties. It accounts for the actual proof-of-work targets represented by the blocks rather than assuming every compared block has the same difficulty.</p>\n<p>The result still depends on the selected blocks and their timestamps. It is not a sensor reading from all mining machines.</p>"
+    },
+    {
+      "heading": "Difficulty gives an expected-work shortcut",
+      "body_markdown": "Difficulty is a human-readable comparison between the current target and Bitcoin's reference difficulty target.\n\nAt difficulty 1, the expected number of hashes required to find a valid block is approximately 2^32. At difficulty D, the common approximation for expected hashes per block is:\n\nD x 2^32\n\nIf blocks were arriving exactly at the ten-minute target spacing, an approximate network hashrate could be written as:\n\nD x 2^32 / 600 seconds\n\nThis is an expectation, not a measurement of the latest instant.\n\nFor a real observation window, analysts use actual accumulated work and elapsed block time. When difficulty changes inside the window, a chainwork calculation avoids treating all blocks as if they represented one target.",
+      "body_html": "<p>Difficulty is a human-readable comparison between the current target and Bitcoin&#39;s reference difficulty target.</p>\n<p>At difficulty 1, the expected number of hashes required to find a valid block is approximately 2^32. At difficulty D, the common approximation for expected hashes per block is:</p>\n<p>D x 2^32</p>\n<p>If blocks were arriving exactly at the ten-minute target spacing, an approximate network hashrate could be written as:</p>\n<p>D x 2^32 / 600 seconds</p>\n<p>This is an expectation, not a measurement of the latest instant.</p>\n<p>For a real observation window, analysts use actual accumulated work and elapsed block time. When difficulty changes inside the window, a chainwork calculation avoids treating all blocks as if they represented one target.</p>"
+    },
+    {
+      "heading": "Block discovery is a random process",
+      "body_markdown": "A constant hashrate does not produce blocks on a fixed schedule.\n\nEach valid header attempt has a small independent chance of satisfying the target. The number of blocks found during a short period can be higher or lower than expected.\n\nThat statistical variance causes short-window network estimates to jump even when no physical miners were added or removed.\n\nA longer window usually reduces noise, but it also delays recognition of rapid real changes. There is no perfect window for every purpose.\n\nAnalysts should report:\n\n- The method used.\n- The start and end blocks.\n- The observation time.\n- Whether difficulty changed.\n- The timestamp convention.\n- The software or data source.\n- Any smoothing applied.\n\nTwo estimates can both be correctly calculated and still differ.",
+      "body_html": "<p>A constant hashrate does not produce blocks on a fixed schedule.</p>\n<p>Each valid header attempt has a small independent chance of satisfying the target. The number of blocks found during a short period can be higher or lower than expected.</p>\n<p>That statistical variance causes short-window network estimates to jump even when no physical miners were added or removed.</p>\n<p>A longer window usually reduces noise, but it also delays recognition of rapid real changes. There is no perfect window for every purpose.</p>\n<p>Analysts should report:</p>\n<ul><li>The method used.</li><li>The start and end blocks.</li><li>The observation time.</li><li>Whether difficulty changed.</li><li>The timestamp convention.</li><li>The software or data source.</li><li>Any smoothing applied.</li></ul>\n<p>Two estimates can both be correctly calculated and still differ.</p>"
+    },
+    {
+      "heading": "Header timestamps have limits as measurement data",
+      "body_markdown": "Bitcoin Core's network-hashrate RPC uses block timestamps within its selected window.\n\nBlock timestamps are miner-supplied values constrained by consensus, not trusted measurements from a synchronized laboratory clock. Their order can be irregular, and the implementation uses the minimum and maximum timestamps in the window to reduce some ordering problems.\n\nExternal analysts may instead use observed arrival times from their own infrastructure. Those times introduce a different boundary because they depend on network position and relay delay.\n\nNeither method directly observes failed hashes.\n\nPrecise claims should identify which time source was used.",
+      "body_html": "<p>Bitcoin Core&#39;s network-hashrate RPC uses block timestamps within its selected window.</p>\n<p>Block timestamps are miner-supplied values constrained by consensus, not trusted measurements from a synchronized laboratory clock. Their order can be irregular, and the implementation uses the minimum and maximum timestamps in the window to reduce some ordering problems.</p>\n<p>External analysts may instead use observed arrival times from their own infrastructure. Those times introduce a different boundary because they depend on network position and relay delay.</p>\n<p>Neither method directly observes failed hashes.</p>\n<p>Precise claims should identify which time source was used.</p>"
+    },
+    {
+      "heading": "Difficulty adjustment reacts to block timing, not reported hashrate",
+      "body_markdown": "Bitcoin adjusts mining difficulty after each 2,016-block interval under mainnet rules.\n\nThe calculation compares the measured timespan with the target timespan and adjusts the target within defined limits. It does not query miners, pools, energy meters, or hashrate dashboards.\n\nIf more hashrate joins while difficulty is unchanged, blocks tend to arrive faster on average. If hashrate leaves, blocks tend to arrive more slowly. The next adjustment responds to the block timing that occurred.\n\nHashrate and difficulty are therefore connected through observed block production, but they are not the same variable.\n\nDifficulty can remain fixed while estimated hashrate changes. Hashrate estimates can also fluctuate from block luck even when physical capacity is stable.",
+      "body_html": "<p>Bitcoin adjusts mining difficulty after each 2,016-block interval under mainnet rules.</p>\n<p>The calculation compares the measured timespan with the target timespan and adjusts the target within defined limits. It does not query miners, pools, energy meters, or hashrate dashboards.</p>\n<p>If more hashrate joins while difficulty is unchanged, blocks tend to arrive faster on average. If hashrate leaves, blocks tend to arrive more slowly. The next adjustment responds to the block timing that occurred.</p>\n<p>Hashrate and difficulty are therefore connected through observed block production, but they are not the same variable.</p>\n<p>Difficulty can remain fixed while estimated hashrate changes. Hashrate estimates can also fluctuate from block luck even when physical capacity is stable.</p>"
+    },
+    {
+      "heading": "More hashrate changes attack economics, not consensus rules",
+      "body_markdown": "Hashrate matters to Bitcoin security because proof-of-work competition determines the cost and probability of replacing valid chain history.\n\nAn attacker seeking to outpace the selected chain needs access to substantial hashing capacity, energy, hardware, coordination, and time. More honest hashrate can increase the resources required to produce a competing branch at a given rate.\n\nThat does not mean hashrate defines valid transactions.\n\nEven overwhelming hash power cannot make a block acceptable to a full node if the block violates the consensus rules that node enforces. Hash power cannot create a valid signature for someone else's key or spend nonexistent outputs.\n\nA dominant miner or coordinated group can create serious risks within the valid rule set. Depending on capability and duration, it may censor selected transactions, reorganize recent blocks, attempt double spends, or delay confirmation.\n\n\"Fifty-one percent controls Bitcoin\" is therefore too broad. Majority hash power can influence ordering and inclusion of valid activity. It does not automatically control node software, private keys, or every consensus rule.",
+      "body_html": "<p>Hashrate matters to Bitcoin security because proof-of-work competition determines the cost and probability of replacing valid chain history.</p>\n<p>An attacker seeking to outpace the selected chain needs access to substantial hashing capacity, energy, hardware, coordination, and time. More honest hashrate can increase the resources required to produce a competing branch at a given rate.</p>\n<p>That does not mean hashrate defines valid transactions.</p>\n<p>Even overwhelming hash power cannot make a block acceptable to a full node if the block violates the consensus rules that node enforces. Hash power cannot create a valid signature for someone else&#39;s key or spend nonexistent outputs.</p>\n<p>A dominant miner or coordinated group can create serious risks within the valid rule set. Depending on capability and duration, it may censor selected transactions, reorganize recent blocks, attempt double spends, or delay confirmation.</p>\n<p>&quot;Fifty-one percent controls Bitcoin&quot; is therefore too broad. Majority hash power can influence ordering and inclusion of valid activity. It does not automatically control node software, private keys, or every consensus rule.</p>"
+    },
+    {
+      "heading": "Distribution and control matter alongside the total",
+      "body_markdown": "A total network estimate does not reveal who can coordinate the work.\n\nMining hardware ownership, pool template control, pool account participation, firmware control, geographic concentration, energy dependence, and communication infrastructure are separate layers.\n\nA large pool's displayed share does not necessarily mean the pool owns all connected machines. It can still indicate meaningful template or payout coordination.\n\nA security analysis should ask:\n\n- Who owns the hardware?\n- Who chooses block templates?\n- Who can redirect machines?\n- How quickly can participants switch pools?\n- Which firmware and network services are trusted?\n- Where are energy and hosting dependencies concentrated?\n- How much capacity is idle or could be activated?\n- How long could an attacker sustain competing work?\n\nHashrate is one input to that threat model, not the whole answer.",
+      "body_html": "<p>A total network estimate does not reveal who can coordinate the work.</p>\n<p>Mining hardware ownership, pool template control, pool account participation, firmware control, geographic concentration, energy dependence, and communication infrastructure are separate layers.</p>\n<p>A large pool&#39;s displayed share does not necessarily mean the pool owns all connected machines. It can still indicate meaningful template or payout coordination.</p>\n<p>A security analysis should ask:</p>\n<ul><li>Who owns the hardware?</li><li>Who chooses block templates?</li><li>Who can redirect machines?</li><li>How quickly can participants switch pools?</li><li>Which firmware and network services are trusted?</li><li>Where are energy and hosting dependencies concentrated?</li><li>How much capacity is idle or could be activated?</li><li>How long could an attacker sustain competing work?</li></ul>\n<p>Hashrate is one input to that threat model, not the whole answer.</p>"
+    },
+    {
+      "heading": "Hashrate does not reveal energy use by itself",
+      "body_markdown": "Hashes are computational attempts. Energy use depends on how efficiently hardware produces them and on the supporting system.\n\nTo estimate electrical demand, an analyst needs assumptions about:\n\n- Joules per terahash.\n- The mix and operating state of machines.\n- Power-supply losses.\n- Cooling and ventilation.\n- Networking and site overhead.\n- Curtailment and downtime.\n- Measurement boundaries.\n\nThe same hashrate can be produced with different electrical loads.\n\nNetwork hashrate multiplied by one device's efficiency is not a precise global energy measurement. It is a scenario based on an assumed hardware mix.\n\nEnergy source, emissions, cost, and grid impact require additional data beyond power draw.",
+      "body_html": "<p>Hashes are computational attempts. Energy use depends on how efficiently hardware produces them and on the supporting system.</p>\n<p>To estimate electrical demand, an analyst needs assumptions about:</p>\n<ul><li>Joules per terahash.</li><li>The mix and operating state of machines.</li><li>Power-supply losses.</li><li>Cooling and ventilation.</li><li>Networking and site overhead.</li><li>Curtailment and downtime.</li><li>Measurement boundaries.</li></ul>\n<p>The same hashrate can be produced with different electrical loads.</p>\n<p>Network hashrate multiplied by one device&#39;s efficiency is not a precise global energy measurement. It is a scenario based on an assumed hardware mix.</p>\n<p>Energy source, emissions, cost, and grid impact require additional data beyond power draw.</p>"
+    },
+    {
+      "heading": "Hashrate does not equal miner revenue or profitability",
+      "body_markdown": "Mining revenue depends on blocks found, subsidy, transaction fees, payout arrangements, and bitcoin-denominated outcomes.\n\nProfitability also depends on energy price, hardware cost, financing, cooling, labor, hosting, taxes, downtime, curtailment, maintenance, and the market value used for accounting.\n\nA rising network hashrate can increase competition for the same expected block rewards before difficulty adjusts. It can also reflect newer hardware, lower-cost energy, temporary deployments, or changes in market conditions.\n\nHashrate alone does not tell a reader whether mining is profitable or whether bitcoin's price will rise.",
+      "body_html": "<p>Mining revenue depends on blocks found, subsidy, transaction fees, payout arrangements, and bitcoin-denominated outcomes.</p>\n<p>Profitability also depends on energy price, hardware cost, financing, cooling, labor, hosting, taxes, downtime, curtailment, maintenance, and the market value used for accounting.</p>\n<p>A rising network hashrate can increase competition for the same expected block rewards before difficulty adjusts. It can also reflect newer hardware, lower-cost energy, temporary deployments, or changes in market conditions.</p>\n<p>Hashrate alone does not tell a reader whether mining is profitable or whether bitcoin&#39;s price will rise.</p>"
+    },
+    {
+      "heading": "Estimates should be dated and scoped",
+      "body_markdown": "A responsible hashrate figure includes a date, observation window, units, chain, and method.\n\nFor example, a statement can say that a particular Bitcoin Core node estimated mainnet hashes per second over the previous 120 blocks at a specified tip. That is more useful than presenting an unlabeled dashboard number as exact.\n\nHistorical charts should also disclose methodology changes. A provider that changes its smoothing window can create an apparent jump without a corresponding physical event.\n\nAvoid false precision. A long decimal string does not turn a probabilistic estimate into a direct count.",
+      "body_html": "<p>A responsible hashrate figure includes a date, observation window, units, chain, and method.</p>\n<p>For example, a statement can say that a particular Bitcoin Core node estimated mainnet hashes per second over the previous 120 blocks at a specified tip. That is more useful than presenting an unlabeled dashboard number as exact.</p>\n<p>Historical charts should also disclose methodology changes. A provider that changes its smoothing window can create an apparent jump without a corresponding physical event.</p>\n<p>Avoid false precision. A long decimal string does not turn a probabilistic estimate into a direct count.</p>"
+    },
+    {
+      "heading": "Hashrate connects mining, difficulty, and chainwork",
+      "body_markdown": "The useful mental model is:\n\n- Miners perform hash attempts.\n- Hashrate measures or estimates attempts per second.\n- The network target determines how difficult a valid result is.\n- Valid blocks add provable work to a chain.\n- Block timing provides evidence used to estimate network hashrate.\n- Difficulty adjustment responds periodically to prior timing.\n- Nodes select among valid candidate chains by accumulated work.\n\nHashrate is important because it describes the pace of proof-of-work competition. It remains an estimate at the network level and should always be interpreted with its window, method, and threat-model limits.",
+      "body_html": "<p>The useful mental model is:</p>\n<ul><li>Miners perform hash attempts.</li><li>Hashrate measures or estimates attempts per second.</li><li>The network target determines how difficult a valid result is.</li><li>Valid blocks add provable work to a chain.</li><li>Block timing provides evidence used to estimate network hashrate.</li><li>Difficulty adjustment responds periodically to prior timing.</li><li>Nodes select among valid candidate chains by accumulated work.</li></ul>\n<p>Hashrate is important because it describes the pace of proof-of-work competition. It remains an estimate at the network level and should always be interpreted with its window, method, and threat-model limits.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Hashrate",
+      "definition": "An estimate of the total proof-of-work computation being applied to Bitcoin mining."
+    },
+    {
+      "term": "Mining",
+      "definition": "The proof-of-work process that orders valid transactions into blocks and competes to extend the Bitcoin chain."
+    },
+    {
+      "term": "Threat model",
+      "definition": "A defined view of the assets, adversaries, capabilities, failure modes, and assumptions relevant to a security decision."
+    },
+    {
+      "term": "Difficulty",
+      "definition": "The proof-of-work threshold that determines how hard it is to produce a valid block hash."
+    },
+    {
+      "term": "Proof of work",
+      "definition": "The computational process miners use to produce block hashes below the network target."
+    },
+    {
+      "term": "Miner",
+      "definition": "An operator that constructs candidate blocks and performs proof of work."
+    },
+    {
+      "term": "Blockchain",
+      "definition": "The ordered history of valid Bitcoin blocks selected by accumulated proof of work."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bitcoin Core network-hashrate RPC implementation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/rpc/mining.cpp",
+      "supports": "`getnetworkhashps`, the selected block window, chainwork difference, timestamp range, default window, and hashes-per-second estimate."
+    },
+    {
+      "title": "Bitcoin Core chainwork implementation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/chain.cpp",
+      "supports": "Per-block proof calculation from the target, accumulated chainwork, and work-based chain comparison."
+    },
+    {
+      "title": "Bitcoin Core chain index definitions",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/chain.h",
+      "supports": "Stored chainwork, block height, header timestamps, ancestor navigation, and active-chain data used by the estimate."
+    },
+    {
+      "title": "Bitcoin Core proof-of-work implementation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/pow.cpp",
+      "supports": "Target decoding, proof-of-work validation, difficulty adjustment mechanics, and the target-work relationship."
+    },
+    {
+      "title": "Bitcoin Core mainnet consensus parameters",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/kernel/chainparams.cpp",
+      "supports": "Mainnet target spacing, target timespan, proof-of-work limit, and difficulty-adjustment interval."
+    },
+    {
+      "title": "Bitcoin Core getnetworkhashps RPC documentation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://bitcoincore.org/en/doc/31.0.0/rpc/mining/getnetworkhashps/",
+      "supports": "The RPC's estimated-network-hashes-per-second result, default block window, historical height option, and since-adjustment mode."
+    },
+    {
+      "title": "Bitcoin Core getdifficulty RPC documentation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://bitcoincore.org/en/doc/31.0.0/rpc/blockchain/getdifficulty/",
+      "supports": "The node-reported proof-of-work difficulty relative to the minimum reference difficulty."
+    },
+    {
+      "title": "Bitcoin white paper",
+      "author_or_publisher": "Satoshi Nakamoto",
+      "url": "https://bitcoin.org/bitcoin.pdf",
+      "supports": "Repeated proof-of-work hashing, probabilistic block discovery, accumulated-work chain ordering, and attacker catch-up probability."
+    },
+    {
+      "title": "Stratum V2 Mining Protocol specification",
+      "author_or_publisher": "Stratum V2 contributors",
+      "url": "https://github.com/stratum-mining/sv2-spec/blob/main/03-Protocol-Overview.md",
+      "supports": "Mining jobs, share submissions, share targets, pool coordination, and the distinction between pool shares and Bitcoin-valid blocks."
+    }
+  ],
+  "seo_title": "Bitcoin Hashrate Explained: Measurement, Estimates, and Security",
+  "meta_description": "Learn what Bitcoin hashrate measures, how network hashrate is estimated from chainwork and block time, and why the result is not an exact live count.",
+  "excerpt": "Hashrate describes proof-of-work attempts per second. Learn how machines, pools, and nodes estimate it, why short windows are noisy, and what it does and does not say about security.",
+  "reading_time": "11 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-NETWORK",
+    "label": "The Bitcoin Network",
+    "subcategory": "Network",
+    "depth": "Shallow",
+    "format": "Explainer"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-027",
+      "title": "How the Bitcoin Blockchain Works",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-029",
+      "title": "How Bitcoin Proof of Work Secures the Network",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": []
+  },
+  "review_dates": {
+    "reviewed": "2026-07-18",
+    "copy_locked": "2026-07-18",
+    "human_verification": "2026-07-18"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "Three Ways to Read Hashrate",
+      "educational_purpose": "Separate machine measurement, pool estimation, and network estimation.",
+      "recommended_placement": "After the section titled Pool hashrate is usually estimated from shares.",
+      "visual_description": "Old scientific instrument panel with three gauges. Device gauge reads Local work, pool gauge reads Accepted shares over time, and network gauge reads Chainwork over block time. Each has a different observation window.",
+      "required_labels": "Device hashrate, Pool effective hashrate, Network hashrate estimate, Local work, Accepted shares, Chainwork, Time window",
+      "caption": "Device, pool, and network hashrate figures use different evidence and should not be treated as identical measurements.",
+      "alt_text": "Technical panel comparing Bitcoin device hashrate from local work, pool hashrate from accepted shares, and network hashrate from chainwork over time.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack the three gauges vertically and keep the evidence label directly beneath each gauge.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "Why Short Hashrate Windows Are Noisy",
+      "educational_purpose": "Show random block discovery around a constant underlying rate.",
+      "recommended_placement": "After the section titled Block discovery is a random process.",
+      "visual_description": "Ocean-wave chart with a steady dashed baseline labeled Constant underlying hashrate. Short-window block observations rise and fall sharply around it. A longer smoothing window follows the baseline more closely but lags a later real change.",
+      "required_labels": "Constant underlying hashrate, Random block arrivals, Short window, Long window, Noise, Lag",
+      "caption": "Random block timing makes short-window hashrate estimates volatile, while longer windows trade responsiveness for stability.",
+      "alt_text": "Statistical chart showing noisy short-window Bitcoin hashrate estimates around a stable underlying rate and a smoother but slower long-window estimate.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Use one centered baseline with two clearly labeled observation lines and no dense axis text.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Hashrate Is One Layer of the Threat Model",
+      "educational_purpose": "Prevent total hashrate from being treated as a complete security score.",
+      "recommended_placement": "After the section titled Distribution and control matter alongside the total.",
+      "visual_description": "Infrastructure map with total network hashrate at center. Separate surrounding stations show Hardware ownership, Template control, Pool coordination, Energy access, Network connectivity, Attack duration, and Node validation. Lines connect them without merging the roles.",
+      "required_labels": "Total hashrate, Hardware ownership, Template control, Pool coordination, Energy access, Connectivity, Attack duration, Node validation",
+      "caption": "Security analysis requires more than a total hashrate estimate because control, duration, infrastructure, and node rules also matter.",
+      "alt_text": "Bitcoin mining threat-model diagram placing total hashrate among separate factors for hardware ownership, template control, pools, energy, connectivity, duration, and node validation.",
+      "image_orientation": "Square",
+      "mobile_crop_notes": "Keep total hashrate at center with seven short outer labels arranged as an even ring.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}

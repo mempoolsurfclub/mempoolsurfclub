@@ -1,0 +1,165 @@
+{% comment %}
+  Generated from docs/learn/content/guides/MSC-GUIDE-019-bitcoin-asic-miners.md.
+  Registry binding: MSC-GUIDE-019.
+  Preview only. Do not edit manually.
+  Rebuild with node scripts/generate-msc-learn-guide-category-runtime.mjs --start=17 --end=32 --write.
+{% endcomment %}
+<section class="msc-shell msc-learn-page" data-msc-registry-id="MSC-GUIDE-019" data-msc-preview-only="true">
+  <div class="msc-container msc-learn-page__container">
+    <nav class="msc-learn-breadcrumbs" aria-label="Learn breadcrumbs"><ol><li><span>Learn</span></li><li><span>The Bitcoin Network</span></li><li aria-current="page"><span>What Is an ASIC Miner?</span></li></ol></nav>
+    <header class="msc-learn-page__header">
+      <p class="msc-section-kicker">The Bitcoin Network</p>
+      <h1>What Is an ASIC Miner?</h1>
+      <p class="msc-learn-page__deck">A Bitcoin ASIC miner is specialized hardware designed to perform Bitcoin proof-of-work hashing efficiently. The ASIC chip is one component inside a complete mining machine, which also depends on controllers, power conversion, networking, cooling, firmware, sensors, and external infrastructure.</p>
+      <ul class="msc-learn-page-meta"><li>Mining</li><li>Shallow</li><li>Explainer</li><li>10 to 12 minutes</li><li>Reviewed 2026-07-18</li></ul>
+      <p class="msc-learn-preview-note">Preview only. Publication records and confirmed URLs do not exist; all navigation remains inactive.</p>
+    </header>
+    <article class="msc-learn-article rte" data-msc-content-source="structured-runtime">
+<section class="msc-learn-article__section">
+<p>Bitcoin mining hardware has one narrow job: evaluate enormous numbers of candidate block headers.</p>
+<p>Modern Bitcoin mining performs that job with application-specific integrated circuits, usually called ASICs. These chips are designed around a particular computation rather than the broad instruction set of a general-purpose processor.</p>
+<p>Specialization can make them highly efficient at Bitcoin&#39;s proof-of-work hash function. It also means they are not interchangeable with a full node, a wallet, a pool server, or a general computer.</p>
+</section>
+<section class="msc-learn-article__section"><h2>ASIC means application-specific integrated circuit</h2>
+<p>An application-specific integrated circuit is a chip designed for a defined application.</p>
+<p>A general-purpose processor can run many kinds of software. A graphics processor is optimized for highly parallel workloads but remains programmable across many tasks. A Bitcoin mining ASIC dedicates silicon, data paths, control logic, and supporting circuits to repeated proof-of-work hashing.</p>
+<p>The exact architecture differs across chip designs. The common purpose is narrow: process candidate Bitcoin block headers at very high rates while using less energy per hash than less specialized hardware could achieve.</p>
+<p>The phrase ASIC miner is often used for a complete machine. Technically, the ASIC is the chip. A finished miner contains many additional systems required to operate those chips.</p>
+</section>
+<section class="msc-learn-article__section"><h2>A complete miner is more than the chips</h2>
+<p>A complete mining machine can include:</p>
+<ul><li>One or more hashboards.</li><li>Many ASIC chips mounted on those boards.</li><li>A controller that receives jobs and manages work.</li><li>Power-conversion stages that supply the required voltages.</li><li>Network interfaces.</li><li>Fans, pumps, heat exchangers, or other cooling equipment.</li><li>Temperature, voltage, current, and fan sensors.</li><li>Firmware and monitoring software.</li><li>A chassis, connectors, and protective components.</li></ul>
+<p>Performance claims need a clear boundary. A chip-level figure may exclude board losses, power conversion, fans, pumps, controllers, or facility cooling. A machine-level figure may include some of those loads but not upstream electrical or cooling infrastructure. A wall-level measurement can include more of the complete machine&#39;s operating load.</p>
+<p>Without that boundary, two efficiency figures may look comparable while measuring different things.</p>
+</section>
+<section class="msc-learn-article__section"><h2>The device receives mining work</h2>
+<p>A hashing device does not discover the current chain tip, choose transactions, and validate the entire blockchain merely by being connected to power.</p>
+<p>It receives mining-job information from a pool, mining proxy, local software, or another upstream system. That information describes the candidate header space it should search.</p>
+<p>The job may include a previous-block reference, target information, a Merkle-root path or fixed root, timestamp guidance, version-related data, coinbase components, extranonce allocation, and other protocol-specific fields.</p>
+<p>The controller translates those instructions into work for the hashboards. ASIC chips evaluate candidate headers and return results that meet the assigned reporting threshold.</p>
+<p>A pool share may be reported frequently. A network-level result is rare and must correspond to a complete valid block candidate.</p>
+</section>
+<section class="msc-learn-article__section"><h2>ASIC hardware is not a Bitcoin node</h2>
+<p>A full node independently verifies Bitcoin blocks and transactions against consensus rules.</p>
+<p>A typical ASIC hashing device does not perform the full set of validation tasks required of a node. It may trust upstream job information, check limited fields, or perform device-level consistency checks without downloading and validating the complete chain.</p>
+<p>The distinction matters when a job contains an invalid transaction, excessive coinbase amount, wrong target, or incorrect previous-block reference. A hashing device can spend energy on that job without making the resulting block acceptable to nodes.</p>
+<p>A mining site may operate a full node and template software alongside its ASIC fleet. The systems can work together, but the ASIC chips do not become full nodes because the site uses both.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Bitcoin mining uses double SHA-256</h2>
+<p>Bitcoin proof of work applies SHA-256 twice to the serialized 80-byte block header.</p>
+<p>SHA-256 maps input data to a fixed 256-bit digest. Mining applies the function to a header, then hashes the resulting digest again. The final value is interpreted as a number and compared with the applicable target.</p>
+<p>The device is not decrypting transaction data. It is not searching for a phrase hidden inside the block. It is not solving a reusable equation whose answer can be applied to another header.</p>
+<p>The work is repeated evaluation of different candidate headers.</p>
+<p>Even when two candidates differ by only one bit, their hash results are expected to behave unpredictably for mining purposes. That prevents a miner from using one result as a directional hint toward the next success.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Failed hashes do not accumulate progress</h2>
+<p>Each attempted header either produces a hash that satisfies the required target or it does not.</p>
+<p>A near-looking result does not make the next attempt more likely to succeed. One million failed hashes do not combine into a partially complete block.</p>
+<p>This is why mining output is measured as a rate of attempts. A machine&#39;s hashrate describes how many candidate hashes it can evaluate per second under stated conditions.</p>
+<p>The probabilistic search restarts conceptually with every candidate. Operational systems keep counters, statistics, and job state, but the cryptographic result does not contain progress that can be carried into a different hash attempt.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Search space extends beyond one nonce</h2>
+<p>The block header includes a 32-bit nonce. A modern device can cycle through that range quickly.</p>
+<p>Mining systems expand the available search space by changing other permitted data. They may use:</p>
+<ul><li>Extranonce values inside the coinbase transaction.</li><li>New Merkle roots produced from coinbase changes.</li><li>Updated timestamps within allowed bounds.</li><li>Permitted version rolling.</li><li>Different transaction templates.</li><li>New previous-block references after a chain-tip change.</li></ul>
+<p>An ASIC may receive new work from a controller whenever one portion of search space is exhausted or the upstream job changes.</p>
+<p>Changing coinbase data is especially common in pooled mining because it can give different workers distinct Merkle roots. That keeps large numbers of devices from repeating the same header candidates.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Hashrate uses powers-of-ten prefixes</h2>
+<p>Hashrate is expressed in hashes per second.</p>
+<p>Common units include:</p>
+<ul><li>H/s for hashes per second.</li><li>kH/s for one thousand hashes per second.</li><li>MH/s for one million hashes per second.</li><li>GH/s for one billion hashes per second.</li><li>TH/s for one trillion hashes per second.</li><li>PH/s for one quadrillion hashes per second.</li><li>EH/s for one quintillion hashes per second.</li></ul>
+<p>Bitcoin ASIC machines are commonly discussed in terahashes per second, while farms, pools, and the network may be discussed with larger prefixes.</p>
+<p>The unit states a rate, not a guarantee. Reported performance can vary with operating settings, thermal conditions, measurement windows, rejected work, and whether the number comes from local chips, machine firmware, pool shares, or network inference.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Power and energy are different quantities</h2>
+<p>Electrical power is the rate at which energy is used. It is commonly measured in watts.</p>
+<p>Energy accumulates over time. One watt equals one joule per second.</p>
+<p>If a complete machine draws 3,000 watts while producing 100 terahashes per second, its simplified machine-level efficiency is:</p>
+<p>3,000 joules per second divided by 100 terahashes per second = 30 joules per terahash.</p>
+<p>The seconds cancel, leaving energy per unit of hashing work.</p>
+<p>This example uses simplified round numbers. It is not a specification for a current product and does not include every possible facility load.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Joules per terahash measures efficiency</h2>
+<p>Mining efficiency is commonly expressed as joules per terahash, written J/TH.</p>
+<p>A lower J/TH figure means less energy is used per unit of hashing work within the stated measurement boundary.</p>
+<p>The relationship can be expressed as:</p>
+<p>watts divided by terahashes per second = joules per terahash.</p>
+<p>The same relationship can be rearranged:</p>
+<p>watts = terahashes per second multiplied by joules per terahash.</p>
+<p>This arithmetic is useful only when the units and boundaries match. A chip-level J/TH value should not be compared directly with a wall-level machine value as if they include the same losses.</p>
+<p>Higher hashrate does not automatically mean better efficiency. One machine can perform more hashes per second while using more energy per hash.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Advertised and observed results can differ</h2>
+<p>A specification is normally measured under defined conditions.</p>
+<p>Observed performance can vary with:</p>
+<ul><li>Inlet and chip temperature.</li><li>Power-supply voltage and power quality.</li><li>Cooling capacity and airflow.</li><li>Firmware and control settings.</li><li>Operating frequency and voltage.</li><li>Dust, corrosion, and maintenance.</li><li>Altitude and air density for air-cooled systems.</li><li>Component tolerances and aging.</li><li>Network latency and rejected-share rate.</li><li>Measurement point and instrument accuracy.</li></ul>
+<p>A pool dashboard can also report a short-term hashrate estimate that differs from the machine&#39;s local reading because shares arrive probabilistically.</p>
+<p>This does not make every specification unreliable. It means the conditions, duration, and measurement boundary should be stated.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Cooling is part of the system</h2>
+<p>Hashing equipment turns electrical power into computation and heat.</p>
+<p>Air-cooled systems move air across heat sinks. Liquid or hydro systems move heat through a liquid circuit. Immersion systems place suitable equipment in a dielectric fluid and transfer heat through a separate loop.</p>
+<p>These categories describe engineering approaches, not universal recommendations.</p>
+<p>Cooling design depends on machine construction, facility size, climate, power density, maintenance capability, fluid compatibility, fire and electrical requirements, local codes, and operator expertise. Heat reuse also depends on temperature, timing, distance, demand, and integration design.</p>
+<p>This guide does not provide instructions for electrical wiring, overclocking, undervolting, firmware modification, immersion conversion, or facility construction. Those activities can create safety, warranty, fire, and equipment risks that require qualified site-specific engineering.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Noise and heat are operating realities</h2>
+<p>A mining machine can create substantial heat and noise.</p>
+<p>The magnitude depends on power draw, fan or pump design, cooling system, acoustic environment, workload, and facility configuration. A machine suitable for an industrial site may be unsuitable for an occupied room.</p>
+<p>Noise is not proof that a miner is performing valid network work. Heat is not a measure of profitability. They are physical consequences that operators must account for.</p>
+<p>Site planning should distinguish the electrical load of the miner from supporting loads such as fans, pumps, networking, controls, lighting, and facility cooling.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Efficiency does not guarantee profitability</h2>
+<p>A more efficient machine uses less energy per unit of hashing work within the same measurement boundary.</p>
+<p>Profitability depends on more variables than J/TH. These can include:</p>
+<ul><li>Electricity price and contract terms.</li><li>Uptime and curtailment.</li><li>Network difficulty.</li><li>Pool fees and payout terms.</li><li>Transaction-fee revenue.</li><li>Bitcoin&#39;s market price.</li><li>Capital cost and financing.</li><li>Repairs and spare parts.</li><li>Cooling and infrastructure.</li><li>Taxes, insurance, labor, and compliance.</li><li>Resale or alternative-use value.</li></ul>
+<p>Each variable can change. A machine can remain technically functional while becoming uneconomic for one operator and useful for another with different costs or objectives.</p>
+<p>No hardware specification guarantees a break-even date, return, or useful operating life.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Specialized hardware can outlive one economic cycle</h2>
+<p>ASIC obsolescence does not follow one fixed schedule.</p>
+<p>A newer chip can improve efficiency, but existing machines may continue operating where power is inexpensive, heat has a use, capital cost is already recovered, repair parts are available, or the operator accepts a different return.</p>
+<p>Other machines may stop quickly because of high energy costs, poor reliability, unavailable parts, or changes in network conditions.</p>
+<p>Technical function and economic competitiveness are separate. A device can still compute valid Bitcoin hashes even when its operating economics have changed.</p>
+<p>This is why product age alone does not determine whether a machine is operational, efficient, or profitable.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Manufacturer documentation has a narrow scope</h2>
+<p>Manufacturer manuals and data sheets can support claims about one model&#39;s connectors, rated power, cooling method, operating range, or control interface.</p>
+<p>They should not be used to prove that every ASIC miner has the same design or performance. Marketing figures should also be distinguished from independently observed results.</p>
+<p>Retail listings and affiliate reviews are especially weak sources for general technical claims. They may copy specifications, omit measurement conditions, or prioritize sales.</p>
+<p>Durable education should explain system relationships that remain valid across product cycles and use model-specific documentation only when the example truly requires it.</p>
+</section>
+<section class="msc-learn-article__section"><h2>The complete mining stack matters</h2>
+<p>An ASIC chip contributes hashing work. It does not operate alone.</p>
+<p>A complete path can include:</p>
+<ol><li>A full node and block-template source.</li><li>Mining or pool software.</li><li>Job distribution and proxy infrastructure.</li><li>Controllers and firmware.</li><li>Hashboards and ASIC chips.</li><li>Power conversion.</li><li>Networking.</li><li>Cooling and heat rejection.</li><li>Monitoring and maintenance.</li><li>Block submission and pool accounting.</li></ol>
+<p>A failure at any layer can reduce accepted work or prevent a found result from becoming a valid block.</p>
+<p>Understanding this stack prevents a common category error: treating the machine&#39;s hashrate as the whole mining system.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Specialized hashing under shared rules</h2>
+<p>ASIC miners made Bitcoin mining highly specialized, but they did not replace Bitcoin&#39;s validation model.</p>
+<p>The devices search candidate headers. Pools and software may coordinate the work. Nodes decide whether a found block follows the rules.</p>
+<p>The next guide explains the consensus process that changes the required proof-of-work target as aggregate hashing conditions change.</p>
+</section>
+    </article>
+    <section class="msc-learn-key-terms" aria-labelledby="MscGuide019Terms"><h2 id="MscGuide019Terms">Key Terms</h2><dl><div class="msc-learn-term"><dt>ASIC miner</dt><dd>Specialized hardware designed to perform Bitcoin proof-of-work hashing efficiently.</dd></div>
+<div class="msc-learn-term"><dt>Mining</dt><dd>The proof-of-work process that orders valid transactions into blocks and competes to extend the Bitcoin chain.</dd></div>
+<div class="msc-learn-term"><dt>Miner</dt><dd>An operator that constructs candidate blocks and performs proof of work.</dd></div>
+<div class="msc-learn-term"><dt>Hashrate</dt><dd>An estimate of the total proof-of-work computation being applied to Bitcoin mining.</dd></div>
+<div class="msc-learn-term"><dt>Proof of work</dt><dd>The computational process miners use to produce block hashes below the network target.</dd></div>
+<div class="msc-learn-term"><dt>Hash function</dt><dd>A deterministic function that maps data to a fixed-size output with security properties used throughout Bitcoin.</dd></div>
+<div class="msc-learn-term"><dt>Energy use</dt><dd>The amount and source of energy consumed by Bitcoin mining and its supporting operations.</dd></div>
+<div class="msc-learn-term"><dt>Difficulty</dt><dd>The proof-of-work threshold that determines how hard it is to produce a valid block hash.</dd></div></dl></section>
+    <section class="msc-learn-sources" aria-labelledby="MscGuide019Sources"><h2 id="MscGuide019Sources">Sources</h2><article class="msc-learn-source"><h3>FIPS 180-4: Secure Hash Standard</h3><ul><li><strong>author or publisher:</strong> National Institute of Standards and Technology</li><li><strong>supports:</strong> The SHA-256 algorithm, 256-bit digest size, and deterministic hash-function behavior used in Bitcoin&#39;s double-SHA-256 block-header hashing.</li></ul><p><strong>Direct URL:</strong> <code>https://doi.org/10.6028/NIST.FIPS.180-4</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin: A Peer-to-Peer Electronic Cash System</h3><ul><li><strong>author or publisher:</strong> Satoshi Nakamoto</li><li><strong>supports:</strong> Repeated proof-of-work hashing, probabilistic block discovery, network incentives, and the relationship between hashing work and chain extension.</li></ul><p><strong>Direct URL:</strong> <code>https://bitcoin.org/bitcoin.pdf</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Developer Guide: Mining</h3><ul><li><strong>author or publisher:</strong> Bitcoin Project developer documentation</li><li><strong>supports:</strong> Block-header hashing, nonce and extranonce search space, Merkle-root updates, mining jobs, and block submission.</li></ul><p><strong>Direct URL:</strong> <code>https://developer.bitcoin.org/devguide/mining.html</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Block Header</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core developers</li><li><strong>supports:</strong> The six serialized Bitcoin block-header fields and the data repeatedly hashed by mining equipment.</li></ul><p><strong>Direct URL:</strong> <code>https://github.com/bitcoin/bitcoin/blob/master/src/primitives/block.h</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Block Hash Implementation</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core developers</li><li><strong>supports:</strong> Bitcoin Core&#39;s current block-header hash computation.</li></ul><p><strong>Direct URL:</strong> <code>https://github.com/bitcoin/bitcoin/blob/master/src/primitives/block.cpp</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Core SHA-256 Implementation Interface</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core developers</li><li><strong>supports:</strong> Bitcoin Core&#39;s SHA-256 hashing interface and fixed 32-byte output size.</li></ul><p><strong>Direct URL:</strong> <code>https://github.com/bitcoin/bitcoin/blob/master/src/crypto/sha256.h</code></p></article>
+<article class="msc-learn-source"><h3>Stratum V2 Mining Protocol</h3><ul><li><strong>author or publisher:</strong> Stratum V2 specification contributors</li><li><strong>supports:</strong> Mining-device job receipt, standard and extended header search space, extranonce use, version rolling, time rolling, and share submission.</li></ul><p><strong>Direct URL:</strong> <code>https://stratumprotocol.org/specification/05-mining-protocol/</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Mining RPC</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core developers</li><li><strong>supports:</strong> Network-hashrate estimation from observed chain work and elapsed time rather than a central global counter.</li></ul><p><strong>Direct URL:</strong> <code>https://github.com/bitcoin/bitcoin/blob/master/src/rpc/mining.cpp</code></p></article>
+<article class="msc-learn-source"><h3>International System of Units: The SI Brochure</h3><ul><li><strong>author or publisher:</strong> Bureau International des Poids et Mesures</li><li><strong>supports:</strong> Watts as joules per second and the unit relationships used to derive joules per terahash from watts and terahashes per second.</li></ul><p><strong>Direct URL:</strong> <code>https://www.bipm.org/en/publications/si-brochure</code></p></article></section>
+    <nav class="msc-learn-prev-next" aria-label="Guide navigation preview"><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Previous</span><strong>How Bitcoin Mining Pools Work</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Category</span><strong>The Bitcoin Network</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Next</span><strong>How Bitcoin&#39;s Difficulty Adjustment Works</strong><small>Link inactive</small></span></nav>
+  </div>
+</section>

@@ -1,0 +1,153 @@
+{% comment %}
+  Generated from docs/learn/content/guides/MSC-GUIDE-027-bitcoin-blockchain.md.
+  Registry binding: MSC-GUIDE-027.
+  Preview only. Do not edit manually.
+  Rebuild with node scripts/generate-msc-learn-guide-category-runtime.mjs --start=17 --end=32 --write.
+{% endcomment %}
+<section class="msc-shell msc-learn-page" data-msc-registry-id="MSC-GUIDE-027" data-msc-preview-only="true">
+  <div class="msc-container msc-learn-page__container">
+    <nav class="msc-learn-breadcrumbs" aria-label="Learn breadcrumbs"><ol><li><span>Learn</span></li><li><span>The Bitcoin Network</span></li><li aria-current="page"><span>How the Bitcoin Blockchain Works</span></li></ol></nav>
+    <header class="msc-learn-page__header">
+      <p class="msc-section-kicker">The Bitcoin Network</p>
+      <h1>How the Bitcoin Blockchain Works</h1>
+      <p class="msc-learn-page__deck">The Bitcoin blockchain is the ordered history of valid Bitcoin blocks selected by accumulated proof of work. Blocks link backward through previous-block hashes, while nodes independently validate each candidate chain. The selected history can change during a reorganization, so confirmation depth matters and first inclusion is not absolute finality.</p>
+      <ul class="msc-learn-page-meta"><li>Network</li><li>Shallow</li><li>Explainer</li><li>10 minutes</li><li>Reviewed 2026-07-18</li></ul>
+      <p class="msc-learn-preview-note">Preview only. Publication records and confirmed URLs do not exist; all navigation remains inactive.</p>
+    </header>
+    <article class="msc-learn-article rte" data-msc-content-source="structured-runtime">
+<section class="msc-learn-article__section">
+<p>The Bitcoin blockchain is often described as a permanent ledger.</p>
+<p>That description is useful only when its limits are understood. Bitcoin does not rely on one central ledger keeper, one database server, or one miner announcing the official history. Nodes receive blocks from peers, validate them independently, track competing valid branches, and select the valid chain with the greatest accumulated proof of work under their rules.</p>
+<p>The result is a shared history that converges through validation, proof of work, and network propagation.</p>
+</section>
+<section class="msc-learn-article__section"><h2>The blockchain is an ordered block history</h2>
+<p>Each Bitcoin block header contains the hash of a previous block.</p>
+<p>That reference links a new block to a specific parent. The parent links to its parent, continuing backward to the genesis block.</p>
+<p>A block&#39;s own hash commits to its header, including the previous-block reference and the Merkle root for its transaction identifiers. Changing an earlier block changes its hash. The later block that referenced the old hash would no longer point to the altered version.</p>
+<p>An attacker attempting to replace earlier history must therefore construct a competing valid branch from the changed point and supply enough proof of work for nodes to select it over the current valid chain.</p>
+<p>The linkage makes history tamper-evident. Proof of work and independent validation determine which linked history is selected.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Every node maintains its own view</h2>
+<p>There is no database process that pushes one authoritative blockchain state to every participant.</p>
+<p>Each full node maintains local data such as:</p>
+<ul><li>A block index describing known headers and block relationships.</li><li>Chainwork values for known blocks.</li><li>One or more chainstate views.</li><li>A selected active chain.</li><li>Raw block and undo data according to storage configuration.</li><li>Peer and validation state.</li><li>Optional indexes for additional queries.</li></ul>
+<p>Nodes can learn about blocks at different times. One node may know a competing branch that another has not seen. Their selected tips can briefly differ.</p>
+<p>Convergence happens as valid blocks propagate and one valid branch accumulates more proof of work. A node does not need identical storage or mempool contents to enforce compatible consensus rules.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Validation comes before activation</h2>
+<p>A block&#39;s proof of work is not enough by itself.</p>
+<p>A node checks the header and block under the applicable consensus rules. It verifies transaction validity, UTXO spends, scripts, block limits, coinbase rules, commitments, and chain context.</p>
+<p>A node only activates a candidate chain after validating the required blocks. Among valid candidate chains, accumulated proof of work guides chain selection under that node&#39;s rules.</p>
+<p>This prevents miners from buying permission to create invalid outputs, bypass signatures, exceed allowed issuance, or redefine block validity. More proof of work can win a competition between valid histories. It cannot make an invalid history valid to a node that enforces the rules.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Accumulated work is not simply block count</h2>
+<p>A common shortcut says Bitcoin follows the longest chain.</p>
+<p>The more precise rule is based on accumulated proof of work, often called chainwork.</p>
+<p>Bitcoin Core derives the work associated with a block from its encoded proof-of-work target. A block at a harder target represents more expected hashing work than a block at an easier target. Chainwork is the sum of the work values along a branch.</p>
+<p>Two branches with the same number of blocks can therefore have different accumulated work.</p>
+<p>On mainnet, difficulty normally remains constant within an adjustment period, so block count and chainwork often move together over short comparisons. The protocol still compares work, not height alone.</p>
+<p>&quot;Most-work valid chain&quot; is a better description than &quot;longest chain.&quot;</p>
+</section>
+<section class="msc-learn-article__section"><h2>New blocks extend a chosen parent</h2>
+<p>A miner or pool selects a previous block to extend and builds a candidate on top of it.</p>
+<p>Most miners usually work near the tip they believe nodes will accept because extending an older or weaker branch reduces the chance that their block will remain in the selected history.</p>
+<p>Network delay can still produce competing valid blocks. Two miners can extend the same parent almost simultaneously. Some nodes see one block first; others see the other.</p>
+<p>At that moment, both branches can be valid and have equal accumulated work. A node can temporarily remain on the first valid tip it received while tracking the competitor.</p>
+<p>The next valid block found on one branch normally breaks the tie by adding more work. Nodes that had selected the other branch can then reorganize.</p>
+</section>
+<section class="msc-learn-article__section"><h2>A reorganization changes the selected chain</h2>
+<p>A chain reorganization occurs when a node changes its active tip to a competing valid branch with more accumulated proof of work.</p>
+<p>The node disconnects blocks from its old active branch back to the shared ancestor, then connects blocks from the stronger branch in order.</p>
+<p>That process updates chainstate. Outputs created only in disconnected blocks can disappear from the active-chain UTXO set. Spends confirmed only in those blocks can become unconfirmed. Transactions from disconnected blocks may return to the node&#39;s mempool if they remain valid and satisfy current constraints.</p>
+<p>Transactions in the newly connected branch become confirmed. Conflicting transactions from the old branch may no longer be valid.</p>
+<p>A reorganization is not a rollback commanded by a central administrator. It is a local node changing its selected valid history as new work and block data arrive.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Confirmations measure selected-chain depth</h2>
+<p>A transaction has one confirmation when it appears in a block on the node&#39;s selected chain.</p>
+<p>If one later block extends that chain, the transaction has two confirmations. Each additional block increases its depth below the selected tip.</p>
+<p>Confirmations matter because replacing the transaction&#39;s block requires replacing that block and catching up with the work added after it. Deeper history generally requires more competing work to displace under ordinary assumptions.</p>
+<p>Confirmation count is still not a universal finality guarantee.</p>
+<p>Risk depends on:</p>
+<ul><li>The value and reversibility of the transaction.</li><li>The attacker&#39;s available hash power and duration.</li><li>Whether the recipient controls its own node.</li><li>Network connectivity and eclipse risk.</li><li>The possibility of an accidental or deliberate reorganization.</li><li>The transaction&#39;s conflict history.</li><li>Operational and legal context outside Bitcoin.</li></ul>
+<p>A merchant selling a low-value digital item may accept a different threshold from an exchange settling a large withdrawal.</p>
+</section>
+<section class="msc-learn-article__section"><h2>First inclusion is not immutability</h2>
+<p>A block explorer may label a transaction confirmed as soon as it enters a block.</p>
+<p>That means the explorer&#39;s node currently sees the transaction on its selected chain. It does not mean the transaction can never leave that history.</p>
+<p>Short reorganizations are a normal possibility in a distributed proof-of-work network. Deep reorganizations are much less common and generally more costly, but Bitcoin does not place an absolute finality flag on an ordinary transaction after a fixed number of blocks.</p>
+<p>&quot;Immutable&quot; should be treated as a practical description of deeply buried, valid history under stated assumptions, not as an instant consensus state.</p>
+<p>The precise language is that later proof of work makes replacement increasingly difficult.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Reorganizations do not rewrite transaction objects</h2>
+<p>A reorganization changes which blocks are selected.</p>
+<p>It does not edit a confirmed transaction in place. A transaction from a disconnected block remains the same data structure. Its status changes because the block containing it is no longer on the active chain.</p>
+<p>The transaction may:</p>
+<ul><li>Appear in the new branch as well.</li><li>Return to a mempool.</li><li>Conflict with a transaction confirmed in the new branch.</li><li>Become invalid under the new active-chain state.</li><li>Be rebroadcast and confirmed later.</li><li>Remain absent.</li></ul>
+<p>Wallets and services must respond to active-chain status rather than treating one observed block inclusion as permanent.</p>
+</section>
+<section class="msc-learn-article__section"><h2>The active chain is not every valid block</h2>
+<p>A node can retain valid blocks that are not on its active chain.</p>
+<p>These blocks can belong to stale branches, historical competitors, or branch tips the node is tracking. Their transactions are not considered confirmed merely because the blocks themselves were valid.</p>
+<p>The word blockchain sometimes blurs this distinction. A node&#39;s block database can contain more blocks than the one selected chain. The active blockchain refers to the branch currently selected by accumulated work among valid candidates.</p>
+<p>A block explorer may display stale blocks separately. Their presence demonstrates that validity and selection are separate questions.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Block height identifies position, not identity</h2>
+<p>Block height counts the position of a block relative to genesis.</p>
+<p>Genesis has height 0. Its child has height 1, and so on.</p>
+<p>Height is not a unique block identifier. Competing branches can contain different valid blocks at the same height. The block hash identifies the specific block.</p>
+<p>This matters when software or users say &quot;block 900,000,&quot; for example. A height points to the active-chain block in a particular node&#39;s current view unless a block hash or branch is specified.</p>
+<p>During a reorganization, the block associated with a height can change.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Timestamps do not select the chain</h2>
+<p>Blocks contain timestamps, but nodes do not choose the chain with the newest-looking time.</p>
+<p>Timestamps are constrained by consensus and are used in areas such as difficulty adjustment and time-based transaction rules. They remain miner-supplied values within permitted bounds.</p>
+<p>Chain selection uses accumulated proof of work among valid candidates. A branch cannot win by placing a larger timestamp in its header.</p>
+<p>Likewise, wall-clock age does not make an invalid branch acceptable.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Chainstate is derived from selected history</h2>
+<p>A full node does not need to replay every historical transaction for every new block.</p>
+<p>During synchronization, it validates blocks and builds chainstate, including the current set of unspent transaction outputs. New transactions and blocks can then be checked against that current state.</p>
+<p>When a block connects, spent outputs are removed and new outputs are added. Undo data helps a node disconnect retained blocks during a reorganization.</p>
+<p>Chainstate is derived from validated history. It is not a substitute consensus authority.</p>
+<p>A pruned node can discard eligible old raw block files after validation while retaining chainstate and continuing to enforce the same consensus rules. This is why a blockchain should not be defined as &quot;a complete copy of every block stored by every node.&quot;</p>
+</section>
+<section class="msc-learn-article__section"><h2>The blockchain does not contain every Bitcoin-related event</h2>
+<p>Bitcoin&#39;s selected chain records valid on-chain transactions and block data.</p>
+<p>It does not directly record:</p>
+<ul><li>Every transaction that was created but never confirmed.</li><li>Every transaction that entered a mempool.</li><li>Every attempted block header hash.</li><li>Wallet labels or private keys.</li><li>Exchange account balances.</li><li>Lightning channel updates that remain off-chain.</li><li>Real-world identities unless users or external systems connect them.</li><li>Every stale block known to every node.</li></ul>
+<p>Applications can derive indexes and interpretations from blockchain data, but those views are not automatically consensus state.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Proof of work orders valid history</h2>
+<p>Proof of work gives nodes an objective way to compare valid branches without a central coordinator.</p>
+<p>It does not tell nodes which rules to enforce. Node software and operator choices determine the rules used for validation.</p>
+<p>This division is essential:</p>
+<ul><li>Consensus rules determine which blocks are valid.</li><li>Proof of work helps order valid competing histories.</li><li>Network relay spreads candidate blocks.</li><li>Chainstate tracks the effects of the selected history.</li><li>Confirmations measure depth within that selected history.</li></ul>
+<p>Collapsing these roles produces slogans such as &quot;miners control the blockchain&quot; or &quot;nodes vote on transactions.&quot; Neither is precise.</p>
+</section>
+<section class="msc-learn-article__section"><h2>The selected history is durable because replacement is costly and detectable</h2>
+<p>Bitcoin&#39;s blockchain is durable through several reinforcing properties.</p>
+<p>Hash links expose changes to earlier blocks. Proof of work makes rebuilding a competing branch costly. Independent nodes reject rule-breaking blocks. Wide peer connectivity helps valid blocks propagate. Confirmation depth increases the work an attacker must overcome.</p>
+<p>None of these properties requires trusting one institution to maintain the ledger.</p>
+<p>The result is not magical permanence. It is a continuously validated, work-ordered history whose replacement becomes increasingly difficult as valid blocks accumulate above it.</p>
+<p>That is the useful meaning of the Bitcoin blockchain.</p>
+</section>
+    </article>
+    <section class="msc-learn-key-terms" aria-labelledby="MscGuide027Terms"><h2 id="MscGuide027Terms">Key Terms</h2><dl><div class="msc-learn-term"><dt>Blockchain</dt><dd>The ordered history of valid Bitcoin blocks selected by accumulated proof of work.</dd></div>
+<div class="msc-learn-term"><dt>Block</dt><dd>A valid batch of Bitcoin transactions linked to prior chain history through proof of work.</dd></div>
+<div class="msc-learn-term"><dt>Node</dt><dd>Bitcoin software that communicates with peers and may validate, relay, store, or serve network data.</dd></div>
+<div class="msc-learn-term"><dt>Reorganization</dt><dd>A change in the selected chain tip when a competing valid chain accumulates more proof of work.</dd></div>
+<div class="msc-learn-term"><dt>Confirmation</dt><dd>The inclusion of a transaction in a block, followed by additional blocks that increase settlement depth.</dd></div>
+<div class="msc-learn-term"><dt>Proof of work</dt><dd>The computational process miners use to produce block hashes below the network target.</dd></div>
+<div class="msc-learn-term"><dt>Validation</dt><dd>The process of checking transactions and blocks against applicable rules.</dd></div></dl></section>
+    <section class="msc-learn-sources" aria-labelledby="MscGuide027Sources"><h2 id="MscGuide027Sources">Sources</h2><article class="msc-learn-source"><h3>Bitcoin white paper</h3><ul><li><strong>author or publisher:</strong> Satoshi Nakamoto</li><li><strong>url:</strong> https://bitcoin.org/bitcoin.pdf</li><li><strong>supports:</strong> Hash-linked blocks, proof-of-work ordering, transaction history, competing-chain probability, and the role of later work in making replacement more difficult.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core chain data structures</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/src/chain.h</li><li><strong>supports:</strong> Block index relationships, block height, active-chain representation, chainwork storage, ancestor access, and branch navigation.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core chainwork implementation</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/src/chain.cpp</li><li><strong>supports:</strong> Per-block proof calculation, accumulated-work comparisons, and work-equivalent time calculations.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core validation implementation</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/src/validation.cpp</li><li><strong>supports:</strong> Block validation, candidate-chain tracking, ActivateBestChain behavior, block connection and disconnection, chainstate updates, and mempool reconciliation after reorganizations.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core block data structures</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/src/primitives/block.h</li><li><strong>supports:</strong> Previous-block hash linkage, Merkle-root commitment, block header fields, and block hashing.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core getchaintips RPC</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://bitcoincore.org/en/doc/31.0.0/rpc/blockchain/getchaintips/</li><li><strong>supports:</strong> Reporting known chain tips, branch lengths, fork points, active status, and competing valid or invalid branches known to one node.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core getblockchaininfo RPC</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://bitcoincore.org/en/doc/31.0.0/rpc/blockchain/getblockchaininfo/</li><li><strong>supports:</strong> The local active-chain height, best block hash, chainwork, verification progress, and pruning state.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core file-system documentation</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/doc/files.md</li><li><strong>supports:</strong> The distinction among raw block files, undo files, block index, chainstate, optional indexes, and other node data.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Developer Guide: Block Chain</h3><ul><li><strong>author or publisher:</strong> Bitcoin.org contributors</li><li><strong>url:</strong> https://developer.bitcoin.org/devguide/block_chain.html</li><li><strong>supports:</strong> Hash-linked block history, chain forks, stale blocks, block height, confirmations, and proof-of-work chain selection.</li></ul></article></section>
+    <nav class="msc-learn-prev-next" aria-label="Guide navigation preview"><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Previous</span><strong>How Bitcoin Blocks Work</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Category</span><strong>The Bitcoin Network</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Next</span><strong>What Is Bitcoin Hashrate?</strong><small>Link inactive</small></span></nav>
+  </div>
+</section>

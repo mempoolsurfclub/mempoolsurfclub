@@ -1,0 +1,415 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-024-bitcoin-node-software.md",
+  "source_sha256": "192bf431048a704024a175f7860490c04f8bb32aa50c7d46a62e9fe181c99fe7",
+  "registry_id": "MSC-GUIDE-024",
+  "status": "COPY_LOCKED",
+  "h1": "Bitcoin Node Software Explained",
+  "introductory_deck": "Bitcoin node software connects to peers and may validate, relay, store, or serve network data according to its configuration. Different implementations can enforce compatible consensus rules while making different choices about transaction policy, features, interfaces, release processes, and defaults. Choosing software therefore requires more than comparing names or popularity.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "A Bitcoin node is defined by behavior, not by a logo.\n\nNode software receives peer-to-peer messages, validates blocks and transactions, maintains chainstate, selects valid proof-of-work history, and exposes local functions according to its configuration. The software may also include a wallet, graphical interface, RPC server, indexes, privacy-network support, mining interfaces, or application hooks.\n\nMore than one implementation can participate in Bitcoin, but compatibility is not automatic. Software that disagrees on a consensus rule can accept a different chain. Software that agrees on consensus can still differ in transaction relay, mempool policy, defaults, user interface, packaging, and optional features.\n\nA responsible comparison starts by separating those layers.",
+      "body_html": "<p>A Bitcoin node is defined by behavior, not by a logo.</p>\n<p>Node software receives peer-to-peer messages, validates blocks and transactions, maintains chainstate, selects valid proof-of-work history, and exposes local functions according to its configuration. The software may also include a wallet, graphical interface, RPC server, indexes, privacy-network support, mining interfaces, or application hooks.</p>\n<p>More than one implementation can participate in Bitcoin, but compatibility is not automatic. Software that disagrees on a consensus rule can accept a different chain. Software that agrees on consensus can still differ in transaction relay, mempool policy, defaults, user interface, packaging, and optional features.</p>\n<p>A responsible comparison starts by separating those layers.</p>"
+    },
+    {
+      "heading": "Consensus behavior is the first boundary",
+      "body_markdown": "Consensus rules determine whether a block and its transactions are valid.\n\nA node implementation must correctly enforce the rules required by the network it intends to join. These include proof-of-work requirements, transaction validity, script rules, issuance limits, block limits, locktime behavior, and activated protocol changes.\n\nIf two implementations disagree on consensus behavior at a relevant block, they can select incompatible histories. That is why consensus code receives unusually careful review and testing.\n\nSoftware diversity can reduce dependence on one codebase, but it can also create independent opportunities for consensus bugs. Neither uniformity nor diversity is automatically safe. The relevant questions are how implementations are maintained, tested, reviewed, and kept compatible.\n\nAn implementation's claim to be a Bitcoin node should be evaluated through documented behavior and source code, not branding alone.",
+      "body_html": "<p>Consensus rules determine whether a block and its transactions are valid.</p>\n<p>A node implementation must correctly enforce the rules required by the network it intends to join. These include proof-of-work requirements, transaction validity, script rules, issuance limits, block limits, locktime behavior, and activated protocol changes.</p>\n<p>If two implementations disagree on consensus behavior at a relevant block, they can select incompatible histories. That is why consensus code receives unusually careful review and testing.</p>\n<p>Software diversity can reduce dependence on one codebase, but it can also create independent opportunities for consensus bugs. Neither uniformity nor diversity is automatically safe. The relevant questions are how implementations are maintained, tested, reviewed, and kept compatible.</p>\n<p>An implementation&#39;s claim to be a Bitcoin node should be evaluated through documented behavior and source code, not branding alone.</p>"
+    },
+    {
+      "heading": "Policy is not consensus",
+      "body_markdown": "Node software also applies local policy to unconfirmed transactions.\n\nPolicy can determine:\n\n- Which transactions enter a node's mempool.\n- Which transactions the node relays.\n- Which transactions are treated as standard by default.\n- How replacement is evaluated.\n- How package relationships and resource limits are handled.\n- Which transactions a default mining template may select.\n- What fees or resource thresholds influence local behavior.\n\nA transaction rejected from one node's mempool can still be valid by consensus. If a miner includes it in a valid block, a compatible node must accept the block even if its local policy would not have relayed that transaction.\n\nThis distinction is central to node-software comparisons. A stricter or looser default relay policy does not necessarily mean the implementation follows different consensus rules.\n\nPolicy differences can still matter. They affect propagation, user experience, miner visibility, application testing, and which transactions are easy to broadcast. Operators should understand those effects without describing policy preferences as changes to Bitcoin validity.",
+      "body_html": "<p>Node software also applies local policy to unconfirmed transactions.</p>\n<p>Policy can determine:</p>\n<ul><li>Which transactions enter a node&#39;s mempool.</li><li>Which transactions the node relays.</li><li>Which transactions are treated as standard by default.</li><li>How replacement is evaluated.</li><li>How package relationships and resource limits are handled.</li><li>Which transactions a default mining template may select.</li><li>What fees or resource thresholds influence local behavior.</li></ul>\n<p>A transaction rejected from one node&#39;s mempool can still be valid by consensus. If a miner includes it in a valid block, a compatible node must accept the block even if its local policy would not have relayed that transaction.</p>\n<p>This distinction is central to node-software comparisons. A stricter or looser default relay policy does not necessarily mean the implementation follows different consensus rules.</p>\n<p>Policy differences can still matter. They affect propagation, user experience, miner visibility, application testing, and which transactions are easy to broadcast. Operators should understand those effects without describing policy preferences as changes to Bitcoin validity.</p>"
+    },
+    {
+      "heading": "Bitcoin Core",
+      "body_markdown": "Bitcoin Core is the most widely used open-source Bitcoin node and wallet software implementation.\n\nIt connects to the peer-to-peer network, downloads and fully validates blocks and transactions, maintains chainstate, and provides a command-line daemon, RPC interface, and optional wallet and graphical interface.\n\nBitcoin Core is developed through a public repository. Changes are proposed, reviewed, tested, and merged through an open process. Stable release tags are created from release branches, while the master development branch is not guaranteed to be stable.\n\nIts broad use creates practical advantages:\n\n- Extensive operational experience.\n- Wide compatibility with wallets and infrastructure.\n- Large test coverage and review attention.\n- Established documentation and release processes.\n- Familiar RPCs and configuration conventions.\n- Broad packaging and platform support.\n\nBroad use is not proof that every default fits every operator. Bitcoin Core includes many configuration choices, optional indexes, wallet functions, peer-network settings, and policy defaults. Operators still need to review the release and configuration they use.",
+      "body_html": "<p>Bitcoin Core is the most widely used open-source Bitcoin node and wallet software implementation.</p>\n<p>It connects to the peer-to-peer network, downloads and fully validates blocks and transactions, maintains chainstate, and provides a command-line daemon, RPC interface, and optional wallet and graphical interface.</p>\n<p>Bitcoin Core is developed through a public repository. Changes are proposed, reviewed, tested, and merged through an open process. Stable release tags are created from release branches, while the master development branch is not guaranteed to be stable.</p>\n<p>Its broad use creates practical advantages:</p>\n<ul><li>Extensive operational experience.</li><li>Wide compatibility with wallets and infrastructure.</li><li>Large test coverage and review attention.</li><li>Established documentation and release processes.</li><li>Familiar RPCs and configuration conventions.</li><li>Broad packaging and platform support.</li></ul>\n<p>Broad use is not proof that every default fits every operator. Bitcoin Core includes many configuration choices, optional indexes, wallet functions, peer-network settings, and policy defaults. Operators still need to review the release and configuration they use.</p>"
+    },
+    {
+      "heading": "Bitcoin Knots",
+      "body_markdown": "Bitcoin Knots is a maintained Bitcoin node software implementation with policy and feature differences from Bitcoin Core.\n\nIts codebase is derived from Bitcoin Core and remains closely related, but it is maintained and released as a separate project. It can connect to Bitcoin peers and fully validate blocks and transactions.\n\nKnots may include additional configuration options, backported changes, different defaults, or policy choices that are not identical to the corresponding Bitcoin Core release.\n\nCurrent releases also show why consensus and policy must not be collapsed. Bitcoin Knots v29.3.knots20260508 includes an RDTS or BIP110 soft fork deployment and asks the operator for explicit confirmation. The project also provides a build of that release without RDTS support. This is a release-specific and configuration-sensitive consensus difference, not merely a mempool-policy preference. Operators must verify the exact release, enabled consensus rules, activation assumptions, and compatibility with the chain they intend to follow.\n\nThat relationship requires precise wording. Bitcoin Knots is not an unrelated clean-room implementation, and it should not be described as merely a theme or interface for Bitcoin Core. It is a separate maintained software distribution built from a closely related codebase.\n\nAn operator comparing the two should read the current Knots release notes and documentation rather than relying on a timeless list of differences. Features, defaults, backports, consensus settings, and release relationships can change.",
+      "body_html": "<p>Bitcoin Knots is a maintained Bitcoin node software implementation with policy and feature differences from Bitcoin Core.</p>\n<p>Its codebase is derived from Bitcoin Core and remains closely related, but it is maintained and released as a separate project. It can connect to Bitcoin peers and fully validate blocks and transactions.</p>\n<p>Knots may include additional configuration options, backported changes, different defaults, or policy choices that are not identical to the corresponding Bitcoin Core release.</p>\n<p>Current releases also show why consensus and policy must not be collapsed. Bitcoin Knots v29.3.knots20260508 includes an RDTS or BIP110 soft fork deployment and asks the operator for explicit confirmation. The project also provides a build of that release without RDTS support. This is a release-specific and configuration-sensitive consensus difference, not merely a mempool-policy preference. Operators must verify the exact release, enabled consensus rules, activation assumptions, and compatibility with the chain they intend to follow.</p>\n<p>That relationship requires precise wording. Bitcoin Knots is not an unrelated clean-room implementation, and it should not be described as merely a theme or interface for Bitcoin Core. It is a separate maintained software distribution built from a closely related codebase.</p>\n<p>An operator comparing the two should read the current Knots release notes and documentation rather than relying on a timeless list of differences. Features, defaults, backports, consensus settings, and release relationships can change.</p>"
+    },
+    {
+      "heading": "Related codebases do not eliminate comparison work",
+      "body_markdown": "Because Bitcoin Core and Bitcoin Knots share substantial history and code, many operational concepts are familiar across both projects. That can support compatibility with existing infrastructure.\n\nShared ancestry also means they may share some defects, assumptions, file formats, or architectural limits. A difference in one policy area does not imply independent implementation of every consensus component.\n\nThe meaningful comparison is release-specific:\n\n- Which upstream changes are included?\n- Which additional patches are included?\n- Which consensus deployments or settings are included?\n- Which defaults differ?\n- Which policy controls are exposed?\n- How are releases signed and distributed?\n- Which operating systems and build configurations are supported?\n- What migration or data-directory guidance is published?\n- Which RPC or wallet behaviors differ?\n- How quickly are security and bug fixes integrated?\n\nDo not infer these answers from the project name.",
+      "body_html": "<p>Because Bitcoin Core and Bitcoin Knots share substantial history and code, many operational concepts are familiar across both projects. That can support compatibility with existing infrastructure.</p>\n<p>Shared ancestry also means they may share some defects, assumptions, file formats, or architectural limits. A difference in one policy area does not imply independent implementation of every consensus component.</p>\n<p>The meaningful comparison is release-specific:</p>\n<ul><li>Which upstream changes are included?</li><li>Which additional patches are included?</li><li>Which consensus deployments or settings are included?</li><li>Which defaults differ?</li><li>Which policy controls are exposed?</li><li>How are releases signed and distributed?</li><li>Which operating systems and build configurations are supported?</li><li>What migration or data-directory guidance is published?</li><li>Which RPC or wallet behaviors differ?</li><li>How quickly are security and bug fixes integrated?</li></ul>\n<p>Do not infer these answers from the project name.</p>"
+    },
+    {
+      "heading": "Other implementations and specialized software",
+      "body_markdown": "Bitcoin has had other node implementations, protocol libraries, indexers, wallet servers, and research projects.\n\nSome may fully validate mainnet blocks. Others implement only selected protocol functions. A library that parses transactions is not necessarily a complete node. An Electrum server normally depends on a validating backend. An explorer may index data supplied by another node. A mining proxy may speak mining protocols without validating the complete chain.\n\nSoftware should be classified by what it actually does:\n\n- Does it validate all required consensus rules?\n- Does it maintain chainstate?\n- Does it participate in Bitcoin's peer-to-peer network?\n- Does it select valid chain history by accumulated work?\n- Does it relay transactions or blocks?\n- Does it serve historical data?\n- Does it expose wallet or application interfaces?\n- Is it intended for production mainnet use?\n\nA comparison that places every Bitcoin-related program in one node-software list obscures these differences.",
+      "body_html": "<p>Bitcoin has had other node implementations, protocol libraries, indexers, wallet servers, and research projects.</p>\n<p>Some may fully validate mainnet blocks. Others implement only selected protocol functions. A library that parses transactions is not necessarily a complete node. An Electrum server normally depends on a validating backend. An explorer may index data supplied by another node. A mining proxy may speak mining protocols without validating the complete chain.</p>\n<p>Software should be classified by what it actually does:</p>\n<ul><li>Does it validate all required consensus rules?</li><li>Does it maintain chainstate?</li><li>Does it participate in Bitcoin&#39;s peer-to-peer network?</li><li>Does it select valid chain history by accumulated work?</li><li>Does it relay transactions or blocks?</li><li>Does it serve historical data?</li><li>Does it expose wallet or application interfaces?</li><li>Is it intended for production mainnet use?</li></ul>\n<p>A comparison that places every Bitcoin-related program in one node-software list obscures these differences.</p>"
+    },
+    {
+      "heading": "Source availability is necessary but not sufficient",
+      "body_markdown": "Open source allows operators and reviewers to inspect the code, build it, compare changes, and test behavior.\n\nThat does not mean every operator personally audits every line. Trust is distributed across maintainers, reviewers, testers, reproducible-build participants, package maintainers, and users who report failures.\n\nUseful project signals include:\n\n- Public source and issue tracking.\n- Documented contribution and review processes.\n- Automated and manual testing.\n- Clear release tags and notes.\n- Signed release materials.\n- Security-reporting procedures.\n- Reproducible or independently checked builds.\n- Active maintenance and transparent unresolved issues.\n- Clear licensing.\n- Documentation for upgrades and incompatibilities.\n\nPopularity can bring more review and operational exposure, but popularity alone is not a substitute for these properties.",
+      "body_html": "<p>Open source allows operators and reviewers to inspect the code, build it, compare changes, and test behavior.</p>\n<p>That does not mean every operator personally audits every line. Trust is distributed across maintainers, reviewers, testers, reproducible-build participants, package maintainers, and users who report failures.</p>\n<p>Useful project signals include:</p>\n<ul><li>Public source and issue tracking.</li><li>Documented contribution and review processes.</li><li>Automated and manual testing.</li><li>Clear release tags and notes.</li><li>Signed release materials.</li><li>Security-reporting procedures.</li><li>Reproducible or independently checked builds.</li><li>Active maintenance and transparent unresolved issues.</li><li>Clear licensing.</li><li>Documentation for upgrades and incompatibilities.</li></ul>\n<p>Popularity can bring more review and operational exposure, but popularity alone is not a substitute for these properties.</p>"
+    },
+    {
+      "heading": "Release binaries and source code are different artifacts",
+      "body_markdown": "A source repository shows what can be built. A downloaded binary is a particular build produced through a release process.\n\nAn operator should know:\n\n- Who built the binary.\n- Which source tag it corresponds to.\n- Which build options were used.\n- How checksums and signatures are published.\n- Whether the build can be reproduced or independently compared.\n- How updates are delivered.\n- Whether a package distributor applies extra patches.\n\nOfficial project binaries, operating-system packages, containers, and appliance images can all have different trust paths.\n\nA signed package confirms an attestation from the signer. It does not prove that the software is bug-free or that every included patch is appropriate. Binary verification and source review answer different questions.",
+      "body_html": "<p>A source repository shows what can be built. A downloaded binary is a particular build produced through a release process.</p>\n<p>An operator should know:</p>\n<ul><li>Who built the binary.</li><li>Which source tag it corresponds to.</li><li>Which build options were used.</li><li>How checksums and signatures are published.</li><li>Whether the build can be reproduced or independently compared.</li><li>How updates are delivered.</li><li>Whether a package distributor applies extra patches.</li></ul>\n<p>Official project binaries, operating-system packages, containers, and appliance images can all have different trust paths.</p>\n<p>A signed package confirms an attestation from the signer. It does not prove that the software is bug-free or that every included patch is appropriate. Binary verification and source review answer different questions.</p>"
+    },
+    {
+      "heading": "Defaults are part of the user experience",
+      "body_markdown": "Two implementations can offer similar capabilities but guide operators toward different behavior through defaults.\n\nDefaults may affect:\n\n- Mempool size and transaction policy.\n- Replacement behavior.\n- Listening and peer connectivity.\n- Pruning and block storage.\n- Wallet availability.\n- Network privacy settings.\n- Index creation.\n- RPC exposure.\n- Logging.\n- Resource allocation.\n- Mining-template construction.\n- Consensus deployments that require operator selection or confirmation.\n\nA default is not automatically a consensus rule. It is still consequential because many operators never change it. Where a release exposes a consensus-rule selection, that setting must be evaluated separately from ordinary policy defaults.\n\nWhen comparing software, document the installed release's defaults instead of repeating a historical blog post. Also distinguish defaults from available options. An implementation may support a behavior without enabling it automatically.",
+      "body_html": "<p>Two implementations can offer similar capabilities but guide operators toward different behavior through defaults.</p>\n<p>Defaults may affect:</p>\n<ul><li>Mempool size and transaction policy.</li><li>Replacement behavior.</li><li>Listening and peer connectivity.</li><li>Pruning and block storage.</li><li>Wallet availability.</li><li>Network privacy settings.</li><li>Index creation.</li><li>RPC exposure.</li><li>Logging.</li><li>Resource allocation.</li><li>Mining-template construction.</li><li>Consensus deployments that require operator selection or confirmation.</li></ul>\n<p>A default is not automatically a consensus rule. It is still consequential because many operators never change it. Where a release exposes a consensus-rule selection, that setting must be evaluated separately from ordinary policy defaults.</p>\n<p>When comparing software, document the installed release&#39;s defaults instead of repeating a historical blog post. Also distinguish defaults from available options. An implementation may support a behavior without enabling it automatically.</p>"
+    },
+    {
+      "heading": "Configuration names are not universal contracts",
+      "body_markdown": "Related implementations may recognize many of the same configuration options and RPCs, but compatibility should not be assumed.\n\nAn option can be renamed, removed, given a different default, or interpreted differently. An RPC can return additional fields or change behavior across releases. Wallet formats and migration paths can evolve.\n\nCopying a configuration file from one implementation or version into another without review can create startup failures or unintended behavior.\n\nUse each project's built-in help, release notes, and official documentation. Treat configuration as versioned operational code.\n\nFor automated infrastructure, test the exact combination of node release, RPC client, wallet, indexer, and dependent service before production deployment.",
+      "body_html": "<p>Related implementations may recognize many of the same configuration options and RPCs, but compatibility should not be assumed.</p>\n<p>An option can be renamed, removed, given a different default, or interpreted differently. An RPC can return additional fields or change behavior across releases. Wallet formats and migration paths can evolve.</p>\n<p>Copying a configuration file from one implementation or version into another without review can create startup failures or unintended behavior.</p>\n<p>Use each project&#39;s built-in help, release notes, and official documentation. Treat configuration as versioned operational code.</p>\n<p>For automated infrastructure, test the exact combination of node release, RPC client, wallet, indexer, and dependent service before production deployment.</p>"
+    },
+    {
+      "heading": "Data directories require special caution",
+      "body_markdown": "Node data directories contain databases and files whose formats and migration behavior can change.\n\nClosely related implementations may be able to use similar data, but an operator should not switch the same live data directory back and forth unless both projects explicitly support that path for the releases involved.\n\nRisks include:\n\n- Database migrations that older software cannot reverse.\n- Index formats that differ.\n- Wallet migrations.\n- Settings or configuration changes.\n- New files unknown to another version.\n- Unclean shutdown recovery.\n- Pruning-state assumptions.\n- Chainstate or block-index incompatibilities.\n\nA safe evaluation often uses a separate data directory, separate host, or tested backup rather than pointing new software at the only production copy.\n\nBlockchain data can be redownloaded. Wallet and application metadata may be harder or impossible to reconstruct. Backups should reflect that difference.",
+      "body_html": "<p>Node data directories contain databases and files whose formats and migration behavior can change.</p>\n<p>Closely related implementations may be able to use similar data, but an operator should not switch the same live data directory back and forth unless both projects explicitly support that path for the releases involved.</p>\n<p>Risks include:</p>\n<ul><li>Database migrations that older software cannot reverse.</li><li>Index formats that differ.</li><li>Wallet migrations.</li><li>Settings or configuration changes.</li><li>New files unknown to another version.</li><li>Unclean shutdown recovery.</li><li>Pruning-state assumptions.</li><li>Chainstate or block-index incompatibilities.</li></ul>\n<p>A safe evaluation often uses a separate data directory, separate host, or tested backup rather than pointing new software at the only production copy.</p>\n<p>Blockchain data can be redownloaded. Wallet and application metadata may be harder or impossible to reconstruct. Backups should reflect that difference.</p>"
+    },
+    {
+      "heading": "Wallet functionality is optional and separate",
+      "body_markdown": "Node software may include a wallet, but node validation and wallet custody are separate responsibilities.\n\nBitcoin Core and Bitcoin Knots can include wallet functionality depending on build and configuration. An operator can also disable the wallet and connect external software.\n\nWhen comparing wallet features, examine descriptors, backup formats, signing capabilities, hardware-wallet workflows, coin control, fee management, privacy behavior, and migration support separately from chain validation.\n\nA node implementation can be an excellent validator without being the preferred wallet for a particular user. A wallet can use a node without sharing the same process or interface.\n\nDo not let the presence of a graphical wallet decide a consensus-software comparison by itself.",
+      "body_html": "<p>Node software may include a wallet, but node validation and wallet custody are separate responsibilities.</p>\n<p>Bitcoin Core and Bitcoin Knots can include wallet functionality depending on build and configuration. An operator can also disable the wallet and connect external software.</p>\n<p>When comparing wallet features, examine descriptors, backup formats, signing capabilities, hardware-wallet workflows, coin control, fee management, privacy behavior, and migration support separately from chain validation.</p>\n<p>A node implementation can be an excellent validator without being the preferred wallet for a particular user. A wallet can use a node without sharing the same process or interface.</p>\n<p>Do not let the presence of a graphical wallet decide a consensus-software comparison by itself.</p>"
+    },
+    {
+      "heading": "RPC and application compatibility",
+      "body_markdown": "Many Bitcoin applications depend on RPC calls, ZeroMQ notifications, REST endpoints, block files, indexes, or wallet interfaces.\n\nCompatibility should be tested at the specific method and release level.\n\nQuestions include:\n\n- Are required RPC methods present?\n- Do argument names and defaults match?\n- Are result fields stable for the application?\n- Does the setup require `txindex`, block filters, or another index?\n- Does pruning remove data the application expects?\n- Are notifications available and ordered as expected?\n- Does the application require wallet RPCs?\n- How are authentication and remote access secured?\n- Are startup and shutdown sequences handled correctly?\n\nA statement that software is Core compatible can hide important limits. Document the exact interfaces the dependent application uses.",
+      "body_html": "<p>Many Bitcoin applications depend on RPC calls, ZeroMQ notifications, REST endpoints, block files, indexes, or wallet interfaces.</p>\n<p>Compatibility should be tested at the specific method and release level.</p>\n<p>Questions include:</p>\n<ul><li>Are required RPC methods present?</li><li>Do argument names and defaults match?</li><li>Are result fields stable for the application?</li><li>Does the setup require <code>txindex</code>, block filters, or another index?</li><li>Does pruning remove data the application expects?</li><li>Are notifications available and ordered as expected?</li><li>Does the application require wallet RPCs?</li><li>How are authentication and remote access secured?</li><li>Are startup and shutdown sequences handled correctly?</li></ul>\n<p>A statement that software is Core compatible can hide important limits. Document the exact interfaces the dependent application uses.</p>"
+    },
+    {
+      "heading": "Network privacy and transport features",
+      "body_markdown": "Node implementations may support clearnet, Tor, I2P, encrypted peer transport, proxy settings, inbound services, address controls, and connection-management options.\n\nFeature presence is not the same as a private configuration.\n\nA node can leak information through connection patterns, DNS, remote RPC, wallet queries, logs, host telemetry, or surrounding applications. A privacy network does not secure an exposed administration interface.\n\nCompare privacy behavior at the system level:\n\n- Which networks are enabled?\n- How are peers discovered?\n- Are DNS lookups proxied?\n- Does the node listen publicly?\n- Are onion or I2P services created?\n- Which addresses are advertised?\n- What applications connect to the node?\n- Where are logs and metrics sent?\n\nDocumentation should describe capabilities and assumptions rather than promise anonymity.",
+      "body_html": "<p>Node implementations may support clearnet, Tor, I2P, encrypted peer transport, proxy settings, inbound services, address controls, and connection-management options.</p>\n<p>Feature presence is not the same as a private configuration.</p>\n<p>A node can leak information through connection patterns, DNS, remote RPC, wallet queries, logs, host telemetry, or surrounding applications. A privacy network does not secure an exposed administration interface.</p>\n<p>Compare privacy behavior at the system level:</p>\n<ul><li>Which networks are enabled?</li><li>How are peers discovered?</li><li>Are DNS lookups proxied?</li><li>Does the node listen publicly?</li><li>Are onion or I2P services created?</li><li>Which addresses are advertised?</li><li>What applications connect to the node?</li><li>Where are logs and metrics sent?</li></ul>\n<p>Documentation should describe capabilities and assumptions rather than promise anonymity.</p>"
+    },
+    {
+      "heading": "Performance comparisons need controlled conditions",
+      "body_markdown": "Synchronization speed, memory use, disk use, startup time, and peer behavior can differ between releases and configurations.\n\nA fair comparison controls:\n\n- Hardware.\n- Operating system.\n- Storage medium.\n- Network connection.\n- Database cache.\n- Pruning.\n- Indexes.\n- Wallets.\n- Peer set.\n- Software version.\n- Build options.\n- Chainstate starting point.\n\nOne user's benchmark on one appliance does not establish universal performance.\n\nPerformance also has multiple dimensions. A configuration that completes initial synchronization faster may use more memory. A smaller mempool may use fewer resources but behave differently for applications. An index can improve queries while increasing disk and synchronization work.\n\nDescribe the measured setup and avoid ranking implementations from uncontrolled anecdotes.",
+      "body_html": "<p>Synchronization speed, memory use, disk use, startup time, and peer behavior can differ between releases and configurations.</p>\n<p>A fair comparison controls:</p>\n<ul><li>Hardware.</li><li>Operating system.</li><li>Storage medium.</li><li>Network connection.</li><li>Database cache.</li><li>Pruning.</li><li>Indexes.</li><li>Wallets.</li><li>Peer set.</li><li>Software version.</li><li>Build options.</li><li>Chainstate starting point.</li></ul>\n<p>One user&#39;s benchmark on one appliance does not establish universal performance.</p>\n<p>Performance also has multiple dimensions. A configuration that completes initial synchronization faster may use more memory. A smaller mempool may use fewer resources but behave differently for applications. An index can improve queries while increasing disk and synchronization work.</p>\n<p>Describe the measured setup and avoid ranking implementations from uncontrolled anecdotes.</p>"
+    },
+    {
+      "heading": "Maintenance and update strategy",
+      "body_markdown": "Node software participates in a security-sensitive network and should have a clear maintenance path.\n\nReview:\n\n- Current stable releases.\n- Supported upgrade paths.\n- Security announcements.\n- Release-signing practices.\n- End-of-life expectations.\n- Backport policies.\n- Open critical issues.\n- Test coverage.\n- Maintainer and reviewer activity.\n- Downstream package lag.\n\nAn operator also needs an update policy. Automatic unattended replacement may be inappropriate for critical infrastructure. Indefinite delay on unsupported software can also create risk.\n\nA practical process stages upgrades, reads release notes, verifies artifacts, tests dependent applications, shuts down cleanly, and confirms healthy operation afterward.",
+      "body_html": "<p>Node software participates in a security-sensitive network and should have a clear maintenance path.</p>\n<p>Review:</p>\n<ul><li>Current stable releases.</li><li>Supported upgrade paths.</li><li>Security announcements.</li><li>Release-signing practices.</li><li>End-of-life expectations.</li><li>Backport policies.</li><li>Open critical issues.</li><li>Test coverage.</li><li>Maintainer and reviewer activity.</li><li>Downstream package lag.</li></ul>\n<p>An operator also needs an update policy. Automatic unattended replacement may be inappropriate for critical infrastructure. Indefinite delay on unsupported software can also create risk.</p>\n<p>A practical process stages upgrades, reads release notes, verifies artifacts, tests dependent applications, shuts down cleanly, and confirms healthy operation afterward.</p>"
+    },
+    {
+      "heading": "Software choice does not replace operator judgment",
+      "body_markdown": "No implementation can make every operational decision automatically.\n\nThe operator still chooses:\n\n- Which release to install.\n- Which binaries or packages to trust.\n- Which consensus and policy behavior to accept.\n- Which features to enable.\n- Which peers and networks to use.\n- Whether to prune.\n- Which indexes to build.\n- How to secure RPC.\n- How wallets connect.\n- How updates and recovery work.\n\nA popular implementation with careless administration can be less reliable than a carefully maintained alternative. A feature-rich implementation can create unnecessary complexity when the operator needs only basic validation.\n\nThe best choice is the maintained software whose documented behavior, release process, interfaces, and operational tradeoffs match the real use case.",
+      "body_html": "<p>No implementation can make every operational decision automatically.</p>\n<p>The operator still chooses:</p>\n<ul><li>Which release to install.</li><li>Which binaries or packages to trust.</li><li>Which consensus and policy behavior to accept.</li><li>Which features to enable.</li><li>Which peers and networks to use.</li><li>Whether to prune.</li><li>Which indexes to build.</li><li>How to secure RPC.</li><li>How wallets connect.</li><li>How updates and recovery work.</li></ul>\n<p>A popular implementation with careless administration can be less reliable than a carefully maintained alternative. A feature-rich implementation can create unnecessary complexity when the operator needs only basic validation.</p>\n<p>The best choice is the maintained software whose documented behavior, release process, interfaces, and operational tradeoffs match the real use case.</p>"
+    },
+    {
+      "heading": "A neutral comparison framework",
+      "body_markdown": "Use the same questions for every candidate:\n\n1. **Validation:** Does it fully validate the current Bitcoin consensus rules, and does the release expose any additional consensus deployments or settings?\n2. **Maintenance:** Is it actively maintained with a visible security and release process?\n3. **Release trust:** Can binaries be verified against documented signed release materials?\n4. **Policy:** Which relay and mempool defaults differ, and why do those differences matter?\n5. **Features:** Which wallet, index, network, and application interfaces are required?\n6. **Compatibility:** Will dependent tools work with the exact release and configuration?\n7. **Storage:** Are archival, pruning, and index needs supported?\n8. **Privacy:** What peer, proxy, logging, and remote-access assumptions exist?\n9. **Operations:** Can the system be monitored, updated, backed up, and recovered?\n10. **Migration:** Is there a documented path from the current software and data?\n\nThis framework avoids factional labels. It keeps attention on verifiable behavior.\n\nBitcoin node software should be chosen the same way other security-critical infrastructure is chosen: through source, documentation, release evidence, controlled testing, and an honest match between capabilities and requirements.",
+      "body_html": "<p>Use the same questions for every candidate:</p>\n<ol><li><strong>Validation:</strong> Does it fully validate the current Bitcoin consensus rules, and does the release expose any additional consensus deployments or settings?</li><li><strong>Maintenance:</strong> Is it actively maintained with a visible security and release process?</li><li><strong>Release trust:</strong> Can binaries be verified against documented signed release materials?</li><li><strong>Policy:</strong> Which relay and mempool defaults differ, and why do those differences matter?</li><li><strong>Features:</strong> Which wallet, index, network, and application interfaces are required?</li><li><strong>Compatibility:</strong> Will dependent tools work with the exact release and configuration?</li><li><strong>Storage:</strong> Are archival, pruning, and index needs supported?</li><li><strong>Privacy:</strong> What peer, proxy, logging, and remote-access assumptions exist?</li><li><strong>Operations:</strong> Can the system be monitored, updated, backed up, and recovered?</li><li><strong>Migration:</strong> Is there a documented path from the current software and data?</li></ol>\n<p>This framework avoids factional labels. It keeps attention on verifiable behavior.</p>\n<p>Bitcoin node software should be chosen the same way other security-critical infrastructure is chosen: through source, documentation, release evidence, controlled testing, and an honest match between capabilities and requirements.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Node software",
+      "definition": "Software that connects to Bitcoin peers and may validate, relay, store, or serve network data according to its configuration."
+    },
+    {
+      "term": "Node",
+      "definition": "Bitcoin software that communicates with peers and may validate, relay, store, or serve network data."
+    },
+    {
+      "term": "Bitcoin Core",
+      "definition": "The most widely used open-source Bitcoin node and wallet software implementation."
+    },
+    {
+      "term": "Bitcoin Knots",
+      "definition": "A maintained Bitcoin node software implementation with policy and feature differences from Bitcoin Core."
+    },
+    {
+      "term": "Policy",
+      "definition": "Local software rules that influence transaction relay, mempool acceptance, or default behavior without changing consensus validity."
+    },
+    {
+      "term": "Standardness",
+      "definition": "Node policy rules used for transaction relay and mining defaults that are separate from consensus validity."
+    },
+    {
+      "term": "Consensus",
+      "definition": "The shared validation rules independently enforced by Bitcoin nodes."
+    },
+    {
+      "term": "Validation",
+      "definition": "The process of checking transactions and blocks against applicable rules."
+    },
+    {
+      "term": "Software release",
+      "definition": "A versioned distribution of software accompanied by code changes, review, testing, documentation, and release information."
+    },
+    {
+      "term": "Open-Source",
+      "definition": "A development model in which source code is available under a license that permits inspection, use, modification, and redistribution."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bitcoin Core README",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/README.md",
+      "supports": "Bitcoin Core's full-validation role, optional wallet and GUI, MIT license, public development process, testing, and stable release tags."
+    },
+    {
+      "title": "Bitcoin Core contribution guidelines",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/CONTRIBUTING.md",
+      "supports": "The project's public contribution, review, testing, and code-change process."
+    },
+    {
+      "title": "Bitcoin Core developer notes",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/doc/developer-notes.md",
+      "supports": "Development practices, testing expectations, code review, subsystem boundaries, and security-sensitive maintenance context."
+    },
+    {
+      "title": "Bitcoin Core startup-option implementation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/init.cpp",
+      "supports": "Consensus-adjacent configuration, policy, pruning, indexes, wallet, networking, RPC, and resource settings plus compatibility warnings."
+    },
+    {
+      "title": "Bitcoin Core policy sources",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/tree/v31.0/src/policy",
+      "supports": "Separation of transaction standardness and relay policy from block consensus validation."
+    },
+    {
+      "title": "Bitcoin Core JSON-RPC interface documentation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/doc/JSON-RPC-interface.md",
+      "supports": "RPC behavior, security boundaries, authentication, and application-integration considerations."
+    },
+    {
+      "title": "Bitcoin Core files documentation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/doc/files.md",
+      "supports": "Data-directory components, indexes, chainstate, wallet files, settings, logs, and migration-sensitive local data."
+    },
+    {
+      "title": "Bitcoin Core 31.0 release notes",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/doc/release-notes/release-notes-31.0.md",
+      "supports": "Release-specific changes, compatibility considerations, resource changes, updated defaults, and the need for version-aware operational review."
+    },
+    {
+      "title": "Bitcoin Knots repository README",
+      "author_or_publisher": "Bitcoin Knots contributors",
+      "url": "https://github.com/bitcoinknots/bitcoin",
+      "supports": "Bitcoin Knots connecting to the Bitcoin network, fully validating blocks and transactions, optional wallet and GUI, and separate project identity."
+    },
+    {
+      "title": "Bitcoin Knots official website",
+      "author_or_publisher": "Bitcoin Knots project",
+      "url": "https://bitcoinknots.org/",
+      "supports": "Official Bitcoin Knots releases, project documentation, current distribution channel, and availability of release variants."
+    },
+    {
+      "title": "Bitcoin Knots v29.3.knots20260508 release notes",
+      "author_or_publisher": "Bitcoin Knots contributors",
+      "url": "https://github.com/bitcoinknots/bitcoin/releases/tag/v29.3.knots20260508",
+      "supports": "The current release's RDTS or BIP110 soft fork deployment, explicit operator confirmation, availability of a build without RDTS support, and the need to compare consensus settings as well as policy and feature differences."
+    },
+    {
+      "title": "Bitcoin Developer Guide: P2P Network",
+      "author_or_publisher": "Bitcoin.org contributors",
+      "url": "https://developer.bitcoin.org/devguide/p2p_network.html",
+      "supports": "Peer-to-peer node behavior, block and transaction relay, service signaling, and network-message context."
+    },
+    {
+      "title": "Bitcoin Developer Guide: Block Chain",
+      "author_or_publisher": "Bitcoin.org contributors",
+      "url": "https://developer.bitcoin.org/devguide/block_chain.html",
+      "supports": "Full validation, chainstate, proof-of-work chain selection, and consensus behavior that compatible implementations must enforce."
+    },
+    {
+      "title": "MIT License",
+      "author_or_publisher": "Open Source Initiative",
+      "url": "https://opensource.org/license/MIT",
+      "supports": "The licensing terms referenced by Bitcoin Core and Bitcoin Knots for inspection, modification, and redistribution."
+    }
+  ],
+  "seo_title": "Bitcoin Node Software Explained: Core, Knots, and Tradeoffs",
+  "meta_description": "Compare Bitcoin node software through consensus behavior, policy, releases, interfaces, storage, privacy, and operations, including Bitcoin Core and Bitcoin Knots.",
+  "excerpt": "Bitcoin node implementations can share consensus compatibility while differing in policy, defaults, features, releases, interfaces, and operational tradeoffs.",
+  "reading_time": "19 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-NETWORK",
+    "label": "The Bitcoin Network",
+    "subcategory": "Nodes",
+    "depth": "Deep",
+    "format": "Comparison"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-023",
+      "title": "How to Run a Bitcoin Node",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-025",
+      "title": "What Happens Inside the Bitcoin Mempool?",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": [
+      {
+        "registry_id": "MSC-GUIDE-021",
+        "title": "What Is a Bitcoin Full Node?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-022",
+        "title": "What Is a Pruned Bitcoin Node?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-023",
+        "title": "How to Run a Bitcoin Node",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-025",
+        "title": "What Happens Inside the Bitcoin Mempool?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-030",
+        "title": "How Bitcoin Reaches Consensus",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-041",
+        "title": "Bitcoin Developer Tools: A Practical Overview",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-049",
+        "title": "What Is Bitcoin Core?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-050",
+        "title": "What Is Bitcoin Knots?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-051",
+        "title": "How to Read the Bitcoin Source Code",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-052",
+        "title": "How Bitcoin Core Releases Work",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-061",
+        "title": "How Bitcoin RPC Works",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-063",
+        "title": "How Bitcoin Software Is Tested",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-064",
+        "title": "How to Run Reliable Bitcoin Infrastructure",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GLOSSARY-001",
+        "title": "Bitcoin Glossary",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-HUB-NETWORK",
+        "title": "The Bitcoin Network",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-PATH-NETWORK",
+        "title": "Understand the Network",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-PATH-BUILD",
+        "title": "Build on Bitcoin",
+        "active": false,
+        "url": null
+      }
+    ]
+  },
+  "review_dates": {
+    "reviewed": "2026-07-18",
+    "copy_locked": "2026-07-18",
+    "human_verification": "2026-07-18"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "Consensus and Policy Layers",
+      "educational_purpose": "Show how two node implementations can agree on block validity while applying different local transaction policies, while also flagging that a release may expose separate consensus-rule choices.",
+      "recommended_placement": "After the section titled Policy is not consensus.",
+      "visual_description": "Oceanographic cross-section with a shared deep foundation labeled Consensus validation. Above it, two separate surface stations labeled Implementation A policy and Implementation B policy filter different unconfirmed transactions. A separate switch beside the foundation is labeled Release-specific consensus setting. Both stations accept the same valid block only when the selected consensus rules remain compatible.",
+      "required_labels": "Consensus rules, Release-specific consensus setting, Valid block, Local policy A, Local policy B, Mempool, Relay, Compatibility check",
+      "caption": "Node software can differ in local policy, while release-specific consensus settings require a separate compatibility review.",
+      "alt_text": "Layered diagram showing two Bitcoin node implementations with different local policies above a consensus layer and a separate release-specific consensus compatibility switch.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Keep the consensus foundation and compatibility switch centered, with the two policy stations stacked above it.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "Node Software Comparison Matrix",
+      "educational_purpose": "Give readers a neutral framework for evaluating implementations without ranking them.",
+      "recommended_placement": "After the section titled A neutral comparison framework.",
+      "visual_description": "Old infrastructure-manual matrix with columns for Candidate software and rows for Validation, Maintenance, Release trust, Policy, Features, Compatibility, Storage, Privacy, Operations, and Migration. Use check fields rather than scores or winner badges.",
+      "required_labels": "Validation, Maintenance, Release trust, Policy, Features, Compatibility, Storage, Privacy, Operations, Migration",
+      "caption": "Compare node software through documented behavior and operating requirements rather than factional labels.",
+      "alt_text": "Neutral evaluation matrix for Bitcoin node software covering validation, maintenance, releases, policy, features, compatibility, storage, privacy, operations, and migration.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Convert the matrix into ten stacked question cards for narrow screens.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Source to Running Binary",
+      "educational_purpose": "Separate source code, release process, packages, and the binary an operator actually runs.",
+      "recommended_placement": "After the section titled Release binaries and source code are different artifacts.",
+      "visual_description": "Technical supply-chain map. Public source and a tagged release feed a build and signing station. Paths branch to official binary, operating-system package, container, and appliance image. Each ends at a verification checkpoint before the running node.",
+      "required_labels": "Public source, Release tag, Build process, Signed checksums, Official binary, Distribution package, Container, Appliance image, Verification, Running node",
+      "caption": "The software repository, release process, package source, and installed binary are separate parts of the node's trust path.",
+      "alt_text": "Software supply-chain diagram showing Bitcoin node source code moving through release, build, packaging, signature, and verification stages before becoming a running node.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Use one vertical source-to-node path with package types shown as short side branches.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}

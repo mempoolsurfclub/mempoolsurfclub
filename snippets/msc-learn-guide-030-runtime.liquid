@@ -1,0 +1,183 @@
+{% comment %}
+  Generated from docs/learn/content/guides/MSC-GUIDE-030-bitcoin-consensus.md.
+  Registry binding: MSC-GUIDE-030.
+  Preview only. Do not edit manually.
+  Rebuild with node scripts/generate-msc-learn-guide-category-runtime.mjs --start=17 --end=32 --write.
+{% endcomment %}
+<section class="msc-shell msc-learn-page" data-msc-registry-id="MSC-GUIDE-030" data-msc-preview-only="true">
+  <div class="msc-container msc-learn-page__container">
+    <nav class="msc-learn-breadcrumbs" aria-label="Learn breadcrumbs"><ol><li><span>Learn</span></li><li><span>The Bitcoin Network</span></li><li aria-current="page"><span>How Bitcoin Reaches Consensus</span></li></ol></nav>
+    <header class="msc-learn-page__header">
+      <p class="msc-section-kicker">The Bitcoin Network</p>
+      <h1>How Bitcoin Reaches Consensus</h1>
+      <p class="msc-learn-page__deck">Bitcoin consensus is the shared set of validation rules that independently operated nodes use to decide which transactions and blocks are valid. Proof of work orders valid competing chain history, but it does not replace validation. Bitcoin reaches practical agreement because nodes apply compatible rules to the same public data, reject rule-breaking blocks, and select the valid candidate chain with the greatest accumulated work.</p>
+      <ul class="msc-learn-page-meta"><li>Consensus</li><li>Deep</li><li>Technical Analysis</li><li>15 minutes</li><li>Reviewed 2026-07-19</li></ul>
+      <p class="msc-learn-preview-note">Preview only. Publication records and confirmed URLs do not exist; all navigation remains inactive.</p>
+    </header>
+    <article class="msc-learn-article rte" data-msc-content-source="structured-runtime">
+<section class="msc-learn-article__section">
+<p>Bitcoin has no central server that publishes one official ledger.</p>
+<p>Instead, independently operated systems receive transactions and blocks from peers, evaluate them locally, and maintain their own view of valid chain history.</p>
+<p>The word consensus describes the rules that let those independent systems reach compatible results. It does not mean that every participant votes, agrees on every policy setting, or runs identical software.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Consensus begins with independently enforced rules</h2>
+<p>A Bitcoin full node checks data against rules implemented in the software its operator chose to run.</p>
+<p>Those rules cover questions such as:</p>
+<ul><li>Is the block header proof of work valid?</li><li>Does the block use the required target?</li><li>Is the block linked to a known valid parent?</li><li>Do transaction inputs exist and remain unspent in the applicable state?</li><li>Do scripts and signatures satisfy the spending conditions?</li><li>Are amounts within permitted ranges?</li><li>Does the block stay within consensus limits?</li><li>Is the coinbase transaction structured correctly?</li><li>Does the coinbase claim no more than the permitted subsidy plus fees?</li><li>Are locktime, sequence, witness, and activation rules satisfied?</li></ul>
+<p>A node does not ask a miner, exchange, developer, website, or other node for permission to apply these checks.</p>
+<p>It calculates the result from the received data, its validated chainstate, and the rules it enforces.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Validity and chain selection are separate decisions</h2>
+<p>A node can know about more than one valid branch.</p>
+<p>Validity asks whether a block and its ancestors satisfy the rules.</p>
+<p>Chain selection asks which valid candidate chain the node should activate.</p>
+<p>Bitcoin Core tracks accumulated proof of work as chainwork. Among valid candidates, the node attempts to activate the chain with the greatest accumulated work.</p>
+<p>This distinction prevents a common mistake. Proof of work does not define validity by itself. An invalid block remains invalid even if producing it consumed substantial resources.</p>
+<p>Work orders the valid candidates. Validation defines the candidate set.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Nodes converge when they have compatible rules and data</h2>
+<p>Two nodes running compatible consensus rules can receive blocks in different orders and temporarily select different tips.</p>
+<p>Suppose two valid blocks extend the same parent nearly simultaneously. One node hears about block A first. Another hears about block B first.</p>
+<p>Each may temporarily select the branch it currently sees as strongest. When one branch accumulates more work and both nodes learn about it, they can converge on that valid chain.</p>
+<p>Network convergence therefore depends on several conditions:</p>
+<ul><li>Nodes enforce compatible consensus rules.</li><li>Valid blocks propagate between peers.</li><li>Nodes can obtain missing ancestors and transactions.</li><li>Candidate branches are compared by accumulated work.</li><li>The network continues producing valid blocks.</li></ul>
+<p>Short-lived disagreement about the tip is normal. Persistent disagreement about validity is more serious because different rule sets can produce a lasting chain split.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Agreement does not require simultaneous knowledge</h2>
+<p>Bitcoin nodes do not share one perfectly synchronized memory.</p>
+<p>One node may know a transaction that another has never received. A miner may learn about a newly found block before distant peers. A pruned node may retain less historical block data than an archival node. Optional indexes can differ completely.</p>
+<p>Consensus requires compatible results when nodes evaluate the same relevant data under the same rules. It does not require identical peer sets, mempools, storage layouts, clocks, or arrival order.</p>
+<p>This distinction explains why Bitcoin can operate over an unreliable global network. Temporary information differences are expected. The protocol provides ways to request missing headers, blocks, and transactions, while proof-of-work chain selection helps nodes resolve competing valid tips.</p>
+<p>A node that is offline for a week can return, obtain later chain data, validate the missing history, and independently reach the selected valid tip it now knows. It does not need a central authority to certify the catch-up result.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Consensus rules are not mempool policy</h2>
+<p>A transaction can be valid under consensus and still be absent from a particular node&#39;s mempool.</p>
+<p>Nodes use local policy rules to decide which unconfirmed transactions they accept, relay, replace, or evict. Policy can account for fee rate, resource use, standard script forms, package relationships, replacement rules, and other operational concerns.</p>
+<p>Miners also use template policy when selecting valid transactions for candidate blocks.</p>
+<p>A block containing a consensus-valid transaction must be evaluated under block consensus rules even when that transaction would not have entered the node&#39;s own mempool.</p>
+<p>Policy influences propagation and default behavior. It does not redefine historical block validity.</p>
+<p>This is why statements such as &quot;the network rejected the transaction&quot; need context. A node may reject a transaction from its mempool for policy reasons while still accepting it later inside a valid block.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Consensus rules are not one software brand</h2>
+<p>Bitcoin Core is the most widely used open-source Bitcoin node and wallet implementation, but Bitcoin consensus is not a trademark held by one repository.</p>
+<p>Other implementations can participate when they reproduce compatible consensus behavior.</p>
+<p>That compatibility is difficult. Consensus code includes edge cases, historical exceptions, integer behavior, serialization details, script semantics, activation conditions, and chainstate transitions. A small difference can become a network split if real data reaches the disputed boundary.</p>
+<p>Implementations therefore need careful review, testing, and comparison against deployed behavior.</p>
+<p>Running different software can improve diversity in some operational layers, but consensus diversity is not automatically safe. Independent code that interprets a consensus rule differently can create incompatible validity decisions.</p>
+<p>The relevant goal is independent verification with compatible consensus results.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Miners propose ordering within the rules</h2>
+<p>Miners construct candidate blocks and perform proof of work.</p>
+<p>A miner chooses which valid transactions to include, how to order transactions subject to dependencies, where to direct coinbase outputs, and which valid parent to extend.</p>
+<p>When the miner finds a qualifying header hash, it broadcasts the block.</p>
+<p>Nodes then verify the complete block.</p>
+<p>Miners therefore have meaningful power over transaction inclusion, ordering, and the production of competing valid history. They do not have unilateral authority to make invalid data acceptable to full nodes.</p>
+<p>A miner signaling support for a proposal can communicate readiness or participate in an activation mechanism. Signaling is not a general vote that rewrites every node&#39;s rules.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Users choose the rules their nodes enforce</h2>
+<p>Consensus enforcement occurs in software, and software is chosen and operated by people and organizations.</p>
+<p>Node operators decide whether to install an update. Wallet providers decide which transaction forms to create. Exchanges and merchants decide what chain activity they recognize for deposits, withdrawals, and settlement. Miners decide which templates and validation software to use. Developers propose and review code.</p>
+<p>These choices matter, but Bitcoin has no protocol field that counts every user, wallet, business, or unit of economic value.</p>
+<p>Terms such as &quot;economic majority&quot; describe practical influence, not a built-in consensus measurement.</p>
+<p>A widely used service can influence adoption through the software and chain it supports. That does not give the service a cryptographic privilege inside another operator&#39;s node.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Developers propose code but do not activate it by authorship</h2>
+<p>Developers research problems, publish proposals, review specifications, write implementations, test behavior, and release software.</p>
+<p>Merging code into one repository does not remotely alter running nodes.</p>
+<p>A consensus change becomes relevant only through deployment and use. Operators must obtain software containing the rules, and the activation conditions encoded by that software must be reached.</p>
+<p>Developers can have substantial influence because technical review and implementation quality matter. They do not possess a protocol key that commands the network to upgrade.</p>
+<p>The difference between influence and unilateral control is central to Bitcoin governance.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Wallets depend on nodes and assumptions</h2>
+<p>A wallet presents balances, creates transactions, tracks confirmations, and manages keys or signing devices.</p>
+<p>The wallet&#39;s chain view may come from:</p>
+<ul><li>Its own fully validating node.</li><li>A remote node selected by the user.</li><li>A wallet provider&#39;s server.</li><li>A compact-filter client.</li><li>A block explorer or API.</li><li>A custodial account database.</li></ul>
+<p>Those arrangements provide different levels of independent verification and trust.</p>
+<p>A wallet that relies on a remote service may inherit that service&#39;s view of consensus and chain selection. The protocol still operates through validating nodes, but the wallet user may not personally verify all data.</p>
+<p>This is why &quot;users enforce the rules&quot; needs an operational qualifier. A user enforces rules directly when software under the user&#39;s control performs the relevant validation.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Consensus failure can create a chain split</h2>
+<p>If connected nodes apply incompatible validity rules to the same block, they may disagree permanently.</p>
+<p>Consider two groups:</p>
+<ul><li>Group A accepts a block under rule set A.</li><li>Group B rejects that block under rule set B.</li></ul>
+<p>Any descendants of the disputed block inherit the disagreement. Proof of work can order branches within each group&#39;s valid set, but it cannot make the rejected ancestor valid to Group B.</p>
+<p>This is a consensus split.</p>
+<p>The consequences can include duplicate transaction histories, confused balances, replay risks, market disruption, incompatible wallets, and separate mining incentives.</p>
+<p>Software bugs can also produce accidental splits. Historical incidents show why consensus changes and validation refactors receive unusually cautious review.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Reorganizations are not automatically consensus failures</h2>
+<p>A reorganization occurs when a node switches from one valid branch to another valid branch with more accumulated work.</p>
+<p>The old branch may have contained valid blocks. It simply lost the chainwork competition.</p>
+<p>A consensus failure is different. It involves disagreement about whether data is valid under the enforced rules.</p>
+<p>Both situations can change the active chain, but their causes differ:</p>
+<ul><li>Reorganization: competing valid histories under compatible rules.</li><li>Consensus split: incompatible validity decisions.</li></ul>
+<p>Distinguishing them prevents every temporary fork from being described as a protocol breakdown.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Network messages are not consensus votes</h2>
+<p>Bitcoin peers exchange inventory, transactions, headers, blocks, compact blocks, addresses, and other protocol messages.</p>
+<p>Receiving many copies of a block does not make it valid.</p>
+<p>Peer count does not determine consensus validity. A node can receive an invalid block from every connected peer and still reject it.</p>
+<p>Likewise, a node does not accept a transaction because enough peers relayed it. It performs its own checks.</p>
+<p>Peer-to-peer networking helps data propagate. Consensus validation decides whether the data can affect the node&#39;s state.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Local state is derived from validated history</h2>
+<p>A node maintains chainstate representing the spendable-output view at its selected chain tip.</p>
+<p>Connecting a block spends existing outputs and creates new outputs. Disconnecting a block during a reorganization reverses those state changes using stored information.</p>
+<p>This local state is not copied blindly from a central ledger server. It is derived from the node&#39;s validated block history.</p>
+<p>Indexes, wallet databases, mempools, raw block files, and chainstate are separate data structures. Consensus-critical state is the result of applying valid transactions in selected-chain order.</p>
+<p>Two compatible nodes that validate the same selected history should derive compatible consensus state even when their mempools, indexes, peer sets, storage modes, and wallet data differ.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Shared rules do not require identical local configuration</h2>
+<p>Nodes can differ in many non-consensus settings:</p>
+<ul><li>Maximum mempool size.</li><li>Transaction relay fee policy.</li><li>Peer count and network transport.</li><li>Pruning level.</li><li>Optional indexes.</li><li>Wallet usage.</li><li>RPC access.</li><li>Logging.</li><li>Block-relay preferences.</li><li>Transaction-replacement policy.</li></ul>
+<p>These settings can change performance, privacy, relay, storage, and user experience.</p>
+<p>They do not necessarily change which historical blocks the node accepts.</p>
+<p>A consensus analysis should identify the layer being discussed. Treating every default setting as a consensus rule exaggerates incompatibility. Treating a consensus flag as ordinary policy understates the risk.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Agreement is continuous rather than ceremonial</h2>
+<p>Bitcoin does not hold a final meeting where consensus is declared complete.</p>
+<p>Every new block presents another opportunity for independent validation. Every chain reorganization requires nodes to reevaluate selected history. Every software release can change non-consensus behavior and may, in some cases, include code for future consensus rules.</p>
+<p>Practical consensus is continuously reproduced when nodes:</p>
+<ol><li>Receive candidate transactions and blocks.</li><li>Apply compatible validation rules.</li><li>Reject invalid data.</li><li>Track valid candidate chains.</li><li>Compare accumulated proof of work.</li><li>Activate the strongest valid chain they know.</li><li>Derive local state from that selected history.</li></ol>
+<p>This process can tolerate network delay and temporary branch competition. It cannot safely tolerate uncontrolled disagreement about validity.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Consensus is technical and social at different layers</h2>
+<p>The word consensus is also used for human agreement around proposed changes.</p>
+<p>Technical consensus describes the rules software enforces and the deterministic results of applying them.</p>
+<p>Social coordination describes how people debate proposals, review code, select software, plan activation, respond to failures, and decide which systems they recognize.</p>
+<p>The two layers interact. Human decisions determine which technical rules are deployed. Technical rules then determine what running nodes accept.</p>
+<p>Collapsing the layers leads to opposite errors.</p>
+<p>One error says code alone decides everything, ignoring that people choose and operate software.</p>
+<p>The other says community opinion can directly override a node&#39;s validation result without changing its software.</p>
+<p>Bitcoin&#39;s design places the final technical check inside independently operated nodes while leaving software adoption and upgrade coordination to human decision-making.</p>
+</section>
+<section class="msc-learn-article__section"><h2>The durable consensus model</h2>
+<p>A precise model of Bitcoin consensus has five parts:</p>
+<ol><li>Consensus rules define valid transactions, blocks, and state transitions.</li><li>Full nodes enforce those rules independently.</li><li>Miners perform proof of work to propose ordering among valid transactions and branches.</li><li>Nodes select the valid candidate chain with the greatest accumulated work.</li><li>People and organizations choose, operate, and update the software that performs those checks.</li></ol>
+<p>No single part replaces the others.</p>
+<p>Miners without validation can waste work on invalid blocks. Nodes without block production cannot extend history. Developers without adoption cannot remotely change deployed rules. Users relying on third parties may not directly verify the chain they see.</p>
+<p>Bitcoin reaches consensus not through one master vote, but through compatible rule enforcement applied to shared public data.</p>
+</section>
+    </article>
+    <section class="msc-learn-key-terms" aria-labelledby="MscGuide030Terms"><h2 id="MscGuide030Terms">Key Terms</h2><dl><div class="msc-learn-term"><dt>Consensus</dt><dd>The shared validation rules independently enforced by Bitcoin nodes.</dd></div>
+<div class="msc-learn-term"><dt>Node</dt><dd>Bitcoin software that communicates with peers and may validate, relay, store, or serve network data.</dd></div>
+<div class="msc-learn-term"><dt>Validation</dt><dd>The process of checking transactions and blocks against applicable rules.</dd></div>
+<div class="msc-learn-term"><dt>Protocol</dt><dd>A defined set of rules and message formats that allows independent participants or software systems to interact consistently.</dd></div>
+<div class="msc-learn-term"><dt>Policy</dt><dd>Local software rules that influence transaction relay, mempool acceptance, or default behavior without changing consensus validity.</dd></div>
+<div class="msc-learn-term"><dt>Proof of work</dt><dd>The computational process miners use to produce block hashes below the network target.</dd></div>
+<div class="msc-learn-term"><dt>Reorganization</dt><dd>A change in the selected chain tip when a competing valid chain accumulates more proof of work.</dd></div></dl></section>
+    <section class="msc-learn-sources" aria-labelledby="MscGuide030Sources"><h2 id="MscGuide030Sources">Sources</h2><article class="msc-learn-source"><h3>Bitcoin Core validation implementation</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/src/validation.cpp</li><li><strong>supports:</strong> Transaction and block validation, chainstate transitions, candidate-chain activation, reorganizations, and rejection of invalid data.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core chainstate interface</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/src/validation.h</li><li><strong>supports:</strong> Chainstate management, block processing interfaces, coins views, validation state, and active-chain coordination.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core chain index definitions</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/src/chain.h</li><li><strong>supports:</strong> Block-index relationships, stored chainwork, active-chain representation, ancestors, and branch navigation.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core chainwork implementation</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/src/chain.cpp</li><li><strong>supports:</strong> Per-block proof calculation, accumulated chainwork, and work-based comparison of valid histories.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core peer-processing implementation</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/src/net_processing.cpp</li><li><strong>supports:</strong> Peer message processing, block and transaction relay, headers handling, and the separation between received data and local validation.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core transaction policy definitions</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/src/policy/policy.h</li><li><strong>supports:</strong> Standardness and local transaction-policy concepts that remain distinct from block consensus validity.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core script verification flags</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/src/script/interpreter.h</li><li><strong>supports:</strong> Script-verification rules, consensus-related script flags, and the subset relationship used for soft-fork rule restrictions.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core integration/staging tree README</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/README.md</li><li><strong>supports:</strong> Bitcoin Core&#39;s role in connecting to the peer-to-peer network and fully validating blocks and transactions.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin white paper</h3><ul><li><strong>author or publisher:</strong> Satoshi Nakamoto</li><li><strong>url:</strong> https://bitcoin.org/bitcoin.pdf</li><li><strong>supports:</strong> Peer-to-peer operation, proof-of-work chain ordering, independent verification context, and competing-chain analysis.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Developer Guide: Block Chain</h3><ul><li><strong>author or publisher:</strong> Bitcoin.org contributors</li><li><strong>url:</strong> https://developer.bitcoin.org/devguide/block_chain.html</li><li><strong>supports:</strong> Block validation, UTXO processing, proof-of-work chain selection, confirmations, and reorganizations.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Developer Guide: P2P Network</h3><ul><li><strong>author or publisher:</strong> Bitcoin.org contributors</li><li><strong>url:</strong> https://developer.bitcoin.org/devguide/p2p_network.html</li><li><strong>supports:</strong> Peer discovery, transaction and block relay, network messages, and data propagation between nodes.</li></ul></article>
+<article class="msc-learn-source"><h3>BIP 141: Segregated Witness</h3><ul><li><strong>author or publisher:</strong> Eric Lombrozo, Johnson Lau, and Pieter Wuille</li><li><strong>url:</strong> https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki</li><li><strong>supports:</strong> A deployed consensus soft fork, new validation rules, deployment parameters, and the difference between proposing rules and enforcing them after activation.</li></ul></article></section>
+    <nav class="msc-learn-prev-next" aria-label="Guide navigation preview"><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Previous</span><strong>How Bitcoin Proof of Work Secures the Network</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Category</span><strong>The Bitcoin Network</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Next</span><strong>How Bitcoin Soft Forks Work</strong><small>Link inactive</small></span></nav>
+  </div>
+</section>

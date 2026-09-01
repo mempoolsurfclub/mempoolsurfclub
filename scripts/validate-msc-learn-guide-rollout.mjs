@@ -59,8 +59,8 @@ for (let current = 1; current < 16; current += 1) {
 const guide016Block = section.match(/{%- when 'MSC-GUIDE-016' -%}([\s\S]*?){%- else -%}/)?.[1] || '';
 assert.ok(guide016Block.includes("next_registry_id: 'MSC-GUIDE-017'"), 'Guide 016 must preview Guide 017 next');
 assert.ok(guide016Block.includes("next_title: 'How Bitcoin Mining Works'"), 'Guide 016 must preview the approved Guide 017 title');
-assert.ok(guide016Block.includes('next_active: false'), 'Guide 016 → Guide 017 must remain inactive until the next category rollout');
-assert.ok(!guide016Block.includes('next_url:'), 'Guide 016 must not invent a Guide 017 preview URL');
+assert.ok(guide016Block.includes('next_active: true'), 'Guide 016 → Guide 017 must be active once The Bitcoin Network rollout exists');
+assert.ok(guide016Block.includes("next_url: '/pages/learn-bitcoin-network?view=msc-learn-guide-017'"), 'Guide 016 must use the verified Network preview route for Guide 017');
 assert.ok(guide016Block.includes('completed_count: 16'), 'Guide 016 must show Bitcoin Basics as complete');
 assert.ok(guide016Block.includes('remaining_count: 0'), 'Guide 016 must show zero Bitcoin Basics guides remaining');
 
@@ -94,4 +94,4 @@ assert.ok(sharedCss.includes('font-size: 1.6rem;'), 'Locked Next Guide eyebrow s
 assert.ok(sharedCss.includes('margin-top: .4rem;'), 'Locked Next Guide spacing drifted');
 assert.ok(sharedCss.includes('.msc-learn-guide-transition.is-active:hover'), 'Locked border-only active transition interaction drifted');
 
-console.log('MSC Learn Guide 002–016 rollout validation passed: COPY_LOCKED runtimes are synchronized, the Guide 001 visual contract is preserved, all 16 Bitcoin Basics hub cards are active, transitions are wired through Guide 016, and Guide 017 remains inactive for the next category rollout.');
+console.log('MSC Learn Guide 002–016 rollout validation passed: COPY_LOCKED runtimes are synchronized, the Guide 001 visual contract is preserved, all 16 Bitcoin Basics hub cards are active, transitions are wired through Guide 016, and Guide 016 now hands off to the active Guide 017 Network preview.');

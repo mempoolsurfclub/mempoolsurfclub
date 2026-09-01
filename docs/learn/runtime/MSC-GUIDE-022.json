@@ -1,0 +1,329 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-022-pruned-bitcoin-node.md",
+  "source_sha256": "ec680805382a59244dac766c1d6517e78788a5a11759d8c22f3f1b7d6dd42a7a",
+  "registry_id": "MSC-GUIDE-022",
+  "status": "COPY_LOCKED",
+  "h1": "What Is a Pruned Bitcoin Node?",
+  "introductory_deck": "A pruned Bitcoin node is a fully validating node configured to delete older block data after checking it. Pruning reduces local storage requirements without outsourcing consensus validation, but it changes which historical data the node can serve, rescan, or rebuild from its own disk.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "Running a Bitcoin node requires several kinds of local data. The largest category is usually the collection of raw block and undo files accumulated over the chain's history.\n\nPruning lets a node limit how much of that historical block data remains on disk. The node still downloads and validates blocks under its ordinary synchronization process. After eligible data is no longer needed for current operation, older block and undo files can be deleted according to the configured pruning mode.\n\nThat makes pruning a storage policy, not a weaker form of consensus validation.",
+      "body_html": "<p>Running a Bitcoin node requires several kinds of local data. The largest category is usually the collection of raw block and undo files accumulated over the chain&#39;s history.</p>\n<p>Pruning lets a node limit how much of that historical block data remains on disk. The node still downloads and validates blocks under its ordinary synchronization process. After eligible data is no longer needed for current operation, older block and undo files can be deleted according to the configured pruning mode.</p>\n<p>That makes pruning a storage policy, not a weaker form of consensus validation.</p>"
+    },
+    {
+      "heading": "A pruned node is still a full node",
+      "body_markdown": "A full node is defined by independent validation. It checks blocks and transactions against the consensus rules rather than trusting another service's answer.\n\nA pruned full node performs that same validation. It verifies historical blocks as it synchronizes, updates chainstate, maintains the current UTXO set, and continues checking new blocks and transactions.\n\nThe difference appears after validation. An archival node retains the complete raw block history it has downloaded. A pruned node discards eligible older block files while keeping the information needed to continue validating the selected chain.\n\nCalling a pruned node a partial validator is therefore inaccurate. It is better described as a fully validating node with limited historical block retention.",
+      "body_html": "<p>A full node is defined by independent validation. It checks blocks and transactions against the consensus rules rather than trusting another service&#39;s answer.</p>\n<p>A pruned full node performs that same validation. It verifies historical blocks as it synchronizes, updates chainstate, maintains the current UTXO set, and continues checking new blocks and transactions.</p>\n<p>The difference appears after validation. An archival node retains the complete raw block history it has downloaded. A pruned node discards eligible older block files while keeping the information needed to continue validating the selected chain.</p>\n<p>Calling a pruned node a partial validator is therefore inaccurate. It is better described as a fully validating node with limited historical block retention.</p>"
+    },
+    {
+      "heading": "Pruning removes files, not validation history",
+      "body_markdown": "Bitcoin Core stores raw blocks in `blk` files and block undo information in `rev` files. It also maintains a block index and a separate chainstate database representing the current unspent transaction output set.\n\nWhen pruning is enabled, eligible old block and undo files are deleted locally. The chainstate and block index remain available for ongoing validation.\n\nThe node does not forget that the selected chain passed validation merely because it no longer has every old block body on disk. It retains the derived state needed to evaluate new spends and connect new valid blocks.\n\nThis distinction is central:\n\n- Raw block files preserve historical transaction and block data.\n- Undo files support disconnecting retained blocks during reorganizations.\n- Chainstate represents currently spendable outputs and related metadata.\n- The block index records chain structure and block metadata.\n- Optional indexes support additional queries and applications.\n\nPruning primarily reduces retained raw block and undo data. It does not collapse all node databases into one small file.",
+      "body_html": "<p>Bitcoin Core stores raw blocks in <code>blk</code> files and block undo information in <code>rev</code> files. It also maintains a block index and a separate chainstate database representing the current unspent transaction output set.</p>\n<p>When pruning is enabled, eligible old block and undo files are deleted locally. The chainstate and block index remain available for ongoing validation.</p>\n<p>The node does not forget that the selected chain passed validation merely because it no longer has every old block body on disk. It retains the derived state needed to evaluate new spends and connect new valid blocks.</p>\n<p>This distinction is central:</p>\n<ul><li>Raw block files preserve historical transaction and block data.</li><li>Undo files support disconnecting retained blocks during reorganizations.</li><li>Chainstate represents currently spendable outputs and related metadata.</li><li>The block index records chain structure and block metadata.</li><li>Optional indexes support additional queries and applications.</li></ul>\n<p>Pruning primarily reduces retained raw block and undo data. It does not collapse all node databases into one small file.</p>"
+    },
+    {
+      "heading": "The prune target is not the entire data-directory size",
+      "body_markdown": "A configured prune target applies to block-file storage behavior. It is not a promise that the complete Bitcoin Core data directory will remain below that number.\n\nChainstate, the block index, wallet databases, optional indexes, logs, peer data, settings, and temporary overhead can all use additional disk space.\n\nA prune target should be treated as a block-storage target, not a guaranteed cap on the entire installation.",
+      "body_html": "<p>A configured prune target applies to block-file storage behavior. It is not a promise that the complete Bitcoin Core data directory will remain below that number.</p>\n<p>Chainstate, the block index, wallet databases, optional indexes, logs, peer data, settings, and temporary overhead can all use additional disk space.</p>\n<p>A prune target should be treated as a block-storage target, not a guaranteed cap on the entire installation.</p>"
+    },
+    {
+      "heading": "What pruning keeps",
+      "body_markdown": "A normally operating pruned node keeps the current chainstate, block index information, recent block data required by the pruning logic, and the software's other configured databases.\n\nThat is enough to:\n\n- Validate newly received blocks and transactions.\n- Maintain the current UTXO set.\n- Follow valid chain reorganizations within the retained operating window.\n- Relay current transactions and blocks according to local policy and peer behavior.\n- Support applications that rely on current validated state.\n- Enforce the same consensus rules as an archival node running compatible software.\n\nThe node can know that the selected chain was validated even when it no longer holds the raw bytes for every old block.\n\nWhat it cannot do is recreate every historical query directly from files it has already deleted.",
+      "body_html": "<p>A normally operating pruned node keeps the current chainstate, block index information, recent block data required by the pruning logic, and the software&#39;s other configured databases.</p>\n<p>That is enough to:</p>\n<ul><li>Validate newly received blocks and transactions.</li><li>Maintain the current UTXO set.</li><li>Follow valid chain reorganizations within the retained operating window.</li><li>Relay current transactions and blocks according to local policy and peer behavior.</li><li>Support applications that rely on current validated state.</li><li>Enforce the same consensus rules as an archival node running compatible software.</li></ul>\n<p>The node can know that the selected chain was validated even when it no longer holds the raw bytes for every old block.</p>\n<p>What it cannot do is recreate every historical query directly from files it has already deleted.</p>"
+    },
+    {
+      "heading": "Pruning reduces storage, not historical download work",
+      "body_markdown": "A common misunderstanding is that a pruned node skips downloading most of the blockchain.\n\nIt does not.\n\nTo independently validate from genesis under the ordinary initial synchronization path, the node receives historical blocks, checks them, and then deletes eligible old files as it progresses. Pruning can keep ongoing disk use far below archival requirements, but it does not eliminate the initial bandwidth, CPU work, database activity, or elapsed time involved in validation.\n\nThe practical bottleneck varies by hardware and network connection. Storage speed, available memory, processor performance, bandwidth limits, and peer quality can all affect synchronization.\n\nA node that loads an explicitly supported UTXO snapshot may make current chainstate available sooner while background validation continues, but that is a separate feature and does not change the basic meaning of pruning.",
+      "body_html": "<p>A common misunderstanding is that a pruned node skips downloading most of the blockchain.</p>\n<p>It does not.</p>\n<p>To independently validate from genesis under the ordinary initial synchronization path, the node receives historical blocks, checks them, and then deletes eligible old files as it progresses. Pruning can keep ongoing disk use far below archival requirements, but it does not eliminate the initial bandwidth, CPU work, database activity, or elapsed time involved in validation.</p>\n<p>The practical bottleneck varies by hardware and network connection. Storage speed, available memory, processor performance, bandwidth limits, and peer quality can all affect synchronization.</p>\n<p>A node that loads an explicitly supported UTXO snapshot may make current chainstate available sooner while background validation continues, but that is a separate feature and does not change the basic meaning of pruning.</p>"
+    },
+    {
+      "heading": "Pruning changes historical service capabilities",
+      "body_markdown": "An archival node can serve any block it retains when peers or local applications request it. A pruned node cannot serve block data that is no longer on disk.\n\nThat matters for:\n\n- Helping new peers download old blocks.\n- Running explorers or analytics that need arbitrary historical block access.\n- Rebuilding optional indexes from local block files.\n- Performing old wallet rescans.\n- Answering RPC requests for deleted block bodies.\n- Supporting applications that expect complete historical data.\n\nBIP 159 defines a limited-service signal that allows pruned nodes to indicate that they can serve blocks above a recent height range rather than the full historical chain. Software behavior and service flags should still be checked against the implementation and release being used.\n\nA pruned node can remain useful to peers and applications, but it is not an archival data source.",
+      "body_html": "<p>An archival node can serve any block it retains when peers or local applications request it. A pruned node cannot serve block data that is no longer on disk.</p>\n<p>That matters for:</p>\n<ul><li>Helping new peers download old blocks.</li><li>Running explorers or analytics that need arbitrary historical block access.</li><li>Rebuilding optional indexes from local block files.</li><li>Performing old wallet rescans.</li><li>Answering RPC requests for deleted block bodies.</li><li>Supporting applications that expect complete historical data.</li></ul>\n<p>BIP 159 defines a limited-service signal that allows pruned nodes to indicate that they can serve blocks above a recent height range rather than the full historical chain. Software behavior and service flags should still be checked against the implementation and release being used.</p>\n<p>A pruned node can remain useful to peers and applications, but it is not an archival data source.</p>"
+    },
+    {
+      "heading": "Wallet rescans require planning",
+      "body_markdown": "A wallet may need to scan historical blocks to discover transactions associated with its keys or scripts.\n\nIf the relevant blocks have already been pruned, the node cannot complete that scan from its local block files. The operator may need to redownload missing history, restore from a newer wallet state, import information with a known creation time, or use another trusted workflow supported by the wallet software.\n\nThe right recovery process depends on the wallet, descriptors, backups, and software version. Pruning should not be enabled without understanding how connected wallets will be restored and rescanned.\n\nPruning does not damage keys or spendable outputs by itself. The risk is operational: a node may lack the historical files needed to rediscover wallet activity from an old backup.\n\nWallet backups remain separate from node block storage. Keeping more block data is not a substitute for securing wallet keys and recovery information.",
+      "body_html": "<p>A wallet may need to scan historical blocks to discover transactions associated with its keys or scripts.</p>\n<p>If the relevant blocks have already been pruned, the node cannot complete that scan from its local block files. The operator may need to redownload missing history, restore from a newer wallet state, import information with a known creation time, or use another trusted workflow supported by the wallet software.</p>\n<p>The right recovery process depends on the wallet, descriptors, backups, and software version. Pruning should not be enabled without understanding how connected wallets will be restored and rescanned.</p>\n<p>Pruning does not damage keys or spendable outputs by itself. The risk is operational: a node may lack the historical files needed to rediscover wallet activity from an old backup.</p>\n<p>Wallet backups remain separate from node block storage. Keeping more block data is not a substitute for securing wallet keys and recovery information.</p>"
+    },
+    {
+      "heading": "Some indexes and features need historical block data",
+      "body_markdown": "Optional indexes can require data that pruning removes.\n\nBitcoin Core does not allow pruning together with the full transaction index enabled by `-txindex`. The reason is practical: a transaction index promises retrieval across historical transactions, while pruning deletes the block data needed to satisfy those requests.\n\nOther indexes and applications have their own compatibility rules. An operator should not assume that every node feature works with every prune setting.\n\nBefore choosing pruning, identify the services the node must provide. A private wallet backend may work well with pruning. A public block explorer, historical research system, or archival peer generally needs more complete data.",
+      "body_html": "<p>Optional indexes can require data that pruning removes.</p>\n<p>Bitcoin Core does not allow pruning together with the full transaction index enabled by <code>-txindex</code>. The reason is practical: a transaction index promises retrieval across historical transactions, while pruning deletes the block data needed to satisfy those requests.</p>\n<p>Other indexes and applications have their own compatibility rules. An operator should not assume that every node feature works with every prune setting.</p>\n<p>Before choosing pruning, identify the services the node must provide. A private wallet backend may work well with pruning. A public block explorer, historical research system, or archival peer generally needs more complete data.</p>"
+    },
+    {
+      "heading": "Turning pruning off is not instant",
+      "body_markdown": "Deleting old block files is intentionally destructive local storage behavior.\n\nIn Bitcoin Core, reverting from a pruned configuration to an unpruned archival state requires downloading the blockchain again. The node cannot restore files that were deleted unless the operator has a separate compatible copy.\n\nChanging the configured target upward may retain more data going forward, but it does not recreate history already removed. Reindexing from local files is also limited by which files remain.\n\nThis is one of the most important operational tradeoffs. Pruning is easy to enable, but returning to complete archival storage can require substantial time, bandwidth, and disk space.",
+      "body_html": "<p>Deleting old block files is intentionally destructive local storage behavior.</p>\n<p>In Bitcoin Core, reverting from a pruned configuration to an unpruned archival state requires downloading the blockchain again. The node cannot restore files that were deleted unless the operator has a separate compatible copy.</p>\n<p>Changing the configured target upward may retain more data going forward, but it does not recreate history already removed. Reindexing from local files is also limited by which files remain.</p>\n<p>This is one of the most important operational tradeoffs. Pruning is easy to enable, but returning to complete archival storage can require substantial time, bandwidth, and disk space.</p>"
+    },
+    {
+      "heading": "Automatic and manual pruning are different modes",
+      "body_markdown": "Bitcoin Core supports automatic pruning to a target and manual pruning through RPC configuration.\n\nWith automatic pruning, the software manages eligible block-file deletion to remain near the configured target. The target is expressed in mebibytes and is subject to a minimum supported value and implementation overhead.\n\nManual pruning allows an operator to request deletion to a chosen height through the supported RPC workflow. It requires more deliberate administration and should not be confused with setting a very small automatic target.\n\nThe exact option behavior, minimum values, and RPC parameters can change across releases. Operators should use the documentation and built-in help for the version they actually run.",
+      "body_html": "<p>Bitcoin Core supports automatic pruning to a target and manual pruning through RPC configuration.</p>\n<p>With automatic pruning, the software manages eligible block-file deletion to remain near the configured target. The target is expressed in mebibytes and is subject to a minimum supported value and implementation overhead.</p>\n<p>Manual pruning allows an operator to request deletion to a chosen height through the supported RPC workflow. It requires more deliberate administration and should not be confused with setting a very small automatic target.</p>\n<p>The exact option behavior, minimum values, and RPC parameters can change across releases. Operators should use the documentation and built-in help for the version they actually run.</p>"
+    },
+    {
+      "heading": "A smaller prune target creates tighter operational margins",
+      "body_markdown": "Reducing the target can make a node fit on smaller storage, but the smallest possible value is not always the best practical choice.\n\nA tight target leaves less retained history for reorganizations, rescans, troubleshooting, local applications, and temporary operational needs. It may also increase the frequency of file deletion and reduce the range of blocks the node can serve.\n\nA larger target preserves more recent history while still avoiding complete archival storage.\n\nThe correct choice depends on available disk, expected applications, wallet recovery needs, service goals, and the cost of redownloading. A node appliance's default should not automatically be treated as ideal for every operator.",
+      "body_html": "<p>Reducing the target can make a node fit on smaller storage, but the smallest possible value is not always the best practical choice.</p>\n<p>A tight target leaves less retained history for reorganizations, rescans, troubleshooting, local applications, and temporary operational needs. It may also increase the frequency of file deletion and reduce the range of blocks the node can serve.</p>\n<p>A larger target preserves more recent history while still avoiding complete archival storage.</p>\n<p>The correct choice depends on available disk, expected applications, wallet recovery needs, service goals, and the cost of redownloading. A node appliance&#39;s default should not automatically be treated as ideal for every operator.</p>"
+    },
+    {
+      "heading": "Pruning and snapshots solve different problems",
+      "body_markdown": "Pruning controls which validated block files remain on disk. A UTXO snapshot changes how quickly supported software can make a recent chainstate available while background validation continues.\n\nThe two features can be used in the same broader operating plan, but they should not be treated as interchangeable. A snapshot is not a permanent substitute for validation, and pruning does not create or authenticate a snapshot.\n\nAn operator should follow the exact implementation's rules for loading, verifying, and completing background validation. Applications that depend on the node should understand whether the active chainstate came from ordinary sequential synchronization or a supported snapshot workflow and whether background validation has finished.\n\nThis distinction matters for documentation. Saying that a pruned node starts from a snapshot is inaccurate as a general definition. Pruning describes retained storage after validation. Snapshot activation is a separate synchronization feature with its own trust, verification, and recovery behavior.",
+      "body_html": "<p>Pruning controls which validated block files remain on disk. A UTXO snapshot changes how quickly supported software can make a recent chainstate available while background validation continues.</p>\n<p>The two features can be used in the same broader operating plan, but they should not be treated as interchangeable. A snapshot is not a permanent substitute for validation, and pruning does not create or authenticate a snapshot.</p>\n<p>An operator should follow the exact implementation&#39;s rules for loading, verifying, and completing background validation. Applications that depend on the node should understand whether the active chainstate came from ordinary sequential synchronization or a supported snapshot workflow and whether background validation has finished.</p>\n<p>This distinction matters for documentation. Saying that a pruned node starts from a snapshot is inaccurate as a general definition. Pruning describes retained storage after validation. Snapshot activation is a separate synchronization feature with its own trust, verification, and recovery behavior.</p>"
+    },
+    {
+      "heading": "Pruning does not make a node private or secure by itself",
+      "body_markdown": "Pruning reduces disk use. It does not automatically hide peer connections, encrypt node data, secure RPC access, protect wallet keys, verify software downloads, or keep the operating system maintained.\n\nA pruned node has the same need for secure software installation, access controls, updates, monitoring, and backups as an archival node.\n\nIt can improve the feasibility of running a validating node on constrained hardware, which may strengthen an operator's ability to verify Bitcoin directly. That benefit should not be confused with a complete privacy or security strategy.",
+      "body_html": "<p>Pruning reduces disk use. It does not automatically hide peer connections, encrypt node data, secure RPC access, protect wallet keys, verify software downloads, or keep the operating system maintained.</p>\n<p>A pruned node has the same need for secure software installation, access controls, updates, monitoring, and backups as an archival node.</p>\n<p>It can improve the feasibility of running a validating node on constrained hardware, which may strengthen an operator&#39;s ability to verify Bitcoin directly. That benefit should not be confused with a complete privacy or security strategy.</p>"
+    },
+    {
+      "heading": "Pruned and archival nodes serve different goals",
+      "body_markdown": "A pruned node is often a strong fit when the priority is current independent validation with limited storage.\n\nAn archival node is often the better fit when the operator needs:\n\n- Complete historical RPC access.\n- Old wallet rescans without redownloading.\n- A full transaction index.\n- Block explorer or analytics services.\n- Historical block serving.\n- Local reindexing from the complete block set.\n- Long-term research or preservation.\n\nNeither configuration is more valid at the consensus layer. Both can enforce the same Bitcoin rules.\n\nThe meaningful difference is what each node retains and can provide after validation. Pruning trades historical availability for lower storage requirements while preserving independent chain validation.",
+      "body_html": "<p>A pruned node is often a strong fit when the priority is current independent validation with limited storage.</p>\n<p>An archival node is often the better fit when the operator needs:</p>\n<ul><li>Complete historical RPC access.</li><li>Old wallet rescans without redownloading.</li><li>A full transaction index.</li><li>Block explorer or analytics services.</li><li>Historical block serving.</li><li>Local reindexing from the complete block set.</li><li>Long-term research or preservation.</li></ul>\n<p>Neither configuration is more valid at the consensus layer. Both can enforce the same Bitcoin rules.</p>\n<p>The meaningful difference is what each node retains and can provide after validation. Pruning trades historical availability for lower storage requirements while preserving independent chain validation.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Pruned node",
+      "definition": "A fully validating node configured to discard older block data after verification."
+    },
+    {
+      "term": "Pruning",
+      "definition": "A node storage mode that removes older block data after validation while retaining the information needed to continue validating the chain."
+    },
+    {
+      "term": "Full node",
+      "definition": "Software that independently verifies Bitcoin blocks and transactions against consensus rules."
+    },
+    {
+      "term": "Node",
+      "definition": "Bitcoin software that communicates with peers and may validate, relay, store, or serve network data."
+    },
+    {
+      "term": "Validation",
+      "definition": "The process of checking transactions and blocks against applicable rules."
+    },
+    {
+      "term": "UTXO",
+      "definition": "An unspent transaction output that can be used as an input in a later transaction."
+    },
+    {
+      "term": "Policy",
+      "definition": "Local software rules that influence transaction relay, mempool acceptance, or default behavior without changing consensus validity."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bitcoin Core startup-option implementation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/init.cpp",
+      "supports": "The `-prune` modes, automatic and manual pruning behavior, minimum target handling, incompatibility with `-txindex`, and the warning that returning to unpruned operation requires downloading the blockchain again."
+    },
+    {
+      "title": "Bitcoin Core block storage implementation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/node/blockstorage.cpp",
+      "supports": "Eligibility and deletion of block and undo files, pruning state, retained block data, and local block-file management."
+    },
+    {
+      "title": "Bitcoin Core validation implementation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/validation.cpp",
+      "supports": "Historical block validation, chainstate updates, block connection and disconnection, and continued validation after pruning."
+    },
+    {
+      "title": "Bitcoin Core files documentation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/doc/files.md",
+      "supports": "The distinction among block files, undo files, chainstate, indexes, logs, settings, and wallet-related data."
+    },
+    {
+      "title": "Bitcoin Core getblockchaininfo RPC",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://bitcoincore.org/en/doc/31.0.0/rpc/blockchain/getblockchaininfo/",
+      "supports": "Reported pruning state, prune height, automatic pruning status, target size, chain progress, and validated-chain information."
+    },
+    {
+      "title": "Bitcoin Core pruneblockchain RPC",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://bitcoincore.org/en/doc/31.0.0/rpc/blockchain/pruneblockchain/",
+      "supports": "Manual block pruning through RPC and height-based pruning requests."
+    },
+    {
+      "title": "BIP 159: NODE_NETWORK_LIMITED service bit",
+      "author_or_publisher": "Jonas Schnelli",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0159.mediawiki",
+      "supports": "Signaling by nodes that can serve a limited recent block range rather than the complete historical chain."
+    },
+    {
+      "title": "Bitcoin Core reduce-traffic documentation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/doc/reduce-traffic.md",
+      "supports": "Bandwidth-related operation, block and transaction relay considerations, and the distinction between storage pruning and network traffic."
+    },
+    {
+      "title": "Bitcoin Core README",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/README.md",
+      "supports": "Bitcoin Core's role in downloading and fully validating blocks and transactions."
+    },
+    {
+      "title": "Bitcoin Developer Guide: Block Chain",
+      "author_or_publisher": "Bitcoin.org contributors",
+      "url": "https://developer.bitcoin.org/devguide/block_chain.html",
+      "supports": "Sequential block validation, UTXO state, chain selection, and the historical data context required for independent validation."
+    }
+  ],
+  "seo_title": "What Is a Pruned Bitcoin Node? Tradeoffs Explained",
+  "meta_description": "Learn how a pruned Bitcoin node fully validates the chain while deleting older block data, and compare its storage benefits with archival-node limitations.",
+  "excerpt": "A pruned Bitcoin node independently validates the chain but discards eligible older block data, reducing storage while limiting historical access and service.",
+  "reading_time": "12 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-NETWORK",
+    "label": "The Bitcoin Network",
+    "subcategory": "Nodes",
+    "depth": "Shallow",
+    "format": "Comparison"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-021",
+      "title": "What Is a Bitcoin Full Node?",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-023",
+      "title": "How to Run a Bitcoin Node",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": [
+      {
+        "registry_id": "MSC-GUIDE-013",
+        "title": "What Are UTXOs in Bitcoin?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-021",
+        "title": "What Is a Bitcoin Full Node?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-023",
+        "title": "How to Run a Bitcoin Node",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-024",
+        "title": "Bitcoin Node Software Explained",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-025",
+        "title": "What Happens Inside the Bitcoin Mempool?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-027",
+        "title": "How the Bitcoin Blockchain Works",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-049",
+        "title": "What Is Bitcoin Core?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-061",
+        "title": "How Bitcoin RPC Works",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GLOSSARY-001",
+        "title": "Bitcoin Glossary",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-HUB-NETWORK",
+        "title": "The Bitcoin Network",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-PATH-NETWORK",
+        "title": "Understand the Network",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-PATH-BUILD",
+        "title": "Build on Bitcoin",
+        "active": false,
+        "url": null
+      }
+    ]
+  },
+  "review_dates": {
+    "reviewed": "2026-07-18",
+    "copy_locked": "2026-07-18",
+    "human_verification": "2026-07-18"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "Validate First, Prune Later",
+      "educational_purpose": "Show that pruning follows full validation rather than skipping old blocks.",
+      "recommended_placement": "After the section titled A pruned node is still a full node.",
+      "visual_description": "Navigation-chart timeline. Historical blocks enter a validation station one by one. Validated state flows into chainstate, while older block-file crates move into a marked deletion zone only after validation.",
+      "required_labels": "Historical blocks, Full validation, Chainstate update, Retained recent blocks, Eligible old block files, Prune after validation",
+      "caption": "A pruned node validates historical blocks before deleting eligible old block files.",
+      "alt_text": "Technical timeline showing historical Bitcoin blocks passing through full validation, updating chainstate, and then becoming eligible for local pruning.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Keep the validation station and split between chainstate retention and block-file pruning inside the center crop.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "What a Pruned Node Keeps",
+      "educational_purpose": "Distinguish current validation data from historical files that may be removed.",
+      "recommended_placement": "After the section titled What pruning keeps.",
+      "visual_description": "Old infrastructure-manual storage cabinet. Permanent drawers hold chainstate, block index, configuration, and peer data. A rolling recent-block drawer remains. Faded archival drawers outside the cabinet are labeled Deleted locally.",
+      "required_labels": "Chainstate, UTXO set, Block index, Recent block data, Configuration, Optional indexes, Older block files deleted locally",
+      "caption": "Pruning reduces retained historical block data while preserving the state needed to validate new activity.",
+      "alt_text": "Storage diagram showing a pruned Bitcoin node retaining chainstate, block index, recent blocks, and configuration while older block files are deleted locally.",
+      "image_orientation": "Portrait",
+      "mobile_crop_notes": "Use a single vertical cabinet with the deleted historical drawer shown beside the lower half.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Pruned Node Versus Archival Node",
+      "educational_purpose": "Compare operating capabilities without implying different consensus validity.",
+      "recommended_placement": "After the section titled Pruned and archival nodes serve different goals.",
+      "visual_description": "Two side-by-side field stations sharing the same validation gauge. The pruned station has limited historical shelves and a smaller storage footprint. The archival station has complete historical shelves and supports old-block queries and rescans.",
+      "required_labels": "Same consensus validation, Pruned node, Archival node, Lower block storage, Complete block history, Historical serving, Old wallet rescans",
+      "caption": "Pruned and archival nodes can enforce the same rules, but they retain and serve different amounts of historical data.",
+      "alt_text": "Comparison diagram showing pruned and archival Bitcoin nodes using the same validation rules but different historical storage and service capabilities.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack the two stations vertically and repeat the shared validation label above both.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}

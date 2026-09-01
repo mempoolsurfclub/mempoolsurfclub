@@ -1,0 +1,266 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-026-bitcoin-blocks.md",
+  "source_sha256": "1dd308a00d6911d628b35bf044d54ffed24ed0211b5035d4bf973c8711bf56bd",
+  "registry_id": "MSC-GUIDE-026",
+  "status": "COPY_LOCKED",
+  "h1": "How Bitcoin Blocks Work",
+  "introductory_deck": "A Bitcoin block is a valid batch of transactions linked to prior chain history through proof of work. Miners construct candidate blocks, but nodes decide whether a received block satisfies the consensus rules. A block combines an 80-byte header, a transaction list beginning with a coinbase transaction, and commitments that let nodes verify its contents.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "Bitcoin processes transactions through blocks, but a block is more than a container filled by a miner.\n\nIt is a structured proposal with proof of work, a link to prior history, a commitment to its transactions, and a set of transactions that must satisfy Bitcoin's rules together. A miner can construct and hash a candidate. The candidate becomes part of a node's selected chain only after the node validates it and chain selection places it on the active history.\n\nUnderstanding that sequence prevents several common mistakes. Miners do not vote transactions valid. A block hash does not excuse invalid contents. A transaction does not become confirmed merely because it appeared in a template.",
+      "body_html": "<p>Bitcoin processes transactions through blocks, but a block is more than a container filled by a miner.</p>\n<p>It is a structured proposal with proof of work, a link to prior history, a commitment to its transactions, and a set of transactions that must satisfy Bitcoin&#39;s rules together. A miner can construct and hash a candidate. The candidate becomes part of a node&#39;s selected chain only after the node validates it and chain selection places it on the active history.</p>\n<p>Understanding that sequence prevents several common mistakes. Miners do not vote transactions valid. A block hash does not excuse invalid contents. A transaction does not become confirmed merely because it appeared in a template.</p>"
+    },
+    {
+      "heading": "Candidate blocks, mined blocks, and accepted blocks are different stages",
+      "body_markdown": "A mining system begins with a candidate block.\n\nThe candidate usually contains:\n\n- A header linked to a chosen previous block.\n- A coinbase transaction created for the candidate.\n- A selected set of additional transactions.\n- A Merkle root committing to the transaction identifiers.\n- Any required witness commitment.\n- A target encoded in the header's `nBits` field.\n- A timestamp and version.\n- A nonce plus other changeable data used while searching.\n\nThe miner repeatedly hashes block headers or related header variants while changing fields that alter the header commitment. Most results do not satisfy the target.\n\nWhen a hash is at or below the required target, the miner can submit the resulting block to the network. That does not guarantee acceptance. Each receiving node checks proof of work, header context, transaction validity, block limits, coinbase rules, commitments, and other consensus conditions.\n\nA block is valid only if the complete object passes those checks. A valid block may still compete with another valid branch before one chain becomes selected.",
+      "body_html": "<p>A mining system begins with a candidate block.</p>\n<p>The candidate usually contains:</p>\n<ul><li>A header linked to a chosen previous block.</li><li>A coinbase transaction created for the candidate.</li><li>A selected set of additional transactions.</li><li>A Merkle root committing to the transaction identifiers.</li><li>Any required witness commitment.</li><li>A target encoded in the header&#39;s <code>nBits</code> field.</li><li>A timestamp and version.</li><li>A nonce plus other changeable data used while searching.</li></ul>\n<p>The miner repeatedly hashes block headers or related header variants while changing fields that alter the header commitment. Most results do not satisfy the target.</p>\n<p>When a hash is at or below the required target, the miner can submit the resulting block to the network. That does not guarantee acceptance. Each receiving node checks proof of work, header context, transaction validity, block limits, coinbase rules, commitments, and other consensus conditions.</p>\n<p>A block is valid only if the complete object passes those checks. A valid block may still compete with another valid branch before one chain becomes selected.</p>"
+    },
+    {
+      "heading": "The block header is 80 bytes",
+      "body_markdown": "The serialized Bitcoin block header contains six fields:\n\n- Version, 4 bytes.\n- Previous block hash, 32 bytes.\n- Merkle root, 32 bytes.\n- Timestamp, 4 bytes.\n- Encoded target, commonly called `nBits`, 4 bytes.\n- Nonce, 4 bytes.\n\nTogether they form an 80-byte header.\n\nThe block hash is the double-SHA-256 hash of this serialized header, interpreted under Bitcoin's proof-of-work rules. The hash must satisfy the target represented by `nBits`.\n\nOnly the header is repeatedly hashed in the basic proof-of-work loop. The transaction list affects that loop through the Merkle root and, for witness data, through the witness commitment included in the coinbase transaction.\n\nChanging a transaction, its order, the coinbase data, or a witness commitment changes a commitment and ultimately changes the header being hashed.",
+      "body_html": "<p>The serialized Bitcoin block header contains six fields:</p>\n<ul><li>Version, 4 bytes.</li><li>Previous block hash, 32 bytes.</li><li>Merkle root, 32 bytes.</li><li>Timestamp, 4 bytes.</li><li>Encoded target, commonly called <code>nBits</code>, 4 bytes.</li><li>Nonce, 4 bytes.</li></ul>\n<p>Together they form an 80-byte header.</p>\n<p>The block hash is the double-SHA-256 hash of this serialized header, interpreted under Bitcoin&#39;s proof-of-work rules. The hash must satisfy the target represented by <code>nBits</code>.</p>\n<p>Only the header is repeatedly hashed in the basic proof-of-work loop. The transaction list affects that loop through the Merkle root and, for witness data, through the witness commitment included in the coinbase transaction.</p>\n<p>Changing a transaction, its order, the coinbase data, or a witness commitment changes a commitment and ultimately changes the header being hashed.</p>"
+    },
+    {
+      "heading": "The previous-block field links history",
+      "body_markdown": "The previous block hash points to the block the candidate seeks to extend.\n\nThat link creates a chain of headers. Altering an earlier block changes its hash, which breaks the next block's previous-hash reference and every later link built from it.\n\nThe link alone does not select the active chain. Nodes can know about multiple valid branches. They compare accumulated proof of work among valid candidates and activate the chain their rules select.\n\nA miner cannot point to an invalid parent and make it acceptable through additional hashing. The branch must remain valid under the node's consensus rules.",
+      "body_html": "<p>The previous block hash points to the block the candidate seeks to extend.</p>\n<p>That link creates a chain of headers. Altering an earlier block changes its hash, which breaks the next block&#39;s previous-hash reference and every later link built from it.</p>\n<p>The link alone does not select the active chain. Nodes can know about multiple valid branches. They compare accumulated proof of work among valid candidates and activate the chain their rules select.</p>\n<p>A miner cannot point to an invalid parent and make it acceptable through additional hashing. The branch must remain valid under the node&#39;s consensus rules.</p>"
+    },
+    {
+      "heading": "The Merkle root commits to transaction identifiers",
+      "body_markdown": "Bitcoin arranges the block's transaction identifiers into a Merkle tree and places the resulting Merkle root in the header.\n\nThe root is a compact commitment to the ordered transaction list. A node can recompute it from the block and reject the block if it does not match the header.\n\nThe root does not store every transaction inside the header. The full transactions still travel with the block or are reconstructed through a relay protocol. The root lets a verifier detect a mismatch between the header commitment and the supplied transaction set.\n\nTransaction order matters. Reordering transactions changes the Merkle tree and therefore the root.\n\nA Merkle branch can later prove that a transaction identifier is included in a particular block without listing every other transaction identifier. That proof addresses inclusion in the committed set. It does not by itself prove that the block is valid, selected, or deeply confirmed.",
+      "body_html": "<p>Bitcoin arranges the block&#39;s transaction identifiers into a Merkle tree and places the resulting Merkle root in the header.</p>\n<p>The root is a compact commitment to the ordered transaction list. A node can recompute it from the block and reject the block if it does not match the header.</p>\n<p>The root does not store every transaction inside the header. The full transactions still travel with the block or are reconstructed through a relay protocol. The root lets a verifier detect a mismatch between the header commitment and the supplied transaction set.</p>\n<p>Transaction order matters. Reordering transactions changes the Merkle tree and therefore the root.</p>\n<p>A Merkle branch can later prove that a transaction identifier is included in a particular block without listing every other transaction identifier. That proof addresses inclusion in the committed set. It does not by itself prove that the block is valid, selected, or deeply confirmed.</p>"
+    },
+    {
+      "heading": "SegWit adds a witness commitment",
+      "body_markdown": "The ordinary Merkle root commits to transaction identifiers that exclude segregated witness data.\n\nBIP 141 therefore defines a separate witness commitment. The commitment is placed in an output of the coinbase transaction and commits to a witness Merkle root together with a reserved value from the coinbase witness.\n\nNodes enforcing SegWit rules verify this commitment when the block contains witness data under the applicable conditions.\n\nThis is why saying \"the header Merkle root commits to every byte in the block\" is inaccurate. The transaction-id Merkle root and the coinbase witness commitment cover different parts of the transaction data.",
+      "body_html": "<p>The ordinary Merkle root commits to transaction identifiers that exclude segregated witness data.</p>\n<p>BIP 141 therefore defines a separate witness commitment. The commitment is placed in an output of the coinbase transaction and commits to a witness Merkle root together with a reserved value from the coinbase witness.</p>\n<p>Nodes enforcing SegWit rules verify this commitment when the block contains witness data under the applicable conditions.</p>\n<p>This is why saying &quot;the header Merkle root commits to every byte in the block&quot; is inaccurate. The transaction-id Merkle root and the coinbase witness commitment cover different parts of the transaction data.</p>"
+    },
+    {
+      "heading": "The coinbase transaction comes first",
+      "body_markdown": "The first transaction in a Bitcoin block is the coinbase transaction.\n\nIt does not spend an earlier UTXO through ordinary inputs. Instead, its special input identifies it as coinbase and includes required or miner-chosen data. Under BIP 34, the block height is encoded at the beginning of the coinbase input's script data for applicable blocks.\n\nThe coinbase transaction can create outputs paying the block subsidy and collected transaction fees. The total output value may not exceed the amount allowed under the consensus rules for that block.\n\nA miner may divide the permitted value among several outputs or use a template with particular destinations. The consensus rule concerns the allowed total and transaction validity, not one mandatory payout address.\n\nCoinbase outputs are subject to a maturity rule. They can be spent only in a block whose height is at least 100 greater than the height of the block that created them.",
+      "body_html": "<p>The first transaction in a Bitcoin block is the coinbase transaction.</p>\n<p>It does not spend an earlier UTXO through ordinary inputs. Instead, its special input identifies it as coinbase and includes required or miner-chosen data. Under BIP 34, the block height is encoded at the beginning of the coinbase input&#39;s script data for applicable blocks.</p>\n<p>The coinbase transaction can create outputs paying the block subsidy and collected transaction fees. The total output value may not exceed the amount allowed under the consensus rules for that block.</p>\n<p>A miner may divide the permitted value among several outputs or use a template with particular destinations. The consensus rule concerns the allowed total and transaction validity, not one mandatory payout address.</p>\n<p>Coinbase outputs are subject to a maturity rule. They can be spent only in a block whose height is at least 100 greater than the height of the block that created them.</p>"
+    },
+    {
+      "heading": "Transaction fees are not separate block objects",
+      "body_markdown": "Every non-coinbase transaction consumes input value and creates output value. When input value exceeds output value, the difference is the transaction fee.\n\nThe block's total fees are the sum of those differences for its included transactions. The coinbase transaction may claim up to the current block subsidy plus those fees.\n\nThere is no separate fee transaction added after the block. Fees are implicit in the included transactions and become claimable through the coinbase transaction.\n\nA block can include transactions with different fee rates. Consensus does not require a miner to sort transactions from highest fee rate to lowest. Mining policy and dependencies determine practical selection.",
+      "body_html": "<p>Every non-coinbase transaction consumes input value and creates output value. When input value exceeds output value, the difference is the transaction fee.</p>\n<p>The block&#39;s total fees are the sum of those differences for its included transactions. The coinbase transaction may claim up to the current block subsidy plus those fees.</p>\n<p>There is no separate fee transaction added after the block. Fees are implicit in the included transactions and become claimable through the coinbase transaction.</p>\n<p>A block can include transactions with different fee rates. Consensus does not require a miner to sort transactions from highest fee rate to lowest. Mining policy and dependencies determine practical selection.</p>"
+    },
+    {
+      "heading": "Dependencies constrain transaction order",
+      "body_markdown": "A transaction can spend an output created by an earlier transaction in the same block.\n\nThe parent must appear before the child so the output exists when the node validates the child. The coinbase transaction must be first, but other transaction ordering is largely shaped by these dependencies and the miner's chosen template policy.\n\nA miner cannot include two transactions that spend the same output. It also cannot include a child before the in-block parent it depends on.\n\nA candidate builder commonly selects related transactions as packages because a high-fee child may justify including a lower-fee parent. The final block still contains individually serialized transactions in a valid order.",
+      "body_html": "<p>A transaction can spend an output created by an earlier transaction in the same block.</p>\n<p>The parent must appear before the child so the output exists when the node validates the child. The coinbase transaction must be first, but other transaction ordering is largely shaped by these dependencies and the miner&#39;s chosen template policy.</p>\n<p>A miner cannot include two transactions that spend the same output. It also cannot include a child before the in-block parent it depends on.</p>\n<p>A candidate builder commonly selects related transactions as packages because a high-fee child may justify including a lower-fee parent. The final block still contains individually serialized transactions in a valid order.</p>"
+    },
+    {
+      "heading": "Block weight limits the transaction set",
+      "body_markdown": "SegWit introduced block weight as the main consensus accounting measure for block size.\n\nBitcoin's maximum block weight is 4,000,000 weight units. Witness bytes receive a lower weight than non-witness bytes under the defined formula.\n\nThe limit does not mean every valid block is four megabytes on disk or on the wire. Actual serialized size depends on the mix of witness and non-witness data. A block containing no discounted witness data reaches the weight limit at a much smaller serialized size than a witness-heavy block.\n\nCandidate builders also reserve space and weight for the coinbase transaction, commitments, and safety margins. A template may remain below the theoretical maximum.\n\nWeight is a consensus limit. Local mining policy may use additional limits, but nodes must accept a block that satisfies consensus even when its transaction mix would not match their own template policy.",
+      "body_html": "<p>SegWit introduced block weight as the main consensus accounting measure for block size.</p>\n<p>Bitcoin&#39;s maximum block weight is 4,000,000 weight units. Witness bytes receive a lower weight than non-witness bytes under the defined formula.</p>\n<p>The limit does not mean every valid block is four megabytes on disk or on the wire. Actual serialized size depends on the mix of witness and non-witness data. A block containing no discounted witness data reaches the weight limit at a much smaller serialized size than a witness-heavy block.</p>\n<p>Candidate builders also reserve space and weight for the coinbase transaction, commitments, and safety margins. A template may remain below the theoretical maximum.</p>\n<p>Weight is a consensus limit. Local mining policy may use additional limits, but nodes must accept a block that satisfies consensus even when its transaction mix would not match their own template policy.</p>"
+    },
+    {
+      "heading": "Timestamps are constrained but not a precise clock",
+      "body_markdown": "The block header contains a miner-selected timestamp measured in seconds.\n\nConsensus applies contextual time rules. A block's timestamp must be greater than the median time of a defined set of previous blocks. Bitcoin Core also does not accept a header while its timestamp is more than two hours ahead of the node's current clock.\n\nA block timestamp is not a trusted record of the exact moment the block was found. Miners have limited freedom within the valid range, and network arrival times differ.\n\nBitcoin's target spacing is ten minutes, but individual block intervals vary widely. The timestamp field does not turn that target into an exact schedule.",
+      "body_html": "<p>The block header contains a miner-selected timestamp measured in seconds.</p>\n<p>Consensus applies contextual time rules. A block&#39;s timestamp must be greater than the median time of a defined set of previous blocks. Bitcoin Core also does not accept a header while its timestamp is more than two hours ahead of the node&#39;s current clock.</p>\n<p>A block timestamp is not a trusted record of the exact moment the block was found. Miners have limited freedom within the valid range, and network arrival times differ.</p>\n<p>Bitcoin&#39;s target spacing is ten minutes, but individual block intervals vary widely. The timestamp field does not turn that target into an exact schedule.</p>"
+    },
+    {
+      "heading": "Proof of work covers the header commitment",
+      "body_markdown": "Proof of work demonstrates that a valid header hash was found below the target.\n\nBecause the header includes the previous block hash and Merkle root, the proof is tied to a particular parent and committed transaction set. If the miner changes a transaction or coinbase field, the Merkle root or witness commitment path changes and the header work must be searched again.\n\nProof of work does not validate signatures, UTXO availability, block weight, coinbase value, or script execution. Nodes perform those checks separately.\n\nAn invalid block can have a hash below the target. Nodes enforcing the rules still reject it.",
+      "body_html": "<p>Proof of work demonstrates that a valid header hash was found below the target.</p>\n<p>Because the header includes the previous block hash and Merkle root, the proof is tied to a particular parent and committed transaction set. If the miner changes a transaction or coinbase field, the Merkle root or witness commitment path changes and the header work must be searched again.</p>\n<p>Proof of work does not validate signatures, UTXO availability, block weight, coinbase value, or script execution. Nodes perform those checks separately.</p>\n<p>An invalid block can have a hash below the target. Nodes enforcing the rules still reject it.</p>"
+    },
+    {
+      "heading": "Nodes validate blocks independently",
+      "body_markdown": "When a node receives a block, it checks multiple layers.\n\nHeader checks include:\n\n- Proof of work satisfies the encoded target.\n- The target is permitted for that height and network.\n- The previous block is known or requested.\n- Version and activation rules are satisfied.\n- Time constraints are satisfied.\n\nBlock and transaction checks include:\n\n- The transaction Merkle root matches.\n- The coinbase transaction is present and first.\n- No extra coinbase transaction appears.\n- Transaction syntax and amounts are valid.\n- Inputs exist and are unspent in the applicable state.\n- Spending conditions and signatures are satisfied.\n- Locktime and sequence rules are satisfied.\n- Block weight and other consensus limits are respected.\n- The coinbase claim does not exceed subsidy plus fees.\n- Required witness commitments are valid.\n\nThe exact software path is more detailed, but the principle is stable: a miner proposes; a node verifies.",
+      "body_html": "<p>When a node receives a block, it checks multiple layers.</p>\n<p>Header checks include:</p>\n<ul><li>Proof of work satisfies the encoded target.</li><li>The target is permitted for that height and network.</li><li>The previous block is known or requested.</li><li>Version and activation rules are satisfied.</li><li>Time constraints are satisfied.</li></ul>\n<p>Block and transaction checks include:</p>\n<ul><li>The transaction Merkle root matches.</li><li>The coinbase transaction is present and first.</li><li>No extra coinbase transaction appears.</li><li>Transaction syntax and amounts are valid.</li><li>Inputs exist and are unspent in the applicable state.</li><li>Spending conditions and signatures are satisfied.</li><li>Locktime and sequence rules are satisfied.</li><li>Block weight and other consensus limits are respected.</li><li>The coinbase claim does not exceed subsidy plus fees.</li><li>Required witness commitments are valid.</li></ul>\n<p>The exact software path is more detailed, but the principle is stable: a miner proposes; a node verifies.</p>"
+    },
+    {
+      "heading": "Relay can avoid sending every transaction again",
+      "body_markdown": "A newly found block can be large enough that efficient propagation matters.\n\nBIP 152 compact block relay lets peers announce a block using its header, short transaction identifiers, and a small set of prefetched transactions. A receiving node can reconstruct much of the block from transactions it already knows, then request what is missing.\n\nCompact relay does not change block validity. It is a transport optimization. The reconstructed block must still pass the same checks as a fully transmitted block.\n\nIf reconstruction fails or transactions are missing, peers can request additional data or fall back to other relay behavior.",
+      "body_html": "<p>A newly found block can be large enough that efficient propagation matters.</p>\n<p>BIP 152 compact block relay lets peers announce a block using its header, short transaction identifiers, and a small set of prefetched transactions. A receiving node can reconstruct much of the block from transactions it already knows, then request what is missing.</p>\n<p>Compact relay does not change block validity. It is a transport optimization. The reconstructed block must still pass the same checks as a fully transmitted block.</p>\n<p>If reconstruction fails or transactions are missing, peers can request additional data or fall back to other relay behavior.</p>"
+    },
+    {
+      "heading": "A valid block can still become stale",
+      "body_markdown": "Two miners can find valid blocks that extend the same parent before either block has reached the entire network.\n\nDifferent nodes may temporarily select different tips. As one branch gains more accumulated proof of work, nodes that learn about the stronger valid branch can reorganize to it.\n\nA valid block that is not part of the ultimately selected chain is often called stale. Its coinbase outputs do not mature on the selected chain, and its transactions may return to unconfirmed status unless they also appear in the selected branch.\n\nThis does not mean the stale block was invalid. It means another valid branch became the selected history.",
+      "body_html": "<p>Two miners can find valid blocks that extend the same parent before either block has reached the entire network.</p>\n<p>Different nodes may temporarily select different tips. As one branch gains more accumulated proof of work, nodes that learn about the stronger valid branch can reorganize to it.</p>\n<p>A valid block that is not part of the ultimately selected chain is often called stale. Its coinbase outputs do not mature on the selected chain, and its transactions may return to unconfirmed status unless they also appear in the selected branch.</p>\n<p>This does not mean the stale block was invalid. It means another valid branch became the selected history.</p>"
+    },
+    {
+      "heading": "A block confirms transactions only on the selected chain",
+      "body_markdown": "A transaction has one confirmation when it appears in a block on the node's selected chain. Each later block added to that chain increases its confirmation depth.\n\nA reorganization can reduce or remove those confirmations. Bitcoin does not mark a transaction instantly immutable at first inclusion.\n\nAs depth grows, replacing that history generally requires more competing proof of work and becomes less practical under ordinary assumptions. The appropriate confirmation threshold remains contextual rather than universal.",
+      "body_html": "<p>A transaction has one confirmation when it appears in a block on the node&#39;s selected chain. Each later block added to that chain increases its confirmation depth.</p>\n<p>A reorganization can reduce or remove those confirmations. Bitcoin does not mark a transaction instantly immutable at first inclusion.</p>\n<p>As depth grows, replacing that history generally requires more competing proof of work and becomes less practical under ordinary assumptions. The appropriate confirmation threshold remains contextual rather than universal.</p>"
+    },
+    {
+      "heading": "A block is a validated link, not merely a batch",
+      "body_markdown": "A concise block model has four parts:\n\n1. A miner constructs a candidate linked to a parent.\n2. The transaction set is committed through the Merkle root and, when required, a witness commitment.\n3. Proof of work is searched over the header commitment.\n4. Nodes independently validate the complete block and select among valid chains by accumulated work.\n\nBlocks organize transaction settlement into verifiable steps. Their security does not come from trusting the miner, the pool, or a block explorer. It comes from commitments, proof of work, and independent validation under shared rules.",
+      "body_html": "<p>A concise block model has four parts:</p>\n<ol><li>A miner constructs a candidate linked to a parent.</li><li>The transaction set is committed through the Merkle root and, when required, a witness commitment.</li><li>Proof of work is searched over the header commitment.</li><li>Nodes independently validate the complete block and select among valid chains by accumulated work.</li></ol>\n<p>Blocks organize transaction settlement into verifiable steps. Their security does not come from trusting the miner, the pool, or a block explorer. It comes from commitments, proof of work, and independent validation under shared rules.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Block",
+      "definition": "A valid batch of Bitcoin transactions linked to prior chain history through proof of work."
+    },
+    {
+      "term": "Transaction",
+      "definition": "A data structure that spends existing UTXOs and creates new outputs."
+    },
+    {
+      "term": "Mining",
+      "definition": "The proof-of-work process that orders valid transactions into blocks and competes to extend the Bitcoin chain."
+    },
+    {
+      "term": "Merkle root",
+      "definition": "A compact commitment to the transaction set inside a Bitcoin block."
+    },
+    {
+      "term": "Proof of work",
+      "definition": "The computational process miners use to produce block hashes below the network target."
+    },
+    {
+      "term": "Confirmation",
+      "definition": "The inclusion of a transaction in a block, followed by additional blocks that increase settlement depth."
+    },
+    {
+      "term": "Reorganization",
+      "definition": "A change in the selected chain tip when a competing valid chain accumulates more proof of work."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bitcoin Core block data structures",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/primitives/block.h",
+      "supports": "The serialized block header fields, block transaction vector, header hashing object, and structural distinction between a header and a full block."
+    },
+    {
+      "title": "Bitcoin Core consensus constants",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/consensus/consensus.h",
+      "supports": "Maximum block weight, block-weight accounting constants, coinbase maturity, and consensus resource limits."
+    },
+    {
+      "title": "Bitcoin Core block-validation implementation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/validation.cpp",
+      "supports": "Header and block validation, transaction checks, UTXO updates, coinbase reward limits, witness commitments, chain connection, and rejection of invalid blocks."
+    },
+    {
+      "title": "Bitcoin Core block-assembly implementation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/node/miner.cpp",
+      "supports": "Candidate-block construction, coinbase creation, transaction package selection, dependency ordering, weight accounting, and template finalization."
+    },
+    {
+      "title": "Bitcoin Core proof-of-work implementation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/pow.cpp",
+      "supports": "Target decoding, proof-of-work checks, permitted target calculation, and the separation between hash-target compliance and full block validity."
+    },
+    {
+      "title": "BIP 34: Block v2, Height in Coinbase",
+      "author_or_publisher": "Gavin Andresen",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0034.mediawiki",
+      "supports": "Encoding the block height at the beginning of the coinbase transaction's input script data."
+    },
+    {
+      "title": "BIP 141: Segregated Witness",
+      "author_or_publisher": "Eric Lombrozo, Johnson Lau, and Pieter Wuille",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki",
+      "supports": "Block weight, witness discounting, transaction identifiers, witness transaction identifiers, and the coinbase witness commitment."
+    },
+    {
+      "title": "BIP 152: Compact Block Relay",
+      "author_or_publisher": "Matt Corallo",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0152.mediawiki",
+      "supports": "Compact-block announcements, short transaction identifiers, reconstruction from known transactions, and requests for missing transaction data."
+    },
+    {
+      "title": "Bitcoin white paper",
+      "author_or_publisher": "Satoshi Nakamoto",
+      "url": "https://bitcoin.org/bitcoin.pdf",
+      "supports": "Hash-linked blocks, proof-of-work chain ordering, transaction inclusion through Merkle trees, and the probabilistic treatment of later chain replacement."
+    },
+    {
+      "title": "Bitcoin Developer Guide: Block Chain",
+      "author_or_publisher": "Bitcoin.org contributors",
+      "url": "https://developer.bitcoin.org/devguide/block_chain.html",
+      "supports": "Block headers, transaction Merkle trees, coinbase transactions, chain linkage, target thresholds, and block validation context."
+    }
+  ],
+  "seo_title": "How Bitcoin Blocks Work: Headers, Transactions, and Validation",
+  "meta_description": "Learn how Bitcoin blocks combine transactions, coinbase rewards, Merkle commitments, proof of work, weight limits, and independent node validation.",
+  "excerpt": "Bitcoin blocks link transaction batches to prior history through proof of work. See how headers, Merkle roots, coinbase transactions, weight, and node validation fit together.",
+  "reading_time": "11 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-NETWORK",
+    "label": "The Bitcoin Network",
+    "subcategory": "Network",
+    "depth": "Shallow",
+    "format": "Explainer"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-025",
+      "title": "What Happens Inside the Bitcoin Mempool?",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-027",
+      "title": "How the Bitcoin Blockchain Works",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": []
+  },
+  "review_dates": {
+    "reviewed": "2026-07-18",
+    "copy_locked": "2026-07-18",
+    "human_verification": "2026-07-18"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "Anatomy of a Bitcoin Block",
+      "educational_purpose": "Show the block header, coinbase transaction, transaction list, and commitments as distinct components.",
+      "recommended_placement": "After the section titled The block header is 80 bytes.",
+      "visual_description": "Old naval engineering cutaway of a block packet. The top strip is the 80-byte header with six labeled fields. Below it, the coinbase transaction appears first, followed by ordinary transactions. Lines connect the transaction set to the Merkle root and witness data to the coinbase witness commitment.",
+      "required_labels": "Version, Previous block hash, Merkle root, Timestamp, nBits, Nonce, Coinbase transaction, Transactions, Witness commitment",
+      "caption": "A Bitcoin block combines an 80-byte header with a transaction list whose commitments are checked by validating nodes.",
+      "alt_text": "Technical cutaway of a Bitcoin block showing the six header fields, coinbase transaction, ordinary transactions, Merkle root, and witness commitment.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack the header above the transaction list and keep all six header labels inside the center crop.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "From Candidate to Accepted Block",
+      "educational_purpose": "Separate mining from node validation and chain selection.",
+      "recommended_placement": "After the section titled Candidate blocks, mined blocks, and accepted blocks are different stages.",
+      "visual_description": "Field-guide process with four stations: Build candidate, Search proof of work, Validate complete block, Compare valid chainwork. Invalid routes leave the validation station, while a valid route reaches the selected-chain track.",
+      "required_labels": "Candidate block, Header hashing, Target met, Node validation, Invalid block rejected, Valid candidate chain, Accumulated work, Selected chain",
+      "caption": "Finding proof of work allows a block to be submitted, but nodes still validate the complete block before chain selection.",
+      "alt_text": "Process diagram showing a candidate Bitcoin block moving through proof-of-work hashing, full node validation, and accumulated-work chain selection.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Use one vertical path with the invalid rejection branch placed beside the node-validation stage.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Two Commitments Inside a SegWit Block",
+      "educational_purpose": "Distinguish the header Merkle root from the coinbase witness commitment.",
+      "recommended_placement": "After the section titled SegWit adds a witness commitment.",
+      "visual_description": "Oceanographic dual-channel diagram. One channel gathers transaction identifiers into the header Merkle root. The second gathers witness transaction identifiers into a witness Merkle root that feeds a commitment output in the coinbase transaction.",
+      "required_labels": "Transaction IDs, Header Merkle root, Witness transaction IDs, Witness Merkle root, Reserved value, Coinbase commitment",
+      "caption": "SegWit blocks use the header Merkle root for transaction identifiers and a coinbase output for the witness commitment.",
+      "alt_text": "Dual commitment diagram showing transaction IDs forming the block-header Merkle root and witness transaction IDs forming a coinbase witness commitment.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack the transaction and witness channels vertically and keep their two destination commitments aligned on the right.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}
