@@ -1,9 +1,38 @@
 {{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
+{{ 'msc-learn-guide.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'msc-learn-hub-progress.js' | asset_url }}" defer="defer"></script>
 {%- assign pilot_registry_id = section.settings.registry_id | strip -%}
 {%- case pilot_registry_id -%}
   {%- when 'MSC-GUIDE-001' -%}
     {% render 'msc-learn-guide-001-runtime' %}
+    <script>
+      (() => {
+        const script = document.currentScript;
+        const scope = script.closest('.shopify-section') || document;
+        const page = scope.querySelector('.msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"]');
+        if (!page) return;
+
+        page.removeAttribute('data-msc-preview-only');
+
+        const categoryCrumb = page.querySelector('.msc-learn-breadcrumbs li:nth-child(2) span');
+        if (categoryCrumb) {
+          const link = document.createElement('a');
+          link.href = '/pages/learn-bitcoin-basics';
+          link.textContent = categoryCrumb.textContent;
+          link.className = 'msc-learn-guide__category-link';
+          categoryCrumb.replaceWith(link);
+        }
+
+        const categoryNav = page.querySelector('.msc-learn-prev-next__item:nth-child(2)');
+        if (categoryNav && categoryNav.tagName !== 'A') {
+          const link = document.createElement('a');
+          link.href = '/pages/learn-bitcoin-basics';
+          link.className = categoryNav.className;
+          link.innerHTML = '<span>Category</span><strong>Bitcoin Basics</strong><small>Return to hub</small>';
+          categoryNav.replaceWith(link);
+        }
+      })();
+    </script>
   {%- else -%}
     <section class="msc-shell msc-learn-page" data-msc-preview-only="true">
       <div class="msc-container msc-learn-page__container">
