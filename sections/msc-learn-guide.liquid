@@ -1,10 +1,76 @@
 {{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
 {{ 'msc-learn-guide.css' | asset_url | stylesheet_tag }}
+{{ 'msc-learn-hub-progress.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'msc-learn-hub-progress.js' | asset_url }}" defer="defer"></script>
 {%- assign pilot_registry_id = section.settings.registry_id | strip -%}
 {%- case pilot_registry_id -%}
   {%- when 'MSC-GUIDE-001' -%}
     {% render 'msc-learn-guide-001-runtime' %}
+    <style>
+      .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-prev-next {
+        position: relative;
+        width: 1px;
+        height: 1px;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        border: 0;
+        clip-path: inset(50%);
+      }
+
+      .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-guide-transition {
+        --msc-hub-sand: var(--msc-guide-sand);
+        --msc-hub-paper: var(--msc-guide-paper);
+      }
+
+      .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-guide-transition .msc-learn-hub-transition__destination {
+        cursor: default;
+      }
+
+      .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-guide-transition .msc-learn-hub-transition__destination::before {
+        display: none;
+      }
+
+      .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-guide-transition .msc-learn-hub-transition__title {
+        max-width: 24ch;
+      }
+    </style>
+    <template data-msc-guide-next-template="MSC-GUIDE-001">
+      <section class="msc-learn-hub-transition msc-learn-guide-transition" data-msc-guide-transition aria-label="Next guide preview: Why Does Bitcoin Matter?">
+        <div class="msc-learn-hub-transition__destination" aria-disabled="true">
+          <span class="msc-learn-hub-transition__eyebrow">Next guide</span>
+          <strong class="msc-learn-hub-transition__title">Why Does Bitcoin Matter?</strong>
+        </div>
+        <aside class="msc-learn-hub-transition__progress" aria-label="Bitcoin Basics progress">
+          <div class="msc-learn-hub-transition__progress-top">
+            <span class="msc-learn-hub-transition__progress-label">Bitcoin Basics progress</span>
+            <strong>01 / 16</strong>
+          </div>
+          <div class="msc-learn-hub-transition__groups" aria-hidden="true">
+            <div class="msc-learn-hub-transition__group"><div class="msc-learn-hub-transition__nodes"><span class="msc-learn-hub-transition__node is-complete"></span><span class="msc-learn-hub-transition__node is-current"></span><span class="msc-learn-hub-transition__node"></span><span class="msc-learn-hub-transition__node"></span></div></div>
+            <div class="msc-learn-hub-transition__group"><div class="msc-learn-hub-transition__nodes"><span class="msc-learn-hub-transition__node"></span><span class="msc-learn-hub-transition__node"></span><span class="msc-learn-hub-transition__node"></span><span class="msc-learn-hub-transition__node"></span></div></div>
+            <div class="msc-learn-hub-transition__group"><div class="msc-learn-hub-transition__nodes"><span class="msc-learn-hub-transition__node"></span><span class="msc-learn-hub-transition__node"></span><span class="msc-learn-hub-transition__node"></span><span class="msc-learn-hub-transition__node"></span></div></div>
+            <div class="msc-learn-hub-transition__group"><div class="msc-learn-hub-transition__nodes"><span class="msc-learn-hub-transition__node"></span><span class="msc-learn-hub-transition__node"></span><span class="msc-learn-hub-transition__node"></span><span class="msc-learn-hub-transition__node"></span></div></div>
+          </div>
+          <div class="msc-learn-hub-transition__progress-footer">
+            <span>15 guides remaining</span>
+            <strong>Continue when ready</strong>
+          </div>
+        </aside>
+      </section>
+    </template>
+    <script>
+      (() => {
+        const script = document.currentScript;
+        const scope = script.closest('.shopify-section') || document;
+        const page = scope.querySelector('.msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"]');
+        const template = scope.querySelector('template[data-msc-guide-next-template="MSC-GUIDE-001"]');
+        const navigation = page ? page.querySelector('.msc-learn-prev-next') : null;
+        if (!page || !template || !navigation || page.querySelector('[data-msc-guide-transition]')) return;
+        navigation.setAttribute('aria-hidden', 'true');
+        navigation.after(template.content.cloneNode(true));
+      })();
+    </script>
   {%- else -%}
     <section class="msc-shell msc-learn-page" data-msc-preview-only="true">
       <div class="msc-container msc-learn-page__container">
