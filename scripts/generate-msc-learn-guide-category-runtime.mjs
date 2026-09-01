@@ -102,10 +102,11 @@ const flexibleNumberedSourceParser = String.raw`function parseNumberedSourceReco
     if (!current) throw new Error('Unexpected content before numbered source record: ' + line);
 
     const continuationIndent = String(current.number).length + 2;
+    const allowedIndents = new Set([3, continuationIndent]);
     const bullet = line.match(/^(\s*)-\s+(.*)$/);
     if (bullet) {
-      if (bullet[1].length !== continuationIndent) {
-        throw new Error('Numbered source record ' + current.number + ' field is not indented by exactly ' + continuationIndent + ' spaces: ' + line);
+      if (!allowedIndents.has(bullet[1].length)) {
+        throw new Error('Numbered source record ' + current.number + ' field uses unsupported continuation indentation: ' + line);
       }
       assertCanonicalSourceFieldDelimiter(bullet[2], 'Unsupported numbered source record content: ' + line);
       const field = bullet[2].match(/^([^:]+):(?=\s|$)\s*(.*)$/);
@@ -115,7 +116,7 @@ const flexibleNumberedSourceParser = String.raw`function parseNumberedSourceReco
     }
 
     const compact = line.match(/^(\s+)([^:]+):(?=\s|$)\s*(.*)$/);
-    if (!compact || compact[1].length !== continuationIndent) {
+    if (!compact || !allowedIndents.has(compact[1].length)) {
       throw new Error('Unsupported numbered source record content: ' + line);
     }
     addSourceField(current.fields, compact[2], compact[3], 'Numbered source record ' + current.number);
