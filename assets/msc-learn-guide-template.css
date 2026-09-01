@@ -1,0 +1,348 @@
+/* MSC Learn shared topic-guide template.
+   Visual contract locked from MSC-GUIDE-001 on 2026-09-01.
+   Content may vary by guide; these layout and interaction rules must remain shared. */
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] {
+  --msc-guide-ink: #10282d;
+  --msc-guide-deep: #173c43;
+  --msc-guide-sea: #4e6b71;
+  --msc-guide-sand: #d4be99;
+  --msc-guide-paper: #fbf8ef;
+  position: relative;
+  padding: clamp(3.4rem, 5vw, 5.8rem) 0 clamp(6rem, 9vw, 9rem);
+  background:
+    radial-gradient(circle at 12% 8%, rgba(212, 190, 153, .12), transparent 30rem),
+    radial-gradient(circle at 88% 24%, rgba(78, 107, 113, .25), transparent 42rem),
+    linear-gradient(180deg, #10282d 0%, #173c43 48%, #10282d 100%);
+  color: var(--msc-guide-paper);
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"]::before {
+  background-image:
+    linear-gradient(rgba(251, 248, 239, .03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(251, 248, 239, .03) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, .86), transparent 97%);
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-page__container { display: block; }
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-breadcrumbs {
+  position: relative;
+  z-index: 2;
+  margin: 0 0 1.8rem;
+  color: rgba(251, 248, 239, .58);
+  font-size: 1rem;
+  font-weight: 750;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-breadcrumbs li:not(:last-child)::after {
+  content: "/";
+  margin-left: .55rem;
+  color: rgba(212, 190, 153, .5);
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-page__header {
+  position: relative;
+  max-width: none;
+  padding: clamp(2.7rem, 5vw, 4.8rem);
+  overflow: hidden;
+  border: 1px solid rgba(212, 190, 153, .27);
+  border-radius: 28px;
+  background: linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.028)), rgba(16,40,45,.46);
+  box-shadow: 0 26px 70px rgba(5, 13, 24, .22);
+  backdrop-filter: blur(14px);
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-page__header > * { position: relative; z-index: 1; }
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-page__header .msc-section-kicker {
+  margin: 0 0 1rem;
+  color: rgba(212, 190, 153, .78);
+  font-size: 1rem;
+  font-weight: 850;
+  letter-spacing: .16em;
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-page__header h1 {
+  max-width: 13ch;
+  margin: 0;
+  color: var(--msc-guide-sand);
+  font-size: clamp(4.6rem, 7vw, 7.7rem);
+  line-height: .92;
+  letter-spacing: -.055em;
+  text-wrap: balance;
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-page__deck {
+  max-width: 76rem;
+  margin: 1.8rem 0 0;
+  color: rgba(251, 248, 239, .8);
+  font-size: clamp(1.5rem, 1.75vw, 1.82rem);
+  line-height: 1.62;
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-page-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .55rem;
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-page-meta li {
+  padding: .48rem .7rem;
+  border: 1px solid rgba(212,190,153,.22);
+  border-radius: 999px;
+  background: rgba(255,255,255,.035);
+  color: rgba(251,248,239,.64);
+  font-size: .92rem;
+  font-weight: 780;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-preview-note { display: none; }
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-article {
+  width: min(82rem, calc(100% - 2rem));
+  margin: clamp(4rem, 6vw, 6rem) auto 0;
+  counter-reset: msc-guide-section;
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-article__section {
+  position: relative;
+  padding: 0 0 clamp(2.8rem, 4.5vw, 4.2rem);
+  border-bottom: 1px solid rgba(212,190,153,.14);
+  counter-increment: msc-guide-section;
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-article__section + .msc-learn-article__section { padding-top: clamp(2.8rem, 4.5vw, 4.2rem); }
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-article__section h2 {
+  position: relative;
+  margin: 0 0 1.6rem;
+  padding-left: 3.7rem;
+  color: var(--msc-guide-sand);
+  font-size: clamp(2.7rem, 3.4vw, 4rem);
+  line-height: 1.08;
+  letter-spacing: -.04em;
+  text-wrap: balance;
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-article__section h2::before {
+  content: counter(msc-guide-section, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: .38em;
+  color: rgba(212,190,153,.48);
+  font-size: .95rem;
+  font-weight: 850;
+  line-height: 1;
+  letter-spacing: .12em;
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-article__section:first-child::before {
+  content: "STARTING POINT";
+  display: block;
+  margin: 0 0 1rem;
+  color: rgba(212,190,153,.58);
+  font-size: .92rem;
+  font-weight: 850;
+  letter-spacing: .14em;
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-article__section p,
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-article__section li {
+  color: rgba(251,248,239,.78);
+  font-size: clamp(1.52rem, 1.55vw, 1.68rem);
+  line-height: 1.76;
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-article__section p { margin: 0 0 1.35rem; }
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-article__section p:last-child { margin-bottom: 0; }
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-article__section ol,
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-article__section ul { margin: 1.4rem 0 1.6rem; padding-left: 2.2rem; }
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-article__section li + li { margin-top: .7rem; }
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-key-terms,
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-sources,
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-prev-next {
+  width: min(100rem, calc(100% - 2rem));
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-key-terms,
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-sources {
+  margin-top: clamp(4.5rem, 7vw, 7rem);
+  padding-top: 2.5rem;
+  border-top: 1px solid rgba(212,190,153,.24);
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-key-terms > h2,
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-sources > h2 {
+  margin: 0 0 2rem;
+  color: var(--msc-guide-sand);
+  font-size: clamp(3rem, 4vw, 4.5rem);
+  line-height: 1;
+  letter-spacing: -.045em;
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-key-terms dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: .8rem;
+  margin: 0;
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-term {
+  padding: 1.45rem;
+  border: 1px solid rgba(212,190,153,.16);
+  border-radius: 14px;
+  background: rgba(255,255,255,.025);
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-term dt { margin-bottom: .55rem; color: var(--msc-guide-sand); font-size: 1.25rem; font-weight: 800; }
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-term dd { margin: 0; color: rgba(251,248,239,.68); font-size: 1.25rem; line-height: 1.55; }
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-source {
+  display: grid;
+  grid-template-columns: minmax(16rem,.8fr) minmax(0,1.5fr);
+  gap: 1.2rem 2rem;
+  padding: 1.45rem 0;
+  border-bottom: 1px solid rgba(212,190,153,.12);
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-source h3 { margin: 0; color: rgba(251,248,239,.84); font-size: 1.35rem; line-height: 1.35; }
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-source ul,
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-source p { grid-column: 2; margin: 0; color: rgba(251,248,239,.62); font-size: 1.15rem; line-height: 1.55; }
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-source ul { padding-left: 1.4rem; }
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-source code { color: rgba(212,190,153,.7); font-size: .95em; overflow-wrap: anywhere; }
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-prev-next {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: .8rem;
+  margin-top: clamp(4rem, 6vw, 6rem);
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-prev-next__item {
+  display: flex;
+  flex-direction: column;
+  gap: .45rem;
+  min-height: 9rem;
+  padding: 1.35rem;
+  border: 1px solid rgba(212,190,153,.16);
+  border-radius: 14px;
+  background: rgba(255,255,255,.025);
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-prev-next__item > span { color: rgba(212,190,153,.58); font-size: .86rem; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-prev-next__item strong { color: rgba(251,248,239,.78); font-size: 1.25rem; line-height: 1.3; }
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-prev-next__item small { margin-top: auto; color: rgba(251,248,239,.42); font-size: 1rem; }
+
+@media screen and (max-width: 749px) {
+  .msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] { padding-top: 2.6rem; }
+  .msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-page__header { padding: 2.25rem 1.8rem; border-radius: 20px; }
+  .msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-article { width: 100%; }
+  .msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-article__section h2 { padding-left: 0; }
+  .msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-article__section h2::before { position: static; display: block; margin-bottom: .55rem; }
+  .msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-key-terms,
+  .msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-sources,
+  .msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-prev-next { width: 100%; }
+  .msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-key-terms dl { grid-template-columns: 1fr; }
+  .msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-source { grid-template-columns: 1fr; gap: .7rem; }
+  .msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-source ul,
+  .msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-source p { grid-column: 1; }
+  .msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-prev-next { grid-template-columns: 1fr; }
+}
+
+/* Locked shared guide transition and final Guide 001 refinements. */
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-prev-next {
+  position: relative;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  clip-path: inset(50%);
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-guide-transition {
+  --msc-hub-sand: var(--msc-guide-sand);
+  --msc-hub-paper: var(--msc-guide-paper);
+  min-width: 0;
+  transition: border-color .2s ease;
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-guide-transition__link {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  border-radius: inherit;
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-guide-transition__link:focus-visible { outline: none; }
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-guide-transition.is-active { cursor: pointer; }
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-guide-transition.is-active:hover,
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-guide-transition.is-active:focus-within {
+  border-color: rgba(212, 190, 153, .82);
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-guide-transition .msc-learn-hub-transition__destination {
+  min-width: 0;
+  cursor: default;
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-guide-transition .msc-learn-hub-transition__destination::before { display: none; }
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-guide-transition .msc-learn-hub-transition__eyebrow {
+  font-size: 1.6rem;
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-guide-transition .msc-learn-hub-transition__title {
+  display: block;
+  max-width: none;
+  min-width: 0;
+  margin-top: .4rem;
+  font-size: clamp(2.8rem, 3.2vw, 4rem);
+  line-height: 1;
+  white-space: normal;
+  text-wrap: balance;
+}
+
+.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-guide-transition__description {
+  max-width: 48rem;
+  margin: 1.1rem 0 0;
+  color: rgba(251, 248, 239, .62);
+  font-size: clamp(1.15rem, 1.15vw, 1.3rem);
+  line-height: 1.5;
+}
+
+@media screen and (min-width: 750px) {
+  .msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-article {
+    width: min(100rem, calc(100% - 2rem));
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"] .msc-learn-guide-transition {
+    grid-template-columns: minmax(0, 1.12fr) minmax(28rem, .88fr);
+    gap: clamp(2rem, 3vw, 3rem);
+  }
+}

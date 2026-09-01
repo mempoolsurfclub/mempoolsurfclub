@@ -8,6 +8,8 @@ on:
       - 'templates/**'
       - 'sections/**'
       - 'snippets/**'
+      - 'assets/msc-learn-guide-template.css'
+      - 'assets/msc-learn-hub-progress.css'
       - 'package.json'
       - 'package-lock.json'
       - '.github/workflows/learn-validation.yml'
@@ -20,6 +22,8 @@ on:
       - 'templates/**'
       - 'sections/**'
       - 'snippets/**'
+      - 'assets/msc-learn-guide-template.css'
+      - 'assets/msc-learn-hub-progress.css'
       - 'package.json'
       - 'package-lock.json'
       - '.github/workflows/learn-validation.yml'
@@ -64,6 +68,9 @@ jobs:
 
       - name: Validate Guide 001 runtime pilot
         run: npm run validate:learn-guide-pilot
+
+      - name: Validate shared Learn guide template lock
+        run: npm run validate:learn-guide-template
 
       - name: Validate Bitcoin Basics hub runtime pilot
         run: npm run validate:learn-hub-pilot
