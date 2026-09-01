@@ -80,9 +80,10 @@
           const page = document.querySelector('.msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"]');
           const template = document.querySelector('template[data-msc-guide-next-template="MSC-GUIDE-001"]');
           const navigation = page ? page.querySelector('.msc-learn-prev-next') : null;
-          if (!page || !template || !navigation || page.querySelector('[data-msc-guide-transition]')) return;
+          const keyTerms = page ? page.querySelector('.msc-learn-key-terms') : null;
+          if (!page || !template || !navigation || !keyTerms || page.querySelector('[data-msc-guide-transition]')) return;
           navigation.setAttribute('aria-hidden', 'true');
-          navigation.after(template.content.cloneNode(true));
+          keyTerms.before(template.content.cloneNode(true));
         };
 
         if (document.readyState === 'loading') {
