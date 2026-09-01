@@ -61,14 +61,22 @@
     </template>
     <script>
       (() => {
-        const script = document.currentScript;
-        const scope = script.closest('.shopify-section') || document;
-        const page = scope.querySelector('.msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"]');
-        const template = scope.querySelector('template[data-msc-guide-next-template="MSC-GUIDE-001"]');
-        const navigation = page ? page.querySelector('.msc-learn-prev-next') : null;
-        if (!page || !template || !navigation || page.querySelector('[data-msc-guide-transition]')) return;
-        navigation.setAttribute('aria-hidden', 'true');
-        navigation.after(template.content.cloneNode(true));
+        const mountGuideTransition = () => {
+          const page = document.querySelector('.msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"]');
+          const template = document.querySelector('template[data-msc-guide-next-template="MSC-GUIDE-001"]');
+          const navigation = page ? page.querySelector('.msc-learn-prev-next') : null;
+          if (!page || !template || !navigation || page.querySelector('[data-msc-guide-transition]')) return;
+          navigation.setAttribute('aria-hidden', 'true');
+          navigation.after(template.content.cloneNode(true));
+        };
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', mountGuideTransition, { once: true });
+        } else {
+          mountGuideTransition();
+        }
+
+        document.addEventListener('shopify:section:load', mountGuideTransition);
       })();
     </script>
   {%- else -%}
