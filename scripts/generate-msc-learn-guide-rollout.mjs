@@ -86,6 +86,34 @@ const GUIDES = [
     snippet: 'snippets/msc-learn-guide-012-runtime.liquid',
     dom: 'MscGuide012',
   },
+  {
+    id: 'MSC-GUIDE-013',
+    source: 'docs/learn/content/guides/MSC-GUIDE-013-bitcoin-utxos.md',
+    json: 'docs/learn/runtime/MSC-GUIDE-013.json',
+    snippet: 'snippets/msc-learn-guide-013-runtime.liquid',
+    dom: 'MscGuide013',
+  },
+  {
+    id: 'MSC-GUIDE-014',
+    source: 'docs/learn/content/guides/MSC-GUIDE-014-bitcoin-confirmations.md',
+    json: 'docs/learn/runtime/MSC-GUIDE-014.json',
+    snippet: 'snippets/msc-learn-guide-014-runtime.liquid',
+    dom: 'MscGuide014',
+  },
+  {
+    id: 'MSC-GUIDE-015',
+    source: 'docs/learn/content/guides/MSC-GUIDE-015-bitcoin-halving.md',
+    json: 'docs/learn/runtime/MSC-GUIDE-015.json',
+    snippet: 'snippets/msc-learn-guide-015-runtime.liquid',
+    dom: 'MscGuide015',
+  },
+  {
+    id: 'MSC-GUIDE-016',
+    source: 'docs/learn/content/guides/MSC-GUIDE-016-bitcoin-best-practices.md',
+    json: 'docs/learn/runtime/MSC-GUIDE-016.json',
+    snippet: 'snippets/msc-learn-guide-016-runtime.liquid',
+    dom: 'MscGuide016',
+  },
 ];
 
 const read = (file) => fs.readFileSync(path.join(ROOT, file), 'utf8');
@@ -170,7 +198,7 @@ try {
   fs.rmSync(path.join(ROOT, TMP_DIR), { recursive: true, force: true });
   fs.mkdirSync(path.join(ROOT, TMP_DIR), { recursive: true });
   for (const guide of GUIDES) materialize(guide);
-  console.log(`MSC Learn Guide 002–012 rollout runtime ${WRITE ? 'materialized' : 'validation passed'} using the locked Guide 001 parser.`);
+  console.log(`MSC Learn Guide 002–016 rollout runtime ${WRITE ? 'materialized' : 'validation passed'} using the locked Guide 001 parser.`);
 } finally {
   fs.rmSync(path.join(ROOT, TMP_DIR), { recursive: true, force: true });
 }
