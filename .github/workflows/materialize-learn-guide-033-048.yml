@@ -1,0 +1,149 @@
+name: Materialize Learn Guide 033-048 rollout
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    if: github.head_ref == 'learn/activate-guides-033-048'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Materialize COPY_LOCKED Building guide runtimes
+        run: node scripts/generate-msc-learn-guide-category-runtime.mjs --start=33 --end=48 --write
+      - name: Materialize Building preview bindings
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const pad = (value) => String(value).padStart(3, '0');
+          const sourceDir = 'docs/learn/content/guides';
+          const pagePath = '/pages/learn-building-on-bitcoin';
+
+          function sourceFor(number) {
+            const id = `MSC-GUIDE-${pad(number)}`;
+            const matches = fs.readdirSync(sourceDir).filter((file) => file.startsWith(`${id}-`) && file.endsWith('.md'));
+            if (matches.length !== 1) throw new Error(`${id} source resolution failed`);
+            const source = fs.readFileSync(path.join(sourceDir, matches[0]), 'utf8');
+            const h1 = source.match(/^h1:\s*(.+)$/m)?.[1]?.trim();
+            const category = source.match(/^category:\s*(.+)$/m)?.[1]?.trim();
+            const subcategory = source.match(/^subcategory:\s*(.+)$/m)?.[1]?.trim();
+            const deck = source.match(/## 1\. Introductory deck\s*\n\n([\s\S]*?)\n\n## 2\./)?.[1]?.trim().replace(/\s*\n\s*/g, ' ');
+            const teaser = deck?.match(/^(.+?[.!?])(?:\s|$)/)?.[1] || deck;
+            if (!h1 || !category || !subcategory || !deck || !teaser) throw new Error(`${id} metadata/deck resolution failed`);
+            return { id, number: pad(number), h1, category, subcategory, deck, teaser };
+          }
+
+          const liquid = (value) => value.includes("'") ? JSON.stringify(value) : `'${value}'`;
+          const guides = Array.from({ length: 17 }, (_, index) => sourceFor(index + 33));
+          for (const guide of guides.slice(0, 16)) {
+            if (guide.category !== 'Building on Bitcoin') throw new Error(`${guide.id} category drifted`);
+          }
+          const nextCategory = guides[16];
+          if (nextCategory.id !== 'MSC-GUIDE-049') throw new Error('Guide 049 handoff source missing');
+
+          const blocks = [];
+          for (let index = 0; index < 16; index += 1) {
+            const current = guides[index];
+            const next = guides[index + 1];
+            const position = index + 1;
+            const active = current.id !== 'MSC-GUIDE-048';
+            const rows = [
+              `  {%- when '${current.id}' -%}`,
+              `    {% render 'msc-learn-guide-${current.number}-runtime' %}`,
+              `    <template data-msc-guide-next-template="${current.id}">`,
+              `      {% render 'msc-learn-guide-transition',`,
+              `        current_registry_id: '${current.id}',`,
+              `        next_registry_id: '${next.id}',`,
+              `        next_number: '${next.number}',`,
+              `        next_title: ${liquid(next.h1)},`,
+              `        next_description: ${liquid(next.teaser)},`,
+              `        category_label: 'Building on Bitcoin',`,
+              `        completed_count: ${position},`,
+              `        total_count: 16,`,
+              `        remaining_count: ${16 - position},`,
+              active
+                ? `        next_active: true,\n        next_url: '${pagePath}?view=msc-learn-guide-${next.number}'`
+                : `        next_active: false`,
+              `      %}`,
+              `    </template>`,
+            ];
+            blocks.push(rows.join('\n'));
+          }
+          blocks.push(`  {%- else -%}\n    <section class="msc-shell msc-learn-page" data-msc-preview-only="true">\n      <div class="msc-container msc-learn-page__container">\n        <header class="msc-learn-page__header">\n          <p class="msc-section-kicker">Learn runtime preview</p>\n          <h1>Guide preview unavailable</h1>\n          <p>No structured runtime package is registered for {{ pilot_registry_id | escape }}.</p>\n        </header>\n      </div>\n    </section>`);
+          fs.writeFileSync('snippets/msc-learn-guide-building-bindings.liquid', `{%- case pilot_registry_id -%}\n${blocks.join('\n')}\n{%- endcase -%}\n`);
+
+          const networkPath = 'snippets/msc-learn-guide-network-bindings.liquid';
+          let network = fs.readFileSync(networkPath, 'utf8');
+          const guide032Start = network.indexOf("  {%- when 'MSC-GUIDE-032' -%}");
+          const fallbackStart = network.indexOf('  {%- else -%}', guide032Start);
+          if (guide032Start < 0 || fallbackStart < 0) throw new Error('Guide 032 binding boundary missing');
+          let guide032Block = network.slice(guide032Start, fallbackStart);
+          if (!guide032Block.includes('next_active: true')) {
+            if (!guide032Block.includes('next_active: false')) throw new Error('Guide 032 next state drifted');
+            guide032Block = guide032Block.replace(
+              '        next_active: false\n',
+              `        next_active: true,\n        next_url: '${pagePath}?view=msc-learn-guide-033'\n`,
+            );
+          }
+          network = network.slice(0, guide032Start) + guide032Block + `  {%- else -%}\n    {% render 'msc-learn-guide-building-bindings', pilot_registry_id: pilot_registry_id %}\n{%- endcase -%}\n`;
+          fs.writeFileSync(networkPath, network);
+
+          const guideRows = guides.slice(0, 16).map(({ id, h1, number }) => [id, h1, `${pagePath}?view=msc-learn-guide-${number}`]);
+          for (const [id, , url] of guideRows) {
+            const number = id.slice(-3);
+            fs.writeFileSync(`templates/page.msc-learn-guide-${number}.json`, `${JSON.stringify({
+              sections: { main: { type: 'msc-learn-guide', settings: { registry_id: id } } },
+              order: ['main'],
+            }, null, 2)}\n`);
+          }
+
+          const scope = '.msc-learn-page[data-msc-registry-id="MSC-HUB-BUILDING"]';
+          const style = `<style>${scope} .msc-learn-guide-card.is-live-guide{cursor:pointer;transition:border-color .2s ease}${scope} .msc-learn-guide-card.is-live-guide:hover,${scope} .msc-learn-guide-card.is-live-guide:focus-within{border-color:rgba(212,190,153,.82)}.msc-learn-guide-card__link-cover{position:absolute;inset:0;z-index:5;border-radius:inherit;color:inherit;text-decoration:none;outline:none}</style>`;
+          const script = `<script>(()=>{const page=document.querySelector('${scope}');if(!page)return;const guides=${JSON.stringify(guideRows)};guides.forEach(([id,title,url])=>{const card=page.querySelector(\`.msc-learn-guide-card[data-msc-guide-id="${'${id}'}"]\`);if(!card||card.querySelector('.msc-learn-guide-card__link-cover'))return;card.removeAttribute('aria-disabled');card.classList.add('is-live-guide');const note=card.querySelector('.msc-learn-preview-note');if(note)note.remove();const link=document.createElement('a');link.href=url;link.className='msc-learn-guide-card__link-cover';link.setAttribute('aria-label',\`Read ${'${title}'}\`);const label=document.createElement('span');label.className='visually-hidden';label.textContent=\`Read ${'${title}'}\`;link.appendChild(label);card.appendChild(link);});})();</script>`;
+          const hubPath = 'templates/page.learn-building-on-bitcoin.json';
+          const hub = JSON.parse(fs.readFileSync(hubPath, 'utf8'));
+          hub.sections.guidepreviews = { type: 'custom-liquid', settings: { custom_liquid: style + script, color_scheme: 'scheme-1', padding_top: 0, padding_bottom: 0 } };
+          hub.order = ['main', 'guidepreviews'];
+          fs.writeFileSync(hubPath, `${JSON.stringify(hub, null, 2)}\n`);
+
+          const lockPath = 'docs/learn/MSC_Learn_Guide_Template_Lock.md';
+          let lock = fs.readFileSync(lockPath, 'utf8');
+          lock = lock.replace(
+            'Guides 017–032 extend the same locked system through all four `The Bitcoin Network` subcategories — `Mining`, `Nodes`, `Network`, and `Consensus` — without changing the visual contract.',
+            'Guides 017–032 extend the same locked system through all four `The Bitcoin Network` subcategories — `Mining`, `Nodes`, `Network`, and `Consensus` — without changing the visual contract. Guides 033–048 extend that same locked system through the complete `Building on Bitcoin` category without changing the visual contract.',
+          );
+          lock = lock.replace(
+            'The Bitcoin Basics hub cards for Guides 001–016 and The Bitcoin Network hub cards for Guides 017–032 are active in preview. The visible sequence is wired continuously through both categories:',
+            'The Bitcoin Basics hub cards for Guides 001–016, The Bitcoin Network hub cards for Guides 017–032, and Building on Bitcoin hub cards for Guides 033–048 are active in preview. The visible sequence is wired continuously through all three categories:',
+          );
+          lock = lock.replace(
+            '`001 → 002 → 003 → 004 → 005 → 006 → 007 → 008 → 009 → 010 → 011 → 012 → 013 → 014 → 015 → 016 → 017 → 018 → 019 → 020 → 021 → 022 → 023 → 024 → 025 → 026 → 027 → 028 → 029 → 030 → 031 → 032`',
+            '`001 → 002 → 003 → 004 → 005 → 006 → 007 → 008 → 009 → 010 → 011 → 012 → 013 → 014 → 015 → 016 → 017 → 018 → 019 → 020 → 021 → 022 → 023 → 024 → 025 → 026 → 027 → 028 → 029 → 030 → 031 → 032 → 033 → 034 → 035 → 036 → 037 → 038 → 039 → 040 → 041 → 042 → 043 → 044 → 045 → 046 → 047 → 048`',
+          );
+          lock = lock.replace(
+            'Guide 016 now continues into Guide 017 on `The Bitcoin Network`. Guide 032 previews Guide 033 — **How the Lightning Network Works** — but does not activate it until the `Building on Bitcoin` rollout exists.',
+            `Guide 016 continues into Guide 017 on \`The Bitcoin Network\`. Guide 032 now continues into Guide 033 on \`Building on Bitcoin\`. Guide 048 previews Guide 049 — **${nextCategory.h1}** — but does not activate it until the next category rollout exists.`,
+          );
+          const buildingViews = guides.slice(0, 16).map(({ number }) => `- Guide ${number}: \`?view=msc-learn-guide-${number}\``).join('\n');
+          lock = lock.replace('- Guide 032: `?view=msc-learn-guide-032`\n', `- Guide 032: \`?view=msc-learn-guide-032\`\n${buildingViews}\n`);
+          lock = lock.replace('Guides 001–032 remain preview-bound runtimes', 'Guides 001–048 remain preview-bound runtimes');
+          fs.writeFileSync(lockPath, lock);
+          NODE
+      - name: Commit Building rollout materialization
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/learn/MSC_Learn_Guide_Template_Lock.md docs/learn/runtime/MSC-GUIDE-0{33..48}.json snippets/msc-learn-guide-0{33..48}-runtime.liquid snippets/msc-learn-guide-network-bindings.liquid snippets/msc-learn-guide-building-bindings.liquid templates/page.learn-building-on-bitcoin.json templates/page.msc-learn-guide-0{33..48}.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Materialize Learn Guides 033-048 Building rollout"
+          git push origin HEAD:${{ github.head_ref }}
