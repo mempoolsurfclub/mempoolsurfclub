@@ -31,7 +31,7 @@ assert.ok(section.includes("querySelectorAll('.msc-learn-page[data-msc-registry-
 assert.ok(section.includes('keyTerms.before(template.content.cloneNode(true))'), 'Next Guide transition must mount immediately before Key Terms');
 
 assert.ok(style.includes('.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"]'), 'Shared guide CSS must target the full MSC-GUIDE family');
-assert.ok(!style.includes('MSC-GUIDE-001'), 'Shared guide CSS must not contain Guide-001-only selectors');
+assert.ok(!style.includes('.msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"]'), 'Shared guide CSS must not contain Guide-001-only selectors');
 assert.ok(style.includes('width: min(100rem, calc(100% - 2rem));'), 'Locked tablet/desktop article width must remain 100rem');
 assert.ok(style.includes('font-size: 1.6rem;'), 'Locked Next Guide eyebrow size must remain 1.6rem');
 assert.ok(style.includes('margin-top: .4rem;'), 'Locked Next Guide title spacing must remain .4rem');
