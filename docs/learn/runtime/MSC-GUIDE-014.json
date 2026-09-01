@@ -1,0 +1,332 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-014-bitcoin-confirmations.md",
+  "source_sha256": "402a933989088a7627917e1e496b86ef8f7b0863e35e9de1d036ec8094ac0db9",
+  "registry_id": "MSC-GUIDE-014",
+  "status": "COPY_LOCKED",
+  "h1": "How Bitcoin Confirmations Work",
+  "introductory_deck": "A Bitcoin confirmation begins when a valid transaction is included in a block on a node's active chain. Additional blocks increase its confirmation depth and usually reduce practical reorganization risk, but they do not create absolute finality or settle every commercial question.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "A Bitcoin transaction can be valid before it is confirmed. It can also be relayed widely, appear in wallet software, and sit in many mempools without having any confirmations.\n\nConfirmation begins with block inclusion. The distinction matters because an unconfirmed transaction and a confirmed transaction occupy different places in Bitcoin's shared history.",
+      "body_html": "<p>A Bitcoin transaction can be valid before it is confirmed. It can also be relayed widely, appear in wallet software, and sit in many mempools without having any confirmations.</p>\n<p>Confirmation begins with block inclusion. The distinction matters because an unconfirmed transaction and a confirmed transaction occupy different places in Bitcoin&#39;s shared history.</p>"
+    },
+    {
+      "heading": "Unconfirmed does not mean partially confirmed",
+      "body_markdown": "An unconfirmed transaction has not yet been included in a block in the node's active best valid chain.\n\nA node may have accepted the transaction into its mempool after checking it against consensus requirements and local policy. The node may relay it to peers. Wallets may show it as pending. Miners may consider it for a candidate block.\n\nNone of those states is a confirmation.\n\nMempools are local. Different nodes can receive transactions in different orders, apply different policies, have different capacity limits, or miss a transaction entirely. One node may store a transaction that another node rejects or has not yet seen.\n\nMempool acceptance therefore describes a node's current unconfirmed transaction set. It does not place the transaction in the blockchain.",
+      "body_html": "<p>An unconfirmed transaction has not yet been included in a block in the node&#39;s active best valid chain.</p>\n<p>A node may have accepted the transaction into its mempool after checking it against consensus requirements and local policy. The node may relay it to peers. Wallets may show it as pending. Miners may consider it for a candidate block.</p>\n<p>None of those states is a confirmation.</p>\n<p>Mempools are local. Different nodes can receive transactions in different orders, apply different policies, have different capacity limits, or miss a transaction entirely. One node may store a transaction that another node rejects or has not yet seen.</p>\n<p>Mempool acceptance therefore describes a node&#39;s current unconfirmed transaction set. It does not place the transaction in the blockchain.</p>"
+    },
+    {
+      "heading": "The first confirmation comes from block inclusion",
+      "body_markdown": "A transaction receives its first confirmation when it is included in a valid block that the node accepts into its active chain.\n\nCommon confirmation counting includes the transaction's own block as confirmation one. If another block is built on top of that chain, the transaction has two confirmations from that node's current view. Each additional block increases the depth by one.\n\nThis count is about chain position, not elapsed clock time. A wallet generally compares the transaction's block height with the height of its current active chain tip.\n\nA transaction identifier alone does not guarantee that the transaction will ever be confirmed. It identifies transaction data, but miners may not include it, it may be replaced before confirmation, or another transaction may spend a conflicting input.",
+      "body_html": "<p>A transaction receives its first confirmation when it is included in a valid block that the node accepts into its active chain.</p>\n<p>Common confirmation counting includes the transaction&#39;s own block as confirmation one. If another block is built on top of that chain, the transaction has two confirmations from that node&#39;s current view. Each additional block increases the depth by one.</p>\n<p>This count is about chain position, not elapsed clock time. A wallet generally compares the transaction&#39;s block height with the height of its current active chain tip.</p>\n<p>A transaction identifier alone does not guarantee that the transaction will ever be confirmed. It identifies transaction data, but miners may not include it, it may be replaced before confirmation, or another transaction may spend a conflicting input.</p>"
+    },
+    {
+      "heading": "Nodes decide which blocks are valid",
+      "body_markdown": "Miners assemble candidate blocks and perform proof of work. When a miner finds a block, nodes do not simply trust the miner's claim.\n\nEach validating node checks the block and its transactions against the consensus rules it enforces. These checks include proof of work, transaction validity, spending rules, block limits, and the relationship to prior chain state.\n\nA block that violates those rules is invalid to that node. Additional blocks built on an invalid block do not make it valid.\n\nThis is why confirmations are meaningful only within a valid chain. Miners propose history. Nodes independently verify whether the proposed blocks satisfy the rules.",
+      "body_html": "<p>Miners assemble candidate blocks and perform proof of work. When a miner finds a block, nodes do not simply trust the miner&#39;s claim.</p>\n<p>Each validating node checks the block and its transactions against the consensus rules it enforces. These checks include proof of work, transaction validity, spending rules, block limits, and the relationship to prior chain state.</p>\n<p>A block that violates those rules is invalid to that node. Additional blocks built on an invalid block do not make it valid.</p>\n<p>This is why confirmations are meaningful only within a valid chain. Miners propose history. Nodes independently verify whether the proposed blocks satisfy the rules.</p>"
+    },
+    {
+      "heading": "Chain selection uses cumulative proof of work",
+      "body_markdown": "Bitcoin is sometimes described as following the longest chain. That wording can be misleading if longest is interpreted as the greatest number of blocks.\n\nNodes select among valid candidate chains using accumulated chain work, which represents cumulative proof of work. A chain with fewer blocks can have more cumulative work if its blocks represent more required work.\n\nThe active chain is the valid chain that the node currently selects under this rule. Confirmation depth is measured from the transaction's block within that active chain.\n\nThe rule does not mean miners can make an invalid chain authoritative by adding work to it. Validity is checked first. Chain selection compares valid alternatives.\n\nThe selected chain can change as new valid blocks arrive. A node may know about several valid branches while maintaining one active chain for its current UTXO state and wallet view.\n\nChain work is calculated from the proof-of-work targets represented by the blocks. It is not a vote count, a count of miners, or a simple comparison of timestamps. A branch becomes the active candidate because its validated history represents more accumulated work under the node's rules.\n\nThis also explains why a chain with an extra low-work block is not automatically preferred over a shorter chain whose blocks represent greater cumulative work. In normal mainnet operation, block count and work often move together, but the consensus-sensitive comparison is work.",
+      "body_html": "<p>Bitcoin is sometimes described as following the longest chain. That wording can be misleading if longest is interpreted as the greatest number of blocks.</p>\n<p>Nodes select among valid candidate chains using accumulated chain work, which represents cumulative proof of work. A chain with fewer blocks can have more cumulative work if its blocks represent more required work.</p>\n<p>The active chain is the valid chain that the node currently selects under this rule. Confirmation depth is measured from the transaction&#39;s block within that active chain.</p>\n<p>The rule does not mean miners can make an invalid chain authoritative by adding work to it. Validity is checked first. Chain selection compares valid alternatives.</p>\n<p>The selected chain can change as new valid blocks arrive. A node may know about several valid branches while maintaining one active chain for its current UTXO state and wallet view.</p>\n<p>Chain work is calculated from the proof-of-work targets represented by the blocks. It is not a vote count, a count of miners, or a simple comparison of timestamps. A branch becomes the active candidate because its validated history represents more accumulated work under the node&#39;s rules.</p>\n<p>This also explains why a chain with an extra low-work block is not automatically preferred over a shorter chain whose blocks represent greater cumulative work. In normal mainnet operation, block count and work often move together, but the consensus-sensitive comparison is work.</p>"
+    },
+    {
+      "heading": "Competing blocks can exist",
+      "body_markdown": "Two miners can find valid blocks near the same time, each extending the same parent block.\n\nSome nodes may receive one block first while other nodes receive the competing block first. For a short period, the network can have different active tips at the same height.\n\nMiners then build on the valid tip they know and choose. When one branch accumulates more proof of work, nodes that had selected the other branch can switch.\n\nThe block that is no longer in the active chain is often called stale. It may have been valid, but it did not remain part of the selected chain history.",
+      "body_html": "<p>Two miners can find valid blocks near the same time, each extending the same parent block.</p>\n<p>Some nodes may receive one block first while other nodes receive the competing block first. For a short period, the network can have different active tips at the same height.</p>\n<p>Miners then build on the valid tip they know and choose. When one branch accumulates more proof of work, nodes that had selected the other branch can switch.</p>\n<p>The block that is no longer in the active chain is often called stale. It may have been valid, but it did not remain part of the selected chain history.</p>"
+    },
+    {
+      "heading": "A reorganization can change confirmation state",
+      "body_markdown": "A chain reorganization occurs when a node switches from its current active chain to another valid chain with more cumulative proof of work.\n\nDuring the switch, one or more blocks can be disconnected from active chain state and blocks from the competing branch can be connected. Transactions in disconnected blocks lose the confirmations they received from those blocks.\n\nA removed transaction can have several outcomes:\n\n- It may return to the node's mempool if it remains valid and meets current policy.\n- It may already appear in a block on the newly selected chain.\n- It may be confirmed later in a different block.\n- It may conflict with a transaction in the new active chain and no longer be valid for inclusion.\n\nWallet software updates its display from the chain view and transaction information available to it. Different nodes or wallets may briefly show different states while blocks and reorganizations propagate.",
+      "body_html": "<p>A chain reorganization occurs when a node switches from its current active chain to another valid chain with more cumulative proof of work.</p>\n<p>During the switch, one or more blocks can be disconnected from active chain state and blocks from the competing branch can be connected. Transactions in disconnected blocks lose the confirmations they received from those blocks.</p>\n<p>A removed transaction can have several outcomes:</p>\n<ul><li>It may return to the node&#39;s mempool if it remains valid and meets current policy.</li><li>It may already appear in a block on the newly selected chain.</li><li>It may be confirmed later in a different block.</li><li>It may conflict with a transaction in the new active chain and no longer be valid for inclusion.</li></ul>\n<p>Wallet software updates its display from the chain view and transaction information available to it. Different nodes or wallets may briefly show different states while blocks and reorganizations propagate.</p>"
+    },
+    {
+      "heading": "More depth usually adds settlement assurance",
+      "body_markdown": "Each additional confirmation means more proof of work has accumulated on top of the block containing the transaction.\n\nReversing that transaction through a competing chain would generally require replacing its block and the work accumulated after it, while also competing with continuing honest chain growth. Under Bitcoin's operating assumptions, deeper transactions are ordinarily harder to reorganize than shallow ones.\n\nThis is increasing settlement assurance, not absolute finality.\n\nBitcoin does not contain a depth at which a transaction becomes mathematically impossible to reorganize. Additional confirmations reduce practical risk under assumptions about hashrate, network behavior, validation, and incentives.\n\nThey also do not repair an invalid transaction. If a block is invalid under a node's rules, the node rejects it regardless of claimed depth.",
+      "body_html": "<p>Each additional confirmation means more proof of work has accumulated on top of the block containing the transaction.</p>\n<p>Reversing that transaction through a competing chain would generally require replacing its block and the work accumulated after it, while also competing with continuing honest chain growth. Under Bitcoin&#39;s operating assumptions, deeper transactions are ordinarily harder to reorganize than shallow ones.</p>\n<p>This is increasing settlement assurance, not absolute finality.</p>\n<p>Bitcoin does not contain a depth at which a transaction becomes mathematically impossible to reorganize. Additional confirmations reduce practical risk under assumptions about hashrate, network behavior, validation, and incentives.</p>\n<p>They also do not repair an invalid transaction. If a block is invalid under a node&#39;s rules, the node rejects it regardless of claimed depth.</p>"
+    },
+    {
+      "heading": "There is no universal confirmation count",
+      "body_markdown": "The appropriate confirmation requirement depends on the situation.\n\nRelevant factors can include:\n\n- The value and reversibility of what is being delivered.\n- The value of the transaction.\n- The relationship and history between the parties.\n- Replacement or conflict risk before confirmation.\n- The cost of responding to a reorganization.\n- The counterparty's risk tolerance.\n- Whether delivery can wait or be reversed.\n- The surrounding legal or commercial arrangement.\n\nA low-value, repeat interaction may be handled differently from delivery of a high-value irreversible good. A custodian may use a different policy from a local merchant. These are acceptance decisions, not consensus rules.\n\nNo fixed number is suitable for every payment. Treating any familiar fixed count as universally safe or final replaces risk analysis with a slogan.\n\nA receiver can also separate technical confirmation policy from business policy. For example, the receiver may wait for additional depth before releasing something that cannot be recovered, while allowing a reversible service to proceed sooner.\n\nThe protocol does not know which goods are being delivered or whether a refund is possible. Confirmation policy belongs to the application and the parties using it.",
+      "body_html": "<p>The appropriate confirmation requirement depends on the situation.</p>\n<p>Relevant factors can include:</p>\n<ul><li>The value and reversibility of what is being delivered.</li><li>The value of the transaction.</li><li>The relationship and history between the parties.</li><li>Replacement or conflict risk before confirmation.</li><li>The cost of responding to a reorganization.</li><li>The counterparty&#39;s risk tolerance.</li><li>Whether delivery can wait or be reversed.</li><li>The surrounding legal or commercial arrangement.</li></ul>\n<p>A low-value, repeat interaction may be handled differently from delivery of a high-value irreversible good. A custodian may use a different policy from a local merchant. These are acceptance decisions, not consensus rules.</p>\n<p>No fixed number is suitable for every payment. Treating any familiar fixed count as universally safe or final replaces risk analysis with a slogan.</p>\n<p>A receiver can also separate technical confirmation policy from business policy. For example, the receiver may wait for additional depth before releasing something that cannot be recovered, while allowing a reversible service to proceed sooner.</p>\n<p>The protocol does not know which goods are being delivered or whether a refund is possible. Confirmation policy belongs to the application and the parties using it.</p>"
+    },
+    {
+      "heading": "Zero-confirmation acceptance is a risk decision",
+      "body_markdown": "A zero-confirmation payment is an unconfirmed transaction accepted before block inclusion.\n\nThe receiver may observe a transaction in a wallet or mempool and decide to proceed. That decision depends on the transaction, wallet behavior, network observations, replacement policy, conflict detection, value at risk, and the ability to reverse delivery.\n\nReplace-by-fee and conflicting transactions are especially relevant before confirmation. A transaction may be valid and widely relayed while another valid transaction spends one or more of the same inputs.\n\nThe Bitcoin protocol does not label an unconfirmed payment commercially safe. A recipient decides whether the surrounding risk is acceptable.",
+      "body_html": "<p>A zero-confirmation payment is an unconfirmed transaction accepted before block inclusion.</p>\n<p>The receiver may observe a transaction in a wallet or mempool and decide to proceed. That decision depends on the transaction, wallet behavior, network observations, replacement policy, conflict detection, value at risk, and the ability to reverse delivery.</p>\n<p>Replace-by-fee and conflicting transactions are especially relevant before confirmation. A transaction may be valid and widely relayed while another valid transaction spends one or more of the same inputs.</p>\n<p>The Bitcoin protocol does not label an unconfirmed payment commercially safe. A recipient decides whether the surrounding risk is acceptable.</p>"
+    },
+    {
+      "heading": "Mempool status can change",
+      "body_markdown": "An unconfirmed transaction can leave a node's mempool without confirming.\n\nIt may be replaced, conflict with a newly confirmed transaction, be removed for local resource management, fail a changed policy condition, or depend on an ancestor that is removed. Another node may still retain it.\n\nLikewise, a transaction absent from one mempool may remain valid and later appear in a block. Miners are not required to build blocks from one universal mempool.\n\nWallet interfaces often simplify these states into labels such as pending, dropped, replaced, conflicted, or unconfirmed. Those labels reflect the wallet's information and software behavior, not additional consensus states.",
+      "body_html": "<p>An unconfirmed transaction can leave a node&#39;s mempool without confirming.</p>\n<p>It may be replaced, conflict with a newly confirmed transaction, be removed for local resource management, fail a changed policy condition, or depend on an ancestor that is removed. Another node may still retain it.</p>\n<p>Likewise, a transaction absent from one mempool may remain valid and later appear in a block. Miners are not required to build blocks from one universal mempool.</p>\n<p>Wallet interfaces often simplify these states into labels such as pending, dropped, replaced, conflicted, or unconfirmed. Those labels reflect the wallet&#39;s information and software behavior, not additional consensus states.</p>"
+    },
+    {
+      "heading": "Confirmation depth is not clock time",
+      "body_markdown": "Bitcoin targets an average block interval of roughly ten minutes over time. Blocks do not arrive on a fixed schedule.\n\nSeveral blocks can arrive close together. A longer gap can occur without indicating that a particular transaction is invalid. The difficulty adjustment targets the long-run production rate rather than scheduling each block.\n\nBlock timestamps do not directly determine a transaction's confirmation count. The count comes from the transaction's block and the blocks above it in the active chain.\n\nA wallet might estimate time from confirmations, but confirmation depth and elapsed minutes are different measurements.",
+      "body_html": "<p>Bitcoin targets an average block interval of roughly ten minutes over time. Blocks do not arrive on a fixed schedule.</p>\n<p>Several blocks can arrive close together. A longer gap can occur without indicating that a particular transaction is invalid. The difficulty adjustment targets the long-run production rate rather than scheduling each block.</p>\n<p>Block timestamps do not directly determine a transaction&#39;s confirmation count. The count comes from the transaction&#39;s block and the blocks above it in the active chain.</p>\n<p>A wallet might estimate time from confirmations, but confirmation depth and elapsed minutes are different measurements.</p>"
+    },
+    {
+      "heading": "Wallets report their current view",
+      "body_markdown": "A wallet can calculate confirmations only from the chain data it trusts.\n\nA wallet connected to its own fully validated node can use that node's active chain. A lightweight wallet may depend on server or peer information. A custodial service may present an internal status based on its own systems.\n\nTemporary disagreement can occur during block propagation or a reorganization. A wallet that is behind the current tip can also display a lower confirmation count than a synchronized node.\n\nThe displayed number should be understood as the wallet's current view of depth, not a separate network certificate.",
+      "body_html": "<p>A wallet can calculate confirmations only from the chain data it trusts.</p>\n<p>A wallet connected to its own fully validated node can use that node&#39;s active chain. A lightweight wallet may depend on server or peer information. A custodial service may present an internal status based on its own systems.</p>\n<p>Temporary disagreement can occur during block propagation or a reorganization. A wallet that is behind the current tip can also display a lower confirmation count than a synchronized node.</p>\n<p>The displayed number should be understood as the wallet&#39;s current view of depth, not a separate network certificate.</p>"
+    },
+    {
+      "heading": "Confirmations answer a limited question",
+      "body_markdown": "Confirmation depth provides evidence that a valid transaction has been included in the selected chain and buried under additional proof of work.\n\nIt does not prove the legal identity of a payer, the condition of goods, the accuracy of an invoice, the legitimacy of a service, the absence of fraud, or the resolution of a contractual dispute.\n\nThose questions belong to other systems.\n\nBitcoin confirmations provide increasing technical settlement assurance within Bitcoin's chain. The next guide explains a different block-height process: the scheduled reduction in Bitcoin's block subsidy.",
+      "body_html": "<p>Confirmation depth provides evidence that a valid transaction has been included in the selected chain and buried under additional proof of work.</p>\n<p>It does not prove the legal identity of a payer, the condition of goods, the accuracy of an invoice, the legitimacy of a service, the absence of fraud, or the resolution of a contractual dispute.</p>\n<p>Those questions belong to other systems.</p>\n<p>Bitcoin confirmations provide increasing technical settlement assurance within Bitcoin&#39;s chain. The next guide explains a different block-height process: the scheduled reduction in Bitcoin&#39;s block subsidy.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Confirmation",
+      "definition": "The inclusion of a transaction in a block, followed by additional blocks that increase settlement depth."
+    },
+    {
+      "term": "Block",
+      "definition": "A valid batch of Bitcoin transactions linked to prior chain history through proof of work."
+    },
+    {
+      "term": "Blockchain",
+      "definition": "The ordered history of valid Bitcoin blocks selected by accumulated proof of work."
+    },
+    {
+      "term": "Transaction",
+      "definition": "A data structure that spends existing UTXOs and creates new outputs."
+    },
+    {
+      "term": "Mempool",
+      "definition": "A node's local collection of valid unconfirmed transactions eligible for relay or block inclusion."
+    },
+    {
+      "term": "Node",
+      "definition": "Bitcoin software that communicates with peers and may validate, relay, store, or serve network data."
+    },
+    {
+      "term": "Miner",
+      "definition": "An operator that constructs candidate blocks and performs proof of work."
+    },
+    {
+      "term": "Proof of work",
+      "definition": "The computational process miners use to produce block hashes below the network target."
+    },
+    {
+      "term": "Reorganization",
+      "definition": "A change in the selected chain tip when a competing valid chain accumulates more proof of work."
+    },
+    {
+      "term": "Consensus",
+      "definition": "The shared validation rules independently enforced by Bitcoin nodes."
+    },
+    {
+      "term": "Validation",
+      "definition": "The process of checking transactions and blocks against applicable rules."
+    },
+    {
+      "term": "Transaction relay",
+      "definition": "The peer-to-peer propagation of transactions between nodes under local policy rules."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bitcoin: A Peer-to-Peer Electronic Cash System",
+      "author_or_publisher": "Satoshi Nakamoto",
+      "direct_url": "https://bitcoin.org/bitcoin.pdf",
+      "supports": "Proof-of-work chain selection, cumulative work, transaction ordering, the probability framing for replacing deeper history, and the long-run block-production target."
+    },
+    {
+      "title": "Bitcoin Developer Guide: Block Chain",
+      "author_or_publisher": "Bitcoin Project developer documentation",
+      "direct_url": "https://developer.bitcoin.org/devguide/block_chain.html",
+      "supports": "Independent block validation, competing chain tips, active-chain selection, confirmations, stale blocks, and chain reorganizations."
+    },
+    {
+      "title": "Bitcoin Developer Guide: Transactions",
+      "author_or_publisher": "Bitcoin Project developer documentation",
+      "direct_url": "https://developer.bitcoin.org/devguide/transactions.html",
+      "supports": "Transaction inputs, outputs, conflicts, transaction identifiers, and the distinction between transaction validity and block confirmation."
+    },
+    {
+      "title": "Bitcoin Developer Guide: P2P Network",
+      "author_or_publisher": "Bitcoin Project developer documentation",
+      "direct_url": "https://developer.bitcoin.org/devguide/p2p_network.html",
+      "supports": "Peer-to-peer transaction and block propagation, node-local network views, and the separation between relay and chain inclusion."
+    },
+    {
+      "title": "Bitcoin Core Chain Data Structures",
+      "author_or_publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/src/chain.h",
+      "supports": "Block indexes, block height, chain work, active-chain ancestry, and the data used to compare valid chain candidates."
+    },
+    {
+      "title": "Bitcoin Core Validation",
+      "author_or_publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp",
+      "supports": "Block and transaction validation, active-chain connection and disconnection, chain-tip activation, transaction conflict handling, and reorganization processing."
+    },
+    {
+      "title": "Bitcoin Core Mempool Implementation",
+      "author_or_publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/src/txmempool.cpp",
+      "supports": "Node-local mempool storage, transaction removal, conflicts, and mempool updates during chain changes."
+    },
+    {
+      "title": "BIP 125: Opt-in Full Replace-by-Fee Signaling",
+      "author_or_publisher": "David A. Harding and Peter Todd",
+      "direct_url": "https://bips.dev/125/",
+      "supports": "The documented opt-in replacement model and why replacement and conflicting transactions matter before confirmation."
+    }
+  ],
+  "seo_title": "How Bitcoin Confirmations Work: Depth, Reorgs, and Risk",
+  "meta_description": "Learn when a Bitcoin transaction becomes confirmed, how confirmation depth grows, why cumulative proof of work matters, and how reorganizations affect settlement risk.",
+  "excerpt": "A Bitcoin confirmation begins with inclusion in a block on a node's active chain. This guide explains confirmation depth, competing blocks, reorganizations, and why no universal count guarantees finality.",
+  "reading_time": "9 to 11 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-BASICS",
+    "label": "Bitcoin Basics",
+    "subcategory": "Essentials",
+    "depth": "Surface",
+    "format": "Explainer"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-013",
+      "title": "What Are UTXOs in Bitcoin?",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-015",
+      "title": "What Is the Bitcoin Halving?",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": [
+      {
+        "registry_id": "MSC-GUIDE-013",
+        "title": "What Are UTXOs in Bitcoin?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-015",
+        "title": "What Is the Bitcoin Halving?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-026",
+        "title": "How Bitcoin Blocks Work",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-008",
+        "title": "How Bitcoin Transactions and Fees Work",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-025",
+        "title": "What Happens Inside the Bitcoin Mempool?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-029",
+        "title": "How Bitcoin Proof of Work Secures the Network",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-030",
+        "title": "How Bitcoin Reaches Consensus",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GLOSSARY-001",
+        "title": "Bitcoin Glossary",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-HUB-BASICS",
+        "title": "Bitcoin Basics",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-PATH-NETWORK",
+        "title": "Understand the Network",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-PATH-START",
+        "title": "Start With Bitcoin",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-PATH-SAFE",
+        "title": "Use Bitcoin Safely",
+        "active": false,
+        "url": null
+      }
+    ]
+  },
+  "review_dates": {
+    "reviewed": "2026-07-17",
+    "copy_locked": "2026-07-17",
+    "human_verification": "2026-07-17"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "From Mempool to Confirmation Depth",
+      "educational_purpose": "Separate unconfirmed transaction relay from block inclusion and additional confirmation depth.",
+      "recommended_placement": "After the section titled The first confirmation comes from block inclusion.",
+      "visual_description": "Old technical field-guide flow on Paper. A transaction moves through several node-local mempool boxes, then enters a block labeled confirmation one. Two additional blocks extend the chain and increase depth. Keep mempool boxes visually separate from the blockchain.",
+      "required_labels": "Unconfirmed transaction, Node-local mempool, Block inclusion, Confirmation 1, Additional depth",
+      "caption": "Relay and mempool acceptance are unconfirmed states. Confirmation begins when the transaction enters an active-chain block.",
+      "alt_text": "Technical flow showing an unconfirmed transaction in node-local mempools, followed by inclusion in a block and two additional confirmation levels.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack the mempool stage above the three-block chain and keep the first-confirmation boundary prominent.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "Competing Tips and Reorganization",
+      "educational_purpose": "Show how two valid branches can exist briefly and why a node switches to the valid branch with more cumulative proof of work.",
+      "recommended_placement": "After the section titled A reorganization can change confirmation state.",
+      "visual_description": "Navigation-chart fork beginning from one shared block. Two valid branches extend to different tips. Work markers accumulate beside each branch, and the node's active-chain marker moves to the branch with greater cumulative work. Show one transaction returning to an unconfirmed holding area.",
+      "required_labels": "Shared history, Valid branch A, Valid branch B, Cumulative work, Active chain, Reorganization",
+      "caption": "A node can switch between valid branches when another chain accumulates more proof of work.",
+      "alt_text": "Forked Bitcoin chain diagram showing two valid branches, cumulative-work markers, an active-chain switch, and a transaction removed by a reorganization.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Use a vertical fork with short branches and place the active-chain switch marker in the center.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Depth Increases Assurance, Not Absolute Finality",
+      "educational_purpose": "Explain that additional confirmations generally reduce practical reorganization risk without declaring any fixed depth irreversible.",
+      "recommended_placement": "After the section titled There is no universal confirmation count.",
+      "visual_description": "Calm oceanographic depth chart with a transaction block near the surface and additional blocks descending through increasing depth bands. A risk curve narrows gradually but never reaches a label of zero or final. Include circumstance markers for value, delivery, and reversibility.",
+      "required_labels": "Confirmation depth, Practical assurance, Reorganization risk, Transaction value, Delivery risk, No universal count",
+      "caption": "Confirmation needs depend on circumstances, while additional depth generally increases practical settlement assurance.",
+      "alt_text": "Oceanographic-style confirmation-depth chart showing practical assurance increasing and reorganization risk narrowing without an absolute finality point.",
+      "image_orientation": "Square",
+      "mobile_crop_notes": "Keep the descending block column centered and place circumstance markers along the right edge.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}

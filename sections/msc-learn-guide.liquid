@@ -205,6 +205,74 @@
         completed_count: 12,
         total_count: 16,
         remaining_count: 4,
+        next_active: true,
+        next_url: '/pages/learn-bitcoin-basics?view=msc-learn-guide-013'
+      %}
+    </template>
+  {%- when 'MSC-GUIDE-013' -%}
+    {% render 'msc-learn-guide-013-runtime' %}
+    <template data-msc-guide-next-template="MSC-GUIDE-013">
+      {% render 'msc-learn-guide-transition',
+        current_registry_id: 'MSC-GUIDE-013',
+        next_registry_id: 'MSC-GUIDE-014',
+        next_number: '014',
+        next_title: 'How Bitcoin Confirmations Work',
+        next_description: "A Bitcoin confirmation begins when a valid transaction is included in a block on a node's active chain.",
+        category_label: 'Bitcoin Basics',
+        completed_count: 13,
+        total_count: 16,
+        remaining_count: 3,
+        next_active: true,
+        next_url: '/pages/learn-bitcoin-basics?view=msc-learn-guide-014'
+      %}
+    </template>
+  {%- when 'MSC-GUIDE-014' -%}
+    {% render 'msc-learn-guide-014-runtime' %}
+    <template data-msc-guide-next-template="MSC-GUIDE-014">
+      {% render 'msc-learn-guide-transition',
+        current_registry_id: 'MSC-GUIDE-014',
+        next_registry_id: 'MSC-GUIDE-015',
+        next_number: '015',
+        next_title: 'What Is the Bitcoin Halving?',
+        next_description: 'The Bitcoin halving is a scheduled reduction in the block subsidy permitted by the consensus rules.',
+        category_label: 'Bitcoin Basics',
+        completed_count: 14,
+        total_count: 16,
+        remaining_count: 2,
+        next_active: true,
+        next_url: '/pages/learn-bitcoin-basics?view=msc-learn-guide-015'
+      %}
+    </template>
+  {%- when 'MSC-GUIDE-015' -%}
+    {% render 'msc-learn-guide-015-runtime' %}
+    <template data-msc-guide-next-template="MSC-GUIDE-015">
+      {% render 'msc-learn-guide-transition',
+        current_registry_id: 'MSC-GUIDE-015',
+        next_registry_id: 'MSC-GUIDE-016',
+        next_number: '016',
+        next_title: 'Bitcoin Best Practices for Safe Everyday Use',
+        next_description: 'Safe everyday Bitcoin use comes from understanding the wallet, payment, recovery, and privacy systems involved in each action.',
+        category_label: 'Bitcoin Basics',
+        completed_count: 15,
+        total_count: 16,
+        remaining_count: 1,
+        next_active: true,
+        next_url: '/pages/learn-bitcoin-basics?view=msc-learn-guide-016'
+      %}
+    </template>
+  {%- when 'MSC-GUIDE-016' -%}
+    {% render 'msc-learn-guide-016-runtime' %}
+    <template data-msc-guide-next-template="MSC-GUIDE-016">
+      {% render 'msc-learn-guide-transition',
+        current_registry_id: 'MSC-GUIDE-016',
+        next_registry_id: 'MSC-GUIDE-017',
+        next_number: '017',
+        next_title: 'How Bitcoin Mining Works',
+        next_description: 'Bitcoin mining constructs candidate blocks and searches for proof of work that satisfies the network target.',
+        category_label: 'Bitcoin Basics',
+        completed_count: 16,
+        total_count: 16,
+        remaining_count: 0,
         next_active: false
       %}
     </template>
