@@ -1,0 +1,63 @@
+{%- liquid
+  assign completed_value = completed_count | default: 0 | plus: 0
+  assign total_value = total_count | default: 16 | plus: 0
+  assign remaining_value = remaining_count | default: total_value | plus: 0
+  assign next_position = completed_value | plus: 1
+  assign group_count = total_value | plus: 3 | divided_by: 4
+  assign transition_active = false
+  if next_active and next_url != blank
+    assign transition_active = true
+  endif
+-%}
+
+{%- capture completed_label -%}{% if completed_value < 10 %}0{% endif %}{{ completed_value }}{%- endcapture -%}
+
+<section
+  class="msc-learn-hub-transition msc-learn-guide-transition{% if transition_active %} is-active{% endif %}"
+  data-msc-guide-transition
+  data-msc-guide-current="{{ current_registry_id | escape }}"
+  data-msc-guide-next="{{ next_registry_id | escape }}"
+  aria-label="Next guide{% unless transition_active %} preview{% endunless %}: {{ next_title | escape }}"
+>
+  {%- if transition_active -%}
+    <a class="msc-learn-guide-transition__link" href="{{ next_url | escape }}">
+      <span class="visually-hidden">Continue to {{ next_title | escape }}</span>
+    </a>
+  {%- endif -%}
+
+  <div class="msc-learn-hub-transition__destination"{% unless transition_active %} aria-disabled="true"{% endunless %}>
+    <span class="msc-learn-hub-transition__eyebrow">Next guide · {{ next_number | escape }}</span>
+    <strong class="msc-learn-hub-transition__title">{{ next_title | escape }}</strong>
+    {%- if next_description != blank -%}
+      <p class="msc-learn-guide-transition__description">{{ next_description | escape }}</p>
+    {%- endif -%}
+  </div>
+
+  <aside class="msc-learn-hub-transition__progress" aria-label="{{ category_label | escape }} progress">
+    <div class="msc-learn-hub-transition__progress-top">
+      <span class="msc-learn-hub-transition__progress-label">{{ category_label | escape }} progress</span>
+      <strong>{{ completed_label }} / {{ total_value }}</strong>
+    </div>
+
+    <div class="msc-learn-hub-transition__groups" aria-hidden="true">
+      {%- for group_index in (1..group_count) -%}
+        {%- assign group_offset = group_index | minus: 1 | times: 4 -%}
+        <div class="msc-learn-hub-transition__group">
+          <div class="msc-learn-hub-transition__nodes">
+            {%- for slot_index in (1..4) -%}
+              {%- assign node_index = group_offset | plus: slot_index -%}
+              {%- if node_index <= total_value -%}
+                <span class="msc-learn-hub-transition__node{% if node_index <= completed_value %} is-complete{% elsif node_index == next_position and completed_value < total_value %} is-current{% endif %}"></span>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+
+    <div class="msc-learn-hub-transition__progress-footer">
+      <span>{{ remaining_value }} guide{% unless remaining_value == 1 %}s{% endunless %} remaining</span>
+      <strong>Continue when ready</strong>
+    </div>
+  </aside>
+</section>

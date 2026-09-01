@@ -1,120 +1,26 @@
 {{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
-{{ 'msc-learn-guide.css' | asset_url | stylesheet_tag }}
 {{ 'msc-learn-hub-progress.css' | asset_url | stylesheet_tag }}
+{{ 'msc-learn-guide-template.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'msc-learn-hub-progress.js' | asset_url }}" defer="defer"></script>
+
 {%- assign pilot_registry_id = section.settings.registry_id | strip -%}
 {%- case pilot_registry_id -%}
   {%- when 'MSC-GUIDE-001' -%}
     {% render 'msc-learn-guide-001-runtime' %}
-    <style>
-      .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-prev-next {
-        position: relative;
-        width: 1px;
-        height: 1px;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        border: 0;
-        clip-path: inset(50%);
-      }
-
-      .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-guide-transition {
-        --msc-hub-sand: var(--msc-guide-sand);
-        --msc-hub-paper: var(--msc-guide-paper);
-        min-width: 0;
-      }
-
-      .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-guide-transition .msc-learn-hub-transition__destination {
-        min-width: 0;
-        cursor: default;
-      }
-
-      .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-guide-transition .msc-learn-hub-transition__destination::before {
-        display: none;
-      }
-
-      .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-guide-transition .msc-learn-hub-transition__eyebrow {
-        font-size: 1.6rem;
-      }
-
-      .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-guide-transition .msc-learn-hub-transition__title {
-        display: block;
-        max-width: none;
-        min-width: 0;
-        margin-top: .4rem;
-        font-size: clamp(2.8rem, 3.2vw, 4rem);
-        line-height: 1;
-        white-space: normal;
-        text-wrap: balance;
-      }
-
-      .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-guide-transition__description {
-        max-width: 48rem;
-        margin: 1.1rem 0 0;
-        color: rgba(251, 248, 239, .62);
-        font-size: clamp(1.15rem, 1.15vw, 1.3rem);
-        line-height: 1.5;
-      }
-
-      @media screen and (min-width: 750px) {
-        .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-article {
-          width: min(100rem, calc(100% - 2rem));
-        }
-      }
-
-      @media screen and (min-width: 990px) {
-        .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-guide-transition {
-          grid-template-columns: minmax(0, 1.12fr) minmax(28rem, .88fr);
-          gap: clamp(2rem, 3vw, 3rem);
-        }
-      }
-    </style>
     <template data-msc-guide-next-template="MSC-GUIDE-001">
-      <section class="msc-learn-hub-transition msc-learn-guide-transition" data-msc-guide-transition aria-label="Next guide preview: Why Does Bitcoin Matter?">
-        <div class="msc-learn-hub-transition__destination" aria-disabled="true">
-          <span class="msc-learn-hub-transition__eyebrow">Next guide · 002</span>
-          <strong class="msc-learn-hub-transition__title">Why Does Bitcoin Matter?</strong>
-          <p class="msc-learn-guide-transition__description">Bitcoin matters because it combines open participation, independently verifiable rules, scarce digital units, and ownership through cryptographic keys.</p>
-        </div>
-        <aside class="msc-learn-hub-transition__progress" aria-label="Bitcoin Basics progress">
-          <div class="msc-learn-hub-transition__progress-top">
-            <span class="msc-learn-hub-transition__progress-label">Bitcoin Basics progress</span>
-            <strong>01 / 16</strong>
-          </div>
-          <div class="msc-learn-hub-transition__groups" aria-hidden="true">
-            <div class="msc-learn-hub-transition__group"><div class="msc-learn-hub-transition__nodes"><span class="msc-learn-hub-transition__node is-complete"></span><span class="msc-learn-hub-transition__node is-current"></span><span class="msc-learn-hub-transition__node"></span><span class="msc-learn-hub-transition__node"></span></div></div>
-            <div class="msc-learn-hub-transition__group"><div class="msc-learn-hub-transition__nodes"><span class="msc-learn-hub-transition__node"></span><span class="msc-learn-hub-transition__node"></span><span class="msc-learn-hub-transition__node"></span><span class="msc-learn-hub-transition__node"></span></div></div>
-            <div class="msc-learn-hub-transition__group"><div class="msc-learn-hub-transition__nodes"><span class="msc-learn-hub-transition__node"></span><span class="msc-learn-hub-transition__node"></span><span class="msc-learn-hub-transition__node"></span><span class="msc-learn-hub-transition__node"></span></div></div>
-            <div class="msc-learn-hub-transition__group"><div class="msc-learn-hub-transition__nodes"><span class="msc-learn-hub-transition__node"></span><span class="msc-learn-hub-transition__node"></span><span class="msc-learn-hub-transition__node"></span><span class="msc-learn-hub-transition__node"></span></div></div>
-          </div>
-          <div class="msc-learn-hub-transition__progress-footer">
-            <span>15 guides remaining</span>
-            <strong>Continue when ready</strong>
-          </div>
-        </aside>
-      </section>
+      {% render 'msc-learn-guide-transition',
+        current_registry_id: 'MSC-GUIDE-001',
+        next_registry_id: 'MSC-GUIDE-002',
+        next_number: '002',
+        next_title: 'Why Does Bitcoin Matter?',
+        next_description: 'Bitcoin matters because it combines open participation, independently verifiable rules, scarce digital units, and ownership through cryptographic keys.',
+        category_label: 'Bitcoin Basics',
+        completed_count: 1,
+        total_count: 16,
+        remaining_count: 15,
+        next_active: false
+      %}
     </template>
-    <script>
-      (() => {
-        const mountGuideTransition = () => {
-          const page = document.querySelector('.msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"]');
-          const template = document.querySelector('template[data-msc-guide-next-template="MSC-GUIDE-001"]');
-          const navigation = page ? page.querySelector('.msc-learn-prev-next') : null;
-          const keyTerms = page ? page.querySelector('.msc-learn-key-terms') : null;
-          if (!page || !template || !navigation || !keyTerms || page.querySelector('[data-msc-guide-transition]')) return;
-          navigation.setAttribute('aria-hidden', 'true');
-          keyTerms.before(template.content.cloneNode(true));
-        };
-
-        if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', mountGuideTransition, { once: true });
-        } else {
-          mountGuideTransition();
-        }
-
-        document.addEventListener('shopify:section:load', mountGuideTransition);
-      })();
-    </script>
   {%- else -%}
     <section class="msc-shell msc-learn-page" data-msc-preview-only="true">
       <div class="msc-container msc-learn-page__container">
@@ -126,6 +32,31 @@
       </div>
     </section>
 {%- endcase -%}
+
+<script>
+  (() => {
+    const mountGuideTransitions = () => {
+      document.querySelectorAll('.msc-learn-page[data-msc-registry-id^="MSC-GUIDE-"]').forEach((page) => {
+        const registryId = page.getAttribute('data-msc-registry-id');
+        const template = document.querySelector(`template[data-msc-guide-next-template="${registryId}"]`);
+        const navigation = page.querySelector('.msc-learn-prev-next');
+        const keyTerms = page.querySelector('.msc-learn-key-terms');
+        if (!template || !navigation || !keyTerms || page.querySelector('[data-msc-guide-transition]')) return;
+        navigation.setAttribute('aria-hidden', 'true');
+        keyTerms.before(template.content.cloneNode(true));
+      });
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', mountGuideTransitions, { once: true });
+    } else {
+      mountGuideTransitions();
+    }
+
+    document.addEventListener('shopify:section:load', mountGuideTransitions);
+  })();
+</script>
+
 {% schema %}
 {
   "name": "MSC Learn guide",
