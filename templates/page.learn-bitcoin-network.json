@@ -3,9 +3,19 @@
     "main": {
       "type": "msc-learn-network-category",
       "settings": {}
+    },
+    "guidepreviews": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<style>.msc-learn-page[data-msc-registry-id=\"MSC-HUB-NETWORK\"] .msc-learn-guide-card.is-live-guide{cursor:pointer;transition:border-color .2s ease}.msc-learn-page[data-msc-registry-id=\"MSC-HUB-NETWORK\"] .msc-learn-guide-card.is-live-guide:hover,.msc-learn-page[data-msc-registry-id=\"MSC-HUB-NETWORK\"] .msc-learn-guide-card.is-live-guide:focus-within{border-color:rgba(212,190,153,.82)}.msc-learn-guide-card__link-cover{position:absolute;inset:0;z-index:5;border-radius:inherit;color:inherit;text-decoration:none;outline:none}</style><script>(()=>{const page=document.querySelector('.msc-learn-page[data-msc-registry-id=\"MSC-HUB-NETWORK\"]');if(!page)return;const guides=[[\"MSC-GUIDE-017\",\"How Bitcoin Mining Works\",\"/pages/learn-bitcoin-network?view=msc-learn-guide-017\"],[\"MSC-GUIDE-018\",\"How Bitcoin Mining Pools Work\",\"/pages/learn-bitcoin-network?view=msc-learn-guide-018\"],[\"MSC-GUIDE-019\",\"What Is an ASIC Miner?\",\"/pages/learn-bitcoin-network?view=msc-learn-guide-019\"],[\"MSC-GUIDE-020\",\"How Bitcoin's Difficulty Adjustment Works\",\"/pages/learn-bitcoin-network?view=msc-learn-guide-020\"],[\"MSC-GUIDE-021\",\"What Is a Bitcoin Full Node?\",\"/pages/learn-bitcoin-network?view=msc-learn-guide-021\"],[\"MSC-GUIDE-022\",\"What Is a Pruned Bitcoin Node?\",\"/pages/learn-bitcoin-network?view=msc-learn-guide-022\"],[\"MSC-GUIDE-023\",\"How to Run a Bitcoin Node\",\"/pages/learn-bitcoin-network?view=msc-learn-guide-023\"],[\"MSC-GUIDE-024\",\"Bitcoin Node Software Explained\",\"/pages/learn-bitcoin-network?view=msc-learn-guide-024\"],[\"MSC-GUIDE-025\",\"What Happens Inside the Bitcoin Mempool?\",\"/pages/learn-bitcoin-network?view=msc-learn-guide-025\"],[\"MSC-GUIDE-026\",\"How Bitcoin Blocks Work\",\"/pages/learn-bitcoin-network?view=msc-learn-guide-026\"],[\"MSC-GUIDE-027\",\"How the Bitcoin Blockchain Works\",\"/pages/learn-bitcoin-network?view=msc-learn-guide-027\"],[\"MSC-GUIDE-028\",\"What Is Bitcoin Hashrate?\",\"/pages/learn-bitcoin-network?view=msc-learn-guide-028\"],[\"MSC-GUIDE-029\",\"How Bitcoin Proof of Work Secures the Network\",\"/pages/learn-bitcoin-network?view=msc-learn-guide-029\"],[\"MSC-GUIDE-030\",\"How Bitcoin Reaches Consensus\",\"/pages/learn-bitcoin-network?view=msc-learn-guide-030\"],[\"MSC-GUIDE-031\",\"How Bitcoin Soft Forks Work\",\"/pages/learn-bitcoin-network?view=msc-learn-guide-031\"],[\"MSC-GUIDE-032\",\"How Bitcoin Network Upgrades Happen\",\"/pages/learn-bitcoin-network?view=msc-learn-guide-032\"]];guides.forEach(([id,title,url])=>{const card=page.querySelector(`.msc-learn-guide-card[data-msc-guide-id=\"${id}\"]`);if(!card||card.querySelector('.msc-learn-guide-card__link-cover'))return;card.removeAttribute('aria-disabled');card.classList.add('is-live-guide');const note=card.querySelector('.msc-learn-preview-note');if(note)note.remove();const link=document.createElement('a');link.href=url;link.className='msc-learn-guide-card__link-cover';link.setAttribute('aria-label',`Read ${title}`);const label=document.createElement('span');label.className='visually-hidden';label.textContent=`Read ${title}`;link.appendChild(label);card.appendChild(link);});})();</script>",
+        "color_scheme": "scheme-1",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "guidepreviews"
   ]
 }

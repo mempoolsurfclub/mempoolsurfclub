@@ -1,0 +1,147 @@
+{% comment %}
+  Generated from docs/learn/content/guides/MSC-GUIDE-017-how-bitcoin-mining-works.md.
+  Registry binding: MSC-GUIDE-017.
+  Preview only. Do not edit manually.
+  Rebuild with node scripts/generate-msc-learn-guide-category-runtime.mjs --start=17 --end=32 --write.
+{% endcomment %}
+<section class="msc-shell msc-learn-page" data-msc-registry-id="MSC-GUIDE-017" data-msc-preview-only="true">
+  <div class="msc-container msc-learn-page__container">
+    <nav class="msc-learn-breadcrumbs" aria-label="Learn breadcrumbs"><ol><li><span>Learn</span></li><li><span>The Bitcoin Network</span></li><li aria-current="page"><span>How Bitcoin Mining Works</span></li></ol></nav>
+    <header class="msc-learn-page__header">
+      <p class="msc-section-kicker">The Bitcoin Network</p>
+      <h1>How Bitcoin Mining Works</h1>
+      <p class="msc-learn-page__deck">Bitcoin mining constructs candidate blocks and searches for proof of work that satisfies the network target. Mining helps order valid transactions and extend the chain, while independently operated nodes decide whether a found block and every transaction inside it follow the consensus rules.</p>
+      <ul class="msc-learn-page-meta"><li>Mining</li><li>Shallow</li><li>Explainer</li><li>11 to 13 minutes</li><li>Reviewed 2026-07-18</li></ul>
+      <p class="msc-learn-preview-note">Preview only. Publication records and confirmed URLs do not exist; all navigation remains inactive.</p>
+    </header>
+    <article class="msc-learn-article rte" data-msc-content-source="structured-runtime">
+<section class="msc-learn-article__section">
+<p>Bitcoin mining is often reduced to a picture of machines racing to solve a puzzle. That image captures the competition, but it hides the actual workflow.</p>
+<p>Mining brings together several distinct jobs. Software gathers transaction information, constructs a candidate block, creates a coinbase transaction, and prepares a block header. Hashing hardware repeatedly evaluates versions of that header. When a result satisfies the target, the block is broadcast. Nodes then validate the block independently.</p>
+<p>The miner proposes the next block. The network does not accept that proposal merely because energy was spent producing it.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Mining begins with a candidate block</h2>
+<p>A candidate block is a proposed batch of transactions linked to the current chain tip.</p>
+<p>A block assembler may begin with transactions available in a node&#39;s local mempool. That mempool is not a universal network queue. Different nodes receive transactions at different times, apply different policy settings, and may store different sets of unconfirmed transactions.</p>
+<p>A mining operator can also receive valid transactions through direct submission, private relay, or another permitted source. A transaction absent from one public node&#39;s mempool can still be included in a valid block if it satisfies the consensus rules and all required dependencies are available.</p>
+<p>Block construction therefore starts from the operator&#39;s available information, not from one official list maintained by the protocol.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Transaction selection follows several constraints</h2>
+<p>A block assembler chooses transactions subject to more than one consideration.</p>
+<p>Every included transaction must be valid in the candidate block&#39;s context. Inputs must refer to spendable outputs, required scripts and signatures must verify, locktime and sequence conditions must be satisfied, and dependencies must appear in a usable order. The completed block must also respect weight, signature-operation, and other consensus limits.</p>
+<p>Fees matter because the miner can claim transaction fees from included transactions. Selection can also reflect ancestor and descendant relationships, operator policy, direct agreements, block-template software, transaction ordering preferences, or a decision to leave some block space unused.</p>
+<p>Bitcoin Core&#39;s block assembler normally works from its local mempool and evaluates groups of related transactions under configured limits and fee settings. Other mining systems can construct templates differently. Bitcoin does not require every miner to use one implementation or identical transaction-selection policy.</p>
+</section>
+<section class="msc-learn-article__section"><h2>The coinbase transaction comes first</h2>
+<p>The first transaction in a valid block is the coinbase transaction.</p>
+<p>Its input does not spend a previous UTXO. Instead, the coinbase transaction can create outputs whose total value is no greater than the permitted block subsidy plus the transaction fees available from the other transactions in the block.</p>
+<p>The subsidy and fees are separate components. The subsidy creates new bitcoin under the issuance schedule. Fees are existing input value not reassigned to ordinary transaction outputs.</p>
+<p>A miner may claim less than the maximum allowed amount, but claiming more makes the block invalid to nodes enforcing the rule. Proof of work cannot repair an excessive coinbase claim.</p>
+<p>Coinbase outputs also have a consensus maturity requirement. They cannot be spent until a transaction using them appears in a block whose height is at least 100 greater than the height of the block that created them. A reorganization can change active-chain depth and therefore change whether a wallet currently treats a coinbase output as mature.</p>
+</section>
+<section class="msc-learn-article__section"><h2>The transaction set produces a Merkle root</h2>
+<p>The candidate block&#39;s transactions are organized into a Merkle tree. The Merkle root is a compact commitment to the transaction set inside the block.</p>
+<p>If any transaction changes, the Merkle root changes. The coinbase transaction is part of that set, so changing coinbase data also produces a different Merkle root.</p>
+<p>This property is useful for mining. The 32-bit nonce field in the block header provides a limited search space. High-speed hardware can exhaust that space quickly. Mining software can change data in the coinbase transaction, including an extranonce area used by many mining systems, rebuild the Merkle root, and create a fresh range of candidate headers.</p>
+<p>Changing the selected transactions can do the same. The candidate block remains subject to all block-validity rules after each change.</p>
+</section>
+<section class="msc-learn-article__section"><h2>The block header has six serialized fields</h2>
+<p>Bitcoin proof of work is performed over the serialized 80-byte block header.</p>
+<p>The header contains six fields:</p>
+<ol><li>A version field.</li><li>The hash of the previous block header.</li><li>The Merkle root committing to the transaction set.</li><li>A timestamp field.</li><li>The proof-of-work target encoded in compact <code>nBits</code> form.</li><li>A nonce.</li></ol>
+<p>The previous-block hash links the candidate to prior chain history. The Merkle root commits to the block&#39;s transactions. The timestamp must satisfy applicable constraints. The compact target tells nodes which proof-of-work threshold applies. Version bits can communicate defined software or deployment information. The nonce is one value miners can vary during the search.</p>
+<p>The header does not contain full transaction data, but its Merkle root binds the proof-of-work search to that candidate transaction set.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Mining hashes the header twice with SHA-256</h2>
+<p>Bitcoin proof of work applies SHA-256 twice to the serialized block header.</p>
+<p>Mining hardware repeatedly evaluates candidate headers and compares the resulting 256-bit hash with the applicable network target. A valid result is numerically less than or equal to that target.</p>
+<p>The hash does not decrypt transactions, approve ownership, or solve an equation with a reusable shortcut. For mining purposes, small changes to the header produce results that behave unpredictably. A miner cannot look at one failed result and learn which nearby nonce is closer to success.</p>
+<p>Failed attempts do not accumulate partial progress toward a future valid hash. Each candidate either satisfies the target or it does not.</p>
+<p>The work is easy for a node to verify after the fact. A node hashes the header and checks the result against the target. Producing a valid result may require an enormous number of attempts, but verifying that one result is straightforward.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Miners search more than the nonce field</h2>
+<p>The nonce is the most visible changing field, but it is not the only available source of search space.</p>
+<p>Mining systems may vary:</p>
+<ul><li>The nonce.</li><li>Extranonce data in the coinbase transaction.</li><li>Permitted timestamp values.</li><li>Version-related fields where allowed.</li><li>The transaction set or ordering.</li><li>Other coinbase data that remains valid.</li></ul>
+<p>Changing coinbase data changes the coinbase transaction identifier and Merkle root. That creates a different header even when the previous-block hash and other fields remain the same.</p>
+<p>Pools and mining proxies often divide this larger search space among many devices so they are less likely to duplicate work. Solo miners can use similar techniques through their own software stack.</p>
+<p>The exact work-distribution design belongs to the mining system. Bitcoin consensus cares about the resulting block and header, not the internal method used to assign candidate hashes.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Block discovery is probabilistic</h2>
+<p>A valid hash can appear on the first attempt or after a long run of failures.</p>
+<p>If a miner controls a given share of the total hashing work being applied to the network, its expected share of discovered blocks over a sufficiently long period is related to that hashrate share. Short periods can vary widely.</p>
+<p>A miner with one percent of estimated network hashrate is not promised exactly one percent of blocks in each day, week, or difficulty period. Random variation can produce streaks and dry periods.</p>
+<p>No individual miner receives a scheduled block time. Bitcoin targets an average block interval across the network over time. Actual block arrivals remain irregular.</p>
+<p>This variance is one reason mining pools exist. Pools coordinate work and use internal accounting to distribute payouts more frequently than most small solo miners would discover blocks on their own. Pooling changes payout variance and dependencies. It does not change Bitcoin&#39;s block-validity rules.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Hashrate is estimated, not read from a global meter</h2>
+<p>Hashrate describes the rate of proof-of-work hash attempts.</p>
+<p>An individual device can report its own measured or configured rate. Network hashrate is different. Bitcoin does not contain one global meter that counts every attempt performed by every miner.</p>
+<p>Software estimates network hashrate from observed blocks, their proof-of-work requirements, and elapsed time. The estimate depends on the observation window and the irregular timing of block discovery. Short windows can be noisy. Longer windows smooth more variation but respond more slowly to change.</p>
+<p>The estimate also does not reveal exactly how many machines, owners, facilities, or geographic locations produced the work. Different hardware can contribute different rates, and operational arrangements can separate equipment ownership from pool or template coordination.</p>
+</section>
+<section class="msc-learn-article__section"><h2>A found block is a proposal</h2>
+<p>When a miner finds a header hash satisfying the target, the mining system assembles and broadcasts the corresponding full block.</p>
+<p>Peers do not accept it automatically. A validating node checks matters such as:</p>
+<ul><li>The proof-of-work target and header hash.</li><li>The required target for that height.</li><li>The link to known prior chain state.</li><li>The Merkle root and transaction commitments.</li><li>Block weight and structure.</li><li>Every included transaction.</li><li>Input availability and spending conditions.</li><li>The coinbase amount and maturity-related rules.</li><li>Applicable consensus deployments and script rules.</li></ul>
+<p>If any required rule fails, the node rejects the block. More proof of work cannot make an invalid block valid to that node.</p>
+<p>A node only activates a candidate chain after validating the required blocks. Among valid candidate chains, accumulated proof of work guides chain selection under that node&#39;s rules. Mining contributes to chain ordering, but it does not give miners unilateral authority to redefine validity.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Mining is not transaction approval</h2>
+<p>Mining affects when valid transactions may be included and how chain history is extended.</p>
+<p>It does not establish a person&#39;s legal ownership. It does not make an invalid signature valid. It does not permit miners to create arbitrary bitcoin. It does not encrypt transaction contents.</p>
+<p>A miner can omit a valid transaction from one candidate block. Another miner may include it later. A miner can receive a transaction through a route other nodes did not see. That flexibility exists inside the boundary of block validity.</p>
+<p>Mining is therefore best understood as competitive block production under rules that nodes independently enforce.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Hardware, software, pools, and nodes have separate roles</h2>
+<p>A mining operation can contain several components.</p>
+<p>A full node validates chain and transaction data and can provide a candidate template. Block-assembly software chooses valid transactions and creates the coinbase and header fields. A pool coordinator may distribute jobs and account for contributed work. ASIC hardware performs high-rate header hashing.</p>
+<p>One machine or software package can combine several roles, but the roles remain conceptually distinct.</p>
+<p>An ASIC miner does not replace a full node merely because it produces hashes. A pool is not the Bitcoin consensus system merely because it coordinates substantial work. A node is not a hashing device merely because it can prepare a block template.</p>
+<p>Separating the roles makes concentration and failure questions more precise. Hardware ownership, pool coordination, transaction-template control, node validation, and payout dependence are different dimensions.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Mining uses energy and produces heat</h2>
+<p>Hashing hardware consumes electrical energy. Almost all of the electrical power used by the equipment ultimately becomes heat that must be handled by the operating site.</p>
+<p>The source of electricity, machine efficiency, cooling design, climate, utilization, curtailment, transmission conditions, and supporting infrastructure vary. Those differences affect cost and environmental outcomes.</p>
+<p>It is inaccurate to claim that all Bitcoin mining uses one energy source or creates one universal environmental result. It is equally inaccurate to discuss hashrate as if it required no physical resources.</p>
+<p>A responsible analysis states what is being measured, identifies system boundaries, and separates energy use from claims about emissions or benefits that require additional evidence.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Difficulty adjustment and halving are separate</h2>
+<p>If aggregate hashing conditions change, block intervals may become shorter or longer before the next difficulty boundary.</p>
+<p>Bitcoin&#39;s difficulty adjustment later changes the proof-of-work target under its own consensus rules. The adjustment does not continuously poll miners or guarantee exact ten-minute blocks.</p>
+<p>The halving is different. It changes the permitted block subsidy at 210,000-block intervals. It does not directly change the proof-of-work target.</p>
+<p>Mining economics can respond to both mechanisms, along with fees, energy costs, hardware efficiency, and market conditions. Bitcoin does not guarantee a particular miner&#39;s profitability or response.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Solo and pooled mining use the same validity rules</h2>
+<p>A solo miner coordinates its own template construction, hashing, and block submission. A pooled miner contributes work through a coordination and payout system.</p>
+<p>The payout experience can be very different. Solo discovery is highly variable for a small miner. A pool can distribute revenue according to submitted shares and its chosen payout rules.</p>
+<p>The network-facing block must satisfy the same consensus rules either way. Nodes do not validate a block differently because it came from a pool, a company, or a solo operator.</p>
+<p>The next guide explains how mining pools assign work, measure shares, submit blocks, and distribute payout risk without becoming Bitcoin consensus authorities.</p>
+</section>
+    </article>
+    <section class="msc-learn-key-terms" aria-labelledby="MscGuide017Terms"><h2 id="MscGuide017Terms">Key Terms</h2><dl><div class="msc-learn-term"><dt>Mining</dt><dd>The proof-of-work process that orders valid transactions into blocks and competes to extend the Bitcoin chain.</dd></div>
+<div class="msc-learn-term"><dt>Miner</dt><dd>An operator that constructs candidate blocks and performs proof of work.</dd></div>
+<div class="msc-learn-term"><dt>Proof of work</dt><dd>The computational process miners use to produce block hashes below the network target.</dd></div>
+<div class="msc-learn-term"><dt>Block</dt><dd>A valid batch of Bitcoin transactions linked to prior chain history through proof of work.</dd></div>
+<div class="msc-learn-term"><dt>Block subsidy</dt><dd>New bitcoin created under the issuance schedule and paid through a block&#39;s coinbase transaction.</dd></div>
+<div class="msc-learn-term"><dt>Transaction fee</dt><dd>The input value not reassigned to transaction outputs and available to the block&#39;s miner.</dd></div>
+<div class="msc-learn-term"><dt>Hashrate</dt><dd>An estimate of the total proof-of-work computation being applied to Bitcoin mining.</dd></div>
+<div class="msc-learn-term"><dt>Node</dt><dd>Bitcoin software that communicates with peers and may validate, relay, store, or serve network data.</dd></div>
+<div class="msc-learn-term"><dt>Validation</dt><dd>The process of checking transactions and blocks against applicable rules.</dd></div>
+<div class="msc-learn-term"><dt>Mempool</dt><dd>A node&#39;s local collection of valid unconfirmed transactions eligible for relay or block inclusion.</dd></div>
+<div class="msc-learn-term"><dt>Energy use</dt><dd>The amount and source of energy consumed by Bitcoin mining and its supporting operations.</dd></div>
+<div class="msc-learn-term"><dt>Difficulty adjustment</dt><dd>Bitcoin&#39;s periodic recalculation of mining difficulty based on prior block timing.</dd></div></dl></section>
+    <section class="msc-learn-sources" aria-labelledby="MscGuide017Sources"><h2 id="MscGuide017Sources">Sources</h2><article class="msc-learn-source"><h3>Bitcoin: A Peer-to-Peer Electronic Cash System</h3><ul><li><strong>author or publisher:</strong> Satoshi Nakamoto</li><li><strong>supports:</strong> Bitcoin&#39;s proof-of-work chain, incentive model, transaction ordering, probabilistic block discovery, and broad difficulty-adjustment purpose.</li></ul><p><strong>Direct URL:</strong> <code>https://bitcoin.org/bitcoin.pdf</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Developer Guide: Mining</h3><ul><li><strong>author or publisher:</strong> Bitcoin Project developer documentation</li><li><strong>supports:</strong> Candidate-block construction, coinbase creation, Merkle-root updates, block-header hashing, extranonce use, and block submission.</li></ul><p><strong>Direct URL:</strong> <code>https://developer.bitcoin.org/devguide/mining.html</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Developer Guide: Block Chain</h3><ul><li><strong>author or publisher:</strong> Bitcoin Project developer documentation</li><li><strong>supports:</strong> Block structure, proof of work, Merkle commitments, node validation, chain selection, block subsidies, fees, and coinbase maturity context.</li></ul><p><strong>Direct URL:</strong> <code>https://developer.bitcoin.org/devguide/block_chain.html</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Block Assembler</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core developers</li><li><strong>supports:</strong> Current Bitcoin Core candidate-block assembly, mempool transaction selection, coinbase construction, subsidy-plus-fee calculation, header preparation, and pre-submission validity testing.</li></ul><p><strong>Direct URL:</strong> <code>https://github.com/bitcoin/bitcoin/blob/master/src/node/miner.cpp</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Mining Interface</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core developers</li><li><strong>supports:</strong> Current interfaces and structures separating block creation, coinbase data, block templates, and mining options.</li></ul><p><strong>Direct URL:</strong> <code>https://github.com/bitcoin/bitcoin/blob/master/src/node/miner.h</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Mining RPC</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core developers</li><li><strong>supports:</strong> Current getblocktemplate, submitblock, generate, and network-hashrate estimation behavior exposed by Bitcoin Core mining RPCs.</li></ul><p><strong>Direct URL:</strong> <code>https://github.com/bitcoin/bitcoin/blob/master/src/rpc/mining.cpp</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Block Header</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core developers</li><li><strong>supports:</strong> The serialized block-header fields: version, previous-block hash, Merkle root, time, compact target, and nonce.</li></ul><p><strong>Direct URL:</strong> <code>https://github.com/bitcoin/bitcoin/blob/master/src/primitives/block.h</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Proof of Work</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core developers</li><li><strong>supports:</strong> Target derivation from compact `nBits`, proof-of-work comparison, difficulty-boundary behavior, and network-specific proof-of-work rules.</li></ul><p><strong>Direct URL:</strong> <code>https://github.com/bitcoin/bitcoin/blob/master/src/pow.cpp</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Block Validation</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core developers</li><li><strong>supports:</strong> Independent block and transaction validation, coinbase value checks, chain-state connection, and rejection of invalid blocks.</li></ul><p><strong>Direct URL:</strong> <code>https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Consensus Constants</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core developers</li><li><strong>supports:</strong> The 100-block coinbase maturity constant and core block-weight and consensus limits.</li></ul><p><strong>Direct URL:</strong> <code>https://github.com/bitcoin/bitcoin/blob/master/src/consensus/consensus.h</code></p></article>
+<article class="msc-learn-source"><h3>FIPS 180-4: Secure Hash Standard</h3><ul><li><strong>author or publisher:</strong> National Institute of Standards and Technology</li><li><strong>supports:</strong> The SHA-256 algorithm and fixed-length digest behavior used in Bitcoin&#39;s double-SHA-256 block-header hashing.</li></ul><p><strong>Direct URL:</strong> <code>https://doi.org/10.6028/NIST.FIPS.180-4</code></p></article></section>
+    <nav class="msc-learn-prev-next" aria-label="Guide navigation preview"><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Previous</span><strong>Bitcoin Best Practices for Safe Everyday Use</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Category</span><strong>The Bitcoin Network</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Next</span><strong>How Bitcoin Mining Pools Work</strong><small>Link inactive</small></span></nav>
+  </div>
+</section>

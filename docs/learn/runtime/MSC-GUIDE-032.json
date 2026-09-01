@@ -1,0 +1,356 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-032-bitcoin-network-upgrades.md",
+  "source_sha256": "27c6cc0b52675c4f52bdab21fcf5c1e5ec08b0a5a111722bf77f47ff406b8233",
+  "registry_id": "MSC-GUIDE-032",
+  "status": "COPY_LOCKED",
+  "h1": "How Bitcoin Network Upgrades Happen",
+  "introductory_deck": "Bitcoin network upgrades emerge through public proposals, technical review, implementation, testing, software releases, operator decisions, and sometimes an explicit activation mechanism. No developer, miner, company, or node can update the entire network by decree. The history of P2SH, BIP 34, locktime changes, SegWit, and Taproot shows that upgrading Bitcoin is a layered coordination process in which software availability, adoption, signaling, and enforcement remain separate.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "Bitcoin changes over time, but it does not have one central administrator that schedules protocol releases for everyone.\n\nAn upgrade begins as an idea and becomes relevant only if people specify it, implement it, review it, adopt supporting software, and use compatible rules.\n\nThat process can be slow because Bitcoin protects valuable history and must continue operating while participants make independent decisions.",
+      "body_html": "<p>Bitcoin changes over time, but it does not have one central administrator that schedules protocol releases for everyone.</p>\n<p>An upgrade begins as an idea and becomes relevant only if people specify it, implement it, review it, adopt supporting software, and use compatible rules.</p>\n<p>That process can be slow because Bitcoin protects valuable history and must continue operating while participants make independent decisions.</p>"
+    },
+    {
+      "heading": "Network upgrade is a broad category",
+      "body_markdown": "A Bitcoin network upgrade can affect several layers:\n\n- Consensus rules for valid blocks and transactions.\n- Node policy for mempool acceptance and relay.\n- Peer-to-peer messages and transport behavior.\n- Mining interfaces and block-template construction.\n- Wallet formats, addresses, signing, and backups.\n- RPCs, indexes, descriptors, and operator tools.\n- Performance, storage, privacy, and security behavior.\n\nNot every upgrade changes consensus.\n\nA node can gain a new RPC, faster block validation, or a different relay policy without changing which blocks it accepts. Those changes may require coordination among applications or peers, but they do not automatically create a new validity rule.\n\nConsensus upgrades receive special scrutiny because incompatible enforcement can split participants over which blocks are valid.",
+      "body_html": "<p>A Bitcoin network upgrade can affect several layers:</p>\n<ul><li>Consensus rules for valid blocks and transactions.</li><li>Node policy for mempool acceptance and relay.</li><li>Peer-to-peer messages and transport behavior.</li><li>Mining interfaces and block-template construction.</li><li>Wallet formats, addresses, signing, and backups.</li><li>RPCs, indexes, descriptors, and operator tools.</li><li>Performance, storage, privacy, and security behavior.</li></ul>\n<p>Not every upgrade changes consensus.</p>\n<p>A node can gain a new RPC, faster block validation, or a different relay policy without changing which blocks it accepts. Those changes may require coordination among applications or peers, but they do not automatically create a new validity rule.</p>\n<p>Consensus upgrades receive special scrutiny because incompatible enforcement can split participants over which blocks are valid.</p>"
+    },
+    {
+      "heading": "A BIP records a proposal rather than approving it",
+      "body_markdown": "Bitcoin Improvement Proposals provide a structured way to document ideas.\n\nThe BIP process defines publication requirements, document types, status handling, and editorial procedures. A BIP can describe a consensus change, peer protocol, application standard, informational design, or process.\n\nPublication in the BIPs repository does not mean the proposal is endorsed, safe, implemented, or scheduled for activation.\n\nA BIP number is also not authority over running nodes. The document can improve review by giving participants a stable specification and history, but adoption remains a separate question.\n\nUseful upgrade analysis asks:\n\n- What problem is being addressed?\n- Which layer changes?\n- Is the proposal complete enough to implement independently?\n- What compatibility assumptions does it make?\n- What tests or vectors define expected behavior?\n- Which software implements it?\n- What activation or deployment conditions apply?\n- Which users and services need operational changes?",
+      "body_html": "<p>Bitcoin Improvement Proposals provide a structured way to document ideas.</p>\n<p>The BIP process defines publication requirements, document types, status handling, and editorial procedures. A BIP can describe a consensus change, peer protocol, application standard, informational design, or process.</p>\n<p>Publication in the BIPs repository does not mean the proposal is endorsed, safe, implemented, or scheduled for activation.</p>\n<p>A BIP number is also not authority over running nodes. The document can improve review by giving participants a stable specification and history, but adoption remains a separate question.</p>\n<p>Useful upgrade analysis asks:</p>\n<ul><li>What problem is being addressed?</li><li>Which layer changes?</li><li>Is the proposal complete enough to implement independently?</li><li>What compatibility assumptions does it make?</li><li>What tests or vectors define expected behavior?</li><li>Which software implements it?</li><li>What activation or deployment conditions apply?</li><li>Which users and services need operational changes?</li></ul>"
+    },
+    {
+      "heading": "Discussion usually comes before formal specification",
+      "body_markdown": "Ideas are often discussed in public technical forums before a formal BIP is ready.\n\nEarly discussion can reveal that a proposal duplicates earlier work, creates an unexpected consensus risk, lacks a deployment plan, or needs to be divided into several specifications.\n\nThe design may change repeatedly.\n\nThis stage matters because implementation details can expose consequences that prose alone misses. A signature change may affect hardware wallets. A new output type may require address support. A block rule may require mining-template changes. A peer feature may need capability negotiation.\n\nThere is no required moment when discussion becomes agreement. A proposal can remain debated, be revised, be replaced, or become inactive without changing Bitcoin.",
+      "body_html": "<p>Ideas are often discussed in public technical forums before a formal BIP is ready.</p>\n<p>Early discussion can reveal that a proposal duplicates earlier work, creates an unexpected consensus risk, lacks a deployment plan, or needs to be divided into several specifications.</p>\n<p>The design may change repeatedly.</p>\n<p>This stage matters because implementation details can expose consequences that prose alone misses. A signature change may affect hardware wallets. A new output type may require address support. A block rule may require mining-template changes. A peer feature may need capability negotiation.</p>\n<p>There is no required moment when discussion becomes agreement. A proposal can remain debated, be revised, be replaced, or become inactive without changing Bitcoin.</p>"
+    },
+    {
+      "heading": "Implementation makes behavior testable",
+      "body_markdown": "A written specification becomes more concrete when software implements it.\n\nImplementation can reveal ambiguous byte encodings, integer boundaries, interactions with existing rules, denial-of-service risks, upgrade paths, and differences between policy and consensus.\n\nFor consensus changes, reviewers need deterministic behavior. Two correct implementations must agree on the validity of every possible relevant block and transaction.\n\nReference code can help explain the proposal, but one implementation does not substitute for a specification or review. Code can contain bugs, and prose can fail to capture code behavior.\n\nTesting may include:\n\n- Unit and functional tests.\n- Cross-implementation test vectors.\n- Fuzzing and adversarial cases.\n- Test networks or signet experiments.\n- Mining and wallet integration tests.\n- Activation-state tests.\n- Reorganization tests near the boundary.\n- Performance and resource measurements.",
+      "body_html": "<p>A written specification becomes more concrete when software implements it.</p>\n<p>Implementation can reveal ambiguous byte encodings, integer boundaries, interactions with existing rules, denial-of-service risks, upgrade paths, and differences between policy and consensus.</p>\n<p>For consensus changes, reviewers need deterministic behavior. Two correct implementations must agree on the validity of every possible relevant block and transaction.</p>\n<p>Reference code can help explain the proposal, but one implementation does not substitute for a specification or review. Code can contain bugs, and prose can fail to capture code behavior.</p>\n<p>Testing may include:</p>\n<ul><li>Unit and functional tests.</li><li>Cross-implementation test vectors.</li><li>Fuzzing and adversarial cases.</li><li>Test networks or signet experiments.</li><li>Mining and wallet integration tests.</li><li>Activation-state tests.</li><li>Reorganization tests near the boundary.</li><li>Performance and resource measurements.</li></ul>"
+    },
+    {
+      "heading": "A software release is not network activation",
+      "body_markdown": "When an implementation is merged into a project, only that repository has changed.\n\nWhen a project publishes a release, operators can choose to install it. Existing nodes do not update themselves because new code exists.\n\nA release may contain support for a future rule while leaving that rule inactive. It may also contain wallet, policy, networking, and performance changes unrelated to activation.\n\nThis creates three separate dates:\n\n1. The date code became available.\n2. The period in which operators adopted it.\n3. The block height or deployment state at which a consensus rule began enforcement.\n\nConflating those dates makes upgrade history inaccurate.",
+      "body_html": "<p>When an implementation is merged into a project, only that repository has changed.</p>\n<p>When a project publishes a release, operators can choose to install it. Existing nodes do not update themselves because new code exists.</p>\n<p>A release may contain support for a future rule while leaving that rule inactive. It may also contain wallet, policy, networking, and performance changes unrelated to activation.</p>\n<p>This creates three separate dates:</p>\n<ol><li>The date code became available.</li><li>The period in which operators adopted it.</li><li>The block height or deployment state at which a consensus rule began enforcement.</li></ol>\n<p>Conflating those dates makes upgrade history inaccurate.</p>"
+    },
+    {
+      "heading": "P2SH showed early coordination by time and signaling",
+      "body_markdown": "Pay to Script Hash, specified in BIP 16, changed how certain scripts were evaluated.\n\nBitcoin Core implemented the rules in version 0.6.0, and the rules took effect on April 1, 2012.\n\nThe deployment used miner signaling and a scheduled transition rather than today's versionbits framework.\n\nP2SH also required wallet and address support described separately in BIP 13. That distinction illustrates a recurring pattern: the consensus rule, user-facing encoding, mining readiness, and software release were connected but not identical.\n\nThe episode helped establish that upgrade history must track both technical specification and operational deployment.",
+      "body_html": "<p>Pay to Script Hash, specified in BIP 16, changed how certain scripts were evaluated.</p>\n<p>Bitcoin Core implemented the rules in version 0.6.0, and the rules took effect on April 1, 2012.</p>\n<p>The deployment used miner signaling and a scheduled transition rather than today&#39;s versionbits framework.</p>\n<p>P2SH also required wallet and address support described separately in BIP 13. That distinction illustrates a recurring pattern: the consensus rule, user-facing encoding, mining readiness, and software release were connected but not identical.</p>\n<p>The episode helped establish that upgrade history must track both technical specification and operational deployment.</p>"
+    },
+    {
+      "heading": "BIP 34 introduced height in the coinbase transaction",
+      "body_markdown": "BIP 34 required the block height to appear at the beginning of the coinbase input for applicable blocks.\n\nIts deployment used block-version thresholds. Version 2 blocks began enforcing the new rule, and version 1 blocks were later disallowed.\n\nBitcoin Core's current mainnet parameters use height 227,931 as the buried activation point for BIP 34.\n\nA buried deployment is a historical rule represented by a fixed height because the original signaling period is long past. Modern nodes still enforce the result even though they no longer need to recalculate the old readiness threshold during ordinary mainnet validation.",
+      "body_html": "<p>BIP 34 required the block height to appear at the beginning of the coinbase input for applicable blocks.</p>\n<p>Its deployment used block-version thresholds. Version 2 blocks began enforcing the new rule, and version 1 blocks were later disallowed.</p>\n<p>Bitcoin Core&#39;s current mainnet parameters use height 227,931 as the buried activation point for BIP 34.</p>\n<p>A buried deployment is a historical rule represented by a fixed height because the original signaling period is long past. Modern nodes still enforce the result even though they no longer need to recalculate the old readiness threshold during ordinary mainnet validation.</p>"
+    },
+    {
+      "heading": "BIP 66 and BIP 65 tightened script behavior",
+      "body_markdown": "BIP 66 required strict DER encoding for signatures used by Bitcoin script. Its mainnet activation is represented in current Bitcoin Core parameters at height 363,725.\n\nBIP 65 introduced `CHECKLOCKTIMEVERIFY` by assigning restrictive meaning to an existing no-operation opcode. Its mainnet activation height is 388,381.\n\nBoth used the earlier block-version threshold mechanism.\n\nThese upgrades show two reasons consensus rules evolve. BIP 66 reduced ambiguity in signature encoding, while BIP 65 added a new enforceable spending condition.\n\nThey also show why miners must do more than signal. A miner can claim readiness yet still produce an invalid block if its validation or template system does not enforce the activated rule correctly.",
+      "body_html": "<p>BIP 66 required strict DER encoding for signatures used by Bitcoin script. Its mainnet activation is represented in current Bitcoin Core parameters at height 363,725.</p>\n<p>BIP 65 introduced <code>CHECKLOCKTIMEVERIFY</code> by assigning restrictive meaning to an existing no-operation opcode. Its mainnet activation height is 388,381.</p>\n<p>Both used the earlier block-version threshold mechanism.</p>\n<p>These upgrades show two reasons consensus rules evolve. BIP 66 reduced ambiguity in signature encoding, while BIP 65 added a new enforceable spending condition.</p>\n<p>They also show why miners must do more than signal. A miner can claim readiness yet still produce an invalid block if its validation or template system does not enforce the activated rule correctly.</p>"
+    },
+    {
+      "heading": "Versionbits allowed parallel deployments",
+      "body_markdown": "BIP 9 introduced versionbits so several soft-fork deployments could use separate bits within the block version field.\n\nEach deployment can move through states such as defined, started, locked in, active, or failed according to its parameters and signaling results.\n\nVersionbits separates readiness signaling from actual enforcement. A signal can contribute to lock-in, but upgraded nodes enforce the new rule only when the deployment reaches its active state.\n\nThe mechanism improved flexibility, but it did not turn miners into protocol legislators. Signaling measured a defined form of block-producer readiness. It did not count users, nodes, wallets, businesses, or developers.",
+      "body_html": "<p>BIP 9 introduced versionbits so several soft-fork deployments could use separate bits within the block version field.</p>\n<p>Each deployment can move through states such as defined, started, locked in, active, or failed according to its parameters and signaling results.</p>\n<p>Versionbits separates readiness signaling from actual enforcement. A signal can contribute to lock-in, but upgraded nodes enforce the new rule only when the deployment reaches its active state.</p>\n<p>The mechanism improved flexibility, but it did not turn miners into protocol legislators. Signaling measured a defined form of block-producer readiness. It did not count users, nodes, wallets, businesses, or developers.</p>"
+    },
+    {
+      "heading": "Relative locktime deployed as a coordinated package",
+      "body_markdown": "The relative-locktime upgrade combined BIP 68, BIP 112, and BIP 113.\n\nBIP 68 assigned consensus meaning to transaction sequence fields for relative locktime. BIP 112 introduced `CHECKSEQUENCEVERIFY`. BIP 113 changed locktime evaluation to use median time past.\n\nThe package deployed through BIP 9 and is represented in current mainnet parameters by the CSV activation height of 419,328.\n\nThis history shows why one named upgrade may contain several interdependent BIPs. A complete account must identify which documents specify transaction semantics, script behavior, time calculation, activation, and implementation.",
+      "body_html": "<p>The relative-locktime upgrade combined BIP 68, BIP 112, and BIP 113.</p>\n<p>BIP 68 assigned consensus meaning to transaction sequence fields for relative locktime. BIP 112 introduced <code>CHECKSEQUENCEVERIFY</code>. BIP 113 changed locktime evaluation to use median time past.</p>\n<p>The package deployed through BIP 9 and is represented in current mainnet parameters by the CSV activation height of 419,328.</p>\n<p>This history shows why one named upgrade may contain several interdependent BIPs. A complete account must identify which documents specify transaction semantics, script behavior, time calculation, activation, and implementation.</p>"
+    },
+    {
+      "heading": "SegWit combined consensus, networking, wallet, and activation coordination",
+      "body_markdown": "Segregated Witness was not one isolated code switch.\n\nBIP 141 defined the consensus-layer witness structure, witness commitment, block weight, and witness programs. BIP 143 defined signature hashing for version 0 witness programs. BIP 144 covered peer services. BIP 145 updated mining interfaces. BIP 147 added another consensus restriction.\n\nBitcoin Core implemented major SegWit support in the 0.13 series. The original BIP 9 deployment used bit 1 and required 1,916 signaling blocks in a 2,016-block period, a 95 percent threshold.\n\nDuring 2017, several overlapping coordination efforts attempted to move that deployment toward lock-in. The New York Agreement was an industry commitment to support SegWit through an 80 percent bit 4 signal and later attempt a 2 MB base-block-size hard fork. The agreement was not itself a Bitcoin consensus mechanism and could not update running nodes.\n\nBIP 148 proposed that participating nodes reject blocks that did not signal the existing SegWit bit during a defined period beginning August 1, 2017, unless SegWit had already locked in. BIP 91 defined a separate bit 4 deployment with a threshold of 269 blocks in a 336-block window. Once active, BIP 91 enforcing nodes rejected blocks that did not signal the existing SegWit bit 1 deployment, creating a path for the original BIP 9 threshold to be reached.\n\nSegWit ultimately locked in under its original BIP 9 deployment and activated at mainnet height 481,824. The outcome cannot be reduced to a vote by miners, companies, developers, or users. BIP 9 supplied the activation state enforced by compatible node software, while BIP 91, BIP 148, the New York Agreement, miner behavior, operator choices, and service preparation shaped the coordination environment around it.",
+      "body_html": "<p>Segregated Witness was not one isolated code switch.</p>\n<p>BIP 141 defined the consensus-layer witness structure, witness commitment, block weight, and witness programs. BIP 143 defined signature hashing for version 0 witness programs. BIP 144 covered peer services. BIP 145 updated mining interfaces. BIP 147 added another consensus restriction.</p>\n<p>Bitcoin Core implemented major SegWit support in the 0.13 series. The original BIP 9 deployment used bit 1 and required 1,916 signaling blocks in a 2,016-block period, a 95 percent threshold.</p>\n<p>During 2017, several overlapping coordination efforts attempted to move that deployment toward lock-in. The New York Agreement was an industry commitment to support SegWit through an 80 percent bit 4 signal and later attempt a 2 MB base-block-size hard fork. The agreement was not itself a Bitcoin consensus mechanism and could not update running nodes.</p>\n<p>BIP 148 proposed that participating nodes reject blocks that did not signal the existing SegWit bit during a defined period beginning August 1, 2017, unless SegWit had already locked in. BIP 91 defined a separate bit 4 deployment with a threshold of 269 blocks in a 336-block window. Once active, BIP 91 enforcing nodes rejected blocks that did not signal the existing SegWit bit 1 deployment, creating a path for the original BIP 9 threshold to be reached.</p>\n<p>SegWit ultimately locked in under its original BIP 9 deployment and activated at mainnet height 481,824. The outcome cannot be reduced to a vote by miners, companies, developers, or users. BIP 9 supplied the activation state enforced by compatible node software, while BIP 91, BIP 148, the New York Agreement, miner behavior, operator choices, and service preparation shaped the coordination environment around it.</p>"
+    },
+    {
+      "heading": "Taproot used a bounded signaling window and activation floor",
+      "body_markdown": "Taproot combined BIP 340 Schnorr signatures, BIP 341 Taproot rules, and BIP 342 Tapscript.\n\nThe rules were implemented in Bitcoin Core before activation and deployed with a modified versionbits process.\n\nFor mainnet, BIP 341 specified a 2,016-block signaling period, a threshold of 1,815 blocks, a limited signaling window, and a minimum activation height of 709,632. The deployment activated at that height.\n\nThe minimum activation height created time between lock-in and enforcement for software and operational preparation.\n\nTaproot's history again separates specification, code availability, release support, signaling, lock-in, and activation. Calling all of those events \"the Taproot upgrade date\" hides the process.",
+      "body_html": "<p>Taproot combined BIP 340 Schnorr signatures, BIP 341 Taproot rules, and BIP 342 Tapscript.</p>\n<p>The rules were implemented in Bitcoin Core before activation and deployed with a modified versionbits process.</p>\n<p>For mainnet, BIP 341 specified a 2,016-block signaling period, a threshold of 1,815 blocks, a limited signaling window, and a minimum activation height of 709,632. The deployment activated at that height.</p>\n<p>The minimum activation height created time between lock-in and enforcement for software and operational preparation.</p>\n<p>Taproot&#39;s history again separates specification, code availability, release support, signaling, lock-in, and activation. Calling all of those events &quot;the Taproot upgrade date&quot; hides the process.</p>"
+    },
+    {
+      "heading": "Miners signal and produce blocks, but do not act alone",
+      "body_markdown": "Miners have an important role because they construct blocks and can signal through block headers when a deployment defines that mechanism.\n\nTheir readiness matters. After activation, miners using incorrect rules can lose work by producing blocks that upgraded nodes reject.\n\nBut miners do not install software on user nodes, define what wallets accept, or make invalid blocks valid to nodes enforcing different rules.\n\nA signaling threshold is meaningful because node software assigns meaning to it. The threshold cannot update nodes that do not contain that deployment logic.\n\nMining support is therefore a coordination and production input, not unilateral approval of the protocol.",
+      "body_html": "<p>Miners have an important role because they construct blocks and can signal through block headers when a deployment defines that mechanism.</p>\n<p>Their readiness matters. After activation, miners using incorrect rules can lose work by producing blocks that upgraded nodes reject.</p>\n<p>But miners do not install software on user nodes, define what wallets accept, or make invalid blocks valid to nodes enforcing different rules.</p>\n<p>A signaling threshold is meaningful because node software assigns meaning to it. The threshold cannot update nodes that do not contain that deployment logic.</p>\n<p>Mining support is therefore a coordination and production input, not unilateral approval of the protocol.</p>"
+    },
+    {
+      "heading": "Node operators choose local enforcement software",
+      "body_markdown": "A node operator decides which implementation and version to run.\n\nThat software determines the consensus checks the node performs, subject to network parameters and activation state.\n\nOne node cannot force every other node to upgrade. It can accept, reject, and relay data according to its own rules. When many independently operated nodes enforce compatible rules, they can converge on the same valid proof-of-work history.\n\nThis local choice gives node operation practical importance, but it should not be romanticized as one-node-one-vote governance. Nodes are not registered identities, and a person can run many of them. Economic relevance, connectivity, mining behavior, and service dependencies are not measured by a simple node count.",
+      "body_html": "<p>A node operator decides which implementation and version to run.</p>\n<p>That software determines the consensus checks the node performs, subject to network parameters and activation state.</p>\n<p>One node cannot force every other node to upgrade. It can accept, reject, and relay data according to its own rules. When many independently operated nodes enforce compatible rules, they can converge on the same valid proof-of-work history.</p>\n<p>This local choice gives node operation practical importance, but it should not be romanticized as one-node-one-vote governance. Nodes are not registered identities, and a person can run many of them. Economic relevance, connectivity, mining behavior, and service dependencies are not measured by a simple node count.</p>"
+    },
+    {
+      "heading": "Developers propose and maintain software rather than command adoption",
+      "body_markdown": "Developers research designs, write specifications, review code, produce tests, maintain implementations, and publish releases.\n\nThose activities can strongly influence what options are available and how well risks are understood.\n\nThey do not create a universal update channel.\n\nA maintainer can merge code into one repository, but operators may decline the release, use another implementation, modify the code, or remain on an older version.\n\nThis distinction does not make development power irrelevant. Review access, expertise, release practices, funding, and communication can shape the upgrade process. It means that software influence and network enforcement are not the same authority.",
+      "body_html": "<p>Developers research designs, write specifications, review code, produce tests, maintain implementations, and publish releases.</p>\n<p>Those activities can strongly influence what options are available and how well risks are understood.</p>\n<p>They do not create a universal update channel.</p>\n<p>A maintainer can merge code into one repository, but operators may decline the release, use another implementation, modify the code, or remain on an older version.</p>\n<p>This distinction does not make development power irrelevant. Review access, expertise, release practices, funding, and communication can shape the upgrade process. It means that software influence and network enforcement are not the same authority.</p>"
+    },
+    {
+      "heading": "Wallets, exchanges, and services face their own readiness work",
+      "body_markdown": "Even when old nodes can remain consensus compatible, applications may need updates.\n\nAn upgrade can require:\n\n- New address encodings.\n- New transaction or signature formats.\n- Hardware-wallet firmware.\n- Descriptor and backup changes.\n- Fee and weight accounting.\n- Block-explorer decoding.\n- Exchange deposit and withdrawal support.\n- Custody policy changes.\n- Mining-template and payout updates.\n- Monitoring for activation and reorganization events.\n\nService readiness does not decide consensus validity, but failures can harm users.\n\nThis is why deployment planning includes more than node and miner percentages.",
+      "body_html": "<p>Even when old nodes can remain consensus compatible, applications may need updates.</p>\n<p>An upgrade can require:</p>\n<ul><li>New address encodings.</li><li>New transaction or signature formats.</li><li>Hardware-wallet firmware.</li><li>Descriptor and backup changes.</li><li>Fee and weight accounting.</li><li>Block-explorer decoding.</li><li>Exchange deposit and withdrawal support.</li><li>Custody policy changes.</li><li>Mining-template and payout updates.</li><li>Monitoring for activation and reorganization events.</li></ul>\n<p>Service readiness does not decide consensus validity, but failures can harm users.</p>\n<p>This is why deployment planning includes more than node and miner percentages.</p>"
+    },
+    {
+      "heading": "Emergency fixes reveal consensus risk",
+      "body_markdown": "Not every urgent release is a planned network upgrade.\n\nIn August 2010, block 74,638 included a transaction that exploited an output-value overflow bug and created amounts far beyond Bitcoin's intended monetary rules. Version 0.3.10 added stricter transaction-value checks, and miners and node operators coordinated around a patched chain that excluded the bad block. The event was an emergency correction to unintended validation behavior, not a normal BIP deployment.\n\nIn March 2013, Bitcoin 0.8 accepted a block that some pre-0.8 nodes rejected because older Berkeley DB configurations could exhaust their available locks while processing a large but otherwise valid block. The incompatible behavior produced two chains with substantial proof of work. Major pools temporarily downgraded so mining concentrated on the chain older nodes could process, and Bitcoin 0.8.1 added temporary compatibility limits.\n\nThe 2013 split showed that implementation and resource behavior can become de facto consensus boundaries even when no protocol designer intended them to be rules. It also showed that proof of work cannot automatically resolve a split when participants disagree about validity and both branches retain meaningful mining support.\n\nEmergency response can involve patches, release coordination, miner communication, service pauses, and temporary operating guidance. Those actions should be described by the actual bug and compatibility decision rather than presented as a normal proposal or activation ceremony.",
+      "body_html": "<p>Not every urgent release is a planned network upgrade.</p>\n<p>In August 2010, block 74,638 included a transaction that exploited an output-value overflow bug and created amounts far beyond Bitcoin&#39;s intended monetary rules. Version 0.3.10 added stricter transaction-value checks, and miners and node operators coordinated around a patched chain that excluded the bad block. The event was an emergency correction to unintended validation behavior, not a normal BIP deployment.</p>\n<p>In March 2013, Bitcoin 0.8 accepted a block that some pre-0.8 nodes rejected because older Berkeley DB configurations could exhaust their available locks while processing a large but otherwise valid block. The incompatible behavior produced two chains with substantial proof of work. Major pools temporarily downgraded so mining concentrated on the chain older nodes could process, and Bitcoin 0.8.1 added temporary compatibility limits.</p>\n<p>The 2013 split showed that implementation and resource behavior can become de facto consensus boundaries even when no protocol designer intended them to be rules. It also showed that proof of work cannot automatically resolve a split when participants disagree about validity and both branches retain meaningful mining support.</p>\n<p>Emergency response can involve patches, release coordination, miner communication, service pauses, and temporary operating guidance. Those actions should be described by the actual bug and compatibility decision rather than presented as a normal proposal or activation ceremony.</p>"
+    },
+    {
+      "heading": "Compatibility is tested at boundaries",
+      "body_markdown": "Upgrade risk concentrates at boundaries:\n\n- Before and after activation.\n- Between upgraded and non-upgraded nodes.\n- Between miners that enforce different rules.\n- Between wallet software and new output types.\n- Between peer versions.\n- Between implementations interpreting the same specification.\n- During reorganizations crossing an activation height.\n- When a deployment times out or fails to lock in.\n\nGood engineering defines expected behavior on both sides of each boundary.\n\nA deployment that works only on the happy path is not ready for a live monetary network.",
+      "body_html": "<p>Upgrade risk concentrates at boundaries:</p>\n<ul><li>Before and after activation.</li><li>Between upgraded and non-upgraded nodes.</li><li>Between miners that enforce different rules.</li><li>Between wallet software and new output types.</li><li>Between peer versions.</li><li>Between implementations interpreting the same specification.</li><li>During reorganizations crossing an activation height.</li><li>When a deployment times out or fails to lock in.</li></ul>\n<p>Good engineering defines expected behavior on both sides of each boundary.</p>\n<p>A deployment that works only on the happy path is not ready for a live monetary network.</p>"
+    },
+    {
+      "heading": "There is no single approval ceremony",
+      "body_markdown": "Bitcoin upgrades do not pass through one final institution.\n\nA proposal may gain broad technical review but little operator adoption. Software may be widely installed while a feature remains unused. Miners may signal readiness while wallets are still preparing. Businesses may announce support without running enforcing nodes. Users may disagree about acceptable activation methods.\n\nThe result emerges from actions:\n\n- Authors specify.\n- Reviewers test and criticize.\n- Maintainers decide what enters particular releases.\n- Operators select software.\n- Miners validate, signal, and produce blocks.\n- Wallets and services support new behavior.\n- Users decide which systems and rules they rely on.\n\nNo list is a formal legislature. The categories also overlap because one person or organization may fill several roles.",
+      "body_html": "<p>Bitcoin upgrades do not pass through one final institution.</p>\n<p>A proposal may gain broad technical review but little operator adoption. Software may be widely installed while a feature remains unused. Miners may signal readiness while wallets are still preparing. Businesses may announce support without running enforcing nodes. Users may disagree about acceptable activation methods.</p>\n<p>The result emerges from actions:</p>\n<ul><li>Authors specify.</li><li>Reviewers test and criticize.</li><li>Maintainers decide what enters particular releases.</li><li>Operators select software.</li><li>Miners validate, signal, and produce blocks.</li><li>Wallets and services support new behavior.</li><li>Users decide which systems and rules they rely on.</li></ul>\n<p>No list is a formal legislature. The categories also overlap because one person or organization may fill several roles.</p>"
+    },
+    {
+      "heading": "The historical pattern is conservative layering",
+      "body_markdown": "Across P2SH, BIP 34, BIP 66, BIP 65, relative locktime, SegWit, and Taproot, a recurring sequence appears:\n\n1. Identify a problem or capability.\n2. Discuss tradeoffs publicly.\n3. Write precise specifications.\n4. Implement and test the behavior.\n5. Publish supporting software.\n6. Give operators and services time to prepare.\n7. Coordinate activation when consensus changes.\n8. Enforce the rule through upgraded nodes.\n9. Monitor blocks, applications, and compatibility.\n10. Preserve the result as historical consensus logic.\n\nThe details changed across eras. Early deployments used time or block-version thresholds. Later deployments used versionbits and explicit activation parameters. Old deployments became fixed-height checks.\n\nThe durable principle is independent adoption with precise compatibility.\n\nBitcoin can upgrade because people can coordinate around better rules and software. It remains resistant to unilateral change because every participant decides what to run and every validating node checks the resulting blocks for itself.",
+      "body_html": "<p>Across P2SH, BIP 34, BIP 66, BIP 65, relative locktime, SegWit, and Taproot, a recurring sequence appears:</p>\n<ol><li>Identify a problem or capability.</li><li>Discuss tradeoffs publicly.</li><li>Write precise specifications.</li><li>Implement and test the behavior.</li><li>Publish supporting software.</li><li>Give operators and services time to prepare.</li><li>Coordinate activation when consensus changes.</li><li>Enforce the rule through upgraded nodes.</li><li>Monitor blocks, applications, and compatibility.</li><li>Preserve the result as historical consensus logic.</li></ol>\n<p>The details changed across eras. Early deployments used time or block-version thresholds. Later deployments used versionbits and explicit activation parameters. Old deployments became fixed-height checks.</p>\n<p>The durable principle is independent adoption with precise compatibility.</p>\n<p>Bitcoin can upgrade because people can coordinate around better rules and software. It remains resistant to unilateral change because every participant decides what to run and every validating node checks the resulting blocks for itself.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Network upgrade",
+      "definition": "A coordinated change to Bitcoin software or rules that may affect policy, interoperability, features, or consensus behavior."
+    },
+    {
+      "term": "Consensus",
+      "definition": "The shared validation rules independently enforced by Bitcoin nodes."
+    },
+    {
+      "term": "BIP",
+      "definition": "A Bitcoin Improvement Proposal that documents a proposed standard, process, or protocol change."
+    },
+    {
+      "term": "Bitcoin Core",
+      "definition": "The most widely used open-source Bitcoin node and wallet software implementation."
+    },
+    {
+      "term": "Soft fork",
+      "definition": "A consensus change that makes previously valid behavior invalid under new rules."
+    },
+    {
+      "term": "Hard fork",
+      "definition": "A consensus rule change that can make previously invalid blocks valid and requires broad compatibility planning."
+    },
+    {
+      "term": "Protocol",
+      "definition": "A defined set of rules and message formats that allows independent participants or software systems to interact consistently."
+    },
+    {
+      "term": "Validation",
+      "definition": "The process of checking transactions and blocks against applicable rules."
+    }
+  ],
+  "sources": [
+    {
+      "title": "BIP 3: Updated BIP Process",
+      "author_or_publisher": "Bitcoin Improvement Proposal contributors",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0003.md",
+      "supports": "The current BIP publication process, document handling, editorial roles, and the distinction between publishing a proposal and adopting it."
+    },
+    {
+      "title": "Bitcoin BIPs repository README",
+      "author_or_publisher": "Bitcoin Improvement Proposal contributors",
+      "url": "https://github.com/bitcoin/bips/blob/master/README.mediawiki",
+      "supports": "The BIPs repository as a publication medium and archive, the lack of automatic endorsement or adoption, and the role of users in acceptance."
+    },
+    {
+      "title": "Bitcoin Core implemented BIPs documentation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/doc/bips.md",
+      "supports": "Implementation and deployment history for P2SH, BIP 34, BIP 65, BIP 66, versionbits, CSV, SegWit, and Taproot."
+    },
+    {
+      "title": "BIP 16: Pay to Script Hash",
+      "author_or_publisher": "Gavin Andresen",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0016.mediawiki",
+      "supports": "P2SH consensus behavior, early miner signaling, and the scheduled 2012 transition."
+    },
+    {
+      "title": "BIP 34: Block v2, Height in Coinbase",
+      "author_or_publisher": "Gavin Andresen",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0034.mediawiki",
+      "supports": "Coinbase-height rules, block-version deployment, and early threshold-based activation."
+    },
+    {
+      "title": "BIP 66: Strict DER Signatures",
+      "author_or_publisher": "Pieter Wuille",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0066.mediawiki",
+      "supports": "Strict signature-encoding consensus rules and the version 3 deployment mechanism."
+    },
+    {
+      "title": "BIP 65: OP_CHECKLOCKTIMEVERIFY",
+      "author_or_publisher": "Peter Todd",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0065.mediawiki",
+      "supports": "Absolute locktime script enforcement and the version 4 deployment mechanism."
+    },
+    {
+      "title": "BIP 9: Version Bits with Timeout and Delay",
+      "author_or_publisher": "Pieter Wuille, Peter Todd, Gregory Maxwell, and Rusty Russell",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0009.mediawiki",
+      "supports": "Parallel soft-fork deployment, signaling periods, thresholds, timeouts, and defined state transitions."
+    },
+    {
+      "title": "BIP 68, BIP 112, and BIP 113 relative-locktime suite",
+      "author_or_publisher": "Bitcoin Improvement Proposal contributors",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0068.mediawiki",
+      "supports": "Consensus-enforced relative locktime and its coordinated deployment with CHECKSEQUENCEVERIFY and median-time-past locktime rules."
+    },
+    {
+      "title": "BIP 141: Segregated Witness",
+      "author_or_publisher": "Eric Lombrozo, Johnson Lau, and Pieter Wuille",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki",
+      "supports": "Witness structure, block commitments, block weight, witness programs, backward-compatibility boundaries, and SegWit consensus deployment."
+    },
+    {
+      "title": "BIP 148: Mandatory Activation of SegWit Deployment",
+      "author_or_publisher": "Shaolin Fry",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0148.mediawiki",
+      "supports": "The user-activated soft-fork proposal that formed part of SegWit's deployment history and coordination debate."
+    },
+    {
+      "title": "BIP 91: Reduced threshold SegWit MASF",
+      "author_or_publisher": "James Hilliard",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0091.mediawiki",
+      "supports": "The bit 4 deployment, 269-of-336 threshold, mandatory bit 1 signaling after activation, and its relationship to the existing SegWit BIP 9 deployment."
+    },
+    {
+      "title": "Bitcoin Scaling Agreement at Consensus 2017",
+      "author_or_publisher": "Digital Currency Group",
+      "url": "https://dcgco.medium.com/bitcoin-scaling-agreement-at-consensus-2017-133521fe9a77",
+      "supports": "The original New York Agreement commitment to 80 percent bit 4 SegWit signaling and a later 2 MB hard-fork proposal."
+    },
+    {
+      "title": "BIP 340: Schnorr Signatures for secp256k1",
+      "author_or_publisher": "Pieter Wuille, Jonas Nick, and Tim Ruffing",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0340.mediawiki",
+      "supports": "The Schnorr signature specification deployed as part of Taproot."
+    },
+    {
+      "title": "BIP 341: Taproot",
+      "author_or_publisher": "Pieter Wuille, Jonas Nick, and Anthony Towns",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki",
+      "supports": "Taproot consensus rules, mainnet signaling parameters, 90 percent threshold, minimum activation height, and activation at block 709,632."
+    },
+    {
+      "title": "BIP 342: Validation of Taproot Scripts",
+      "author_or_publisher": "Pieter Wuille, Jonas Nick, and Anthony Towns",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0342.mediawiki",
+      "supports": "Tapscript validation rules and its concurrent deployment with Taproot."
+    },
+    {
+      "title": "Version 0.3.10 overflow patch announcement",
+      "author_or_publisher": "Satoshi Nakamoto",
+      "url": "https://bitcointalk.org/index.php?topic=827.0",
+      "supports": "The emergency release of version 0.3.10 to patch the block 74,638 output-value overflow bug."
+    },
+    {
+      "title": "BIP 50: March 2013 Chain Fork Post-Mortem",
+      "author_or_publisher": "Gavin Andresen",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0050.mediawiki",
+      "supports": "The March 2013 split, Berkeley DB lock exhaustion, incompatible validation behavior, pool downgrades, and the operational response."
+    },
+    {
+      "title": "Bitcoin-Qt version 0.8.1 release notes",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://bitcoin.org/en/release/v0.8.1",
+      "supports": "The 0.8.1 compatibility rules and checkpoint added after the March 2013 chain fork."
+    },
+    {
+      "title": "Bitcoin Core mainnet consensus parameters",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/kernel/chainparams.cpp",
+      "supports": "Buried mainnet activation heights for BIP 34, BIP 65, BIP 66, CSV, and SegWit."
+    },
+    {
+      "title": "Bitcoin Core validation implementation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/validation.cpp",
+      "supports": "Independent block validation, activation of valid candidate chains, and enforcement of consensus rules by local nodes."
+    }
+  ],
+  "seo_title": "How Bitcoin Network Upgrades Happen: From BIPs to Activation",
+  "meta_description": "Learn how Bitcoin upgrades move from public proposals and code review to releases, adoption, signaling, activation, and independent node enforcement.",
+  "excerpt": "Bitcoin upgrades are not approved by one group. See how BIPs, implementations, miners, node operators, wallets, services, and activation mechanisms have shaped changes from P2SH to Taproot.",
+  "reading_time": "15 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-NETWORK",
+    "label": "The Bitcoin Network",
+    "subcategory": "Consensus",
+    "depth": "Deep",
+    "format": "History"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-031",
+      "title": "How Bitcoin Soft Forks Work",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-033",
+      "title": "How the Lightning Network Works",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": []
+  },
+  "review_dates": {
+    "reviewed": "2026-07-19",
+    "copy_locked": "2026-07-19",
+    "human_verification": "2026-07-19"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "From Proposal to Enforced Upgrade",
+      "educational_purpose": "Separate the stages that turn an idea into locally enforced Bitcoin behavior.",
+      "recommended_placement": "After the section titled A software release is not network activation.",
+      "visual_description": "Old nautical engineering flow with stations for public discussion, BIP specification, implementation, review and tests, software release, operator adoption, activation mechanism, and node enforcement. Use separate tracks for miners, wallets, and services joining before activation.",
+      "required_labels": "Discussion, BIP, Implementation, Review, Tests, Release, Adoption, Signaling, Activation, Node enforcement",
+      "caption": "A Bitcoin upgrade moves through specification, software, adoption, and enforcement rather than one approval event.",
+      "alt_text": "Historical process diagram showing a Bitcoin proposal moving through a BIP, implementation, testing, release, operator adoption, activation, and independent node enforcement.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack the main stages vertically and place miner, wallet, and service readiness as short side branches.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "Bitcoin Upgrade Timeline",
+      "educational_purpose": "Show how deployment methods changed from early scheduled and version-threshold transitions to versionbits and bounded activation.",
+      "recommended_placement": "After the section titled Taproot used a bounded signaling window and activation floor.",
+      "visual_description": "Weathered ocean-chart timeline marking P2SH in 2012, BIP 34 at height 227,931, BIP 66 at 363,725, BIP 65 at 388,381, CSV at 419,328, SegWit at 481,824, and Taproot at 709,632. Use distinct symbols for scheduled time, buried height, versionbits, and modified versionbits.",
+      "required_labels": "P2SH, BIP 34, BIP 66, BIP 65, CSV, SegWit, Taproot, Scheduled transition, Version threshold, Versionbits, Activation height",
+      "caption": "Bitcoin's upgrade history moved through several deployment mechanisms while preserving independent node enforcement.",
+      "alt_text": "Historical Bitcoin upgrade timeline from P2SH through Taproot with activation heights and deployment-mechanism labels.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Use a vertical timeline with large height labels and keep each deployment symbol beside its upgrade name.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Who Does What During an Upgrade",
+      "educational_purpose": "Prevent miners, developers, nodes, wallets, and services from being collapsed into one governance body.",
+      "recommended_placement": "After the section titled There is no single approval ceremony.",
+      "visual_description": "Vintage network coordination chart with five independent vessels. Developers carry specifications and code. Node operators carry validation rules. Miners carry templates, signals, and proof of work. Wallets and services carry user-facing support. Users choose software and services. Lines show coordination without a central command ship.",
+      "required_labels": "Developers, Node operators, Miners, Wallets, Services, Users, Specification, Software choice, Validation, Signaling, Block production, Operational support",
+      "caption": "Bitcoin upgrades depend on overlapping roles, but no single role can update every participant by decree.",
+      "alt_text": "Editorial coordination diagram showing developers, node operators, miners, wallets, services, and users performing distinct roles during a Bitcoin upgrade without a central authority.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Arrange the five role vessels in a circle around the upgrade process and keep the center free of any authority symbol.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}

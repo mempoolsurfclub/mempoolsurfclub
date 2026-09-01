@@ -1,0 +1,127 @@
+{% comment %}
+  Generated from docs/learn/content/guides/MSC-GUIDE-021-bitcoin-full-node.md.
+  Registry binding: MSC-GUIDE-021.
+  Preview only. Do not edit manually.
+  Rebuild with node scripts/generate-msc-learn-guide-category-runtime.mjs --start=17 --end=32 --write.
+{% endcomment %}
+<section class="msc-shell msc-learn-page" data-msc-registry-id="MSC-GUIDE-021" data-msc-preview-only="true">
+  <div class="msc-container msc-learn-page__container">
+    <nav class="msc-learn-breadcrumbs" aria-label="Learn breadcrumbs"><ol><li><span>Learn</span></li><li><span>The Bitcoin Network</span></li><li aria-current="page"><span>What Is a Bitcoin Full Node?</span></li></ol></nav>
+    <header class="msc-learn-page__header">
+      <p class="msc-section-kicker">The Bitcoin Network</p>
+      <h1>What Is a Bitcoin Full Node?</h1>
+      <p class="msc-learn-page__deck">A Bitcoin full node is software that independently checks blocks and transactions against the rules it is configured to enforce. It does not need permission from a miner, exchange, wallet provider, or other node to decide whether incoming data is valid. Running one gives its operator a direct view of Bitcoin instead of relying entirely on someone else&#39;s interpretation of the chain.</p>
+      <ul class="msc-learn-page-meta"><li>Nodes</li><li>Shallow</li><li>Explainer</li><li>11 minutes</li><li>Reviewed 2026-07-18</li></ul>
+      <p class="msc-learn-preview-note">Preview only. Publication records and confirmed URLs do not exist; all navigation remains inactive.</p>
+    </header>
+    <article class="msc-learn-article rte" data-msc-content-source="structured-runtime">
+<section class="msc-learn-article__section">
+<p>A Bitcoin full node is often described as a machine that stores the blockchain, but storage is only part of the job. The defining feature is independent validation.</p>
+<p>A full node receives data from peers, checks that data against Bitcoin&#39;s consensus rules, maintains the state needed to evaluate new transactions, and follows a valid chain selected by accumulated proof of work. Depending on its configuration, it may also relay transactions, serve blocks to peers, provide wallet data, expose an RPC interface, or accept inbound connections.</p>
+<p>Those functions are related, but they are not the same thing. A node can validate without mining. It can validate without keeping every old block forever. It can validate while making no wallet available. It can also run with only outbound peer connections.</p>
+<p>The word &quot;full&quot; therefore refers to the node&#39;s validation behavior, not to one required hardware shape or one universal feature list.</p>
+</section>
+<section class="msc-learn-article__section"><h2>A full node checks rules for itself</h2>
+<p>When a node receives a block, it does not trust the sender merely because the block includes proof of work. It checks the block and its transactions against the consensus rules implemented by its software.</p>
+<p>Those checks include matters such as:</p>
+<ul><li>The block header uses the required proof-of-work target.</li><li>The block connects to known valid history.</li><li>Transactions do not create value outside the permitted issuance and fee rules.</li><li>Inputs spend available outputs rather than already spent outputs.</li><li>Signatures and spending conditions satisfy the applicable rules.</li><li>Block size, weight, transaction structure, and other consensus limits are respected.</li><li>Coinbase rules, locktime rules, and deployed consensus changes are enforced.</li></ul>
+<p>A block that fails a required rule is invalid to that node. More proof of work does not convert an invalid block into a valid one.</p>
+<p>This is why a full node is more than a network listener. It evaluates the data it receives and updates its local chainstate only when the required checks pass.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Chainstate is the node&#39;s working view of spendable bitcoin</h2>
+<p>A node needs more than a list of block hashes. It maintains chainstate, including a representation of the current unspent transaction output set.</p>
+<p>The UTXO set lets the node determine whether a transaction is attempting to spend an available output and whether the new transaction satisfies the conditions attached to that output. As valid blocks are connected, spent outputs are removed and newly created outputs are added.</p>
+<p>This working state is different from storing every historical block file. An archival node keeps old block data available locally. A pruned full node can discard older block files after validating them while retaining the chainstate needed to continue validating new activity.</p>
+<p>Both can be fully validating nodes.</p>
+</section>
+<section class="msc-learn-article__section"><h2>A full node follows valid chain history</h2>
+<p>Bitcoin can temporarily present a node with more than one candidate chain tip. A full node does not select a chain based on popularity, a miner&#39;s identity, or a manual vote.</p>
+<p>The node first requires the relevant blocks to satisfy its validation rules. Among valid candidates, accumulated proof of work guides chain selection.</p>
+<p>A reorganization can occur when another valid branch accumulates more work. The node disconnects blocks from the former selected branch and connects blocks from the stronger valid branch, updating chainstate as it goes.</p>
+<p>This process is local to each node. Nodes that enforce compatible rules and receive the same valid information tend to converge on the same chain, but no central server commands them to do so.</p>
+</section>
+<section class="msc-learn-article__section"><h2>One node does not create consensus by itself</h2>
+<p>A full node independently enforces rules, but one node does not unilaterally define Bitcoin for everyone else.</p>
+<p>Consensus describes shared validation rules independently enforced across the network. If one operator changes software to accept something other nodes reject, that operator may follow a different network or incompatible chain. Other nodes are not forced to follow.</p>
+<p>Economic participants also decide which software, rules, and chain they recognize for payments, custody, accounting, and settlement. Miners can propose blocks, but validating nodes decide whether those blocks satisfy the rules they enforce.</p>
+<p>The practical strength of Bitcoin&#39;s validation model comes from many independent operators being able to verify the same public data without appointing a central authority.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Validation, policy, relay, and storage are different layers</h2>
+<p>Bitcoin node discussions often mix four separate ideas:</p>
+<p><strong>Consensus validation</strong> determines whether blocks and transactions are valid under the shared rules.</p>
+<p><strong>Policy</strong> applies local standards to unconfirmed transactions, relay behavior, mempool admission, and default mining choices. A transaction can be valid by consensus but not accepted into a particular node&#39;s mempool.</p>
+<p><strong>Relay</strong> is the forwarding of blocks, transactions, and peer information across the network.</p>
+<p><strong>Storage</strong> determines which block files, indexes, wallet data, logs, and databases remain available locally.</p>
+<p>A full node must perform the validation needed to follow Bitcoin. It does not need to use identical policy settings, retain identical mempool contents, or store identical optional indexes.</p>
+<p>This distinction matters because two honest full nodes can disagree about whether to relay an unconfirmed transaction while still agreeing that a later valid block containing it is acceptable.</p>
+</section>
+<section class="msc-learn-article__section"><h2>A full node is not the same as a miner</h2>
+<p>Mining systems construct candidate blocks and search for proof-of-work hashes. Full nodes verify the results.</p>
+<p>A miner commonly uses a node or node-compatible infrastructure to obtain transactions, build templates, submit found blocks, and verify the chain it is extending. The hashing hardware itself does not replace full-node validation.</p>
+<p>Most full nodes do not mine. Most mining devices are not full nodes.</p>
+<p>Keeping the roles separate makes the network easier to understand. Miners compete to extend the chain. Nodes enforce the rules that determine whether the proposed extension is valid.</p>
+</section>
+<section class="msc-learn-article__section"><h2>A full node is not automatically a wallet</h2>
+<p>A wallet manages keys, constructs transactions, and helps a user track funds. A node validates network data.</p>
+<p>Some software combines both roles. Bitcoin Core, for example, can be built with an optional wallet and graphical interface. Other node setups run without wallet functionality, while external wallets connect to a node for verified chain data.</p>
+<p>Running a node does not by itself secure wallet keys. A node operator still needs appropriate backups, access controls, software maintenance, and a clear security model for any wallet connected to it.</p>
+<p>Likewise, losing a node&#39;s blockchain data does not necessarily mean losing bitcoin. Wallet keys and backups are the critical custody material. The node data can generally be downloaded and validated again, though doing so can take substantial time and resources.</p>
+</section>
+<section class="msc-learn-article__section"><h2>A node can improve a user&#39;s verification and privacy position</h2>
+<p>A wallet that queries someone else&#39;s server may reveal addresses, transaction interests, balances, or timing information to that provider. Connecting a wallet to a node you control can reduce that dependency.</p>
+<p>It also lets the wallet obtain chain data from a source that has independently validated the network according to your chosen software.</p>
+<p>That does not create perfect privacy. Peer connections, network observers, address reuse, transaction structure, wallet configuration, remote administration, and other behavior can still reveal information. Privacy depends on the complete setup, not simply on whether a node exists.</p>
+<p>A local node is best understood as a stronger verification boundary and a useful privacy tool, not as an automatic anonymity system.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Inbound connections are useful but not required for validation</h2>
+<p>A node can make outbound connections, download blocks and transactions, and validate the chain without accepting unsolicited inbound connections.</p>
+<p>Accepting inbound peers can help the broader network by making current data and peer connectivity available to others. It may require firewall, router, service, or privacy decisions that are not appropriate for every operator.</p>
+<p>The choice should be deliberate. A beginner does not need to open a port merely to receive and validate Bitcoin data. A public service node has different operational responsibilities from a private household node.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Node counts are estimates</h2>
+<p>There is no complete central registry of Bitcoin nodes.</p>
+<p>Public measurements often count reachable listening nodes, observed peer addresses, crawled services, or samples from particular networks. They can miss nodes behind firewalls, nodes that accept no inbound connections, nodes using privacy networks, intermittently connected systems, and nodes that avoid discovery.</p>
+<p>A reachable-node count is therefore not the same as the total number of validating nodes. It also says little by itself about ownership, economic relevance, software configuration, uptime, or the rules each node enforces.</p>
+<p>Durable explanations should focus on what nodes do rather than treating one public count as a precise measure of decentralization.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Full nodes can serve different operating goals</h2>
+<p>One operator may run a node to verify personal wallet activity. Another may support a business, explorer, payment system, Lightning implementation, development environment, or mining operation.</p>
+<p>Those uses can require different choices:</p>
+<ul><li>Archival or pruned block storage.</li><li>Optional transaction or block indexes.</li><li>Wallet enabled or disabled.</li><li>Local-only access or carefully controlled remote access.</li><li>Standard peer connections, Tor, I2P, or multiple networks.</li><li>Inbound service or outbound-only operation.</li><li>Desktop use, dedicated hardware, server deployment, or containerized infrastructure.</li><li>Monitoring, backups, alerting, and update procedures.</li></ul>
+<p>There is no single ideal configuration for every user. The essential question is whether the software independently validates the chain and whether the setup matches the operator&#39;s purpose and threat model.</p>
+</section>
+<section class="msc-learn-article__section"><h2>A full node&#39;s answer is local and auditable</h2>
+<p>When an application asks a node for a block, transaction, UTXO, fee estimate, or chain tip, the response comes from that node&#39;s own databases and configuration.</p>
+<p>That makes the result more auditable than an answer from an unknown public server, but it is not automatically complete or objective in every sense. Optional indexes determine which historical queries are available. Mempool contents depend on local policy and peer history. Fee estimates are statistical and depend on the transactions and blocks the node has observed. A pruned node may not retain an old block body even though it validated that block earlier.</p>
+<p>Applications should therefore know which node interface they are using and what the response represents. A wallet can trust a node&#39;s consensus validation while still accounting for local mempool differences or missing historical indexes.</p>
+<p>Running multiple nodes with the same software and configuration can improve availability, but it does not create independent implementation diversity. Running different implementations can provide a comparison point, but only if the operator understands their consensus compatibility and policy differences.</p>
+<p>A node is most valuable when its operator uses its validated answers and understands their scope.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Why full nodes matter</h2>
+<p>A full node gives its operator the ability to reject invalid history without outsourcing that decision.</p>
+<p>That does not mean every node has equal network influence or that merely turning on software solves decentralization. A poorly maintained node can fail, leak information, or provide little useful service. A node whose operator never uses its validated data may not improve that operator&#39;s practical verification very much.</p>
+<p>The strongest benefit is direct enforcement. When a wallet, application, exchange, miner, or business relies on its own validating node, it can base decisions on rules it selected and data it checked.</p>
+<p>Bitcoin&#39;s architecture allows that verification to happen independently and repeatedly across many separate systems. That is the core role of a full node.</p>
+</section>
+    </article>
+    <section class="msc-learn-key-terms" aria-labelledby="MscGuide021Terms"><h2 id="MscGuide021Terms">Key Terms</h2><dl><div class="msc-learn-term"><dt>Full node</dt><dd>Software that independently verifies Bitcoin blocks and transactions against consensus rules.</dd></div>
+<div class="msc-learn-term"><dt>Node</dt><dd>Bitcoin software that communicates with peers and may validate, relay, store, or serve network data.</dd></div>
+<div class="msc-learn-term"><dt>Validation</dt><dd>The process of checking transactions and blocks against applicable rules.</dd></div>
+<div class="msc-learn-term"><dt>Consensus</dt><dd>The shared validation rules independently enforced by Bitcoin nodes.</dd></div>
+<div class="msc-learn-term"><dt>Bitcoin Core</dt><dd>The most widely used open-source Bitcoin node and wallet software implementation.</dd></div>
+<div class="msc-learn-term"><dt>UTXO</dt><dd>An unspent transaction output that can be used as an input in a later transaction.</dd></div>
+<div class="msc-learn-term"><dt>Reorganization</dt><dd>A change in the selected chain tip when a competing valid chain accumulates more proof of work.</dd></div>
+<div class="msc-learn-term"><dt>Policy</dt><dd>Local software rules that influence transaction relay, mempool acceptance, or default behavior without changing consensus validity.</dd></div></dl></section>
+    <section class="msc-learn-sources" aria-labelledby="MscGuide021Sources"><h2 id="MscGuide021Sources">Sources</h2><article class="msc-learn-source"><h3>Bitcoin Core integration/staging tree README</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/README.md</li><li><strong>supports:</strong> Bitcoin Core connecting to the peer-to-peer network, downloading and fully validating blocks and transactions, and optionally including wallet and GUI functionality.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core validation implementation</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/src/validation.cpp</li><li><strong>supports:</strong> Block and transaction validation, chainstate updates, block connection and disconnection, and activation of valid chain candidates.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core net processing implementation</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/src/net_processing.cpp</li><li><strong>supports:</strong> Peer-to-peer block and transaction processing, relay behavior, and separation between received network data and local validation.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core block storage implementation</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/src/node/blockstorage.cpp</li><li><strong>supports:</strong> Local block-file handling, pruning-related storage behavior, block indexes, and the distinction between chainstate and retained block data.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core files documentation</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/doc/files.md</li><li><strong>supports:</strong> The purposes of Bitcoin Core data files, chainstate, block files, indexes, settings, logs, and wallet-related storage.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core JSON-RPC interface documentation</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/doc/JSON-RPC-interface.md</li><li><strong>supports:</strong> The node&#39;s programmatic control and query interface, the sensitivity of RPC access, and the need to protect remote administration.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Tor documentation</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/doc/tor.md</li><li><strong>supports:</strong> Bitcoin Core peer connectivity over Tor, onion-service behavior, and configuration-sensitive privacy considerations.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Developer Guide: P2P Network</h3><ul><li><strong>author or publisher:</strong> Bitcoin.org contributors</li><li><strong>url:</strong> https://developer.bitcoin.org/devguide/p2p_network.html</li><li><strong>supports:</strong> Peer discovery, block and transaction relay, network messages, and the role of peer connections in node operation.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Developer Guide: Block Chain</h3><ul><li><strong>author or publisher:</strong> Bitcoin.org contributors</li><li><strong>url:</strong> https://developer.bitcoin.org/devguide/block_chain.html</li><li><strong>supports:</strong> Block validation, UTXO-based transaction checking, chain selection, and reorganizations.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin white paper</h3><ul><li><strong>author or publisher:</strong> Satoshi Nakamoto</li><li><strong>url:</strong> https://bitcoin.org/bitcoin.pdf</li><li><strong>supports:</strong> The peer-to-peer design, proof-of-work chain ordering, and independent verification context.</li></ul></article></section>
+    <nav class="msc-learn-prev-next" aria-label="Guide navigation preview"><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Previous</span><strong>How Bitcoin&#39;s Difficulty Adjustment Works</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Category</span><strong>The Bitcoin Network</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Next</span><strong>What Is a Pruned Bitcoin Node?</strong><small>Link inactive</small></span></nav>
+  </div>
+</section>

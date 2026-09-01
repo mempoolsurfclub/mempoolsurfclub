@@ -1,0 +1,389 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-020-bitcoin-difficulty-adjustment.md",
+  "source_sha256": "5cae423b8922f0ca64e5a1a645142d06c8d1514387eecb6d504ce69cf382d2a6",
+  "registry_id": "MSC-GUIDE-020",
+  "status": "COPY_LOCKED",
+  "h1": "How Bitcoin's Difficulty Adjustment Works",
+  "introductory_deck": "Bitcoin's mainnet difficulty adjustment periodically recalculates the proof-of-work target from prior block timing. The ordinary rule changes the target only at 2,016-block boundaries, limits each adjustment, and aims for a long-run average spacing without scheduling blocks exactly ten minutes apart.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "Bitcoin miners add or remove hashing capacity for economic and operational reasons. If the proof-of-work requirement never changed, a large increase in aggregate hashing could make blocks arrive much faster, while a large decrease could make them arrive much slower.\n\nBitcoin addresses that problem with a consensus rule that periodically recalculates the proof-of-work target.\n\nThe phrase \"difficulty adjusts every two weeks\" is useful shorthand, but it is not technically precise. Mainnet adjusts at block-height boundaries. The calculation uses block timestamps, clamps the measured timespan, applies integer arithmetic, encodes the result compactly, and remains subject to the proof-of-work limit.",
+      "body_html": "<p>Bitcoin miners add or remove hashing capacity for economic and operational reasons. If the proof-of-work requirement never changed, a large increase in aggregate hashing could make blocks arrive much faster, while a large decrease could make them arrive much slower.</p>\n<p>Bitcoin addresses that problem with a consensus rule that periodically recalculates the proof-of-work target.</p>\n<p>The phrase &quot;difficulty adjusts every two weeks&quot; is useful shorthand, but it is not technically precise. Mainnet adjusts at block-height boundaries. The calculation uses block timestamps, clamps the measured timespan, applies integer arithmetic, encodes the result compactly, and remains subject to the proof-of-work limit.</p>"
+    },
+    {
+      "heading": "Proof of work is checked against a target",
+      "body_markdown": "A Bitcoin block header contains a compact representation of the target in its `nBits` field.\n\nNodes decode that field into a full target value and verify the block-header hash. A proof of work is valid when the numeric hash is less than or equal to the target required by consensus.\n\nA lower target leaves fewer possible hash values that qualify, so the work is harder.\n\nA higher target allows more possible hash values to qualify, so the work is easier.\n\nThe target is the consensus-sensitive threshold. Mining difficulty is a human-readable relative measure derived from the target. Difficulty is not the direct field serialized in the block header.\n\nThis distinction matters because explanations often speak in terms of difficulty while the implementation checks compact target data and full integer targets.",
+      "body_html": "<p>A Bitcoin block header contains a compact representation of the target in its <code>nBits</code> field.</p>\n<p>Nodes decode that field into a full target value and verify the block-header hash. A proof of work is valid when the numeric hash is less than or equal to the target required by consensus.</p>\n<p>A lower target leaves fewer possible hash values that qualify, so the work is harder.</p>\n<p>A higher target allows more possible hash values to qualify, so the work is easier.</p>\n<p>The target is the consensus-sensitive threshold. Mining difficulty is a human-readable relative measure derived from the target. Difficulty is not the direct field serialized in the block header.</p>\n<p>This distinction matters because explanations often speak in terms of difficulty while the implementation checks compact target data and full integer targets.</p>"
+    },
+    {
+      "heading": "Target and difficulty move in opposite directions",
+      "body_markdown": "Difficulty and target are inversely related.\n\nIf the target becomes one half as large, qualifying hashes become roughly twice as rare and the relative difficulty becomes roughly twice as high.\n\nIf the target becomes twice as large, qualifying hashes become roughly twice as common and the relative difficulty becomes roughly one half as high, unless the proof-of-work limit prevents that target.\n\nBitcoin software can present a difficulty number for people, but nodes validate `nBits`, decode the target, check its range, and compare the block hash.\n\nThe relationship should not be confused with hashrate. Hashrate describes estimated hashing work being applied. Difficulty describes the proof-of-work threshold. They interact through observed block timing, but they are not the same quantity.",
+      "body_html": "<p>Difficulty and target are inversely related.</p>\n<p>If the target becomes one half as large, qualifying hashes become roughly twice as rare and the relative difficulty becomes roughly twice as high.</p>\n<p>If the target becomes twice as large, qualifying hashes become roughly twice as common and the relative difficulty becomes roughly one half as high, unless the proof-of-work limit prevents that target.</p>\n<p>Bitcoin software can present a difficulty number for people, but nodes validate <code>nBits</code>, decode the target, check its range, and compare the block hash.</p>\n<p>The relationship should not be confused with hashrate. Hashrate describes estimated hashing work being applied. Difficulty describes the proof-of-work threshold. They interact through observed block timing, but they are not the same quantity.</p>"
+    },
+    {
+      "heading": "Mainnet parameters define the intended pace",
+      "body_markdown": "Current Bitcoin Core mainnet consensus parameters use:\n\n- A target spacing of 600 seconds, or ten minutes.\n- A target timespan of 1,209,600 seconds, or fourteen days.\n- A difficulty-adjustment interval calculated as target timespan divided by target spacing.\n\nDividing 1,209,600 by 600 produces 2,016 blocks.\n\nThe ten-minute value is an average target across many blocks. It is not an appointment for the next block. Proof-of-work discovery is probabilistic, so blocks can arrive seconds apart or after a long gap.\n\nThe fourteen-day value is the target timespan used in the formula. The adjustment does not wait for a calendar to announce that exactly fourteen days have passed.",
+      "body_html": "<p>Current Bitcoin Core mainnet consensus parameters use:</p>\n<ul><li>A target spacing of 600 seconds, or ten minutes.</li><li>A target timespan of 1,209,600 seconds, or fourteen days.</li><li>A difficulty-adjustment interval calculated as target timespan divided by target spacing.</li></ul>\n<p>Dividing 1,209,600 by 600 produces 2,016 blocks.</p>\n<p>The ten-minute value is an average target across many blocks. It is not an appointment for the next block. Proof-of-work discovery is probabilistic, so blocks can arrive seconds apart or after a long gap.</p>\n<p>The fourteen-day value is the target timespan used in the formula. The adjustment does not wait for a calendar to announce that exactly fourteen days have passed.</p>"
+    },
+    {
+      "heading": "Mainnet changes target at retarget boundaries",
+      "body_markdown": "Under the ordinary mainnet rule, blocks between retarget boundaries use the previous block's compact target.\n\nA new target is calculated when the height of the block being validated is a multiple of 2,016.\n\nThe first retargeted target applies to the block at height 2,016. The previous block has height 2,015. The next boundaries occur at heights 4,032, 6,048, and later multiples of 2,016.\n\nThis is why \"every 2,016 blocks\" is more precise than \"every two weeks.\" The boundary is determined by height. The timestamps influence the size of the change after the boundary is reached.\n\nMainnet does not adjust difficulty continuously and does not recalculate a new target after every block.",
+      "body_html": "<p>Under the ordinary mainnet rule, blocks between retarget boundaries use the previous block&#39;s compact target.</p>\n<p>A new target is calculated when the height of the block being validated is a multiple of 2,016.</p>\n<p>The first retargeted target applies to the block at height 2,016. The previous block has height 2,015. The next boundaries occur at heights 4,032, 6,048, and later multiples of 2,016.</p>\n<p>This is why &quot;every 2,016 blocks&quot; is more precise than &quot;every two weeks.&quot; The boundary is determined by height. The timestamps influence the size of the change after the boundary is reached.</p>\n<p>Mainnet does not adjust difficulty continuously and does not recalculate a new target after every block.</p>"
+    },
+    {
+      "heading": "The implementation selects the first block in the period",
+      "body_markdown": "At a retarget boundary, current Bitcoin Core begins from the last block before the new period.\n\nFor the first mainnet retarget, that last block is height 2,015.\n\nThe implementation subtracts `DifficultyAdjustmentInterval() - 1` from that height to locate the first block used in the timespan calculation. With an interval of 2,016, the subtraction is 2,015, so the selected first block is height 0.\n\nFor the next retarget, the last block is height 4,031 and the selected first block is height 2,016.\n\nThe actual timespan is calculated from the timestamp of the last block before the boundary minus the timestamp of that selected first block.",
+      "body_html": "<p>At a retarget boundary, current Bitcoin Core begins from the last block before the new period.</p>\n<p>For the first mainnet retarget, that last block is height 2,015.</p>\n<p>The implementation subtracts <code>DifficultyAdjustmentInterval() - 1</code> from that height to locate the first block used in the timespan calculation. With an interval of 2,016, the subtraction is 2,015, so the selected first block is height 0.</p>\n<p>For the next retarget, the last block is height 4,031 and the selected first block is height 2,016.</p>\n<p>The actual timespan is calculated from the timestamp of the last block before the boundary minus the timestamp of that selected first block.</p>"
+    },
+    {
+      "heading": "The historical measurement spans 2,015 gaps",
+      "body_markdown": "A period containing 2,016 block indexes from the first selected block through the last block has 2,015 intervals between adjacent block timestamps.\n\nThe mainnet target timespan, however, is based on 2,016 target spacings:\n\n2,016 multiplied by 600 seconds = 1,209,600 seconds.\n\nThis creates a historical boundary detail in the implementation. The measured timestamp difference spans 2,015 interblock gaps, while the comparison uses a target timespan corresponding to 2,016 ten-minute spacings.\n\nThe code comment describes going back by what the software wants to be fourteen days of blocks. The exact index selection and subtraction preserve the historical Bitcoin behavior.\n\nIt is therefore inaccurate to say that the implementation averages all 2,016 timestamps or measures exactly 2,016 ten-minute gaps. It uses the timestamps of two selected boundary blocks and subtracts them.",
+      "body_html": "<p>A period containing 2,016 block indexes from the first selected block through the last block has 2,015 intervals between adjacent block timestamps.</p>\n<p>The mainnet target timespan, however, is based on 2,016 target spacings:</p>\n<p>2,016 multiplied by 600 seconds = 1,209,600 seconds.</p>\n<p>This creates a historical boundary detail in the implementation. The measured timestamp difference spans 2,015 interblock gaps, while the comparison uses a target timespan corresponding to 2,016 ten-minute spacings.</p>\n<p>The code comment describes going back by what the software wants to be fourteen days of blocks. The exact index selection and subtraction preserve the historical Bitcoin behavior.</p>\n<p>It is therefore inaccurate to say that the implementation averages all 2,016 timestamps or measures exactly 2,016 ten-minute gaps. It uses the timestamps of two selected boundary blocks and subtracts them.</p>"
+    },
+    {
+      "heading": "Block timestamps are constrained but imperfect",
+      "body_markdown": "The retarget formula uses block timestamps, but those timestamps are not treated as perfect wall-clock measurements.\n\nBitcoin consensus and validation rules place constraints on acceptable block time. A new block must be later than the median time of recent prior blocks, and a node also applies a future-time limit relative to its local adjusted view when accepting a block.\n\nWithin allowed limits, timestamps can be imperfect. Miners choose timestamp values, clocks can differ, and individual blocks may not reflect the exact moment of discovery.\n\nThe retarget does not average every timestamp in the period. It uses the selected first-block timestamp and the last-block timestamp. This makes the result sensitive to those boundary values within the applicable constraints.\n\nCurrent code also contains network-specific protections and testing-network behavior that should not be generalized to historical mainnet rules without careful review.",
+      "body_html": "<p>The retarget formula uses block timestamps, but those timestamps are not treated as perfect wall-clock measurements.</p>\n<p>Bitcoin consensus and validation rules place constraints on acceptable block time. A new block must be later than the median time of recent prior blocks, and a node also applies a future-time limit relative to its local adjusted view when accepting a block.</p>\n<p>Within allowed limits, timestamps can be imperfect. Miners choose timestamp values, clocks can differ, and individual blocks may not reflect the exact moment of discovery.</p>\n<p>The retarget does not average every timestamp in the period. It uses the selected first-block timestamp and the last-block timestamp. This makes the result sensitive to those boundary values within the applicable constraints.</p>\n<p>Current code also contains network-specific protections and testing-network behavior that should not be generalized to historical mainnet rules without careful review.</p>"
+    },
+    {
+      "heading": "The actual timespan is clamped",
+      "body_markdown": "Before calculating the new target, Bitcoin Core clamps the measured actual timespan.\n\nIf the measured value is less than one quarter of the target timespan, it is replaced with one quarter.\n\nIf the measured value is greater than four times the target timespan, it is replaced with four times.\n\nFor mainnet's 1,209,600-second target timespan, the clamp range is:\n\n- Minimum: 302,400 seconds.\n- Maximum: 4,838,400 seconds.\n\nThese limits restrict one retarget to a fourfold change in either direction before compact-target rounding and the proof-of-work limit are considered.\n\nThe clamp is applied to the measured timespan before the multiplication and division that produce the candidate target.",
+      "body_html": "<p>Before calculating the new target, Bitcoin Core clamps the measured actual timespan.</p>\n<p>If the measured value is less than one quarter of the target timespan, it is replaced with one quarter.</p>\n<p>If the measured value is greater than four times the target timespan, it is replaced with four times.</p>\n<p>For mainnet&#39;s 1,209,600-second target timespan, the clamp range is:</p>\n<ul><li>Minimum: 302,400 seconds.</li><li>Maximum: 4,838,400 seconds.</li></ul>\n<p>These limits restrict one retarget to a fourfold change in either direction before compact-target rounding and the proof-of-work limit are considered.</p>\n<p>The clamp is applied to the measured timespan before the multiplication and division that produce the candidate target.</p>"
+    },
+    {
+      "heading": "The target formula uses integer arithmetic",
+      "body_markdown": "After clamping, the ordinary mainnet calculation is conceptually:\n\nnew target = old target multiplied by clamped actual timespan, divided by target timespan.\n\nBitcoin Core performs this with large integers.\n\nIf blocks arrived faster than the target pace, the actual timespan is smaller than the target timespan. The multiplier is less than one, so the new target becomes smaller and difficulty rises.\n\nIf blocks arrived slower, the actual timespan is larger. The new target becomes larger and difficulty falls.\n\nThe resulting target cannot be easier than the mainnet proof-of-work limit. If the calculation would produce a larger target, the limit is used instead.\n\nThe order of operations, integer division, and compact encoding matter. A decimal calculator can illustrate the direction of change, but consensus behavior follows the implementation's integer operations and encoding.",
+      "body_html": "<p>After clamping, the ordinary mainnet calculation is conceptually:</p>\n<p>new target = old target multiplied by clamped actual timespan, divided by target timespan.</p>\n<p>Bitcoin Core performs this with large integers.</p>\n<p>If blocks arrived faster than the target pace, the actual timespan is smaller than the target timespan. The multiplier is less than one, so the new target becomes smaller and difficulty rises.</p>\n<p>If blocks arrived slower, the actual timespan is larger. The new target becomes larger and difficulty falls.</p>\n<p>The resulting target cannot be easier than the mainnet proof-of-work limit. If the calculation would produce a larger target, the limit is used instead.</p>\n<p>The order of operations, integer division, and compact encoding matter. A decimal calculator can illustrate the direction of change, but consensus behavior follows the implementation&#39;s integer operations and encoding.</p>"
+    },
+    {
+      "heading": "Compact `nBits` introduces rounding",
+      "body_markdown": "A full 256-bit target is large, so Bitcoin block headers store a compact representation called `nBits`.\n\nThe compact format resembles a signed-magnitude coefficient with an exponent. Bitcoin Core decodes it into an arithmetic target and checks for negative, zero, overflowing, or above-limit values.\n\nAfter the retarget calculation, the new target is encoded back into compact form. That representation cannot preserve every possible full integer exactly, so the conversion can round the effective target.\n\nValidation and difficulty-transition tests account for compact conversion. This is one reason an explanation should not promise that the new difficulty is an exact decimal ratio of timestamps.\n\nFor readers, the useful mental model is the inverse relationship. For implementation review, the exact `SetCompact` and `GetCompact` behavior matters.",
+      "body_html": "<p>A full 256-bit target is large, so Bitcoin block headers store a compact representation called <code>nBits</code>.</p>\n<p>The compact format resembles a signed-magnitude coefficient with an exponent. Bitcoin Core decodes it into an arithmetic target and checks for negative, zero, overflowing, or above-limit values.</p>\n<p>After the retarget calculation, the new target is encoded back into compact form. That representation cannot preserve every possible full integer exactly, so the conversion can round the effective target.</p>\n<p>Validation and difficulty-transition tests account for compact conversion. This is one reason an explanation should not promise that the new difficulty is an exact decimal ratio of timestamps.</p>\n<p>For readers, the useful mental model is the inverse relationship. For implementation review, the exact <code>SetCompact</code> and <code>GetCompact</code> behavior matters.</p>"
+    },
+    {
+      "heading": "A simplified worked example",
+      "body_markdown": "Consider a fictional network period with simplified values.\n\nAssume:\n\n- Old target: 1,000 units.\n- Target timespan: 100 hours.\n- Measured actual timespan: 20 hours.\n- Proof-of-work limit: 5,000 units.\n\nFirst apply the clamp.\n\nOne quarter of the target timespan is 25 hours. The measured 20 hours is below that minimum, so the clamped actual timespan becomes 25 hours.\n\nThen calculate:\n\nnew target = 1,000 multiplied by 25, divided by 100.\n\nThe simplified result is 250 units.\n\nThe target became one quarter as large, so the relative difficulty became about four times higher.\n\nThis example is not an actual Bitcoin target, current difficulty, compact value, or mainnet period. It uses small decimal numbers only to show that the clamp happens before the final calculation.\n\nIn real Bitcoin Core behavior, full integer targets, compact encoding, rounding, and the proof-of-work limit are applied.",
+      "body_html": "<p>Consider a fictional network period with simplified values.</p>\n<p>Assume:</p>\n<ul><li>Old target: 1,000 units.</li><li>Target timespan: 100 hours.</li><li>Measured actual timespan: 20 hours.</li><li>Proof-of-work limit: 5,000 units.</li></ul>\n<p>First apply the clamp.</p>\n<p>One quarter of the target timespan is 25 hours. The measured 20 hours is below that minimum, so the clamped actual timespan becomes 25 hours.</p>\n<p>Then calculate:</p>\n<p>new target = 1,000 multiplied by 25, divided by 100.</p>\n<p>The simplified result is 250 units.</p>\n<p>The target became one quarter as large, so the relative difficulty became about four times higher.</p>\n<p>This example is not an actual Bitcoin target, current difficulty, compact value, or mainnet period. It uses small decimal numbers only to show that the clamp happens before the final calculation.</p>\n<p>In real Bitcoin Core behavior, full integer targets, compact encoding, rounding, and the proof-of-work limit are applied.</p>"
+    },
+    {
+      "heading": "A slow-period example",
+      "body_markdown": "Use the same fictional old target of 1,000 units and target timespan of 100 hours.\n\nSuppose the measured actual timespan is 600 hours.\n\nFour times the target timespan is 400 hours, so the measured value is clamped down to 400.\n\nThe simplified calculation becomes:\n\nnew target = 1,000 multiplied by 400, divided by 100 = 4,000 units.\n\nThe target became four times larger, making the proof of work about four times easier.\n\nIf the proof-of-work limit had been 3,000 units instead of 5,000, the result would be capped at 3,000.\n\nAgain, actual Bitcoin uses compact targets and integer arithmetic. The example shows direction, clamp order, and limit behavior without claiming to reproduce a current mainnet value.",
+      "body_html": "<p>Use the same fictional old target of 1,000 units and target timespan of 100 hours.</p>\n<p>Suppose the measured actual timespan is 600 hours.</p>\n<p>Four times the target timespan is 400 hours, so the measured value is clamped down to 400.</p>\n<p>The simplified calculation becomes:</p>\n<p>new target = 1,000 multiplied by 400, divided by 100 = 4,000 units.</p>\n<p>The target became four times larger, making the proof of work about four times easier.</p>\n<p>If the proof-of-work limit had been 3,000 units instead of 5,000, the result would be capped at 3,000.</p>\n<p>Again, actual Bitcoin uses compact targets and integer arithmetic. The example shows direction, clamp order, and limit behavior without claiming to reproduce a current mainnet value.</p>"
+    },
+    {
+      "heading": "The adjustment does not poll global hashrate",
+      "body_markdown": "Bitcoin nodes do not ask every miner how much hardware is running.\n\nThey observe valid blocks, their proof-of-work targets, accumulated work, and elapsed time. Network hashrate can be estimated from that observed history.\n\nIf substantial new hashing capacity joins, blocks may arrive faster before the next retarget. The boundary calculation can then lower the target, increasing difficulty.\n\nIf substantial capacity leaves, blocks may arrive more slowly. At the next boundary, the calculation can raise the target, lowering difficulty.\n\nThe response is delayed under the ordinary mainnet rule because the target stays unchanged between boundaries.\n\nThis delay is part of the design. It also means a sudden hashrate change can affect confirmation timing for a period without implying that the network has stopped following its rules.",
+      "body_html": "<p>Bitcoin nodes do not ask every miner how much hardware is running.</p>\n<p>They observe valid blocks, their proof-of-work targets, accumulated work, and elapsed time. Network hashrate can be estimated from that observed history.</p>\n<p>If substantial new hashing capacity joins, blocks may arrive faster before the next retarget. The boundary calculation can then lower the target, increasing difficulty.</p>\n<p>If substantial capacity leaves, blocks may arrive more slowly. At the next boundary, the calculation can raise the target, lowering difficulty.</p>\n<p>The response is delayed under the ordinary mainnet rule because the target stays unchanged between boundaries.</p>\n<p>This delay is part of the design. It also means a sudden hashrate change can affect confirmation timing for a period without implying that the network has stopped following its rules.</p>"
+    },
+    {
+      "heading": "Difficulty does not identify mining structure",
+      "body_markdown": "A higher difficulty indicates that the required target is harder relative to the reference measure.\n\nIt does not directly reveal:\n\n- The exact number of mining machines.\n- The number of operators.\n- The manufacturers or models in use.\n- Geographic distribution.\n- Energy sources.\n- Pool ownership.\n- Hardware ownership.\n- Current profitability.\n\nThose questions require additional evidence and often remain partly estimated.\n\nThe same total hashrate can be produced by different combinations of hardware. Coordinated pool labels can represent equipment owned by many independent parties. Difficulty alone cannot separate those structures.",
+      "body_html": "<p>A higher difficulty indicates that the required target is harder relative to the reference measure.</p>\n<p>It does not directly reveal:</p>\n<ul><li>The exact number of mining machines.</li><li>The number of operators.</li><li>The manufacturers or models in use.</li><li>Geographic distribution.</li><li>Energy sources.</li><li>Pool ownership.</li><li>Hardware ownership.</li><li>Current profitability.</li></ul>\n<p>Those questions require additional evidence and often remain partly estimated.</p>\n<p>The same total hashrate can be produced by different combinations of hardware. Coordinated pool labels can represent equipment owned by many independent parties. Difficulty alone cannot separate those structures.</p>"
+    },
+    {
+      "heading": "Mainnet and testing networks differ",
+      "body_markdown": "Bitcoin Core defines separate consensus parameters for mainnet, public testing networks, signet, and regtest.\n\nMainnet does not enable the public-test-network minimum-difficulty exception. Under the ordinary mainnet rule, blocks between retarget boundaries retain the preceding target.\n\nSome testing networks permit special minimum-difficulty blocks after a sufficient timestamp gap or use additional protections. Regtest can disable retargeting for controlled testing. Testnet4 includes BIP 94 behavior that affects which target is used in part of its calculation.\n\nThose rules should not be imported into a mainnet explanation. A statement accurate for one network can be wrong for another.\n\nThis guide focuses on mainnet. Testing-network exceptions belong in implementation-specific documentation and should be rechecked as software evolves.",
+      "body_html": "<p>Bitcoin Core defines separate consensus parameters for mainnet, public testing networks, signet, and regtest.</p>\n<p>Mainnet does not enable the public-test-network minimum-difficulty exception. Under the ordinary mainnet rule, blocks between retarget boundaries retain the preceding target.</p>\n<p>Some testing networks permit special minimum-difficulty blocks after a sufficient timestamp gap or use additional protections. Regtest can disable retargeting for controlled testing. Testnet4 includes BIP 94 behavior that affects which target is used in part of its calculation.</p>\n<p>Those rules should not be imported into a mainnet explanation. A statement accurate for one network can be wrong for another.</p>\n<p>This guide focuses on mainnet. Testing-network exceptions belong in implementation-specific documentation and should be rechecked as software evolves.</p>"
+    },
+    {
+      "heading": "Nodes enforce the required target",
+      "body_markdown": "A miner does not choose any target it prefers.\n\nFor each candidate block, a validating node calculates the target required by consensus from the previous chain state and network parameters. It checks the header's `nBits` and verifies that the hash satisfies the decoded target.\n\nA miner can search against an easier private threshold, but nodes will reject a block that does not satisfy the required mainnet target.\n\nA pool can assign an easier share target for internal accounting. That does not change the network target. A share meeting only the pool threshold is not a valid Bitcoin block proof.\n\nProof of work also cannot make an otherwise invalid block valid. Target validation is one part of a larger block-validation process.",
+      "body_html": "<p>A miner does not choose any target it prefers.</p>\n<p>For each candidate block, a validating node calculates the target required by consensus from the previous chain state and network parameters. It checks the header&#39;s <code>nBits</code> and verifies that the hash satisfies the decoded target.</p>\n<p>A miner can search against an easier private threshold, but nodes will reject a block that does not satisfy the required mainnet target.</p>\n<p>A pool can assign an easier share target for internal accounting. That does not change the network target. A share meeting only the pool threshold is not a valid Bitcoin block proof.</p>\n<p>Proof of work also cannot make an otherwise invalid block valid. Target validation is one part of a larger block-validation process.</p>"
+    },
+    {
+      "heading": "Difficulty adjustment and chainwork are related but distinct",
+      "body_markdown": "Each valid block contributes proof of work based on its target.\n\nNodes use accumulated chainwork when comparing valid candidate chains. A block with a harder target represents more work than one with an easier target.\n\nThe periodic retarget process determines the target required for new blocks at defined boundaries. Chainwork accumulates from the work represented by the blocks that actually exist.\n\nThese concepts interact, but they answer different questions.\n\nDifficulty adjustment asks: what target must the next period's blocks satisfy?\n\nChainwork asks: how much proof of work is represented by a validated chain history?\n\nA reorganization can change the active chain and its accumulated work without causing a retarget at an arbitrary non-boundary height.",
+      "body_html": "<p>Each valid block contributes proof of work based on its target.</p>\n<p>Nodes use accumulated chainwork when comparing valid candidate chains. A block with a harder target represents more work than one with an easier target.</p>\n<p>The periodic retarget process determines the target required for new blocks at defined boundaries. Chainwork accumulates from the work represented by the blocks that actually exist.</p>\n<p>These concepts interact, but they answer different questions.</p>\n<p>Difficulty adjustment asks: what target must the next period&#39;s blocks satisfy?</p>\n<p>Chainwork asks: how much proof of work is represented by a validated chain history?</p>\n<p>A reorganization can change the active chain and its accumulated work without causing a retarget at an arbitrary non-boundary height.</p>"
+    },
+    {
+      "heading": "Difficulty adjustment is not the halving",
+      "body_markdown": "The halving changes the permitted block subsidy after each 210,000-block interval under current mainnet rules.\n\nThe difficulty adjustment changes the proof-of-work target at 2,016-block boundaries under the ordinary mainnet rule.\n\nOne mechanism controls new issuance. The other responds to prior block timing.\n\nA halving can affect miner economics, which may influence hashrate and later block timing. The difficulty adjustment can eventually respond to that timing under its own formula. The halving does not directly command a difficulty change.\n\nLikewise, a retarget does not change the subsidy.",
+      "body_html": "<p>The halving changes the permitted block subsidy after each 210,000-block interval under current mainnet rules.</p>\n<p>The difficulty adjustment changes the proof-of-work target at 2,016-block boundaries under the ordinary mainnet rule.</p>\n<p>One mechanism controls new issuance. The other responds to prior block timing.</p>\n<p>A halving can affect miner economics, which may influence hashrate and later block timing. The difficulty adjustment can eventually respond to that timing under its own formula. The halving does not directly command a difficulty change.</p>\n<p>Likewise, a retarget does not change the subsidy.</p>"
+    },
+    {
+      "heading": "Difficulty does not guarantee schedule or profit",
+      "body_markdown": "The adjustment aims to keep long-run block production near the target pace as aggregate hashing conditions change.\n\nIt does not guarantee that the next block arrives in ten minutes. It does not guarantee that a 2,016-block period lasts exactly fourteen calendar days. It does not guarantee miner profitability or network revenue.\n\nBlocks remain probabilistic. Hashrate can change during a period. Timestamps are constrained but imperfect. Compact encoding introduces rounding. The proof-of-work limit can cap easier adjustments.\n\nThe consensus rule supplies a predictable calculation, not a clockwork schedule.",
+      "body_html": "<p>The adjustment aims to keep long-run block production near the target pace as aggregate hashing conditions change.</p>\n<p>It does not guarantee that the next block arrives in ten minutes. It does not guarantee that a 2,016-block period lasts exactly fourteen calendar days. It does not guarantee miner profitability or network revenue.</p>\n<p>Blocks remain probabilistic. Hashrate can change during a period. Timestamps are constrained but imperfect. Compact encoding introduces rounding. The proof-of-work limit can cap easier adjustments.</p>\n<p>The consensus rule supplies a predictable calculation, not a clockwork schedule.</p>"
+    },
+    {
+      "heading": "The durable implementation view",
+      "body_markdown": "A precise mainnet explanation can be summarized in a sequence:\n\n1. Decode the previous period's compact target.\n2. Reach a block height that is a multiple of 2,016.\n3. Select the implementation-defined first block and the last block before the boundary.\n4. Subtract their timestamps, spanning 2,015 interblock gaps.\n5. Clamp the measured timespan to one quarter through four times the target timespan.\n6. Multiply the old target by the clamped timespan.\n7. Divide by the 1,209,600-second target timespan.\n8. Cap the result at the mainnet proof-of-work limit.\n9. Encode the result into compact `nBits` form.\n10. Require the new boundary block and following period to use the consensus-required target.\n\nEach node can perform these checks independently from validated chain data.\n\nThe next guide moves from mining into node operation and explains how a Bitcoin full node validates blocks, transactions, and chain history for itself.",
+      "body_html": "<p>A precise mainnet explanation can be summarized in a sequence:</p>\n<ol><li>Decode the previous period&#39;s compact target.</li><li>Reach a block height that is a multiple of 2,016.</li><li>Select the implementation-defined first block and the last block before the boundary.</li><li>Subtract their timestamps, spanning 2,015 interblock gaps.</li><li>Clamp the measured timespan to one quarter through four times the target timespan.</li><li>Multiply the old target by the clamped timespan.</li><li>Divide by the 1,209,600-second target timespan.</li><li>Cap the result at the mainnet proof-of-work limit.</li><li>Encode the result into compact <code>nBits</code> form.</li><li>Require the new boundary block and following period to use the consensus-required target.</li></ol>\n<p>Each node can perform these checks independently from validated chain data.</p>\n<p>The next guide moves from mining into node operation and explains how a Bitcoin full node validates blocks, transactions, and chain history for itself.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Difficulty",
+      "definition": "The proof-of-work threshold that determines how hard it is to produce a valid block hash."
+    },
+    {
+      "term": "Difficulty adjustment",
+      "definition": "Bitcoin's periodic recalculation of mining difficulty based on prior block timing."
+    },
+    {
+      "term": "Proof of work",
+      "definition": "The computational process miners use to produce block hashes below the network target."
+    },
+    {
+      "term": "Hashrate",
+      "definition": "An estimate of the total proof-of-work computation being applied to Bitcoin mining."
+    },
+    {
+      "term": "Block",
+      "definition": "A valid batch of Bitcoin transactions linked to prior chain history through proof of work."
+    },
+    {
+      "term": "Consensus",
+      "definition": "The shared validation rules independently enforced by Bitcoin nodes."
+    },
+    {
+      "term": "Validation",
+      "definition": "The process of checking transactions and blocks against applicable rules."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bitcoin Core Proof-of-Work Implementation",
+      "author_or_publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/src/pow.cpp",
+      "supports": "Retarget-boundary detection, first-block lookup, actual-timespan subtraction, one-quarter and four-times clamps, target multiplication and division, proof-of-work limit, compact conversion, and hash-to-target validation."
+    },
+    {
+      "title": "Bitcoin Core Proof-of-Work Interface",
+      "author_or_publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/src/pow.h",
+      "supports": "Current proof-of-work calculation and validation interfaces used by Bitcoin Core."
+    },
+    {
+      "title": "Bitcoin Core Consensus Parameters",
+      "author_or_publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/src/consensus/params.h",
+      "supports": "Target spacing, target timespan, difficulty-adjustment interval calculation, proof-of-work limit fields, minimum-difficulty flags, and network-specific retarget controls."
+    },
+    {
+      "title": "Bitcoin Core Mainnet and Testing-Network Parameters",
+      "author_or_publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp",
+      "supports": "Mainnet's 600-second spacing, 1,209,600-second target timespan, disabled minimum-difficulty exception, proof-of-work limit, and distinct testnet, signet, and regtest parameters."
+    },
+    {
+      "title": "Bitcoin Core Block Header",
+      "author_or_publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/src/primitives/block.h",
+      "supports": "The `nBits` compact-target field and the other serialized block-header fields."
+    },
+    {
+      "title": "Bitcoin Core Arithmetic Target Encoding",
+      "author_or_publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/src/arith_uint256.cpp",
+      "supports": "`SetCompact` and `GetCompact` conversion between compact `nBits` representation and full arithmetic targets, including sign, exponent, mantissa, overflow, and rounding behavior."
+    },
+    {
+      "title": "Bitcoin Core Chainwork Calculation",
+      "author_or_publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/src/chain.cpp",
+      "supports": "Per-block proof calculation from target and accumulated chainwork as a concept distinct from periodic retargeting."
+    },
+    {
+      "title": "Bitcoin Core Proof-of-Work Tests",
+      "author_or_publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/src/test/pow_tests.cpp",
+      "supports": "Current tests for retarget calculations, allowed adjustment ranges, compact targets, and network-specific proof-of-work behavior."
+    },
+    {
+      "title": "Bitcoin Core Validation",
+      "author_or_publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp",
+      "supports": "Header proof-of-work checking, required-target enforcement, block-time constraints, block validation, and active-chain processing."
+    },
+    {
+      "title": "Bitcoin: A Peer-to-Peer Electronic Cash System",
+      "author_or_publisher": "Satoshi Nakamoto",
+      "direct_url": "https://bitcoin.org/bitcoin.pdf",
+      "supports": "The broad design goal of adjusting proof-of-work difficulty from prior block timing to maintain an average production rate as hardware speed and participation change."
+    },
+    {
+      "title": "Bitcoin Developer Guide: Block Chain",
+      "author_or_publisher": "Bitcoin Project developer documentation",
+      "direct_url": "https://developer.bitcoin.org/devguide/block_chain.html",
+      "supports": "Proof-of-work targets, compact target representation, block headers, cumulative work, timestamps, and general difficulty-adjustment context."
+    }
+  ],
+  "seo_title": "How Bitcoin's Difficulty Adjustment Works: Targets and Retargets",
+  "meta_description": "Learn how Bitcoin mainnet recalculates its proof-of-work target every 2,016 blocks using boundary timestamps, clamps, integer arithmetic, compact encoding, and a proof-of-work limit.",
+  "excerpt": "Bitcoin's difficulty adjustment recalculates the mainnet proof-of-work target at 2,016-block boundaries. This technical guide explains targets, compact nBits, the 2,015-gap timing detail, clamps, rounding, and network differences.",
+  "reading_time": "14 to 17 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-NETWORK",
+    "label": "The Bitcoin Network",
+    "subcategory": "Mining",
+    "depth": "Deep",
+    "format": "Technical Analysis"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-019",
+      "title": "What Is an ASIC Miner?",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-021",
+      "title": "What Is a Bitcoin Full Node?",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": [
+      {
+        "registry_id": "MSC-GUIDE-019",
+        "title": "What Is an ASIC Miner?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-021",
+        "title": "What Is a Bitcoin Full Node?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-030",
+        "title": "How Bitcoin Reaches Consensus",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-014",
+        "title": "How Bitcoin Confirmations Work",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-015",
+        "title": "What Is the Bitcoin Halving?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-017",
+        "title": "How Bitcoin Mining Works",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-018",
+        "title": "How Bitcoin Mining Pools Work",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-026",
+        "title": "How Bitcoin Blocks Work",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-028",
+        "title": "What Is Bitcoin Hashrate?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-029",
+        "title": "How Bitcoin Proof of Work Secures the Network",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-027",
+        "title": "How the Bitcoin Blockchain Works",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-032",
+        "title": "How Bitcoin Network Upgrades Happen",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GLOSSARY-001",
+        "title": "Bitcoin Glossary",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-HUB-NETWORK",
+        "title": "The Bitcoin Network",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-PATH-NETWORK",
+        "title": "Understand the Network",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-PATH-BUILD",
+        "title": "Build on Bitcoin",
+        "active": false,
+        "url": null
+      }
+    ]
+  },
+  "review_dates": {
+    "reviewed": "2026-07-18",
+    "copy_locked": "2026-07-18",
+    "human_verification": "2026-07-18"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "The 2,016-Block Retarget Window",
+      "educational_purpose": "Show the boundary rule and the historical difference between 2,016 blocks and 2,015 timestamp gaps.",
+      "recommended_placement": "After the section titled The historical measurement spans 2,015 gaps.",
+      "visual_description": "Navigation-chart timeline with blocks numbered conceptually from first period block to last period block, followed by the new boundary block. Brackets label 2,016 selected blocks, 2,015 interblock timestamp gaps, and the new target beginning at the boundary.",
+      "required_labels": "First selected block, Last block before boundary, 2,016 blocks, 2,015 timestamp gaps, Retarget boundary, New target",
+      "caption": "The implementation subtracts timestamps across 2,015 gaps while comparing the result with a target timespan based on 2,016 ten-minute spacings.",
+      "alt_text": "Technical timeline showing 2,016 selected blocks, 2,015 intervals between their timestamps, and a new proof-of-work target beginning at the next boundary block.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Place the first block, last pre-boundary block, and boundary block in one horizontal center band with both brackets visible.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "Target and Difficulty Move Inversely",
+      "educational_purpose": "Explain the inverse relationship without anchoring the guide to a current difficulty value.",
+      "recommended_placement": "After the section titled Target and difficulty move in opposite directions.",
+      "visual_description": "Oceanographic depth chart with a wide easy-target band near the surface and a narrow hard-target band deeper below. A paired scale shows target increasing in one direction and difficulty increasing in the opposite direction.",
+      "required_labels": "Higher target, Easier proof of work, Lower target, Harder proof of work, Difficulty increases, Target decreases, Valid hash range",
+      "caption": "Lowering the target narrows the range of qualifying hashes and raises relative difficulty.",
+      "alt_text": "Inverse scale showing that a higher target makes proof of work easier while a lower target makes it harder and increases difficulty.",
+      "image_orientation": "Square",
+      "mobile_crop_notes": "Keep both opposing arrows and the valid-hash bands inside the central crop.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Mainnet Retarget Calculation",
+      "educational_purpose": "Show the exact calculation sequence, including clamp and compact rounding.",
+      "recommended_placement": "After the section titled A slow-period example.",
+      "visual_description": "Infrastructure-manual flow from boundary timestamps to measured timespan, one-quarter and four-times clamp, old-target multiplication, target-timespan division, proof-of-work-limit cap, compact encoding, and boundary-block validation. Use fictional simplified numbers in a small side card.",
+      "required_labels": "Boundary timestamps, Measured timespan, Clamp, Old target, Multiply, Divide, Proof-of-work limit, Compact nBits, Rounding, Required boundary target",
+      "caption": "Mainnet clamps the measured timespan before integer target arithmetic, applies the proof-of-work limit, and encodes the result into compact form.",
+      "alt_text": "Retarget flow diagram showing timestamp subtraction, timespan clamps, old-target multiplication, target-timespan division, proof-of-work-limit cap, compact encoding, and validation.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Convert the flow into a vertical sequence and keep the clamp stage visually distinct before multiplication.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}

@@ -273,19 +273,12 @@
         completed_count: 16,
         total_count: 16,
         remaining_count: 0,
-        next_active: false
+        next_active: true,
+        next_url: '/pages/learn-bitcoin-network?view=msc-learn-guide-017'
       %}
     </template>
   {%- else -%}
-    <section class="msc-shell msc-learn-page" data-msc-preview-only="true">
-      <div class="msc-container msc-learn-page__container">
-        <header class="msc-learn-page__header">
-          <p class="msc-section-kicker">Learn runtime preview</p>
-          <h1>Guide preview unavailable</h1>
-          <p>No structured runtime package is registered for {{ pilot_registry_id | escape }}.</p>
-        </header>
-      </div>
-    </section>
+    {% render 'msc-learn-guide-network-bindings', pilot_registry_id: pilot_registry_id %}
 {%- endcase -%}
 
 <script>

@@ -1,0 +1,379 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-023-run-a-bitcoin-node.md",
+  "source_sha256": "dc3bfe7ac609f8aede25eec2dbe9f2706dfdf4f40739e7cb5bab3d815dabd84a",
+  "registry_id": "MSC-GUIDE-023",
+  "status": "COPY_LOCKED",
+  "h1": "How to Run a Bitcoin Node",
+  "introductory_deck": "Running a Bitcoin node means choosing software, installing it from a trusted source, validating the chain, and maintaining the system over time. The setup can be simple, but the right storage, network, privacy, wallet, and update choices depend on what the node is meant to do.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "A Bitcoin node is not a one-time download that can be forgotten after installation. It is an operating system for independent verification: software, data, peer connections, configuration, security controls, and maintenance working together.\n\nThe basic path is straightforward:\n\n1. Decide what the node must support.\n2. Choose maintained node software.\n3. Prepare suitable hardware and storage.\n4. Download and verify the software.\n5. Configure storage, networking, and access.\n6. Complete initial synchronization.\n7. Connect wallets or applications carefully.\n8. Monitor, update, and recover the system.\n\nThe details matter because a private desktop node, a business payment backend, a public archival server, and a development node have different requirements.\n\nThis walkthrough stays software-neutral where possible and uses Bitcoin Core terminology only when describing Bitcoin Core behavior.",
+      "body_html": "<p>A Bitcoin node is not a one-time download that can be forgotten after installation. It is an operating system for independent verification: software, data, peer connections, configuration, security controls, and maintenance working together.</p>\n<p>The basic path is straightforward:</p>\n<ol><li>Decide what the node must support.</li><li>Choose maintained node software.</li><li>Prepare suitable hardware and storage.</li><li>Download and verify the software.</li><li>Configure storage, networking, and access.</li><li>Complete initial synchronization.</li><li>Connect wallets or applications carefully.</li><li>Monitor, update, and recover the system.</li></ol>\n<p>The details matter because a private desktop node, a business payment backend, a public archival server, and a development node have different requirements.</p>\n<p>This walkthrough stays software-neutral where possible and uses Bitcoin Core terminology only when describing Bitcoin Core behavior.</p>"
+    },
+    {
+      "heading": "Step 1: Define the node's job",
+      "body_markdown": "Start with the purpose.\n\nA personal node may exist to verify a wallet and reduce reliance on public servers. A business node may feed payment systems or accounting tools. A Lightning node may need reliable validated chain data. A developer may need RPC access, indexes, test networks, or reproducible environments. A public service may need inbound connectivity and complete archival data.\n\nWrite down the required functions before buying hardware or changing settings.\n\nUseful questions include:\n\n- Does the node need complete historical block access?\n- Will an old wallet ever need to be rescanned?\n- Does an application require a transaction index or another optional index?\n- Will the node serve only local devices or remote systems?\n- Is wallet functionality needed on the node itself?\n- Must the node accept inbound peer connections?\n- Will it operate over clearnet, Tor, I2P, or more than one network?\n- How much downtime is acceptable?\n- Who is responsible for updates, monitoring, and recovery?\n\nThese answers determine whether pruning is suitable, how much storage is needed, and how tightly access should be controlled.",
+      "body_html": "<p>Start with the purpose.</p>\n<p>A personal node may exist to verify a wallet and reduce reliance on public servers. A business node may feed payment systems or accounting tools. A Lightning node may need reliable validated chain data. A developer may need RPC access, indexes, test networks, or reproducible environments. A public service may need inbound connectivity and complete archival data.</p>\n<p>Write down the required functions before buying hardware or changing settings.</p>\n<p>Useful questions include:</p>\n<ul><li>Does the node need complete historical block access?</li><li>Will an old wallet ever need to be rescanned?</li><li>Does an application require a transaction index or another optional index?</li><li>Will the node serve only local devices or remote systems?</li><li>Is wallet functionality needed on the node itself?</li><li>Must the node accept inbound peer connections?</li><li>Will it operate over clearnet, Tor, I2P, or more than one network?</li><li>How much downtime is acceptable?</li><li>Who is responsible for updates, monitoring, and recovery?</li></ul>\n<p>These answers determine whether pruning is suitable, how much storage is needed, and how tightly access should be controlled.</p>"
+    },
+    {
+      "heading": "Step 2: Choose maintained node software",
+      "body_markdown": "Bitcoin Core is the most widely used open-source Bitcoin node and wallet software implementation. Bitcoin Knots is another maintained node implementation with policy and feature differences.\n\nOther Bitcoin software projects exist, but not every library, wallet backend, explorer, or partial protocol implementation is a drop-in fully validating mainnet node.\n\nEvaluate software through official documentation, source repositories, release notes, signed releases, maintenance activity, security communications, platform support, and compatibility with the tools you intend to use.\n\nDo not select node software only because an appliance vendor bundled it or because a social post called one configuration the standard choice. Know the actual project, version, source, and update path.\n\nThe software you run determines the consensus and policy code your node enforces. That deserves deliberate review.",
+      "body_html": "<p>Bitcoin Core is the most widely used open-source Bitcoin node and wallet software implementation. Bitcoin Knots is another maintained node implementation with policy and feature differences.</p>\n<p>Other Bitcoin software projects exist, but not every library, wallet backend, explorer, or partial protocol implementation is a drop-in fully validating mainnet node.</p>\n<p>Evaluate software through official documentation, source repositories, release notes, signed releases, maintenance activity, security communications, platform support, and compatibility with the tools you intend to use.</p>\n<p>Do not select node software only because an appliance vendor bundled it or because a social post called one configuration the standard choice. Know the actual project, version, source, and update path.</p>\n<p>The software you run determines the consensus and policy code your node enforces. That deserves deliberate review.</p>"
+    },
+    {
+      "heading": "Step 3: Plan hardware and storage",
+      "body_markdown": "Node resource needs change over time as the chain grows and software evolves.\n\nA practical system needs:\n\n- A supported 64-bit operating environment.\n- Enough storage for the chosen archival or pruned configuration.\n- Additional free space for chainstate, indexes, logs, updates, temporary files, and operating-system needs.\n- Reliable storage with reasonable random-read and write performance.\n- Memory appropriate to the software and database-cache settings.\n- A processor capable of completing validation in an acceptable time.\n- A stable network connection with sufficient data allowance.\n- Cooling, power, and physical conditions suitable for continuous operation.\n\nFast solid-state storage can substantially improve synchronization and database responsiveness compared with slow flash media or heavily constrained disks.\n\nAvoid sizing a system to the exact current blockchain size. Archival data grows, indexes add overhead, updates need working space, and recovery may temporarily require more capacity.\n\nFor a pruned node, remember that the configured prune target is not the total disk requirement. Chainstate and other data remain outside that target.",
+      "body_html": "<p>Node resource needs change over time as the chain grows and software evolves.</p>\n<p>A practical system needs:</p>\n<ul><li>A supported 64-bit operating environment.</li><li>Enough storage for the chosen archival or pruned configuration.</li><li>Additional free space for chainstate, indexes, logs, updates, temporary files, and operating-system needs.</li><li>Reliable storage with reasonable random-read and write performance.</li><li>Memory appropriate to the software and database-cache settings.</li><li>A processor capable of completing validation in an acceptable time.</li><li>A stable network connection with sufficient data allowance.</li><li>Cooling, power, and physical conditions suitable for continuous operation.</li></ul>\n<p>Fast solid-state storage can substantially improve synchronization and database responsiveness compared with slow flash media or heavily constrained disks.</p>\n<p>Avoid sizing a system to the exact current blockchain size. Archival data grows, indexes add overhead, updates need working space, and recovery may temporarily require more capacity.</p>\n<p>For a pruned node, remember that the configured prune target is not the total disk requirement. Chainstate and other data remain outside that target.</p>"
+    },
+    {
+      "heading": "Step 4: Decide between archival and pruned storage",
+      "body_markdown": "An archival node retains historical block data. A pruned node validates historical blocks and then deletes eligible old block files.\n\nChoose archival storage when you need arbitrary historical block queries, old wallet rescans, a full transaction index, block-explorer workloads, research access, or broad historical serving.\n\nChoose pruning when current independent validation matters more than permanent local history and storage is constrained.\n\nPruning does not reduce the ordinary initial historical download and validation workload. It mainly reduces how much old block data remains afterward.\n\nChanging from pruned Bitcoin Core operation back to archival operation requires downloading the blockchain again. Treat that as a meaningful future cost.",
+      "body_html": "<p>An archival node retains historical block data. A pruned node validates historical blocks and then deletes eligible old block files.</p>\n<p>Choose archival storage when you need arbitrary historical block queries, old wallet rescans, a full transaction index, block-explorer workloads, research access, or broad historical serving.</p>\n<p>Choose pruning when current independent validation matters more than permanent local history and storage is constrained.</p>\n<p>Pruning does not reduce the ordinary initial historical download and validation workload. It mainly reduces how much old block data remains afterward.</p>\n<p>Changing from pruned Bitcoin Core operation back to archival operation requires downloading the blockchain again. Treat that as a meaningful future cost.</p>"
+    },
+    {
+      "heading": "Step 5: Download from the official project",
+      "body_markdown": "Use the project's official download page or release repository.\n\nAvoid search ads, file mirrors, random package links, and preinstalled images whose build source cannot be identified. A convincing filename is not proof that a binary came from the maintainers.\n\nFor Bitcoin Core, the official project publishes release files, checksums, and signatures. The project advises users to obtain binaries from its official download location rather than relying on GitHub-hosted release assets.\n\nDistribution packages can be convenient, but their maintainers, update timing, build options, and signing process may differ from the upstream project. Know whether you are using an upstream binary, a distribution build, or a third-party appliance image.\n\nRecord the version and source used so the installation can be audited later.",
+      "body_html": "<p>Use the project&#39;s official download page or release repository.</p>\n<p>Avoid search ads, file mirrors, random package links, and preinstalled images whose build source cannot be identified. A convincing filename is not proof that a binary came from the maintainers.</p>\n<p>For Bitcoin Core, the official project publishes release files, checksums, and signatures. The project advises users to obtain binaries from its official download location rather than relying on GitHub-hosted release assets.</p>\n<p>Distribution packages can be convenient, but their maintainers, update timing, build options, and signing process may differ from the upstream project. Know whether you are using an upstream binary, a distribution build, or a third-party appliance image.</p>\n<p>Record the version and source used so the installation can be audited later.</p>"
+    },
+    {
+      "heading": "Step 6: Verify the download",
+      "body_markdown": "Verification reduces the risk of installing a corrupted or substituted binary.\n\nA strong process checks the release's cryptographic hash against the signed checksum file and verifies the relevant maintainer signatures according to the project's current instructions.\n\nThe exact commands depend on the operating system, signature tools, and release process. Do not copy a years-old command sequence without checking the current official verification guide.\n\nVerification is not a guarantee that software contains no bugs. It establishes that the downloaded file matches a release attested to through the project's stated process.\n\nIf verification fails or the signing information is unclear, stop before installation.",
+      "body_html": "<p>Verification reduces the risk of installing a corrupted or substituted binary.</p>\n<p>A strong process checks the release&#39;s cryptographic hash against the signed checksum file and verifies the relevant maintainer signatures according to the project&#39;s current instructions.</p>\n<p>The exact commands depend on the operating system, signature tools, and release process. Do not copy a years-old command sequence without checking the current official verification guide.</p>\n<p>Verification is not a guarantee that software contains no bugs. It establishes that the downloaded file matches a release attested to through the project&#39;s stated process.</p>\n<p>If verification fails or the signing information is unclear, stop before installation.</p>"
+    },
+    {
+      "heading": "Step 7: Install with a deliberate data directory",
+      "body_markdown": "Choose where node data will live before initial synchronization.\n\nThe data directory may contain block files, chainstate, indexes, peer information, configuration, settings, logs, and wallet data. Its permissions and backup treatment should match the sensitivity of those contents.\n\nNode block data can be redownloaded. Wallet files, descriptors, labels, and other custody-related information may not be replaceable. Do not treat the whole directory as one uniform backup problem.\n\nAvoid placing live node databases in consumer file-sync folders. Concurrent synchronization, partial copies, permission changes, and rollback behavior can corrupt or expose active data.\n\nUse normal software shutdown procedures before moving or copying a data directory.",
+      "body_html": "<p>Choose where node data will live before initial synchronization.</p>\n<p>The data directory may contain block files, chainstate, indexes, peer information, configuration, settings, logs, and wallet data. Its permissions and backup treatment should match the sensitivity of those contents.</p>\n<p>Node block data can be redownloaded. Wallet files, descriptors, labels, and other custody-related information may not be replaceable. Do not treat the whole directory as one uniform backup problem.</p>\n<p>Avoid placing live node databases in consumer file-sync folders. Concurrent synchronization, partial copies, permission changes, and rollback behavior can corrupt or expose active data.</p>\n<p>Use normal software shutdown procedures before moving or copying a data directory.</p>"
+    },
+    {
+      "heading": "Step 8: Start with minimal configuration",
+      "body_markdown": "Default settings are designed to provide a reasonable starting point, but they are not universal.\n\nConfigure only what the node's purpose requires. Common decisions include:\n\n- Archival or pruned storage.\n- Data directory location.\n- Wallet enabled or disabled.\n- RPC availability and authentication.\n- Optional indexes.\n- Peer-network selection.\n- Listening for inbound peers.\n- Bandwidth-related limits.\n- Database-cache size.\n- Logging and monitoring.\n\nEvery additional service increases complexity and may create security or privacy exposure.\n\nDo not expose the RPC interface directly to the public internet. RPC can control sensitive node and wallet functions, reveal private data, and change operational state. Use local binding, strong authentication, network segmentation, authenticated tunnels, or another carefully reviewed access design.\n\nConfiguration option names and defaults can change. Use the built-in help and documentation for the installed release.",
+      "body_html": "<p>Default settings are designed to provide a reasonable starting point, but they are not universal.</p>\n<p>Configure only what the node&#39;s purpose requires. Common decisions include:</p>\n<ul><li>Archival or pruned storage.</li><li>Data directory location.</li><li>Wallet enabled or disabled.</li><li>RPC availability and authentication.</li><li>Optional indexes.</li><li>Peer-network selection.</li><li>Listening for inbound peers.</li><li>Bandwidth-related limits.</li><li>Database-cache size.</li><li>Logging and monitoring.</li></ul>\n<p>Every additional service increases complexity and may create security or privacy exposure.</p>\n<p>Do not expose the RPC interface directly to the public internet. RPC can control sensitive node and wallet functions, reveal private data, and change operational state. Use local binding, strong authentication, network segmentation, authenticated tunnels, or another carefully reviewed access design.</p>\n<p>Configuration option names and defaults can change. Use the built-in help and documentation for the installed release.</p>"
+    },
+    {
+      "heading": "Step 9: Understand peer connectivity",
+      "body_markdown": "A node needs peers to learn about blocks and transactions.\n\nOutbound connections are enough to download and validate the chain. Opening the Bitcoin peer-to-peer port is not mandatory for a personal node.\n\nAccepting inbound connections can make the node reachable to other peers and can help serve current network data. It also introduces router, firewall, exposure, bandwidth, and privacy considerations.\n\nAutomatic port mapping should not be enabled without understanding what it exposes. Manual forwarding should not be presented as a required beginner step.\n\nTor and I2P can change how peer connections are established and what network observers can see, but they require correct installation and configuration. Privacy networks do not fix unsafe RPC exposure, wallet leaks, or poor operating-system security.",
+      "body_html": "<p>A node needs peers to learn about blocks and transactions.</p>\n<p>Outbound connections are enough to download and validate the chain. Opening the Bitcoin peer-to-peer port is not mandatory for a personal node.</p>\n<p>Accepting inbound connections can make the node reachable to other peers and can help serve current network data. It also introduces router, firewall, exposure, bandwidth, and privacy considerations.</p>\n<p>Automatic port mapping should not be enabled without understanding what it exposes. Manual forwarding should not be presented as a required beginner step.</p>\n<p>Tor and I2P can change how peer connections are established and what network observers can see, but they require correct installation and configuration. Privacy networks do not fix unsafe RPC exposure, wallet leaks, or poor operating-system security.</p>"
+    },
+    {
+      "heading": "Step 10: Complete initial block download",
+      "body_markdown": "At first start, the node discovers peers and begins synchronizing Bitcoin history.\n\nInitial block download is not merely file transfer. The node checks headers, proof of work, block structure, transactions, spending conditions, and chainstate transitions according to its software.\n\nProgress can be limited by different resources at different stages. Network speed, storage latency, CPU performance, available memory, peer quality, and database settings all matter.\n\nDo not judge synchronization only by the displayed block count. Review the software's reported verification progress, chain, headers, blocks, best-block time, and warnings.\n\nKeep enough free disk space for the selected mode. Unexpected shutdowns and full disks can create long recovery work even when the underlying Bitcoin data can be downloaded again.\n\nA node can take hours or days to synchronize depending on the system. There is no universal completion time.",
+      "body_html": "<p>At first start, the node discovers peers and begins synchronizing Bitcoin history.</p>\n<p>Initial block download is not merely file transfer. The node checks headers, proof of work, block structure, transactions, spending conditions, and chainstate transitions according to its software.</p>\n<p>Progress can be limited by different resources at different stages. Network speed, storage latency, CPU performance, available memory, peer quality, and database settings all matter.</p>\n<p>Do not judge synchronization only by the displayed block count. Review the software&#39;s reported verification progress, chain, headers, blocks, best-block time, and warnings.</p>\n<p>Keep enough free disk space for the selected mode. Unexpected shutdowns and full disks can create long recovery work even when the underlying Bitcoin data can be downloaded again.</p>\n<p>A node can take hours or days to synchronize depending on the system. There is no universal completion time.</p>"
+    },
+    {
+      "heading": "Step 11: Confirm the node is healthy",
+      "body_markdown": "After synchronization, verify the node's reported state.\n\nFor Bitcoin Core, `getblockchaininfo` can report the active chain, block and header counts, verification progress, best block hash, chainwork, pruning state, and warnings. Network RPCs can report peer connections and local service information.\n\nA healthy report is not just a green icon. Check that:\n\n- The node is on the intended network.\n- Headers and blocks are caught up.\n- The best-block time is current.\n- Verification progress is complete or near complete.\n- Disk and memory use are stable.\n- Peer connections are present.\n- No unexpected warnings appear.\n- Pruning and indexes match the intended configuration.\n- System time is reasonably accurate.\n- Logs do not show recurring storage, corruption, or connection failures.\n\nMonitoring needs scale with the node's importance. A personal node may need occasional checks. A payment or Lightning backend may need automated alerts and tested failover procedures.",
+      "body_html": "<p>After synchronization, verify the node&#39;s reported state.</p>\n<p>For Bitcoin Core, <code>getblockchaininfo</code> can report the active chain, block and header counts, verification progress, best block hash, chainwork, pruning state, and warnings. Network RPCs can report peer connections and local service information.</p>\n<p>A healthy report is not just a green icon. Check that:</p>\n<ul><li>The node is on the intended network.</li><li>Headers and blocks are caught up.</li><li>The best-block time is current.</li><li>Verification progress is complete or near complete.</li><li>Disk and memory use are stable.</li><li>Peer connections are present.</li><li>No unexpected warnings appear.</li><li>Pruning and indexes match the intended configuration.</li><li>System time is reasonably accurate.</li><li>Logs do not show recurring storage, corruption, or connection failures.</li></ul>\n<p>Monitoring needs scale with the node&#39;s importance. A personal node may need occasional checks. A payment or Lightning backend may need automated alerts and tested failover procedures.</p>"
+    },
+    {
+      "heading": "Step 12: Connect a wallet or application carefully",
+      "body_markdown": "A wallet can use a node to obtain independently validated chain data, broadcast transactions, and monitor relevant activity.\n\nThe connection design should minimize unnecessary exposure. Prefer local communication or a protected private network. Understand whether the wallet uses RPC, an Electrum-style server, compact block filters, a dedicated bridge, or another interface.\n\nA node does not automatically know which wallet activity matters. Some setups require wallet imports, descriptors, indexes, or an additional server that scans the node's data.\n\nDo not expose broad node control merely to provide read-only wallet information. Use the narrowest interface and permissions the application supports.\n\nTest with a small, noncritical workflow before relying on the integration for significant funds or business operations.",
+      "body_html": "<p>A wallet can use a node to obtain independently validated chain data, broadcast transactions, and monitor relevant activity.</p>\n<p>The connection design should minimize unnecessary exposure. Prefer local communication or a protected private network. Understand whether the wallet uses RPC, an Electrum-style server, compact block filters, a dedicated bridge, or another interface.</p>\n<p>A node does not automatically know which wallet activity matters. Some setups require wallet imports, descriptors, indexes, or an additional server that scans the node&#39;s data.</p>\n<p>Do not expose broad node control merely to provide read-only wallet information. Use the narrowest interface and permissions the application supports.</p>\n<p>Test with a small, noncritical workflow before relying on the integration for significant funds or business operations.</p>"
+    },
+    {
+      "heading": "Step 13: Protect wallet and RPC boundaries",
+      "body_markdown": "If the node includes wallet functionality, key security becomes part of node operations.\n\nKeep wallet backups separate from replaceable blockchain data. Protect the host from unauthorized users and remote access. Understand whether wallets are loaded, encrypted, watch-only, or capable of signing.\n\nRPC credentials and cookies can grant powerful access. File permissions, bind addresses, firewall rules, reverse proxies, tunnels, containers, and remote-management tools all affect the actual boundary.\n\nDo not assume a home network is automatically trusted. Compromised devices, exposed services, weak router settings, and cloud-management accounts can create paths to the node.\n\nA node without a wallet still deserves protection because an attacker could alter configuration, disrupt validation, monitor activity, or feed applications false local data.",
+      "body_html": "<p>If the node includes wallet functionality, key security becomes part of node operations.</p>\n<p>Keep wallet backups separate from replaceable blockchain data. Protect the host from unauthorized users and remote access. Understand whether wallets are loaded, encrypted, watch-only, or capable of signing.</p>\n<p>RPC credentials and cookies can grant powerful access. File permissions, bind addresses, firewall rules, reverse proxies, tunnels, containers, and remote-management tools all affect the actual boundary.</p>\n<p>Do not assume a home network is automatically trusted. Compromised devices, exposed services, weak router settings, and cloud-management accounts can create paths to the node.</p>\n<p>A node without a wallet still deserves protection because an attacker could alter configuration, disrupt validation, monitor activity, or feed applications false local data.</p>"
+    },
+    {
+      "heading": "Step 14: Plan updates before they are urgent",
+      "body_markdown": "Node software is security-sensitive and continuously maintained.\n\nSubscribe to official release and security announcements. Read release notes before upgrading. Confirm operating-system compatibility, configuration changes, wallet migrations, index rebuilds, and disk requirements.\n\nDownload and verify updates through the same trusted process used for the initial installation.\n\nShut the node down cleanly. Confirm that the process has stopped before replacing binaries, moving files, or rebooting storage.\n\nDo not blindly install every development build. Stable release tags exist because the project's development branch is not guaranteed to be stable.\n\nAt the same time, do not leave an internet-connected node indefinitely on unsupported software without reviewing the consequences.",
+      "body_html": "<p>Node software is security-sensitive and continuously maintained.</p>\n<p>Subscribe to official release and security announcements. Read release notes before upgrading. Confirm operating-system compatibility, configuration changes, wallet migrations, index rebuilds, and disk requirements.</p>\n<p>Download and verify updates through the same trusted process used for the initial installation.</p>\n<p>Shut the node down cleanly. Confirm that the process has stopped before replacing binaries, moving files, or rebooting storage.</p>\n<p>Do not blindly install every development build. Stable release tags exist because the project&#39;s development branch is not guaranteed to be stable.</p>\n<p>At the same time, do not leave an internet-connected node indefinitely on unsupported software without reviewing the consequences.</p>"
+    },
+    {
+      "heading": "Step 15: Prepare for failure and recovery",
+      "body_markdown": "Assume that disks, power supplies, operating systems, routers, and human procedures can fail.\n\nDocument:\n\n- The software project and version.\n- Download-verification steps.\n- Data-directory and configuration locations.\n- Pruning and index settings.\n- Wallet presence and backup procedures.\n- RPC and network-access design.\n- Monitoring checks.\n- Clean shutdown and upgrade steps.\n- Recovery priorities.\n- Who can administer the system.\n\nTest wallet recovery independently from node-data recovery.\n\nA lost archival block directory is inconvenient and expensive to rebuild, but a lost signing key can be permanent. Give backup effort to the data that cannot be recreated.\n\nFor critical services, test restoration on separate hardware before an emergency.",
+      "body_html": "<p>Assume that disks, power supplies, operating systems, routers, and human procedures can fail.</p>\n<p>Document:</p>\n<ul><li>The software project and version.</li><li>Download-verification steps.</li><li>Data-directory and configuration locations.</li><li>Pruning and index settings.</li><li>Wallet presence and backup procedures.</li><li>RPC and network-access design.</li><li>Monitoring checks.</li><li>Clean shutdown and upgrade steps.</li><li>Recovery priorities.</li><li>Who can administer the system.</li></ul>\n<p>Test wallet recovery independently from node-data recovery.</p>\n<p>A lost archival block directory is inconvenient and expensive to rebuild, but a lost signing key can be permanent. Give backup effort to the data that cannot be recreated.</p>\n<p>For critical services, test restoration on separate hardware before an emergency.</p>"
+    },
+    {
+      "heading": "A node is an ongoing responsibility",
+      "body_markdown": "The value of a node is not the box, logo, or dashboard. It is the continuing ability to validate Bitcoin under rules the operator chose and understands.\n\nA sound setup uses maintained software, verified releases, sufficient resources, narrow access, clear wallet boundaries, monitored operation, and a recovery plan.\n\nStart with the simplest configuration that meets the real goal. Complexity can be added later when its benefit is understood.",
+      "body_html": "<p>The value of a node is not the box, logo, or dashboard. It is the continuing ability to validate Bitcoin under rules the operator chose and understands.</p>\n<p>A sound setup uses maintained software, verified releases, sufficient resources, narrow access, clear wallet boundaries, monitored operation, and a recovery plan.</p>\n<p>Start with the simplest configuration that meets the real goal. Complexity can be added later when its benefit is understood.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Node",
+      "definition": "Bitcoin software that communicates with peers and may validate, relay, store, or serve network data."
+    },
+    {
+      "term": "Full node",
+      "definition": "Software that independently verifies Bitcoin blocks and transactions against consensus rules."
+    },
+    {
+      "term": "Pruned node",
+      "definition": "A fully validating node configured to discard older block data after verification."
+    },
+    {
+      "term": "Bitcoin Core",
+      "definition": "The most widely used open-source Bitcoin node and wallet software implementation."
+    },
+    {
+      "term": "Bitcoin privacy",
+      "definition": "The degree to which transaction activity, ownership relationships, and user identity can remain difficult to observe or connect."
+    },
+    {
+      "term": "RPC",
+      "definition": "A command and data interface used to control or query Bitcoin software such as Bitcoin Core."
+    },
+    {
+      "term": "Validation",
+      "definition": "The process of checking transactions and blocks against applicable rules."
+    },
+    {
+      "term": "Threat model",
+      "definition": "A defined view of the assets, adversaries, capabilities, failure modes, and assumptions relevant to a security decision."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bitcoin Core download page",
+      "author_or_publisher": "Bitcoin Core project",
+      "url": "https://bitcoincore.org/en/download/",
+      "supports": "Official release acquisition, published verification materials, signed checksums, and the project's warning to use its official download location."
+    },
+    {
+      "title": "Bitcoin Core release verification documentation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/contrib/verify-binaries/README.md",
+      "supports": "Release checksum and signature verification workflow and the distinction between verifying a release artifact and reviewing its source."
+    },
+    {
+      "title": "Bitcoin Core README",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/README.md",
+      "supports": "Bitcoin Core's full-validation role, optional wallet and GUI, stable release tags, and development-branch caution."
+    },
+    {
+      "title": "Bitcoin Core startup options",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/init.cpp",
+      "supports": "Pruning, indexes, listening, connection, RPC, data-directory, wallet, cache, and other configuration options plus their implementation-specific compatibility rules."
+    },
+    {
+      "title": "Bitcoin Core files documentation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/doc/files.md",
+      "supports": "Data-directory contents, block files, chainstate, indexes, peer data, settings, logs, and wallet storage distinctions."
+    },
+    {
+      "title": "Bitcoin Core reduce-traffic documentation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/doc/reduce-traffic.md",
+      "supports": "Bandwidth management, upload behavior, block serving, connection choices, and traffic-related operating tradeoffs."
+    },
+    {
+      "title": "Bitcoin Core JSON-RPC interface documentation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/doc/JSON-RPC-interface.md",
+      "supports": "RPC capabilities, authentication and exposure risks, local control, and why unrestricted public RPC access is unsafe."
+    },
+    {
+      "title": "Bitcoin Core Tor documentation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/doc/tor.md",
+      "supports": "Tor peer connectivity, onion-service behavior, listening choices, and configuration requirements."
+    },
+    {
+      "title": "Bitcoin Core getblockchaininfo RPC",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://bitcoincore.org/en/doc/31.0.0/rpc/blockchain/getblockchaininfo/",
+      "supports": "Chain, block, header, verification progress, chainwork, pruning, and warning fields used to assess synchronization."
+    },
+    {
+      "title": "Bitcoin Core getnetworkinfo RPC",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://bitcoincore.org/en/doc/31.0.0/rpc/network/getnetworkinfo/",
+      "supports": "Peer-network state, connection counts, local services, network reachability, relay-related settings, and warnings."
+    },
+    {
+      "title": "Bitcoin Core 31.0 release notes",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/doc/release-notes/release-notes-31.0.md",
+      "supports": "The need to review release-specific compatibility, resource, configuration, and migration changes before upgrading."
+    },
+    {
+      "title": "Bitcoin Core full-node guide",
+      "author_or_publisher": "Bitcoin Core project",
+      "url": "https://bitcoincore.org/en/full-node/",
+      "supports": "General hardware, bandwidth, installation, configuration, synchronization, and inbound-connectivity context. Version-sensitive commands must be checked against current release documentation."
+    }
+  ],
+  "seo_title": "How to Run a Bitcoin Node: Practical Setup Guide",
+  "meta_description": "Follow a practical, software-aware process for running a Bitcoin node, from hardware and verified downloads to synchronization, wallet access, updates, and recovery.",
+  "excerpt": "Running a Bitcoin node requires more than installing software. Plan its purpose, storage, peer access, wallet boundary, monitoring, updates, and recovery.",
+  "reading_time": "15 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-NETWORK",
+    "label": "The Bitcoin Network",
+    "subcategory": "Nodes",
+    "depth": "Shallow",
+    "format": "Walkthrough"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-022",
+      "title": "What Is a Pruned Bitcoin Node?",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-024",
+      "title": "Bitcoin Node Software Explained",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": [
+      {
+        "registry_id": "MSC-GUIDE-011",
+        "title": "How to Keep Bitcoin Secure",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-012",
+        "title": "How Bitcoin Privacy Works",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-021",
+        "title": "What Is a Bitcoin Full Node?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-022",
+        "title": "What Is a Pruned Bitcoin Node?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-024",
+        "title": "Bitcoin Node Software Explained",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-025",
+        "title": "What Happens Inside the Bitcoin Mempool?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-041",
+        "title": "Bitcoin Developer Tools: A Practical Overview",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-049",
+        "title": "What Is Bitcoin Core?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-052",
+        "title": "How Bitcoin Core Releases Work",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-061",
+        "title": "How Bitcoin RPC Works",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-064",
+        "title": "How to Run Reliable Bitcoin Infrastructure",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GLOSSARY-001",
+        "title": "Bitcoin Glossary",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-HUB-NETWORK",
+        "title": "The Bitcoin Network",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-PATH-NETWORK",
+        "title": "Understand the Network",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-PATH-SAFE",
+        "title": "Use Bitcoin Safely",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-PATH-BUILD",
+        "title": "Build on Bitcoin",
+        "active": false,
+        "url": null
+      }
+    ]
+  },
+  "review_dates": {
+    "reviewed": "2026-07-18",
+    "copy_locked": "2026-07-18",
+    "human_verification": "2026-07-18"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "Node Setup Decision Chart",
+      "educational_purpose": "Help readers choose a configuration based on purpose before selecting hardware or settings.",
+      "recommended_placement": "After the section titled Step 1: Define the node's job.",
+      "visual_description": "Old navigation chart beginning with Purpose and branching to Personal verification, Wallet backend, Lightning or payment service, Development, and Public archival service. Each route points to storage, access, uptime, and index considerations.",
+      "required_labels": "Purpose, Personal verification, Wallet backend, Service node, Development, Archival history, Pruning, RPC access, Inbound peers, Monitoring",
+      "caption": "The right node configuration starts with the job the node must perform.",
+      "alt_text": "Decision chart branching from a Bitcoin node's purpose into personal, wallet, service, development, and archival configurations with storage and access considerations.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Use a vertical decision tree with Purpose at the top and no more than two labels per branch.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "Trusted Installation Path",
+      "educational_purpose": "Show the sequence from an official release source to a verified installation.",
+      "recommended_placement": "After the section titled Step 6: Verify the download.",
+      "visual_description": "Technical field-guide sequence showing Official project, Release file, Signed checksum, Local hash check, Signature verification, and Install. A side route from Random mirror ends at Stop.",
+      "required_labels": "Official project, Release artifact, Checksum, Maintainer signatures, Local verification, Install, Unverified source, Stop",
+      "caption": "Verify that the downloaded binary matches the project's signed release information before installation.",
+      "alt_text": "Security flow diagram showing a Bitcoin node release moving from the official project through checksum and signature verification before installation, with an unverified mirror route rejected.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Keep the six trusted steps in one centered vertical path and place the rejected mirror route to the side.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Ongoing Node Operations Loop",
+      "educational_purpose": "Reinforce that a node requires continuing monitoring, updates, access review, and recovery planning.",
+      "recommended_placement": "After the section titled A node is an ongoing responsibility.",
+      "visual_description": "Infrastructure-manual loop around a central validating node. Four stations read Monitor, Verify releases, Update cleanly, and Test recovery. Smaller callouts show disk, peers, warnings, wallet boundary, and configuration.",
+      "required_labels": "Validating node, Monitor, Verify releases, Update cleanly, Test recovery, Disk space, Peer health, Warnings, Wallet boundary",
+      "caption": "Reliable node operation is a cycle of validation, monitoring, verified updates, and tested recovery.",
+      "alt_text": "Circular operations diagram around a Bitcoin validating node with monitoring, release verification, clean updates, and recovery testing.",
+      "image_orientation": "Square",
+      "mobile_crop_notes": "Keep the node at center and use four evenly spaced outer stations with short labels.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}

@@ -1,0 +1,132 @@
+{% comment %}
+  Generated from docs/learn/content/guides/MSC-GUIDE-029-bitcoin-proof-of-work.md.
+  Registry binding: MSC-GUIDE-029.
+  Preview only. Do not edit manually.
+  Rebuild with node scripts/generate-msc-learn-guide-category-runtime.mjs --start=17 --end=32 --write.
+{% endcomment %}
+<section class="msc-shell msc-learn-page" data-msc-registry-id="MSC-GUIDE-029" data-msc-preview-only="true">
+  <div class="msc-container msc-learn-page__container">
+    <nav class="msc-learn-breadcrumbs" aria-label="Learn breadcrumbs"><ol><li><span>Learn</span></li><li><span>The Bitcoin Network</span></li><li aria-current="page"><span>How Bitcoin Proof of Work Secures the Network</span></li></ol></nav>
+    <header class="msc-learn-page__header">
+      <p class="msc-section-kicker">The Bitcoin Network</p>
+      <h1>How Bitcoin Proof of Work Secures the Network</h1>
+      <p class="msc-learn-page__deck">Bitcoin proof of work turns block production into a costly, verifiable competition. Miners search for block-header hashes below a network target, while full nodes independently verify the result and every rule inside the block. Proof of work helps order valid history and makes replacement expensive, but it does not let miners override signatures, create invalid bitcoin, or change the rules enforced by nodes.</p>
+      <ul class="msc-learn-page-meta"><li>Consensus</li><li>Shallow</li><li>Explainer</li><li>11 minutes</li><li>Reviewed 2026-07-19</li></ul>
+      <p class="msc-learn-preview-note">Preview only. Publication records and confirmed URLs do not exist; all navigation remains inactive.</p>
+    </header>
+    <article class="msc-learn-article rte" data-msc-content-source="structured-runtime">
+<section class="msc-learn-article__section">
+<p>Bitcoin proof of work is often described as the system that secures the network. That statement is directionally useful, but it needs boundaries.</p>
+<p>Proof of work does not decide whether a transaction has a valid signature. It does not decide whether a coin exists. It does not give a miner permission to ignore block limits or create more subsidy than the rules allow.</p>
+<p>Its central job is different. Proof of work gives Bitcoin a measurable way to compare valid competing histories and makes producing that history costly.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Miners search for a qualifying block-header hash</h2>
+<p>A miner begins with a candidate block linked to a chosen parent block.</p>
+<p>The candidate includes transactions, a coinbase transaction, commitments to the transaction set, and an 80-byte block header. The header contains the version, previous block hash, Merkle root, timestamp, encoded target, and nonce.</p>
+<p>Mining systems repeatedly hash serialized header variants with double SHA-256. A result is valid proof of work only when the interpreted hash is less than or equal to the target required for that block.</p>
+<p>Most hashes fail. A failed hash is not partial progress that can be saved toward the next attempt. It is simply one result that did not satisfy the target.</p>
+<p>Miners create more search space by changing the nonce, timestamp within allowed bounds, permitted version bits, coinbase data, transaction selection, or transaction order. Changes that affect the coinbase or transaction set alter the Merkle root and therefore create a different header.</p>
+</section>
+<section class="msc-learn-article__section"><h2>The target determines how difficult success is</h2>
+<p>The proof-of-work target is a threshold.</p>
+<p>A lower target permits fewer possible hash results, so finding a qualifying result is harder. A higher target permits more results, so it is easier.</p>
+<p>Bitcoin commonly expresses this relationship through difficulty, which compares the current target with a reference target. Difficulty is a convenient display measure. Nodes ultimately validate the encoded target and the resulting header hash under the applicable consensus rules.</p>
+<p>On mainnet, the required target is recalculated at 2,016-block boundaries under the ordinary difficulty-adjustment rule. Miners do not report how many machines they have, and nodes do not ask a hashrate dashboard what target to accept.</p>
+<p>Each node calculates the required target from validated chain data and network parameters.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Proof of work is easy to verify after it is found</h2>
+<p>Finding a qualifying header can require an enormous number of attempts. Verifying the result is much cheaper.</p>
+<p>A node can serialize the header, calculate its hash, decode the target, and compare the two. It also checks that the target is the one permitted for that chain position.</p>
+<p>This asymmetry is essential. Production is intentionally expensive and probabilistic. Verification is deterministic and practical for ordinary full nodes.</p>
+<p>The node still has much more work to do. It checks the block structure, transaction commitments, scripts, signatures, available inputs, amounts, block limits, coinbase rules, lock conditions, and other consensus requirements.</p>
+<p>A valid proof-of-work hash proves that the header met the target. It does not prove that the complete block is valid.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Work orders valid competing histories</h2>
+<p>Bitcoin peers can temporarily learn about more than one valid branch.</p>
+<p>Two miners may find blocks extending the same parent at nearly the same time. Network delay can cause different nodes to see those blocks in a different order.</p>
+<p>Nodes do not permanently select the first block they heard about. Among valid candidate chains, they compare accumulated proof of work, represented in Bitcoin Core as chainwork.</p>
+<p>Each valid block contributes work based on its target. A chain with more blocks does not automatically have more chainwork if the blocks represent different targets. Header timestamps also do not directly determine which branch wins.</p>
+<p>The selected chain is the valid candidate chain with the greatest accumulated work under the node&#39;s chain-selection rules.</p>
+<p>When a competing valid branch overtakes the currently selected branch, the node can reorganize. It disconnects blocks from the old branch, connects blocks from the stronger valid branch, updates chainstate, and reconciles affected transactions.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Work cannot make an invalid block valid</h2>
+<p>Suppose a miner produces a header hash far below the target but includes a transaction that spends a nonexistent output.</p>
+<p>A full node enforcing the applicable rules rejects the block.</p>
+<p>The same is true if the miner claims too much coinbase value, violates block weight, breaks a required script rule, uses the wrong target, or fails another consensus check.</p>
+<p>This separation limits what hash power can do. Mining determines competition within the valid rule set. Validation determines whether a block belongs in that valid set at all.</p>
+<p>An attacker with substantial hash power may be able to reorder recent valid transactions, delay confirmations, censor selected transactions, or attempt a double spend by building a competing valid branch. Hash power does not reveal private keys or create valid signatures for someone else&#39;s funds.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Proof of work makes history expensive to replace</h2>
+<p>Each accepted block links to the hash of its parent.</p>
+<p>Changing an earlier block changes its header hash. That breaks the next block&#39;s previous-hash reference and every later link built above it.</p>
+<p>An attacker trying to replace that history must construct an alternative valid branch and perform enough new proof of work for the branch to overtake the selected chain.</p>
+<p>The deeper the targeted transaction sits beneath later blocks, the more accumulated work the attacker generally must overcome.</p>
+<p>This is why confirmations are probabilistic settlement depth rather than an instant switch to absolute finality. One confirmation means inclusion in the selected chain. Additional blocks increase the work represented above that transaction.</p>
+<p>The appropriate waiting depth depends on the value, threat model, available alternatives, and tolerance for reorganization risk.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Majority hash power is serious but not unlimited</h2>
+<p>The phrase &quot;51 percent attack&quot; refers to a simplified case in which an attacker can sustain more proof-of-work production than the rest of the competing network.</p>
+<p>Such an attacker can have a strong probability of making its valid branch accumulate work faster. That can support transaction censorship, reordering, and attempts to reverse the attacker&#39;s own recent payments.</p>
+<p>The exact outcome depends on the attacker&#39;s share, duration, private lead, network propagation, target transaction depth, defensive behavior, and whether other miners redirect capacity.</p>
+<p>Majority hash power does not automatically grant control of:</p>
+<ul><li>Other people&#39;s private keys.</li><li>The consensus rules enforced by full nodes.</li><li>Wallet software and user devices.</li><li>Every miner or pool.</li><li>The monetary rules inside software that nodes choose to run.</li><li>Off-chain contracts or external institutions.</li></ul>
+<p>A miner that changes the rules creates blocks that unmodified nodes may reject. Proof of work is not a bypass around validation.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Security depends on cost, capability, and coordination</h2>
+<p>Hashrate is one part of a proof-of-work threat model.</p>
+<p>An attacker may need specialized hardware, electrical power, facilities, cooling, firmware, network access, operational staff, and a way to hide or coordinate the effort. The attacker must also consider opportunity cost because hardware used on a competing branch is not simultaneously earning ordinary rewards on the selected chain.</p>
+<p>The cost is not one fixed dollar figure.</p>
+<p>Hardware can be owned, rented, redirected, stolen, subsidized, or already deployed. Energy prices and curtailment arrangements differ. Pool-level coordination can differ from hardware ownership. An attack sustained for hours has different requirements from one sustained for months.</p>
+<p>A responsible security claim identifies the capability being considered instead of saying that a single hashrate number measures all security.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Energy expenditure is an input, not the rule itself</h2>
+<p>Proof of work requires physical computation, and physical computation requires energy.</p>
+<p>That connection makes large-scale block production costly. It also creates real resource use that should be measured with clear boundaries.</p>
+<p>Bitcoin consensus does not check a power bill or require a specific amount of electricity per block. Nodes verify hashes and targets. Energy use arises from miners competing to find those hashes with real machines.</p>
+<p>The same hashrate can be produced with different hardware efficiency and supporting infrastructure. Electrical demand, energy source, emissions, cost, grid effects, heat reuse, and curtailment are separate measurements.</p>
+<p>&quot;Bitcoin is secured by energy&quot; is therefore incomplete. Security comes from a system in which proof-of-work production has real cost, valid work is cheaply verifiable, nodes enforce rules independently, and competing histories are compared by accumulated work.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Miners are paid for valid selected-chain blocks</h2>
+<p>Proof-of-work incentives connect security with block rewards.</p>
+<p>A miner that finds a valid block may claim up to the permitted subsidy plus transaction fees through the coinbase transaction. Those outputs are subject to the 100-block coinbase maturity rule.</p>
+<p>A found block can still become stale if another valid branch becomes selected. The stale block&#39;s coinbase output does not mature on the selected chain.</p>
+<p>An invalid block is worse. Nodes reject it regardless of the miner&#39;s cost.</p>
+<p>This gives miners an economic reason to build on a valid chain, include valid transactions, follow activation rules they expect the network to enforce, and propagate blocks quickly.</p>
+<p>The incentive is not perfect control. It is a recurring reward for producing work that other nodes can verify and accept.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Difficulty adjustment keeps the competition usable</h2>
+<p>Hashrate changes over time as machines enter, leave, throttle, fail, or move between uses.</p>
+<p>Without a difficulty adjustment, a large increase in aggregate hash power would cause blocks to arrive faster on average. A large decrease would cause them to arrive more slowly.</p>
+<p>Bitcoin mainnet periodically recalculates the target from prior block timing. The objective is to keep long-run block production near the ten-minute target spacing despite changes in aggregate hashing conditions.</p>
+<p>The adjustment does not eliminate random block intervals. It does not guarantee exactly ten minutes between blocks. It changes the expected difficulty of future proof-of-work searches.</p>
+<p>Proof of work and difficulty adjustment therefore operate together:</p>
+<ol><li>The target sets the qualification threshold.</li><li>Miners search for a header hash that satisfies it.</li><li>Nodes verify the proof and complete block.</li><li>Valid blocks add work to candidate chain history.</li><li>Nodes select the valid chain with the greatest accumulated work.</li><li>Periodic retargeting responds to prior block timing.</li></ol>
+</section>
+<section class="msc-learn-article__section"><h2>Proof of work solves an ordering problem</h2>
+<p>Bitcoin does not have a central operator that assigns one official transaction order.</p>
+<p>Proof of work supplies a public, independently verifiable ordering signal. Anyone can attempt to extend the chain. Anyone running a full node can verify whether the resulting block follows the rules and how much work the candidate chain represents.</p>
+<p>This mechanism does not remove every risk. It creates a specific security model.</p>
+<p>Blocks remain probabilistic. Recent history can reorganize. Mining can concentrate. Censorship attempts are possible. Hardware and energy systems have operational dependencies. Software rules can become socially disputed.</p>
+<p>The durable insight is narrower and stronger than a slogan: proof of work makes block production costly, verification cheap, and replacement of valid accumulated history progressively more difficult.</p>
+</section>
+    </article>
+    <section class="msc-learn-key-terms" aria-labelledby="MscGuide029Terms"><h2 id="MscGuide029Terms">Key Terms</h2><dl><div class="msc-learn-term"><dt>Proof of work</dt><dd>The computational process miners use to produce block hashes below the network target.</dd></div>
+<div class="msc-learn-term"><dt>Mining</dt><dd>The proof-of-work process that orders valid transactions into blocks and competes to extend the Bitcoin chain.</dd></div>
+<div class="msc-learn-term"><dt>Threat model</dt><dd>A defined view of the assets, adversaries, capabilities, failure modes, and assumptions relevant to a security decision.</dd></div>
+<div class="msc-learn-term"><dt>Difficulty</dt><dd>The proof-of-work threshold that determines how hard it is to produce a valid block hash.</dd></div>
+<div class="msc-learn-term"><dt>Hashrate</dt><dd>An estimate of the total proof-of-work computation being applied to Bitcoin mining.</dd></div>
+<div class="msc-learn-term"><dt>Validation</dt><dd>The process of checking transactions and blocks against applicable rules.</dd></div>
+<div class="msc-learn-term"><dt>Blockchain</dt><dd>The ordered history of valid Bitcoin blocks selected by accumulated proof of work.</dd></div></dl></section>
+    <section class="msc-learn-sources" aria-labelledby="MscGuide029Sources"><h2 id="MscGuide029Sources">Sources</h2><article class="msc-learn-source"><h3>Bitcoin white paper</h3><ul><li><strong>author or publisher:</strong> Satoshi Nakamoto</li><li><strong>url:</strong> https://bitcoin.org/bitcoin.pdf</li><li><strong>supports:</strong> Hash-based proof of work, chain ordering, network operation, confirmation depth, and the probability of a competing chain catching up.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core proof-of-work implementation</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/src/pow.cpp</li><li><strong>supports:</strong> Required-target calculation, compact target decoding, proof-of-work limit handling, difficulty adjustment, and header hash validation.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core proof-of-work interface</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/src/pow.h</li><li><strong>supports:</strong> The proof-of-work calculation and checking interfaces used by Bitcoin Core.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core chainwork implementation</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/src/chain.cpp</li><li><strong>supports:</strong> Per-block proof calculation, accumulated chainwork, and comparison of work represented by chain history.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core chain index definitions</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/src/chain.h</li><li><strong>supports:</strong> Stored chainwork, block height, parent relationships, active-chain access, and candidate branch navigation.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core validation implementation</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/src/validation.cpp</li><li><strong>supports:</strong> Header and block validation, proof-of-work checks, candidate-chain activation, block connection and disconnection, and rejection of invalid blocks.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core block-header data structure</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/src/primitives/block.h</li><li><strong>supports:</strong> The six serialized header fields, 80-byte header structure, and block-header hashing object.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core mainnet consensus parameters</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/src/kernel/chainparams.cpp</li><li><strong>supports:</strong> Mainnet target spacing, target timespan, proof-of-work limit, deployment heights, and network-specific consensus parameters.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core block-assembly implementation</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/src/node/miner.cpp</li><li><strong>supports:</strong> Candidate-block construction, coinbase creation, transaction selection, header preparation, and template validity checks.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Developer Guide: Block Chain</h3><ul><li><strong>author or publisher:</strong> Bitcoin.org contributors</li><li><strong>url:</strong> https://developer.bitcoin.org/devguide/block_chain.html</li><li><strong>supports:</strong> Block headers, targets, proof of work, chain selection, Merkle commitments, and confirmation context.</li></ul></article></section>
+    <nav class="msc-learn-prev-next" aria-label="Guide navigation preview"><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Previous</span><strong>What Is Bitcoin Hashrate?</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Category</span><strong>The Bitcoin Network</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Next</span><strong>How Bitcoin Reaches Consensus</strong><small>Link inactive</small></span></nav>
+  </div>
+</section>

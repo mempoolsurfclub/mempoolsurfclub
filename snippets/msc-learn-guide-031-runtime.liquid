@@ -1,0 +1,194 @@
+{% comment %}
+  Generated from docs/learn/content/guides/MSC-GUIDE-031-bitcoin-soft-forks.md.
+  Registry binding: MSC-GUIDE-031.
+  Preview only. Do not edit manually.
+  Rebuild with node scripts/generate-msc-learn-guide-category-runtime.mjs --start=17 --end=32 --write.
+{% endcomment %}
+<section class="msc-shell msc-learn-page" data-msc-registry-id="MSC-GUIDE-031" data-msc-preview-only="true">
+  <div class="msc-container msc-learn-page__container">
+    <nav class="msc-learn-breadcrumbs" aria-label="Learn breadcrumbs"><ol><li><span>Learn</span></li><li><span>The Bitcoin Network</span></li><li aria-current="page"><span>How Bitcoin Soft Forks Work</span></li></ol></nav>
+    <header class="msc-learn-page__header">
+      <p class="msc-section-kicker">The Bitcoin Network</p>
+      <h1>How Bitcoin Soft Forks Work</h1>
+      <p class="msc-learn-page__deck">A Bitcoin soft fork changes consensus by making the valid-block rules more restrictive. Upgraded nodes reject some blocks that older nodes would have accepted, while blocks valid under the new rules can remain acceptable to older nodes. That compatibility property helps deployment, but it does not remove activation risk, operational incompatibility, or the need for miners, nodes, wallets, services, and users to coordinate carefully.</p>
+      <ul class="msc-learn-page-meta"><li>Consensus</li><li>Deep</li><li>Explainer</li><li>16 minutes</li><li>Reviewed 2026-07-19</li></ul>
+      <p class="msc-learn-preview-note">Preview only. Publication records and confirmed URLs do not exist; all navigation remains inactive.</p>
+    </header>
+    <article class="msc-learn-article rte" data-msc-content-source="structured-runtime">
+<section class="msc-learn-article__section">
+<p>Bitcoin consensus rules can change, but changing them safely is difficult.</p>
+<p>A soft fork is one method. It introduces stricter validity conditions while preserving a subset relationship with the older rules.</p>
+<p>That definition is more precise than saying a soft fork is simply a backward-compatible upgrade.</p>
+</section>
+<section class="msc-learn-article__section"><h2>A soft fork narrows the valid set</h2>
+<p>Imagine the old rules accept a large set of possible blocks.</p>
+<p>A soft fork adds a restriction. Upgraded nodes now accept only a subset of that old set.</p>
+<p>Every block valid under the new rules should also remain acceptable under the old rules. Some blocks acceptable to old nodes are no longer acceptable to upgraded nodes.</p>
+<p>This subset relationship is the defining property.</p>
+<p>It allows non-upgraded nodes to continue following a chain produced under the stricter rules because those blocks still fit inside the older validity set.</p>
+<p>The reverse is not guaranteed. An old miner can produce a block that satisfies the old rules but violates the new restriction. Upgraded nodes reject that block after activation.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Restrictions can appear at several validation layers</h2>
+<p>A soft fork is not limited to adding one script opcode.</p>
+<p>The stricter condition can affect:</p>
+<ul><li>Which transaction or block structures are valid.</li><li>How existing fields are interpreted.</li><li>Which signatures satisfy a spending condition.</li><li>How locktime or sequence constraints are evaluated.</li><li>Which commitments must appear in a block.</li><li>How much block resource usage is permitted.</li><li>Which block versions or deployment states are acceptable.</li></ul>
+<p>The compatibility test remains the same in each case. A block satisfying the activated rule must still fit inside the old node&#39;s accepted set.</p>
+<p>That test applies to complete blocks, not only to one transaction feature. A proposal can introduce a new transaction form while also changing block commitments, accounting rules, signature hashing, and activation checks. Reviewers must examine how those pieces interact.</p>
+<p>Policy changes are different. A node can tighten its mempool or relay policy without changing which confirmed blocks it accepts. That local restriction may resemble a soft fork because it narrows what the node relays, but it is not a consensus change unless the block-validation rules also change.</p>
+<p>Keeping the layers separate prevents a common mistake: treating every stricter default as an activated network rule. A relay filter can be changed locally. A soft fork changes the validity boundary that upgraded nodes apply to blocks.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Soft forks do not make old nodes enforce new meaning</h2>
+<p>An old node can accept a new-rule block without understanding every rule the upgraded nodes checked.</p>
+<p>This is often achieved by assigning new restrictive meaning to a pattern that old software already treats permissively.</p>
+<p>For example, an older node may treat a future witness program as having minimal or no spending conditions. Upgraded nodes can assign real validation rules to that version. A spend satisfying the new rules remains acceptable to the old node because the old node does not apply the added restriction.</p>
+<p>That is compatibility through non-enforcement.</p>
+<p>The old node follows the chain but cannot independently verify the new condition. Its security model for those new transaction forms is weaker than that of an upgraded node.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Soft fork compatibility is not universal compatibility</h2>
+<p>A soft fork can preserve block acceptance for old nodes and still create operational problems.</p>
+<p>Non-upgraded software may:</p>
+<ul><li>Fail to understand new addresses or output types.</li><li>Display incomplete transaction information.</li><li>Estimate fees or weight incorrectly.</li><li>Treat new scripts as anyone-can-spend.</li><li>Fail to create or sign new transaction forms.</li><li>Misreport activation state.</li><li>Produce blocks that violate the new rules.</li><li>Rely on policy assumptions that changed with deployment.</li><li>Require wallet, hardware, library, or service updates.</li></ul>
+<p>A soft fork is backward compatible in a specific consensus-validity sense. It is not a promise that every old application continues working safely or with full understanding.</p>
+</section>
+<section class="msc-learn-article__section"><h2>A proposal is not an activated rule</h2>
+<p>A soft-fork idea can pass through several stages:</p>
+<ol><li>Problem definition and design discussion.</li><li>Specification in one or more Bitcoin Improvement Proposals.</li><li>Reference or production implementation.</li><li>Code review and testing.</li><li>Software release.</li><li>Operator adoption.</li><li>Activation coordination.</li><li>Enforcement after activation.</li><li>Monitoring and later maintenance.</li></ol>
+<p>These stages are related but distinct.</p>
+<p>A BIP documents a proposal. It does not command nodes to adopt it.</p>
+<p>A merged implementation makes code available in a repository. It does not remotely update running systems.</p>
+<p>A release lets operators install software. It does not guarantee that activation conditions will be reached.</p>
+<p>Activation is the transition at which upgraded nodes begin enforcing the new consensus rule for relevant blocks.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Activation must coordinate enforcement</h2>
+<p>If upgraded nodes begin enforcing a rule before enough block producers are prepared, non-upgraded miners may create blocks that the upgraded network rejects.</p>
+<p>That can cause stale blocks, lost mining revenue, delayed confirmations, and competing branches.</p>
+<p>If different upgraded node groups use conflicting activation conditions, they can disagree about validity at the boundary.</p>
+<p>Deployment mechanisms therefore try to coordinate three things:</p>
+<ul><li>Readiness information.</li><li>A clear lock-in or decision point.</li><li>A predictable enforcement point.</li></ul>
+<p>No mechanism eliminates social judgment. Parameters such as signaling thresholds, timeouts, activation heights, and mandatory enforcement rules express choices about risk and coordination.</p>
+</section>
+<section class="msc-learn-article__section"><h2>P2SH used a scheduled transition</h2>
+<p>Pay to Script Hash, specified in BIP 16, was deployed before versionbits. The new evaluation rules were implemented in Bitcoin Core 0.6.0 and took effect on April 1, 2012. Miners used coinbase signaling to show readiness before the scheduled enforcement time.</p>
+<p>P2SH demonstrates that a soft fork does not require the later BIP 9 state machine. It also separated the consensus rule from the BIP 13 address format and wallet support needed to use P2SH safely.</p>
+</section>
+<section class="msc-learn-article__section"><h2>CSV deployed as a coordinated BIP 9 package</h2>
+<p>The relative locktime upgrade combined BIP 68, BIP 112, and BIP 113. BIP 68 gave transaction sequence fields consensus-enforced relative locktime meaning. BIP 112 introduced <code>CHECKSEQUENCEVERIFY</code>. BIP 113 changed locktime evaluation to use median time past.</p>
+<p>The package deployed together through BIP 9. Current Bitcoin Core mainnet parameters preserve the result at CSV activation height 419,328.</p>
+<p>CSV shows that one soft-fork deployment can coordinate several interdependent consensus rules under one activation state.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Early deployments used block-version thresholds</h2>
+<p>Several early Bitcoin soft forks used block-version signaling and threshold logic.</p>
+<p>BIP 34 introduced a rule requiring the block height in the coinbase transaction and used version 2 blocks. BIP 66 tightened signature encoding rules with version 3 blocks. BIP 65 introduced <code>CHECKLOCKTIMEVERIFY</code> with version 4 blocks.</p>
+<p>The historical mechanism counted recent block versions. As support crossed defined thresholds, new rules became enforced and older-version blocks were eventually rejected.</p>
+<p>Bitcoin Core later simplified the deployed activation checks for BIPs 34, 65, and 66 into fixed mainnet heights. Current code treats them as buried deployments because their activation is far in the past.</p>
+<p>Buried deployment logic is historical enforcement, not a template for deciding every future upgrade.</p>
+</section>
+<section class="msc-learn-article__section"><h2>BIP 9 introduced versionbits state transitions</h2>
+<p>BIP 9 created a framework for deploying multiple soft forks through separate bits in the block version field.</p>
+<p>A deployment moves through defined states based on median time, signaling counts, and retarget-period boundaries:</p>
+<ul><li><code>DEFINED</code>: The deployment parameters exist but signaling has not started.</li><li><code>STARTED</code>: Blocks can signal readiness during counting periods.</li><li><code>LOCKED_IN</code>: The threshold was reached and activation is scheduled after a delay.</li><li><code>ACTIVE</code>: Upgraded nodes enforce the new rules.</li><li><code>FAILED</code>: The timeout was reached without lock-in.</li></ul>
+<p>The block-version bit communicates miner readiness under the mechanism. It does not change transaction validity before the encoded activation state requires enforcement.</p>
+<p>BIP 9 also does not measure every user, node, wallet, exchange, or economic actor. Miner signaling is one coordination input, not a universal governance vote.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Signaling and enforcement are different</h2>
+<p>A miner can signal readiness and still run incorrect enforcement software.</p>
+<p>A miner can also enforce the new rules without setting the expected signaling bit if its software or configuration behaves that way.</p>
+<p>Nodes should not treat signaling alone as proof that a block satisfies the new rules. After activation, upgraded nodes validate the actual block contents.</p>
+<p>This distinction matters because signaling is metadata. Enforcement is behavior.</p>
+<p>The safest deployment analysis asks:</p>
+<ul><li>Which software versions implement the rules?</li><li>What exactly does the signal mean?</li><li>How is the threshold calculated?</li><li>When does lock-in occur?</li><li>When does enforcement begin?</li><li>What happens at timeout?</li><li>Can miners build invalid blocks after activation?</li><li>How do nodes expose deployment state?</li><li>Which operational systems must upgrade?</li></ul>
+</section>
+<section class="msc-learn-article__section"><h2>SegWit used a coordinated soft-fork suite</h2>
+<p>Segregated Witness changed several consensus-critical areas.</p>
+<p>BIP 141 defined the witness structure, witness programs, block weight, and witness commitment. BIP 143 defined a new signature-hash method for version 0 witness programs. BIP 147 addressed a malleability-related rule.</p>
+<p>The deployment used BIP 9 versionbits parameters for the <code>segwit</code> deployment.</p>
+<p>SegWit illustrates why a soft fork can be technically broad. It affected transaction serialization, identifiers, signature verification, block accounting, relay, wallets, addresses, hardware signing, and mining templates.</p>
+<p>Older nodes could remain on the chain, but they did not fully validate witness spending conditions or account for witness data in the same way as upgraded nodes.</p>
+<p>Calling SegWit &quot;backward compatible&quot; is true only with those limits stated.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Taproot used versionbits with modified parameters</h2>
+<p>Taproot deployed the BIP 340, BIP 341, and BIP 342 rule set.</p>
+<p>BIP 341 specified a versionbits deployment with a 2,016-block signaling period, a 90 percent threshold, a limited signaling window, and a minimum activation height of 709,632 for mainnet.</p>
+<p>The deployment activated at that height.</p>
+<p>Taproot assigned new meaning to SegWit version 1 outputs. Older nodes could continue following valid Taproot blocks, but they treated those outputs under their older permissive understanding and did not enforce Schnorr, key-path, script-path, or Tapscript rules.</p>
+<p>Upgraded nodes performed the additional checks.</p>
+<p>This is the soft-fork subset relationship in practice: new-rule validity fits inside what the older nodes already allowed, while upgraded nodes enforce more.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Other activation designs change the tradeoffs</h2>
+<p>BIP 8 describes a versionbits framework with height-based parameters and an optional lock-in-on-timeout behavior.</p>
+<p>Height-based activation, flag-day activation, miner thresholds, mandatory lock-in, and combinations of these ideas shift risk between delayed activation, premature activation, coordination failure, and chain splitting.</p>
+<p>A mechanism that guarantees eventual activation can reduce miner veto concerns but increase the consequences of poor ecosystem preparation.</p>
+<p>A mechanism that allows timeout without activation can reduce forced-enforcement risk but may leave a widely supported proposal inactive.</p>
+<p>There is no activation formula that turns a disputed social decision into a purely mechanical fact. The formula becomes authoritative only for nodes that run software containing it.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Soft forks can fail safely only within assumptions</h2>
+<p>The phrase &quot;soft forks fail safely&quot; can be misleading.</p>
+<p>If activation does not occur, software may remain compatible under the old rules. But operational costs can still include development work, release complexity, user confusion, and fragmented expectations.</p>
+<p>If activation occurs with insufficient miner enforcement, upgraded nodes can reject blocks that consume real work.</p>
+<p>If a bug exists in the new rules, upgraded nodes may accept or reject unintended data.</p>
+<p>If different implementations interpret the specification differently, a consensus split can occur.</p>
+<p>If users send funds to new output types while relying on old validation infrastructure, they may misunderstand their security boundary.</p>
+<p>Soft forks reduce one class of compatibility problem. They do not remove the need for conservative engineering.</p>
+</section>
+<section class="msc-learn-article__section"><h2>A hard fork changes the compatibility direction</h2>
+<p>A hard fork expands or otherwise changes the valid set so that blocks accepted under the new rules may be rejected by old nodes.</p>
+<p>Old nodes cannot necessarily follow the new chain without upgrading.</p>
+<p>The distinction is about validity-set relationships, not about whether a change is politically contentious, technically large, or considered beneficial.</p>
+<p>A small rule relaxation can be a hard fork. A broad set of new restrictions can be a soft fork.</p>
+<p>Some proposals combine behaviors or depend on activation context, so classification should follow the exact validation change rather than a label.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Full nodes determine whether enforcement applies locally</h2>
+<p>An operator&#39;s node enforces the rules contained in that software and activated under its configured network parameters.</p>
+<p>The node does not enforce a soft fork because a website says it activated. It evaluates the deployment state or historical activation height encoded by its implementation and validates blocks accordingly.</p>
+<p>A non-upgraded node cannot be made to perform new checks through peer messages.</p>
+<p>An upgraded node cannot force an old node to understand a new script system.</p>
+<p>Each operator&#39;s software choice sets the local enforcement boundary. Network compatibility depends on enough participants choosing software that produces and recognizes the same valid history.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Miners need full validation around activation</h2>
+<p>Mining only the header target is not enough.</p>
+<p>A miner building on a candidate chain should validate the parent, construct templates that obey the active rules, and reject invalid blocks from other miners.</p>
+<p>After a soft fork activates, an unprepared miner can extend a block that old software accepts but upgraded software rejects. Other prepared miners may build on the upgraded-valid branch instead, causing the noncompliant work to become stale.</p>
+<p>Pool operators also need to distinguish miner signaling, template construction, block validation, and hash-provider behavior. A pool participant&#39;s machines usually hash work assigned by the pool. The pool&#39;s template and validation systems can therefore be a key enforcement point without implying ownership of all connected hardware.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Safe deployment requires more than one threshold</h2>
+<p>A serious soft-fork readiness review considers:</p>
+<ul><li>Specification maturity.</li><li>Independent code review.</li><li>Test coverage and test vectors.</li><li>Cross-implementation agreement.</li><li>Miner and pool readiness.</li><li>Wallet and hardware support.</li><li>Exchange and custody operations.</li><li>Monitoring and incident response.</li><li>Activation-state visibility.</li><li>Reorganization and chain-split planning.</li><li>User communication.</li><li>Time for upgrades and rollback decisions.</li></ul>
+<p>No single percentage proves that every dependency is ready.</p>
+<p>The goal is not ceremonial unanimity. It is enough technical and operational coordination that the stricter rules can activate without uncontrolled disagreement about valid history.</p>
+</section>
+<section class="msc-learn-article__section"><h2>The durable soft-fork model</h2>
+<p>A Bitcoin soft fork can be summarized in six steps:</p>
+<ol><li>Define a rule that narrows the old valid-block set.</li><li>Specify and implement the exact validation behavior.</li><li>Review, test, release, and adopt supporting software.</li><li>Use an activation mechanism to coordinate when enforcement begins.</li><li>Have upgraded nodes enforce the stricter rules on real blocks.</li><li>Continue monitoring compatibility, mining behavior, wallets, and services after activation.</li></ol>
+<p>Older nodes may remain on the chain because new-valid blocks fit inside the old valid set.</p>
+<p>They do not gain the new security checks automatically.</p>
+<p>That is the central tradeoff: soft forks can preserve chain compatibility for non-upgraded nodes while shifting full verification of new behavior to upgraded nodes.</p>
+</section>
+    </article>
+    <section class="msc-learn-key-terms" aria-labelledby="MscGuide031Terms"><h2 id="MscGuide031Terms">Key Terms</h2><dl><div class="msc-learn-term"><dt>Soft fork</dt><dd>A consensus change that makes previously valid behavior invalid under new rules.</dd></div>
+<div class="msc-learn-term"><dt>Consensus</dt><dd>The shared validation rules independently enforced by Bitcoin nodes.</dd></div>
+<div class="msc-learn-term"><dt>BIP</dt><dd>A Bitcoin Improvement Proposal that documents a proposed standard, process, or protocol change.</dd></div>
+<div class="msc-learn-term"><dt>Validation</dt><dd>The process of checking transactions and blocks against applicable rules.</dd></div>
+<div class="msc-learn-term"><dt>Protocol</dt><dd>A defined set of rules and message formats that allows independent participants or software systems to interact consistently.</dd></div>
+<div class="msc-learn-term"><dt>Node</dt><dd>Bitcoin software that communicates with peers and may validate, relay, store, or serve network data.</dd></div>
+<div class="msc-learn-term"><dt>Proof of work</dt><dd>The computational process miners use to produce block hashes below the network target.</dd></div></dl></section>
+    <section class="msc-learn-sources" aria-labelledby="MscGuide031Sources"><h2 id="MscGuide031Sources">Sources</h2><article class="msc-learn-source"><h3>BIP 9: Version bits with timeout and delay</h3><ul><li><strong>author or publisher:</strong> Pieter Wuille, Peter Todd, Gregory Maxwell, and Rusty Russell</li><li><strong>url:</strong> https://github.com/bitcoin/bips/blob/master/bip-0009.mediawiki</li><li><strong>supports:</strong> Versionbits deployment states, signaling periods, thresholds, lock-in, activation delay, and timeout behavior.</li></ul></article>
+<article class="msc-learn-source"><h3>BIP 8: Version bits with lock-in by height</h3><ul><li><strong>author or publisher:</strong> Shaolin Fry and Luke Dashjr</li><li><strong>url:</strong> https://github.com/bitcoin/bips/blob/master/bip-0008.mediawiki</li><li><strong>supports:</strong> Height-based versionbits parameters, lock-in-on-timeout behavior, and alternative soft-fork activation tradeoffs.</li></ul></article>
+<article class="msc-learn-source"><h3>BIP 16: Pay to Script Hash</h3><ul><li><strong>author or publisher:</strong> Gavin Andresen</li><li><strong>url:</strong> https://github.com/bitcoin/bips/blob/master/bip-0016.mediawiki</li><li><strong>supports:</strong> P2SH validation rules, miner readiness signaling, and the scheduled April 1, 2012 enforcement transition.</li></ul></article>
+<article class="msc-learn-source"><h3>BIP 68: Relative lock-time using consensus-enforced sequence numbers</h3><ul><li><strong>author or publisher:</strong> Mark Friedenbach, BtcDrak, Nicolas Dorier, and kinoshitajona</li><li><strong>url:</strong> https://github.com/bitcoin/bips/blob/master/bip-0068.mediawiki</li><li><strong>supports:</strong> Consensus-enforced relative locktime semantics for transaction sequence fields and coordinated deployment with BIPs 112 and 113.</li></ul></article>
+<article class="msc-learn-source"><h3>BIP 112: CHECKSEQUENCEVERIFY</h3><ul><li><strong>author or publisher:</strong> BtcDrak, Mark Friedenbach, and Eric Lombrozo</li><li><strong>url:</strong> https://github.com/bitcoin/bips/blob/master/bip-0112.mediawiki</li><li><strong>supports:</strong> CHECKSEQUENCEVERIFY semantics and simultaneous deployment with BIPs 68 and 113.</li></ul></article>
+<article class="msc-learn-source"><h3>BIP 113: Median time-past as endpoint for lock-time calculations</h3><ul><li><strong>author or publisher:</strong> Thomas Kerin and Mark Friedenbach</li><li><strong>url:</strong> https://github.com/bitcoin/bips/blob/master/bip-0113.mediawiki</li><li><strong>supports:</strong> Median-time-past locktime evaluation and simultaneous deployment with BIPs 68 and 112.</li></ul></article>
+<article class="msc-learn-source"><h3>BIP 34: Block v2, height in coinbase</h3><ul><li><strong>author or publisher:</strong> Gavin Andresen</li><li><strong>url:</strong> https://github.com/bitcoin/bips/blob/master/bip-0034.mediawiki</li><li><strong>supports:</strong> Coinbase-height enforcement, block-version signaling, threshold-based activation, and rejection of older-version blocks.</li></ul></article>
+<article class="msc-learn-source"><h3>BIP 65: OP_CHECKLOCKTIMEVERIFY</h3><ul><li><strong>author or publisher:</strong> Peter Todd</li><li><strong>url:</strong> https://github.com/bitcoin/bips/blob/master/bip-0065.mediawiki</li><li><strong>supports:</strong> A deployed script-rule soft fork and its historical version-based activation method.</li></ul></article>
+<article class="msc-learn-source"><h3>BIP 66: Strict DER signatures</h3><ul><li><strong>author or publisher:</strong> Pieter Wuille</li><li><strong>url:</strong> https://github.com/bitcoin/bips/blob/master/bip-0066.mediawiki</li><li><strong>supports:</strong> Stricter signature encoding as a soft fork and its version-based deployment.</li></ul></article>
+<article class="msc-learn-source"><h3>BIP 141: Segregated Witness</h3><ul><li><strong>author or publisher:</strong> Eric Lombrozo, Johnson Lau, and Pieter Wuille</li><li><strong>url:</strong> https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki</li><li><strong>supports:</strong> Witness programs, witness commitments, block weight, backward-compatibility limits, and BIP 9 deployment parameters.</li></ul></article>
+<article class="msc-learn-source"><h3>BIP 143: Transaction signature verification for version 0 witness program</h3><ul><li><strong>author or publisher:</strong> Johnson Lau and Pieter Wuille</li><li><strong>url:</strong> https://github.com/bitcoin/bips/blob/master/bip-0143.mediawiki</li><li><strong>supports:</strong> The SegWit version 0 signature-hash rules deployed with the witness consensus changes.</li></ul></article>
+<article class="msc-learn-source"><h3>BIP 147: Dealing with dummy stack element malleability</h3><ul><li><strong>author or publisher:</strong> Johnson Lau</li><li><strong>url:</strong> https://github.com/bitcoin/bips/blob/master/bip-0147.mediawiki</li><li><strong>supports:</strong> The NULLDUMMY consensus rule deployed with SegWit.</li></ul></article>
+<article class="msc-learn-source"><h3>BIP 341: Taproot</h3><ul><li><strong>author or publisher:</strong> Pieter Wuille, Jonas Nick, and Anthony Towns</li><li><strong>url:</strong> https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki</li><li><strong>supports:</strong> Taproot consensus rules, modified versionbits deployment, 90 percent threshold, minimum activation height, activation at block 709,632, and old-node validation limits.</li></ul></article>
+<article class="msc-learn-source"><h3>BIP 342: Tapscript</h3><ul><li><strong>author or publisher:</strong> Pieter Wuille, Jonas Nick, and Anthony Towns</li><li><strong>url:</strong> https://github.com/bitcoin/bips/blob/master/bip-0342.mediawiki</li><li><strong>supports:</strong> Tapscript validation rules deployed with Taproot.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core script verification interface</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/src/script/interpreter.h</li><li><strong>supports:</strong> Script-verification flags and the explicit subset relationship intended for soft-fork restrictions.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core mainnet consensus parameters</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/src/kernel/chainparams.cpp</li><li><strong>supports:</strong> Buried mainnet activation heights for BIP 34, BIP 65, BIP 66, CSV, and SegWit, plus deployment parameters used by current code.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core implemented BIPs documentation</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/doc/bips.md</li><li><strong>supports:</strong> Bitcoin Core implementation history for BIP 9, BIP 16, BIP 34, BIP 65, BIP 66, SegWit, Taproot, and buried deployments.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core versionbits implementation</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.0/src/versionbits.cpp</li><li><strong>supports:</strong> Current threshold-state calculations and deployment-state transitions.</li></ul></article></section>
+    <nav class="msc-learn-prev-next" aria-label="Guide navigation preview"><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Previous</span><strong>How Bitcoin Reaches Consensus</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Category</span><strong>The Bitcoin Network</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Next</span><strong>How Bitcoin Network Upgrades Happen</strong><small>Link inactive</small></span></nav>
+  </div>
+</section>

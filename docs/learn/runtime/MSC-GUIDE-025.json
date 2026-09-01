@@ -1,0 +1,251 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-025-bitcoin-mempool.md",
+  "source_sha256": "3cd4423ac9869ab288c3c42d4df9576527f606d6bc27040f6b820cd97dc912fb",
+  "registry_id": "MSC-GUIDE-025",
+  "status": "COPY_LOCKED",
+  "h1": "What Happens Inside the Bitcoin Mempool?",
+  "introductory_deck": "A Bitcoin mempool is a node's local collection of valid unconfirmed transactions that are eligible for relay or block inclusion under that node's current policy. There is no single universal mempool. Different nodes can accept, reject, retain, replace, and evict different transactions while still enforcing compatible consensus rules.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "A Bitcoin transaction does not enter one global waiting room after it is signed.\n\nIt is usually sent to one or more Bitcoin nodes. Each receiving node evaluates the transaction for itself. A transaction that passes the node's required checks may enter that node's mempool and may be announced to peers. Another node can reach a different mempool decision because its chain tip, existing transactions, resource limits, configuration, or policy differs.\n\nThat local process is what people mean when they talk about the Bitcoin mempool.",
+      "body_html": "<p>A Bitcoin transaction does not enter one global waiting room after it is signed.</p>\n<p>It is usually sent to one or more Bitcoin nodes. Each receiving node evaluates the transaction for itself. A transaction that passes the node&#39;s required checks may enter that node&#39;s mempool and may be announced to peers. Another node can reach a different mempool decision because its chain tip, existing transactions, resource limits, configuration, or policy differs.</p>\n<p>That local process is what people mean when they talk about the Bitcoin mempool.</p>"
+    },
+    {
+      "heading": "The mempool belongs to a node",
+      "body_markdown": "A mempool exists inside a particular node process. It is not part of the blockchain, and it is not a consensus object shared identically by every participant.\n\nTwo compatible full nodes can have different mempools because:\n\n- They learned about transactions in a different order.\n- One node has a conflicting transaction already.\n- Their local minimum fee conditions differ.\n- Their memory limits or expiry settings differ.\n- One node restarted and restored a different saved set.\n- Their policy settings or software releases differ.\n- Their selected chain tips recently changed.\n- A transaction reached one peer group but not another.\n\nThe phrase \"the mempool\" is useful shorthand for the broader market of unconfirmed transactions, but it should not be read as one authoritative list.\n\nA block does not have to match any node's prior mempool. A node validates the block itself when it arrives.",
+      "body_html": "<p>A mempool exists inside a particular node process. It is not part of the blockchain, and it is not a consensus object shared identically by every participant.</p>\n<p>Two compatible full nodes can have different mempools because:</p>\n<ul><li>They learned about transactions in a different order.</li><li>One node has a conflicting transaction already.</li><li>Their local minimum fee conditions differ.</li><li>Their memory limits or expiry settings differ.</li><li>One node restarted and restored a different saved set.</li><li>Their policy settings or software releases differ.</li><li>Their selected chain tips recently changed.</li><li>A transaction reached one peer group but not another.</li></ul>\n<p>The phrase &quot;the mempool&quot; is useful shorthand for the broader market of unconfirmed transactions, but it should not be read as one authoritative list.</p>\n<p>A block does not have to match any node&#39;s prior mempool. A node validates the block itself when it arrives.</p>"
+    },
+    {
+      "heading": "Consensus validity and mempool acceptance are different tests",
+      "body_markdown": "Before accepting an unconfirmed transaction, a node must determine that it can be evaluated against the applicable chain and unconfirmed ancestors. The transaction must not violate consensus rules that would make it invalid in the next block being considered.\n\nMempool admission also applies local policy. Policy helps a node manage relay, resource use, denial-of-service exposure, replacement, and transaction patterns that the software is willing to handle before confirmation.\n\nA transaction can therefore be:\n\n- Invalid by consensus and unacceptable everywhere enforcing those rules.\n- Valid by consensus but rejected from a particular mempool under local policy.\n- Accepted by one node and rejected by another.\n- Absent simply because the node has not received it.\n- Removed later even though it remains valid by consensus.\n\nIf a miner includes a consensus-valid transaction in a valid block, a node cannot reject that block merely because the transaction would not have entered its own mempool.\n\nThis boundary prevents local relay preferences from silently becoming new consensus rules.",
+      "body_html": "<p>Before accepting an unconfirmed transaction, a node must determine that it can be evaluated against the applicable chain and unconfirmed ancestors. The transaction must not violate consensus rules that would make it invalid in the next block being considered.</p>\n<p>Mempool admission also applies local policy. Policy helps a node manage relay, resource use, denial-of-service exposure, replacement, and transaction patterns that the software is willing to handle before confirmation.</p>\n<p>A transaction can therefore be:</p>\n<ul><li>Invalid by consensus and unacceptable everywhere enforcing those rules.</li><li>Valid by consensus but rejected from a particular mempool under local policy.</li><li>Accepted by one node and rejected by another.</li><li>Absent simply because the node has not received it.</li><li>Removed later even though it remains valid by consensus.</li></ul>\n<p>If a miner includes a consensus-valid transaction in a valid block, a node cannot reject that block merely because the transaction would not have entered its own mempool.</p>\n<p>This boundary prevents local relay preferences from silently becoming new consensus rules.</p>"
+    },
+    {
+      "heading": "A transaction may depend on unconfirmed parents",
+      "body_markdown": "A mempool can contain transaction chains.\n\nA child transaction may spend an output created by an unconfirmed parent already in the same mempool. The child cannot be confirmed before the parent output exists in the active chain, so a valid block must place the parent before the child.\n\nNodes track these relationships to evaluate fees, limits, replacement, eviction, and mining order. Modern Bitcoin Core groups connected mempool transactions into clusters for several resource and ordering calculations.\n\nThis means a transaction's practical treatment may depend on more than its individual fee rate. A low-fee parent and high-fee child can be evaluated together for mining because including the child requires including the parent.\n\nPackage behavior is implementation-sensitive. A wallet or service should not assume every node accepts the same multi-transaction submission or applies identical package rules.",
+      "body_html": "<p>A mempool can contain transaction chains.</p>\n<p>A child transaction may spend an output created by an unconfirmed parent already in the same mempool. The child cannot be confirmed before the parent output exists in the active chain, so a valid block must place the parent before the child.</p>\n<p>Nodes track these relationships to evaluate fees, limits, replacement, eviction, and mining order. Modern Bitcoin Core groups connected mempool transactions into clusters for several resource and ordering calculations.</p>\n<p>This means a transaction&#39;s practical treatment may depend on more than its individual fee rate. A low-fee parent and high-fee child can be evaluated together for mining because including the child requires including the parent.</p>\n<p>Package behavior is implementation-sensitive. A wallet or service should not assume every node accepts the same multi-transaction submission or applies identical package rules.</p>"
+    },
+    {
+      "heading": "Fees compete for limited block space",
+      "body_markdown": "A transaction fee is the difference between the value of its inputs and outputs. Fee rate expresses that fee relative to transaction weight or virtual size.\n\nMiners generally have an incentive to select transaction packages that increase fee revenue while staying within block limits and satisfying dependencies. That creates competition for scarce block space.\n\nA node's mempool can help estimate that competition, but no displayed fee tier guarantees a confirmation time. Conditions can change when:\n\n- New transactions arrive.\n- A block is found.\n- Miners use different templates or policies.\n- A high-fee child changes a package's attractiveness.\n- Transactions are replaced.\n- A reorganization changes what is confirmed.\n- A node's local view differs from the estimator's view.\n\nA fee estimate is a statistical and policy-dependent tool, not a reservation in a future block.",
+      "body_html": "<p>A transaction fee is the difference between the value of its inputs and outputs. Fee rate expresses that fee relative to transaction weight or virtual size.</p>\n<p>Miners generally have an incentive to select transaction packages that increase fee revenue while staying within block limits and satisfying dependencies. That creates competition for scarce block space.</p>\n<p>A node&#39;s mempool can help estimate that competition, but no displayed fee tier guarantees a confirmation time. Conditions can change when:</p>\n<ul><li>New transactions arrive.</li><li>A block is found.</li><li>Miners use different templates or policies.</li><li>A high-fee child changes a package&#39;s attractiveness.</li><li>Transactions are replaced.</li><li>A reorganization changes what is confirmed.</li><li>A node&#39;s local view differs from the estimator&#39;s view.</li></ul>\n<p>A fee estimate is a statistical and policy-dependent tool, not a reservation in a future block.</p>"
+    },
+    {
+      "heading": "Low-fee transactions can remain, disappear, or return",
+      "body_markdown": "Mempool membership is temporary.\n\nA transaction normally leaves a node's mempool when it is confirmed in a connected block. It can also be removed because it conflicts with a confirmed transaction, is replaced under the node's policy, expires under local settings, violates a resource limit after conditions change, or is evicted when the mempool exceeds its configured size.\n\nWhen a mempool is full, Bitcoin Core can raise a rolling minimum fee rate and remove lower-scoring transaction packages to reclaim memory. That minimum can later fall. A transaction removed by one node is not erased from Bitcoin. Another node may still retain it, a wallet may rebroadcast it, or a miner may receive it through another path.\n\nA disconnected block during a chain reorganization can also return transactions to the unconfirmed state. Bitcoin Core attempts to reconcile its mempool with the newly selected chain. Transactions may be re-added when they remain valid and satisfy the applicable constraints, while conflicts or now-invalid transactions are removed.",
+      "body_html": "<p>Mempool membership is temporary.</p>\n<p>A transaction normally leaves a node&#39;s mempool when it is confirmed in a connected block. It can also be removed because it conflicts with a confirmed transaction, is replaced under the node&#39;s policy, expires under local settings, violates a resource limit after conditions change, or is evicted when the mempool exceeds its configured size.</p>\n<p>When a mempool is full, Bitcoin Core can raise a rolling minimum fee rate and remove lower-scoring transaction packages to reclaim memory. That minimum can later fall. A transaction removed by one node is not erased from Bitcoin. Another node may still retain it, a wallet may rebroadcast it, or a miner may receive it through another path.</p>\n<p>A disconnected block during a chain reorganization can also return transactions to the unconfirmed state. Bitcoin Core attempts to reconcile its mempool with the newly selected chain. Transactions may be re-added when they remain valid and satisfy the applicable constraints, while conflicts or now-invalid transactions are removed.</p>"
+    },
+    {
+      "heading": "Replacement is a local policy decision",
+      "body_markdown": "An unconfirmed transaction can conflict with another unconfirmed transaction by spending the same input.\n\nSome node policies permit a higher-fee replacement when defined conditions are met. Replacement rules address more than the absolute fee. Implementations can consider fee rate, total fee, conflicts, transaction relationships, and resource limits.\n\nBIP 125 documented an opt-in replace-by-fee policy used historically by Bitcoin Core and other software. Current behavior must be checked against the exact node release and configuration because replacement policy has continued to evolve.\n\nReplacement does not edit a transaction already on the network. It introduces a separate transaction that conflicts with the earlier one. Nodes independently decide which transaction, if either, they retain and relay.\n\nNeither transaction is confirmed until one appears in a valid block on the selected chain.",
+      "body_html": "<p>An unconfirmed transaction can conflict with another unconfirmed transaction by spending the same input.</p>\n<p>Some node policies permit a higher-fee replacement when defined conditions are met. Replacement rules address more than the absolute fee. Implementations can consider fee rate, total fee, conflicts, transaction relationships, and resource limits.</p>\n<p>BIP 125 documented an opt-in replace-by-fee policy used historically by Bitcoin Core and other software. Current behavior must be checked against the exact node release and configuration because replacement policy has continued to evolve.</p>\n<p>Replacement does not edit a transaction already on the network. It introduces a separate transaction that conflicts with the earlier one. Nodes independently decide which transaction, if either, they retain and relay.</p>\n<p>Neither transaction is confirmed until one appears in a valid block on the selected chain.</p>"
+    },
+    {
+      "heading": "Missing-input transactions are not ordinary mempool entries",
+      "body_markdown": "A node may receive a transaction whose referenced inputs are unknown.\n\nThat transaction cannot be validated as an ordinary mempool transaction because the node cannot locate and evaluate all spent outputs. Bitcoin Core can keep some missing-input transactions in a separate orphanage while it requests or waits for their parents.\n\nThe orphanage is resource-limited and is not the same as the mempool. An \"orphan transaction\" in this networking sense should also not be confused with a stale block or a transaction removed by a reorganization.\n\nOnce the required parents become available, the node can reconsider the transaction. Acceptance is still not guaranteed.",
+      "body_html": "<p>A node may receive a transaction whose referenced inputs are unknown.</p>\n<p>That transaction cannot be validated as an ordinary mempool transaction because the node cannot locate and evaluate all spent outputs. Bitcoin Core can keep some missing-input transactions in a separate orphanage while it requests or waits for their parents.</p>\n<p>The orphanage is resource-limited and is not the same as the mempool. An &quot;orphan transaction&quot; in this networking sense should also not be confused with a stale block or a transaction removed by a reorganization.</p>\n<p>Once the required parents become available, the node can reconsider the transaction. Acceptance is still not guaranteed.</p>"
+    },
+    {
+      "heading": "Relay spreads transactions without creating certainty",
+      "body_markdown": "After accepting a transaction, a node may announce it to selected peers under its relay rules. Peers can request the transaction and evaluate it independently.\n\nRelay is not a broadcast to every node at once. Propagation depends on peer connections, announcement timing, privacy protections, policy compatibility, network conditions, and whether peers already know the transaction.\n\nA wallet that submits a transaction to one node has evidence that the node received the submission. It does not automatically know that:\n\n- Every miner received it.\n- Every node accepted it.\n- It will remain in any mempool.\n- It cannot be replaced.\n- It will confirm in the next block.\n- It will confirm at all.\n\nMonitoring several public explorers can provide additional observations, but explorers also show particular infrastructure and policy views. They do not create a canonical mempool.",
+      "body_html": "<p>After accepting a transaction, a node may announce it to selected peers under its relay rules. Peers can request the transaction and evaluate it independently.</p>\n<p>Relay is not a broadcast to every node at once. Propagation depends on peer connections, announcement timing, privacy protections, policy compatibility, network conditions, and whether peers already know the transaction.</p>\n<p>A wallet that submits a transaction to one node has evidence that the node received the submission. It does not automatically know that:</p>\n<ul><li>Every miner received it.</li><li>Every node accepted it.</li><li>It will remain in any mempool.</li><li>It cannot be replaced.</li><li>It will confirm in the next block.</li><li>It will confirm at all.</li></ul>\n<p>Monitoring several public explorers can provide additional observations, but explorers also show particular infrastructure and policy views. They do not create a canonical mempool.</p>"
+    },
+    {
+      "heading": "Miners build candidates from available information",
+      "body_markdown": "A mining system constructs a candidate block from transactions it knows about and is willing to include.\n\nIts source may include a local mempool, transactions received privately, pool infrastructure, or another template provider. The candidate must respect dependencies, weight limits, consensus rules, and the miner's chosen transaction-selection policy.\n\nThe miner then adds a coinbase transaction and builds the block header commitments used for proof of work.\n\nA transaction's presence in a public node's mempool does not force miners to include it. Its absence from that mempool does not prevent a miner from including it if the transaction is valid and the miner has obtained it.\n\nAfter proof of work is found, nodes validate the resulting block independently. The block, not prior mempool membership, determines confirmation.",
+      "body_html": "<p>A mining system constructs a candidate block from transactions it knows about and is willing to include.</p>\n<p>Its source may include a local mempool, transactions received privately, pool infrastructure, or another template provider. The candidate must respect dependencies, weight limits, consensus rules, and the miner&#39;s chosen transaction-selection policy.</p>\n<p>The miner then adds a coinbase transaction and builds the block header commitments used for proof of work.</p>\n<p>A transaction&#39;s presence in a public node&#39;s mempool does not force miners to include it. Its absence from that mempool does not prevent a miner from including it if the transaction is valid and the miner has obtained it.</p>\n<p>After proof of work is found, nodes validate the resulting block independently. The block, not prior mempool membership, determines confirmation.</p>"
+    },
+    {
+      "heading": "New blocks reshape the local mempool",
+      "body_markdown": "When a node accepts a new block onto its selected chain, it removes the block's transactions from its mempool. It also removes mempool transactions that conflict with confirmed spends and updates relationships among the remaining entries.\n\nA block can free memory, lower competition, and change fee estimation. It can also confirm a low-fee parent that makes a previously dependent child stand alone.\n\nA chain reorganization reverses part of that process. Transactions from disconnected blocks may become unconfirmed again, and transactions from newly connected blocks become confirmed. The node must rebuild a mempool view consistent with the new active chain.\n\nThis is one reason a mempool should not be described as a static queue.",
+      "body_html": "<p>When a node accepts a new block onto its selected chain, it removes the block&#39;s transactions from its mempool. It also removes mempool transactions that conflict with confirmed spends and updates relationships among the remaining entries.</p>\n<p>A block can free memory, lower competition, and change fee estimation. It can also confirm a low-fee parent that makes a previously dependent child stand alone.</p>\n<p>A chain reorganization reverses part of that process. Transactions from disconnected blocks may become unconfirmed again, and transactions from newly connected blocks become confirmed. The node must rebuild a mempool view consistent with the new active chain.</p>\n<p>This is one reason a mempool should not be described as a static queue.</p>"
+    },
+    {
+      "heading": "Mempool order is not first come, first served",
+      "body_markdown": "Bitcoin does not require miners to confirm transactions in arrival order.\n\nNodes record useful metadata such as entry time, fees, size, and transaction relationships, but a miner can choose a different order. Fee incentives, package dependencies, private transactions, local prioritization, and template construction all affect selection.\n\nA transaction can wait longer than a later transaction. A child can raise the combined appeal of a parent package. A miner can include a valid transaction that most public nodes never relayed.\n\n\"Position in the mempool\" is therefore usually a model produced by a particular service, not a consensus-defined line number.",
+      "body_html": "<p>Bitcoin does not require miners to confirm transactions in arrival order.</p>\n<p>Nodes record useful metadata such as entry time, fees, size, and transaction relationships, but a miner can choose a different order. Fee incentives, package dependencies, private transactions, local prioritization, and template construction all affect selection.</p>\n<p>A transaction can wait longer than a later transaction. A child can raise the combined appeal of a parent package. A miner can include a valid transaction that most public nodes never relayed.</p>\n<p>&quot;Position in the mempool&quot; is therefore usually a model produced by a particular service, not a consensus-defined line number.</p>"
+    },
+    {
+      "heading": "Mempool data is useful when its boundaries are clear",
+      "body_markdown": "Mempool observations can help users and operators:\n\n- Inspect whether a node accepted a transaction.\n- Study unconfirmed transaction relationships.\n- Estimate fee pressure.\n- Debug replacement or conflict behavior.\n- Build candidate block templates.\n- Monitor local memory use and policy thresholds.\n- Test wallet and application behavior.\n- Observe how a chain reorganization changes unconfirmed state.\n\nThe data should always be labeled with the node, software release, configuration, chain tip, and observation time when precision matters.\n\nA mempool snapshot can be accurate for one node and still differ from the rest of the network.",
+      "body_html": "<p>Mempool observations can help users and operators:</p>\n<ul><li>Inspect whether a node accepted a transaction.</li><li>Study unconfirmed transaction relationships.</li><li>Estimate fee pressure.</li><li>Debug replacement or conflict behavior.</li><li>Build candidate block templates.</li><li>Monitor local memory use and policy thresholds.</li><li>Test wallet and application behavior.</li><li>Observe how a chain reorganization changes unconfirmed state.</li></ul>\n<p>The data should always be labeled with the node, software release, configuration, chain tip, and observation time when precision matters.</p>\n<p>A mempool snapshot can be accurate for one node and still differ from the rest of the network.</p>"
+    },
+    {
+      "heading": "The mempool is a policy layer around unconfirmed activity",
+      "body_markdown": "The blockchain records confirmed transactions in selected valid blocks. The mempool is the node's changing working set before confirmation.\n\nThat working set helps nodes relay transactions, helps miners assemble candidates, and helps wallets estimate current conditions. It does not grant a transaction confirmation, establish one universal fee market view, or override block validation.\n\nThe clean mental model is simple:\n\n- Transactions are created and submitted.\n- Nodes evaluate them independently.\n- Accepted transactions may enter local mempools and relay.\n- Miners construct candidates from the transactions they know.\n- Nodes confirm only what appears in a valid block on the selected chain.\n\nThe mempool matters because it is where unconfirmed transaction policy, propagation, dependencies, and fee competition meet. It remains local, temporary, and separate from consensus history.",
+      "body_html": "<p>The blockchain records confirmed transactions in selected valid blocks. The mempool is the node&#39;s changing working set before confirmation.</p>\n<p>That working set helps nodes relay transactions, helps miners assemble candidates, and helps wallets estimate current conditions. It does not grant a transaction confirmation, establish one universal fee market view, or override block validation.</p>\n<p>The clean mental model is simple:</p>\n<ul><li>Transactions are created and submitted.</li><li>Nodes evaluate them independently.</li><li>Accepted transactions may enter local mempools and relay.</li><li>Miners construct candidates from the transactions they know.</li><li>Nodes confirm only what appears in a valid block on the selected chain.</li></ul>\n<p>The mempool matters because it is where unconfirmed transaction policy, propagation, dependencies, and fee competition meet. It remains local, temporary, and separate from consensus history.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Mempool",
+      "definition": "A node's local collection of valid unconfirmed transactions eligible for relay or block inclusion."
+    },
+    {
+      "term": "Transaction",
+      "definition": "A data structure that spends existing UTXOs and creates new outputs."
+    },
+    {
+      "term": "Fee rate",
+      "definition": "The amount paid per unit of transaction weight or virtual size to compete for block space."
+    },
+    {
+      "term": "Node",
+      "definition": "Bitcoin software that communicates with peers and may validate, relay, store, or serve network data."
+    },
+    {
+      "term": "Policy",
+      "definition": "Local software rules that influence transaction relay, mempool acceptance, or default behavior without changing consensus validity."
+    },
+    {
+      "term": "Transaction relay",
+      "definition": "The peer-to-peer propagation of transactions between nodes under local policy rules."
+    },
+    {
+      "term": "UTXO",
+      "definition": "An unspent transaction output that can be used as an input in a later transaction."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bitcoin Core transaction mempool interface",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/txmempool.h",
+      "supports": "The mempool as a store of transactions valid relative to the current best chain, admission exclusions, transaction relationships, replacement, expiry, eviction, reorganization handling, and RPC inspection."
+    },
+    {
+      "title": "Bitcoin Core transaction validation implementation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/validation.cpp",
+      "supports": "Mempool acceptance, consensus and policy checks, conflict handling, chain-tip updates, block connection, and mempool reconciliation after reorganizations."
+    },
+    {
+      "title": "Bitcoin Core peer-processing implementation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/net_processing.cpp",
+      "supports": "Transaction announcements, peer requests, relay behavior, missing-input transaction handling, and peer-to-peer propagation boundaries."
+    },
+    {
+      "title": "Bitcoin Core mempool replacement policy",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/doc/policy/mempool-replacements.md",
+      "supports": "Current replacement concepts, conflict evaluation, fee requirements, and the release-sensitive nature of mempool replacement policy."
+    },
+    {
+      "title": "Bitcoin Core package policy interface",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/policy/packages.h",
+      "supports": "Package terminology, transaction relationships, package validation limits, and implementation-specific multi-transaction evaluation."
+    },
+    {
+      "title": "Bitcoin Core block-assembly implementation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/node/miner.cpp",
+      "supports": "Candidate-block construction, transaction dependency ordering, fee-aware package selection, block limits, and the distinction between a mempool and a completed block."
+    },
+    {
+      "title": "Bitcoin Core getmempoolinfo RPC",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://bitcoincore.org/en/doc/31.0.0/rpc/blockchain/getmempoolinfo/",
+      "supports": "Local mempool size, memory usage, maximum size, minimum fee conditions, and implementation-reported mempool state."
+    },
+    {
+      "title": "Bitcoin Core getrawmempool RPC",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://bitcoincore.org/en/doc/31.0.0/rpc/blockchain/getrawmempool/",
+      "supports": "Local mempool transaction data, verbose entry information, dependencies, and the fact that RPC output represents one node."
+    },
+    {
+      "title": "BIP 125: Opt-in Full Replace-by-Fee Signaling",
+      "author_or_publisher": "David A. Harding and Peter Todd",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0125.mediawiki",
+      "supports": "The historical opt-in replacement model, signaling, and terminology. Current node behavior remains release-specific."
+    },
+    {
+      "title": "Bitcoin Developer Guide: Transactions",
+      "author_or_publisher": "Bitcoin.org contributors",
+      "url": "https://developer.bitcoin.org/devguide/transactions.html",
+      "supports": "Transaction inputs, outputs, fees, dependencies, and the distinction between unconfirmed transactions and transactions included in blocks."
+    }
+  ],
+  "seo_title": "Bitcoin Mempool Explained: What Happens Before Confirmation",
+  "meta_description": "Learn how local Bitcoin mempools accept, relay, replace, evict, and organize unconfirmed transactions before miners include them in valid blocks.",
+  "excerpt": "Every Bitcoin node maintains its own view of valid unconfirmed transactions. Learn how mempool policy, fees, replacement, relay, and mining fit together before confirmation.",
+  "reading_time": "10 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-NETWORK",
+    "label": "The Bitcoin Network",
+    "subcategory": "Network",
+    "depth": "Shallow",
+    "format": "Explainer"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-024",
+      "title": "Bitcoin Node Software Explained",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-026",
+      "title": "How Bitcoin Blocks Work",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": []
+  },
+  "review_dates": {
+    "reviewed": "2026-07-18",
+    "copy_locked": "2026-07-18",
+    "human_verification": "2026-07-18"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "One Network, Different Mempools",
+      "educational_purpose": "Show why compatible nodes can hold different unconfirmed transaction sets.",
+      "recommended_placement": "After the section titled The mempool belongs to a node.",
+      "visual_description": "Old ocean-current chart with three Bitcoin node stations connected by peer routes. Overlapping transaction cards appear in all three local pools, while conflicting, low-fee, and not-yet-seen cards appear in only one or two.",
+      "required_labels": "Node A mempool, Node B mempool, Node C mempool, Shared transaction, Local policy, Different arrival order, Conflict",
+      "caption": "Each node builds its own mempool from the transactions it receives and the policy it applies.",
+      "alt_text": "Technical network diagram showing three Bitcoin nodes with overlapping but non-identical local mempools caused by policy, conflicts, and transaction arrival order.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack the three node stations vertically and keep one shared transaction plus one differing transaction visible in each pool.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "Transaction Admission Station",
+      "educational_purpose": "Separate consensus checks, local policy, and relay.",
+      "recommended_placement": "After the section titled Consensus validity and mempool acceptance are different tests.",
+      "visual_description": "Field-guide flow showing a submitted transaction entering consensus-context checks, then a local-policy gate, then the node mempool, and finally optional peer relay. Rejected paths are labeled Invalid, Missing inputs, or Policy rejected.",
+      "required_labels": "Submitted transaction, Applicable validation checks, Local policy, Mempool, Peer relay, Invalid, Missing inputs, Policy rejected",
+      "caption": "A node evaluates an unconfirmed transaction before storing or relaying it, and another node may reach a different policy result.",
+      "alt_text": "Editorial flow diagram showing a Bitcoin transaction passing validation-context and local-policy checks before entering a node's mempool and being relayed.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Use a single vertical flow with the three rejection branches placed beside their corresponding checks.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "How Transactions Leave a Mempool",
+      "educational_purpose": "Explain that confirmation is only one of several removal paths.",
+      "recommended_placement": "After the section titled Low-fee transactions can remain, disappear, or return.",
+      "visual_description": "Infrastructure-manual map centered on a local mempool. Exit routes lead to Confirmed in block, Replaced, Conflicted, Expired, and Evicted. A reorganization loop returns an eligible transaction from a disconnected block to reconsideration.",
+      "required_labels": "Local mempool, Confirmed, Replaced, Conflicted, Expired, Evicted, Reorganization, Reconsider",
+      "caption": "Transactions can leave a node's mempool for several reasons, and a reorganization can make some confirmed transactions unconfirmed again.",
+      "alt_text": "Diagram showing Bitcoin mempool transactions exiting through confirmation, replacement, conflict, expiry, or eviction, with a reorganization path returning some transactions for reconsideration.",
+      "image_orientation": "Square",
+      "mobile_crop_notes": "Keep the mempool at center with five short exit labels and one curved reorganization arrow.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}
