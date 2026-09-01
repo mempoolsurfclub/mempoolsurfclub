@@ -5,9 +5,19 @@
       "settings": {
         "registry_id": "MSC-HUB-BASICS"
       }
+    },
+    "guide001preview": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<style>.msc-learn-page[data-msc-registry-id=\\\"MSC-HUB-BASICS\\\"] .msc-learn-guide-card[data-msc-guide-id=\\\"MSC-GUIDE-001\\\"].is-live-guide h3 a{color:inherit;text-decoration:none}.msc-learn-page[data-msc-registry-id=\\\"MSC-HUB-BASICS\\\"] .msc-learn-guide-card[data-msc-guide-id=\\\"MSC-GUIDE-001\\\"].is-live-guide h3 a:hover{color:#fbf8ef}.msc-learn-guide-live-link__cta{display:block;margin-top:1rem;color:#d4be99;font-size:.95rem;font-weight:850;line-height:1;letter-spacing:.12em;text-transform:uppercase}</style><script>(() => { const page = document.querySelector('.msc-learn-page[data-msc-registry-id=\\\"MSC-HUB-BASICS\\\"]'); const card = page ? page.querySelector('.msc-learn-guide-card[data-msc-guide-id=\\\"MSC-GUIDE-001\\\"]') : null; const heading = card ? card.querySelector('h3') : null; if (!card || !heading || heading.querySelector('a')) return; card.removeAttribute('aria-disabled'); card.classList.add('is-live-guide'); const note = card.querySelector('.msc-learn-preview-note'); if (note) note.remove(); const link = document.createElement('a'); link.href = '/pages/learn-bitcoin-basics?view=msc-learn-guide'; link.className = 'msc-learn-guide-live-link'; link.setAttribute('aria-label', 'Read What Is Bitcoin?'); const title = document.createElement('span'); title.textContent = heading.textContent; const cta = document.createElement('span'); cta.className = 'msc-learn-guide-live-link__cta'; cta.textContent = 'Read guide →'; link.append(title, cta); heading.textContent = ''; heading.appendChild(link); })();</script>",
+        "color_scheme": "scheme-1",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "guide001preview"
   ]
 }
