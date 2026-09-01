@@ -1,0 +1,41 @@
+name: Materialize Learn Guide 009-012 rollout
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    if: github.head_ref == 'learn/activate-guides-009-012'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Materialize COPY_LOCKED guide runtimes
+        run: node scripts/generate-msc-learn-guide-rollout.mjs --write
+      - name: Commit generated Guide 009-012 runtime files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            docs/learn/runtime/MSC-GUIDE-009.json \
+            docs/learn/runtime/MSC-GUIDE-010.json \
+            docs/learn/runtime/MSC-GUIDE-011.json \
+            docs/learn/runtime/MSC-GUIDE-012.json \
+            snippets/msc-learn-guide-009-runtime.liquid \
+            snippets/msc-learn-guide-010-runtime.liquid \
+            snippets/msc-learn-guide-011-runtime.liquid \
+            snippets/msc-learn-guide-012-runtime.liquid
+          if git diff --cached --quiet; then
+            echo "Generated runtimes already committed."
+            exit 0
+          fi
+          git commit -m "Materialize Learn Guides 009-012 runtimes"
+          git push origin HEAD:${{ github.head_ref }}
