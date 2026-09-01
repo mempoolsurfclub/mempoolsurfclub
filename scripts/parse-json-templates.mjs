@@ -1,4 +1,5 @@
 import './validate-msc-learn-guide-template.mjs';
+import './validate-msc-learn-guide-rollout.mjs';
 import fs from 'fs';
 for (const file of fs.readdirSync('templates')) {
   if (!file.endsWith('.json')) continue;

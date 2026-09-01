@@ -6,10 +6,10 @@
         "registry_id": "MSC-HUB-BASICS"
       }
     },
-    "guide001preview": {
+    "guidepreviews": {
       "type": "custom-liquid",
       "settings": {
-        "custom_liquid": "<style>.msc-learn-page[data-msc-registry-id=\"MSC-HUB-BASICS\"] .msc-learn-guide-card[data-msc-guide-id=\"MSC-GUIDE-001\"].is-live-guide{cursor:pointer;transition:border-color .2s ease}.msc-learn-page[data-msc-registry-id=\"MSC-HUB-BASICS\"] .msc-learn-guide-card[data-msc-guide-id=\"MSC-GUIDE-001\"].is-live-guide:hover,.msc-learn-page[data-msc-registry-id=\"MSC-HUB-BASICS\"] .msc-learn-guide-card[data-msc-guide-id=\"MSC-GUIDE-001\"].is-live-guide:focus-within{border-color:rgba(212,190,153,.82)}.msc-learn-guide-card__link-cover{position:absolute;inset:0;z-index:5;border-radius:inherit;color:inherit;text-decoration:none;outline:none}</style><script>(() => { const page = document.querySelector('.msc-learn-page[data-msc-registry-id=\"MSC-HUB-BASICS\"]'); const card = page ? page.querySelector('.msc-learn-guide-card[data-msc-guide-id=\"MSC-GUIDE-001\"]') : null; if (!card || card.querySelector('.msc-learn-guide-card__link-cover')) return; card.removeAttribute('aria-disabled'); card.classList.add('is-live-guide'); const note = card.querySelector('.msc-learn-preview-note'); if (note) note.remove(); const link = document.createElement('a'); link.href = '/pages/learn-bitcoin-basics?view=msc-learn-guide'; link.className = 'msc-learn-guide-card__link-cover'; link.setAttribute('aria-label', 'Read What Is Bitcoin?'); const label = document.createElement('span'); label.className = 'visually-hidden'; label.textContent = 'Read What Is Bitcoin?'; link.appendChild(label); card.appendChild(link); })();</script>",
+        "custom_liquid": "<style>.msc-learn-page[data-msc-registry-id=\"MSC-HUB-BASICS\"] .msc-learn-guide-card.is-live-guide{cursor:pointer;transition:border-color .2s ease}.msc-learn-page[data-msc-registry-id=\"MSC-HUB-BASICS\"] .msc-learn-guide-card.is-live-guide:hover,.msc-learn-page[data-msc-registry-id=\"MSC-HUB-BASICS\"] .msc-learn-guide-card.is-live-guide:focus-within{border-color:rgba(212,190,153,.82)}.msc-learn-guide-card__link-cover{position:absolute;inset:0;z-index:5;border-radius:inherit;color:inherit;text-decoration:none;outline:none}</style><script>(()=>{const page=document.querySelector('.msc-learn-page[data-msc-registry-id=\"MSC-HUB-BASICS\"]');if(!page)return;const guides=[['MSC-GUIDE-001','What Is Bitcoin?','/pages/learn-bitcoin-basics?view=msc-learn-guide'],['MSC-GUIDE-002','Why Does Bitcoin Matter?','/pages/learn-bitcoin-basics?view=msc-learn-guide-002'],['MSC-GUIDE-003','A History of Bitcoin','/pages/learn-bitcoin-basics?view=msc-learn-guide-003'],['MSC-GUIDE-004','Who Was Satoshi Nakamoto?','/pages/learn-bitcoin-basics?view=msc-learn-guide-004']];guides.forEach(([id,title,url])=>{const card=page.querySelector(`.msc-learn-guide-card[data-msc-guide-id=\"${id}\"]`);if(!card||card.querySelector('.msc-learn-guide-card__link-cover'))return;card.removeAttribute('aria-disabled');card.classList.add('is-live-guide');const note=card.querySelector('.msc-learn-preview-note');if(note)note.remove();const link=document.createElement('a');link.href=url;link.className='msc-learn-guide-card__link-cover';link.setAttribute('aria-label',`Read ${title}`);const label=document.createElement('span');label.className='visually-hidden';label.textContent=`Read ${title}`;link.appendChild(label);card.appendChild(link);});})();</script>",
         "color_scheme": "scheme-1",
         "padding_top": 0,
         "padding_bottom": 0
@@ -18,6 +18,6 @@
   },
   "order": [
     "main",
-    "guide001preview"
+    "guidepreviews"
   ]
 }
