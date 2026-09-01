@@ -106,7 +106,7 @@ const flexibleNumberedSourceParser = String.raw`function parseNumberedSourceReco
     const bullet = line.match(/^(\s*)-\s+(.*)$/);
     if (bullet) {
       if (!allowedIndents.has(bullet[1].length)) {
-        throw new Error('Numbered source record ' + current.number + ' field uses unsupported continuation indentation: ' + line);
+        throw new Error('Numbered source record ' + current.number + ' field is not indented by exactly ' + continuationIndent + ' spaces: ' + line);
       }
       assertCanonicalSourceFieldDelimiter(bullet[2], 'Unsupported numbered source record content: ' + line);
       const field = bullet[2].match(/^([^:]+):(?=\s|$)\s*(.*)$/);
