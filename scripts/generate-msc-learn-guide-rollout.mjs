@@ -30,6 +30,34 @@ const GUIDES = [
     snippet: 'snippets/msc-learn-guide-004-runtime.liquid',
     dom: 'MscGuide004',
   },
+  {
+    id: 'MSC-GUIDE-005',
+    source: 'docs/learn/content/guides/MSC-GUIDE-005-what-is-a-bitcoin-wallet.md',
+    json: 'docs/learn/runtime/MSC-GUIDE-005.json',
+    snippet: 'snippets/msc-learn-guide-005-runtime.liquid',
+    dom: 'MscGuide005',
+  },
+  {
+    id: 'MSC-GUIDE-006',
+    source: 'docs/learn/content/guides/MSC-GUIDE-006-bitcoin-self-custody.md',
+    json: 'docs/learn/runtime/MSC-GUIDE-006.json',
+    snippet: 'snippets/msc-learn-guide-006-runtime.liquid',
+    dom: 'MscGuide006',
+  },
+  {
+    id: 'MSC-GUIDE-007',
+    source: 'docs/learn/content/guides/MSC-GUIDE-007-send-and-receive-bitcoin.md',
+    json: 'docs/learn/runtime/MSC-GUIDE-007.json',
+    snippet: 'snippets/msc-learn-guide-007-runtime.liquid',
+    dom: 'MscGuide007',
+  },
+  {
+    id: 'MSC-GUIDE-008',
+    source: 'docs/learn/content/guides/MSC-GUIDE-008-bitcoin-transactions-and-fees.md',
+    json: 'docs/learn/runtime/MSC-GUIDE-008.json',
+    snippet: 'snippets/msc-learn-guide-008-runtime.liquid',
+    dom: 'MscGuide008',
+  },
 ];
 
 const read = (file) => fs.readFileSync(path.join(ROOT, file), 'utf8');
@@ -95,7 +123,7 @@ function materialize(config) {
   assert.ok(runtime.article_sections?.length, `${config.id} article sections are missing`);
   assert.ok(runtime.key_terms?.length, `${config.id} key terms are missing`);
   assert.ok(runtime.sources?.length, `${config.id} sources are missing`);
-  assert.ok(generatedSnippet.includes(`data-msc-registry-id="${config.id}"`), `${config.id} snippet binding is missing`);
+  assert.ok(generatedSnippet.includes(`data-msc-registry-id=\"${config.id}\"`), `${config.id} snippet binding is missing`);
   assert.ok(!/<a\b|\bhref\s*=|page\.content/i.test(generatedSnippet), `${config.id} generated content must not activate source or article links`);
 
   if (WRITE) {
@@ -114,7 +142,7 @@ try {
   fs.rmSync(path.join(ROOT, TMP_DIR), { recursive: true, force: true });
   fs.mkdirSync(path.join(ROOT, TMP_DIR), { recursive: true });
   for (const guide of GUIDES) materialize(guide);
-  console.log(`MSC Learn Guide 002–004 rollout runtime ${WRITE ? 'materialized' : 'validation passed'} using the locked Guide 001 parser.`);
+  console.log(`MSC Learn Guide 002–008 rollout runtime ${WRITE ? 'materialized' : 'validation passed'} using the locked Guide 001 parser.`);
 } finally {
   fs.rmSync(path.join(ROOT, TMP_DIR), { recursive: true, force: true });
 }
