@@ -69,6 +69,62 @@ const flexibleKeyTermParser = String.raw`function parseKeyTerms(markdown) {
   });
 }`;
 
+const flexibleNumberedSourceParser = String.raw`function parseNumberedSourceRecords(markdown) {
+  const lines = normalize(markdown).split('\n');
+  const records = [];
+  let current = null;
+  let expectedNumber = 1;
+
+  const finishRecord = () => {
+    if (!current) return;
+    if (!Object.keys(current.fields).length) throw new Error('Numbered source record ' + current.number + ' has no subordinate fields');
+    records.push({ title: current.title, ...current.fields });
+    current = null;
+  };
+
+  for (const rawLine of lines) {
+    if (!rawLine.trim()) continue;
+    const line = rawLine.replace(/\s+$/, '');
+    const opener = line.match(/^(\d+)\.\s+\*\*(.*?)\*\*$/);
+    if (opener) {
+      finishRecord();
+      const number = Number(opener[1]);
+      if (opener[1] !== String(number)) throw new Error('Numbered source record uses noncanonical numbering: ' + opener[1]);
+      if (number !== expectedNumber) throw new Error('Numbered source records must be continuous from 1; expected ' + expectedNumber + ', found ' + number);
+      const title = opener[2].trim();
+      if (!title) throw new Error('Numbered source record ' + number + ' has an empty title');
+      current = { number, title, fields: {} };
+      expectedNumber += 1;
+      continue;
+    }
+    if (/^\d+\.\s*/.test(line)) throw new Error('Malformed numbered source opener: ' + line);
+    if (!current) throw new Error('Unexpected content before numbered source record: ' + line);
+
+    const continuationIndent = String(current.number).length + 2;
+    const bullet = line.match(/^(\s*)-\s+(.*)$/);
+    if (bullet) {
+      if (bullet[1].length !== continuationIndent) {
+        throw new Error('Numbered source record ' + current.number + ' field is not indented by exactly ' + continuationIndent + ' spaces: ' + line);
+      }
+      assertCanonicalSourceFieldDelimiter(bullet[2], 'Unsupported numbered source record content: ' + line);
+      const field = bullet[2].match(/^([^:]+):(?=\s|$)\s*(.*)$/);
+      if (!field) throw new Error('Unsupported numbered source record content: ' + line);
+      addSourceField(current.fields, field[1], field[2], 'Numbered source record ' + current.number);
+      continue;
+    }
+
+    const compact = line.match(/^(\s+)([^:]+):(?=\s|$)\s*(.*)$/);
+    if (!compact || compact[1].length !== continuationIndent) {
+      throw new Error('Unsupported numbered source record content: ' + line);
+    }
+    addSourceField(current.fields, compact[2], compact[3], 'Numbered source record ' + current.number);
+  }
+
+  finishRecord();
+  if (!records.length) throw new Error('Sources section did not contain any numbered records');
+  return records;
+}`;
+
 function transformedGenerator(config, tempJson, tempSnippet) {
   let source = read(BASE_GENERATOR);
   source = replaceOnce(
@@ -101,6 +157,12 @@ function transformedGenerator(config, tempJson, tempSnippet) {
   assert.notEqual(keyTermStart, -1, 'Base guide generator drifted: missing parseKeyTerms start');
   assert.notEqual(keyTermBoundary, -1, 'Base guide generator drifted: missing parseKeyTerms boundary');
   source = source.slice(0, keyTermStart) + flexibleKeyTermParser + source.slice(keyTermBoundary);
+
+  const numberedSourceStart = source.indexOf('function parseNumberedSourceRecords(markdown) {');
+  const numberedSourceBoundary = source.indexOf('\n\nfunction parseSourceRecords', numberedSourceStart);
+  assert.notEqual(numberedSourceStart, -1, 'Base guide generator drifted: missing parseNumberedSourceRecords start');
+  assert.notEqual(numberedSourceBoundary, -1, 'Base guide generator drifted: missing parseNumberedSourceRecords boundary');
+  source = source.slice(0, numberedSourceStart) + flexibleNumberedSourceParser + source.slice(numberedSourceBoundary);
 
   source = source
     .replaceAll('MscGuide001Terms', `${config.dom}Terms`)
