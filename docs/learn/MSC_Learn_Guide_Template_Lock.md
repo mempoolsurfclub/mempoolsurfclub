@@ -8,7 +8,7 @@ Lock date: 2026-09-01
 
 ## Purpose
 
-This document freezes the approved Mempool Surf Club topic-guide reading experience before additional Learn guides are activated. Guide 001 is the visual and structural reference. Future topic guides must inherit the shared template rather than receive independent page redesigns.
+This document freezes the approved Mempool Surf Club topic-guide reading experience. Guide 001 is the visual and structural reference. Every additional topic guide must inherit the shared template rather than receive an independent page redesign.
 
 ## Shared implementation
 
@@ -16,8 +16,10 @@ This document freezes the approved Mempool Surf Club topic-guide reading experie
 - Shared section: `sections/msc-learn-guide.liquid`
 - Shared topic-guide stylesheet: `assets/msc-learn-guide-template.css`
 - Shared Next Guide component: `snippets/msc-learn-guide-transition.liquid`
-- Existing structured Guide 001 runtime: `snippets/msc-learn-guide-001-runtime.liquid`
+- Structured Guide 001 runtime: `snippets/msc-learn-guide-001-runtime.liquid`
+- Guide 002–004 rollout materializer: `scripts/generate-msc-learn-guide-rollout.mjs`
 - Template drift validation: `scripts/validate-msc-learn-guide-template.mjs`
+- Rollout validation: `scripts/validate-msc-learn-guide-rollout.mjs`
 
 The historical `assets/msc-learn-guide.css` file records the earlier Guide-001-only pilot styling but is no longer loaded by the shared guide section. Do not use it as the rollout stylesheet.
 
@@ -58,8 +60,17 @@ Content changes by guide. The template does not.
 
 When Guides 002–080 are activated, preserve this shared structure and styling. Add only the guide-specific runtime binding, copy-locked content, next-guide data, progress data, and eventual confirmed destination URL. Do not fork the stylesheet or add per-guide inline CSS to solve ordinary title or content-length differences.
 
-The first rollout QA batch is Guides 002–004. It must test long titles, article length variation, responsive behavior, Key Terms, Sources, and transition content against Guide 001 without redesigning the template.
+The first rollout batch, Guides 002–004, is active as preview-only alternate-template views on the existing Bitcoin Basics Shopify page. The Bitcoin Basics hub cards for Guides 001–004 are clickable in preview, and the visible sequence is wired 001 → 002 → 003 → 004. Guide 004 previews Guide 005 but does not activate it.
+
+Current preview views:
+
+- Guide 001: `?view=msc-learn-guide`
+- Guide 002: `?view=msc-learn-guide-002`
+- Guide 003: `?view=msc-learn-guide-003`
+- Guide 004: `?view=msc-learn-guide-004`
+
+These views are QA routes, not canonical guide URLs.
 
 ## Publication boundary
 
-Guide 001 remains a preview-bound runtime until real Shopify publication records and canonical URLs exist. This template lock does not create Shopify Page objects, activate unpublished links, or establish canonical production URLs.
+Guides 001–004 remain preview-bound runtimes until real Shopify publication records and canonical URLs exist. This template lock and rollout do not create Shopify Page objects, publish canonical guide URLs, or activate planned editorial links inside guide content.
