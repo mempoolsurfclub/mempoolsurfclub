@@ -11,6 +11,7 @@ const result = spawnSync(process.execPath, ['scripts/generate-msc-learn-guide-ca
 if (result.status !== 0) throw new Error(`${result.stdout || ''}${result.stderr || ''}`);
 
 assert.ok(section.includes("{% render 'msc-learn-guide-network-bindings', pilot_registry_id: pilot_registry_id %}"), 'Shared guide section must delegate Guides 017–032 to the Network bindings');
+assert.ok(bindings.includes("{% render 'msc-learn-guide-building-bindings', pilot_registry_id: pilot_registry_id %}"), 'Network bindings must delegate later guide IDs to Building on Bitcoin');
 
 const activeIds = Array.from({ length: 16 }, (_, index) => `MSC-GUIDE-${String(index + 17).padStart(3, '0')}`);
 for (const id of activeIds) {
@@ -47,8 +48,8 @@ for (let current = 17; current < 32; current += 1) {
 const guide032Block = bindings.match(/{%- when 'MSC-GUIDE-032' -%}([\s\S]*?){%- else -%}/)?.[1] || '';
 assert.ok(guide032Block.includes("next_registry_id: 'MSC-GUIDE-033'"), 'Guide 032 must preview Guide 033 next');
 assert.ok(guide032Block.includes("next_title: 'How the Lightning Network Works'"), 'Guide 032 must preview the approved Guide 033 title');
-assert.ok(guide032Block.includes('next_active: false'), 'Guide 032 → Guide 033 must remain inactive until Building on Bitcoin rolls out');
-assert.ok(!guide032Block.includes('next_url:'), 'Guide 032 must not invent a Guide 033 preview URL');
+assert.ok(guide032Block.includes('next_active: true'), 'Guide 032 → Guide 033 must be active once Building on Bitcoin exists');
+assert.ok(guide032Block.includes("next_url: '/pages/learn-building-on-bitcoin?view=msc-learn-guide-033'"), 'Guide 032 is missing its active Guide 033 Building preview URL');
 assert.ok(guide032Block.includes('completed_count: 16'), 'Guide 032 must show The Bitcoin Network complete');
 assert.ok(guide032Block.includes('remaining_count: 0'), 'Guide 032 must show zero Network guides remaining');
 
@@ -79,4 +80,4 @@ assert.ok(sharedCss.includes('font-size: 1.6rem;'), 'Locked Next Guide eyebrow s
 assert.ok(sharedCss.includes('margin-top: .4rem;'), 'Locked Next Guide spacing drifted');
 assert.ok(sharedCss.includes('.msc-learn-guide-transition.is-active:hover'), 'Locked border-only active transition interaction drifted');
 
-console.log('MSC Learn Network Guide 017–032 rollout validation passed: COPY_LOCKED runtimes are synchronized, the Guide 001 visual contract is preserved, all 16 Network hub cards are active, Guide 016 continues into Guide 017, transitions are wired through Guide 032, and Guide 033 remains inactive.');
+console.log('MSC Learn Network Guide 017–032 rollout validation passed: COPY_LOCKED runtimes are synchronized, the Guide 001 visual contract is preserved, all 16 Network hub cards are active, Guide 016 continues into Guide 017, transitions are wired through Guide 032, and Guide 032 continues into Building on Bitcoin Guide 033.');
