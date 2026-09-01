@@ -64,33 +64,6 @@
   backdrop-filter: blur(14px);
 }
 
-.msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-page__header::before,
-.msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-page__header::after {
-  content: "";
-  position: absolute;
-  pointer-events: none;
-}
-
-.msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-page__header::before {
-  top: -13rem;
-  right: -8rem;
-  width: 36rem;
-  height: 36rem;
-  border-radius: 50%;
-  opacity: .72;
-  background: repeating-radial-gradient(circle at center, transparent 0 34px, rgba(212,190,153,.14) 35px 36px, transparent 37px 66px), radial-gradient(circle at center, rgba(212,190,153,.1), transparent 64%);
-}
-
-.msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-page__header::after {
-  right: 3rem;
-  bottom: 2.8rem;
-  width: min(28rem, 38%);
-  height: 7rem;
-  opacity: .34;
-  background: linear-gradient(90deg, rgba(212,190,153,.55), transparent 78%) 0 0 / 100% 1px no-repeat, repeating-linear-gradient(0deg, transparent 0 13px, rgba(212,190,153,.13) 14px 15px, transparent 16px 28px);
-  transform: rotate(-6deg);
-}
-
 .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-page__header > * { position: relative; z-index: 1; }
 
 .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-page__header .msc-section-kicker {
@@ -283,7 +256,6 @@
 @media screen and (max-width: 749px) {
   .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] { padding-top: 2.6rem; }
   .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-page__header { padding: 2.25rem 1.8rem; border-radius: 20px; }
-  .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-page__header::after { display: none; }
   .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-article { width: 100%; }
   .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-article__section h2 { padding-left: 0; }
   .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-article__section h2::before { position: static; display: block; margin-bottom: .55rem; }
