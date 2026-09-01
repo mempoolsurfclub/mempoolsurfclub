@@ -21,9 +21,11 @@
       .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-guide-transition {
         --msc-hub-sand: var(--msc-guide-sand);
         --msc-hub-paper: var(--msc-guide-paper);
+        min-width: 0;
       }
 
       .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-guide-transition .msc-learn-hub-transition__destination {
+        min-width: 0;
         cursor: default;
       }
 
@@ -32,7 +34,20 @@
       }
 
       .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-guide-transition .msc-learn-hub-transition__title {
-        max-width: 24ch;
+        display: block;
+        max-width: none;
+        min-width: 0;
+        font-size: clamp(2.8rem, 3.2vw, 4rem);
+        line-height: 1;
+        white-space: normal;
+        text-wrap: balance;
+      }
+
+      @media screen and (min-width: 990px) {
+        .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-guide-transition {
+          grid-template-columns: minmax(0, 1.12fr) minmax(28rem, .88fr);
+          gap: clamp(2rem, 3vw, 3rem);
+        }
       }
     </style>
     <template data-msc-guide-next-template="MSC-GUIDE-001">
