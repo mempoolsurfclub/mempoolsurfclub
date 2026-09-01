@@ -18,6 +18,57 @@
         completed_count: 1,
         total_count: 16,
         remaining_count: 15,
+        next_active: true,
+        next_url: '/pages/learn-bitcoin-basics?view=msc-learn-guide-002'
+      %}
+    </template>
+  {%- when 'MSC-GUIDE-002' -%}
+    {% render 'msc-learn-guide-002-runtime' %}
+    <template data-msc-guide-next-template="MSC-GUIDE-002">
+      {% render 'msc-learn-guide-transition',
+        current_registry_id: 'MSC-GUIDE-002',
+        next_registry_id: 'MSC-GUIDE-003',
+        next_number: '003',
+        next_title: 'A History of Bitcoin',
+        next_description: 'Bitcoin emerged from decades of work on digital cash, cryptography, timestamping, and proof of work.',
+        category_label: 'Bitcoin Basics',
+        completed_count: 2,
+        total_count: 16,
+        remaining_count: 14,
+        next_active: true,
+        next_url: '/pages/learn-bitcoin-basics?view=msc-learn-guide-003'
+      %}
+    </template>
+  {%- when 'MSC-GUIDE-003' -%}
+    {% render 'msc-learn-guide-003-runtime' %}
+    <template data-msc-guide-next-template="MSC-GUIDE-003">
+      {% render 'msc-learn-guide-transition',
+        current_registry_id: 'MSC-GUIDE-003',
+        next_registry_id: 'MSC-GUIDE-004',
+        next_number: '004',
+        next_title: 'Who Was Satoshi Nakamoto?',
+        next_description: 'Satoshi Nakamoto is the pseudonymous creator, or group of creators, who published the Bitcoin white paper and released the first software.',
+        category_label: 'Bitcoin Basics',
+        completed_count: 3,
+        total_count: 16,
+        remaining_count: 13,
+        next_active: true,
+        next_url: '/pages/learn-bitcoin-basics?view=msc-learn-guide-004'
+      %}
+    </template>
+  {%- when 'MSC-GUIDE-004' -%}
+    {% render 'msc-learn-guide-004-runtime' %}
+    <template data-msc-guide-next-template="MSC-GUIDE-004">
+      {% render 'msc-learn-guide-transition',
+        current_registry_id: 'MSC-GUIDE-004',
+        next_registry_id: 'MSC-GUIDE-005',
+        next_number: '005',
+        next_title: 'What Is a Bitcoin Wallet?',
+        next_description: 'A Bitcoin wallet is software or hardware that manages keys, constructs transactions, and helps a user interact with Bitcoin.',
+        category_label: 'Bitcoin Basics',
+        completed_count: 4,
+        total_count: 16,
+        remaining_count: 12,
         next_active: false
       %}
     </template>
@@ -66,7 +117,7 @@
       "id": "registry_id",
       "label": "Registry ID",
       "default": "MSC-GUIDE-001",
-      "info": "Preview-only binding. Do not enter a handle or URL."
+      "info": "Preview-only binding. Do not enter a handle or canonical URL."
     }
   ]
 }

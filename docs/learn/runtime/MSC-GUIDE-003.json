@@ -1,0 +1,345 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-003-bitcoin-history.md",
+  "source_sha256": "4849c95ce89b84aecd1fa3463ab7744531cbec6e072cf72a0564df5cba8aed6c",
+  "registry_id": "MSC-GUIDE-003",
+  "status": "COPY_LOCKED",
+  "h1": "A History of Bitcoin",
+  "introductory_deck": "Bitcoin emerged from decades of work on digital cash, cryptography, timestamping, and proof of work. Its history is not a straight line of inevitable progress. It is a record of experiments, setbacks, technical upgrades, public disagreements, and an open network that continued developing without a central owner.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "Bitcoin did not begin with a company launch, a product keynote, or a finished global network.\n\nIt began as a short technical paper sent to a cryptography mailing list in 2008. The proposal drew from earlier work, combined existing ideas in a new way, and was followed by working software. A small group tested it. More people joined. Bugs were found, tools improved, markets formed, and arguments about the network's direction became part of its history.\n\nLooking back can make the sequence appear cleaner than it was. Bitcoin's survival was not guaranteed. The network had to move from an idea to functioning code, then from a small experiment to infrastructure used across the world.",
+      "body_html": "<p>Bitcoin did not begin with a company launch, a product keynote, or a finished global network.</p>\n<p>It began as a short technical paper sent to a cryptography mailing list in 2008. The proposal drew from earlier work, combined existing ideas in a new way, and was followed by working software. A small group tested it. More people joined. Bugs were found, tools improved, markets formed, and arguments about the network&#39;s direction became part of its history.</p>\n<p>Looking back can make the sequence appear cleaner than it was. Bitcoin&#39;s survival was not guaranteed. The network had to move from an idea to functioning code, then from a small experiment to infrastructure used across the world.</p>"
+    },
+    {
+      "heading": "Before Bitcoin",
+      "body_markdown": "Researchers had explored digital money long before Bitcoin.\n\nDavid Chaum's work on electronic cash showed how cryptography could support private digital payments, but those systems still depended on an issuing institution. Other researchers developed methods for proving that digital documents existed at a certain time. Adam Back created Hashcash, a proof-of-work system originally designed to make email spam costly. Wei Dai described b-money, a proposal for distributed digital money. Nick Szabo wrote about bit gold, another design for scarce digital value.\n\nBitcoin did not simply copy one predecessor. It brought together digital signatures, peer-to-peer networking, proof of work, public transaction ordering, and economic incentives to address a central problem: how can a digital payment system prevent double-spending without relying on one trusted ledger operator?\n\nThe Bitcoin white paper cited several of these earlier ideas directly. That record matters because it places Bitcoin inside a longer technical history rather than treating it as an invention that appeared from nowhere.",
+      "body_html": "<p>Researchers had explored digital money long before Bitcoin.</p>\n<p>David Chaum&#39;s work on electronic cash showed how cryptography could support private digital payments, but those systems still depended on an issuing institution. Other researchers developed methods for proving that digital documents existed at a certain time. Adam Back created Hashcash, a proof-of-work system originally designed to make email spam costly. Wei Dai described b-money, a proposal for distributed digital money. Nick Szabo wrote about bit gold, another design for scarce digital value.</p>\n<p>Bitcoin did not simply copy one predecessor. It brought together digital signatures, peer-to-peer networking, proof of work, public transaction ordering, and economic incentives to address a central problem: how can a digital payment system prevent double-spending without relying on one trusted ledger operator?</p>\n<p>The Bitcoin white paper cited several of these earlier ideas directly. That record matters because it places Bitcoin inside a longer technical history rather than treating it as an invention that appeared from nowhere.</p>"
+    },
+    {
+      "heading": "The 2008 white paper",
+      "body_markdown": "On October 31, 2008, a person or group using the name Satoshi Nakamoto announced a paper titled \"Bitcoin: A Peer-to-Peer Electronic Cash System\" on the Cryptography Mailing List.\n\nThe paper proposed a network where transactions could be publicly announced, gathered into blocks, and ordered through proof of work. Participants could compare valid histories by the amount of accumulated work behind them. The system included incentives for block production and a predetermined method for introducing new units.\n\nThe paper was concise. It did not describe every feature, wallet practice, mining industry, or business that would later develop around Bitcoin. Its importance was that it presented a coherent design for peer-to-peer electronic cash and explained how the pieces could work together.\n\nThe announcement did not immediately create broad public interest. Early replies focused on technical questions, including scaling, security, and whether the network could resist attack. Bitcoin began as a proposal under review, not as an accepted conclusion.",
+      "body_html": "<p>On October 31, 2008, a person or group using the name Satoshi Nakamoto announced a paper titled &quot;Bitcoin: A Peer-to-Peer Electronic Cash System&quot; on the Cryptography Mailing List.</p>\n<p>The paper proposed a network where transactions could be publicly announced, gathered into blocks, and ordered through proof of work. Participants could compare valid histories by the amount of accumulated work behind them. The system included incentives for block production and a predetermined method for introducing new units.</p>\n<p>The paper was concise. It did not describe every feature, wallet practice, mining industry, or business that would later develop around Bitcoin. Its importance was that it presented a coherent design for peer-to-peer electronic cash and explained how the pieces could work together.</p>\n<p>The announcement did not immediately create broad public interest. Early replies focused on technical questions, including scaling, security, and whether the network could resist attack. Bitcoin began as a proposal under review, not as an accepted conclusion.</p>"
+    },
+    {
+      "heading": "The genesis block and network launch",
+      "body_markdown": "Bitcoin's first block, now called the genesis block, is dated January 3, 2009. Its coinbase data includes the text \"The Times 03/Jan/2009 Chancellor on brink of second bailout for banks.\"\n\nThe embedded headline provides a contemporaneous timestamp reference associated with January 3, 2009. Many readers interpret it as commentary on banking and monetary policy during the financial crisis. Satoshi did not leave a definitive explanation of the message's intended meaning, so the broader political interpretation should remain identified as interpretation.\n\nOn January 8, 2009, Satoshi announced the release of Bitcoin version 0.1. The release included source code and Windows software that allowed early users to connect, generate blocks, and send transactions.\n\nThe network was tiny. Mining could be performed with ordinary computer processors, and there was little economic value attached to the units. The first goal was simply to see whether the system worked.",
+      "body_html": "<p>Bitcoin&#39;s first block, now called the genesis block, is dated January 3, 2009. Its coinbase data includes the text &quot;The Times 03/Jan/2009 Chancellor on brink of second bailout for banks.&quot;</p>\n<p>The embedded headline provides a contemporaneous timestamp reference associated with January 3, 2009. Many readers interpret it as commentary on banking and monetary policy during the financial crisis. Satoshi did not leave a definitive explanation of the message&#39;s intended meaning, so the broader political interpretation should remain identified as interpretation.</p>\n<p>On January 8, 2009, Satoshi announced the release of Bitcoin version 0.1. The release included source code and Windows software that allowed early users to connect, generate blocks, and send transactions.</p>\n<p>The network was tiny. Mining could be performed with ordinary computer processors, and there was little economic value attached to the units. The first goal was simply to see whether the system worked.</p>"
+    },
+    {
+      "heading": "Early users and the first transactions",
+      "body_markdown": "Cryptographer Hal Finney was among the earliest people to run the software. He later described receiving a test transaction of ten bitcoin from Satoshi in January 2009 and exchanging messages about bugs and fixes.\n\nThat early transaction was not a retail purchase. It was a test between participants helping the software operate. Its historical value is that it showed bitcoin moving between two separate users through the new network.\n\nOther contributors soon began reporting problems, suggesting changes, maintaining websites, translating material, and improving the code. This is where Bitcoin's open-source character became important. The project could gain participants who had not been present for the original design.\n\nThe early software was fragile by modern standards. There were few wallets, limited documentation, minimal security tooling, and no established market infrastructure. The historical record shows a project being tested in public, not a finished system waiting for adoption.",
+      "body_html": "<p>Cryptographer Hal Finney was among the earliest people to run the software. He later described receiving a test transaction of ten bitcoin from Satoshi in January 2009 and exchanging messages about bugs and fixes.</p>\n<p>That early transaction was not a retail purchase. It was a test between participants helping the software operate. Its historical value is that it showed bitcoin moving between two separate users through the new network.</p>\n<p>Other contributors soon began reporting problems, suggesting changes, maintaining websites, translating material, and improving the code. This is where Bitcoin&#39;s open-source character became important. The project could gain participants who had not been present for the original design.</p>\n<p>The early software was fragile by modern standards. There were few wallets, limited documentation, minimal security tooling, and no established market infrastructure. The historical record shows a project being tested in public, not a finished system waiting for adoption.</p>"
+    },
+    {
+      "heading": "From experiment to exchange",
+      "body_markdown": "Bitcoin needed ways for people to acquire it, price it, store it, and use it beyond technical testing.\n\nInformal exchanges appeared first. Participants traded bitcoin directly or discussed rough exchange values based on electricity and computing costs. In May 2010, Laszlo Hanyecz offered 10,000 bitcoin for two pizzas in a public forum thread. Another participant arranged the purchase.\n\nThe event became a cultural milestone because it demonstrated bitcoin being exchanged for an ordinary good. Its later fame is tied partly to bitcoin's subsequent market value, but the original significance was practical use. A digital unit produced by an open network had been accepted in a real trade.\n\nAs markets developed, exchanges made access easier. They also introduced new risks. Exchange balances are company liabilities, not direct control of Bitcoin keys. Several later exchange failures taught users that a business built around Bitcoin can fail even while the Bitcoin network continues operating.\n\nThat distinction between protocol and provider became one of the recurring lessons of Bitcoin history.",
+      "body_html": "<p>Bitcoin needed ways for people to acquire it, price it, store it, and use it beyond technical testing.</p>\n<p>Informal exchanges appeared first. Participants traded bitcoin directly or discussed rough exchange values based on electricity and computing costs. In May 2010, Laszlo Hanyecz offered 10,000 bitcoin for two pizzas in a public forum thread. Another participant arranged the purchase.</p>\n<p>The event became a cultural milestone because it demonstrated bitcoin being exchanged for an ordinary good. Its later fame is tied partly to bitcoin&#39;s subsequent market value, but the original significance was practical use. A digital unit produced by an open network had been accepted in a real trade.</p>\n<p>As markets developed, exchanges made access easier. They also introduced new risks. Exchange balances are company liabilities, not direct control of Bitcoin keys. Several later exchange failures taught users that a business built around Bitcoin can fail even while the Bitcoin network continues operating.</p>\n<p>That distinction between protocol and provider became one of the recurring lessons of Bitcoin history.</p>"
+    },
+    {
+      "heading": "Mining became an industry",
+      "body_markdown": "Early Bitcoin mining used general-purpose computer processors. Participants later adopted graphics processors, then specialized hardware called ASIC miners.\n\nThis transition greatly increased the amount of computation securing the network. It also changed mining from a hobby available to many ordinary computers into a specialized industry shaped by hardware supply, energy prices, capital, geography, and operational expertise.\n\nMining pools developed so individual miners could combine work and receive more regular payouts. Companies built data centers, firmware, cooling systems, hosting services, and energy partnerships.\n\nThe growth of mining brought tradeoffs. Specialized equipment increased efficiency, but it also raised barriers to direct participation. Pools improved payout consistency, but concentration in pool coordination became a subject of debate. Bitcoin's history includes both expanding security resources and continuing concern about where influence becomes concentrated.",
+      "body_html": "<p>Early Bitcoin mining used general-purpose computer processors. Participants later adopted graphics processors, then specialized hardware called ASIC miners.</p>\n<p>This transition greatly increased the amount of computation securing the network. It also changed mining from a hobby available to many ordinary computers into a specialized industry shaped by hardware supply, energy prices, capital, geography, and operational expertise.</p>\n<p>Mining pools developed so individual miners could combine work and receive more regular payouts. Companies built data centers, firmware, cooling systems, hosting services, and energy partnerships.</p>\n<p>The growth of mining brought tradeoffs. Specialized equipment increased efficiency, but it also raised barriers to direct participation. Pools improved payout consistency, but concentration in pool coordination became a subject of debate. Bitcoin&#39;s history includes both expanding security resources and continuing concern about where influence becomes concentrated.</p>"
+    },
+    {
+      "heading": "Software development moved beyond its creator",
+      "body_markdown": "Satoshi remained active during Bitcoin's earliest period, releasing software, answering questions, and collaborating with other contributors. Public involvement gradually declined during 2010 and 2011.\n\nBitcoin did not stop when Satoshi withdrew. The source code was already available, other contributors were active, and network participants were not required to seek the creator's approval for every block or transaction.\n\nDevelopment became a public process of proposals, review, testing, releases, and disagreement. Bitcoin Core emerged from the original software lineage, but it did not become a central owner of Bitcoin. Its developers publish software. Node operators decide what software to run, miners construct candidate blocks, and users and businesses choose which rules and services they will accept.\n\nThis separation between authorship and authority is one of the most important historical features of Bitcoin.",
+      "body_html": "<p>Satoshi remained active during Bitcoin&#39;s earliest period, releasing software, answering questions, and collaborating with other contributors. Public involvement gradually declined during 2010 and 2011.</p>\n<p>Bitcoin did not stop when Satoshi withdrew. The source code was already available, other contributors were active, and network participants were not required to seek the creator&#39;s approval for every block or transaction.</p>\n<p>Development became a public process of proposals, review, testing, releases, and disagreement. Bitcoin Core emerged from the original software lineage, but it did not become a central owner of Bitcoin. Its developers publish software. Node operators decide what software to run, miners construct candidate blocks, and users and businesses choose which rules and services they will accept.</p>\n<p>This separation between authorship and authority is one of the most important historical features of Bitcoin.</p>"
+    },
+    {
+      "heading": "Technical upgrades and cautious change",
+      "body_markdown": "Bitcoin's base protocol has changed, but major changes tend to move carefully.\n\nPay to Script Hash, documented in BIP 16, made more complex spending conditions easier to represent for users and services. Segregated Witness, described across several BIPs and activated in 2017, changed how signature data is committed, addressed transaction malleability, and introduced block weight. Taproot, activated in 2021, added new spending and scripting capabilities using Schnorr signatures and Tapscript.\n\nThese upgrades were not simply installed by one company. They required specification, implementation, review, testing, coordination, and adoption. The process was often slow and sometimes contentious.\n\nThe disagreements matter historically because they reveal how Bitcoin changes without a central product manager. Developers can propose code. Miners can signal or choose transactions. Businesses can prepare infrastructure. Node operators can accept or reject software. No one group has unlimited authority over the entire system.",
+      "body_html": "<p>Bitcoin&#39;s base protocol has changed, but major changes tend to move carefully.</p>\n<p>Pay to Script Hash, documented in BIP 16, made more complex spending conditions easier to represent for users and services. Segregated Witness, described across several BIPs and activated in 2017, changed how signature data is committed, addressed transaction malleability, and introduced block weight. Taproot, activated in 2021, added new spending and scripting capabilities using Schnorr signatures and Tapscript.</p>\n<p>These upgrades were not simply installed by one company. They required specification, implementation, review, testing, coordination, and adoption. The process was often slow and sometimes contentious.</p>\n<p>The disagreements matter historically because they reveal how Bitcoin changes without a central product manager. Developers can propose code. Miners can signal or choose transactions. Businesses can prepare infrastructure. Node operators can accept or reject software. No one group has unlimited authority over the entire system.</p>"
+    },
+    {
+      "heading": "Markets changed public attention",
+      "body_markdown": "Bitcoin's exchange price has repeatedly drawn people into the subject, but price alone is a poor history of the network.\n\nMarket cycles affected mining investment, company formation, media interest, regulation, scams, and user behavior. Periods of rapid appreciation attracted new participants. Sharp declines exposed leverage, weak business models, poor custody, and unrealistic claims.\n\nThose events changed public understanding, but they should not be confused with protocol milestones. An exchange failure is not the same as a consensus failure. A company adopting bitcoin is not a network upgrade. A market price record does not prove technical progress.\n\nA useful history keeps these categories separate while recognizing that they influence one another.",
+      "body_html": "<p>Bitcoin&#39;s exchange price has repeatedly drawn people into the subject, but price alone is a poor history of the network.</p>\n<p>Market cycles affected mining investment, company formation, media interest, regulation, scams, and user behavior. Periods of rapid appreciation attracted new participants. Sharp declines exposed leverage, weak business models, poor custody, and unrealistic claims.</p>\n<p>Those events changed public understanding, but they should not be confused with protocol milestones. An exchange failure is not the same as a consensus failure. A company adopting bitcoin is not a network upgrade. A market price record does not prove technical progress.</p>\n<p>A useful history keeps these categories separate while recognizing that they influence one another.</p>"
+    },
+    {
+      "heading": "Wallets, infrastructure, and communities grew",
+      "body_markdown": "The early Bitcoin client asked users to manage unfamiliar software and backup practices. Over time, wallets became more specialized. Hardware wallets, mobile applications, multisignature tools, payment processors, node packages, merchant services, block explorers, and educational resources expanded the ways people could interact with the network.\n\nCommunities also formed around local meetups, conferences, mining, development, privacy, art, payments, policy, and open-source work. Some groups shared goals. Others disagreed strongly about scaling, custody, regulation, or acceptable uses of block space.\n\nThis broader ecosystem helped Bitcoin become more usable, but it also introduced marketing, commercial incentives, and institutional points of control. A service may make Bitcoin easier to use while asking the user to trust that service. History repeatedly shows the need to distinguish convenience from direct verification or key control.",
+      "body_html": "<p>The early Bitcoin client asked users to manage unfamiliar software and backup practices. Over time, wallets became more specialized. Hardware wallets, mobile applications, multisignature tools, payment processors, node packages, merchant services, block explorers, and educational resources expanded the ways people could interact with the network.</p>\n<p>Communities also formed around local meetups, conferences, mining, development, privacy, art, payments, policy, and open-source work. Some groups shared goals. Others disagreed strongly about scaling, custody, regulation, or acceptable uses of block space.</p>\n<p>This broader ecosystem helped Bitcoin become more usable, but it also introduced marketing, commercial incentives, and institutional points of control. A service may make Bitcoin easier to use while asking the user to trust that service. History repeatedly shows the need to distinguish convenience from direct verification or key control.</p>"
+    },
+    {
+      "heading": "Bitcoin continued without a central owner",
+      "body_markdown": "Bitcoin's history is sometimes told as if every milestone led naturally to the network's present scale. The record is less certain.\n\nSoftware bugs could have caused lasting damage. Participants could have lost interest. Regulation, market failures, internal disputes, or competing systems could have limited adoption. Some risks remain.\n\nWhat continued was not one company or one leadership team. It was a network of users, nodes, miners, developers, businesses, and communities with different motives. They did not always agree, but enough participants continued enforcing compatible rules and building useful infrastructure.\n\nThat is the quieter current beneath Bitcoin's history. The network developed through contribution and coordination without turning its creator into a permanent authority.",
+      "body_html": "<p>Bitcoin&#39;s history is sometimes told as if every milestone led naturally to the network&#39;s present scale. The record is less certain.</p>\n<p>Software bugs could have caused lasting damage. Participants could have lost interest. Regulation, market failures, internal disputes, or competing systems could have limited adoption. Some risks remain.</p>\n<p>What continued was not one company or one leadership team. It was a network of users, nodes, miners, developers, businesses, and communities with different motives. They did not always agree, but enough participants continued enforcing compatible rules and building useful infrastructure.</p>\n<p>That is the quieter current beneath Bitcoin&#39;s history. The network developed through contribution and coordination without turning its creator into a permanent authority.</p>"
+    },
+    {
+      "heading": "How to read Bitcoin history",
+      "body_markdown": "A careful reader should separate four kinds of events:\n\n1. Protocol milestones change or clarify the technical rules.\n2. Market milestones change price, liquidity, or access.\n3. Company events affect services operating around Bitcoin.\n4. Cultural milestones change how communities understand or use the network.\n\nOne event can influence more than one category, but the distinction prevents common mistakes. Bitcoin did not succeed because every company around it succeeded. A market rally did not prove the protocol correct. A software upgrade did not guarantee adoption. A famous story is not automatically a verified historical record.\n\nThe next guide narrows the focus to Satoshi Nakamoto. It examines the documented role of Bitcoin's creator and the boundary between public evidence and later speculation.",
+      "body_html": "<p>A careful reader should separate four kinds of events:</p>\n<ol><li>Protocol milestones change or clarify the technical rules.</li><li>Market milestones change price, liquidity, or access.</li><li>Company events affect services operating around Bitcoin.</li><li>Cultural milestones change how communities understand or use the network.</li></ol>\n<p>One event can influence more than one category, but the distinction prevents common mistakes. Bitcoin did not succeed because every company around it succeeded. A market rally did not prove the protocol correct. A software upgrade did not guarantee adoption. A famous story is not automatically a verified historical record.</p>\n<p>The next guide narrows the focus to Satoshi Nakamoto. It examines the documented role of Bitcoin&#39;s creator and the boundary between public evidence and later speculation.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Bitcoin history",
+      "definition": "The documented development of Bitcoin from its prehistory and launch through later technical, economic, and cultural milestones."
+    },
+    {
+      "term": "Bitcoin",
+      "definition": "An open monetary network and asset governed by independently verified consensus rules."
+    },
+    {
+      "term": "Open-Source",
+      "definition": "A development model in which source code is available under a license that permits inspection, use, modification, and redistribution."
+    },
+    {
+      "term": "Historical milestone",
+      "definition": "An event or development that materially changed Bitcoin's technology, adoption, markets, institutions, or culture."
+    },
+    {
+      "term": "Block",
+      "definition": "A valid batch of Bitcoin transactions linked to prior chain history through proof of work."
+    },
+    {
+      "term": "Mining",
+      "definition": "The proof-of-work process that orders valid transactions into blocks and competes to extend the Bitcoin chain."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bitcoin: A Peer-to-Peer Electronic Cash System",
+      "author_or_publisher": "Satoshi Nakamoto",
+      "direct_url": "https://bitcoin.org/bitcoin.pdf",
+      "supports": "Bitcoin's technical foundations and its direct references to earlier work on b-money, Hashcash, and timestamping."
+    },
+    {
+      "title": "Blind Signatures for Untraceable Payments",
+      "author_or_publisher": "David Chaum, Springer",
+      "direct_url": "https://link.springer.com/chapter/10.1007/978-1-4757-0602-4_18",
+      "supports": "Chaum's blind-signature design for private electronic payments and the issuing-institution model described in the Before Bitcoin section."
+    },
+    {
+      "title": "Hashcash - A Denial of Service Counter-Measure",
+      "author_or_publisher": "Adam Back, Satoshi Nakamoto Institute archive",
+      "direct_url": "https://nakamotoinstitute.org/library/hashcash/",
+      "supports": "Back's Hashcash proof-of-work system and its purpose of limiting email spam, denial-of-service attacks, and other network abuse."
+    },
+    {
+      "title": "b-money",
+      "author_or_publisher": "Wei Dai, Satoshi Nakamoto Institute archive",
+      "direct_url": "https://nakamotoinstitute.org/library/b-money/",
+      "supports": "Dai's proposal for distributed electronic money using pseudonymous participants, signed transfers, distributed account records, and computational money creation."
+    },
+    {
+      "title": "Bit gold",
+      "author_or_publisher": "Nick Szabo",
+      "direct_url": "https://unenumerated.blogspot.com/2005/12/bit-gold.html",
+      "supports": "Szabo's proposal for scarce digital value using proof of work, timestamping, and a distributed title registry."
+    },
+    {
+      "title": "Bitcoin P2P e-cash paper",
+      "author_or_publisher": "Satoshi Nakamoto, Cryptography Mailing List archive",
+      "direct_url": "https://www.metzdowd.com/pipermail/cryptography/2008-October/014810.html",
+      "supports": "The October 31, 2008 public announcement of the Bitcoin white paper."
+    },
+    {
+      "title": "Bitcoin v0.1 released",
+      "author_or_publisher": "Satoshi Nakamoto, Cryptography Mailing List archive",
+      "direct_url": "https://www.metzdowd.com/pipermail/cryptography/2009-January/014994.html",
+      "supports": "The January 2009 release of the first public Bitcoin software and its early operating description."
+    },
+    {
+      "title": "Bitcoin Core Mainnet Consensus Parameters",
+      "author_or_publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp",
+      "supports": "The genesis block construction, timestamp, embedded newspaper text, and mainnet consensus parameters."
+    },
+    {
+      "title": "Bitcoin and me",
+      "author_or_publisher": "Hal Finney, Satoshi Nakamoto Institute archive of the original BitcoinTalk post",
+      "direct_url": "https://nakamotoinstitute.org/library/bitcoin-and-me/",
+      "supports": "Finney's account of running the early Bitcoin software, receiving a ten-bitcoin test transaction from Satoshi, and reporting bugs."
+    },
+    {
+      "title": "Pizza for bitcoins?",
+      "author_or_publisher": "Laszlo Hanyecz and BitcoinTalk participants",
+      "direct_url": "https://bitcointalk.org/index.php?topic=137.0",
+      "supports": "The original May 2010 forum offer and discussion that became known as the Bitcoin pizza transaction."
+    },
+    {
+      "title": "BIP 16: Pay to Script Hash",
+      "author_or_publisher": "Gavin Andresen, Bitcoin Improvement Proposals",
+      "direct_url": "https://bips.dev/16/",
+      "supports": "The design and historical context of Pay to Script Hash."
+    },
+    {
+      "title": "BIP 141: Segregated Witness",
+      "author_or_publisher": "Eric Lombrozo, Johnson Lau, and Pieter Wuille, Bitcoin Improvement Proposals",
+      "direct_url": "https://bips.dev/141/",
+      "supports": "SegWit's consensus design, witness structure, transaction malleability changes, and block weight."
+    },
+    {
+      "title": "Segregated witness",
+      "author_or_publisher": "Bitcoin Optech",
+      "direct_url": "https://bitcoinops.org/en/topics/segregated-witness/",
+      "supports": "SegWit's activation in 2017 and its technical deployment history."
+    },
+    {
+      "title": "BIP 341: Taproot",
+      "author_or_publisher": "Pieter Wuille, Jonas Nick, and Anthony Towns, Bitcoin Improvement Proposals",
+      "direct_url": "https://bips.dev/341/",
+      "supports": "Taproot's consensus design, Schnorr-based key-path spending, and script-path structure."
+    },
+    {
+      "title": "Bitcoin Optech Newsletter #175",
+      "author_or_publisher": "Bitcoin Optech",
+      "direct_url": "https://bitcoinops.org/en/newsletters/2021/11/17/",
+      "supports": "Taproot's activation at block height 709,632 in November 2021."
+    },
+    {
+      "title": "Bitcoin Core source repository",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "direct_url": "https://github.com/bitcoin/bitcoin",
+      "supports": "The continuing open-source software lineage, public contribution history, releases, and distributed maintenance of Bitcoin Core."
+    }
+  ],
+  "seo_title": "A History of Bitcoin: From the White Paper to a Global Network",
+  "meta_description": "Trace Bitcoin's history from earlier digital-cash research and the 2008 white paper through mining, markets, major upgrades, and open-source growth.",
+  "excerpt": "Bitcoin grew from decades of digital-cash research into an open global network. This guide follows the major technical, market, and cultural milestones without reducing the story to price.",
+  "reading_time": "9 to 10 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-BASICS",
+    "label": "Bitcoin Basics",
+    "subcategory": "Foundations",
+    "depth": "Surface",
+    "format": "History"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-002",
+      "title": "Why Does Bitcoin Matter?",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-004",
+      "title": "Who Was Satoshi Nakamoto?",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": [
+      {
+        "registry_id": "MSC-GUIDE-001",
+        "title": "What Is Bitcoin?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-002",
+        "title": "Why Does Bitcoin Matter?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-004",
+        "title": "Who Was Satoshi Nakamoto?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-017",
+        "title": "How Bitcoin Mining Works",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-049",
+        "title": "What Is Bitcoin Core?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-056",
+        "title": "How SegWit Changed Bitcoin",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-055",
+        "title": "How Taproot Changed Bitcoin",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-079",
+        "title": "Major Milestones in Bitcoin History",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-080",
+        "title": "How Bitcoin Open-Source Projects Work",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GLOSSARY-001",
+        "title": "Bitcoin Glossary",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-HUB-BASICS",
+        "title": "Bitcoin Basics",
+        "active": false,
+        "url": null
+      }
+    ]
+  },
+  "review_dates": {
+    "reviewed": "2026-07-15",
+    "copy_locked": "2026-07-15",
+    "human_verification": "2026-07-15"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "The Technical Current Before Bitcoin",
+      "educational_purpose": "Show that Bitcoin combined several earlier lines of research rather than appearing without precedent.",
+      "recommended_placement": "After the section titled Before Bitcoin.",
+      "visual_description": "An old field-guide chart with four labeled currents flowing toward one shared channel. Each current represents digital cash, digital signatures, timestamping, and proof of work. The lines meet at a restrained Bitcoin network symbol made from nodes and blocks, not a coin.",
+      "required_labels": "Digital cash, Digital signatures, Timestamping, Proof of work, Bitcoin",
+      "caption": "Bitcoin combined earlier cryptographic and distributed-systems ideas into a working peer-to-peer monetary network.",
+      "alt_text": "Field-guide illustration showing digital cash, signatures, timestamping, and proof of work converging into the Bitcoin network.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Arrange the four currents in two rows so all labels remain readable in a narrow crop.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "From Paper to Running Network",
+      "educational_purpose": "Clarify the sequence from the 2008 announcement to the genesis block, software release, and early test transaction.",
+      "recommended_placement": "After the section titled Early users and the first transactions.",
+      "visual_description": "Minimal navigation timeline with four plotted points and small technical icons: paper, first block, software window, and peer-to-peer transfer. Use Ink linework, Sand markers, and Paper background.",
+      "required_labels": "Oct. 31, 2008, Jan. 3, 2009, Jan. 2009 software release, Early test transaction",
+      "caption": "Bitcoin moved from a public proposal to a running peer-to-peer network within a few months.",
+      "alt_text": "Minimal timeline showing the Bitcoin white paper announcement, genesis block, first software release, and early test transaction.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Allow the timeline to stack vertically while keeping the chronological order and all four dates visible.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Four Kinds of Bitcoin Milestones",
+      "educational_purpose": "Help readers distinguish protocol changes from market, company, and cultural events.",
+      "recommended_placement": "Beside the section titled How to read Bitcoin history.",
+      "visual_description": "Four-part navigation legend styled like a coastal survey key. Each quadrant contains one simple symbol: code and block for protocol, exchange board for market, storefront for company, and gathering or publication for culture. Avoid price charts and brand logos.",
+      "required_labels": "Protocol, Market, Company, Culture",
+      "caption": "Bitcoin history becomes clearer when technical, market, company, and cultural milestones are not treated as the same kind of event.",
+      "alt_text": "Four-part editorial legend distinguishing protocol, market, company, and cultural milestones in Bitcoin history.",
+      "image_orientation": "Square",
+      "mobile_crop_notes": "Keep the four quadrants equal and place labels directly beneath each symbol.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}
