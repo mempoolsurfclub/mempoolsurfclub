@@ -20,20 +20,16 @@ jobs:
           node-version: 22
       - name: Materialize COPY_LOCKED guide runtimes
         run: node scripts/generate-msc-learn-guide-rollout.mjs --write
-      - name: Emit generated files for branch commit
-        run: |
-          for file in \
-            docs/learn/runtime/MSC-GUIDE-005.json \
-            docs/learn/runtime/MSC-GUIDE-006.json \
-            docs/learn/runtime/MSC-GUIDE-007.json \
-            docs/learn/runtime/MSC-GUIDE-008.json \
-            snippets/msc-learn-guide-005-runtime.liquid \
-            snippets/msc-learn-guide-006-runtime.liquid \
-            snippets/msc-learn-guide-007-runtime.liquid \
+      - name: Upload generated Guide 005-008 runtime files
+        uses: actions/upload-artifact@v4
+        with:
+          name: guide-005-008-runtimes
+          path: |
+            docs/learn/runtime/MSC-GUIDE-005.json
+            docs/learn/runtime/MSC-GUIDE-006.json
+            docs/learn/runtime/MSC-GUIDE-007.json
+            docs/learn/runtime/MSC-GUIDE-008.json
+            snippets/msc-learn-guide-005-runtime.liquid
+            snippets/msc-learn-guide-006-runtime.liquid
+            snippets/msc-learn-guide-007-runtime.liquid
             snippets/msc-learn-guide-008-runtime.liquid
-          do
-            echo "MSC_FILE_BEGIN:$file"
-            base64 -w0 "$file"
-            echo
-            echo "MSC_FILE_END:$file"
-          done
