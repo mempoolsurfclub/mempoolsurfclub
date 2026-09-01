@@ -5,6 +5,17 @@
 {%- case pilot_registry_id -%}
   {%- when 'MSC-GUIDE-001' -%}
     {% render 'msc-learn-guide-001-runtime' %}
+    <style>
+      .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-guide__category-link,
+      .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] a.msc-learn-prev-next__item {
+        color: inherit;
+        text-decoration: none;
+      }
+      .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-guide__category-link:hover,
+      .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] a.msc-learn-prev-next__item:hover strong {
+        color: var(--msc-guide-sand);
+      }
+    </style>
     <script>
       (() => {
         const script = document.currentScript;
