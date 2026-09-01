@@ -1,0 +1,149 @@
+{% comment %}
+  Generated from docs/learn/content/guides/MSC-GUIDE-010-bitcoin-public-private-keys.md.
+  Registry binding: MSC-GUIDE-010.
+  Preview only. Do not edit manually.
+  Rebuild with node scripts/generate-msc-learn-guide-rollout.mjs --write.
+{% endcomment %}
+<section class="msc-shell msc-learn-page" data-msc-registry-id="MSC-GUIDE-010" data-msc-preview-only="true">
+  <div class="msc-container msc-learn-page__container">
+    <nav class="msc-learn-breadcrumbs" aria-label="Learn breadcrumbs"><ol><li><span>Learn</span></li><li><span>Bitcoin Basics</span></li><li aria-current="page"><span>How Bitcoin Public and Private Keys Work</span></li></ol></nav>
+    <header class="msc-learn-page__header">
+      <p class="msc-section-kicker">Bitcoin Basics</p>
+      <h1>How Bitcoin Public and Private Keys Work</h1>
+      <p class="msc-learn-page__deck">Bitcoin keys are cryptographic data used in spending conditions and signatures. A private key authorizes spending, while a related public key can be shared and verified without revealing the private key. Wallets may manage large trees of keys, and addresses are destination encodings rather than keys themselves.</p>
+      <ul class="msc-learn-page-meta"><li>Security</li><li>Shallow</li><li>Explainer</li><li>10 to 12 minutes</li><li>Reviewed 2026-07-17</li></ul>
+      <p class="msc-learn-preview-note">Preview only. Publication records and confirmed URLs do not exist; all navigation remains inactive.</p>
+    </header>
+    <article class="msc-learn-article rte" data-msc-content-source="structured-runtime">
+<section class="msc-learn-article__section">
+<p>Bitcoin ownership is often described with the phrase &quot;whoever has the private key controls the bitcoin.&quot; That is directionally useful, but the actual system is more precise.</p>
+<p>Bitcoin transactions create outputs with spending conditions. Keys participate in those conditions. A private key can create a valid digital signature when the applicable script requires one. A public key lets nodes verify that signature.</p>
+<p>The keys do not contain bitcoin. They provide cryptographic authority within rules enforced by Bitcoin software.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Private keys are secret numbers</h2>
+<p>A Bitcoin private key is secret cryptographic material used to authorize spending.</p>
+<p>In common Bitcoin key systems, the private key can be represented as an integer within a defined range. Wallets generate these values using secure randomness or derive them from underlying seed material.</p>
+<p>The private key is not a password stored by the Bitcoin network. There is no central account system that checks whether a user typed it correctly. Instead, wallet software uses the private key in a signature algorithm.</p>
+<p>Anyone who obtains usable private key material may be able to create valid signatures for the outputs controlled by that key. Losing the key can remove the ability to spend unless another recovery path exists.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Bitcoin uses the secp256k1 curve</h2>
+<p>Bitcoin&#39;s traditional public-key cryptography uses the secp256k1 elliptic curve defined by the Standards for Efficient Cryptography group.</p>
+<p>The system specifies a finite field, a curve equation, a generator point, and an order. A private key is used as a scalar in elliptic-curve point multiplication. The result is a public key point.</p>
+<p>This operation is efficient in the forward direction. Given a valid private key, software can derive the corresponding public key.</p>
+<p>Reversing the operation is considered computationally infeasible under the security assumptions used by Bitcoin. Given only the public key, an attacker is not expected to recover the private key with practical computing resources.</p>
+<p>This is not reversible encryption. The public key is not the private key wrapped in a code that the recipient can decrypt.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Public keys can be shared, but they are still sensitive</h2>
+<p>A public key is cryptographic data derived from a private key and used in Bitcoin spending conditions and signatures.</p>
+<p>It is designed to be shareable. Revealing a public key does not directly provide the private key under the assumed hardness of the elliptic-curve discrete logarithm problem.</p>
+<p>That does not make every form of public key information harmless. A public key can link activity. An extended public key can expose an entire branch of receiving information. In some derivation systems, combining extended public information with a leaked non-hardened child private key can compromise a larger branch.</p>
+<p>Public does not mean irrelevant to privacy or wallet architecture.</p>
+</section>
+<section class="msc-learn-article__section"><h2>A signature authorizes a specific message</h2>
+<p>A digital signature is created from private key material and a message digest. In Bitcoin, the message commonly commits to selected transaction data according to the signature-hash rules in use.</p>
+<p>Nodes verify the signature with the corresponding public key. A valid result shows that the required private key participated in authorizing that signed data.</p>
+<p>An ordinary valid signature does not reveal the private key. It also does not prove every broader claim someone might attach to it.</p>
+<p>A signature does not by itself establish a person&#39;s legal identity, intent, ownership history, location, or exclusive control of a key. Keys can be shared, transferred, compromised, or used by automated systems. Cryptography answers a narrow technical question: did valid private key material authorize this message under the relevant scheme?</p>
+</section>
+<section class="msc-learn-article__section"><h2>ECDSA and Schnorr are distinct systems</h2>
+<p>Bitcoin has used the Elliptic Curve Digital Signature Algorithm, or ECDSA, throughout most of its history.</p>
+<p>Taproot introduced Schnorr signatures for Taproot key-path spending and Tapscript contexts through BIP 340, BIP 341, and BIP 342.</p>
+<p>Both systems operate with secp256k1 keys, but their signature formats and verification rules are distinct. Software must apply the correct rules for the output and script being spent.</p>
+<p>Schnorr signatures support properties such as linearity that are useful for advanced constructions. That does not mean every Bitcoin output uses Schnorr or that an ECDSA key is automatically a Taproot spending setup.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Addresses are not public keys</h2>
+<p>An address is a destination representation used by wallets to construct a Bitcoin locking script.</p>
+<p>Some older output types commit to a hash of a public key. When those outputs are spent, the transaction reveals the public key and a signature.</p>
+<p>Other output types represent scripts or commitments. Taproot outputs include a tweaked public key that can represent a key-path spend and commit to possible script paths.</p>
+<p>These details show why address, public key, script, and output are related but distinct.</p>
+<p>A user generally shares an address or payment request, not a raw private key. The sender&#39;s wallet decodes the destination and constructs an output with the corresponding locking condition.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Different outputs reveal key information differently</h2>
+<p>A pay-to-public-key output includes a public key directly in the locking script. A pay-to-public-key-hash output initially commits to a hash and reveals the public key when spent.</p>
+<p>SegWit versions use witness programs with defined interpretation rules. Taproot uses a version 1 witness program that commits to an output key.</p>
+<p>The privacy and security implications depend on the output type and when information becomes visible. It is inaccurate to say that every address is simply a public key or that public keys always remain hidden until spending.</p>
+<p>Wallets also need compatible encoding and script support. A structurally valid address does not guarantee that every service can send to it.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Key encodings are representations, not new authority</h2>
+<p>Wallet software may display keys in different serialized or encoded forms. A public key may be represented in compressed or uncompressed form, while wallet standards can package key data with network, derivation, or checksum information.</p>
+<p>These representations help software exchange and interpret data. They do not create additional bitcoin or a separate layer of ownership. Two encodings can refer to the same underlying elliptic-curve point, while two extended-key strings can carry different derivation scope even when they originate from related material.</p>
+<p>This is one reason copying a string without understanding its type is risky. A private-key encoding can authorize spending. An extended public key cannot directly sign, but it may reveal a broad map of wallet activity. An address is a destination encoding used to construct a script, not a general-purpose public-key container.</p>
+<p>The format tells compatible software how to read the data. The spending condition determines what authority that data can exercise.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Public-key exposure depends on the spending condition</h2>
+<p>Public-key visibility is not a single yes-or-no property across Bitcoin.</p>
+<p>Some outputs place a public key directly in the locking script. Others initially commit to a hash or a witness program and reveal additional information when spent. Taproot output keys are visible on-chain, while optional script-path details remain hidden unless that path is used.</p>
+<p>This affects both security analysis and privacy analysis. The appearance of a public key does not reveal its private key under Bitcoin&#39;s cryptographic assumptions, but it can connect transactions, scripts, or wallet structure. A wallet&#39;s choice of output type therefore changes what information is visible and when, without changing the basic rule that private keys must remain secret.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Wallets usually manage many keys</h2>
+<p>A wallet may create a new receiving address for each payment and a new change destination for outgoing transactions.</p>
+<p>Managing a separate random backup for every key would be difficult. Hierarchical deterministic wallets address this by deriving a tree of keypairs from underlying seed material.</p>
+<p>BIP 32 defines extended private and public keys. An extended key includes a key plus a chain code and related metadata.</p>
+<p>An extended private key can derive descendant private and public keys. An extended public key can derive descendant public keys for non-hardened branches without providing direct spending authority.</p>
+<p>This lets an online system generate receiving information while a separate signer protects private keys. It also creates a privacy boundary that users should understand.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Extended public information can reveal a wallet map</h2>
+<p>An extended public key may allow a party to derive many current and future public keys for a wallet branch.</p>
+<p>The party may be able to identify incoming payments, change, and spending patterns associated with that branch. This can expose more information than sharing one address.</p>
+<p>The exact scope depends on the derivation level and wallet design. An account-level extended public key may reveal one account, while a higher-level key can expose more branches.</p>
+<p>Wallets do not all display, export, or use extended keys in the same way. Some use descriptors that combine extended keys with script and derivation information.</p>
+<p>Even without spending authority, extended public data deserves careful handling because of its monitoring power.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Hardened and non-hardened derivation</h2>
+<p>BIP 32 defines normal, or non-hardened, child derivation and hardened child derivation.</p>
+<p>Non-hardened public child keys can be derived from an extended public key. This supports watch-only systems and separate receiving infrastructure.</p>
+<p>Hardened derivation requires private parent information. It prevents an extended public key from deriving that child branch.</p>
+<p>BIP 32 also documents an important risk: a parent extended public key combined with a corresponding non-hardened descendant private key can expose the parent private key.</p>
+<p>At Shallow depth, the key point is that derivation choices affect sharing boundaries. A wallet should follow its documented structure rather than mixing extended keys and child private keys casually.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Seed phrases and keys are different layers</h2>
+<p>A seed phrase is a human-readable backup representation used by many wallets to derive keys under a wallet standard.</p>
+<p>Under one common flow, BIP 39 mnemonic and passphrase processing creates seed material. BIP 32 then turns seed material into a hierarchical key tree. Other wallet designs may use different standards.</p>
+<p>The phrase is not a private key, even though it can recreate many private keys. The seed is not an address. The wallet is not one key.</p>
+<p>Separating these layers helps explain why recovery may require derivation paths, script types, descriptors, or multisignature configuration in addition to words.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Scripts can require more than one key</h2>
+<p>Bitcoin outputs can use spending conditions more complex than one signature from one key.</p>
+<p>A multisignature script can require a threshold of several keys. A script can combine signatures with timelocks or other conditions. Taproot can support a key path and optional script paths.</p>
+<p>A wallet coordinating these arrangements must know the complete policy. Possessing one key may provide partial authority while remaining insufficient to spend.</p>
+<p>This is another reason the phrase &quot;the private key&quot; can be misleading. The relevant question is which conditions control a specific output and what information satisfies them.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Device passwords do not replace Bitcoin keys</h2>
+<p>A wallet password may decrypt a file. A PIN may unlock a signing device. Biometric access may open an application.</p>
+<p>These controls govern access to local software or hardware. They do not change the spending condition recorded in the Bitcoin output.</p>
+<p>If a device is lost but the wallet recovery information remains complete, the setup may be recoverable. If the underlying key material is lost and no other spending path exists, resetting an interface password will not restore authority.</p>
+<p>Likewise, suspecting key exposure is not solved by changing a wallet-app password. Moving bitcoin to newly created outputs controlled by uncompromised keys changes the on-chain authorization. The exact response should follow verified wallet documentation and a carefully verified environment.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Randomness and implementation quality matter</h2>
+<p>The mathematical system assumes private keys are generated securely and signatures are produced correctly.</p>
+<p>Weak randomness can create predictable keys. Reusing secret signing values in some signature systems can expose private keys. Incorrect verification or serialization can create compatibility or security failures.</p>
+<p>Users do not need to implement cryptography themselves to understand the consequence: trusted software and hardware must use established, reviewed libraries and correct standards.</p>
+<p>A key can be mathematically valid while being operationally unsafe because it was generated, stored, backed up, or used poorly.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Keys provide authority, not guarantees</h2>
+<p>A valid key and signature can satisfy a spending rule. They cannot guarantee that the transaction destination is correct, the wallet interface is honest, the backup is complete, the signer understands the transaction, or the activity remains private.</p>
+<p>Cryptographic authorization is one layer of Bitcoin security.</p>
+<p>The next guide looks beyond the key itself and asks how wallet software, devices, backups, people, and recovery procedures can be managed as a maintainable security system.</p>
+</section>
+    </article>
+    <section class="msc-learn-key-terms" aria-labelledby="MscGuide010Terms"><h2 id="MscGuide010Terms">Key Terms</h2><dl><div class="msc-learn-term"><dt>Private key</dt><dd>Secret cryptographic material used to authorize spending.</dd></div>
+<div class="msc-learn-term"><dt>Public key</dt><dd>Cryptographic data derived from a private key and used in Bitcoin spending conditions and signatures.</dd></div>
+<div class="msc-learn-term"><dt>Digital signature</dt><dd>Cryptographic proof that a valid private key authorized a transaction or message.</dd></div>
+<div class="msc-learn-term"><dt>Address</dt><dd>A destination representation used by wallets to construct a Bitcoin locking script.</dd></div>
+<div class="msc-learn-term"><dt>Wallet</dt><dd>Software or hardware that manages keys, constructs transactions, and helps users interact with Bitcoin.</dd></div>
+<div class="msc-learn-term"><dt>Schnorr signature</dt><dd>The signature scheme specified for Taproot key-path and tapscript use in Bitcoin.</dd></div>
+<div class="msc-learn-term"><dt>Multisig</dt><dd>A spending condition requiring a defined threshold of multiple keys to authorize a transaction.</dd></div></dl></section>
+    <section class="msc-learn-sources" aria-labelledby="MscGuide010Sources"><h2 id="MscGuide010Sources">Sources</h2><article class="msc-learn-source"><h3>SEC 2: Recommended Elliptic Curve Domain Parameters</h3><ul><li><strong>author or publisher:</strong> Standards for Efficient Cryptography Group</li><li><strong>supports:</strong> The secp256k1 field, curve, generator, and order parameters used by Bitcoin key and signature systems.</li></ul><p><strong>Direct URL:</strong> <code>https://www.secg.org/sec2-v2.pdf</code></p></article>
+<article class="msc-learn-source"><h3>BIP 32: Hierarchical Deterministic Wallets</h3><ul><li><strong>author or publisher:</strong> Pieter Wuille</li><li><strong>supports:</strong> Hierarchical key trees, extended private and public keys, hardened and non-hardened derivation, public derivation, and extended-key security boundaries.</li></ul><p><strong>Direct URL:</strong> <code>https://bips.dev/32/</code></p></article>
+<article class="msc-learn-source"><h3>BIP 39: Mnemonic Code for Generating Deterministic Keys</h3><ul><li><strong>author or publisher:</strong> Marek Palatinus, Pavol Rusnak, Aaron Voisine, and Sean Bowe</li><li><strong>supports:</strong> The relationship between mnemonic words, optional passphrases, seed material, and deterministic wallet derivation.</li></ul><p><strong>Direct URL:</strong> <code>https://bips.dev/39/</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Developer Guide: Transactions</h3><ul><li><strong>author or publisher:</strong> Bitcoin Project developer documentation</li><li><strong>supports:</strong> Transaction outputs, public-key-hash spending, script conditions, signatures, addresses, inputs, and witness data.</li></ul><p><strong>Direct URL:</strong> <code>https://developer.bitcoin.org/devguide/transactions.html</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Developer Reference: Transactions</h3><ul><li><strong>author or publisher:</strong> Bitcoin Project developer documentation</li><li><strong>supports:</strong> Transaction serialization, script and witness fields, signature-related data, and standard output forms.</li></ul><p><strong>Direct URL:</strong> <code>https://developer.bitcoin.org/reference/transactions.html</code></p></article>
+<article class="msc-learn-source"><h3>BIP 340: Schnorr Signatures for secp256k1</h3><ul><li><strong>author or publisher:</strong> Pieter Wuille, Jonas Nick, and Tim Ruffing</li><li><strong>supports:</strong> Bitcoin&#39;s Schnorr signature specification, public-key representation, signing, and verification rules.</li></ul><p><strong>Direct URL:</strong> <code>https://bips.dev/340/</code></p></article>
+<article class="msc-learn-source"><h3>BIP 341: Taproot</h3><ul><li><strong>author or publisher:</strong> Pieter Wuille, Jonas Nick, and Anthony Towns</li><li><strong>supports:</strong> Taproot output keys, key-path spending, script commitments, and SegWit version 1 spending rules.</li></ul><p><strong>Direct URL:</strong> <code>https://bips.dev/341/</code></p></article>
+<article class="msc-learn-source"><h3>BIP 342: Validation of Taproot Scripts</h3><ul><li><strong>author or publisher:</strong> Pieter Wuille, Jonas Nick, and Anthony Towns</li><li><strong>supports:</strong> Tapscript validation and Schnorr signature use within Taproot script paths.</li></ul><p><strong>Direct URL:</strong> <code>https://bips.dev/342/</code></p></article>
+<article class="msc-learn-source"><h3>BIP 173: Base32 Address Format for Native v0-16 Witness Outputs</h3><ul><li><strong>author or publisher:</strong> Pieter Wuille and Greg Maxwell</li><li><strong>supports:</strong> Bech32 address encoding and the distinction between an address representation and the underlying witness program.</li></ul><p><strong>Direct URL:</strong> <code>https://bips.dev/173/</code></p></article>
+<article class="msc-learn-source"><h3>BIP 350: Bech32m Format for v1+ Witness Addresses</h3><ul><li><strong>author or publisher:</strong> Pieter Wuille</li><li><strong>supports:</strong> Bech32m encoding for witness version 1 and later address representations.</li></ul><p><strong>Direct URL:</strong> <code>https://bips.dev/350/</code></p></article>
+<article class="msc-learn-source"><h3>BIP 380: Output Script Descriptors General Operation</h3><ul><li><strong>author or publisher:</strong> Pieter Wuille and Ava Chow</li><li><strong>supports:</strong> Combining key origins, extended keys, derivation paths, and script expressions into wallet descriptors.</li></ul><p><strong>Direct URL:</strong> <code>https://bips.dev/380/</code></p></article></section>
+    <nav class="msc-learn-prev-next" aria-label="Guide navigation preview"><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Previous</span><strong>What Is a Bitcoin Seed Phrase?</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Category</span><strong>Bitcoin Basics</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Next</span><strong>How to Keep Bitcoin Secure</strong><small>Link inactive</small></span></nav>
+  </div>
+</section>

@@ -137,6 +137,74 @@
         completed_count: 8,
         total_count: 16,
         remaining_count: 8,
+        next_active: true,
+        next_url: '/pages/learn-bitcoin-basics?view=msc-learn-guide-009'
+      %}
+    </template>
+  {%- when 'MSC-GUIDE-009' -%}
+    {% render 'msc-learn-guide-009-runtime' %}
+    <template data-msc-guide-next-template="MSC-GUIDE-009">
+      {% render 'msc-learn-guide-transition',
+        current_registry_id: 'MSC-GUIDE-009',
+        next_registry_id: 'MSC-GUIDE-010',
+        next_number: '010',
+        next_title: 'How Bitcoin Public and Private Keys Work',
+        next_description: 'Bitcoin keys are cryptographic data used in spending conditions and signatures.',
+        category_label: 'Bitcoin Basics',
+        completed_count: 9,
+        total_count: 16,
+        remaining_count: 7,
+        next_active: true,
+        next_url: '/pages/learn-bitcoin-basics?view=msc-learn-guide-010'
+      %}
+    </template>
+  {%- when 'MSC-GUIDE-010' -%}
+    {% render 'msc-learn-guide-010-runtime' %}
+    <template data-msc-guide-next-template="MSC-GUIDE-010">
+      {% render 'msc-learn-guide-transition',
+        current_registry_id: 'MSC-GUIDE-010',
+        next_registry_id: 'MSC-GUIDE-011',
+        next_number: '011',
+        next_title: 'How to Keep Bitcoin Secure',
+        next_description: 'Bitcoin security is not one device, backup material, or checklist.',
+        category_label: 'Bitcoin Basics',
+        completed_count: 10,
+        total_count: 16,
+        remaining_count: 6,
+        next_active: true,
+        next_url: '/pages/learn-bitcoin-basics?view=msc-learn-guide-011'
+      %}
+    </template>
+  {%- when 'MSC-GUIDE-011' -%}
+    {% render 'msc-learn-guide-011-runtime' %}
+    <template data-msc-guide-next-template="MSC-GUIDE-011">
+      {% render 'msc-learn-guide-transition',
+        current_registry_id: 'MSC-GUIDE-011',
+        next_registry_id: 'MSC-GUIDE-012',
+        next_number: '012',
+        next_title: 'How Bitcoin Privacy Works',
+        next_description: 'Bitcoin privacy depends on how information flows across the public blockchain, wallet software, network connections, services, merchants, devices, and later spending behavior.',
+        category_label: 'Bitcoin Basics',
+        completed_count: 11,
+        total_count: 16,
+        remaining_count: 5,
+        next_active: true,
+        next_url: '/pages/learn-bitcoin-basics?view=msc-learn-guide-012'
+      %}
+    </template>
+  {%- when 'MSC-GUIDE-012' -%}
+    {% render 'msc-learn-guide-012-runtime' %}
+    <template data-msc-guide-next-template="MSC-GUIDE-012">
+      {% render 'msc-learn-guide-transition',
+        current_registry_id: 'MSC-GUIDE-012',
+        next_registry_id: 'MSC-GUIDE-013',
+        next_number: '013',
+        next_title: 'What Are UTXOs in Bitcoin?',
+        next_description: 'Bitcoin does not maintain account balances at the protocol level.',
+        category_label: 'Bitcoin Basics',
+        completed_count: 12,
+        total_count: 16,
+        remaining_count: 4,
         next_active: false
       %}
     </template>

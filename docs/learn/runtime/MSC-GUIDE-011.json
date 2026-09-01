@@ -1,0 +1,342 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-011-bitcoin-security.md",
+  "source_sha256": "d48745799fc90436ebf96492c8f3c2126f588f8fb351c76d643abb0e915b4108",
+  "registry_id": "MSC-GUIDE-011",
+  "status": "COPY_LOCKED",
+  "h1": "How to Keep Bitcoin Secure",
+  "introductory_deck": "Bitcoin security is not one device, backup material, or checklist. It is a maintainable plan for reducing unauthorized spending, permanent loss, privacy exposure, and operational failure across keys, software, devices, backups, services, locations, and people.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "Bitcoin security begins by asking what can go wrong.\n\nA wallet can be stolen. A backup can be destroyed. A service can freeze withdrawals. A user can approve the wrong destination. A trusted person can become unavailable. Software can be fake or outdated. A recovery plan can work in theory and fail when needed.\n\nThese are different risks. A setup that handles one well may handle another poorly.\n\nThe practical goal is not to eliminate all risk. It is to understand where control and failure live, reduce avoidable exposure, and maintain a recovery path that fits the user and the value being protected.",
+      "body_html": "<p>Bitcoin security begins by asking what can go wrong.</p>\n<p>A wallet can be stolen. A backup can be destroyed. A service can freeze withdrawals. A user can approve the wrong destination. A trusted person can become unavailable. Software can be fake or outdated. A recovery plan can work in theory and fail when needed.</p>\n<p>These are different risks. A setup that handles one well may handle another poorly.</p>\n<p>The practical goal is not to eliminate all risk. It is to understand where control and failure live, reduce avoidable exposure, and maintain a recovery path that fits the user and the value being protected.</p>"
+    },
+    {
+      "heading": "Begin with a threat model",
+      "body_markdown": "A threat model is a structured description of what needs protection, who or what could cause harm, and which failures matter most.\n\nFor Bitcoin, useful questions include:\n\n- Is the main concern remote theft, physical theft, accidental loss, service failure, coercion, privacy leakage, or inability to recover?\n- Who needs access now, and who may need access later?\n- Which devices, people, services, and locations are trusted?\n- How much complexity can the participants maintain?\n- How quickly must funds be available?\n- What happens if one component disappears?\n\nThe answers vary. A small spending wallet, a business treasury, and a long-term family recovery plan should not be assumed to need the same arrangement.\n\nA threat model should also include ordinary mistakes. Forgotten passphrases, damaged backups, misunderstood multisignature policies, and incorrect transactions can be more likely than a dramatic technical attack.",
+      "body_html": "<p>A threat model is a structured description of what needs protection, who or what could cause harm, and which failures matter most.</p>\n<p>For Bitcoin, useful questions include:</p>\n<ul><li>Is the main concern remote theft, physical theft, accidental loss, service failure, coercion, privacy leakage, or inability to recover?</li><li>Who needs access now, and who may need access later?</li><li>Which devices, people, services, and locations are trusted?</li><li>How much complexity can the participants maintain?</li><li>How quickly must funds be available?</li><li>What happens if one component disappears?</li></ul>\n<p>The answers vary. A small spending wallet, a business treasury, and a long-term family recovery plan should not be assumed to need the same arrangement.</p>\n<p>A threat model should also include ordinary mistakes. Forgotten passphrases, damaged backups, misunderstood multisignature policies, and incorrect transactions can be more likely than a dramatic technical attack.</p>"
+    },
+    {
+      "heading": "Protect against theft and loss",
+      "body_markdown": "Bitcoin security has at least two opposing failure modes.\n\nUnauthorized spending happens when someone gains enough authority to create a valid transaction.\n\nPermanent loss happens when the legitimate user can no longer satisfy the spending condition or reconstruct the wallet.\n\nAdding secrecy may reduce theft risk while increasing recovery risk. Adding copies may reduce loss risk while increasing exposure. Adding signers may reduce dependence on one key while increasing coordination and recovery complexity.\n\nA balanced plan treats theft and loss as separate problems rather than assuming that more protection in one direction improves everything.",
+      "body_html": "<p>Bitcoin security has at least two opposing failure modes.</p>\n<p>Unauthorized spending happens when someone gains enough authority to create a valid transaction.</p>\n<p>Permanent loss happens when the legitimate user can no longer satisfy the spending condition or reconstruct the wallet.</p>\n<p>Adding secrecy may reduce theft risk while increasing recovery risk. Adding copies may reduce loss risk while increasing exposure. Adding signers may reduce dependence on one key while increasing coordination and recovery complexity.</p>\n<p>A balanced plan treats theft and loss as separate problems rather than assuming that more protection in one direction improves everything.</p>"
+    },
+    {
+      "heading": "Custodial and self-custodial risks differ",
+      "body_markdown": "In a custodial arrangement, a service controls the keys or withdrawal authority. The user depends on the service's security, solvency, policy, legal environment, identity controls, and availability.\n\nIn self-custody, the user or a user-defined group controls the keys needed to spend. This can reduce dependence on a custodian, but it moves backup, transaction verification, device, and recovery responsibilities into the user's arrangement.\n\nNeither model removes trust. Custody moves trust toward an institution. Self-custody distributes trust across software, devices, backups, people, and procedures chosen by the user.\n\nThe important security question is not which label sounds stronger. It is where failure can occur and how recovery works.",
+      "body_html": "<p>In a custodial arrangement, a service controls the keys or withdrawal authority. The user depends on the service&#39;s security, solvency, policy, legal environment, identity controls, and availability.</p>\n<p>In self-custody, the user or a user-defined group controls the keys needed to spend. This can reduce dependence on a custodian, but it moves backup, transaction verification, device, and recovery responsibilities into the user&#39;s arrangement.</p>\n<p>Neither model removes trust. Custody moves trust toward an institution. Self-custody distributes trust across software, devices, backups, people, and procedures chosen by the user.</p>\n<p>The important security question is not which label sounds stronger. It is where failure can occur and how recovery works.</p>"
+    },
+    {
+      "heading": "Separate the security layers",
+      "body_markdown": "A Bitcoin setup can include several distinct layers:\n\n1. Wallet software that tracks activity and constructs transactions.\n2. A signing environment that protects private keys and produces signatures.\n3. Backups that preserve recovery information.\n4. A recovery procedure that explains how to rebuild the setup.\n5. Network data used to identify balances and transactions.\n6. Physical locations that protect devices and records.\n7. People who hold knowledge, authority, or access.\n8. Inheritance or continuity instructions.\n\nStrength in one layer does not automatically secure the others.\n\nA secure signing device does not create a complete backup. A durable backup does not prevent a substituted address. A private node does not verify that the human approved the intended transaction. A multisignature policy does not guarantee that the participants can recover it.",
+      "body_html": "<p>A Bitcoin setup can include several distinct layers:</p>\n<ol><li>Wallet software that tracks activity and constructs transactions.</li><li>A signing environment that protects private keys and produces signatures.</li><li>Backups that preserve recovery information.</li><li>A recovery procedure that explains how to rebuild the setup.</li><li>Network data used to identify balances and transactions.</li><li>Physical locations that protect devices and records.</li><li>People who hold knowledge, authority, or access.</li><li>Inheritance or continuity instructions.</li></ol>\n<p>Strength in one layer does not automatically secure the others.</p>\n<p>A secure signing device does not create a complete backup. A durable backup does not prevent a substituted address. A private node does not verify that the human approved the intended transaction. A multisignature policy does not guarantee that the participants can recover it.</p>"
+    },
+    {
+      "heading": "Devices reduce some risks, not all risks",
+      "body_markdown": "A hardware signing device is designed to keep private keys in a more restricted environment and sign without exposing those keys directly to a connected computer.\n\nThis can reduce risks from malware on the general-purpose device. It does not eliminate all risk.\n\nThe user still depends on the device's firmware, display, manufacturing and delivery process, backup method, transaction parsing, supported scripts, recovery procedure, and their own review.\n\nA compromised computer may show one destination while asking the signing device to authorize another. The device can help only if the user checks reliable information on the trusted display and understands what is being approved.\n\nThe right lesson is not that hardware is useless or perfect. It is that each component has a defined security role.",
+      "body_html": "<p>A hardware signing device is designed to keep private keys in a more restricted environment and sign without exposing those keys directly to a connected computer.</p>\n<p>This can reduce risks from malware on the general-purpose device. It does not eliminate all risk.</p>\n<p>The user still depends on the device&#39;s firmware, display, manufacturing and delivery process, backup method, transaction parsing, supported scripts, recovery procedure, and their own review.</p>\n<p>A compromised computer may show one destination while asking the signing device to authorize another. The device can help only if the user checks reliable information on the trusted display and understands what is being approved.</p>\n<p>The right lesson is not that hardware is useless or perfect. It is that each component has a defined security role.</p>"
+    },
+    {
+      "heading": "Software origin and verification matter",
+      "body_markdown": "Wallet and node software should come from the expected project source.\n\nAttackers can distribute fake applications, modified downloads, search advertisements, copied websites, and malicious update notices. A familiar logo is not proof that a file is authentic.\n\nOpen-source projects may publish checksums, digital signatures, reproducible build information, or platform-specific verification steps. The available method varies by project and user capability.\n\nVerification should follow the project's current official documentation. Users should not invent a verification process they do not understand or assume that an app-store listing eliminates all supply-chain risk.\n\nUpdating can fix known vulnerabilities, but updates can also change behavior or compatibility. A maintainable process includes knowing where release information comes from and how recovery works if an update fails.",
+      "body_html": "<p>Wallet and node software should come from the expected project source.</p>\n<p>Attackers can distribute fake applications, modified downloads, search advertisements, copied websites, and malicious update notices. A familiar logo is not proof that a file is authentic.</p>\n<p>Open-source projects may publish checksums, digital signatures, reproducible build information, or platform-specific verification steps. The available method varies by project and user capability.</p>\n<p>Verification should follow the project&#39;s current official documentation. Users should not invent a verification process they do not understand or assume that an app-store listing eliminates all supply-chain risk.</p>\n<p>Updating can fix known vulnerabilities, but updates can also change behavior or compatibility. A maintainable process includes knowing where release information comes from and how recovery works if an update fails.</p>"
+    },
+    {
+      "heading": "Passwords, PINs, phrases, and keys have different jobs",
+      "body_markdown": "A device PIN may restrict access to a signing device. A wallet password may encrypt a local file. A seed phrase may recreate wallet key material. An optional passphrase may change the derived wallet. A private key may authorize spending.\n\nThese controls should not be treated as interchangeable.\n\nChanging a password does not change the keys controlling an existing output. Losing a PIN may affect device access but not necessarily recovery. Revealing a seed phrase can expose far more than one application session.\n\nSecurity improves when users know which control protects which layer.",
+      "body_html": "<p>A device PIN may restrict access to a signing device. A wallet password may encrypt a local file. A seed phrase may recreate wallet key material. An optional passphrase may change the derived wallet. A private key may authorize spending.</p>\n<p>These controls should not be treated as interchangeable.</p>\n<p>Changing a password does not change the keys controlling an existing output. Losing a PIN may affect device access but not necessarily recovery. Revealing a seed phrase can expose far more than one application session.</p>\n<p>Security improves when users know which control protects which layer.</p>"
+    },
+    {
+      "heading": "Review receiving information",
+      "body_markdown": "Receiving bitcoin can also involve security decisions.\n\nA wallet may display an address on a computer, phone, or separate signing device. Malware can replace clipboard contents or alter a QR code. A merchant system can show the wrong invoice. A user can select the wrong network or payment path.\n\nImportant receiving information should be verified through the methods supported by the wallet arrangement. A separate trusted display can reduce dependence on a compromised computer, but it does not help if the wrong address was imported into the wallet configuration.\n\nAddress reuse also affects privacy, which can become a security concern when balances or relationships are exposed.",
+      "body_html": "<p>Receiving bitcoin can also involve security decisions.</p>\n<p>A wallet may display an address on a computer, phone, or separate signing device. Malware can replace clipboard contents or alter a QR code. A merchant system can show the wrong invoice. A user can select the wrong network or payment path.</p>\n<p>Important receiving information should be verified through the methods supported by the wallet arrangement. A separate trusted display can reduce dependence on a compromised computer, but it does not help if the wrong address was imported into the wallet configuration.</p>\n<p>Address reuse also affects privacy, which can become a security concern when balances or relationships are exposed.</p>"
+    },
+    {
+      "heading": "Review before authorizing a spend",
+      "body_markdown": "Before signing, a user should be able to identify:\n\n- The destination.\n- The amount.\n- The fee.\n- The network and payment path.\n- Any change output.\n- The effect of the transaction on wallet structure or privacy.\n\nNot every wallet displays every detail clearly. A signer may show only a summary. A complex transaction may include multiple inputs and outputs.\n\nThe user should understand what the trusted signing environment can verify and which details still come from the coordinator or connected device.\n\nA valid signature proves cryptographic authorization. It does not prove that the user saw accurate information or intended the economic result.",
+      "body_html": "<p>Before signing, a user should be able to identify:</p>\n<ul><li>The destination.</li><li>The amount.</li><li>The fee.</li><li>The network and payment path.</li><li>Any change output.</li><li>The effect of the transaction on wallet structure or privacy.</li></ul>\n<p>Not every wallet displays every detail clearly. A signer may show only a summary. A complex transaction may include multiple inputs and outputs.</p>\n<p>The user should understand what the trusted signing environment can verify and which details still come from the coordinator or connected device.</p>\n<p>A valid signature proves cryptographic authorization. It does not prove that the user saw accurate information or intended the economic result.</p>"
+    },
+    {
+      "heading": "Common scams target recovery and support",
+      "body_markdown": "Fake support agents often ask for recovery phrases, private keys, remote access, screen sharing, or immediate movement of funds.\n\nPhishing sites may imitate wallet downloads or account portals. Fake updates may install malware. Malicious QR codes and clipboard replacement can substitute destinations. Recovery scams may claim that a phrase must be \"validated\" online.\n\nRecovery material should not be shared because someone claims to be support. Legitimate troubleshooting should begin with verified documentation and known project channels.\n\nUrgency is a common pressure tactic. Pausing to verify the source is a security action, not a delay.",
+      "body_html": "<p>Fake support agents often ask for recovery phrases, private keys, remote access, screen sharing, or immediate movement of funds.</p>\n<p>Phishing sites may imitate wallet downloads or account portals. Fake updates may install malware. Malicious QR codes and clipboard replacement can substitute destinations. Recovery scams may claim that a phrase must be &quot;validated&quot; online.</p>\n<p>Recovery material should not be shared because someone claims to be support. Legitimate troubleshooting should begin with verified documentation and known project channels.</p>\n<p>Urgency is a common pressure tactic. Pausing to verify the source is a security action, not a delay.</p>"
+    },
+    {
+      "heading": "Backups need both availability and secrecy",
+      "body_markdown": "A backup should survive the failures included in the threat model. It also needs protection from unauthorized access.\n\nRedundancy can help if one copy is destroyed or unavailable. Each additional copy, location, or person can also create a new exposure path.\n\nThe useful design depends on the amount at risk, the expected time horizon, local hazards, privacy needs, and who must recover the wallet.\n\nNo one medium, number of copies, or storage location is universally correct. A backup plan should be specific enough that the intended user can follow it and limited enough that unnecessary parties do not gain access.",
+      "body_html": "<p>A backup should survive the failures included in the threat model. It also needs protection from unauthorized access.</p>\n<p>Redundancy can help if one copy is destroyed or unavailable. Each additional copy, location, or person can also create a new exposure path.</p>\n<p>The useful design depends on the amount at risk, the expected time horizon, local hazards, privacy needs, and who must recover the wallet.</p>\n<p>No one medium, number of copies, or storage location is universally correct. A backup plan should be specific enough that the intended user can follow it and limited enough that unnecessary parties do not gain access.</p>"
+    },
+    {
+      "heading": "Recovery procedures deserve their own test",
+      "body_markdown": "Possessing backup material is not the same as knowing how to recover.\n\nRecovery may depend on a passphrase, derivation path, script type, descriptor, wallet file, account index, multisignature configuration, or other signers.\n\nA controlled recovery test can reveal missing information and unclear steps. It can also create new exposure if secret material is entered into untrusted software, copied to a connected device, or observed by another person.\n\nTesting should use verified wallet documentation and an environment appropriate to the threat model. The test should confirm the setup rather than merely checking that words pass a checksum.",
+      "body_html": "<p>Possessing backup material is not the same as knowing how to recover.</p>\n<p>Recovery may depend on a passphrase, derivation path, script type, descriptor, wallet file, account index, multisignature configuration, or other signers.</p>\n<p>A controlled recovery test can reveal missing information and unclear steps. It can also create new exposure if secret material is entered into untrusted software, copied to a connected device, or observed by another person.</p>\n<p>Testing should use verified wallet documentation and an environment appropriate to the threat model. The test should confirm the setup rather than merely checking that words pass a checksum.</p>"
+    },
+    {
+      "heading": "Single-signature, multisignature, and collaborative arrangements",
+      "body_markdown": "A single-signature arrangement requires one authorized signature for each applicable spending path. It can be easier to understand and recover, while concentrating authority and recovery risk.\n\nA multisignature arrangement requires a defined threshold of multiple keys. It can distribute authority across devices, people, or locations. It also requires coordination information, compatible software, and a recovery plan for unavailable signers.\n\nA collaborative arrangement may involve a service that helps coordinate transactions or holds one key in a user-defined policy. This can provide support or recovery options while adding service, privacy, availability, and policy dependencies.\n\nComplexity is not automatically security. A setup is only useful if the participants can operate, maintain, and recover it.",
+      "body_html": "<p>A single-signature arrangement requires one authorized signature for each applicable spending path. It can be easier to understand and recover, while concentrating authority and recovery risk.</p>\n<p>A multisignature arrangement requires a defined threshold of multiple keys. It can distribute authority across devices, people, or locations. It also requires coordination information, compatible software, and a recovery plan for unavailable signers.</p>\n<p>A collaborative arrangement may involve a service that helps coordinate transactions or holds one key in a user-defined policy. This can provide support or recovery options while adding service, privacy, availability, and policy dependencies.</p>\n<p>Complexity is not automatically security. A setup is only useful if the participants can operate, maintain, and recover it.</p>"
+    },
+    {
+      "heading": "Privacy and physical security are separate plans",
+      "body_markdown": "A technically strong wallet can still expose sensitive information through public posts, service records, reused addresses, home-network data, or poor physical handling.\n\nPrivacy planning asks who can connect identity, balances, transactions, locations, and relationships.\n\nPhysical security asks who can access devices, backups, or people.\n\nThese plans overlap but should not be collapsed into one checklist. A backup location that is physically durable may be privacy-sensitive. A hidden device may be difficult for an heir to recover.",
+      "body_html": "<p>A technically strong wallet can still expose sensitive information through public posts, service records, reused addresses, home-network data, or poor physical handling.</p>\n<p>Privacy planning asks who can connect identity, balances, transactions, locations, and relationships.</p>\n<p>Physical security asks who can access devices, backups, or people.</p>\n<p>These plans overlap but should not be collapsed into one checklist. A backup location that is physically durable may be privacy-sensitive. A hidden device may be difficult for an heir to recover.</p>"
+    },
+    {
+      "heading": "Inheritance and continuity require clarity",
+      "body_markdown": "Long-term security includes the possibility that the primary user cannot participate.\n\nAn inheritance or continuity plan may need to explain where information is located, which people are involved, what conditions apply, and how to distinguish legitimate recovery from a scam.\n\nGiving one person complete access too early may create theft risk. Giving nobody enough information may create permanent loss.\n\nThe plan should match the custody arrangement and be understandable to the people expected to use it. It should also be maintained when software, devices, relationships, or locations change.",
+      "body_html": "<p>Long-term security includes the possibility that the primary user cannot participate.</p>\n<p>An inheritance or continuity plan may need to explain where information is located, which people are involved, what conditions apply, and how to distinguish legitimate recovery from a scam.</p>\n<p>Giving one person complete access too early may create theft risk. Giving nobody enough information may create permanent loss.</p>\n<p>The plan should match the custody arrangement and be understandable to the people expected to use it. It should also be maintained when software, devices, relationships, or locations change.</p>"
+    },
+    {
+      "heading": "Suspected compromise requires careful verification",
+      "body_markdown": "A suspected compromise can involve a leaked phrase, exposed key, malicious device, fake wallet, substituted destination, or service-account problem.\n\nThe correct response depends on what is actually compromised. A wallet password change does not repair exposed Bitcoin keys. Moving funds through an unverified interface can make the problem worse.\n\nAt a high level, the user should pause, identify the affected layer, consult current verified documentation for the exact wallet, and use a carefully verified recovery or signing environment.\n\nThis guide does not provide an emergency transaction procedure because the safe steps depend on the setup and the nature of the compromise.",
+      "body_html": "<p>A suspected compromise can involve a leaked phrase, exposed key, malicious device, fake wallet, substituted destination, or service-account problem.</p>\n<p>The correct response depends on what is actually compromised. A wallet password change does not repair exposed Bitcoin keys. Moving funds through an unverified interface can make the problem worse.</p>\n<p>At a high level, the user should pause, identify the affected layer, consult current verified documentation for the exact wallet, and use a carefully verified recovery or signing environment.</p>\n<p>This guide does not provide an emergency transaction procedure because the safe steps depend on the setup and the nature of the compromise.</p>"
+    },
+    {
+      "heading": "Maintainability is a security feature",
+      "body_markdown": "A plan that works only while one expert remembers every detail is fragile.\n\nSecurity arrangements should be reviewed when the value at risk changes, software becomes unsupported, a device fails, a signer moves, or an inheritance plan changes.\n\nClear records, verified documentation, and a realistic level of complexity help keep the system recoverable.\n\nThe strongest setup is not the one with the most parts. It is the one that addresses the relevant threats and can still be understood and operated over time.\n\nThe next guide looks at privacy as another form of information security, with its own layers and tradeoffs.",
+      "body_html": "<p>A plan that works only while one expert remembers every detail is fragile.</p>\n<p>Security arrangements should be reviewed when the value at risk changes, software becomes unsupported, a device fails, a signer moves, or an inheritance plan changes.</p>\n<p>Clear records, verified documentation, and a realistic level of complexity help keep the system recoverable.</p>\n<p>The strongest setup is not the one with the most parts. It is the one that addresses the relevant threats and can still be understood and operated over time.</p>\n<p>The next guide looks at privacy as another form of information security, with its own layers and tradeoffs.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Self-Custody",
+      "definition": "Direct control of the keys needed to spend bitcoin."
+    },
+    {
+      "term": "Custody",
+      "definition": "Control over the keys or authorization needed to move bitcoin."
+    },
+    {
+      "term": "Wallet",
+      "definition": "Software or hardware that manages keys, constructs transactions, and helps users interact with Bitcoin."
+    },
+    {
+      "term": "Private key",
+      "definition": "Secret cryptographic material used to authorize spending."
+    },
+    {
+      "term": "Seed phrase",
+      "definition": "A human-readable backup representation used by many wallets to derive keys under a wallet standard."
+    },
+    {
+      "term": "Multisig",
+      "definition": "A spending condition requiring a defined threshold of multiple keys to authorize a transaction."
+    },
+    {
+      "term": "Cold storage",
+      "definition": "A custody setup intended to keep signing keys away from internet-connected systems."
+    },
+    {
+      "term": "Hot wallet",
+      "definition": "A wallet whose signing environment is connected to an online device or service."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bitcoin Developer Guide: Wallets",
+      "author_or_publisher": "Bitcoin Project developer documentation",
+      "direct_url": "https://developer.bitcoin.org/devguide/wallets.html",
+      "supports": "Wallet key management, deterministic backups, encrypted wallet files, and separation between wallet functions and Bitcoin outputs."
+    },
+    {
+      "title": "BIP 39: Mnemonic Code for Generating Deterministic Keys",
+      "author_or_publisher": "Marek Palatinus, Pavol Rusnak, Aaron Voisine, and Sean Bowe",
+      "direct_url": "https://bips.dev/39/",
+      "supports": "Mnemonic backups, optional passphrases, checksum behavior, and the limits of assuming universal BIP 39 compatibility."
+    },
+    {
+      "title": "BIP 32: Hierarchical Deterministic Wallets",
+      "author_or_publisher": "Pieter Wuille",
+      "direct_url": "https://bips.dev/32/",
+      "supports": "Hierarchical key derivation, extended keys, watch-only derivation, hardened branches, and recovery structure."
+    },
+    {
+      "title": "BIP 129: Bitcoin Secure Multisig Setup",
+      "author_or_publisher": "Hugo Nguyen, Peter Gray, Marko Bencun, Aaron Chen, and Rodolfo Novak",
+      "direct_url": "https://bips.dev/129/",
+      "supports": "Multisignature setup records, participant verification, wallet policy, and coordination information needed for reliable recovery."
+    },
+    {
+      "title": "BIP 174: Partially Signed Bitcoin Transaction Format",
+      "author_or_publisher": "Andrew Chow",
+      "direct_url": "https://bips.dev/174/",
+      "supports": "Separating transaction creation, updating, signing, and finalization across devices and participants."
+    },
+    {
+      "title": "BIP 380: Output Script Descriptors General Operation",
+      "author_or_publisher": "Pieter Wuille and Ava Chow",
+      "direct_url": "https://bips.dev/380/",
+      "supports": "Describing wallet scripts, keys, origins, and derivation paths for coordination and recovery."
+    },
+    {
+      "title": "Bitcoin Core: Managing Wallets",
+      "author_or_publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/doc/managing-wallets.md",
+      "supports": "Bitcoin Core wallet creation, loading, backups, descriptor wallets, and wallet-management behavior."
+    },
+    {
+      "title": "Bitcoin Core Binary Verification",
+      "author_or_publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/contrib/verify-binaries/README.md",
+      "supports": "Project-supported methods for checking downloaded Bitcoin Core release artifacts and signatures."
+    },
+    {
+      "title": "Bitcoin Core Downloads",
+      "author_or_publisher": "Bitcoin Core project",
+      "direct_url": "https://bitcoincore.org/en/download/",
+      "supports": "The official Bitcoin Core release channel, published checksums, signatures, and current release-verification references."
+    },
+    {
+      "title": "BIP 21: URI Scheme",
+      "author_or_publisher": "Nils Schneider and Matt Corallo",
+      "direct_url": "https://bips.dev/21/",
+      "supports": "The Bitcoin payment URI structure for an address, optional amount, label, message, and extensible parameters."
+    }
+  ],
+  "seo_title": "How to Keep Bitcoin Secure: A Risk-Based Guide",
+  "meta_description": "Build a maintainable Bitcoin security plan around theft, loss, devices, software, backups, recovery, privacy, and custody tradeoffs without relying on one universal setup.",
+  "excerpt": "Bitcoin security is a system of keys, devices, software, backups, people, and recovery procedures. This guide explains how to evaluate risks without prescribing one product or setup.",
+  "reading_time": "10 to 12 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-BASICS",
+    "label": "Bitcoin Basics",
+    "subcategory": "Security",
+    "depth": "Surface",
+    "format": "Guide"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-010",
+      "title": "How Bitcoin Public and Private Keys Work",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-012",
+      "title": "How Bitcoin Privacy Works",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": [
+      {
+        "registry_id": "MSC-GUIDE-010",
+        "title": "How Bitcoin Public and Private Keys Work",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-012",
+        "title": "How Bitcoin Privacy Works",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-006",
+        "title": "What Is Bitcoin Self-Custody?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-009",
+        "title": "What Is a Bitcoin Seed Phrase?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-005",
+        "title": "What Is a Bitcoin Wallet?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-007",
+        "title": "How to Send and Receive Bitcoin",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-016",
+        "title": "Bitcoin Best Practices for Safe Everyday Use",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GLOSSARY-001",
+        "title": "Bitcoin Glossary",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-HUB-BASICS",
+        "title": "Bitcoin Basics",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-PATH-SAFE",
+        "title": "Use Bitcoin Safely",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-PATH-START",
+        "title": "Start With Bitcoin",
+        "active": false,
+        "url": null
+      }
+    ]
+  },
+  "review_dates": {
+    "reviewed": "2026-07-17",
+    "copy_locked": "2026-07-17",
+    "human_verification": "2026-07-17"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "Threat Model Map",
+      "educational_purpose": "Separate theft, loss, privacy, and availability risks before choosing controls.",
+      "recommended_placement": "After the section titled Begin with a threat model.",
+      "visual_description": "Calm oceanographic survey map divided into four zones with simple markers for unauthorized spending, permanent loss, information exposure, and unavailable access. A central wallet arrangement connects to each zone.",
+      "required_labels": "Theft, Loss, Privacy, Availability, People, Devices, Services",
+      "caption": "A security plan begins by identifying which failures matter and where they can occur.",
+      "alt_text": "Editorial risk map connecting a Bitcoin wallet arrangement to theft, permanent loss, privacy exposure, and availability risks.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Arrange the four risk zones in a vertical stack around the central wallet marker.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "Security Is Layered",
+      "educational_purpose": "Show why a strong device, backup, or multisignature policy does not secure every other layer.",
+      "recommended_placement": "After the section titled Separate the security layers.",
+      "visual_description": "Infrastructure-manual cutaway with separate layers for software source, coordinator, signing device, transaction review, backup, recovery, physical location, and people. Lines show dependencies without merging the layers into one shield.",
+      "required_labels": "Software, Signing, Transaction review, Backup, Recovery, Physical security, People",
+      "caption": "Bitcoin security depends on several layers that must work together without being treated as interchangeable.",
+      "alt_text": "Layered technical diagram separating wallet software, signing, transaction review, backup, recovery, physical security, and people.",
+      "image_orientation": "Square",
+      "mobile_crop_notes": "Keep all layers in a top-to-bottom stack with short labels on the left.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Verification Checkpoints",
+      "educational_purpose": "Show the points where users can verify software origin, receiving information, transaction details, and recovery documentation.",
+      "recommended_placement": "After the section titled Review before authorizing a spend.",
+      "visual_description": "Navigation-chart route with four checkpoints from software acquisition to wallet setup, receiving verification, and transaction authorization. Include a separate maintenance loop for updates and recovery tests.",
+      "required_labels": "Official source, File verification, Receiving check, Signing check, Recovery review, Maintenance",
+      "caption": "Security improves when verification happens at several points instead of depending on one trusted screen.",
+      "alt_text": "Navigation-style diagram showing verification checkpoints for software origin, wallet setup, receiving information, transaction signing, and recovery maintenance.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Use a single vertical route with the maintenance loop attached near the final checkpoint.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}
