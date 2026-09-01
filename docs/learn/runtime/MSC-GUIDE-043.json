@@ -1,0 +1,438 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-043-bitcoin-apis.md",
+  "source_sha256": "5a76ccabd998cd8af7f0e424a31aabfe2d3f3edba64ab5db90b4372cc5cd2fcc",
+  "registry_id": "MSC-GUIDE-043",
+  "status": "COPY_LOCKED",
+  "h1": "Bitcoin APIs Explained",
+  "introductory_deck": "“Bitcoin API” can describe a node administration interface, a wallet RPC, a notification stream, a peer protocol, an indexed block-explorer service, or a hosted infrastructure product. This guide explains those boundaries, the data each interface can and cannot prove, and the operational rules applications need for authentication, units, retries, reorganizations, privacy, and version changes.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "An application communicates with a node, wallet, indexer, Lightning implementation, or provider through an interface. The response reflects that system’s chain tip, configuration, indexes, policy, cache, software version, and local observations.\n\nThat distinction matters because different interfaces can return values that look similar while carrying different evidence. A block hash from a validating node, an address balance from an indexer, a fee estimate from a hosted service, and a transaction status from an application database are not interchangeable claims.\n\nAn API design begins by naming the producer of every response.",
+      "body_html": "<p>An application communicates with a node, wallet, indexer, Lightning implementation, or provider through an interface. The response reflects that system’s chain tip, configuration, indexes, policy, cache, software version, and local observations.</p>\n<p>That distinction matters because different interfaces can return values that look similar while carrying different evidence. A block hash from a validating node, an address balance from an indexer, a fee estimate from a hosted service, and a transaction status from an application database are not interchangeable claims.</p>\n<p>An API design begins by naming the producer of every response.</p>"
+    },
+    {
+      "heading": "What “Bitcoin API” can mean",
+      "body_markdown": "The term can refer to several interface families:\n\n- Bitcoin Core JSON-RPC for node and wallet operations\n- Bitcoin Core REST for limited read access\n- Bitcoin Core ZMQ notifications\n- The Bitcoin peer-to-peer protocol\n- Electrum-protocol servers\n- Esplora-style HTTP APIs\n- Hosted block-explorer or infrastructure APIs\n- Lightning node APIs\n- An application-facing API built in front of any of the above\n\nEach family has different authentication, data, state, and failure properties. An application should not expose a raw node-administration interface simply because it is convenient. It should translate node and wallet capabilities into a narrower API with explicit authorization and business rules.",
+      "body_html": "<p>The term can refer to several interface families:</p>\n<ul><li>Bitcoin Core JSON-RPC for node and wallet operations</li><li>Bitcoin Core REST for limited read access</li><li>Bitcoin Core ZMQ notifications</li><li>The Bitcoin peer-to-peer protocol</li><li>Electrum-protocol servers</li><li>Esplora-style HTTP APIs</li><li>Hosted block-explorer or infrastructure APIs</li><li>Lightning node APIs</li><li>An application-facing API built in front of any of the above</li></ul>\n<p>Each family has different authentication, data, state, and failure properties. An application should not expose a raw node-administration interface simply because it is convenient. It should translate node and wallet capabilities into a narrower API with explicit authorization and business rules.</p>"
+    },
+    {
+      "heading": "Bitcoin Core JSON-RPC",
+      "body_markdown": "Bitcoin Core JSON-RPC is a request-response interface served by `bitcoind` and, when enabled, `bitcoin-qt`. As of Bitcoin Core 31.1, the root endpoint handles node RPCs and can handle wallet RPCs when exactly one wallet is loaded. Wallet-specific endpoints use `/wallet/<walletname>/`.\n\nNode RPCs include chain, mempool, peer, network, mining, raw-transaction, and administrative methods. Wallet RPCs operate on loaded wallet state, including addresses, balances, PSBTs, signing, transaction creation, locks, and fee bumping.\n\nThe distinction is important. A node RPC such as a block query reflects the node’s chain and optional indexes. A wallet RPC reflects a particular wallet database and its synchronization state. A wallet balance is not a universal property of the chain; it is the wallet’s interpretation of transactions relevant to its scripts.\n\nBitcoin Core’s RPC interface is implicitly versioned by the major release. Fields, defaults, deprecations, and method behavior can change. Clients should pin versions, test response schemas, and read release notes rather than assume indefinite compatibility.",
+      "body_html": "<p>Bitcoin Core JSON-RPC is a request-response interface served by <code>bitcoind</code> and, when enabled, <code>bitcoin-qt</code>. As of Bitcoin Core 31.1, the root endpoint handles node RPCs and can handle wallet RPCs when exactly one wallet is loaded. Wallet-specific endpoints use <code>/wallet/&lt;walletname&gt;/</code>.</p>\n<p>Node RPCs include chain, mempool, peer, network, mining, raw-transaction, and administrative methods. Wallet RPCs operate on loaded wallet state, including addresses, balances, PSBTs, signing, transaction creation, locks, and fee bumping.</p>\n<p>The distinction is important. A node RPC such as a block query reflects the node’s chain and optional indexes. A wallet RPC reflects a particular wallet database and its synchronization state. A wallet balance is not a universal property of the chain; it is the wallet’s interpretation of transactions relevant to its scripts.</p>\n<p>Bitcoin Core’s RPC interface is implicitly versioned by the major release. Fields, defaults, deprecations, and method behavior can change. Clients should pin versions, test response schemas, and read release notes rather than assume indefinite compatibility.</p>"
+    },
+    {
+      "heading": "Cookie authentication and `rpcauth`",
+      "body_markdown": "Bitcoin Core can authenticate local RPC clients with a temporary cookie file. The cookie contains generated credentials and is replaced when the node restarts. File permissions and local process boundaries are therefore part of the security model.\n\nThe `rpcauth` configuration option supports salted password authentication without storing the plaintext password in the configuration file. Bitcoin Core also provides `-rpcwhitelist` and `-rpcwhitelistdefault` to restrict which RPC methods a credential may call.\n\nThose method restrictions are useful operational controls, but they should not be treated as a robust security boundary for hostile multi-user or multi-wallet isolation. Public applications should still place Bitcoin Core behind a narrower service that performs application-specific authentication, authorization, validation, and rate limiting.",
+      "body_html": "<p>Bitcoin Core can authenticate local RPC clients with a temporary cookie file. The cookie contains generated credentials and is replaced when the node restarts. File permissions and local process boundaries are therefore part of the security model.</p>\n<p>The <code>rpcauth</code> configuration option supports salted password authentication without storing the plaintext password in the configuration file. Bitcoin Core also provides <code>-rpcwhitelist</code> and <code>-rpcwhitelistdefault</code> to restrict which RPC methods a credential may call.</p>\n<p>Those method restrictions are useful operational controls, but they should not be treated as a robust security boundary for hostile multi-user or multi-wallet isolation. Public applications should still place Bitcoin Core behind a narrower service that performs application-specific authentication, authorization, validation, and rate limiting.</p>"
+    },
+    {
+      "heading": "Network exposure and transport security",
+      "body_markdown": "Bitcoin Core documentation explicitly warns against exposing RPC directly to the public internet. RPC authentication does not encrypt traffic, and the interface is not designed as a hardened public application endpoint.\n\nRemote administration should be limited to secure private networks or protected tunnels, with firewalling and least-privilege credentials. A public web or mobile application should call an application service that performs authorization, validation, rate limiting, and response normalization. That service can then communicate with Bitcoin Core over a restricted internal boundary.",
+      "body_html": "<p>Bitcoin Core documentation explicitly warns against exposing RPC directly to the public internet. RPC authentication does not encrypt traffic, and the interface is not designed as a hardened public application endpoint.</p>\n<p>Remote administration should be limited to secure private networks or protected tunnels, with firewalling and least-privilege credentials. A public web or mobile application should call an application service that performs authorization, validation, rate limiting, and response normalization. That service can then communicate with Bitcoin Core over a restricted internal boundary.</p>"
+    },
+    {
+      "heading": "Bitcoin Core REST",
+      "body_markdown": "Bitcoin Core provides an optional REST interface for selected read operations. It can return blocks, headers, transactions, chain information, UTXO information, and related data in defined encodings.\n\nREST is narrower than RPC and does not replace wallet or administrative methods. It also does not add an address-history index. The availability of a REST endpoint does not mean its response is safe to expose without an application security layer.\n\nApplications should identify whether a REST response comes directly from the validating node, whether it requires an optional index, and how it behaves during pruning or reorganization.",
+      "body_html": "<p>Bitcoin Core provides an optional REST interface for selected read operations. It can return blocks, headers, transactions, chain information, UTXO information, and related data in defined encodings.</p>\n<p>REST is narrower than RPC and does not replace wallet or administrative methods. It also does not add an address-history index. The availability of a REST endpoint does not mean its response is safe to expose without an application security layer.</p>\n<p>Applications should identify whether a REST response comes directly from the validating node, whether it requires an optional index, and how it behaves during pruning or reorganization.</p>"
+    },
+    {
+      "heading": "ZMQ notifications",
+      "body_markdown": "Bitcoin Core ZMQ is a one-way publish-subscribe notification interface. Topics can announce raw or hashed blocks and transactions, sequence changes, mempool additions and removals, and block connections or disconnections.\n\nZMQ is useful when an application needs low-latency notification without polling every method. It is not a durable event log. Notifications can be lost during transport, a subscriber can disconnect, and the application can start after earlier events occurred.\n\nSubscribers should track sequence information where available, detect gaps, and reconcile against RPC or another authoritative state query. The subscriber must retrieve the active chain from its last known point rather than assume every notification extends the previous tip.\n\nBitcoin Core’s ZMQ publication interface does not authenticate subscribers. It should be exposed only within a trusted network boundary.",
+      "body_html": "<p>Bitcoin Core ZMQ is a one-way publish-subscribe notification interface. Topics can announce raw or hashed blocks and transactions, sequence changes, mempool additions and removals, and block connections or disconnections.</p>\n<p>ZMQ is useful when an application needs low-latency notification without polling every method. It is not a durable event log. Notifications can be lost during transport, a subscriber can disconnect, and the application can start after earlier events occurred.</p>\n<p>Subscribers should track sequence information where available, detect gaps, and reconcile against RPC or another authoritative state query. The subscriber must retrieve the active chain from its last known point rather than assume every notification extends the previous tip.</p>\n<p>Bitcoin Core’s ZMQ publication interface does not authenticate subscribers. It should be exposed only within a trusted network boundary.</p>"
+    },
+    {
+      "heading": "The Bitcoin peer-to-peer protocol",
+      "body_markdown": "The P2P protocol carries version negotiation, peer addresses, inventory announcements, transactions, headers, blocks, compact blocks, filters, and other messages between nodes.\n\nIt is not an ordinary REST API. Peers are untrusted network participants. Receiving a transaction or block does not make it valid. A P2P client must decide what it validates, how it selects a chain, how it handles malformed messages, and how it limits resource consumption.\n\nA full node uses the P2P protocol as one input to its validation process. An application that implements only a small subset may receive useful data but should not describe that as equivalent to full validation.\n\nCurrent Bitcoin Core also supports BIP 324 version 2 transport, but transport encryption and peer authentication properties must not be confused with application authorization or consensus validation.",
+      "body_html": "<p>The P2P protocol carries version negotiation, peer addresses, inventory announcements, transactions, headers, blocks, compact blocks, filters, and other messages between nodes.</p>\n<p>It is not an ordinary REST API. Peers are untrusted network participants. Receiving a transaction or block does not make it valid. A P2P client must decide what it validates, how it selects a chain, how it handles malformed messages, and how it limits resource consumption.</p>\n<p>A full node uses the P2P protocol as one input to its validation process. An application that implements only a small subset may receive useful data but should not describe that as equivalent to full validation.</p>\n<p>Current Bitcoin Core also supports BIP 324 version 2 transport, but transport encryption and peer authentication properties must not be confused with application authorization or consensus validation.</p>"
+    },
+    {
+      "heading": "Electrum protocol servers",
+      "body_markdown": "The Electrum protocol uses JSON-RPC over stream transports such as TCP, TLS, or WebSockets. Clients negotiate a protocol version and can request headers, transactions, script or script-hash histories, balances, UTXOs, fee estimates, and subscriptions.\n\nThe currently published protocol documentation is labeled 1.7.x. Protocol 1.7 replaces the older `blockchain.scripthash.*` method family with `blockchain.scriptpubkey.*` methods and changes some response and reorganization-notification behavior. Those methods still require an external index that maps scripts to transaction history; Bitcoin Core does not provide that universal index by default.\n\nDeployed support is uneven. Electrum 4.7.2 documents protocol 1.6 support, while clients and servers may advertise different version ranges. Integrations must negotiate and test the exact protocol version instead of assuming that the latest documented specification is already supported everywhere.\n\nHeaders and Merkle proofs can support evidence that a transaction was included under a block header. They do not independently validate every Bitcoin consensus rule unless the client performs the additional validation required for that claim.",
+      "body_html": "<p>The Electrum protocol uses JSON-RPC over stream transports such as TCP, TLS, or WebSockets. Clients negotiate a protocol version and can request headers, transactions, script or script-hash histories, balances, UTXOs, fee estimates, and subscriptions.</p>\n<p>The currently published protocol documentation is labeled 1.7.x. Protocol 1.7 replaces the older <code>blockchain.scripthash.*</code> method family with <code>blockchain.scriptpubkey.*</code> methods and changes some response and reorganization-notification behavior. Those methods still require an external index that maps scripts to transaction history; Bitcoin Core does not provide that universal index by default.</p>\n<p>Deployed support is uneven. Electrum 4.7.2 documents protocol 1.6 support, while clients and servers may advertise different version ranges. Integrations must negotiate and test the exact protocol version instead of assuming that the latest documented specification is already supported everywhere.</p>\n<p>Headers and Merkle proofs can support evidence that a transaction was included under a block header. They do not independently validate every Bitcoin consensus rule unless the client performs the additional validation required for that claim.</p>"
+    },
+    {
+      "heading": "Esplora-style HTTP APIs",
+      "body_markdown": "Esplora-style APIs expose HTTP resources for blocks, transactions, addresses, scripts, UTXOs, fee estimates, and mempool information. The API is usually backed by an indexer such as an electrs-derived backend rather than by Bitcoin Core alone.\n\nFields may combine raw Bitcoin data with indexed, cached, or computed values. Address history and spending relationships require indexes. Fee estimates are estimates. Mempool entries reflect the backend’s local node and policy.\n\nAn Esplora endpoint can be self-hosted or hosted by another organization. The protocol shape does not determine the trust model. Applications should record network, chain tip, backend version, cache behavior, and provider failure expectations.",
+      "body_html": "<p>Esplora-style APIs expose HTTP resources for blocks, transactions, addresses, scripts, UTXOs, fee estimates, and mempool information. The API is usually backed by an indexer such as an electrs-derived backend rather than by Bitcoin Core alone.</p>\n<p>Fields may combine raw Bitcoin data with indexed, cached, or computed values. Address history and spending relationships require indexes. Fee estimates are estimates. Mempool entries reflect the backend’s local node and policy.</p>\n<p>An Esplora endpoint can be self-hosted or hosted by another organization. The protocol shape does not determine the trust model. Applications should record network, chain tip, backend version, cache behavior, and provider failure expectations.</p>"
+    },
+    {
+      "heading": "Hosted explorer and infrastructure APIs",
+      "body_markdown": "Hosted providers may add account authentication, quotas, webhooks, historical analytics, transaction broadcast, address monitoring, fiat conversions, or proprietary risk fields.\n\nThose features can be useful, but they are not part of Bitcoin consensus. A provider’s “confirmed,” “safe,” “final,” “risk,” or “balance” field must be mapped to documented inputs and logic.\n\nHosted services introduce:\n\n- Availability and rate-limit dependencies\n- Provider authentication and account risk\n- Privacy leakage from addresses, xpubs, transactions, and IPs\n- Version and deprecation risk\n- Policy and chain-tip differences\n- Logging and data-retention dependencies\n- Cached or delayed responses\n- Proprietary derived fields\n\nNo commercial provider should be treated as a universal default. Selection should follow the application’s validation, privacy, uptime, and regulatory requirements.",
+      "body_html": "<p>Hosted providers may add account authentication, quotas, webhooks, historical analytics, transaction broadcast, address monitoring, fiat conversions, or proprietary risk fields.</p>\n<p>Those features can be useful, but they are not part of Bitcoin consensus. A provider’s “confirmed,” “safe,” “final,” “risk,” or “balance” field must be mapped to documented inputs and logic.</p>\n<p>Hosted services introduce:</p>\n<ul><li>Availability and rate-limit dependencies</li><li>Provider authentication and account risk</li><li>Privacy leakage from addresses, xpubs, transactions, and IPs</li><li>Version and deprecation risk</li><li>Policy and chain-tip differences</li><li>Logging and data-retention dependencies</li><li>Cached or delayed responses</li><li>Proprietary derived fields</li></ul>\n<p>No commercial provider should be treated as a universal default. Selection should follow the application’s validation, privacy, uptime, and regulatory requirements.</p>"
+    },
+    {
+      "heading": "Lightning node APIs are separate",
+      "body_markdown": "Lightning implementations expose separate RPC, REST, gRPC, socket, or plugin interfaces for channels, invoices, payments, routing, peers, and implementation-specific wallet state. Their schemas and security assumptions differ from Bitcoin Core. On-chain funding and closing still interact with Bitcoin, but Lightning APIs require independent version and security review.",
+      "body_html": "<p>Lightning implementations expose separate RPC, REST, gRPC, socket, or plugin interfaces for channels, invoices, payments, routing, peers, and implementation-specific wallet state. Their schemas and security assumptions differ from Bitcoin Core. On-chain funding and closing still interact with Bitcoin, but Lightning APIs require independent version and security review.</p>"
+    },
+    {
+      "heading": "Local validation and remote data access",
+      "body_markdown": "A local validating node can establish which blocks and transactions satisfy Bitcoin rules for its accepted chain. A remote API can provide convenient indexed data. Many applications use both.\n\nFor example, a remote service might return address history while a local node verifies referenced transactions and blocks. That cross-check reduces some provider trust but does not automatically verify every derived field. The application must define what is checked, when, and against which chain tip.\n\nA local or remote source can be stale, misconfigured, or on the wrong network. Chain-tip hash, work, sync status, and network identifier all matter.",
+      "body_html": "<p>A local validating node can establish which blocks and transactions satisfy Bitcoin rules for its accepted chain. A remote API can provide convenient indexed data. Many applications use both.</p>\n<p>For example, a remote service might return address history while a local node verifies referenced transactions and blocks. That cross-check reduces some provider trust but does not automatically verify every derived field. The application must define what is checked, when, and against which chain tip.</p>\n<p>A local or remote source can be stale, misconfigured, or on the wrong network. Chain-tip hash, work, sync status, and network identifier all matter.</p>"
+    },
+    {
+      "heading": "Raw data and derived fields",
+      "body_markdown": "API fields can be grouped by how they are produced.\n\n**Raw or directly encoded data** includes serialized blocks, headers, transactions, scripts, witnesses, and outpoints.\n\n**Node state** includes active-chain membership, current tip, local mempool contents, peer state, and UTXO-set queries.\n\n**Indexed fields** include address history, script history, transaction lookup outside available block context, spending relationships, and explorer search.\n\n**Estimated fields** include fee estimates and projected confirmation targets.\n\n**Cached fields** may represent an earlier response or asynchronously updated database.\n\n**Application-derived fields** include invoice status, account balance, risk score, token balance, inscription state, and business labels.\n\nThe API should identify those categories rather than present every field with equal authority.",
+      "body_html": "<p>API fields can be grouped by how they are produced.</p>\n<p><strong>Raw or directly encoded data</strong> includes serialized blocks, headers, transactions, scripts, witnesses, and outpoints.</p>\n<p><strong>Node state</strong> includes active-chain membership, current tip, local mempool contents, peer state, and UTXO-set queries.</p>\n<p><strong>Indexed fields</strong> include address history, script history, transaction lookup outside available block context, spending relationships, and explorer search.</p>\n<p><strong>Estimated fields</strong> include fee estimates and projected confirmation targets.</p>\n<p><strong>Cached fields</strong> may represent an earlier response or asynchronously updated database.</p>\n<p><strong>Application-derived fields</strong> include invoice status, account balance, risk score, token balance, inscription state, and business labels.</p>\n<p>The API should identify those categories rather than present every field with equal authority.</p>"
+    },
+    {
+      "heading": "Blocks, headers, transactions, and UTXOs",
+      "body_markdown": "A block response should include enough identity to determine network, block hash, height, and active-chain relationship. Height alone is insufficient because a reorganization can replace the block at that height.\n\nA transaction response should distinguish raw transaction data from confirmation metadata. Confirmation count depends on current tip. The transaction’s block hash should be preserved so the application can detect replacement of its containing block.\n\nA UTXO response depends on the queried state. Bitcoin Core’s UTXO set reflects currently unspent outputs on its active chain. An indexer may also report mempool spends or historical outputs. Applications should not collapse confirmed UTXO state, mempool availability, and wallet reservations.\n\nAddress history is not native consensus state. It is derived by mapping address encodings or scripts to transactions.",
+      "body_html": "<p>A block response should include enough identity to determine network, block hash, height, and active-chain relationship. Height alone is insufficient because a reorganization can replace the block at that height.</p>\n<p>A transaction response should distinguish raw transaction data from confirmation metadata. Confirmation count depends on current tip. The transaction’s block hash should be preserved so the application can detect replacement of its containing block.</p>\n<p>A UTXO response depends on the queried state. Bitcoin Core’s UTXO set reflects currently unspent outputs on its active chain. An indexer may also report mempool spends or historical outputs. Applications should not collapse confirmed UTXO state, mempool availability, and wallet reservations.</p>\n<p>Address history is not native consensus state. It is derived by mapping address encodings or scripts to transactions.</p>"
+    },
+    {
+      "heading": "Current chain tip and confirmations",
+      "body_markdown": "APIs should expose chain-tip hash as well as height. Clients can then detect a same-height tip change and walk back to a common ancestor.\n\nConfirmations are usually derived as current tip height minus transaction block height plus one, provided the block remains active. A cached confirmation number can become stale. A transaction can move from confirmed to unconfirmed after a reorganization.\n\nFor critical workflows, store the confirming block hash and compare it to the current active chain. Do not store only an integer confirmation count.",
+      "body_html": "<p>APIs should expose chain-tip hash as well as height. Clients can then detect a same-height tip change and walk back to a common ancestor.</p>\n<p>Confirmations are usually derived as current tip height minus transaction block height plus one, provided the block remains active. A cached confirmation number can become stale. A transaction can move from confirmed to unconfirmed after a reorganization.</p>\n<p>For critical workflows, store the confirming block hash and compare it to the current active chain. Do not store only an integer confirmation count.</p>"
+    },
+    {
+      "heading": "Mempool replacement and eviction",
+      "body_markdown": "Mempool data is local. Transactions can enter, leave, be replaced, expire, be evicted for resource limits, conflict, or confirm.\n\nAPIs may report replacement relationships or removal reasons, but those are implementation and observation dependent. One provider may see a replacement that another never received. A transaction absent from a mempool is not necessarily invalid or impossible to confirm.\n\nWebhook and subscription consumers should reconcile missed events. An “unconfirmed balance” should identify the backend that observed it.",
+      "body_html": "<p>Mempool data is local. Transactions can enter, leave, be replaced, expire, be evicted for resource limits, conflict, or confirm.</p>\n<p>APIs may report replacement relationships or removal reasons, but those are implementation and observation dependent. One provider may see a replacement that another never received. A transaction absent from a mempool is not necessarily invalid or impossible to confirm.</p>\n<p>Webhook and subscription consumers should reconcile missed events. An “unconfirmed balance” should identify the backend that observed it.</p>"
+    },
+    {
+      "heading": "Transaction broadcast responses",
+      "body_markdown": "A broadcast endpoint may reject a transaction before submission, accept it into one node’s mempool, forward it to peers, or merely enqueue it for processing.\n\nA successful acknowledgment is not confirmation. It may not even prove broad relay. Applications should separately monitor local mempool acceptance, provider observations, conflicts, and block inclusion.\n\nRetries should be idempotent at the application level. Re-sending the same raw transaction is usually harmless, but re-running “create and send” may construct a different transaction or duplicate a withdrawal.",
+      "body_html": "<p>A broadcast endpoint may reject a transaction before submission, accept it into one node’s mempool, forward it to peers, or merely enqueue it for processing.</p>\n<p>A successful acknowledgment is not confirmation. It may not even prove broad relay. Applications should separately monitor local mempool acceptance, provider observations, conflicts, and block inclusion.</p>\n<p>Retries should be idempotent at the application level. Re-sending the same raw transaction is usually harmless, but re-running “create and send” may construct a different transaction or duplicate a withdrawal.</p>"
+    },
+    {
+      "heading": "Raw transactions and PSBTs",
+      "body_markdown": "Raw transactions can contain sensitive spending information before broadcast. PSBTs can contain UTXO data, key origins, scripts, derivation paths, proprietary fields, and partial signatures.\n\nAPI logging should redact or restrict these payloads. Authorization should distinguish transaction construction, signing, finalization, and broadcast. A client allowed to query blocks should not automatically be allowed to sign or spend.\n\nPSBT version and field compatibility must be explicit. APIs should not silently drop unknown fields or convert versions without reporting what changed.",
+      "body_html": "<p>Raw transactions can contain sensitive spending information before broadcast. PSBTs can contain UTXO data, key origins, scripts, derivation paths, proprietary fields, and partial signatures.</p>\n<p>API logging should redact or restrict these payloads. Authorization should distinguish transaction construction, signing, finalization, and broadcast. A client allowed to query blocks should not automatically be allowed to sign or spend.</p>\n<p>PSBT version and field compatibility must be explicit. APIs should not silently drop unknown fields or convert versions without reporting what changed.</p>"
+    },
+    {
+      "heading": "Authentication, authorization, and rate limits",
+      "body_markdown": "API keys, cookies, mutual TLS, OAuth-style tokens, service identities, and network controls can authenticate clients. Authorization should then limit methods, wallets, amounts, destinations, and administrative operations.\n\nRate limits protect availability but also affect correctness. A client that stops pagination early or fails after a partial page can build incomplete state. Quotas, burst behavior, and retry windows should be documented.\n\nAdministrative node methods should remain behind a separate boundary from public read methods. Wallet spending methods deserve stronger controls than wallet observation methods.",
+      "body_html": "<p>API keys, cookies, mutual TLS, OAuth-style tokens, service identities, and network controls can authenticate clients. Authorization should then limit methods, wallets, amounts, destinations, and administrative operations.</p>\n<p>Rate limits protect availability but also affect correctness. A client that stops pagination early or fails after a partial page can build incomplete state. Quotas, burst behavior, and retry windows should be documented.</p>\n<p>Administrative node methods should remain behind a separate boundary from public read methods. Wallet spending methods deserve stronger controls than wallet observation methods.</p>"
+    },
+    {
+      "heading": "Pagination, cursors, timeouts, and retries",
+      "body_markdown": "Historical endpoints need stable pagination. Offset pagination can change underneath a client when new records appear or reorganizations reorder data. Cursors should identify ordering and chain context where possible.\n\nTimeouts should distinguish connection failure, server processing time, and unknown completion state. A request that times out may still have been processed.\n\nRetries should use exponential backoff and idempotency semantics appropriate to the operation. Query retries differ from transaction-creation or withdrawal retries. Duplicate webhook delivery should be expected.\n\nApplications should preserve enough identifiers to reconcile after uncertainty instead of assuming a timeout means “nothing happened.”",
+      "body_html": "<p>Historical endpoints need stable pagination. Offset pagination can change underneath a client when new records appear or reorganizations reorder data. Cursors should identify ordering and chain context where possible.</p>\n<p>Timeouts should distinguish connection failure, server processing time, and unknown completion state. A request that times out may still have been processed.</p>\n<p>Retries should use exponential backoff and idempotency semantics appropriate to the operation. Query retries differ from transaction-creation or withdrawal retries. Duplicate webhook delivery should be expected.</p>\n<p>Applications should preserve enough identifiers to reconcile after uncertainty instead of assuming a timeout means “nothing happened.”</p>"
+    },
+    {
+      "heading": "Errors, versioning, and deprecation",
+      "body_markdown": "An API should separate transport errors, authentication errors, invalid parameters, policy rejection, consensus invalidity, missing index data, stale backend state, and internal failure.\n\nBitcoin Core RPC errors are implementation-specific. Hosted providers often normalize or replace them. Applications should log structured error categories without exposing secrets.\n\nVersioning should cover fields, units, enum values, default behavior, and deprecation windows. Adding a field is not always harmless if clients reject unknown data. Removing a field can be dangerous if the application silently substitutes a default.\n\nA provider’s default API version and a repository’s default branch are not reliable substitutes for explicit version pinning.",
+      "body_html": "<p>An API should separate transport errors, authentication errors, invalid parameters, policy rejection, consensus invalidity, missing index data, stale backend state, and internal failure.</p>\n<p>Bitcoin Core RPC errors are implementation-specific. Hosted providers often normalize or replace them. Applications should log structured error categories without exposing secrets.</p>\n<p>Versioning should cover fields, units, enum values, default behavior, and deprecation windows. Adding a field is not always harmless if clients reject unknown data. Removing a field can be dangerous if the application silently substitutes a default.</p>\n<p>A provider’s default API version and a repository’s default branch are not reliable substitutes for explicit version pinning.</p>"
+    },
+    {
+      "heading": "Amounts, fee rates, and size units",
+      "body_markdown": "Bitcoin amounts should be transported as integer satoshis where possible. Floating-point numbers can introduce rounding errors.\n\nFee-rate units must be labeled. Satoshis per virtual byte, satoshis per kilobyte, and bitcoin per kilobyte are not interchangeable.\n\nTransaction size can refer to raw bytes, virtual bytes, or weight units. SegWit weight is defined in weight units; virtual size is derived from weight. An API field named `size` should not be assumed to mean `vsize`.\n\nNetwork identifiers should be explicit. Address parsing must confirm that the address or script belongs to the intended network and encoding.",
+      "body_html": "<p>Bitcoin amounts should be transported as integer satoshis where possible. Floating-point numbers can introduce rounding errors.</p>\n<p>Fee-rate units must be labeled. Satoshis per virtual byte, satoshis per kilobyte, and bitcoin per kilobyte are not interchangeable.</p>\n<p>Transaction size can refer to raw bytes, virtual bytes, or weight units. SegWit weight is defined in weight units; virtual size is derived from weight. An API field named <code>size</code> should not be assumed to mean <code>vsize</code>.</p>\n<p>Network identifiers should be explicit. Address parsing must confirm that the address or script belongs to the intended network and encoding.</p>"
+    },
+    {
+      "heading": "Privacy leakage and hosted logs",
+      "body_markdown": "Queries can reveal addresses, script hashes, xpubs, transaction IDs, IP addresses, timing, account relationships, and wallet activity.\n\nBatching queries may reduce or increase linkage depending on the provider. Using Tor changes network metadata but does not prevent a logged xpub from linking the wallet. Self-hosting keeps more requests local but creates its own operational logs.\n\nPrivacy policies and retention claims are service-level statements, not Bitcoin protocol guarantees. Applications should minimize queries and avoid sending broader identifiers than required.",
+      "body_html": "<p>Queries can reveal addresses, script hashes, xpubs, transaction IDs, IP addresses, timing, account relationships, and wallet activity.</p>\n<p>Batching queries may reduce or increase linkage depending on the provider. Using Tor changes network metadata but does not prevent a logged xpub from linking the wallet. Self-hosting keeps more requests local but creates its own operational logs.</p>\n<p>Privacy policies and retention claims are service-level statements, not Bitcoin protocol guarantees. Applications should minimize queries and avoid sending broader identifiers than required.</p>"
+    },
+    {
+      "heading": "Caching and stale data",
+      "body_markdown": "Caching block and transaction data can improve performance, but mutable metadata needs careful invalidation.\n\nRaw confirmed transaction bytes are stable for a given txid, while active-chain membership, confirmation count, fee estimates, mempool status, and address balances can change. A reorganization can invalidate block-height associations. Index lag can make recently confirmed data appear unconfirmed.\n\nCache keys should include network and, where relevant, chain-tip or block-hash context. Applications should expose data freshness when it affects decisions.",
+      "body_html": "<p>Caching block and transaction data can improve performance, but mutable metadata needs careful invalidation.</p>\n<p>Raw confirmed transaction bytes are stable for a given txid, while active-chain membership, confirmation count, fee estimates, mempool status, and address balances can change. A reorganization can invalidate block-height associations. Index lag can make recently confirmed data appear unconfirmed.</p>\n<p>Cache keys should include network and, where relevant, chain-tip or block-hash context. Applications should expose data freshness when it affects decisions.</p>"
+    },
+    {
+      "heading": "Cross-checking and proofs",
+      "body_markdown": "Critical data can be cross-checked across a validating node, multiple providers, or raw chain data. Provider agreement is useful operational evidence but is not itself consensus validation.\n\nA Merkle proof can show that a transaction ID is included in a block whose header commits to the Merkle root. It does not prove that the block is valid, belongs to the best chain, or that the transaction satisfies every consensus rule unless the client validates the necessary headers, proof of work, chain selection, and transaction context.\n\nHeaders can support chain-work verification, but they do not contain the full transactions needed for complete validation.\n\nCross-checks should therefore state exactly what they establish.",
+      "body_html": "<p>Critical data can be cross-checked across a validating node, multiple providers, or raw chain data. Provider agreement is useful operational evidence but is not itself consensus validation.</p>\n<p>A Merkle proof can show that a transaction ID is included in a block whose header commits to the Merkle root. It does not prove that the block is valid, belongs to the best chain, or that the transaction satisfies every consensus rule unless the client validates the necessary headers, proof of work, chain selection, and transaction context.</p>\n<p>Headers can support chain-work verification, but they do not contain the full transactions needed for complete validation.</p>\n<p>Cross-checks should therefore state exactly what they establish.</p>"
+    },
+    {
+      "heading": "Provider disagreement and observability",
+      "body_markdown": "Applications should monitor:\n\n- Chain-tip height and hash by source\n- Sync lag\n- Mempool disagreement\n- Broadcast rejection categories\n- Index freshness\n- Webhook gaps\n- Cache age\n- Error and rate-limit trends\n- Version and deprecation notices\n\nDisagreement can result from propagation, policy, reorganization timing, pruning, index lag, or software differences. Preserve source-specific observations and reconcile them.",
+      "body_html": "<p>Applications should monitor:</p>\n<ul><li>Chain-tip height and hash by source</li><li>Sync lag</li><li>Mempool disagreement</li><li>Broadcast rejection categories</li><li>Index freshness</li><li>Webhook gaps</li><li>Cache age</li><li>Error and rate-limit trends</li><li>Version and deprecation notices</li></ul>\n<p>Disagreement can result from propagation, policy, reorganization timing, pruning, index lag, or software differences. Preserve source-specific observations and reconcile them.</p>"
+    },
+    {
+      "heading": "An API evaluation framework",
+      "body_markdown": "For each endpoint, ask:\n\n1. What system produced the response?\n2. Does that system validate Bitcoin, index validated data, cache another service, or apply application logic?\n3. Which network, active-chain tip, and software version does it use?\n4. Is the value confirmed, mempool-derived, estimated, cached, indexed, or application-derived?\n5. Which fields require optional or external indexes?\n6. What authentication and authorization protect the operation?\n7. What happens during timeout, retry, duplicate delivery, replacement, eviction, or reorganization?\n8. Which units and integer formats are used?\n9. What privacy information does the request reveal?\n10. What evidence can be independently checked?\n\nA well-designed application-facing API should answer those questions in its schema and operational documentation.",
+      "body_html": "<p>For each endpoint, ask:</p>\n<ol><li>What system produced the response?</li><li>Does that system validate Bitcoin, index validated data, cache another service, or apply application logic?</li><li>Which network, active-chain tip, and software version does it use?</li><li>Is the value confirmed, mempool-derived, estimated, cached, indexed, or application-derived?</li><li>Which fields require optional or external indexes?</li><li>What authentication and authorization protect the operation?</li><li>What happens during timeout, retry, duplicate delivery, replacement, eviction, or reorganization?</li><li>Which units and integer formats are used?</li><li>What privacy information does the request reveal?</li><li>What evidence can be independently checked?</li></ol>\n<p>A well-designed application-facing API should answer those questions in its schema and operational documentation.</p>"
+    },
+    {
+      "heading": "The working model",
+      "body_markdown": "Bitcoin APIs are interfaces to systems around Bitcoin, not a single protocol authority.\n\nBitcoin Core RPC exposes one implementation’s node and wallet behavior. REST provides limited reads. ZMQ provides lossy notifications. P2P carries untrusted network messages. Electrum and Esplora services depend on indexes. Hosted providers add service and privacy dependencies. Lightning APIs belong to separate implementations. Application APIs add business state.\n\nThe safest design keeps node administration private, exposes narrow application methods, uses integer and explicit units, records source and chain-tip context, handles retries and reorganizations, and distinguishes raw, validated, indexed, cached, estimated, mempool, and application-derived data.\n\nAn API response can be useful without being independent proof of Bitcoin validity. Precision about that boundary is the foundation of reliable integration.",
+      "body_html": "<p>Bitcoin APIs are interfaces to systems around Bitcoin, not a single protocol authority.</p>\n<p>Bitcoin Core RPC exposes one implementation’s node and wallet behavior. REST provides limited reads. ZMQ provides lossy notifications. P2P carries untrusted network messages. Electrum and Esplora services depend on indexes. Hosted providers add service and privacy dependencies. Lightning APIs belong to separate implementations. Application APIs add business state.</p>\n<p>The safest design keeps node administration private, exposes narrow application methods, uses integer and explicit units, records source and chain-tip context, handles retries and reorganizations, and distinguishes raw, validated, indexed, cached, estimated, mempool, and application-derived data.</p>\n<p>An API response can be useful without being independent proof of Bitcoin validity. Precision about that boundary is the foundation of reliable integration.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "RPC",
+      "definition": "A request-response mechanism for calling methods on another process."
+    },
+    {
+      "term": "REST",
+      "definition": "An HTTP resource interface used by Bitcoin Core for limited reads and by many external services for broader indexed data."
+    },
+    {
+      "term": "ZMQ",
+      "definition": "A publish-subscribe notification interface used by Bitcoin Core for block, transaction, and sequence events."
+    },
+    {
+      "term": "P2P",
+      "definition": "Bitcoin’s peer-to-peer wire protocol between network participants."
+    },
+    {
+      "term": "Cookie authentication",
+      "definition": "Temporary file-based RPC credentials generated by Bitcoin Core."
+    },
+    {
+      "term": "Indexer",
+      "definition": "Software that creates searchable or application-specific state from Bitcoin data."
+    },
+    {
+      "term": "Chain tip",
+      "definition": "The block a node currently treats as the end of its active chain."
+    },
+    {
+      "term": "Mempool",
+      "definition": "A node’s local set of unconfirmed transactions accepted under current policy."
+    },
+    {
+      "term": "Idempotency",
+      "definition": "The property that a repeated request does not create unintended duplicate effects."
+    },
+    {
+      "term": "Cursor",
+      "definition": "A pagination token representing a position in an ordered result set."
+    },
+    {
+      "term": "Virtual byte",
+      "definition": "A transaction-size unit derived from SegWit weight."
+    },
+    {
+      "term": "Weight unit",
+      "definition": "The unit used by Bitcoin’s SegWit block-weight accounting."
+    },
+    {
+      "term": "Merkle proof",
+      "definition": "A proof that a transaction ID is committed by a block’s Merkle root."
+    },
+    {
+      "term": "Derived state",
+      "definition": "Data calculated by an indexer, wallet, provider, or application rather than directly enforced as Bitcoin consensus state."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bitcoin Core Downloads",
+      "author_or_publisher": "Bitcoin Core project",
+      "url": "https://bitcoincore.org/en/download/",
+      "supports": "Bitcoin Core 31.1 as the current release used for dated implementation references on July 23, 2026."
+    },
+    {
+      "title": "Bitcoin Core JSON-RPC Interface",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/doc/JSON-RPC-interface.md",
+      "supports": "RPC endpoints, JSON-RPC versions, major-version interface changes, cookie authentication, remote-access guidance, and public-internet warnings."
+    },
+    {
+      "title": "Bitcoin Core 31.0 RPC Reference",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://bitcoincore.org/en/doc/31.0.0/rpc/",
+      "supports": "The officially exported Bitcoin Core 31.0 RPC method families and baseline response documentation. Bitcoin Core 31.1 remains the current binary and implementation reference; patch-release behavior is verified separately against tagged v31.1 source and tests."
+    },
+    {
+      "title": "Bitcoin Core REST Interface",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/doc/REST-interface.md",
+      "supports": "Current optional REST endpoints, encodings, and read-oriented scope."
+    },
+    {
+      "title": "Bitcoin Core ZMQ Documentation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/doc/zmq.md",
+      "supports": "ZMQ topics, sequence notifications, loss handling, block disconnections, mempool events, and lack of subscriber authentication."
+    },
+    {
+      "title": "Bitcoin Core P2P Protocol Source",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/tree/v31.1/src",
+      "supports": "Dated implementation evidence for P2P messages, peer handling, validation, transport, and resource controls."
+    },
+    {
+      "title": "BIP 324: Version 2 P2P Encrypted Transport",
+      "author_or_publisher": "Dhruv Mehta, Tim Ruffing, Jonas Schnelli, and Pieter Wuille",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0324.mediawiki",
+      "supports": "The v2 P2P transport protocol and its scoped transport properties."
+    },
+    {
+      "title": "Bitcoin Core RPC Authentication Documentation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/share/rpcauth/rpcauth.py",
+      "supports": "Generation and structure of salted `rpcauth` configuration entries."
+    },
+    {
+      "title": "Electrum Protocol Basics",
+      "author_or_publisher": "Electrum protocol contributors",
+      "url": "https://electrum-protocol.readthedocs.io/en/latest/protocol-basics.html",
+      "supports": "JSON-RPC stream transport, version negotiation, script-hash status, subscriptions, header handling, and Merkle-proof context."
+    },
+    {
+      "title": "Electrum Protocol Changes",
+      "author_or_publisher": "Electrum protocol contributors",
+      "url": "https://electrum-protocol.readthedocs.io/en/latest/protocol-changes.html",
+      "supports": "Version 1.6 negotiation and canonical mempool-order changes and later protocol-version documentation."
+    },
+    {
+      "title": "Electrum Release Notes",
+      "author_or_publisher": "Electrum contributors",
+      "url": "https://github.com/spesmilo/electrum/blob/master/RELEASE-NOTES",
+      "supports": "Electrum 4.7.2 as the latest documented release reviewed in July 2026 and current client protocol support notes."
+    },
+    {
+      "title": "Esplora API Documentation",
+      "author_or_publisher": "Blockstream contributors",
+      "url": "https://github.com/Blockstream/esplora/blob/master/API.md",
+      "supports": "HTTP endpoints for blocks, transactions, addresses, scripts, UTXOs, fees, and mempool data."
+    },
+    {
+      "title": "Esplora Repository",
+      "author_or_publisher": "Blockstream contributors",
+      "url": "https://github.com/Blockstream/esplora",
+      "supports": "Esplora’s explorer presentation layer and dependence on an indexed backend."
+    },
+    {
+      "title": "electrs Repository",
+      "author_or_publisher": "Roman Zeyde and contributors",
+      "url": "https://github.com/romanz/electrs",
+      "supports": "An Electrum server implementation that builds script-history indexes over Bitcoin data."
+    },
+    {
+      "title": "Fulcrum Repository",
+      "author_or_publisher": "Calin Culianu and contributors",
+      "url": "https://github.com/cculianu/Fulcrum",
+      "supports": "An independently maintained Electrum server implementation and current release and development evidence."
+    },
+    {
+      "title": "BIP 141: Segregated Witness",
+      "author_or_publisher": "Eric Lombrozo, Johnson Lau, and Pieter Wuille",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki",
+      "supports": "Transaction weight and virtual-size foundations used when interpreting API size and fee-rate units."
+    },
+    {
+      "title": "BIP 174: Partially Signed Bitcoin Transaction Format",
+      "author_or_publisher": "Andrew Chow",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0174.mediawiki",
+      "supports": "PSBT version 0 structure and metadata categories."
+    },
+    {
+      "title": "BIP 370: PSBT Version 2",
+      "author_or_publisher": "Andrew Chow",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0370.mediawiki",
+      "supports": "PSBT version 2 and compatibility boundaries."
+    },
+    {
+      "title": "BIP 157: Client Side Block Filtering",
+      "author_or_publisher": "Olaoluwa Osuntokun, Alex Akselrod, and Jim Posen",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0157.mediawiki",
+      "supports": "Compact-filter peer methods and client synchronization evidence."
+    },
+    {
+      "title": "BIP 158: Compact Block Filters",
+      "author_or_publisher": "Olaoluwa Osuntokun and Alex Akselrod",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0158.mediawiki",
+      "supports": "Compact filter construction and matching semantics."
+    },
+    {
+      "title": "Bitcoin Core v31.1 Mempool Source",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/tree/v31.1/src/policy",
+      "supports": "Dated implementation evidence for mempool, standardness, fees, dust, and relay policy."
+    },
+    {
+      "title": "Bitcoin Core v31.1 Raw Transaction RPC Source",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/src/rpc/rawtransaction.cpp",
+      "supports": "Dated transaction decode, PSBT, broadcast, and policy-error behavior in Bitcoin Core RPC."
+    },
+    {
+      "title": "Bitcoin Core v31.1 Blockchain RPC Source",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/src/rpc/blockchain.cpp",
+      "supports": "Dated chain-tip, block, UTXO, confirmation, and optional-index response behavior."
+    },
+    {
+      "title": "Bitcoin Core Functional Interface Tests",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/tree/v31.1/test/functional",
+      "supports": "Current implementation tests for RPC, REST, ZMQ, P2P, authentication, mempool, reorganization, and broadcast behavior."
+    }
+  ],
+  "seo_title": "Bitcoin APIs Explained: RPC, REST, ZMQ and More | Mempool Surf Club",
+  "meta_description": "Understand Bitcoin Core RPC, REST, ZMQ, P2P, Electrum, Esplora, hosted APIs, units, authentication, broadcast, caching, privacy, and reorganizations.",
+  "excerpt": "A systems guide to Bitcoin interfaces and API trust boundaries, covering node RPC, REST, ZMQ, P2P, indexed services, hosted providers, data states, retries, units, privacy, and chain reorganizations.",
+  "reading_time": "19 to 23 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-BUILDING",
+    "label": "Building on Bitcoin",
+    "subcategory": "Development",
+    "depth": "Deep",
+    "format": "Technical Analysis"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-042",
+      "title": "How Bitcoin Wallet Integrations Work",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-044",
+      "title": "How Bitcoin Indexers Work",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": []
+  },
+  "review_dates": {
+    "reviewed": "2026-07-24",
+    "copy_locked": "2026-07-24",
+    "human_verification": "2026-07-24"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "Bitcoin Interface Signal Map",
+      "educational_purpose": "Distinguish RPC, REST, ZMQ, P2P, Electrum, Esplora, and hosted API interfaces by direction, purpose, and trust boundary.",
+      "recommended_placement": "After the section What “Bitcoin API” can mean.",
+      "visual_description": "Vintage communications chart centered on a validating node, with separate signal routes for request-response, read-only HTTP, notifications, peer messages, indexed queries, and hosted services.",
+      "required_labels": "JSON-RPC, REST, ZMQ, P2P, Electrum, Esplora, Hosted API, Validating node, Indexer, Application",
+      "caption": "Interfaces that expose similar data can differ in validation, indexing, authentication, and failure behavior.",
+      "alt_text": "Technical network map showing distinct routes between an application, a Bitcoin node, indexers, peers, and hosted APIs.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Place the application at top, interfaces in the center, and node, indexer, and peers at the bottom.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "Request-to-Chain Trust Path",
+      "educational_purpose": "Show how one application request passes through authentication, business logic, an API adapter, a node or indexer, and chain-tip verification.",
+      "recommended_placement": "After the section Local validation and remote data access.",
+      "visual_description": "Layered cartographic route with checkpoints for identity, authorization, source system, index or cache, validating node, active-chain hash, and application response.",
+      "required_labels": "Client, Authentication, Authorization, Application API, Cache, Indexer, Validating node, Chain tip, Response evidence",
+      "caption": "Reliable API responses preserve which system produced the value and which chain context supports it.",
+      "alt_text": "Layered trust-path diagram tracing an application request through authorization, cache or index, a validating node, and chain-tip context.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Use a single vertical path with side badges for cache, index, and hosted-service dependencies.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Four Data-State Tides",
+      "educational_purpose": "Separate confirmed, mempool, cached, and application-derived states that APIs may present.",
+      "recommended_placement": "After the section Raw data and derived fields.",
+      "visual_description": "Nautical tide chart divided into four bands, each with source, mutability, and reorganization behavior, connected to one transaction identifier.",
+      "required_labels": "Confirmed chain, Local mempool, Cached response, Derived state, Block hash, Source, Freshness, Reorganization",
+      "caption": "The same transaction can have different statuses across chain, mempool, cache, and application layers.",
+      "alt_text": "Four-band technical chart comparing confirmed, mempool, cached, and application-derived transaction states.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack the four data states vertically with a shared transaction marker.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}

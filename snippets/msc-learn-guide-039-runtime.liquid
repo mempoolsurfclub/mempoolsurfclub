@@ -1,0 +1,157 @@
+{% comment %}
+  Generated from docs/learn/content/guides/MSC-GUIDE-039-brc-20-bitcoin.md.
+  Registry binding: MSC-GUIDE-039.
+  Preview only. Do not edit manually.
+  Rebuild with node scripts/generate-msc-learn-guide-category-runtime.mjs --start=33 --end=48 --write.
+{% endcomment %}
+<section class="msc-shell msc-learn-page" data-msc-registry-id="MSC-GUIDE-039" data-msc-preview-only="true">
+  <div class="msc-container msc-learn-page__container">
+    <nav class="msc-learn-breadcrumbs" aria-label="Learn breadcrumbs"><ol><li><span>Learn</span></li><li><span>Building on Bitcoin</span></li><li aria-current="page"><span>What Is BRC-20 on Bitcoin?</span></li></ol></nav>
+    <header class="msc-learn-page__header">
+      <p class="msc-section-kicker">Building on Bitcoin</p>
+      <h1>What Is BRC-20 on Bitcoin?</h1>
+      <p class="msc-learn-page__deck">BRC-20 is an experimental inscription and indexer convention for deriving fungible balances from deploy, mint, and transfer operations recorded in Bitcoin transactions. Learn how JSON operations, ordering, two-step transfers, confirmations, reorganizations, parser compatibility, UTXO handling, and custody work without treating BRC-20 as a native Bitcoin token standard.</p>
+      <ul class="msc-learn-page-meta"><li>Digital Assets</li><li>Deep</li><li>Technical Analysis</li><li>16 to 19 minutes</li><li>Reviewed 2026-07-23</li></ul>
+      <p class="msc-learn-preview-note">Preview only. Publication records and confirmed URLs do not exist; all navigation remains inactive.</p>
+    </header>
+    <article class="msc-learn-article rte" data-msc-content-source="structured-runtime">
+<section class="msc-learn-article__section">
+<p>BRC-20 began as an experiment in using Ordinal inscriptions and off-chain indexing rules to represent fungible units on Bitcoin. A participant inscribes JSON text describing a deploy, mint, or transfer operation. A BRC-20 indexer reads eligible inscriptions in Bitcoin&#39;s confirmed transaction order and calculates balances according to its supported rule set.</p>
+<p>Bitcoin nodes do not run that calculation. They validate the Bitcoin transactions and blocks that contain or move the inscriptions. They do not reserve BRC-20 tickers, enforce maximum supplies, reject an excessive mint, or maintain BRC-20 address balances.</p>
+<p>That boundary makes BRC-20 a metaprotocol convention rather than a native token ledger inside Bitcoin consensus. Its state exists in compatible indexers and applications that agree on inscription parsing, ordering, validity, and transfer rules.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Historical origin and experimental status</h2>
+<p>The original BRC-20 document was published by the pseudonymous author Domo in 2023 as a “fun experimental standard design.” Its stated idea was to test whether ordinal theory could facilitate fungibility on Bitcoin through three JSON operations: deploy, mint, and transfer.</p>
+<p>The original document remains important historical material because it defines the initial experiment and examples. It is not evidence that every later indexer, extension, marketplace, or wallet uses identical rules. The document itself points readers toward later documentation for future updates.</p>
+<p>Since the experiment began, implementations have added clarifications, indexing infrastructure, and optional extensions. Those developments should be named and versioned rather than silently folded into the original core model.</p>
+<p>This guide explains the original deploy, mint, and transfer workflow and the shared indexer boundary. It does not treat every later BRC-20 extension as universally supported.</p>
+</section>
+<section class="msc-learn-article__section"><h2>JSON inscriptions carry operations</h2>
+<p>A core BRC-20 operation is represented as JSON text inside an inscription. The original examples use a protocol field <code>p</code> set to <code>brc-20</code>, an operation field <code>op</code>, a ticker field <code>tick</code>, and operation-specific parameters.</p>
+<p>A deploy operation commonly includes:</p>
+<ul><li><code>p</code>: the metaprotocol identifier</li><li><code>op</code>: <code>deploy</code></li><li><code>tick</code>: the ticker</li><li><code>max</code>: maximum indexed supply</li><li><code>lim</code>: an optional per-mint limit</li><li><code>dec</code>: optional decimal precision</li></ul>
+<p>A mint operation uses <code>op: mint</code> and an <code>amt</code> amount. A transfer operation uses <code>op: transfer</code> and an <code>amt</code> amount.</p>
+<p>These strings are data. Bitcoin Script does not execute them. Bitcoin Core does not parse the JSON or know whether a required key is missing. A BRC-20 indexer discovers the inscription, decodes its content, applies character, number, and field rules, and then decides whether the operation affects application state.</p>
+<p>An inscription can be structurally discoverable by Ord software while its BRC-20 JSON is malformed, outside a supported media type, numerically invalid, duplicated, or invalid under the indexer&#39;s protocol rules.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Deploy initializes an indexed definition</h2>
+<p>A deploy operation attempts to initialize a BRC-20 definition for a ticker. Under the original model, the first valid deployment of a case-insensitive four-character ticker wins. The deployment records parameters such as maximum supply, mint limit, and decimal precision.</p>
+<p>“First” depends on the indexer&#39;s ordered view of confirmed Bitcoin history. The indexer needs to process blocks, transactions, and inscriptions deterministically. If two deployments compete, their order in the accepted chain determines which one is recognized under that rule set.</p>
+<p>A deploy does not itself credit fungible units to the deployer in the original model. It defines the parameters later mint operations reference.</p>
+<p>Ticker recognition is an indexer convention. Bitcoin allows many transactions to contain identical strings. A ticker does not prove authorship, trademark rights, authenticity, redemption rights, scarcity outside the index, or value. Applications should identify the indexed deployment and rule set, not rely on a displayed ticker alone.</p>
+<p>Later extensions may support ticker lengths, encodings, self-mint behavior, programmable modules, or activation boundaries that differ from the original experiment. Those features require explicit compatibility checks.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Mint operations credit initial holders</h2>
+<p>A mint inscription attempts to create an amount under an existing deployment. The indexer checks the ticker, amount, mint limit, maximum supply, decimal rules, inscription order, and any implementation-specific activation or validity conditions.</p>
+<p>Under the original rules, a valid mint credits the first owner of the mint-function inscription. That creates an operational risk when an inscription service constructs the transaction to itself and forwards the inscription later. The service&#39;s intermediate address may become the indexed recipient rather than the customer.</p>
+<p>The original experiment also describes partial credit for the mint that would cross the remaining maximum supply: only the remaining valid amount is applied. Exact arithmetic, decimal parsing, integer limits, and later clarifications must be checked against the selected maintained indexer.</p>
+<p>Bitcoin confirmation proves that the inscription transaction was included in a valid block. It does not prove that the mint met the BRC-20 deployment&#39;s limits or that every indexer credited it.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Transfer is a two-step process</h2>
+<p>The original BRC-20 transfer workflow separates preparation from delivery.</p>
+<p>First, the holder creates a transfer inscription specifying the ticker and amount. When that inscription confirms and is valid, the indexer moves the amount from the holder&#39;s available balance into a transferable state associated with the inscription.</p>
+<p>Second, the holder spends the UTXO containing that transfer inscription to the recipient. Under the original convention, the first qualifying transfer of the inscription causes the indexer to deduct the transferable amount from the sender and credit the receiver.</p>
+<p>This is not a smart-contract call. The Bitcoin transaction spends a UTXO according to Bitcoin script. The indexer follows the inscription&#39;s movement under Ord rules and applies the BRC-20 transfer convention.</p>
+<p>A displayed “overall balance” can therefore differ from “available balance.” Active transfer inscriptions reserve amounts that cannot be used to create another valid transfer inscription. The original document defines available balance as overall balance minus valid active transfer inscriptions.</p>
+<p>The transfer inscription can also be mishandled. Sending it to an intermediary, spending it as a fee under the relevant ordinal interpretation, or moving it through an unsupported wallet can invalidate the intended outcome or return the reserved amount according to supported rules. Exact behavior must be verified against the indexer in use.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Ordering determines state</h2>
+<p>BRC-20 state is a history-dependent calculation. Indexers must determine an order for inscriptions and transfer events, then apply operations sequentially.</p>
+<p>The original document says that events in the same block are prioritized by their order in that block. Implementations must also define inscription ordering within transactions, the ownership script associated with an inscription, and the transfer event that qualifies as the first move.</p>
+<p>This makes ordering part of application validity. A mint can be valid when evaluated before another mint and invalid when evaluated after it because the maximum supply has been reached. A transfer inscription can be valid when the sender has available balance and invalid after an earlier event reduces that balance.</p>
+<p>Bitcoin consensus orders transactions in blocks but does not calculate the BRC-20 consequences of that order. Indexers do.</p>
+<p>An interface that shows unconfirmed BRC-20 activity is presenting a provisional state. Mempool order is not a consensus sequence, conflicting transactions may exist, and miners choose the confirmed order.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Confirmations and reorganizations</h2>
+<p>A BRC-20 indexer normally derives canonical state from the accepted Bitcoin chain. When a transaction confirms, its block position supplies the order used for application processing.</p>
+<p>A Bitcoin reorganization disconnects one or more blocks and replaces them with another valid branch. The indexer must reverse every affected deployment, mint, transfer-inscription event, transfer settlement, and balance change, then apply the replacement blocks.</p>
+<p>This can change which ticker deployment was first, whether a mint fit under a cap, which owner received an inscription, and whether a transfer completed. An inscription identifier can remain tied to a transaction, while its confirmation position and surrounding application state change.</p>
+<p>The current OPI implementation describes reorganization protection and per-block and cumulative event hashes for comparing indexed state. That is useful implementation evidence, not a guarantee that every service runs the same code, version, database, or chain tip.</p>
+<p>Applications should disclose confirmation requirements and avoid presenting unconfirmed or recently confirmed balances as irreversible.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Duplicate, invalid, and conflicting operations</h2>
+<p>Bitcoin permits duplicate-looking JSON, repeated tickers, misspelled fields, extra fields, malformed numbers, and operations that exceed application limits. The blockchain records the transaction if it is otherwise valid. A BRC-20 indexer decides whether the content is recognized and whether it changes state.</p>
+<p>A later deployment of an already recognized ticker is generally invalid under the original first-deployment model. A mint can be invalid because the ticker does not exist, the amount exceeds the per-mint limit, the supply is exhausted, or the JSON fails parser rules. A transfer inscription can be invalid because the sender lacks available balance.</p>
+<p>Conflicts can also result from two transactions spending the same UTXO. Only the spend included in the accepted chain survives at the Bitcoin layer. The indexer&#39;s application events must follow that result.</p>
+<p>An invalid BRC-20 operation does not make the Bitcoin transaction invalid. It may still pay fees, move bitcoin, and transfer an inscription. Users cannot assume that an unsuccessful BRC-20 operation will be rejected before broadcast or refunded.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Indexer compatibility and divergence</h2>
+<p>BRC-20 does not have one consensus module executed by all Bitcoin nodes. Compatibility depends on indexers reproducing the same metaprotocol rules.</p>
+<p>Implementations can diverge on JSON parsing, character encoding, number normalization, ticker handling, inscription eligibility, block activation, transfer ownership, fee-spent inscriptions, cursed or vindicated inscription behavior, extension activation, and reorganization recovery.</p>
+<p>A maintained indexer can also expand beyond original BRC-20. For example, the Open Protocol Indexer repository documents modules and later programmable behavior in addition to core event indexing. A service may support those extensions while another supports only the historical core.</p>
+<p>Event hashes can help operators compare databases, but matching hashes require compatible event definitions and the same chain. A disagreement must be investigated rather than resolved by assuming the larger marketplace or wallet is authoritative.</p>
+<p>For high-integrity use, a service should publish the indexer repository, commit or version, activation settings, chain tip, rebuild procedure, and supported extensions. Users should verify that sender, recipient, wallet, explorer, and custodian use compatible rules.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Bitcoin validity versus BRC-20 validity</h2>
+<p>A Bitcoin node validates that a transaction spends real UTXOs with valid authorization and obeys consensus rules. It does not check whether the inscription body is valid JSON or whether a BRC-20 sender has enough indexed balance.</p>
+<p>An Ord indexer identifies inscription envelopes and follows their assignment. A BRC-20 indexer then filters relevant inscription content and applies deploy, mint, and transfer rules.</p>
+<p>These are three different layers:</p>
+<ol><li>Bitcoin consensus establishes valid transaction history and UTXO spending.</li><li>Ord-compatible interpretation identifies and tracks inscriptions.</li><li>BRC-20 interpretation derives fungible operations and balances.</li></ol>
+<p>A transaction can pass layer one, be recognized at layer two, and fail at layer three. A “valid inscription” therefore does not prove a valid BRC-20 operation under every indexer.</p>
+<p>Bitcoin Core mempool and relay policy adds another implementation layer before confirmation. A transaction may be consensus-valid but not accepted by a particular node&#39;s policy. That policy result does not determine BRC-20 balance validity.</p>
+</section>
+<section class="msc-learn-article__section"><h2>UTXO and wallet handling</h2>
+<p>BRC-20 uses inscriptions that are assigned to sats and held in Bitcoin UTXOs under Ord conventions. The user must control the correct UTXO and construct the correct spend for a transfer.</p>
+<p>An ordinary Bitcoin wallet may not display BRC-20 balances, reserved transfer inscriptions, or inscription locations. It can select the containing UTXO as an input, merge it with other funds, create change, or assign the inscription to an unintended output.</p>
+<p>A BRC-20-aware wallet must coordinate Bitcoin inputs and outputs, Ord sat assignment, inscription movement, BRC-20 available balance, and fee payment. A hardware signer may show only BTC amounts and addresses without decoding the JSON or indexed operation.</p>
+<p>Users should verify the finalized transaction after fee adjustment. Changing input order, output order, output values, or fees can alter inscription assignment even when the JSON content is unchanged.</p>
+<p>Receiving to a valid Bitcoin address does not guarantee that the wallet can display or safely send the BRC-20 balance later.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Fees, block space, and data availability</h2>
+<p>Deploy, mint, and transfer inscriptions use Bitcoin block space and pay transaction fees in bitcoin. The inscription transaction&#39;s weight, the number of inputs and outputs, fee rate, and any later transfer transaction affect cost and confirmation.</p>
+<p>BRC-20&#39;s two-step transfer can require an inscription transaction and a later spend. That is different from Runes, where a runestone transaction can allocate UTXO-associated units directly through edicts.</p>
+<p>A high fee does not make an operation valid. A low fee can delay confirmation until a mint window or ordering opportunity changes. Transaction replacement can alter the candidate that confirms.</p>
+<p>Confirmed inscription data can be part of Bitcoin&#39;s chain history, but access is not universal. Pruned nodes may delete old block files after validation. Ordinary wallets do not index all inscription bodies. Explorers may filter content, change parsers, or become unavailable. A BRC-20 indexer also needs the relevant inscription and transfer history to reconstruct balances.</p>
+<p>Data inclusion is therefore distinct from continuous hosting, indexing, discoverability, and rendering.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Custody boundaries</h2>
+<p>A self-custodial holder controls the Bitcoin keys needed to spend the UTXO carrying the relevant inscription or transfer state. That does not remove the need for compatible indexer software.</p>
+<p>A custodial platform may show an internal BRC-20 balance without assigning a dedicated user-controlled UTXO. The user depends on the provider&#39;s database, withdrawal rules, indexer, chain tip, wallet construction, and availability.</p>
+<p>Neither an explorer label nor a marketplace account proves legal ownership or segregated custody. A ticker, inscription, or balance also does not create rights to off-chain goods, issuer reserves, intellectual property, or redemption unless a separate enforceable arrangement establishes them.</p>
+<p>Before accepting a transfer, parties should agree on the indexer rules, identifiers, destination, confirmations, and custody model.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Differences from Runes</h2>
+<p>Runes uses compact runestones in <code>OP_RETURN</code> outputs, Rune IDs, edicts, mint terms, and UTXO-associated balances interpreted by <code>ord</code>. BRC-20&#39;s historical core uses JSON inscriptions and a separate transfer-inscription workflow.</p>
+<p>The two protocols have different activation, naming, issuance, parsing, invalid-operation, and transfer rules. A wallet supporting inscriptions does not automatically support either fungible protocol correctly. A wallet supporting Runes does not automatically calculate BRC-20 balances.</p>
+<p>Neither protocol is enforced by Bitcoin Core. Both depend on application software reading validated Bitcoin history. Their balances should not be merged merely because a name or ticker looks similar.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Differences from smart contracts</h2>
+<p>A programmable smart-contract system normally defines state-transition code that a network of validating nodes or contract-specific validators executes. Core BRC-20 does not deploy executable contract code to Bitcoin.</p>
+<p>Its JSON declares one of a small set of operations. Indexer software contains the logic that interprets those declarations and calculates balances. Bitcoin Script authorizes UTXO spends but does not execute the BRC-20 supply and balance rules.</p>
+<p>Later programmable extensions should be described by their own implementation and activation rules. They do not retroactively make original BRC-20 a Bitcoin consensus smart-contract platform.</p>
+</section>
+<section class="msc-learn-article__section"><h2>The working model</h2>
+<p>BRC-20 is an indexed event history. A valid deploy defines a ticker and parameters. Valid mints credit initial holders according to order and remaining supply. A valid transfer inscription reserves available balance, and its first qualifying transfer credits a recipient. Indexers reverse and replay those events during reorganizations.</p>
+<p>Bitcoin validates the carrier transactions and UTXO spends. Ord-compatible software identifies and tracks inscriptions. BRC-20 software determines whether the JSON operations affect balances.</p>
+<p>That layered model explains the protocol&#39;s main risks. A confirmed inscription can contain invalid BRC-20 JSON. Two indexers can disagree while accepting the same Bitcoin blocks. An unsupported wallet can move a transfer inscription incorrectly. A custodian can display a balance without giving the user UTXO control.</p>
+<p>BRC-20 should therefore be described as an experimental inscription and indexer convention, not a native Bitcoin token standard or a global token ledger enforced by Bitcoin nodes.</p>
+</section>
+    </article>
+    <section class="msc-learn-key-terms" aria-labelledby="MscGuide039Terms"><h2 id="MscGuide039Terms">Key Terms</h2><dl><div class="msc-learn-term"><dt>BRC-20</dt><dd>An experimental inscription and indexer convention for deriving fungible application balances.</dd></div>
+<div class="msc-learn-term"><dt>Metaprotocol</dt><dd>Application rules interpreted from data in another protocol&#39;s validated history.</dd></div>
+<div class="msc-learn-term"><dt>Deploy</dt><dd>A JSON inscription operation that initializes a ticker and its parameters under supported indexer rules.</dd></div>
+<div class="msc-learn-term"><dt>Mint</dt><dd>A JSON inscription operation that attempts to credit new indexed units under an existing deployment.</dd></div>
+<div class="msc-learn-term"><dt>Transfer inscription</dt><dd>An inscription that reserves an amount for a later qualifying transfer.</dd></div>
+<div class="msc-learn-term"><dt>Available balance</dt><dd>Overall indexed balance minus amounts reserved in active valid transfer inscriptions.</dd></div>
+<div class="msc-learn-term"><dt>Ticker</dt><dd>An application label used to identify a deployment under BRC-20 rules.</dd></div>
+<div class="msc-learn-term"><dt>Indexer</dt><dd>Software that orders inscriptions and calculates deploy, mint, transfer, and balance state.</dd></div>
+<div class="msc-learn-term"><dt>Ord interpretation</dt><dd>The application rules used to identify inscriptions and follow their movement through Bitcoin transactions.</dd></div>
+<div class="msc-learn-term"><dt>Reorganization</dt><dd>A Bitcoin chain change requiring indexed BRC-20 events to be reversed and replayed.</dd></div>
+<div class="msc-learn-term"><dt>UTXO</dt><dd>A spendable Bitcoin output that can carry the sat to which an inscription is assigned.</dd></div>
+<div class="msc-learn-term"><dt>Bitcoin consensus validity</dt><dd>Acceptance of the underlying Bitcoin transaction and block, separate from BRC-20 operation validity.</dd></div>
+<div class="msc-learn-term"><dt>Custody</dt><dd>Control arrangement for the Bitcoin keys and provider systems involved in holding or moving the relevant UTXO.</dd></div></dl></section>
+    <section class="msc-learn-sources" aria-labelledby="MscGuide039Sources"><h2 id="MscGuide039Sources">Sources</h2><article class="msc-learn-source"><h3>BRC-20 Experiment</h3><ul><li><strong>author or publisher:</strong> Domo</li><li><strong>url:</strong> https://domo-2.gitbook.io/brc-20-experiment</li><li><strong>supports:</strong> Historical origin, experimental status, deploy, mint, transfer, available-balance, first-deployment, ordering, decimal, limit, fee-spend, and two-step transfer rules in the original design.</li></ul></article>
+<article class="msc-learn-source"><h3>BRC-20 Experiment: Examples</h3><ul><li><strong>author or publisher:</strong> Domo</li><li><strong>url:</strong> https://domo-2.gitbook.io/brc-20-experiment/examples</li><li><strong>supports:</strong> Original JSON examples and required fields for deploy, mint, and transfer operations.</li></ul></article>
+<article class="msc-learn-source"><h3>Open Protocol Indexer</h3><ul><li><strong>author or publisher:</strong> Best in Slot contributors</li><li><strong>url:</strong> https://github.com/bestinslot-xyz/OPI</li><li><strong>supports:</strong> A maintained BRC-20 indexer implementation, historical event storage, reorganization protection, block and cumulative state hashes, activation details, and later extension boundaries.</li></ul></article>
+<article class="msc-learn-source"><h3>BRC-20 Swap Indexer Snapshot</h3><ul><li><strong>author or publisher:</strong> UniSat Wallet contributors</li><li><strong>url:</strong> https://github.com/brc20-devs/brc20-swap-indexer</li><li><strong>supports:</strong> An OPI-derived BRC-20 swap implementation snapshot, last updated in the inspected branch on June 27, 2024, showing an older `ord` parser lineage, reorganization handling, event hashes, and optional swap behavior. Use as divergence evidence, not as universal current BRC-20 authority.</li></ul></article>
+<article class="msc-learn-source"><h3>Ord Repository</h3><ul><li><strong>author or publisher:</strong> Ord project contributors</li><li><strong>url:</strong> https://github.com/ordinals/ord</li><li><strong>supports:</strong> Maintained inscription discovery, assignment, transfer, and indexing behavior on which BRC-20 implementations depend.</li></ul></article>
+<article class="msc-learn-source"><h3>Ordinal Theory Handbook: Inscriptions</h3><ul><li><strong>author or publisher:</strong> Ord project contributors</li><li><strong>url:</strong> https://docs.ordinals.com/inscriptions.html</li><li><strong>supports:</strong> Inscription envelope fields, identifiers, assignment, numbering, and the distinction between inscription validity and metaprotocol interpretation.</li></ul></article>
+<article class="msc-learn-source"><h3>Ordinal Theory Handbook: Collecting</h3><ul><li><strong>author or publisher:</strong> Ord project contributors</li><li><strong>url:</strong> https://docs.ordinals.com/guides/collecting.html</li><li><strong>supports:</strong> UTXO, sat-control, unsupported-wallet, and accidental fee-spending risks.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Improvement Proposal 141: Segregated Witness</h3><ul><li><strong>author or publisher:</strong> Eric Lombrozo, Johnson Lau, and Pieter Wuille</li><li><strong>url:</strong> https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki</li><li><strong>supports:</strong> Bitcoin witness and transaction-weight rules relevant to inscription data and fees.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Improvement Proposal 341: Taproot</h3><ul><li><strong>author or publisher:</strong> Pieter Wuille, Jonas Nick, and Anthony Towns</li><li><strong>url:</strong> https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki</li><li><strong>supports:</strong> Taproot script-path consensus context for inscription carrier transactions.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Improvement Proposal 342: Validation of Taproot Scripts</h3><ul><li><strong>author or publisher:</strong> Pieter Wuille, Jonas Nick, and Anthony Towns</li><li><strong>url:</strong> https://github.com/bitcoin/bips/blob/master/bip-0342.mediawiki</li><li><strong>supports:</strong> Tapscript validation rules and the boundary between valid Bitcoin script execution and unexecuted inscription-envelope data.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core v31.1 Source Tree</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/tree/v31.1/src</li><li><strong>supports:</strong> One current Bitcoin implementation&#39;s transaction, block, UTXO, mempool, relay, wallet, and pruning behavior; this is not a BRC-20 specification.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core v31.1 Release Notes</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/master/doc/release-notes/release-notes-31.1.md</li><li><strong>supports:</strong> Bitcoin Core 31.1 as the current implementation release used to date Bitcoin Core behavior discussed in the guide.</li></ul></article></section>
+    <nav class="msc-learn-prev-next" aria-label="Guide navigation preview"><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Previous</span><strong>How the Runes Protocol Works</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Category</span><strong>Building on Bitcoin</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Next</span><strong>What Is a Bitcoin Inscription?</strong><small>Link inactive</small></span></nav>
+  </div>
+</section>

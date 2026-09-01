@@ -1,0 +1,419 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-042-bitcoin-wallet-integrations.md",
+  "source_sha256": "cc523d9f992e63ac464223362f87a1a6fbff016875585db92691738140584825",
+  "registry_id": "MSC-GUIDE-042",
+  "status": "COPY_LOCKED",
+  "h1": "How Bitcoin Wallet Integrations Work",
+  "introductory_deck": "A Bitcoin wallet integration is a coordinated system for discovering relevant chain activity, managing scripts and UTXOs, constructing transactions, enforcing approvals, signing, broadcasting, monitoring confirmations, and recovering state. This guide explains those responsibilities across custodial, self-custodial, watch-only, hardware-signing, and hosted architectures without treating address generation, transaction detection, or broadcast as proof of settlement.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "Adding “Bitcoin payments” to an application is not one function call. A wallet integration must connect several responsibilities that may live in different processes, devices, or organizations:\n\n- Define who controls spending keys.\n- Derive scripts and addresses.\n- Discover transactions relevant to those scripts.\n- Track confirmed and unconfirmed UTXOs.\n- Construct recipients, change, fees, sequences, and locktimes.\n- Obtain approvals and signatures.\n- Finalize and broadcast transactions.\n- Reconcile mempool, confirmation, replacement, conflict, and reorganization state.\n- Preserve enough information to recover the wallet and the application’s records.\n\nThe important question is not whether an application “has a wallet.” It is where each responsibility sits and what evidence the application accepts.",
+      "body_html": "<p>Adding “Bitcoin payments” to an application is not one function call. A wallet integration must connect several responsibilities that may live in different processes, devices, or organizations:</p>\n<ul><li>Define who controls spending keys.</li><li>Derive scripts and addresses.</li><li>Discover transactions relevant to those scripts.</li><li>Track confirmed and unconfirmed UTXOs.</li><li>Construct recipients, change, fees, sequences, and locktimes.</li><li>Obtain approvals and signatures.</li><li>Finalize and broadcast transactions.</li><li>Reconcile mempool, confirmation, replacement, conflict, and reorganization state.</li><li>Preserve enough information to recover the wallet and the application’s records.</li></ul>\n<p>The important question is not whether an application “has a wallet.” It is where each responsibility sits and what evidence the application accepts.</p>"
+    },
+    {
+      "heading": "Custodial, self-custodial, watch-only, and signing-service models",
+      "body_markdown": "In a **custodial architecture**, an operator controls the keys or spending policy on behalf of users. User balances may exist partly or entirely in an internal ledger. A withdrawal request becomes an application instruction to the custodian, not direct proof that a specific UTXO belongs to the user. Custody requires strong authorization, accounting, withdrawal review, segregation, and incident-response controls.\n\nIn a **self-custodial architecture**, the user or user-controlled device holds the spending authority. The application may help derive addresses, build transactions, or find chain data, but it cannot spend without the user’s keys or signer. Self-custody reduces operator control over funds while increasing the importance of backup, compatibility, user verification, and device security.\n\nA **watch-only architecture** contains scripts, descriptors, or extended public keys but no private signing material. It can derive addresses, identify relevant transactions, and construct unsigned transactions. Watch-only systems are useful for accounting, monitoring, and separation of duties, but they can still expose sensitive wallet activity.\n\nA **signing-service architecture** keeps keys in a separate service, hardware security module, hardware wallet, or offline system. An online coordinator prepares a transaction or PSBT, while the signer applies policy and authorizes signatures. This separation can reduce key exposure, but only if authentication, approval logic, and transaction verification are designed correctly.\n\nThese models can be combined. A company may use a watch-only online wallet, a policy service, and multiple hardware signers. A mobile wallet may hold keys locally while using a hosted indexer. A custodial service may use external signing devices internally.",
+      "body_html": "<p>In a <strong>custodial architecture</strong>, an operator controls the keys or spending policy on behalf of users. User balances may exist partly or entirely in an internal ledger. A withdrawal request becomes an application instruction to the custodian, not direct proof that a specific UTXO belongs to the user. Custody requires strong authorization, accounting, withdrawal review, segregation, and incident-response controls.</p>\n<p>In a <strong>self-custodial architecture</strong>, the user or user-controlled device holds the spending authority. The application may help derive addresses, build transactions, or find chain data, but it cannot spend without the user’s keys or signer. Self-custody reduces operator control over funds while increasing the importance of backup, compatibility, user verification, and device security.</p>\n<p>A <strong>watch-only architecture</strong> contains scripts, descriptors, or extended public keys but no private signing material. It can derive addresses, identify relevant transactions, and construct unsigned transactions. Watch-only systems are useful for accounting, monitoring, and separation of duties, but they can still expose sensitive wallet activity.</p>\n<p>A <strong>signing-service architecture</strong> keeps keys in a separate service, hardware security module, hardware wallet, or offline system. An online coordinator prepares a transaction or PSBT, while the signer applies policy and authorizes signatures. This separation can reduce key exposure, but only if authentication, approval logic, and transaction verification are designed correctly.</p>\n<p>These models can be combined. A company may use a watch-only online wallet, a policy service, and multiple hardware signers. A mobile wallet may hold keys locally while using a hosted indexer. A custodial service may use external signing devices internally.</p>"
+    },
+    {
+      "heading": "Embedded libraries versus external wallet services",
+      "body_markdown": "An embedded wallet library runs wallet logic inside the application or a closely related process. It may manage descriptors, derivation, transaction graphs, persistence, coin selection, and PSBT construction. This can reduce network dependencies and allow application-specific control. It also places wallet-state migrations, dependency security, concurrency, and possibly secrets inside the application boundary.\n\nAn external wallet service exposes wallet operations over an authenticated interface. Bitcoin Core wallet RPC is one example of an external process boundary. A custom signing or custody service is another. External services can isolate permissions and reduce the number of components that handle keys, but they introduce network, availability, authorization, versioning, and operational dependencies.\n\nThe relevant questions are which process holds keys, which process can change destinations or fees, how requests are authenticated, how duplicate operations are handled, and what state must be restored after failure.",
+      "body_html": "<p>An embedded wallet library runs wallet logic inside the application or a closely related process. It may manage descriptors, derivation, transaction graphs, persistence, coin selection, and PSBT construction. This can reduce network dependencies and allow application-specific control. It also places wallet-state migrations, dependency security, concurrency, and possibly secrets inside the application boundary.</p>\n<p>An external wallet service exposes wallet operations over an authenticated interface. Bitcoin Core wallet RPC is one example of an external process boundary. A custom signing or custody service is another. External services can isolate permissions and reduce the number of components that handle keys, but they introduce network, availability, authorization, versioning, and operational dependencies.</p>\n<p>The relevant questions are which process holds keys, which process can change destinations or fees, how requests are authenticated, how duplicate operations are handled, and what state must be restored after failure.</p>"
+    },
+    {
+      "heading": "Synchronization models",
+      "body_markdown": "A wallet must identify chain activity relevant to its scripts. Common synchronization models include full-node-backed, Electrum-backed, Esplora-backed, and compact-filter-backed designs.\n\nA **full-node-backed wallet** can use Bitcoin Core wallet functionality or custom logic connected to a validating node. The node validates blocks and transactions, but custom wallet software still needs a method for finding relevant scripts. Bitcoin Core’s wallet maintains its own wallet state; a bare full node does not automatically answer arbitrary address-history queries.\n\nAn **Electrum-backed wallet** queries or subscribes to script hashes through an Electrum-protocol server. The server maintains an external index. The wallet can obtain histories, balances, and transaction data efficiently, but it depends on the server’s chain tip, index correctness, protocol version, privacy practices, and availability. A client that validates headers and Merkle proofs gains evidence of transaction inclusion, but it does not independently validate every block and transaction rule as a full node does.\n\nAn **Esplora-backed wallet** calls HTTP endpoints backed by an indexer. It may retrieve addresses, scripts, transactions, UTXOs, blocks, fee estimates, and mempool information. The same trust questions apply: what validates the chain, which fields are indexed or cached, how reorganizations are represented, and what requests are logged?\n\nA **compact-filter-backed wallet** obtains block headers and BIP 157/158 compact filters, matches wallet scripts locally, then downloads candidate blocks. This can reduce direct disclosure of individual addresses or script hashes. It still requires correct filter-header handling, false-positive handling, block retrieval, chain selection, and local scanning. A malicious source can omit or delay data unless the client cross-checks appropriately.",
+      "body_html": "<p>A wallet must identify chain activity relevant to its scripts. Common synchronization models include full-node-backed, Electrum-backed, Esplora-backed, and compact-filter-backed designs.</p>\n<p>A <strong>full-node-backed wallet</strong> can use Bitcoin Core wallet functionality or custom logic connected to a validating node. The node validates blocks and transactions, but custom wallet software still needs a method for finding relevant scripts. Bitcoin Core’s wallet maintains its own wallet state; a bare full node does not automatically answer arbitrary address-history queries.</p>\n<p>An <strong>Electrum-backed wallet</strong> queries or subscribes to script hashes through an Electrum-protocol server. The server maintains an external index. The wallet can obtain histories, balances, and transaction data efficiently, but it depends on the server’s chain tip, index correctness, protocol version, privacy practices, and availability. A client that validates headers and Merkle proofs gains evidence of transaction inclusion, but it does not independently validate every block and transaction rule as a full node does.</p>\n<p>An <strong>Esplora-backed wallet</strong> calls HTTP endpoints backed by an indexer. It may retrieve addresses, scripts, transactions, UTXOs, blocks, fee estimates, and mempool information. The same trust questions apply: what validates the chain, which fields are indexed or cached, how reorganizations are represented, and what requests are logged?</p>\n<p>A <strong>compact-filter-backed wallet</strong> obtains block headers and BIP 157/158 compact filters, matches wallet scripts locally, then downloads candidate blocks. This can reduce direct disclosure of individual addresses or script hashes. It still requires correct filter-header handling, false-positive handling, block retrieval, chain selection, and local scanning. A malicious source can omit or delay data unless the client cross-checks appropriately.</p>"
+    },
+    {
+      "heading": "Key-generation boundaries",
+      "body_markdown": "Private keys and seed material should be generated inside the component intended to hold signing authority. A browser frontend, application log, analytics event, crash report, public fixture, or ordinary environment dump should not become an accidental key-management system.\n\nSeed material is not the same as every key, descriptor, or wallet record. Hierarchical deterministic wallets derive many keys from a root according to defined paths. BIP 32 extended keys combine a key with chain code and derivation metadata. Wallets may also depend on script types, derivation paths, key origins, checksums, multisignature ordering, Miniscript policies, and application labels.\n\nA seed can reproduce keys under the same derivation scheme. It may not reproduce all information needed to identify which scripts to scan, how a multisignature policy was assembled, which descriptors were imported, which accounts were used, or which application records were reserved.\n\nKey-generation boundaries should therefore be documented alongside descriptor and recovery data, not only as “we have the seed.”",
+      "body_html": "<p>Private keys and seed material should be generated inside the component intended to hold signing authority. A browser frontend, application log, analytics event, crash report, public fixture, or ordinary environment dump should not become an accidental key-management system.</p>\n<p>Seed material is not the same as every key, descriptor, or wallet record. Hierarchical deterministic wallets derive many keys from a root according to defined paths. BIP 32 extended keys combine a key with chain code and derivation metadata. Wallets may also depend on script types, derivation paths, key origins, checksums, multisignature ordering, Miniscript policies, and application labels.</p>\n<p>A seed can reproduce keys under the same derivation scheme. It may not reproduce all information needed to identify which scripts to scan, how a multisignature policy was assembled, which descriptors were imported, which accounts were used, or which application records were reserved.</p>\n<p>Key-generation boundaries should therefore be documented alongside descriptor and recovery data, not only as “we have the seed.”</p>"
+    },
+    {
+      "heading": "Extended public keys and privacy",
+      "body_markdown": "An extended public key, or xpub in common terminology, can derive a branch of public keys without exposing the corresponding private keys. This is useful for watch-only wallets and address generation.\n\nIt is also privacy-sensitive. Anyone who obtains an extended public key and knows the derivation scheme may derive many wallet addresses and observe related transactions. Sharing an xpub with a hosted service can reveal a broad view of wallet activity rather than one payment request.\n\nApplications should minimize where extended public keys are stored, restrict access, separate account scopes where appropriate, and avoid placing them in analytics, support tickets, or client logs. An xpub is not a spending secret, but it is not harmless public metadata.",
+      "body_html": "<p>An extended public key, or xpub in common terminology, can derive a branch of public keys without exposing the corresponding private keys. This is useful for watch-only wallets and address generation.</p>\n<p>It is also privacy-sensitive. Anyone who obtains an extended public key and knows the derivation scheme may derive many wallet addresses and observe related transactions. Sharing an xpub with a hosted service can reveal a broad view of wallet activity rather than one payment request.</p>\n<p>Applications should minimize where extended public keys are stored, restrict access, separate account scopes where appropriate, and avoid placing them in analytics, support tickets, or client logs. An xpub is not a spending secret, but it is not harmless public metadata.</p>"
+    },
+    {
+      "heading": "Descriptor wallets and script types",
+      "body_markdown": "Output descriptors describe the scripts a wallet watches or controls. They can include key origins, derivation paths, branches, and script wrappers. Descriptor wallets make the wallet’s script policy more explicit than an undocumented assumption about one address type.\n\nCommon script types include legacy P2PKH, wrapped SegWit, native SegWit, and Taproot output forms. Each has different address encodings, fee characteristics, signing data, and compatibility. Multisignature and Miniscript policies add further structure.\n\nAn integration must enforce network and address compatibility. A syntactically valid address for mainnet must not be accepted as a testnet destination. Some libraries represent addresses as unchecked until the network is confirmed. Applications should not silently reinterpret one network as another.\n\nScript compatibility also extends to signers. A wallet library may construct a Taproot or Miniscript spend that a selected hardware wallet or external signer does not support. Compatibility should be tested against exact software and firmware versions.",
+      "body_html": "<p>Output descriptors describe the scripts a wallet watches or controls. They can include key origins, derivation paths, branches, and script wrappers. Descriptor wallets make the wallet’s script policy more explicit than an undocumented assumption about one address type.</p>\n<p>Common script types include legacy P2PKH, wrapped SegWit, native SegWit, and Taproot output forms. Each has different address encodings, fee characteristics, signing data, and compatibility. Multisignature and Miniscript policies add further structure.</p>\n<p>An integration must enforce network and address compatibility. A syntactically valid address for mainnet must not be accepted as a testnet destination. Some libraries represent addresses as unchecked until the network is confirmed. Applications should not silently reinterpret one network as another.</p>\n<p>Script compatibility also extends to signers. A wallet library may construct a Taproot or Miniscript spend that a selected hardware wallet or external signer does not support. Compatibility should be tested against exact software and firmware versions.</p>"
+    },
+    {
+      "heading": "Address derivation, change, and discovery",
+      "body_markdown": "Wallets typically derive receiving and change scripts from separate branches. A receive address can be shown before funds arrive. That does not mean payment has been detected.\n\nPayment detection requires scanning the relevant chain and mempool data. Confirmation requires inclusion in a block on the wallet’s accepted chain. More confirmations reduce ordinary reorganization risk but do not create absolute irreversibility.\n\nWallets that generate addresses ahead of observed use may apply a **gap limit** or other discovery rule. If an application derives far beyond the expected range without preserving the last-used state, recovery software may stop scanning before it reaches used addresses. Descriptor range data and last-revealed indexes may therefore matter.\n\nChange addresses require the same care as recipient addresses. The wallet must identify which output is change, derive it from the intended descriptor, preserve it during signing, and later track it. A signer should not assume an unlabeled second output is legitimate change.\n\nAddress reuse can connect payments and reduce privacy. Hosted synchronization can further link queries by address, script hash, xpub, account, and IP address.",
+      "body_html": "<p>Wallets typically derive receiving and change scripts from separate branches. A receive address can be shown before funds arrive. That does not mean payment has been detected.</p>\n<p>Payment detection requires scanning the relevant chain and mempool data. Confirmation requires inclusion in a block on the wallet’s accepted chain. More confirmations reduce ordinary reorganization risk but do not create absolute irreversibility.</p>\n<p>Wallets that generate addresses ahead of observed use may apply a <strong>gap limit</strong> or other discovery rule. If an application derives far beyond the expected range without preserving the last-used state, recovery software may stop scanning before it reaches used addresses. Descriptor range data and last-revealed indexes may therefore matter.</p>\n<p>Change addresses require the same care as recipient addresses. The wallet must identify which output is change, derive it from the intended descriptor, preserve it during signing, and later track it. A signer should not assume an unlabeled second output is legitimate change.</p>\n<p>Address reuse can connect payments and reduce privacy. Hosted synchronization can further link queries by address, script hash, xpub, account, and IP address.</p>"
+    },
+    {
+      "heading": "Watch-only wallets and external signing",
+      "body_markdown": "A watch-only wallet can track scripts and build unsigned transactions while keys remain elsewhere. This architecture can separate online observation from signing, but the unsigned transaction remains security-sensitive.\n\nAn online coordinator can lie about the recipient, amount, fee, inputs, change, or application context. A signer that only checks signature validity may authorize a transaction the user did not intend. Hardware wallets and offline signers should verify as much transaction and policy information as they can, and users should review displayed details.\n\nAir-gapped workflows can reduce network exposure, but parsing, firmware, transfer-media, and display risks remain.",
+      "body_html": "<p>A watch-only wallet can track scripts and build unsigned transactions while keys remain elsewhere. This architecture can separate online observation from signing, but the unsigned transaction remains security-sensitive.</p>\n<p>An online coordinator can lie about the recipient, amount, fee, inputs, change, or application context. A signer that only checks signature validity may authorize a transaction the user did not intend. Hardware wallets and offline signers should verify as much transaction and policy information as they can, and users should review displayed details.</p>\n<p>Air-gapped workflows can reduce network exposure, but parsing, firmware, transfer-media, and display risks remain.</p>"
+    },
+    {
+      "heading": "PSBT version and signer compatibility",
+      "body_markdown": "PSBT allows a coordinator to collect transaction and signing information without exposing private keys. Version 0 is defined by BIP 174. Version 2 is defined by BIP 370. Taproot and MuSig2 use additional fields defined by later BIPs.\n\nA wallet integration must know which PSBT versions and fields each signer preserves and understands. Some software can sign version 0 but not version 2. Some can convert formats but may not preserve proprietary or unknown fields. Some hardware devices support a script type only under specific key-origin or descriptor conditions.\n\nThe integration should test:\n\n- PSBT version acceptance\n- Unknown-field preservation\n- Taproot and multisignature fields\n- Input UTXO requirements\n- Key-origin information\n- Change detection\n- Finalization behavior\n- Multiple signer ordering\n- Partial failure and retry\n\nA PSBT that receives signatures is not automatically safe. Signatures prove authorization by keys under Bitcoin’s signature rules. They do not prove that the application selected the correct recipient, amount, fee, or change output.",
+      "body_html": "<p>PSBT allows a coordinator to collect transaction and signing information without exposing private keys. Version 0 is defined by BIP 174. Version 2 is defined by BIP 370. Taproot and MuSig2 use additional fields defined by later BIPs.</p>\n<p>A wallet integration must know which PSBT versions and fields each signer preserves and understands. Some software can sign version 0 but not version 2. Some can convert formats but may not preserve proprietary or unknown fields. Some hardware devices support a script type only under specific key-origin or descriptor conditions.</p>\n<p>The integration should test:</p>\n<ul><li>PSBT version acceptance</li><li>Unknown-field preservation</li><li>Taproot and multisignature fields</li><li>Input UTXO requirements</li><li>Key-origin information</li><li>Change detection</li><li>Finalization behavior</li><li>Multiple signer ordering</li><li>Partial failure and retry</li></ul>\n<p>A PSBT that receives signatures is not automatically safe. Signatures prove authorization by keys under Bitcoin’s signature rules. They do not prove that the application selected the correct recipient, amount, fee, or change output.</p>"
+    },
+    {
+      "heading": "Transaction construction",
+      "body_markdown": "Transaction construction begins with a set of intended payments and available UTXOs. The wallet chooses inputs, creates recipient outputs, usually creates change, sets version and locktime, assigns input sequences, and calculates fees.\n\n**Coin selection** balances fee cost, privacy, UTXO consolidation, confirmation status, script types, and application policy. Different algorithms can produce different valid transactions.\n\n**UTXO locking or reservation** prevents two concurrent requests from spending the same input. A reservation is application state, not Bitcoin consensus. It can expire incorrectly, be lost after a crash, or conflict with another wallet instance. The application must reconcile reservations against actual mempool and chain state.\n\n**Recipient outputs** must match the user’s intended address and amount. Address parsing should be network-aware and checksum-validated.\n\n**Change** should return excess value to a wallet-controlled script. The wallet and signer need enough descriptor information to recognize it.\n\n**Fees** depend on transaction weight and fee rate. Applications must use explicit units such as satoshis per virtual byte. Floating-point bitcoin amounts and ambiguous “bytes” can produce serious errors.\n\n**Dust** is primarily a policy concept in this context. Bitcoin Core’s current dust threshold calculations affect standard transaction relay and wallet construction. Dust policy can change by implementation and version; it is not a universal fixed consensus minimum for all outputs.\n\nA transaction may satisfy consensus rules yet fail a node’s current mempool policy. Construction tests should therefore include the exact node and network policy expected in production.",
+      "body_html": "<p>Transaction construction begins with a set of intended payments and available UTXOs. The wallet chooses inputs, creates recipient outputs, usually creates change, sets version and locktime, assigns input sequences, and calculates fees.</p>\n<p><strong>Coin selection</strong> balances fee cost, privacy, UTXO consolidation, confirmation status, script types, and application policy. Different algorithms can produce different valid transactions.</p>\n<p><strong>UTXO locking or reservation</strong> prevents two concurrent requests from spending the same input. A reservation is application state, not Bitcoin consensus. It can expire incorrectly, be lost after a crash, or conflict with another wallet instance. The application must reconcile reservations against actual mempool and chain state.</p>\n<p><strong>Recipient outputs</strong> must match the user’s intended address and amount. Address parsing should be network-aware and checksum-validated.</p>\n<p><strong>Change</strong> should return excess value to a wallet-controlled script. The wallet and signer need enough descriptor information to recognize it.</p>\n<p><strong>Fees</strong> depend on transaction weight and fee rate. Applications must use explicit units such as satoshis per virtual byte. Floating-point bitcoin amounts and ambiguous “bytes” can produce serious errors.</p>\n<p><strong>Dust</strong> is primarily a policy concept in this context. Bitcoin Core’s current dust threshold calculations affect standard transaction relay and wallet construction. Dust policy can change by implementation and version; it is not a universal fixed consensus minimum for all outputs.</p>\n<p>A transaction may satisfy consensus rules yet fail a node’s current mempool policy. Construction tests should therefore include the exact node and network policy expected in production.</p>"
+    },
+    {
+      "heading": "Signing, finalization, and broadcast",
+      "body_markdown": "Signing applies one or more signatures according to the scripts and sighash rules of the selected inputs. Finalization assembles the witness and script data required for network serialization.\n\nA valid signature proves that the relevant key authorized the signed transaction data under the selected sighash. It does not prove the transaction matches human intent. Signers should verify recipients, amounts, fees, change, and policy before signing.\n\nBroadcast sends the finalized transaction to a node or service. A successful RPC or API response may mean only that the service received or accepted the request. It does not guarantee that every node accepts the transaction, that peers relay it, that miners include it, or that it confirms.\n\nApplications should distinguish:\n\n- Constructed\n- Partially signed\n- Fully signed\n- Finalized\n- Submitted\n- Accepted by a particular mempool\n- Observed by other nodes\n- Confirmed in a block\n- Reorganized or conflicted\n\nCollapsing those states into “paid” creates operational and accounting errors.",
+      "body_html": "<p>Signing applies one or more signatures according to the scripts and sighash rules of the selected inputs. Finalization assembles the witness and script data required for network serialization.</p>\n<p>A valid signature proves that the relevant key authorized the signed transaction data under the selected sighash. It does not prove the transaction matches human intent. Signers should verify recipients, amounts, fees, change, and policy before signing.</p>\n<p>Broadcast sends the finalized transaction to a node or service. A successful RPC or API response may mean only that the service received or accepted the request. It does not guarantee that every node accepts the transaction, that peers relay it, that miners include it, or that it confirms.</p>\n<p>Applications should distinguish:</p>\n<ul><li>Constructed</li><li>Partially signed</li><li>Fully signed</li><li>Finalized</li><li>Submitted</li><li>Accepted by a particular mempool</li><li>Observed by other nodes</li><li>Confirmed in a block</li><li>Reorganized or conflicted</li></ul>\n<p>Collapsing those states into “paid” creates operational and accounting errors.</p>"
+    },
+    {
+      "heading": "Mempool acceptance and local policy",
+      "body_markdown": "A node’s mempool contains transactions it currently accepts under local policy. Policy covers standardness, fees, package limits, replacement, resource limits, and other implementation behavior.\n\nTwo nodes can have different mempools. A transaction may be accepted by the broadcasting node and absent elsewhere. It can be evicted, replaced, expire, conflict with another transaction, or be mined after disappearing from one observed mempool.\n\nApplications should record which node or service produced a mempool status and when. They should not treat a hosted “seen” flag as consensus state.",
+      "body_html": "<p>A node’s mempool contains transactions it currently accepts under local policy. Policy covers standardness, fees, package limits, replacement, resource limits, and other implementation behavior.</p>\n<p>Two nodes can have different mempools. A transaction may be accepted by the broadcasting node and absent elsewhere. It can be evicted, replaced, expire, conflict with another transaction, or be mined after disappearing from one observed mempool.</p>\n<p>Applications should record which node or service produced a mempool status and when. They should not treat a hosted “seen” flag as consensus state.</p>"
+    },
+    {
+      "heading": "Confirmations and reorganizations",
+      "body_markdown": "A transaction is confirmed when it is included in a block on the wallet’s current accepted chain. Confirmation count is derived from the transaction’s block height and the current chain tip.\n\nA reorganization can disconnect the block. The transaction may return to a mempool, confirm in a different block, be replaced by a conflict, or disappear. Application balances, invoices, reservations, and fulfillment records must be able to move backward as well as forward.\n\nConfirmation is therefore not absolute irreversibility. Applications should define risk-sensitive confirmation policies without presenting them as guarantees. High-value or externally irreversible actions may require more evidence and operational review than low-risk actions.",
+      "body_html": "<p>A transaction is confirmed when it is included in a block on the wallet’s current accepted chain. Confirmation count is derived from the transaction’s block height and the current chain tip.</p>\n<p>A reorganization can disconnect the block. The transaction may return to a mempool, confirm in a different block, be replaced by a conflict, or disappear. Application balances, invoices, reservations, and fulfillment records must be able to move backward as well as forward.</p>\n<p>Confirmation is therefore not absolute irreversibility. Applications should define risk-sensitive confirmation policies without presenting them as guarantees. High-value or externally irreversible actions may require more evidence and operational review than low-risk actions.</p>"
+    },
+    {
+      "heading": "Replacement and fee bumping",
+      "body_markdown": "Replace-by-fee, commonly called RBF, allows some unconfirmed transactions to be replaced under node policy. BIP 125 documents the original opt-in replacement policy, but current Bitcoin Core replacement behavior must be checked against the current implementation and release because policy has evolved.\n\nChild-pays-for-parent, or CPFP, spends an output from an unconfirmed parent with a fee that raises the effective package incentive. Whether a package is accepted or mined depends on current policy, package relationships, and miner behavior.\n\nWallet integrations should treat RBF and CPFP as policy-sensitive mechanisms. They should test replacement eligibility, fee calculations, recipient preservation, change handling, conflicts, and UI status. A fee bump does not guarantee confirmation.",
+      "body_html": "<p>Replace-by-fee, commonly called RBF, allows some unconfirmed transactions to be replaced under node policy. BIP 125 documents the original opt-in replacement policy, but current Bitcoin Core replacement behavior must be checked against the current implementation and release because policy has evolved.</p>\n<p>Child-pays-for-parent, or CPFP, spends an output from an unconfirmed parent with a fee that raises the effective package incentive. Whether a package is accepted or mined depends on current policy, package relationships, and miner behavior.</p>\n<p>Wallet integrations should treat RBF and CPFP as policy-sensitive mechanisms. They should test replacement eligibility, fee calculations, recipient preservation, change handling, conflicts, and UI status. A fee bump does not guarantee confirmation.</p>"
+    },
+    {
+      "heading": "Abandonment, rebroadcast, and conflicts",
+      "body_markdown": "A wallet may mark an unconfirmed transaction as abandoned locally, but local abandonment does not erase the transaction from peers or prevent later confirmation if it remains valid and available elsewhere.\n\nRebroadcast behavior is implementation-specific and can leak timing or wallet information. Applications should avoid blind multi-provider rebroadcast loops.\n\nConflict handling should identify transactions that spend the same inputs. The application must decide which state is provisional, which invoices remain open, and how to reconcile a confirmed conflict. Internal records should preserve history rather than overwrite the first transaction without explanation.",
+      "body_html": "<p>A wallet may mark an unconfirmed transaction as abandoned locally, but local abandonment does not erase the transaction from peers or prevent later confirmation if it remains valid and available elsewhere.</p>\n<p>Rebroadcast behavior is implementation-specific and can leak timing or wallet information. Applications should avoid blind multi-provider rebroadcast loops.</p>\n<p>Conflict handling should identify transactions that spend the same inputs. The application must decide which state is provisional, which invoices remain open, and how to reconcile a confirmed conflict. Internal records should preserve history rather than overwrite the first transaction without explanation.</p>"
+    },
+    {
+      "heading": "Balance categories",
+      "body_markdown": "A single “balance” number can hide important distinctions.\n\n**Confirmed funds** are UTXOs in blocks on the current accepted chain.\n\n**Unconfirmed funds** are associated with transactions not yet confirmed and may depend on local mempool observations.\n\n**Immature funds** include coinbase outputs that cannot yet be spent under consensus maturity rules.\n\n**Available funds** are funds the wallet currently considers selectable after applying confirmations, policy, locks, and application rules.\n\n**Reserved funds** are UTXOs the application has assigned to an in-progress operation. Reservation is local state and must be reconciled after failures.\n\nWallet libraries and services may define balance categories differently. Applications should map exact source fields into their own explicit model rather than assume names are universal.",
+      "body_html": "<p>A single “balance” number can hide important distinctions.</p>\n<p><strong>Confirmed funds</strong> are UTXOs in blocks on the current accepted chain.</p>\n<p><strong>Unconfirmed funds</strong> are associated with transactions not yet confirmed and may depend on local mempool observations.</p>\n<p><strong>Immature funds</strong> include coinbase outputs that cannot yet be spent under consensus maturity rules.</p>\n<p><strong>Available funds</strong> are funds the wallet currently considers selectable after applying confirmations, policy, locks, and application rules.</p>\n<p><strong>Reserved funds</strong> are UTXOs the application has assigned to an in-progress operation. Reservation is local state and must be reconciled after failures.</p>\n<p>Wallet libraries and services may define balance categories differently. Applications should map exact source fields into their own explicit model rather than assume names are universal.</p>"
+    },
+    {
+      "heading": "Backup and recovery",
+      "body_markdown": "A wallet backup should be tested, not merely created. Recovery needs vary by architecture.\n\nA seed may restore deterministic keys but not necessarily:\n\n- Descriptor checksums and ranges\n- Script or Miniscript policy\n- Multisignature cosigner keys and ordering\n- Key origins and derivation paths\n- Imported watch-only scripts\n- Labels and transaction metadata\n- UTXO reservations\n- Approval records\n- Invoice mappings\n- Hardware device configuration\n- External signer policy\n- Application database state\n\nDescriptor wallets can make script recovery more explicit, but descriptors must themselves be backed up and protected according to whether they contain private or public key material.\n\nMultisignature recovery requires enough cosigner and policy information to reconstruct the same spending scripts. A set of seeds without the correct policy and derivation can be insufficient.\n\nRecovery testing should occur on an isolated environment using exact documented software versions. The test should verify address derivation, history discovery, balance reconstruction, transaction creation, signer compatibility, and reorganization handling.",
+      "body_html": "<p>A wallet backup should be tested, not merely created. Recovery needs vary by architecture.</p>\n<p>A seed may restore deterministic keys but not necessarily:</p>\n<ul><li>Descriptor checksums and ranges</li><li>Script or Miniscript policy</li><li>Multisignature cosigner keys and ordering</li><li>Key origins and derivation paths</li><li>Imported watch-only scripts</li><li>Labels and transaction metadata</li><li>UTXO reservations</li><li>Approval records</li><li>Invoice mappings</li><li>Hardware device configuration</li><li>External signer policy</li><li>Application database state</li></ul>\n<p>Descriptor wallets can make script recovery more explicit, but descriptors must themselves be backed up and protected according to whether they contain private or public key material.</p>\n<p>Multisignature recovery requires enough cosigner and policy information to reconstruct the same spending scripts. A set of seeds without the correct policy and derivation can be insufficient.</p>\n<p>Recovery testing should occur on an isolated environment using exact documented software versions. The test should verify address derivation, history discovery, balance reconstruction, transaction creation, signer compatibility, and reorganization handling.</p>"
+    },
+    {
+      "heading": "Authentication, authorization, and approval controls",
+      "body_markdown": "Wallet operations should not be exposed as unrestricted node or wallet administration.\n\nAuthentication establishes which user or service is making a request. Authorization determines which wallets, amounts, destinations, and operations that identity may use. Approval controls can require multiple people, delayed review, destination allowlists, transaction limits, or independent signer confirmation.\n\nRate limiting reduces abuse and accidental request storms. Idempotency prevents a retried withdrawal request from creating multiple transactions. Audit logs should record decisions and identifiers without exposing private keys, seed phrases, authentication secrets, or unnecessary PSBT data.\n\nSecret redaction must cover application logs, RPC traces, exception reports, analytics, support exports, and monitoring systems. Sensitive wallet metadata can remain dangerous even when private keys are absent.",
+      "body_html": "<p>Wallet operations should not be exposed as unrestricted node or wallet administration.</p>\n<p>Authentication establishes which user or service is making a request. Authorization determines which wallets, amounts, destinations, and operations that identity may use. Approval controls can require multiple people, delayed review, destination allowlists, transaction limits, or independent signer confirmation.</p>\n<p>Rate limiting reduces abuse and accidental request storms. Idempotency prevents a retried withdrawal request from creating multiple transactions. Audit logs should record decisions and identifiers without exposing private keys, seed phrases, authentication secrets, or unnecessary PSBT data.</p>\n<p>Secret redaction must cover application logs, RPC traces, exception reports, analytics, support exports, and monitoring systems. Sensitive wallet metadata can remain dangerous even when private keys are absent.</p>"
+    },
+    {
+      "heading": "Privacy boundaries",
+      "body_markdown": "Wallet integration leaks can occur through address reuse, xpub exposure, hosted address queries, script-hash subscriptions, IP addresses, transaction broadcasts, timing patterns, and centralized logs.\n\nLocal nodes and compact filters can reduce some hosted-query leakage, but peer and broadcast behavior can still reveal information.\n\nPrivacy claims should be scoped to a defined attacker, architecture, and configuration. “Self-hosted” and “non-custodial” do not automatically mean private.",
+      "body_html": "<p>Wallet integration leaks can occur through address reuse, xpub exposure, hosted address queries, script-hash subscriptions, IP addresses, transaction broadcasts, timing patterns, and centralized logs.</p>\n<p>Local nodes and compact filters can reduce some hosted-query leakage, but peer and broadcast behavior can still reveal information.</p>\n<p>Privacy claims should be scoped to a defined attacker, architecture, and configuration. “Self-hosted” and “non-custodial” do not automatically mean private.</p>"
+    },
+    {
+      "heading": "Testing and monitoring",
+      "body_markdown": "Regtest should cover address derivation, payments, change, coin selection, PSBT exchange, signer rejection, replacement, CPFP, abandonment, conflict, and recovery.\n\nReorganization tests should confirm that:\n\n- Confirmations can decrease.\n- Payments can return to unconfirmed state.\n- Reserved or spent UTXOs are recalculated.\n- Application fulfillment does not silently remain final.\n- Indexers and wallet databases roll back correctly.\n- Conflicting transactions are surfaced.\n\nProduction monitoring should compare the wallet’s chain tip with its validating node or backend, track sync lag, record failed broadcasts, detect signer incompatibility, and alert on unexplained balance or UTXO changes.\n\nMonitoring is evidence about components, not consensus itself. An application database can be internally consistent and still follow the wrong chain tip or stale index.",
+      "body_html": "<p>Regtest should cover address derivation, payments, change, coin selection, PSBT exchange, signer rejection, replacement, CPFP, abandonment, conflict, and recovery.</p>\n<p>Reorganization tests should confirm that:</p>\n<ul><li>Confirmations can decrease.</li><li>Payments can return to unconfirmed state.</li><li>Reserved or spent UTXOs are recalculated.</li><li>Application fulfillment does not silently remain final.</li><li>Indexers and wallet databases roll back correctly.</li><li>Conflicting transactions are surfaced.</li></ul>\n<p>Production monitoring should compare the wallet’s chain tip with its validating node or backend, track sync lag, record failed broadcasts, detect signer incompatibility, and alert on unexplained balance or UTXO changes.</p>\n<p>Monitoring is evidence about components, not consensus itself. An application database can be internally consistent and still follow the wrong chain tip or stale index.</p>"
+    },
+    {
+      "heading": "The working model",
+      "body_markdown": "A Bitcoin wallet integration is a state machine across multiple trust boundaries.\n\nKeys or signers authorize spends. Descriptors and derivation define scripts. Chain backends provide validated or indexed data. Wallet logic discovers transactions and maintains UTXOs. Transaction builders choose inputs, outputs, change, and fees. Signers verify and authorize. Nodes apply mempool policy and broadcast. Blocks create confirmation state. Reorganizations can reverse that state. Application databases map all of it to users, invoices, approvals, and accounting.\n\nAddress generation is not payment detection. Detection is not confirmation. Confirmation is not absolute irreversibility. A signature is not proof of transaction intent. A seed is not always a complete recovery package. A hosted backend is not self-validation.\n\nA reliable integration keeps each statement precise, preserves the information needed to recover, and tests how state moves backward when assumptions fail.",
+      "body_html": "<p>A Bitcoin wallet integration is a state machine across multiple trust boundaries.</p>\n<p>Keys or signers authorize spends. Descriptors and derivation define scripts. Chain backends provide validated or indexed data. Wallet logic discovers transactions and maintains UTXOs. Transaction builders choose inputs, outputs, change, and fees. Signers verify and authorize. Nodes apply mempool policy and broadcast. Blocks create confirmation state. Reorganizations can reverse that state. Application databases map all of it to users, invoices, approvals, and accounting.</p>\n<p>Address generation is not payment detection. Detection is not confirmation. Confirmation is not absolute irreversibility. A signature is not proof of transaction intent. A seed is not always a complete recovery package. A hosted backend is not self-validation.</p>\n<p>A reliable integration keeps each statement precise, preserves the information needed to recover, and tests how state moves backward when assumptions fail.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Custodial wallet",
+      "definition": "A wallet architecture in which an operator controls spending authority for users."
+    },
+    {
+      "term": "Self-custodial wallet",
+      "definition": "A wallet architecture in which the user or user-controlled signer retains spending authority."
+    },
+    {
+      "term": "Watch-only wallet",
+      "definition": "A wallet that tracks scripts and transactions without holding the private keys required to spend."
+    },
+    {
+      "term": "Extended public key",
+      "definition": "A BIP 32 public key plus chain code that can derive a branch of public keys."
+    },
+    {
+      "term": "Descriptor",
+      "definition": "A structured description of wallet scripts, keys, origins, and derivation."
+    },
+    {
+      "term": "Gap limit",
+      "definition": "A wallet discovery rule limiting how far beyond known activity unused derived scripts are scanned."
+    },
+    {
+      "term": "UTXO",
+      "definition": "An unspent transaction output available to be spent under its locking conditions."
+    },
+    {
+      "term": "Coin selection",
+      "definition": "The wallet process for choosing UTXOs to fund a transaction."
+    },
+    {
+      "term": "PSBT",
+      "definition": "A container used to coordinate transaction information and partial signatures."
+    },
+    {
+      "term": "Mempool",
+      "definition": "A node’s local set of unconfirmed transactions accepted under current policy."
+    },
+    {
+      "term": "RBF",
+      "definition": "Replacement of an unconfirmed transaction under applicable node policy."
+    },
+    {
+      "term": "CPFP",
+      "definition": "Spending an unconfirmed output with a child transaction whose fee may improve package confirmation incentives."
+    },
+    {
+      "term": "Reorganization",
+      "definition": "A switch to a different accepted chain that can disconnect previously confirmed transactions."
+    },
+    {
+      "term": "Idempotency",
+      "definition": "A property that allows a request to be retried without creating unintended duplicate effects."
+    },
+    {
+      "term": "Reserved funds",
+      "definition": "UTXOs held aside by application logic for an in-progress operation; reservation is not consensus state."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bitcoin Core Downloads",
+      "author_or_publisher": "Bitcoin Core project",
+      "url": "https://bitcoincore.org/en/download/",
+      "supports": "Bitcoin Core 31.1 as the current release used for dated implementation references on July 23, 2026."
+    },
+    {
+      "title": "Bitcoin Core v31.1 Wallet Documentation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/tree/v31.1/doc",
+      "supports": "Current Bitcoin Core wallet, RPC, descriptor, PSBT, fee-bumping, and operational documentation."
+    },
+    {
+      "title": "Bitcoin Core 31.0 Wallet RPC Reference",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://bitcoincore.org/en/doc/31.0.0/rpc/wallet/",
+      "supports": "The officially exported Bitcoin Core 31.0 wallet RPC method categories and baseline response documentation. Bitcoin Core 31.1 remains the current binary and implementation reference; patch-release behavior is verified separately against tagged v31.1 source and tests."
+    },
+    {
+      "title": "Bitcoin Core JSON-RPC Interface",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/doc/JSON-RPC-interface.md",
+      "supports": "Wallet-specific endpoints, RPC versioning, authentication context, and network-exposure boundaries."
+    },
+    {
+      "title": "BIP 32: Hierarchical Deterministic Wallets",
+      "author_or_publisher": "Pieter Wuille",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki",
+      "supports": "Extended key structure, child derivation, and public derivation boundaries."
+    },
+    {
+      "title": "BIP 44: Multi-Account Hierarchy",
+      "author_or_publisher": "Marek Palatinus and Pavol Rusnak",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki",
+      "supports": "One common account and change derivation convention and its address-gap discovery model."
+    },
+    {
+      "title": "BIP 49: P2WPKH Nested in P2SH",
+      "author_or_publisher": "Daniel Weigl",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0049.mediawiki",
+      "supports": "A common derivation convention for wrapped SegWit single-key wallets."
+    },
+    {
+      "title": "BIP 84: Native SegWit Derivation Scheme",
+      "author_or_publisher": "Pavol Rusnak",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0084.mediawiki",
+      "supports": "A common derivation convention for native SegWit single-key wallets."
+    },
+    {
+      "title": "BIP 86: Key-Derivation for Single-Key Taproot",
+      "author_or_publisher": "Ava Chow",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0086.mediawiki",
+      "supports": "A common derivation convention for single-key Taproot outputs."
+    },
+    {
+      "title": "Output Script Descriptors BIPs 380–386",
+      "author_or_publisher": "Bitcoin BIPs contributors",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0380.mediawiki",
+      "supports": "Descriptor syntax, checksums, key expressions, derivation, and common script expressions."
+    },
+    {
+      "title": "BIP 174: Partially Signed Bitcoin Transaction Format",
+      "author_or_publisher": "Andrew Chow",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0174.mediawiki",
+      "supports": "PSBT version 0 fields and partial-signing coordination."
+    },
+    {
+      "title": "BIP 370: PSBT Version 2",
+      "author_or_publisher": "Andrew Chow",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0370.mediawiki",
+      "supports": "PSBT version 2 and its format differences."
+    },
+    {
+      "title": "BIP 371: Taproot Fields for PSBT",
+      "author_or_publisher": "Andrew Chow, Sanket Kanjalkar, and Nadav Ivgi",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0371.mediawiki",
+      "supports": "PSBT fields used for Taproot inputs and outputs."
+    },
+    {
+      "title": "BIP 125: Opt-in Full Replace-by-Fee Signaling",
+      "author_or_publisher": "David Harding and Peter Todd",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0125.mediawiki",
+      "supports": "The original opt-in RBF signaling and replacement-policy model; current Bitcoin Core policy is separately supported by current source."
+    },
+    {
+      "title": "Bitcoin Core v31.1 Mempool Policy Source",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/tree/v31.1/src/policy",
+      "supports": "Dated implementation evidence for standardness, dust, fees, and mempool policy."
+    },
+    {
+      "title": "Bitcoin Core v31.1 Wallet Source",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/tree/v31.1/src/wallet",
+      "supports": "Dated implementation evidence for descriptors, balances, transaction creation, coin selection, locks, signing, rebroadcast, conflicts, abandonment, and fee bumping."
+    },
+    {
+      "title": "BIP 157: Client Side Block Filtering",
+      "author_or_publisher": "Olaoluwa Osuntokun, Alex Akselrod, and Jim Posen",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0157.mediawiki",
+      "supports": "Peer retrieval and client synchronization using compact block filters."
+    },
+    {
+      "title": "BIP 158: Compact Block Filters",
+      "author_or_publisher": "Olaoluwa Osuntokun and Alex Akselrod",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0158.mediawiki",
+      "supports": "Compact filter construction and local script matching."
+    },
+    {
+      "title": "Electrum Protocol Documentation",
+      "author_or_publisher": "Electrum protocol contributors",
+      "url": "https://electrum-protocol.readthedocs.io/en/latest/",
+      "supports": "Script-hash subscriptions, history, transaction retrieval, protocol negotiation, and Merkle-proof behavior."
+    },
+    {
+      "title": "Esplora API Documentation",
+      "author_or_publisher": "Blockstream contributors",
+      "url": "https://github.com/Blockstream/esplora/blob/master/API.md",
+      "supports": "Esplora-style transaction, address, script, UTXO, block, fee, and mempool endpoints."
+    },
+    {
+      "title": "Bitcoin Dev Kit Wallet Releases",
+      "author_or_publisher": "Bitcoin Dev Kit contributors",
+      "url": "https://github.com/bitcoindevkit/bdk/releases",
+      "supports": "BDK’s component-specific release history and migration away from the deprecated legacy `bdk` 0.x crate."
+    },
+    {
+      "title": "bdk_wallet 3.1.0 Documentation",
+      "author_or_publisher": "Bitcoin Dev Kit contributors",
+      "url": "https://docs.rs/bdk_wallet/3.1.0/bdk_wallet/",
+      "supports": "`bdk_wallet` 3.1.0 as the current documented release reviewed on July 23, 2026 and its descriptor wallets, address derivation, transaction construction, coin selection, signing, persistence, and wallet-state interfaces."
+    },
+    {
+      "title": "Bitcoin Core Hardware Wallet Interface Releases",
+      "author_or_publisher": "HWI contributors",
+      "url": "https://github.com/bitcoin-core/HWI/releases",
+      "supports": "Current HWI release history and device, testnet4, PSBT, and MuSig2 support notes."
+    },
+    {
+      "title": "Bitcoin Core Functional Wallet Tests",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/tree/v31.1/test/functional",
+      "supports": "Current implementation tests for wallet transactions, PSBTs, replacement, fee bumping, conflicts, rescan, backup-related behavior, and reorganizations."
+    },
+    {
+      "title": "Bitcoin Core ZMQ Documentation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/doc/zmq.md",
+      "supports": "Notification loss, sequence tracking, mempool events, and reorganization reconciliation requirements."
+    },
+    {
+      "title": "BIP 373: MuSig2 PSBT Fields",
+      "author_or_publisher": "Ava Chow",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0373.mediawiki",
+      "supports": "Standard MuSig2 PSBT input and output fields for PSBT versions 0 and 2, including participant keys, public nonces, and partial signatures."
+    }
+  ],
+  "seo_title": "How Bitcoin Wallet Integrations Work | Mempool Surf Club",
+  "meta_description": "Learn how Bitcoin wallet integrations handle keys, descriptors, synchronization, UTXOs, PSBTs, signing, broadcast, confirmations, recovery, and privacy.",
+  "excerpt": "A technical guide to wallet integration architecture, from custody and chain synchronization to transaction construction, external signing, fee bumping, recovery, authorization, and reorganization handling.",
+  "reading_time": "21 to 25 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-BUILDING",
+    "label": "Building on Bitcoin",
+    "subcategory": "Development",
+    "depth": "Deep",
+    "format": "Technical Analysis"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-041",
+      "title": "Bitcoin Developer Tools: A Practical Overview",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-043",
+      "title": "Bitcoin APIs Explained",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": []
+  },
+  "review_dates": {
+    "reviewed": "2026-07-24",
+    "copy_locked": "2026-07-24",
+    "human_verification": "2026-07-24"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "Wallet Transaction Lifecycle Chart",
+      "educational_purpose": "Show the state transitions from address derivation and detection through construction, signing, broadcast, mempool observation, confirmation, and possible reorganization.",
+      "recommended_placement": "After the section Signing, finalization, and broadcast.",
+      "visual_description": "Vintage nautical route chart with a transaction vessel moving through labeled stations and a branching rollback current from confirmed state back to unconfirmed or conflicted state.",
+      "required_labels": "Address derived, Transaction detected, Constructed, PSBT, Signed, Broadcast, Mempool, Confirmed, Reorganization, Conflict",
+      "caption": "Wallet state advances through several local and network observations, and some states can move backward.",
+      "alt_text": "Technical lifecycle diagram showing a Bitcoin transaction moving from address derivation to confirmation with reorganization and conflict paths.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Use a vertical state flow with rollback arrows along the right edge.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "Signing-Boundary Architecture",
+      "educational_purpose": "Separate online watch-only coordination from external hardware, air-gapped, or service-based signing authority.",
+      "recommended_placement": "After the section Watch-only wallets and external signing.",
+      "visual_description": "Muted network map with an online wallet station creating a PSBT, an approval checkpoint, three possible signer islands, and a return route carrying signatures without private keys leaving the signer boundary.",
+      "required_labels": "Watch-only wallet, PSBT coordinator, Approval policy, Hardware signer, Air-gapped signer, Signing service, Private keys remain here, Finalization",
+      "caption": "A signing boundary limits key exposure only when transaction verification, authorization, and recovery are also enforced.",
+      "alt_text": "Systems map showing a watch-only coordinator exchanging PSBT data with separate hardware, air-gapped, and service signers.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack coordinator, approval, signer, and finalization as four vertical zones.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "UTXO, Recipient, Change, and Fee Flow",
+      "educational_purpose": "Explain how coin selection and transaction construction transform selected UTXOs into recipient outputs, change, and fees.",
+      "recommended_placement": "After the section Transaction construction.",
+      "visual_description": "Nautical engineering diagram with selected input reservoirs feeding a construction gate that divides value into recipient docks, a wallet-controlled change dock, and a fee channel.",
+      "required_labels": "Selected UTXOs, Coin selection, Recipient output, Change output, Fee, Dust policy, Reserved UTXO, Signer verification",
+      "caption": "A valid transaction can still be wrong if inputs, recipients, change, or fees do not match the intended payment.",
+      "alt_text": "Technical flow diagram showing selected Bitcoin UTXOs divided into recipient outputs, change, and transaction fees.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Arrange inputs at top, construction in the center, and recipient, change, and fee outputs below.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}

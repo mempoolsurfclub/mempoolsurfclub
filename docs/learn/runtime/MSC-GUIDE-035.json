@@ -1,0 +1,395 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-035-rgb-bitcoin.md",
+  "source_sha256": "fd3ab45d7ff8c59f1a0a3031d555a172ab4dadea5f6da9245c9b52ec3a3476f5",
+  "registry_id": "MSC-GUIDE-035",
+  "status": "COPY_LOCKED",
+  "h1": "How RGB Works on Bitcoin",
+  "introductory_deck": "RGB is a client-side-validated smart-contract system that uses single-use seals and commitments in Bitcoin transactions without asking Bitcoin nodes to validate complete RGB contract histories. Understanding it requires separating Bitcoin confirmation from contract validation, and protocol rules from the wallets, libraries, data services, and transfer packages that make those rules usable.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "RGB is a client-side-validated smart-contract system for representing and transferring digital rights with commitments anchored in Bitcoin transactions. Contract participants exchange the data needed to validate state changes, while Bitcoin supplies ordered transaction history and proof that UTXO-based seals were closed.\n\nRGB is not a separate coin or proof-of-work blockchain. It also does not place a conventional global token ledger inside Bitcoin. Bitcoin nodes validate Bitcoin transactions, blocks, scripts, and UTXO spends. They do not execute RGB contract logic, calculate RGB balances, or store every RGB transfer.\n\nThat boundary defines both RGB's design and its operational burden.",
+      "body_html": "<p>RGB is a client-side-validated smart-contract system for representing and transferring digital rights with commitments anchored in Bitcoin transactions. Contract participants exchange the data needed to validate state changes, while Bitcoin supplies ordered transaction history and proof that UTXO-based seals were closed.</p>\n<p>RGB is not a separate coin or proof-of-work blockchain. It also does not place a conventional global token ledger inside Bitcoin. Bitcoin nodes validate Bitcoin transactions, blocks, scripts, and UTXO spends. They do not execute RGB contract logic, calculate RGB balances, or store every RGB transfer.</p>\n<p>That boundary defines both RGB&#39;s design and its operational burden.</p>"
+    },
+    {
+      "heading": "What RGB is designed to do",
+      "body_markdown": "A globally replicated contract system asks many participants to download or validate state they may never use. RGB takes a different approach. A holder or recipient validates the contract history needed for the rights being received, rather than expecting every Bitcoin node to validate every contract.\n\nThis design can support fungible state, unique or non-fungible state, and more general programmable rights. The contract data can remain outside the public Bitcoin ledger while compact commitments are published through Bitcoin transactions.\n\nThe benefit is selective disclosure and reduced global data replication. The tradeoff is that transfer data must reach the recipient, remain compatible with the recipient's software, and be backed up well enough for later validation and spending.",
+      "body_html": "<p>A globally replicated contract system asks many participants to download or validate state they may never use. RGB takes a different approach. A holder or recipient validates the contract history needed for the rights being received, rather than expecting every Bitcoin node to validate every contract.</p>\n<p>This design can support fungible state, unique or non-fungible state, and more general programmable rights. The contract data can remain outside the public Bitcoin ledger while compact commitments are published through Bitcoin transactions.</p>\n<p>The benefit is selective disclosure and reduced global data replication. The tradeoff is that transfer data must reach the recipient, remain compatible with the recipient&#39;s software, and be backed up well enough for later validation and spending.</p>"
+    },
+    {
+      "heading": "Client-side validation is not Bitcoin consensus validation",
+      "body_markdown": "Bitcoin consensus validation asks whether a Bitcoin transaction or block follows Bitcoin's shared rules. A full node checks signatures, scripts, input availability, amounts, block limits, proof of work, and other consensus conditions.\n\nClient-side validation asks a different question. Given an RGB contract and a proposed transfer, does the supplied contract history prove that the transferred state was created and moved according to the RGB rules being applied?\n\nThe recipient's RGB software performs that work. It checks the contract origin, relevant operations, state rules, seals, commitments, and Bitcoin witness history. Bitcoin nodes do not return an answer such as \"this RGB transfer is valid.\"\n\nA confirmed Bitcoin witness transaction provides chain-ordering and spend evidence. A separately verified anchor proves that the RGB operation commitment is included in that transaction. Neither fact by itself proves that the external contract data is complete, non-conflicting, or valid under the relevant RGB contract rules.",
+      "body_html": "<p>Bitcoin consensus validation asks whether a Bitcoin transaction or block follows Bitcoin&#39;s shared rules. A full node checks signatures, scripts, input availability, amounts, block limits, proof of work, and other consensus conditions.</p>\n<p>Client-side validation asks a different question. Given an RGB contract and a proposed transfer, does the supplied contract history prove that the transferred state was created and moved according to the RGB rules being applied?</p>\n<p>The recipient&#39;s RGB software performs that work. It checks the contract origin, relevant operations, state rules, seals, commitments, and Bitcoin witness history. Bitcoin nodes do not return an answer such as &quot;this RGB transfer is valid.&quot;</p>\n<p>A confirmed Bitcoin witness transaction provides chain-ordering and spend evidence. A separately verified anchor proves that the RGB operation commitment is included in that transaction. Neither fact by itself proves that the external contract data is complete, non-conflicting, or valid under the relevant RGB contract rules.</p>"
+    },
+    {
+      "heading": "Single-use seals connect rights to one-time events",
+      "body_markdown": "A single-use seal is a commitment primitive designed to be closed once.\n\nIn Bitcoin-based RGB, a seal definition can identify a Bitcoin transaction output. That output is an ordinary UTXO from Bitcoin's perspective. RGB software gives its future spend an additional client-side meaning.\n\nWhen a valid Bitcoin transaction spends the associated output, the seal is closed. Bitcoin consensus prevents the same UTXO from being spent twice in the selected chain. RGB validation uses that unique spend event as evidence that prior owned state was consumed.\n\nThe seal does not place the RGB state inside the UTXO. It binds the ability to move particular client-side state to a Bitcoin output that can be spent only once.\n\nA concealed or blinded seal can let a recipient provide a destination without revealing the full outpoint or ownership details to parties that do not need them. The exact concealment method and invoice encoding depend on the RGB version and software in use.",
+      "body_html": "<p>A single-use seal is a commitment primitive designed to be closed once.</p>\n<p>In Bitcoin-based RGB, a seal definition can identify a Bitcoin transaction output. That output is an ordinary UTXO from Bitcoin&#39;s perspective. RGB software gives its future spend an additional client-side meaning.</p>\n<p>When a valid Bitcoin transaction spends the associated output, the seal is closed. Bitcoin consensus prevents the same UTXO from being spent twice in the selected chain. RGB validation uses that unique spend event as evidence that prior owned state was consumed.</p>\n<p>The seal does not place the RGB state inside the UTXO. It binds the ability to move particular client-side state to a Bitcoin output that can be spent only once.</p>\n<p>A concealed or blinded seal can let a recipient provide a destination without revealing the full outpoint or ownership details to parties that do not need them. The exact concealment method and invoice encoding depend on the RGB version and software in use.</p>"
+    },
+    {
+      "heading": "State transitions close old seals and define new ones",
+      "body_markdown": "An RGB state transition consumes existing owned state and creates replacement state.\n\nA transfer can assign state to new seal definitions controlled by recipients and, when necessary, return change-like state to the sender. The transition includes the contract operation data needed to describe those changes.\n\nThe Bitcoin transaction that spends the old seal definitions is the witness transaction. It closes the old seals and carries or participates in the commitment to the RGB operation. The resulting contract state is validated off-chain by the parties that receive the needed data.\n\nAssignments are client-side records connecting state to seal definitions. They are not token balances written into Bitcoin outputs. Bitcoin sees UTXOs, scripts, and commitments. RGB software interprets the contract operation and assignment under the relevant protocol rules.",
+      "body_html": "<p>An RGB state transition consumes existing owned state and creates replacement state.</p>\n<p>A transfer can assign state to new seal definitions controlled by recipients and, when necessary, return change-like state to the sender. The transition includes the contract operation data needed to describe those changes.</p>\n<p>The Bitcoin transaction that spends the old seal definitions is the witness transaction. It closes the old seals and carries or participates in the commitment to the RGB operation. The resulting contract state is validated off-chain by the parties that receive the needed data.</p>\n<p>Assignments are client-side records connecting state to seal definitions. They are not token balances written into Bitcoin outputs. Bitcoin sees UTXOs, scripts, and commitments. RGB software interprets the contract operation and assignment under the relevant protocol rules.</p>"
+    },
+    {
+      "heading": "Commitments and anchors link state to Bitcoin",
+      "body_markdown": "RGB uses deterministic Bitcoin commitments so a transaction can commit to client-side data without requiring Bitcoin consensus to interpret that data.\n\nAn anchor is the proof structure connecting an RGB operation to the commitment contained in a Bitcoin witness transaction. Depending on the protocol version and transaction construction, the commitment can use a supported method such as a Taproot-based commitment or an `OP_RETURN` fallback arrangement.\n\nA valid anchor shows that the committed message was included under the commitment scheme and associated with the witness transaction. The recipient still has to validate the message itself.\n\nThis distinction resembles a sealed envelope attached to an ordered public event. Bitcoin can prove that the envelope commitment was present and that the relevant UTXO was spent. It does not read the enclosed RGB contract history or decide whether the contract claims are true.",
+      "body_html": "<p>RGB uses deterministic Bitcoin commitments so a transaction can commit to client-side data without requiring Bitcoin consensus to interpret that data.</p>\n<p>An anchor is the proof structure connecting an RGB operation to the commitment contained in a Bitcoin witness transaction. Depending on the protocol version and transaction construction, the commitment can use a supported method such as a Taproot-based commitment or an <code>OP_RETURN</code> fallback arrangement.</p>\n<p>A valid anchor shows that the committed message was included under the commitment scheme and associated with the witness transaction. The recipient still has to validate the message itself.</p>\n<p>This distinction resembles a sealed envelope attached to an ordered public event. Bitcoin can prove that the envelope commitment was present and that the relevant UTXO was spent. It does not read the enclosed RGB contract history or decide whether the contract claims are true.</p>"
+    },
+    {
+      "heading": "Contract genesis and identifiers establish the starting point",
+      "body_markdown": "Every RGB contract begins with a genesis operation.\n\nGenesis establishes the initial contract parameters, rules, state, and issued rights. The contract identifier is derived from the contract's defining data. It gives software a precise reference that is stronger than a display name, ticker, image, or issuer description.\n\nA recipient should validate the contract identifier and genesis data required by the supported protocol version. Two assets can use the same name or ticker while representing different contracts. A familiar label is not a substitute for a verified identifier.\n\nIssuance also does not prove value, legitimacy, redeemability, legal status, or issuer solvency. Those claims exist outside protocol validity.",
+      "body_html": "<p>Every RGB contract begins with a genesis operation.</p>\n<p>Genesis establishes the initial contract parameters, rules, state, and issued rights. The contract identifier is derived from the contract&#39;s defining data. It gives software a precise reference that is stronger than a display name, ticker, image, or issuer description.</p>\n<p>A recipient should validate the contract identifier and genesis data required by the supported protocol version. Two assets can use the same name or ticker while representing different contracts. A familiar label is not a substitute for a verified identifier.</p>\n<p>Issuance also does not prove value, legitimacy, redeemability, legal status, or issuer solvency. Those claims exist outside protocol validity.</p>"
+    },
+    {
+      "heading": "RGB v0.12 replaced the older schema model",
+      "body_markdown": "RGB terminology changed materially between versions 0.11 and 0.12.\n\nIn the v0.11 architecture, a schema defined contract validation rules, interfaces described application-facing semantics, and implementations connected a schema to an interface. Many existing documentation pages and wallet libraries still use those terms.\n\nThe final v0.12 consensus architecture removed schemata from the current contract model. A codex now supplies the consensus rule package used to verify contract operations, together with its required libraries and execution environment. Wallet-facing software uses a contract API rather than the former standard-library interface and implementation combination.\n\nInterfaces still appear in the Contractum developer environment, where they can be compiled into application-facing contract APIs. They should not be described as unchanged v0.12 standard-library objects.\n\nThis is not a vocabulary-only update. Contracts and software built for incompatible consensus generations cannot be assumed interoperable. A wallet must know which protocol, codex, API, encoding, and application library it supports.",
+      "body_html": "<p>RGB terminology changed materially between versions 0.11 and 0.12.</p>\n<p>In the v0.11 architecture, a schema defined contract validation rules, interfaces described application-facing semantics, and implementations connected a schema to an interface. Many existing documentation pages and wallet libraries still use those terms.</p>\n<p>The final v0.12 consensus architecture removed schemata from the current contract model. A codex now supplies the consensus rule package used to verify contract operations, together with its required libraries and execution environment. Wallet-facing software uses a contract API rather than the former standard-library interface and implementation combination.</p>\n<p>Interfaces still appear in the Contractum developer environment, where they can be compiled into application-facing contract APIs. They should not be described as unchanged v0.12 standard-library objects.</p>\n<p>This is not a vocabulary-only update. Contracts and software built for incompatible consensus generations cannot be assumed interoperable. A wallet must know which protocol, codex, API, encoding, and application library it supports.</p>"
+    },
+    {
+      "heading": "Contract state is local and operation-based",
+      "body_markdown": "Contract state is the result of valid operations known to the validating client.\n\nThe current v0.12 implementation exposes contract state through memory cells and application APIs. Its application layer uses names including `GlobalApi` and `OwnedApi` for globally readable and ownership-bound views. These names replaced earlier immutable and destructible API labels in the v0.12 release-candidate line.\n\nOwned state is tied to single-use seals and is consumed when those seals close. Global state can represent contract information that is not assigned to one owner's seal in the same way. The precise state cell types and available operations are defined by the current codex and contract API.\n\nOlder explanations often divide state into fungible, structured, and attachment categories. Version 0.12 unified the consensus representation, so those older structural categories should not be copied directly into a current data-model explanation.",
+      "body_html": "<p>Contract state is the result of valid operations known to the validating client.</p>\n<p>The current v0.12 implementation exposes contract state through memory cells and application APIs. Its application layer uses names including <code>GlobalApi</code> and <code>OwnedApi</code> for globally readable and ownership-bound views. These names replaced earlier immutable and destructible API labels in the v0.12 release-candidate line.</p>\n<p>Owned state is tied to single-use seals and is consumed when those seals close. Global state can represent contract information that is not assigned to one owner&#39;s seal in the same way. The precise state cell types and available operations are defined by the current codex and contract API.</p>\n<p>Older explanations often divide state into fungible, structured, and attachment categories. Version 0.12 unified the consensus representation, so those older structural categories should not be copied directly into a current data-model explanation.</p>"
+    },
+    {
+      "heading": "RGB-20 and RGB-21 are application standards",
+      "body_markdown": "RGB-20 identifies a fungible-asset application standard. RGB-21 identifies a non-fungible or unique-asset application standard.\n\nThey describe application behavior above Bitcoin consensus. Bitcoin nodes do not know that a commitment represents an RGB-20 amount or an RGB-21 item.\n\nThe v0.12 release-candidate 2 announcement reported updated RGB-20 and RGB-21 standards alongside the new contract API and codex architecture. That does not make older v0.11 schema and interface artifacts automatically compatible with v0.12 contracts.\n\nSupport remains software-specific. A wallet that displays one RGB-20 generation may not understand another version, an RGB-21 contract, or a custom contract API. \"Supports RGB\" is incomplete without exact version and standard details.",
+      "body_html": "<p>RGB-20 identifies a fungible-asset application standard. RGB-21 identifies a non-fungible or unique-asset application standard.</p>\n<p>They describe application behavior above Bitcoin consensus. Bitcoin nodes do not know that a commitment represents an RGB-20 amount or an RGB-21 item.</p>\n<p>The v0.12 release-candidate 2 announcement reported updated RGB-20 and RGB-21 standards alongside the new contract API and codex architecture. That does not make older v0.11 schema and interface artifacts automatically compatible with v0.12 contracts.</p>\n<p>Support remains software-specific. A wallet that displays one RGB-20 generation may not understand another version, an RGB-21 contract, or a custom contract API. &quot;Supports RGB&quot; is incomplete without exact version and standard details.</p>"
+    },
+    {
+      "heading": "Invoices describe requested contract state",
+      "body_markdown": "An RGB invoice is a structured request for state under a specific contract and application environment.\n\nIt can identify a contract, requested state, amount or other assignment information, beneficiary seal, network, and related payment parameters. Version 0.12 expanded invoice capabilities for fungible and non-fungible state and more complex payment scripts.\n\nAn RGB invoice is not automatically a Lightning invoice. The formats, validation rules, routing behavior, and settlement workflows differ unless a specific integration defines how they interact.\n\nBlinded or concealed seals can reduce what a sender learns about the recipient's Bitcoin outpoint. They do not conceal every other part of the interaction. Transport metadata, counterparties, timing, wallet telemetry, and later chain activity can still reveal information.",
+      "body_html": "<p>An RGB invoice is a structured request for state under a specific contract and application environment.</p>\n<p>It can identify a contract, requested state, amount or other assignment information, beneficiary seal, network, and related payment parameters. Version 0.12 expanded invoice capabilities for fungible and non-fungible state and more complex payment scripts.</p>\n<p>An RGB invoice is not automatically a Lightning invoice. The formats, validation rules, routing behavior, and settlement workflows differ unless a specific integration defines how they interact.</p>\n<p>Blinded or concealed seals can reduce what a sender learns about the recipient&#39;s Bitcoin outpoint. They do not conceal every other part of the interaction. Transport metadata, counterparties, timing, wallet telemetry, and later chain activity can still reveal information.</p>"
+    },
+    {
+      "heading": "A consignment carries transfer evidence",
+      "body_markdown": "A consignment is the RGB contract and transfer data delivered to a recipient for client-side validation. It is not a Bitcoin transaction.\n\nThe sender must provide enough information for the recipient to connect the received state to a valid contract origin and verify the relevant transition history. That can include contract identification, operations, seal definitions, witnesses, anchors, and supporting libraries or API information required by the version.\n\nThe recipient should not need every unrelated branch of a large contract history. Client-side validation can disclose the history required for the received state while omitting unrelated ownership branches. The exact pruning and disclosure behavior must match the implementation being used.\n\nVersion 0.12 changed consignments from file-like packages loaded as a whole into streams that can be validated as they arrive. The current validation code reads operations and seals from a consignment stream, verifies contract rules, and checks seal-closing witnesses.\n\nA relay or proxy can deliver the package, but delivery does not make it valid. The recipient's client still performs validation.",
+      "body_html": "<p>A consignment is the RGB contract and transfer data delivered to a recipient for client-side validation. It is not a Bitcoin transaction.</p>\n<p>The sender must provide enough information for the recipient to connect the received state to a valid contract origin and verify the relevant transition history. That can include contract identification, operations, seal definitions, witnesses, anchors, and supporting libraries or API information required by the version.</p>\n<p>The recipient should not need every unrelated branch of a large contract history. Client-side validation can disclose the history required for the received state while omitting unrelated ownership branches. The exact pruning and disclosure behavior must match the implementation being used.</p>\n<p>Version 0.12 changed consignments from file-like packages loaded as a whole into streams that can be validated as they arrive. The current validation code reads operations and seals from a consignment stream, verifies contract rules, and checks seal-closing witnesses.</p>\n<p>A relay or proxy can deliver the package, but delivery does not make it valid. The recipient&#39;s client still performs validation.</p>"
+    },
+    {
+      "heading": "Recipient validation has several layers",
+      "body_markdown": "A recipient validating an RGB transfer needs to determine that:\n\n- The contract identifier and genesis are the intended ones.\n- The operation sequence follows the current codex and contract rules.\n- The transferred state exists and was assigned through valid seal definitions.\n- Earlier owned state was not reused within the validated history.\n- Relevant seals were closed by the correct Bitcoin witness transactions.\n- Anchors prove inclusion of the required commitments.\n- The Bitcoin transactions are in the expected network and chain history.\n- The received application API and data encodings are supported.\n- The consignment contains enough data to establish the received rights.\n\nA chain resolver, Electrum server, Esplora service, or local Bitcoin node can supply Bitcoin transaction and confirmation information. That service does not replace RGB contract validation. It answers chain questions used by the client-side validator.\n\nA confirmed anchor can coexist with missing transfer data. Confirmation cannot deliver a consignment to a wallet that never received it.\n\nAn invalid RGB consignment is not necessarily an invalid Bitcoin transaction. Counterfeit issuance, excess supply, reused state, or unauthorized transitions are rejected by RGB client-side validation, even when the witness transaction itself is valid under Bitcoin's rules. If conflicting histories claim the same owned state, the client must compare their seal-closing evidence with Bitcoin's selected chain and reject any history that lacks the authoritative spend or fails RGB rules.",
+      "body_html": "<p>A recipient validating an RGB transfer needs to determine that:</p>\n<ul><li>The contract identifier and genesis are the intended ones.</li><li>The operation sequence follows the current codex and contract rules.</li><li>The transferred state exists and was assigned through valid seal definitions.</li><li>Earlier owned state was not reused within the validated history.</li><li>Relevant seals were closed by the correct Bitcoin witness transactions.</li><li>Anchors prove inclusion of the required commitments.</li><li>The Bitcoin transactions are in the expected network and chain history.</li><li>The received application API and data encodings are supported.</li><li>The consignment contains enough data to establish the received rights.</li></ul>\n<p>A chain resolver, Electrum server, Esplora service, or local Bitcoin node can supply Bitcoin transaction and confirmation information. That service does not replace RGB contract validation. It answers chain questions used by the client-side validator.</p>\n<p>A confirmed anchor can coexist with missing transfer data. Confirmation cannot deliver a consignment to a wallet that never received it.</p>\n<p>An invalid RGB consignment is not necessarily an invalid Bitcoin transaction. Counterfeit issuance, excess supply, reused state, or unauthorized transitions are rejected by RGB client-side validation, even when the witness transaction itself is valid under Bitcoin&#39;s rules. If conflicting histories claim the same owned state, the client must compare their seal-closing evidence with Bitcoin&#39;s selected chain and reject any history that lacks the authoritative spend or fails RGB rules.</p>"
+    },
+    {
+      "heading": "Data availability and backups affect enforceable use",
+      "body_markdown": "Exercising RGB rights depends on more than private keys.\n\nA seed phrase may restore Bitcoin keys, but it may not restore the RGB contract history, consignments, seal metadata, contract APIs, media, or transfer records needed to prove and spend client-side state.\n\nWallet software therefore has responsibilities for import, export, persistence, backup, and recovery. The v0.12 RC2 runtime and command-line release added contract import and export, contract backups, and removal of unused contracts. Those capabilities still need correct integration and user-facing recovery testing.\n\nLosing required data can make valid rights difficult or impossible to demonstrate to a later recipient. A third-party proxy or indexer may retain copies, but relying on it creates availability and privacy dependencies. A backup claim should state whether it preserves keys only, complete consignments, contract state, attachments, or all data needed for future validation.\n\nUsing a proxy, indexer, or storage provider creates availability and privacy dependencies, not automatic custody. Custody depends on who controls the keys and any additional authorization required to move the state. A self-custodial label does not restore missing consignments or fix incompatible software.\n\nSecure transport matters too. Private transfer packages must reach the intended recipient without substitution, corruption, or accidental disclosure.",
+      "body_html": "<p>Exercising RGB rights depends on more than private keys.</p>\n<p>A seed phrase may restore Bitcoin keys, but it may not restore the RGB contract history, consignments, seal metadata, contract APIs, media, or transfer records needed to prove and spend client-side state.</p>\n<p>Wallet software therefore has responsibilities for import, export, persistence, backup, and recovery. The v0.12 RC2 runtime and command-line release added contract import and export, contract backups, and removal of unused contracts. Those capabilities still need correct integration and user-facing recovery testing.</p>\n<p>Losing required data can make valid rights difficult or impossible to demonstrate to a later recipient. A third-party proxy or indexer may retain copies, but relying on it creates availability and privacy dependencies. A backup claim should state whether it preserves keys only, complete consignments, contract state, attachments, or all data needed for future validation.</p>\n<p>Using a proxy, indexer, or storage provider creates availability and privacy dependencies, not automatic custody. Custody depends on who controls the keys and any additional authorization required to move the state. A self-custodial label does not restore missing consignments or fix incompatible software.</p>\n<p>Secure transport matters too. Private transfer packages must reach the intended recipient without substitution, corruption, or accidental disclosure.</p>"
+    },
+    {
+      "heading": "Confirmations and reorganizations affect anchors",
+      "body_markdown": "RGB relies on Bitcoin's selected chain for the witness transactions that close seals and publish commitments.\n\nBefore confirmation, a transaction can be replaced, conflict, or disappear from a node's mempool. After confirmation, a reorganization can remove the transaction from the active chain or change its depth and ordering context.\n\nRGB v0.12 introduced a revised model intended to handle reorganization risks more explicitly. Wallets still need current chain data and clear policies for when a transfer is considered sufficiently settled.\n\nIf a reorganization removes the witness transaction, the wallet must reconsider the affected seal closing and downstream state, then revalidate against the selected chain.\n\nOne confirmation is not absolute finality. A recipient should distinguish successful client-side validation from the separate question of how much Bitcoin confirmation depth is required for the witness transaction.",
+      "body_html": "<p>RGB relies on Bitcoin&#39;s selected chain for the witness transactions that close seals and publish commitments.</p>\n<p>Before confirmation, a transaction can be replaced, conflict, or disappear from a node&#39;s mempool. After confirmation, a reorganization can remove the transaction from the active chain or change its depth and ordering context.</p>\n<p>RGB v0.12 introduced a revised model intended to handle reorganization risks more explicitly. Wallets still need current chain data and clear policies for when a transfer is considered sufficiently settled.</p>\n<p>If a reorganization removes the witness transaction, the wallet must reconsider the affected seal closing and downstream state, then revalidate against the selected chain.</p>\n<p>One confirmation is not absolute finality. A recipient should distinguish successful client-side validation from the separate question of how much Bitcoin confirmation depth is required for the witness transaction.</p>"
+    },
+    {
+      "heading": "Privacy comes from selective disclosure, not invisibility",
+      "body_markdown": "RGB can keep detailed contract state away from the public Bitcoin ledger. Observers may see a Bitcoin transaction and commitment without learning the full contract operation.\n\nRecipients can also receive only the history needed for their state rather than a global database.\n\nThose properties do not create automatic privacy. A sender and recipient know transaction details. A relay can observe delivery metadata. A hosted wallet, resolver, indexer, or issuer can correlate requests. Bitcoin transaction structure can reveal relationships. Contract identifiers, repeated invoices, media retrieval, and backup services can create additional links.\n\nPrivacy depends on the complete wallet, transport, chain-access, and counterparty model.",
+      "body_html": "<p>RGB can keep detailed contract state away from the public Bitcoin ledger. Observers may see a Bitcoin transaction and commitment without learning the full contract operation.</p>\n<p>Recipients can also receive only the history needed for their state rather than a global database.</p>\n<p>Those properties do not create automatic privacy. A sender and recipient know transaction details. A relay can observe delivery metadata. A hosted wallet, resolver, indexer, or issuer can correlate requests. Bitcoin transaction structure can reveal relationships. Contract identifiers, repeated invoices, media retrieval, and backup services can create additional links.</p>\n<p>Privacy depends on the complete wallet, transport, chain-access, and counterparty model.</p>"
+    },
+    {
+      "heading": "Wallet and SDK versions are not one release line",
+      "body_markdown": "As of July 19, 2026, RGB has several simultaneously relevant version families.\n\nThe `rgb-core` consensus crate is version 0.12.0. Its maintainers describe consensus functionality as frozen except for bug fixes.\n\nThe current default branches of the RGB wallet runtime and RGB standard library identify themselves as 0.12.0-rc.3. The latest published GitHub release for the runtime and command-line tool remains v0.12.0-rc.2, released June 3, 2025.\n\nThe separate `rgb-lib` wallet SDK identifies itself as 0.3.0-beta.7 and currently depends on v0.11.1-rc.11 RGB application libraries. It belongs to a different compatibility line from the v0.12 default branches.\n\nOfficial documentation also contains pages written around v0.11 schemas and interfaces alongside newer v0.12 material. Readers and implementers must verify a page's architecture rather than assuming that an unversioned documentation page describes the final v0.12 model.\n\nThe consensus layer being final does not make every wallet, standard library, SDK, or application final.",
+      "body_html": "<p>As of July 19, 2026, RGB has several simultaneously relevant version families.</p>\n<p>The <code>rgb-core</code> consensus crate is version 0.12.0. Its maintainers describe consensus functionality as frozen except for bug fixes.</p>\n<p>The current default branches of the RGB wallet runtime and RGB standard library identify themselves as 0.12.0-rc.3. The latest published GitHub release for the runtime and command-line tool remains v0.12.0-rc.2, released June 3, 2025.</p>\n<p>The separate <code>rgb-lib</code> wallet SDK identifies itself as 0.3.0-beta.7 and currently depends on v0.11.1-rc.11 RGB application libraries. It belongs to a different compatibility line from the v0.12 default branches.</p>\n<p>Official documentation also contains pages written around v0.11 schemas and interfaces alongside newer v0.12 material. Readers and implementers must verify a page&#39;s architecture rather than assuming that an unversioned documentation page describes the final v0.12 model.</p>\n<p>The consensus layer being final does not make every wallet, standard library, SDK, or application final.</p>"
+    },
+    {
+      "heading": "Lightning compatibility is implementation-specific",
+      "body_markdown": "RGB is designed to support client-side state associated with Lightning channels, and current repositories describe commitments to RGB state in channel transactions.\n\nThat design claim is not universal Lightning deployment.\n\nThe maintained RGB Lightning Node identifies itself as version 0.1.0 and currently pins `rgb-lib` 0.3.0-beta.7, matching the separate `rgb-lib` default branch's current 0.3.0-beta.7 version. Its documentation labels the software early alpha and limits ordinary testing to regtest and testnet environments. It requires a Bitcoin node and an Electrum or Esplora indexer; an RGB proxy server is required only when proxy-based consignment transport is used. These are implementation dependencies, not universal protocol requirements.\n\nIt should therefore be described as an experimental integration, not proof that arbitrary RGB contracts can move across the public Lightning Network through ordinary wallets and nodes. Compatibility depends on modified channel software, shared RGB versions, liquidity, transfer-data delivery, backup, and close handling.",
+      "body_html": "<p>RGB is designed to support client-side state associated with Lightning channels, and current repositories describe commitments to RGB state in channel transactions.</p>\n<p>That design claim is not universal Lightning deployment.</p>\n<p>The maintained RGB Lightning Node identifies itself as version 0.1.0 and currently pins <code>rgb-lib</code> 0.3.0-beta.7, matching the separate <code>rgb-lib</code> default branch&#39;s current 0.3.0-beta.7 version. Its documentation labels the software early alpha and limits ordinary testing to regtest and testnet environments. It requires a Bitcoin node and an Electrum or Esplora indexer; an RGB proxy server is required only when proxy-based consignment transport is used. These are implementation dependencies, not universal protocol requirements.</p>\n<p>It should therefore be described as an experimental integration, not proof that arbitrary RGB contracts can move across the public Lightning Network through ordinary wallets and nodes. Compatibility depends on modified channel software, shared RGB versions, liquidity, transfer-data delivery, backup, and close handling.</p>"
+    },
+    {
+      "heading": "Operational risks and open questions",
+      "body_markdown": "RGB separates Bitcoin settlement evidence from client-side contract validation. That produces several independent failure surfaces.\n\nA Bitcoin transaction can confirm while a consignment is missing. A consignment can be complete while the witness transaction remains unconfirmed. Contract data can be valid while a wallet lacks the correct API. A wallet can control the Bitcoin key while losing the RGB history. Two products can both advertise RGB support while implementing incompatible version families.\n\nOpen technical and operational questions include cross-wallet interoperability, migration between version families, long-term availability of contract data, hardware-wallet verification, secure relay design, reorganization handling, attachment storage, issuer metadata, audit coverage, and usable backup restoration.\n\nThe durable mental model is narrow: Bitcoin orders and validates the UTXO spends and commitments that reach its chain. RGB clients validate the contract history and state they receive. Neither layer can silently perform the other's job.",
+      "body_html": "<p>RGB separates Bitcoin settlement evidence from client-side contract validation. That produces several independent failure surfaces.</p>\n<p>A Bitcoin transaction can confirm while a consignment is missing. A consignment can be complete while the witness transaction remains unconfirmed. Contract data can be valid while a wallet lacks the correct API. A wallet can control the Bitcoin key while losing the RGB history. Two products can both advertise RGB support while implementing incompatible version families.</p>\n<p>Open technical and operational questions include cross-wallet interoperability, migration between version families, long-term availability of contract data, hardware-wallet verification, secure relay design, reorganization handling, attachment storage, issuer metadata, audit coverage, and usable backup restoration.</p>\n<p>The durable mental model is narrow: Bitcoin orders and validates the UTXO spends and commitments that reach its chain. RGB clients validate the contract history and state they receive. Neither layer can silently perform the other&#39;s job.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "RGB",
+      "definition": "A client-side-validated smart-contract system that anchors commitments and single-use-seal closings in Bitcoin transactions."
+    },
+    {
+      "term": "Client-side validation",
+      "definition": "Validation performed by the parties receiving and holding relevant contract data rather than by every Bitcoin node."
+    },
+    {
+      "term": "Single-use seal",
+      "definition": "A commitment primitive designed to be closed once."
+    },
+    {
+      "term": "Seal definition",
+      "definition": "Data identifying the one-time event, commonly a Bitcoin UTXO spend, that can close a seal."
+    },
+    {
+      "term": "Seal closing",
+      "definition": "The event that consumes a single-use seal, commonly the spending of its associated Bitcoin output."
+    },
+    {
+      "term": "Commitment",
+      "definition": "Cryptographic evidence binding a defined message to published data without requiring the message itself to be public."
+    },
+    {
+      "term": "Anchor",
+      "definition": "Proof data connecting an RGB operation commitment to a Bitcoin witness transaction."
+    },
+    {
+      "term": "Contract genesis",
+      "definition": "The first operation defining a contract, its initial rules, state, and issued rights."
+    },
+    {
+      "term": "Contract state",
+      "definition": "The validated result of contract operations known to a particular RGB client."
+    },
+    {
+      "term": "State transition",
+      "definition": "A contract operation that consumes existing state and creates replacement state under the contract rules."
+    },
+    {
+      "term": "Assignment",
+      "definition": "Client-side state associated with a seal definition."
+    },
+    {
+      "term": "Codex",
+      "definition": "The v0.12 consensus rule package and executable logic used to validate contract operations."
+    },
+    {
+      "term": "Schema",
+      "definition": "A pre-v0.12 RGB structure that defined contract rules and data; it is not the current v0.12 consensus model."
+    },
+    {
+      "term": "Interface",
+      "definition": "An application semantic definition retained in the Contractum development layer and compiled into current contract APIs."
+    },
+    {
+      "term": "Contract API",
+      "definition": "The v0.12 application-facing description of how wallet software interacts with a contract."
+    },
+    {
+      "term": "Consignment",
+      "definition": "Contract and transfer data delivered to a recipient for client-side validation."
+    },
+    {
+      "term": "Invoice",
+      "definition": "A structured request for particular RGB contract state and a beneficiary seal."
+    },
+    {
+      "term": "Data availability",
+      "definition": "The ability to obtain the contract and transfer data required for validation, recovery, and later spending."
+    },
+    {
+      "term": "RGB-20",
+      "definition": "An RGB application standard for fungible state."
+    },
+    {
+      "term": "RGB-21",
+      "definition": "An RGB application standard for non-fungible or unique state."
+    },
+    {
+      "term": "UTXO",
+      "definition": "An unspent transaction output that can be used as an input in a later transaction."
+    }
+  ],
+  "sources": [
+    {
+      "title": "RGB v0.12 Consensus Release",
+      "author_or_publisher": "LNP/BP Standards Association",
+      "url": "https://rgb.tech/blog/release-v0-12-consensus/",
+      "supports": "Final RGB v0.12 consensus release date, consensus freeze, v0.12 state and architecture changes, consignment streaming, reorganization model, and separation from later application releases."
+    },
+    {
+      "title": "RGB v0.12 Release Candidate 2",
+      "author_or_publisher": "LNP/BP Standards Association",
+      "url": "https://rgb.tech/blog/release-v0-12-rc-2/",
+      "supports": "RC2 architecture, codex and contract API changes, GlobalApi and OwnedApi terminology, contract import and export, backups, invoices, and updated RGB-20 and RGB-21 standards."
+    },
+    {
+      "title": "RGB Runtime and Command-Line Releases",
+      "author_or_publisher": "RGB-WG contributors",
+      "url": "https://github.com/RGB-WG/rgb/releases",
+      "supports": "Published v0.12.0-rc.2 release date, runtime and command-line maturity, contract import, export, backup, and consignment handling."
+    },
+    {
+      "title": "RGB Runtime and Command-Line Workspace Manifest",
+      "author_or_publisher": "RGB-WG contributors",
+      "repository_path": "RGB-WG/rgb/Cargo.toml",
+      "url": "https://github.com/RGB-WG/rgb/blob/master/Cargo.toml",
+      "supports": "Current default-branch runtime version 0.12.0-rc.3, resolver features, and dependencies on the v0.12 standard-library line."
+    },
+    {
+      "title": "RGB Core Library Manifest",
+      "author_or_publisher": "RGB-WG contributors",
+      "repository_path": "RGB-WG/rgb-core/Cargo.toml",
+      "url": "https://github.com/RGB-WG/rgb-core/blob/master/Cargo.toml",
+      "supports": "Final rgb-core version 0.12.0 and its role as the consensus-layer library."
+    },
+    {
+      "title": "RGB Core Library README",
+      "author_or_publisher": "RGB-WG contributors",
+      "repository_path": "RGB-WG/rgb-core/README.md",
+      "url": "https://github.com/RGB-WG/rgb-core/blob/master/README.md",
+      "supports": "Consensus-critical validation role, client-side-validation and Bitcoin commitment dependencies, and frozen bugfix-only maintenance description."
+    },
+    {
+      "title": "RGB Contract Verification Implementation",
+      "author_or_publisher": "RGB-WG contributors",
+      "repository_path": "RGB-WG/rgb-core/src/verify.rs",
+      "url": "https://github.com/RGB-WG/rgb-core/blob/master/src/verify.rs",
+      "supports": "Consignment-stream processing, operation seals, codex verification, contract memory, seal definitions, and witness validation."
+    },
+    {
+      "title": "RGB Standard Library Workspace Manifest",
+      "author_or_publisher": "RGB-WG contributors",
+      "repository_path": "RGB-WG/rgb-std/Cargo.toml",
+      "url": "https://github.com/RGB-WG/rgb-std/blob/master/Cargo.toml",
+      "supports": "Current default-branch rgb-std version 0.12.0-rc.3, final rgb-core dependency, invoice package, and application-library maturity."
+    },
+    {
+      "title": "LNP/BP Standards Repository",
+      "author_or_publisher": "LNP/BP Standards Association",
+      "url": "https://github.com/LNP-BP/LNPBPs",
+      "supports": "Versioned specifications for deterministic Bitcoin commitments, single-use seals, client-side validation, TXO-based seals, and multi-protocol commitments."
+    },
+    {
+      "title": "Client-side Validation",
+      "author_or_publisher": "RGB protocol contributors",
+      "url": "https://docs.rgb.info/distributed-computing-concepts/client-side-validation",
+      "supports": "Selective validation, recipient-held contract history, data minimization, and the distinction from global consensus validation."
+    },
+    {
+      "title": "Single-use Seals and Proof of Publication",
+      "author_or_publisher": "RGB protocol contributors",
+      "url": "https://docs.rgb.info/distributed-computing-concepts/single-use-seals",
+      "supports": "Seal definitions, closing events, Bitcoin UTXO binding, and proof-of-publication concepts."
+    },
+    {
+      "title": "Commitment Schemes within Bitcoin and RGB",
+      "author_or_publisher": "RGB protocol contributors",
+      "url": "https://docs.rgb.info/commitment-layer/commitment-schemes",
+      "supports": "Deterministic commitment methods, witness transactions, Taproot and OP_RETURN commitment paths, and commitment boundaries."
+    },
+    {
+      "title": "RGB Anchors",
+      "author_or_publisher": "RGB protocol contributors",
+      "url": "https://docs.rgb.info/commitment-layer/anchors",
+      "supports": "Anchor structure, transaction association, and proofs connecting contract operations to Bitcoin commitments."
+    },
+    {
+      "title": "RGB Transfer and Consignment Documentation",
+      "author_or_publisher": "RGB protocol contributors",
+      "url": "https://docs.rgb.info/annexes/contract-transfers",
+      "supports": "Pre-v0.12 schema-era sender-to-recipient transfer data, consignments, beneficiary information, and client-side transfer validation workflow; used for conceptual transfer behavior rather than as evidence for the final v0.12 data model."
+    },
+    {
+      "title": "RGB Invoice Documentation",
+      "author_or_publisher": "RGB protocol contributors",
+      "url": "https://docs.rgb.info/annexes/invoices",
+      "supports": "RGB invoice purpose, beneficiary seals, requested contract state, and distinction from ordinary Bitcoin transaction data."
+    },
+    {
+      "title": "rgb-lib Wallet Library Manifest",
+      "author_or_publisher": "RGB-Tools contributors",
+      "repository_path": "RGB-Tools/rgb-lib/Cargo.toml",
+      "url": "https://github.com/RGB-Tools/rgb-lib/blob/master/Cargo.toml",
+      "supports": "rgb-lib version 0.3.0-beta.7, wallet-library scope, supported chain backends, and dependencies on v0.11.1-rc.11 application libraries."
+    },
+    {
+      "title": "RGB Lightning Node README",
+      "author_or_publisher": "RGB-Tools contributors",
+      "repository_path": "RGB-Tools/rgb-lightning-node/README.md",
+      "url": "https://github.com/RGB-Tools/rgb-lightning-node/blob/master/README.md",
+      "supports": "Experimental RGB channel construction, test-network limitation, early-alpha warning, required Bitcoin node and indexer services, optional proxy-based consignment transport, and non-universal Lightning compatibility."
+    },
+    {
+      "title": "RGB Lightning Node Manifest",
+      "author_or_publisher": "RGB-Tools contributors",
+      "repository_path": "RGB-Tools/rgb-lightning-node/Cargo.toml",
+      "url": "https://github.com/RGB-Tools/rgb-lightning-node/blob/master/Cargo.toml",
+      "supports": "Version 0.1.0 and the exact `rgb-lib` 0.3.0-beta.7 dependency used by the current RGB Lightning Node implementation."
+    },
+    {
+      "title": "Bitcoin Core Validation Implementation, v31.0",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "repository_path": "bitcoin/bitcoin/src/validation.cpp at v31.0",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.0/src/validation.cpp",
+      "supports": "Bitcoin transaction and block validation, UTXO-state changes, active-chain selection, confirmations, and reorganizations that bound RGB witness claims."
+    }
+  ],
+  "seo_title": "How RGB Works on Bitcoin | Client-Side Validation Explained",
+  "meta_description": "Learn how RGB uses client-side validation, single-use seals, consignments, and Bitcoin commitments, with clear v0.12 version and maturity boundaries.",
+  "excerpt": "RGB lets recipients validate contract state from private transfer data while Bitcoin confirms the UTXO spends and commitments anchoring that state. This guide explains seals, anchors, consignments, data availability, versions, and current integration limits.",
+  "reading_time": "16 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-BUILDING",
+    "label": "Building on Bitcoin",
+    "subcategory": "Layer 2",
+    "depth": "Deep",
+    "format": "Technical Analysis"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-034",
+      "title": "What Is Ark on Bitcoin?",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-036",
+      "title": "Bitcoin Sidechains Explained",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": []
+  },
+  "review_dates": {
+    "reviewed": "2026-07-22",
+    "copy_locked": "2026-07-22",
+    "human_verification": "2026-07-22"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "Two Validation Boundaries",
+      "educational_purpose": "Separate what Bitcoin nodes validate from what an RGB recipient validates locally.",
+      "recommended_placement": "After the section Client-side validation is not Bitcoin consensus validation.",
+      "visual_description": "Vintage split nautical chart. The lower public shipping lane shows Bitcoin nodes checking transactions, UTXOs, blocks, and one compact commitment. The upper private chart room shows a recipient checking contract genesis, codex rules, state transitions, seals, and a consignment. A narrow anchor line connects the two layers without merging them.",
+      "required_labels": "Bitcoin consensus, Bitcoin transaction, UTXO spend, Commitment, Recipient client, Contract genesis, Codex, State transition, Consignment, Client-side validation",
+      "caption": "Bitcoin validates the witness transaction and commitment placement; the recipient validates the RGB contract evidence.",
+      "alt_text": "Split technical map showing Bitcoin nodes validating transactions below and an RGB recipient validating private contract data above.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack the public Bitcoin lane below the private RGB validation room and keep the anchor line centered.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "Seal to Anchor Transfer Chain",
+      "educational_purpose": "Show how one owned state is consumed, reassigned, anchored, and checked by the recipient.",
+      "recommended_placement": "After the section Recipient validation has several layers.",
+      "visual_description": "Vintage technical navigation sequence beginning with a UTXO-defined seal and owned state. A state transition consumes that assignment, creates a concealed recipient seal, and commits into a Bitcoin witness transaction. The recipient follows the anchor proof back to the transition and contract rules before accepting.",
+      "required_labels": "Owned state, Seal definition, Seal closing, State transition, New assignment, Concealed seal, Witness transaction, Deterministic commitment, Anchor, Recipient validation",
+      "caption": "Spending the Bitcoin output closes the old seal, while the recipient validates the separate contract transition and anchor proof.",
+      "alt_text": "Sequential systems diagram of an RGB state transition from a UTXO seal through a Bitcoin commitment to recipient validation.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Use a vertical sequence with the Bitcoin witness transaction in the center and recipient validation at the bottom.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Consignment and Data Responsibility Map",
+      "educational_purpose": "Explain that transfer data, chain data, validation, storage, and backups come from different components.",
+      "recommended_placement": "After the section Data availability and backups are part of ownership.",
+      "visual_description": "Nautical cargo manifest map. The sender packages a consignment and sends it through an optional relay. The recipient wallet validates it using contract rules plus chain data from a resolver or local node, then stores the accepted state and a separate backup. Broken paths show missing consignment, unavailable resolver, incompatible version, and incomplete backup.",
+      "required_labels": "Sender wallet, Consignment stream, Optional relay, Recipient wallet, Contract validation, Bitcoin resolver, Local storage, Backup export, Missing data, Version mismatch",
+      "caption": "A Bitcoin commitment does not deliver the private contract data needed for validation, storage, and later spending.",
+      "alt_text": "Technical cargo map showing an RGB consignment moving from sender to recipient with separate chain-data, validation, storage, and backup paths.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack sender, relay, recipient validation, and backup as four stages with failure markers beside each stage.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}

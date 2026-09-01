@@ -1,0 +1,298 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-037-bitcoin-ordinals.md",
+  "source_sha256": "0c5871b5e93ed7ad9bf109128e90e06bd42019f4bb41644d977395d7fe517681",
+  "registry_id": "MSC-GUIDE-037",
+  "status": "COPY_LOCKED",
+  "h1": "What Are Bitcoin Ordinals?",
+  "introductory_deck": "Ordinals are an application-level convention that assigns numbers to satoshis and interprets how those numbered sats move through Bitcoin transactions. Learn how ordinal theory, indexers, transaction ordering, inscriptions, rarity labels, wallet coin control, reorganizations, and custody boundaries fit together without treating ordinal identities as Bitcoin consensus state.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "Bitcoin's consensus rules recognize satoshis as units of value inside transaction outputs. They do not assign each satoshi a permanent serial number. Ordinal theory adds that identity layer outside Bitcoin consensus by defining a numbering scheme for sats and a method for following those numbered sats as outputs are spent and new outputs are created.\n\nThat distinction is the foundation of Ordinals. A Bitcoin node can validate the same transaction whether or not the operator runs Ord software. An Ord indexer can then read the validated blockchain and apply ordinal theory to it. The indexer produces an additional interpretation: which ordinal numbers are currently located in which unspent transaction outputs, or UTXOs.\n\nOrdinals are therefore not a new Bitcoin consensus feature, a separate chain, or a native token ledger. They are an application-level convention built from public Bitcoin transaction history.",
+      "body_html": "<p>Bitcoin&#39;s consensus rules recognize satoshis as units of value inside transaction outputs. They do not assign each satoshi a permanent serial number. Ordinal theory adds that identity layer outside Bitcoin consensus by defining a numbering scheme for sats and a method for following those numbered sats as outputs are spent and new outputs are created.</p>\n<p>That distinction is the foundation of Ordinals. A Bitcoin node can validate the same transaction whether or not the operator runs Ord software. An Ord indexer can then read the validated blockchain and apply ordinal theory to it. The indexer produces an additional interpretation: which ordinal numbers are currently located in which unspent transaction outputs, or UTXOs.</p>\n<p>Ordinals are therefore not a new Bitcoin consensus feature, a separate chain, or a native token ledger. They are an application-level convention built from public Bitcoin transaction history.</p>"
+    },
+    {
+      "heading": "Satoshis under consensus and ordinal identities",
+      "body_markdown": "A satoshi is one hundred-millionth of a bitcoin. Bitcoin consensus tracks amounts assigned to UTXOs and checks whether later transactions spend those outputs according to the applicable scripts and monetary rules. Consensus does not require nodes to remember which particular sat from one input became which sat in one output.\n\nOrdinal theory makes that additional distinction. It assigns ordinal number zero to the first sat produced under the theory's ordering model, then continues numbering later sats according to the order in which they are mined. The ordinal number is not written into the sat, attached by a Bitcoin opcode, or recorded in Bitcoin Core's UTXO set. It is calculated by compatible software from chain history.\n\nTwo observers using the same ordinal rules and the same accepted Bitcoin chain should calculate the same locations. An observer that does not apply those rules sees only ordinary Bitcoin transactions and amounts. An observer using different indexer rules, software versions, or chain tips may produce a different application-level view.\n\nThis is why an ordinal number should not be described as a property enforced by every Bitcoin node. It is an identity assigned by ordinal theory.",
+      "body_html": "<p>A satoshi is one hundred-millionth of a bitcoin. Bitcoin consensus tracks amounts assigned to UTXOs and checks whether later transactions spend those outputs according to the applicable scripts and monetary rules. Consensus does not require nodes to remember which particular sat from one input became which sat in one output.</p>\n<p>Ordinal theory makes that additional distinction. It assigns ordinal number zero to the first sat produced under the theory&#39;s ordering model, then continues numbering later sats according to the order in which they are mined. The ordinal number is not written into the sat, attached by a Bitcoin opcode, or recorded in Bitcoin Core&#39;s UTXO set. It is calculated by compatible software from chain history.</p>\n<p>Two observers using the same ordinal rules and the same accepted Bitcoin chain should calculate the same locations. An observer that does not apply those rules sees only ordinary Bitcoin transactions and amounts. An observer using different indexer rules, software versions, or chain tips may produce a different application-level view.</p>\n<p>This is why an ordinal number should not be described as a property enforced by every Bitcoin node. It is an identity assigned by ordinal theory.</p>"
+    },
+    {
+      "heading": "The numbering model begins with mining order",
+      "body_markdown": "Ordinal theory assigns sat numbers according to block order and the scheduled subsidy ranges. Transaction-fee sats are appended to the block’s coinbase ordering. If the coinbase claims less than the available subsidy and fees, the unclaimed ranges are tracked as lost sats; later ordinal numbers do not shift. Each ordinal number can also be represented in several notations, such as an integer, a block-height-and-offset pair, or a name generated from the number.\n\nThose representations do not create separate assets. They are alternate labels for the same interpreted sat position. A sat remains spendable as part of a Bitcoin UTXO under ordinary Bitcoin rules.\n\nThe numbering model also has to account for transaction fees. Inputs can contain more value than ordinary outputs. The difference is the transaction fee, which becomes available to the miner through the block's coinbase transaction under Bitcoin's rules. Ordinal theory places sats that flow to fees into an interpreted ordering and assigns them through the coinbase output according to its transfer algorithm.\n\nThe exact ordinal location therefore depends on a complete ordered history, not merely the current value of a UTXO. An indexer must process blocks and transactions in order to reconstruct the application state.",
+      "body_html": "<p>Ordinal theory assigns sat numbers according to block order and the scheduled subsidy ranges. Transaction-fee sats are appended to the block’s coinbase ordering. If the coinbase claims less than the available subsidy and fees, the unclaimed ranges are tracked as lost sats; later ordinal numbers do not shift. Each ordinal number can also be represented in several notations, such as an integer, a block-height-and-offset pair, or a name generated from the number.</p>\n<p>Those representations do not create separate assets. They are alternate labels for the same interpreted sat position. A sat remains spendable as part of a Bitcoin UTXO under ordinary Bitcoin rules.</p>\n<p>The numbering model also has to account for transaction fees. Inputs can contain more value than ordinary outputs. The difference is the transaction fee, which becomes available to the miner through the block&#39;s coinbase transaction under Bitcoin&#39;s rules. Ordinal theory places sats that flow to fees into an interpreted ordering and assigns them through the coinbase output according to its transfer algorithm.</p>\n<p>The exact ordinal location therefore depends on a complete ordered history, not merely the current value of a UTXO. An indexer must process blocks and transactions in order to reconstruct the application state.</p>"
+    },
+    {
+      "heading": "First-in-first-out transfer tracking",
+      "body_markdown": "Bitcoin transactions consume whole UTXOs and create new outputs. They do not select individual sats by serial number. Ordinal theory bridges that gap with a first-in-first-out, or FIFO, interpretation.\n\nImagine concatenating the sats from all transaction inputs in input order. Then imagine filling the transaction's outputs, also in output order, from the beginning of that input sequence. The first sat from the first input is assigned to the first available position in the first output. Assignment continues until that output's value is filled, then continues into the next output.\n\nAny remaining input value that is not assigned to an ordinary output is interpreted as the fee. Under ordinal theory, those sats later enter the block's coinbase ordering.\n\nInput and output order therefore matter. Reordering identical-value inputs can change which ordinal numbers the indexer assigns to each output. Reordering outputs can move a tracked sat to a different recipient or into change. Changing a fee can shift the boundary between sats assigned to outputs and sats assigned to the fee.\n\nBitcoin consensus validates amounts, signatures, scripts, and spending authority. It does not validate that a wallet's chosen ordering preserves the ordinal identity a user intended to transfer.",
+      "body_html": "<p>Bitcoin transactions consume whole UTXOs and create new outputs. They do not select individual sats by serial number. Ordinal theory bridges that gap with a first-in-first-out, or FIFO, interpretation.</p>\n<p>Imagine concatenating the sats from all transaction inputs in input order. Then imagine filling the transaction&#39;s outputs, also in output order, from the beginning of that input sequence. The first sat from the first input is assigned to the first available position in the first output. Assignment continues until that output&#39;s value is filled, then continues into the next output.</p>\n<p>Any remaining input value that is not assigned to an ordinary output is interpreted as the fee. Under ordinal theory, those sats later enter the block&#39;s coinbase ordering.</p>\n<p>Input and output order therefore matter. Reordering identical-value inputs can change which ordinal numbers the indexer assigns to each output. Reordering outputs can move a tracked sat to a different recipient or into change. Changing a fee can shift the boundary between sats assigned to outputs and sats assigned to the fee.</p>\n<p>Bitcoin consensus validates amounts, signatures, scripts, and spending authority. It does not validate that a wallet&#39;s chosen ordering preserves the ordinal identity a user intended to transfer.</p>"
+    },
+    {
+      "heading": "Ord software supplies the index",
+      "body_markdown": "The maintained `ord` project includes an indexer, wallet commands, and an explorer. Its indexer connects to a Bitcoin node, reads the accepted chain, and derives ordinal locations and related application data.\n\nThat index is separate from Bitcoin Core's chainstate. Bitcoin Core supplies block and transaction data and validates Bitcoin rules. `ord` applies its own model on top. Other software can implement compatible behavior, but compatibility must be tested rather than assumed.\n\nAn Ord-aware service generally needs enough historical data to build or restore its index. Software releases can also change database schemas or application behavior. The Ord documentation notes that reindexing may be required after certain major releases or database corruption. A reindex reconstructs the application database from available Bitcoin history; it does not change Bitcoin consensus state.\n\nUsers who depend on an explorer or hosted API depend on that service's chain tip, index version, configuration, uptime, and interpretation. Running a Bitcoin node alone does not provide ordinal balances or identities.",
+      "body_html": "<p>The maintained <code>ord</code> project includes an indexer, wallet commands, and an explorer. Its indexer connects to a Bitcoin node, reads the accepted chain, and derives ordinal locations and related application data.</p>\n<p>That index is separate from Bitcoin Core&#39;s chainstate. Bitcoin Core supplies block and transaction data and validates Bitcoin rules. <code>ord</code> applies its own model on top. Other software can implement compatible behavior, but compatibility must be tested rather than assumed.</p>\n<p>An Ord-aware service generally needs enough historical data to build or restore its index. Software releases can also change database schemas or application behavior. The Ord documentation notes that reindexing may be required after certain major releases or database corruption. A reindex reconstructs the application database from available Bitcoin history; it does not change Bitcoin consensus state.</p>\n<p>Users who depend on an explorer or hosted API depend on that service&#39;s chain tip, index version, configuration, uptime, and interpretation. Running a Bitcoin node alone does not provide ordinal balances or identities.</p>"
+    },
+    {
+      "heading": "Reorganizations change the accepted history",
+      "body_markdown": "A Bitcoin reorganization occurs when a node switches to a different valid chain with more accumulated proof of work. Transactions in disconnected blocks may return to a mempool, disappear, or later confirm in a different order. New blocks may contain different transactions.\n\nBecause ordinal state is derived from ordered chain history, an indexer must roll back interpretations from disconnected blocks and apply the replacement branch. An ordinal location, inscription number, transfer history, or displayed owner can change while confirmations are unsettled.\n\nA transaction can also be replaced before confirmation under applicable wallet and mempool conditions. An indexer that displays unconfirmed ordinal movement is presenting a provisional interpretation, not final Bitcoin settlement.\n\nMore confirmations reduce ordinary reorganization risk but do not create a separate ordinal guarantee. The index remains dependent on the accepted Bitcoin chain and the indexer's correct handling of it.",
+      "body_html": "<p>A Bitcoin reorganization occurs when a node switches to a different valid chain with more accumulated proof of work. Transactions in disconnected blocks may return to a mempool, disappear, or later confirm in a different order. New blocks may contain different transactions.</p>\n<p>Because ordinal state is derived from ordered chain history, an indexer must roll back interpretations from disconnected blocks and apply the replacement branch. An ordinal location, inscription number, transfer history, or displayed owner can change while confirmations are unsettled.</p>\n<p>A transaction can also be replaced before confirmation under applicable wallet and mempool conditions. An indexer that displays unconfirmed ordinal movement is presenting a provisional interpretation, not final Bitcoin settlement.</p>\n<p>More confirmations reduce ordinary reorganization risk but do not create a separate ordinal guarantee. The index remains dependent on the accepted Bitcoin chain and the indexer&#39;s correct handling of it.</p>"
+    },
+    {
+      "heading": "Rarity is an ordinal-theory convention",
+      "body_markdown": "Ordinal theory groups certain sats into rarity categories based on positions associated with recurring Bitcoin events. The handbook uses terms such as common, uncommon, rare, epic, legendary, and mythic.\n\nFor example, the first sat of a block is categorized differently from most sats under that convention. Other categories refer to the first sat around difficulty-adjustment periods, subsidy eras, or larger cycle boundaries.\n\nThese labels are not Bitcoin consensus classes. Bitcoin nodes do not enforce a different script, fee rule, or monetary value for a sat because an indexer calls it rare. The label does not prove demand, legal scarcity, authenticity, collectibility, or market value. It is a classification inside ordinal theory.\n\nA user can track an ordinal without attaching content to it. Rare-sat collecting is one example: the sat's interpreted number or category may be the point of interest even when no inscription exists.",
+      "body_html": "<p>Ordinal theory groups certain sats into rarity categories based on positions associated with recurring Bitcoin events. The handbook uses terms such as common, uncommon, rare, epic, legendary, and mythic.</p>\n<p>For example, the first sat of a block is categorized differently from most sats under that convention. Other categories refer to the first sat around difficulty-adjustment periods, subsidy eras, or larger cycle boundaries.</p>\n<p>These labels are not Bitcoin consensus classes. Bitcoin nodes do not enforce a different script, fee rule, or monetary value for a sat because an indexer calls it rare. The label does not prove demand, legal scarcity, authenticity, collectibility, or market value. It is a classification inside ordinal theory.</p>\n<p>A user can track an ordinal without attaching content to it. Rare-sat collecting is one example: the sat&#39;s interpreted number or category may be the point of interest even when no inscription exists.</p>"
+    },
+    {
+      "heading": "Ordinals and inscriptions are related but different",
+      "body_markdown": "Ordinal theory is the numbering and transfer-tracking model. An inscription is data discovered by Ord-compatible software in a particular Bitcoin transaction witness structure. The two concepts are connected because the Ord protocol assigns an inscription to an interpreted sat and then follows that sat through later transactions.\n\nThey are not synonyms.\n\nAn ordinal can exist without an inscription. Under the theory, every sat has an ordinal number whether or not anyone has attached content. An inscription can use ordinal tracking for assignment and transfer, but the inscription envelope, content fields, identifier, and rendering rules are separate application mechanics.\n\nGuide 040 explains the commit-and-reveal transaction structure, witness envelope, content fields, identifiers, rendering, and malformed-envelope behavior in detail. For this guide, the important point is that an inscription does not create ordinal theory, and ordinal theory is broader than inscriptions.\n\nA Rune or BRC-20 operation is different again. Runes use runestone messages interpreted by Rune-aware software. BRC-20 uses JSON inscriptions and indexer rules to derive fungible balances. Neither balance system becomes part of Bitcoin Core's native ledger merely because its data appears in Bitcoin transactions.",
+      "body_html": "<p>Ordinal theory is the numbering and transfer-tracking model. An inscription is data discovered by Ord-compatible software in a particular Bitcoin transaction witness structure. The two concepts are connected because the Ord protocol assigns an inscription to an interpreted sat and then follows that sat through later transactions.</p>\n<p>They are not synonyms.</p>\n<p>An ordinal can exist without an inscription. Under the theory, every sat has an ordinal number whether or not anyone has attached content. An inscription can use ordinal tracking for assignment and transfer, but the inscription envelope, content fields, identifier, and rendering rules are separate application mechanics.</p>\n<p>Guide 040 explains the commit-and-reveal transaction structure, witness envelope, content fields, identifiers, rendering, and malformed-envelope behavior in detail. For this guide, the important point is that an inscription does not create ordinal theory, and ordinal theory is broader than inscriptions.</p>\n<p>A Rune or BRC-20 operation is different again. Runes use runestone messages interpreted by Rune-aware software. BRC-20 uses JSON inscriptions and indexer rules to derive fungible balances. Neither balance system becomes part of Bitcoin Core&#39;s native ledger merely because its data appears in Bitcoin transactions.</p>"
+    },
+    {
+      "heading": "Coin control is part of safe handling",
+      "body_markdown": "A standard Bitcoin wallet usually selects UTXOs to satisfy an amount and fee target. Unless it is Ord-aware, it may not know that a particular UTXO contains an inscription, a sat assigned a sought-after ordinal number, or a sat reserved for another application.\n\nSpending that UTXO can move the tracked sat into an unintended output. Depending on input order, output values, output order, and fee size, the sat may go to the recipient, return as change, or be assigned to the fee under ordinal theory.\n\nThis is a wallet construction risk, not a Bitcoin validation failure. The transaction can be fully valid and confirmed while producing an unintended Ord interpretation.\n\nOrd-aware wallets use sat control, sat selection, postage conventions, and explicit output construction to reduce this risk. The Ord handbook warns that unsupported wallets may receive an ordinal safely as long as the containing UTXO remains unspent, but later ordinary spending can accidentally move it.\n\nUsers should separate ordinary spending funds from UTXOs that require application-aware handling. They should also verify the exact transaction before signing, including every input, every output, values, ordering, change, and fee.",
+      "body_html": "<p>A standard Bitcoin wallet usually selects UTXOs to satisfy an amount and fee target. Unless it is Ord-aware, it may not know that a particular UTXO contains an inscription, a sat assigned a sought-after ordinal number, or a sat reserved for another application.</p>\n<p>Spending that UTXO can move the tracked sat into an unintended output. Depending on input order, output values, output order, and fee size, the sat may go to the recipient, return as change, or be assigned to the fee under ordinal theory.</p>\n<p>This is a wallet construction risk, not a Bitcoin validation failure. The transaction can be fully valid and confirmed while producing an unintended Ord interpretation.</p>\n<p>Ord-aware wallets use sat control, sat selection, postage conventions, and explicit output construction to reduce this risk. The Ord handbook warns that unsupported wallets may receive an ordinal safely as long as the containing UTXO remains unspent, but later ordinary spending can accidentally move it.</p>\n<p>Users should separate ordinary spending funds from UTXOs that require application-aware handling. They should also verify the exact transaction before signing, including every input, every output, values, ordering, change, and fee.</p>"
+    },
+    {
+      "heading": "Fees affect more than cost",
+      "body_markdown": "Bitcoin transaction fees pay for block space and are determined by transaction weight and fee rate, not by an ordinal's claimed importance. Ordinal-aware transfers may need additional inputs or outputs to isolate a target sat and preserve an intended destination, increasing transaction size.\n\nA poorly constructed fee can also consume the tracked sat under ordinal theory. Wallet software must place enough value around the sat to create valid outputs while avoiding dust or policy problems under the current Bitcoin implementation and network conditions.\n\nRelay policy, wallet policy, and miner selection are not identical to consensus. A transaction may be consensus-valid yet fail a node's current mempool or relay policy. Conversely, confirmation proves that the Bitcoin transaction satisfied the validating nodes' consensus rules; it does not prove that every ordinal wallet or indexer interprets the application state identically.\n\nFee estimation is uncertain. A low-fee transaction may remain unconfirmed or be replaced. A high fee does not certify provenance or transfer intent.",
+      "body_html": "<p>Bitcoin transaction fees pay for block space and are determined by transaction weight and fee rate, not by an ordinal&#39;s claimed importance. Ordinal-aware transfers may need additional inputs or outputs to isolate a target sat and preserve an intended destination, increasing transaction size.</p>\n<p>A poorly constructed fee can also consume the tracked sat under ordinal theory. Wallet software must place enough value around the sat to create valid outputs while avoiding dust or policy problems under the current Bitcoin implementation and network conditions.</p>\n<p>Relay policy, wallet policy, and miner selection are not identical to consensus. A transaction may be consensus-valid yet fail a node&#39;s current mempool or relay policy. Conversely, confirmation proves that the Bitcoin transaction satisfied the validating nodes&#39; consensus rules; it does not prove that every ordinal wallet or indexer interprets the application state identically.</p>\n<p>Fee estimation is uncertain. A low-fee transaction may remain unconfirmed or be replaced. A high fee does not certify provenance or transfer intent.</p>"
+    },
+    {
+      "heading": "Custody follows Bitcoin keys and UTXO control",
+      "body_markdown": "Control of an ordinal-bearing UTXO ultimately depends on control of the Bitcoin keys or spending conditions for that output. A self-custodial user can sign the UTXO's Bitcoin spend. A custodian or marketplace may instead control the keys and maintain an internal account or promise to process withdrawals.\n\nOrdinal software adds interpretation, but it does not override Bitcoin spending authority. An explorer's owner label does not create key control. A marketplace account does not by itself prove that a specific UTXO is segregated for the user.\n\nTransfers also depend on recipient compatibility. Sending a tracked sat to a valid Bitcoin address can be valid at the Bitcoin layer even when the recipient wallet cannot display or safely re-spend it. The recipient may later spend the containing UTXO through ordinary coin selection.\n\nBefore transfer, parties need to agree on the intended asset, destination, indexer rules, confirmation threshold, and handling software. They should not infer legal ownership or contractual rights from an address or ordinal label alone.",
+      "body_html": "<p>Control of an ordinal-bearing UTXO ultimately depends on control of the Bitcoin keys or spending conditions for that output. A self-custodial user can sign the UTXO&#39;s Bitcoin spend. A custodian or marketplace may instead control the keys and maintain an internal account or promise to process withdrawals.</p>\n<p>Ordinal software adds interpretation, but it does not override Bitcoin spending authority. An explorer&#39;s owner label does not create key control. A marketplace account does not by itself prove that a specific UTXO is segregated for the user.</p>\n<p>Transfers also depend on recipient compatibility. Sending a tracked sat to a valid Bitcoin address can be valid at the Bitcoin layer even when the recipient wallet cannot display or safely re-spend it. The recipient may later spend the containing UTXO through ordinary coin selection.</p>\n<p>Before transfer, parties need to agree on the intended asset, destination, indexer rules, confirmation threshold, and handling software. They should not infer legal ownership or contractual rights from an address or ordinal label alone.</p>"
+    },
+    {
+      "heading": "Provenance depends on interpretable history",
+      "body_markdown": "Ordinal provenance usually means reconstructing a chain of inscriptions, parent relationships, prior transfers, or creator associations from Bitcoin data and Ord conventions. The chain can provide verifiable transaction references, but the meaning assigned to those references remains application-level.\n\nA signature can prove control of a key for a defined message. A transaction can prove that an output was spent. An inscription parent field can establish a relationship recognized by compatible Ord software when its construction rules are satisfied. None of those facts alone proves authorship, trademark rights, copyright ownership, authenticity of an off-chain person, or permission to reuse content.\n\nIndexer compatibility matters. Historical inscription numbering rules, software bugs, cursed or vindicated inscription treatment, parent validation, and later protocol fields can affect what an application displays. Services should document their version and rebuild process, especially after protocol changes.\n\nA name, ordinal number, inscription number, image, or collection label can be copied into another inscription or interface. Users must verify identifiers and transaction history rather than relying on appearance.",
+      "body_html": "<p>Ordinal provenance usually means reconstructing a chain of inscriptions, parent relationships, prior transfers, or creator associations from Bitcoin data and Ord conventions. The chain can provide verifiable transaction references, but the meaning assigned to those references remains application-level.</p>\n<p>A signature can prove control of a key for a defined message. A transaction can prove that an output was spent. An inscription parent field can establish a relationship recognized by compatible Ord software when its construction rules are satisfied. None of those facts alone proves authorship, trademark rights, copyright ownership, authenticity of an off-chain person, or permission to reuse content.</p>\n<p>Indexer compatibility matters. Historical inscription numbering rules, software bugs, cursed or vindicated inscription treatment, parent validation, and later protocol fields can affect what an application displays. Services should document their version and rebuild process, especially after protocol changes.</p>\n<p>A name, ordinal number, inscription number, image, or collection label can be copied into another inscription or interface. Users must verify identifiers and transaction history rather than relying on appearance.</p>"
+    },
+    {
+      "heading": "Permanence and accessibility are separate claims",
+      "body_markdown": "Bitcoin block inclusion can make transaction and witness data part of the accepted blockchain history. That is a meaningful data-availability property, but it is not the same as universal access or permanent rendering.\n\nA pruned Bitcoin node may validate old blocks and later delete their block files. An ordinary wallet may not index witness content. An explorer may filter, moderate, fail to support a media type, change rendering rules, or go offline. Browser support can change. Recursive or delegated content can introduce additional dependencies on other inscriptions and application behavior.\n\nReorganizations can remove recent data from the accepted chain. Future software may parse a field differently or cease serving a format. Users also need an index or transaction retrieval path to find the relevant bytes.\n\nAccordingly, it is more precise to say that confirmed inscription data can be included in Bitcoin's chain history under ordinary Bitcoin rules. Universal hosting, discoverability, interpretation, rendering, legality, and uninterrupted availability are not guaranteed.",
+      "body_html": "<p>Bitcoin block inclusion can make transaction and witness data part of the accepted blockchain history. That is a meaningful data-availability property, but it is not the same as universal access or permanent rendering.</p>\n<p>A pruned Bitcoin node may validate old blocks and later delete their block files. An ordinary wallet may not index witness content. An explorer may filter, moderate, fail to support a media type, change rendering rules, or go offline. Browser support can change. Recursive or delegated content can introduce additional dependencies on other inscriptions and application behavior.</p>\n<p>Reorganizations can remove recent data from the accepted chain. Future software may parse a field differently or cease serving a format. Users also need an index or transaction retrieval path to find the relevant bytes.</p>\n<p>Accordingly, it is more precise to say that confirmed inscription data can be included in Bitcoin&#39;s chain history under ordinary Bitcoin rules. Universal hosting, discoverability, interpretation, rendering, legality, and uninterrupted availability are not guaranteed.</p>"
+    },
+    {
+      "heading": "Why Ordinals are not automatically NFTs",
+      "body_markdown": "“NFT” is a broad ecosystem label associated with many different contract, registry, custody, and rights models. Ordinal theory does not create a smart-contract token for every sat. It assigns application-level numbers and follows sats through Bitcoin transactions.\n\nSome inscriptions are used as unique digital collectibles and may be described by their communities as NFTs. Others are text, software, documents, media, protocol messages, parent records, or arbitrary data. A rare sat can be tracked without any inscription. A BRC-20 inscription may represent a fungible indexer operation rather than a unique collectible.\n\nThe label can obscure more than it explains. A careful description should identify the actual mechanism: a numbered sat under ordinal theory, an inscription envelope interpreted by Ord software, a Rune balance derived from a runestone, or a BRC-20 balance derived by an indexer.\n\nNone of those labels proves ownership rights, authenticity, scarcity, redeemability, interoperability, liquidity, or value.",
+      "body_html": "<p>“NFT” is a broad ecosystem label associated with many different contract, registry, custody, and rights models. Ordinal theory does not create a smart-contract token for every sat. It assigns application-level numbers and follows sats through Bitcoin transactions.</p>\n<p>Some inscriptions are used as unique digital collectibles and may be described by their communities as NFTs. Others are text, software, documents, media, protocol messages, parent records, or arbitrary data. A rare sat can be tracked without any inscription. A BRC-20 inscription may represent a fungible indexer operation rather than a unique collectible.</p>\n<p>The label can obscure more than it explains. A careful description should identify the actual mechanism: a numbered sat under ordinal theory, an inscription envelope interpreted by Ord software, a Rune balance derived from a runestone, or a BRC-20 balance derived by an indexer.</p>\n<p>None of those labels proves ownership rights, authenticity, scarcity, redeemability, interoperability, liquidity, or value.</p>"
+    },
+    {
+      "heading": "The working model",
+      "body_markdown": "Ordinals add an application index to Bitcoin history. The index numbers sats by mining order and tracks them through transactions using input and output ordering. Bitcoin nodes validate the underlying blocks and spends. Ord-compatible software derives the ordinal identities, locations, rarity categories, and related application data.\n\nThat model creates useful precision. A confirmed Bitcoin transaction can be valid even when a wallet accidentally moved a tracked sat. Two services can agree on Bitcoin consensus while disagreeing because of index versions or application rules. An ordinal can exist without an inscription, and an inscription can carry data without becoming a native Bitcoin token.\n\nThe practical responsibilities are therefore divided. Bitcoin supplies ordered, validated transaction history. Indexers supply ordinal interpretation. Wallets must construct transactions that preserve the intended interpretation. Users must verify custody, identifiers, compatibility, provenance claims, and access assumptions without treating any of them as guarantees.",
+      "body_html": "<p>Ordinals add an application index to Bitcoin history. The index numbers sats by mining order and tracks them through transactions using input and output ordering. Bitcoin nodes validate the underlying blocks and spends. Ord-compatible software derives the ordinal identities, locations, rarity categories, and related application data.</p>\n<p>That model creates useful precision. A confirmed Bitcoin transaction can be valid even when a wallet accidentally moved a tracked sat. Two services can agree on Bitcoin consensus while disagreeing because of index versions or application rules. An ordinal can exist without an inscription, and an inscription can carry data without becoming a native Bitcoin token.</p>\n<p>The practical responsibilities are therefore divided. Bitcoin supplies ordered, validated transaction history. Indexers supply ordinal interpretation. Wallets must construct transactions that preserve the intended interpretation. Users must verify custody, identifiers, compatibility, provenance claims, and access assumptions without treating any of them as guarantees.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Satoshi",
+      "definition": "One hundred-millionth of a bitcoin and the smallest unit represented in ordinary Bitcoin amounts."
+    },
+    {
+      "term": "Ordinal theory",
+      "definition": "An application-level numbering and transfer-tracking convention for satoshis."
+    },
+    {
+      "term": "Ordinal number",
+      "definition": "The number assigned to a sat under ordinal theory, not a serial number enforced by Bitcoin consensus."
+    },
+    {
+      "term": "Ord indexer",
+      "definition": "Software that reads Bitcoin history and derives ordinal locations and related application state."
+    },
+    {
+      "term": "UTXO",
+      "definition": "An unspent Bitcoin transaction output that can contain one or more sats."
+    },
+    {
+      "term": "Sat control",
+      "definition": "Wallet construction that deliberately places a tracked sat into a chosen output."
+    },
+    {
+      "term": "FIFO",
+      "definition": "The first-in-first-out interpretation used by ordinal theory to map ordered input sats into ordered outputs."
+    },
+    {
+      "term": "Rarity",
+      "definition": "An ordinal-theory classification based on a sat's interpreted position in recurring Bitcoin events."
+    },
+    {
+      "term": "Inscription",
+      "definition": "Data identified by Ord-compatible software in a defined Bitcoin witness envelope and assigned through Ord rules."
+    },
+    {
+      "term": "Coin control",
+      "definition": "Explicit selection and handling of UTXOs rather than automatic wallet selection."
+    },
+    {
+      "term": "Reorganization",
+      "definition": "A switch to a different accepted Bitcoin chain that requires derived index state to be rolled back and reapplied."
+    },
+    {
+      "term": "Provenance",
+      "definition": "Interpreted transaction and relationship history used to support an origin or lineage claim."
+    },
+    {
+      "term": "Bitcoin consensus",
+      "definition": "The rules nodes apply to validate Bitcoin blocks, transactions, scripts, proof of work, and UTXO spends."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Ordinal Theory Handbook: Introduction",
+      "author_or_publisher": "Ord project contributors",
+      "url": "https://docs.ordinals.com/",
+      "supports": "The maintained project's definition of ordinal theory as an identity and tracking convention for satoshis and its relationship to inscriptions."
+    },
+    {
+      "title": "Ordinal Theory Handbook: Overview",
+      "author_or_publisher": "Ord project contributors",
+      "url": "https://docs.ordinals.com/overview.html",
+      "supports": "Numbering by mining order, FIFO transfer tracking, notation systems, rarity terminology, and the components of the Ord project."
+    },
+    {
+      "title": "Ordinal Theory Handbook: FAQ",
+      "author_or_publisher": "Ord project contributors",
+      "url": "https://docs.ordinals.com/faq.html",
+      "supports": "The input-to-output FIFO algorithm and practical explanation of how sats are assigned through transactions."
+    },
+    {
+      "title": "Ordinals BIP Draft",
+      "author_or_publisher": "Ord project contributors",
+      "url": "https://github.com/ordinals/ord/blob/master/bip.mediawiki",
+      "supports": "The formal ordinal numbering and transfer model, including scheduled subsidy ranges, transaction-fee ordering, coinbase assignment, and coinbase ranges left unassigned to outputs."
+    },
+    {
+      "title": "Ord Repository",
+      "author_or_publisher": "Ord project contributors",
+      "url": "https://github.com/ordinals/ord",
+      "supports": "Current maintained reference software for indexing ordinal state, including lost-sat tracking for subsidy or fee ranges left unassigned by coinbase outputs, plus wallet, inscription, and Rune behavior."
+    },
+    {
+      "title": "Ord Releases",
+      "author_or_publisher": "Ord project contributors",
+      "url": "https://github.com/ordinals/ord/releases",
+      "supports": "Current software release history and the need to date implementation-specific behavior; latest release reviewed was 0.27.1 as of 2026-07-22."
+    },
+    {
+      "title": "Ordinal Theory Handbook: Collecting",
+      "author_or_publisher": "Ord project contributors",
+      "url": "https://docs.ordinals.com/guides/collecting.html",
+      "supports": "Sat-control requirements, unsupported-wallet risks, accidental transfers, and spending an ordinal-bearing UTXO to fees."
+    },
+    {
+      "title": "Ordinal Theory Handbook: Wallet",
+      "author_or_publisher": "Ord project contributors",
+      "url": "https://docs.ordinals.com/guides/wallet.html",
+      "supports": "The separation between Bitcoin Core node and wallet functions and Ord-aware inscription and sat-control operations."
+    },
+    {
+      "title": "Ordinal Theory Handbook: Reindexing",
+      "author_or_publisher": "Ord project contributors",
+      "url": "https://docs.ordinals.com/guides/reindexing.html",
+      "supports": "Ord index database reconstruction after schema-changing releases or corruption."
+    },
+    {
+      "title": "Ordinal Theory Handbook: Inscriptions",
+      "author_or_publisher": "Ord project contributors",
+      "url": "https://docs.ordinals.com/inscriptions.html",
+      "supports": "The distinction between ordinal tracking and inscription data, inscription assignment, and historical numbering behavior."
+    },
+    {
+      "title": "Bitcoin Improvement Proposal 141: Segregated Witness",
+      "author_or_publisher": "Eric Lombrozo, Johnson Lau, and Pieter Wuille",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki",
+      "supports": "Bitcoin witness structure, transaction weight, and the consensus context used by inscription transactions."
+    },
+    {
+      "title": "Bitcoin Core v31.1 Source Tree",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/tree/v31.1/src",
+      "supports": "One current implementation's validation, UTXO, transaction, mempool, relay, wallet, and pruning behavior; this is implementation evidence, not a definition of all Bitcoin protocol behavior."
+    },
+    {
+      "title": "Bitcoin Core v31.1 Release Notes",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/master/doc/release-notes/release-notes-31.1.md",
+      "supports": "Bitcoin Core 31.1 as the current implementation release used to date implementation and policy references in this guide."
+    }
+  ],
+  "seo_title": "What Are Bitcoin Ordinals? | Mempool Surf Club",
+  "meta_description": "Learn how ordinal theory numbers and tracks sats, why indexers and coin control matter, and where Bitcoin consensus ends.",
+  "excerpt": "Understand Ordinals as an application-level sat numbering system, including FIFO tracking, indexers, rarity labels, inscriptions, reorganizations, custody, and wallet risks.",
+  "reading_time": "16 to 19 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-BUILDING",
+    "label": "Building on Bitcoin",
+    "subcategory": "Digital Assets",
+    "depth": "Deep",
+    "format": "Technical Analysis"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-036",
+      "title": "Bitcoin Sidechains Explained",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-038",
+      "title": "How the Runes Protocol Works",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": []
+  },
+  "review_dates": {
+    "reviewed": "2026-07-23",
+    "copy_locked": "2026-07-23",
+    "human_verification": "2026-07-23"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "The Two-Layer Sat Navigation Chart",
+      "educational_purpose": "Separate ordinary Bitcoin UTXO validation from the ordinal numbers derived by an external indexer.",
+      "recommended_placement": "After the section Satoshis under consensus and ordinal identities.",
+      "visual_description": "Vintage nautical chart with a lower layer of Bitcoin transaction outputs and an upper transparent tracing layer that assigns numbered routes to individual sats.",
+      "required_labels": "Bitcoin consensus, UTXO amounts, Ord indexer, Ordinal number, Derived location, Not consensus state",
+      "caption": "Bitcoin validates amounts and spends; Ord-compatible software derives individual sat identities from the same history.",
+      "alt_text": "Two-layer technical chart showing Bitcoin UTXOs below and an Ord indexer tracing numbered satoshis above.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack the Bitcoin layer, indexer lens, and derived ordinal layer vertically.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "FIFO Transaction Harbor",
+      "educational_purpose": "Show how ordered inputs fill ordered outputs and how a tracked sat can move into change or fees.",
+      "recommended_placement": "After the section First-in-first-out transfer tracking.",
+      "visual_description": "Cartographic harbor diagram with three input channels feeding numbered sat markers into two output docks and a fee channel, all in explicit order.",
+      "required_labels": "Input 0, Input 1, Output 0, Output 1, Change, Fee, Tracked sat, FIFO order",
+      "caption": "Ordinal theory maps ordered input sats into ordered output positions, with unassigned value interpreted as fees.",
+      "alt_text": "Nautical flow diagram showing ordered Bitcoin inputs filling ordered outputs and a fee path under the FIFO ordinal model.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Use one vertical flow from inputs through an ordering gate into recipient, change, and fee destinations.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Coin-Control Hazard Map",
+      "educational_purpose": "Explain why an ordinary wallet can create a valid Bitcoin transaction that unintentionally moves an inscription or tracked sat.",
+      "recommended_placement": "After the section Coin control is part of safe handling.",
+      "visual_description": "Vintage systems map comparing an automatic wallet route with an Ord-aware route around marked UTXOs, change outputs, and fee shoals.",
+      "required_labels": "Automatic selection, Ord-aware selection, Protected UTXO, Recipient, Change, Fee, Accidental movement",
+      "caption": "Bitcoin validity does not guarantee that wallet construction preserved the user's intended ordinal location.",
+      "alt_text": "Technical hazard map comparing automatic coin selection with Ord-aware coin control around protected UTXOs and fee outputs.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Present the unsafe and controlled routes as two vertically stacked panels.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}

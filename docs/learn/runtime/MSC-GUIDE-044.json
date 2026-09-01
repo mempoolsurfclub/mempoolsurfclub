@@ -1,0 +1,439 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-044-bitcoin-indexers.md",
+  "source_sha256": "7aed370ba188ce001aa356e568670f5b3b1c4049eb7ced03d915ed8e6246216d",
+  "registry_id": "MSC-GUIDE-044",
+  "status": "COPY_LOCKED",
+  "h1": "How Bitcoin Indexers Work",
+  "introductory_deck": "A Bitcoin indexer reads ordered blockchain or mempool data and builds a database optimized for questions the validating node does not answer directly. This guide explains native Bitcoin Core data, optional indexes, external address and script indexes, application-protocol state, reorganizations, pruning, consistency, and the point where useful derived data stops being Bitcoin consensus.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "Bitcoin’s blockchain is an ordered history of blocks and transactions. A validating node uses that history to maintain the active chain and the current set of spendable outputs. Applications often need different questions answered quickly:\n\n- Which transactions touched this script?\n- Which transaction spent this output?\n- What is the history of this address?\n- Which blocks may contain wallet-relevant scripts?\n- Which inscriptions, token operations, or application events were interpreted from a transaction?\n- How far behind the current chain tip is a service?\n- What changed during a reorganization?\n\nAn indexer preprocesses Bitcoin data into keys, tables, filters, or event records that make those queries efficient. The index can be accurate and reproducible while remaining outside Bitcoin consensus.",
+      "body_html": "<p>Bitcoin’s blockchain is an ordered history of blocks and transactions. A validating node uses that history to maintain the active chain and the current set of spendable outputs. Applications often need different questions answered quickly:</p>\n<ul><li>Which transactions touched this script?</li><li>Which transaction spent this output?</li><li>What is the history of this address?</li><li>Which blocks may contain wallet-relevant scripts?</li><li>Which inscriptions, token operations, or application events were interpreted from a transaction?</li><li>How far behind the current chain tip is a service?</li><li>What changed during a reorganization?</li></ul>\n<p>An indexer preprocesses Bitcoin data into keys, tables, filters, or event records that make those queries efficient. The index can be accurate and reproducible while remaining outside Bitcoin consensus.</p>"
+    },
+    {
+      "heading": "Validation and indexing are different jobs",
+      "body_markdown": "Validation asks whether blocks and transactions satisfy Bitcoin’s rules and belong to the node’s accepted chain.\n\nIndexing asks how to organize validated or observed data for later retrieval.\n\nA validating node can operate without an address-history index. An indexer can build address history while relying on another process for validation. The indexer’s database does not become consensus state merely because it was built from a valid chain.\n\nThis separation produces several trust questions:\n\n- Which node or chain source supplies blocks?\n- Does the indexer verify raw data or trust the source?\n- Which chain tip is indexed?\n- How are disconnected blocks rolled back?\n- Which fields are direct Bitcoin data and which are derived?\n- How can the index be rebuilt or checked?\n- What happens if database state and node state diverge?\n\nAn indexer should document those boundaries explicitly.",
+      "body_html": "<p>Validation asks whether blocks and transactions satisfy Bitcoin’s rules and belong to the node’s accepted chain.</p>\n<p>Indexing asks how to organize validated or observed data for later retrieval.</p>\n<p>A validating node can operate without an address-history index. An indexer can build address history while relying on another process for validation. The indexer’s database does not become consensus state merely because it was built from a valid chain.</p>\n<p>This separation produces several trust questions:</p>\n<ul><li>Which node or chain source supplies blocks?</li><li>Does the indexer verify raw data or trust the source?</li><li>Which chain tip is indexed?</li><li>How are disconnected blocks rolled back?</li><li>Which fields are direct Bitcoin data and which are derived?</li><li>How can the index be rebuilt or checked?</li><li>What happens if database state and node state diverge?</li></ul>\n<p>An indexer should document those boundaries explicitly.</p>"
+    },
+    {
+      "heading": "Bitcoin Core chainstate",
+      "body_markdown": "Bitcoin Core’s chainstate is required validation data. It represents the current UTXO set for a chainstate: outputs that exist, have not been spent, and can be checked when validating new transactions and blocks.\n\nThe UTXO set is not a complete transaction-history database. Once an output is spent, it is no longer part of the current UTXO set. Chainstate therefore cannot answer arbitrary questions about every historical transaction or every script that appeared.\n\nBitcoin Core may maintain more than one chainstate during assumeUTXO-related operation, but that is still validation architecture, not a universal application index.",
+      "body_html": "<p>Bitcoin Core’s chainstate is required validation data. It represents the current UTXO set for a chainstate: outputs that exist, have not been spent, and can be checked when validating new transactions and blocks.</p>\n<p>The UTXO set is not a complete transaction-history database. Once an output is spent, it is no longer part of the current UTXO set. Chainstate therefore cannot answer arbitrary questions about every historical transaction or every script that appeared.</p>\n<p>Bitcoin Core may maintain more than one chainstate during assumeUTXO-related operation, but that is still validation architecture, not a universal application index.</p>"
+    },
+    {
+      "heading": "Bitcoin Core’s block index",
+      "body_markdown": "Bitcoin Core’s block index stores metadata about known block headers and block files, including chain relationships, heights, work, status, and disk positions needed to manage validation and chain selection.\n\nThe block index is not the same as the raw block files. It is also not an address index or explorer database. It helps Bitcoin Core locate and reason about blocks; it does not map every address to all transactions.\n\nA node can know that a block existed and was validated while no longer retaining its full block data after pruning.",
+      "body_html": "<p>Bitcoin Core’s block index stores metadata about known block headers and block files, including chain relationships, heights, work, status, and disk positions needed to manage validation and chain selection.</p>\n<p>The block index is not the same as the raw block files. It is also not an address index or explorer database. It helps Bitcoin Core locate and reason about blocks; it does not map every address to all transactions.</p>\n<p>A node can know that a block existed and was validated while no longer retaining its full block data after pruning.</p>"
+    },
+    {
+      "heading": "The UTXO set",
+      "body_markdown": "The UTXO set maps spendable outpoints to output information needed for validation. It supports questions such as whether an input refers to an existing unspent output and what script and amount that output contains.\n\nIt does not directly contain:\n\n- Complete transaction history\n- Spent output history\n- Address balances across all historical activity\n- Application token balances\n- Ordinal identities\n- Explorer labels\n- Mempool state\n\nAn address balance can be derived from a set of UTXOs associated with scripts, but Bitcoin consensus does not define addresses as accounts with native balances. The mapping from address encoding to scripts and then to indexed outputs is application logic.",
+      "body_html": "<p>The UTXO set maps spendable outpoints to output information needed for validation. It supports questions such as whether an input refers to an existing unspent output and what script and amount that output contains.</p>\n<p>It does not directly contain:</p>\n<ul><li>Complete transaction history</li><li>Spent output history</li><li>Address balances across all historical activity</li><li>Application token balances</li><li>Ordinal identities</li><li>Explorer labels</li><li>Mempool state</li></ul>\n<p>An address balance can be derived from a set of UTXOs associated with scripts, but Bitcoin consensus does not define addresses as accounts with native balances. The mapping from address encoding to scripts and then to indexed outputs is application logic.</p>"
+    },
+    {
+      "heading": "Optional Bitcoin Core indexes in version 31.1",
+      "body_markdown": "Bitcoin Core 31.1 exposes several optional indexes in addition to required validation data.\n\n**Full transaction index (`txindex`)** maps transaction IDs to locations in stored blocks so `getrawtransaction` can retrieve arbitrary confirmed transactions without the caller supplying a block hash. It does not map addresses to transaction history.\n\n**Transaction output spender index (`txospenderindex`)** supports lookup of transactions spending specified previous outputs through the relevant RPC. It is an outpoint-to-spender index, not a universal address index.\n\n**Compact block-filter index (`blockfilterindex`)** stores BIP 158 compact filters by block. It can support BIP 157 filter serving and wallet-style scanning. A filter can indicate a possible match and requires the client to inspect matching block data.\n\n**Coin statistics index (`coinstatsindex`)** supports efficient historical UTXO-set statistics for `gettxoutsetinfo` at indexed block points. It is not a list of all coins or addresses.\n\nThese indexes are implementation features. Other Bitcoin implementations may expose different indexes or interfaces. Enabling them consumes disk, processing time, and synchronization work.",
+      "body_html": "<p>Bitcoin Core 31.1 exposes several optional indexes in addition to required validation data.</p>\n<p><strong>Full transaction index (<code>txindex</code>)</strong> maps transaction IDs to locations in stored blocks so <code>getrawtransaction</code> can retrieve arbitrary confirmed transactions without the caller supplying a block hash. It does not map addresses to transaction history.</p>\n<p><strong>Transaction output spender index (<code>txospenderindex</code>)</strong> supports lookup of transactions spending specified previous outputs through the relevant RPC. It is an outpoint-to-spender index, not a universal address index.</p>\n<p><strong>Compact block-filter index (<code>blockfilterindex</code>)</strong> stores BIP 158 compact filters by block. It can support BIP 157 filter serving and wallet-style scanning. A filter can indicate a possible match and requires the client to inspect matching block data.</p>\n<p><strong>Coin statistics index (<code>coinstatsindex</code>)</strong> supports efficient historical UTXO-set statistics for <code>gettxoutsetinfo</code> at indexed block points. It is not a list of all coins or addresses.</p>\n<p>These indexes are implementation features. Other Bitcoin implementations may expose different indexes or interfaces. Enabling them consumes disk, processing time, and synchronization work.</p>"
+    },
+    {
+      "heading": "`txindex` is not an address index",
+      "body_markdown": "A transaction index answers “where is the transaction with this transaction ID?” It does not answer “which transactions involved this address?”\n\nAddress history requires indexing scripts or address representations across outputs and, often, the previous outputs spent by inputs. That is a different key structure and a larger application database.\n\nThe same distinction applies to an archival node. Retaining all blocks provides the source data needed to build many indexes, but it does not automatically create an explorer, Electrum server, wallet history, token index, or address API.",
+      "body_html": "<p>A transaction index answers “where is the transaction with this transaction ID?” It does not answer “which transactions involved this address?”</p>\n<p>Address history requires indexing scripts or address representations across outputs and, often, the previous outputs spent by inputs. That is a different key structure and a larger application database.</p>\n<p>The same distinction applies to an archival node. Retaining all blocks provides the source data needed to build many indexes, but it does not automatically create an explorer, Electrum server, wallet history, token index, or address API.</p>"
+    },
+    {
+      "heading": "Pruning and historical block access",
+      "body_markdown": "Pruning allows Bitcoin Core to delete old block files after validation while retaining enough chainstate and recent block data to continue operating. As of Bitcoin Core 31.1, pruning is incompatible with `txindex`.\n\nCompact block-filter indexing has supported pruning in current Bitcoin Core for several releases, subject to the index being synchronized and the node retaining the data needed during operation. Coin statistics and other index behavior must be checked against the exact release and configuration.\n\nExternal indexers may require historical blocks during initial synchronization, rebuilds, or rollback recovery. Some can operate after building their own complete database and then use a pruned node for incremental updates. Others require an unpruned node or separate block archive.\n\n“Runs with pruning” is therefore an implementation-specific claim. It may mean initial indexing still required full history, that only recent rebuilds are possible, or that the indexer keeps its own copy of derived data.",
+      "body_html": "<p>Pruning allows Bitcoin Core to delete old block files after validation while retaining enough chainstate and recent block data to continue operating. As of Bitcoin Core 31.1, pruning is incompatible with <code>txindex</code>.</p>\n<p>Compact block-filter indexing has supported pruning in current Bitcoin Core for several releases, subject to the index being synchronized and the node retaining the data needed during operation. Coin statistics and other index behavior must be checked against the exact release and configuration.</p>\n<p>External indexers may require historical blocks during initial synchronization, rebuilds, or rollback recovery. Some can operate after building their own complete database and then use a pruned node for incremental updates. Others require an unpruned node or separate block archive.</p>\n<p>“Runs with pruning” is therefore an implementation-specific claim. It may mean initial indexing still required full history, that only recent rebuilds are possible, or that the indexer keeps its own copy of derived data.</p>"
+    },
+    {
+      "heading": "External address and script indexes",
+      "body_markdown": "External indexers commonly scan every block and build keys based on locking scripts, script hashes, addresses, outpoints, transaction IDs, block heights, and spending relationships.\n\nIndexing by script is more fundamental than indexing by address. An address is an encoding for certain script templates. Not every script has one standard address representation, and the same application may support several address types.\n\nTo build complete script history, an indexer usually records both outputs that create matching scripts and inputs that spend previous outputs. Processing an input may require access to the previous output’s script and amount.\n\nDatabase design affects query speed, storage, reorganization handling, and migration complexity. A compact index may make one query fast and another expensive. There is no universal schema.",
+      "body_html": "<p>External indexers commonly scan every block and build keys based on locking scripts, script hashes, addresses, outpoints, transaction IDs, block heights, and spending relationships.</p>\n<p>Indexing by script is more fundamental than indexing by address. An address is an encoding for certain script templates. Not every script has one standard address representation, and the same application may support several address types.</p>\n<p>To build complete script history, an indexer usually records both outputs that create matching scripts and inputs that spend previous outputs. Processing an input may require access to the previous output’s script and amount.</p>\n<p>Database design affects query speed, storage, reorganization handling, and migration complexity. A compact index may make one query fast and another expensive. There is no universal schema.</p>"
+    },
+    {
+      "heading": "Electrum server models",
+      "body_markdown": "Electrum servers expose script-hash histories, balances, UTXOs, transactions, headers, fee estimates, and subscriptions. They depend on an index that maps script hashes to relevant transactions.\n\nDifferent server implementations use different storage engines and indexing strategies. `electrs` is a Rust implementation commonly used for personal Electrum service and as a basis for Esplora-style backends. Fulcrum is an independently maintained C++ implementation designed for high-performance Electrum protocol service.\n\nProtocol compatibility does not mean database equivalence. Two servers can implement the same method while differing in mempool ordering, performance limits, protocol versions, pruning requirements, caching, and reorganization behavior.\n\nThe Electrum protocol itself is an application protocol. Its script-hash status and history rules are not Bitcoin consensus rules.",
+      "body_html": "<p>Electrum servers expose script-hash histories, balances, UTXOs, transactions, headers, fee estimates, and subscriptions. They depend on an index that maps script hashes to relevant transactions.</p>\n<p>Different server implementations use different storage engines and indexing strategies. <code>electrs</code> is a Rust implementation commonly used for personal Electrum service and as a basis for Esplora-style backends. Fulcrum is an independently maintained C++ implementation designed for high-performance Electrum protocol service.</p>\n<p>Protocol compatibility does not mean database equivalence. Two servers can implement the same method while differing in mempool ordering, performance limits, protocol versions, pruning requirements, caching, and reorganization behavior.</p>\n<p>The Electrum protocol itself is an application protocol. Its script-hash status and history rules are not Bitcoin consensus rules.</p>"
+    },
+    {
+      "heading": "Esplora and electrs-style stacks",
+      "body_markdown": "Esplora is an explorer interface and HTTP API typically backed by an indexed service. The commonly referenced stack separates the explorer frontend from an electrs-derived backend that provides transaction, script, address, block, mempool, and fee endpoints.\n\nThe HTTP response may combine raw transaction data with index-derived status, spending relationships, and address history. The service’s node validates Bitcoin; the indexer organizes data; the API serializes a view; the frontend presents it.\n\nA hosted Esplora endpoint adds another boundary: the user depends on the operator’s node, index, cache, rate limits, logging, and uptime.\n\nThe Esplora repository and deployment stack have had periods where release tagging did not map cleanly to one versioned backend artifact. Production operators should pin exact container, commit, or package versions rather than rely on a moving “latest” label.",
+      "body_html": "<p>Esplora is an explorer interface and HTTP API typically backed by an indexed service. The commonly referenced stack separates the explorer frontend from an electrs-derived backend that provides transaction, script, address, block, mempool, and fee endpoints.</p>\n<p>The HTTP response may combine raw transaction data with index-derived status, spending relationships, and address history. The service’s node validates Bitcoin; the indexer organizes data; the API serializes a view; the frontend presents it.</p>\n<p>A hosted Esplora endpoint adds another boundary: the user depends on the operator’s node, index, cache, rate limits, logging, and uptime.</p>\n<p>The Esplora repository and deployment stack have had periods where release tagging did not map cleanly to one versioned backend artifact. Production operators should pin exact container, commit, or package versions rather than rely on a moving “latest” label.</p>"
+    },
+    {
+      "heading": "Wallet-specific compact-filter scanning",
+      "body_markdown": "Compact block filters let a wallet test whether a block may contain scripts it cares about without asking a server for each address or script hash.\n\nThe wallet downloads and verifies a filter-header chain, matches local scripts against filters, and retrieves candidate blocks. False positives are expected; the wallet scans the block to determine whether a real match exists.\n\nThis is a wallet synchronization database rather than a universal address index. It usually tracks only the wallet’s own scripts and transactions. It can improve privacy relative to direct hosted address queries, but it still depends on correct header, filter, and block handling and on sources not withholding data undetected.",
+      "body_html": "<p>Compact block filters let a wallet test whether a block may contain scripts it cares about without asking a server for each address or script hash.</p>\n<p>The wallet downloads and verifies a filter-header chain, matches local scripts against filters, and retrieves candidate blocks. False positives are expected; the wallet scans the block to determine whether a real match exists.</p>\n<p>This is a wallet synchronization database rather than a universal address index. It usually tracks only the wallet’s own scripts and transactions. It can improve privacy relative to direct hosted address queries, but it still depends on correct header, filter, and block handling and on sources not withholding data undetected.</p>"
+    },
+    {
+      "heading": "Application-specific indexers",
+      "body_markdown": "Applications can derive state that Bitcoin does not natively represent.\n\nAn Ord indexer assigns ordinal numbers and tracks interpreted sat locations. A Runes indexer interprets runestones and derives balances, etching state, and transfers. A BRC-20 indexer parses selected inscription content and applies an application rule set to deploy, mint, and transfer operations.\n\nBitcoin validates the underlying transactions and blocks. It does not validate those application balances or identities as native consensus state.\n\nApplication indexes must define:\n\n- Which transactions or witness fields count as events\n- Parsing and validity rules\n- Event ordering\n- Block and transaction ordering\n- Version activation points\n- Duplicate or malformed operation handling\n- Reorganization rollback\n- Historical bug compatibility\n- Database migrations\n\nTwo indexers can accept the same Bitcoin chain and disagree because they apply different application rules, versions, or historical interpretations.",
+      "body_html": "<p>Applications can derive state that Bitcoin does not natively represent.</p>\n<p>An Ord indexer assigns ordinal numbers and tracks interpreted sat locations. A Runes indexer interprets runestones and derives balances, etching state, and transfers. A BRC-20 indexer parses selected inscription content and applies an application rule set to deploy, mint, and transfer operations.</p>\n<p>Bitcoin validates the underlying transactions and blocks. It does not validate those application balances or identities as native consensus state.</p>\n<p>Application indexes must define:</p>\n<ul><li>Which transactions or witness fields count as events</li><li>Parsing and validity rules</li><li>Event ordering</li><li>Block and transaction ordering</li><li>Version activation points</li><li>Duplicate or malformed operation handling</li><li>Reorganization rollback</li><li>Historical bug compatibility</li><li>Database migrations</li></ul>\n<p>Two indexers can accept the same Bitcoin chain and disagree because they apply different application rules, versions, or historical interpretations.</p>"
+    },
+    {
+      "heading": "Event extraction and schema design",
+      "body_markdown": "Indexing begins with deterministic event extraction. For each connected block, the indexer identifies relevant transactions, inputs, outputs, scripts, witness data, and protocol messages.\n\nIt then maps events into database keys. Common keys include:\n\n- Block hash or height\n- Transaction ID and position\n- Outpoint\n- Script or script hash\n- Address representation\n- Application identifier\n- Owner or balance key\n- Event sequence\n\nOrdering must be explicit. Bitcoin orders blocks in a chain and transactions within each block. Inputs and outputs also have order. Some application protocols assign meaning to that order.\n\nDatabase records should retain enough source references to explain how a derived value was produced. A balance without event history is difficult to audit or rebuild.",
+      "body_html": "<p>Indexing begins with deterministic event extraction. For each connected block, the indexer identifies relevant transactions, inputs, outputs, scripts, witness data, and protocol messages.</p>\n<p>It then maps events into database keys. Common keys include:</p>\n<ul><li>Block hash or height</li><li>Transaction ID and position</li><li>Outpoint</li><li>Script or script hash</li><li>Address representation</li><li>Application identifier</li><li>Owner or balance key</li><li>Event sequence</li></ul>\n<p>Ordering must be explicit. Bitcoin orders blocks in a chain and transactions within each block. Inputs and outputs also have order. Some application protocols assign meaning to that order.</p>\n<p>Database records should retain enough source references to explain how a derived value was produced. A balance without event history is difficult to audit or rebuild.</p>"
+    },
+    {
+      "heading": "Chain tips, checkpoints, and incremental updates",
+      "body_markdown": "An indexer needs a recorded chain tip: usually block hash and height, not height alone. On startup, it compares that tip with the node’s active chain.\n\nA checkpoint can record a known processed block and database state. It speeds restart and consistency checks, but it does not replace validation. A stale or incorrect checkpoint can anchor the index to the wrong history.\n\nIncremental updates process new blocks after the stored tip. The indexer should commit block-derived changes atomically or use a journal so a crash does not leave half-applied state.\n\nTip lag is an important operational metric. An API can be healthy while its index is several blocks behind.",
+      "body_html": "<p>An indexer needs a recorded chain tip: usually block hash and height, not height alone. On startup, it compares that tip with the node’s active chain.</p>\n<p>A checkpoint can record a known processed block and database state. It speeds restart and consistency checks, but it does not replace validation. A stale or incorrect checkpoint can anchor the index to the wrong history.</p>\n<p>Incremental updates process new blocks after the stored tip. The indexer should commit block-derived changes atomically or use a journal so a crash does not leave half-applied state.</p>\n<p>Tip lag is an important operational metric. An API can be healthy while its index is several blocks behind.</p>"
+    },
+    {
+      "heading": "Undo data and reorganization rollback",
+      "body_markdown": "A reorganization disconnects one or more blocks and connects a replacement branch. An indexer must reverse every state change caused by disconnected blocks.\n\nOne model stores **undo data** for each block: prior values or inverse operations needed to restore the earlier state. Another model replays from a checkpoint before the fork. Some databases use versioned records or append-only event logs.\n\nRollback must cover more than balances. It may need to reverse:\n\n- Created and spent outputs\n- Address histories\n- Transaction confirmation metadata\n- Application events\n- Token balances\n- Inscription locations\n- Cached summaries\n- API notification state\n\nAfter rollback, the replacement blocks are processed in order. Failure to reverse one table can produce internally inconsistent results even when the chain tip appears correct.",
+      "body_html": "<p>A reorganization disconnects one or more blocks and connects a replacement branch. An indexer must reverse every state change caused by disconnected blocks.</p>\n<p>One model stores <strong>undo data</strong> for each block: prior values or inverse operations needed to restore the earlier state. Another model replays from a checkpoint before the fork. Some databases use versioned records or append-only event logs.</p>\n<p>Rollback must cover more than balances. It may need to reverse:</p>\n<ul><li>Created and spent outputs</li><li>Address histories</li><li>Transaction confirmation metadata</li><li>Application events</li><li>Token balances</li><li>Inscription locations</li><li>Cached summaries</li><li>API notification state</li></ul>\n<p>After rollback, the replacement blocks are processed in order. Failure to reverse one table can produce internally inconsistent results even when the chain tip appears correct.</p>"
+    },
+    {
+      "heading": "Replay and rebuilds",
+      "body_markdown": "A replay reprocesses events from retained raw data or a checkpoint. A full rebuild discards the index and scans the source history again.\n\nRebuild capability is a security and maintenance feature. It allows recovery from corruption, schema changes, or discovered logic bugs. It also exposes dependencies: an indexer cannot rebuild old history from a pruned node if the needed blocks are unavailable elsewhere.\n\nRebuilds should be versioned and tested. Application protocols sometimes preserve historical behavior that newer code would otherwise interpret differently. A “clean rebuild” can disagree with an older database if consensus-like application rules were not stable.",
+      "body_html": "<p>A replay reprocesses events from retained raw data or a checkpoint. A full rebuild discards the index and scans the source history again.</p>\n<p>Rebuild capability is a security and maintenance feature. It allows recovery from corruption, schema changes, or discovered logic bugs. It also exposes dependencies: an indexer cannot rebuild old history from a pruned node if the needed blocks are unavailable elsewhere.</p>\n<p>Rebuilds should be versioned and tested. Application protocols sometimes preserve historical behavior that newer code would otherwise interpret differently. A “clean rebuild” can disagree with an older database if consensus-like application rules were not stable.</p>"
+    },
+    {
+      "heading": "Mempool indexing",
+      "body_markdown": "An indexer may add unconfirmed transactions to provisional tables. Mempool indexing is harder than confirmed block indexing because there is no universal ordered mempool.\n\nNodes differ by policy, arrival order, package acceptance, replacement, eviction, expiration, and connectivity. A transaction can be present on one node and absent on another.\n\nMempool records should be labeled provisional and tied to a source node. They must be removed or updated when transactions confirm, conflict, are replaced, or disappear. Absence from the source mempool does not prove invalidity.\n\nApplication protocols can produce especially fragile unconfirmed state. Two valid unconfirmed operations may conflict or confirm in a different order. A displayed pending balance should not be presented as confirmed application state.",
+      "body_html": "<p>An indexer may add unconfirmed transactions to provisional tables. Mempool indexing is harder than confirmed block indexing because there is no universal ordered mempool.</p>\n<p>Nodes differ by policy, arrival order, package acceptance, replacement, eviction, expiration, and connectivity. A transaction can be present on one node and absent on another.</p>\n<p>Mempool records should be labeled provisional and tied to a source node. They must be removed or updated when transactions confirm, conflict, are replaced, or disappear. Absence from the source mempool does not prove invalidity.</p>\n<p>Application protocols can produce especially fragile unconfirmed state. Two valid unconfirmed operations may conflict or confirm in a different order. A displayed pending balance should not be presented as confirmed application state.</p>"
+    },
+    {
+      "heading": "Storage and performance costs",
+      "body_markdown": "Indexes trade storage and write work for query speed. Costs depend on chain history, schema duplication, compression, cache size, database engine, supported queries, and whether previous outputs are denormalized.\n\nInitial synchronization can be CPU-, disk-, and I/O-intensive. Indexers may read all blocks, resolve inputs, build multiple column families, compact databases, and calculate summaries.\n\nIncremental updates are smaller but still need atomicity and rollback. Caches improve read performance while creating freshness and invalidation responsibilities.\n\nOperators should measure actual disk growth, synchronization time, memory, compaction, and backup behavior for the exact version and configuration. Published performance claims are not universal guarantees.",
+      "body_html": "<p>Indexes trade storage and write work for query speed. Costs depend on chain history, schema duplication, compression, cache size, database engine, supported queries, and whether previous outputs are denormalized.</p>\n<p>Initial synchronization can be CPU-, disk-, and I/O-intensive. Indexers may read all blocks, resolve inputs, build multiple column families, compact databases, and calculate summaries.</p>\n<p>Incremental updates are smaller but still need atomicity and rollback. Caches improve read performance while creating freshness and invalidation responsibilities.</p>\n<p>Operators should measure actual disk growth, synchronization time, memory, compaction, and backup behavior for the exact version and configuration. Published performance claims are not universal guarantees.</p>"
+    },
+    {
+      "heading": "Consistency models and partial failures",
+      "body_markdown": "A node and indexer are separate systems. The node may advance while the indexer is stopped. The indexer may write one table and fail before another. An API process may cache old results after the database catches up.\n\nPossible consistency models include:\n\n- Strong per-block atomic updates\n- Eventual consistency across tables or services\n- Read snapshots tied to a chain tip\n- Append-only events with asynchronously built summaries\n\nThe API should expose enough chain context to interpret results. A response may include indexed height, tip hash, or freshness timestamp.\n\nPartial failures should not be hidden as empty results. “No history” is different from “index unavailable,” “not synchronized,” or “pruned source data missing.”",
+      "body_html": "<p>A node and indexer are separate systems. The node may advance while the indexer is stopped. The indexer may write one table and fail before another. An API process may cache old results after the database catches up.</p>\n<p>Possible consistency models include:</p>\n<ul><li>Strong per-block atomic updates</li><li>Eventual consistency across tables or services</li><li>Read snapshots tied to a chain tip</li><li>Append-only events with asynchronously built summaries</li></ul>\n<p>The API should expose enough chain context to interpret results. A response may include indexed height, tip hash, or freshness timestamp.</p>\n<p>Partial failures should not be hidden as empty results. “No history” is different from “index unavailable,” “not synchronized,” or “pruned source data missing.”</p>"
+    },
+    {
+      "heading": "Version migrations and state checks",
+      "body_markdown": "Schema changes may require migrations or rebuilds. Migrations should record database version, software version, and completion status. Operators need rollback or restore procedures if an upgrade fails.\n\nConsistency checks can include:\n\n- Stored tip exists on the node’s active chain\n- Indexed block count and hashes match checkpoints\n- UTXO-derived totals reconcile where intended\n- Event counts match source transaction references\n- State hashes or Merkleized summaries match between replicas\n- No table is ahead of the committed tip\n- Undo data exists for the supported rollback window\n\nA state hash can detect divergence between index replicas that use the same rules. It does not prove the rules themselves are correct or part of Bitcoin consensus.",
+      "body_html": "<p>Schema changes may require migrations or rebuilds. Migrations should record database version, software version, and completion status. Operators need rollback or restore procedures if an upgrade fails.</p>\n<p>Consistency checks can include:</p>\n<ul><li>Stored tip exists on the node’s active chain</li><li>Indexed block count and hashes match checkpoints</li><li>UTXO-derived totals reconcile where intended</li><li>Event counts match source transaction references</li><li>State hashes or Merkleized summaries match between replicas</li><li>No table is ahead of the committed tip</li><li>Undo data exists for the supported rollback window</li></ul>\n<p>A state hash can detect divergence between index replicas that use the same rules. It does not prove the rules themselves are correct or part of Bitcoin consensus.</p>"
+    },
+    {
+      "heading": "Indexer divergence",
+      "body_markdown": "Two indexers may diverge because of:\n\n- Different Bitcoin chain tips\n- Missed or misordered blocks\n- Reorganization rollback bugs\n- Mempool differences\n- Schema or migration bugs\n- Application-rule version differences\n- Historical compatibility choices\n- Corrupt source or database data\n- Parser differences\n\nMonitoring should compare tip hash, indexed height, software version, database version, and selected deterministic query results.\n\nDivergence should be investigated at the earliest differing block or event. Comparing only final balances can hide the cause.",
+      "body_html": "<p>Two indexers may diverge because of:</p>\n<ul><li>Different Bitcoin chain tips</li><li>Missed or misordered blocks</li><li>Reorganization rollback bugs</li><li>Mempool differences</li><li>Schema or migration bugs</li><li>Application-rule version differences</li><li>Historical compatibility choices</li><li>Corrupt source or database data</li><li>Parser differences</li></ul>\n<p>Monitoring should compare tip hash, indexed height, software version, database version, and selected deterministic query results.</p>\n<p>Divergence should be investigated at the earliest differing block or event. Comparing only final balances can hide the cause.</p>"
+    },
+    {
+      "heading": "APIs built on indexes",
+      "body_markdown": "Explorer and wallet APIs turn index records into responses. They may add pagination, caching, labels, fee estimates, confirmation counts, and application summaries.\n\nThe API layer should distinguish:\n\n- Raw transaction or block data\n- Node-validated chain membership\n- Index-derived history\n- Mempool observations\n- Cached values\n- Application-derived state\n\nAn index-backed API can be useful without being authoritative for consensus. Critical clients can verify referenced blocks, transactions, scripts, and outpoints against a validating node.",
+      "body_html": "<p>Explorer and wallet APIs turn index records into responses. They may add pagination, caching, labels, fee estimates, confirmation counts, and application summaries.</p>\n<p>The API layer should distinguish:</p>\n<ul><li>Raw transaction or block data</li><li>Node-validated chain membership</li><li>Index-derived history</li><li>Mempool observations</li><li>Cached values</li><li>Application-derived state</li></ul>\n<p>An index-backed API can be useful without being authoritative for consensus. Critical clients can verify referenced blocks, transactions, scripts, and outpoints against a validating node.</p>"
+    },
+    {
+      "heading": "Privacy and hosted indexers",
+      "body_markdown": "Address and script queries reveal what the client is interested in. Repeated queries can link addresses, transactions, timing, accounts, and IP addresses. Extended public key queries can reveal a broad wallet scope.\n\nA hosted indexer also sees authentication identifiers and request patterns and may retain logs. TLS protects transport in transit but does not prevent the provider from observing the request.\n\nSelf-hosting reduces third-party query disclosure and provider dependence. It adds hardware, storage, patching, monitoring, backup, and availability responsibilities. Neither model guarantees privacy or uptime.",
+      "body_html": "<p>Address and script queries reveal what the client is interested in. Repeated queries can link addresses, transactions, timing, accounts, and IP addresses. Extended public key queries can reveal a broad wallet scope.</p>\n<p>A hosted indexer also sees authentication identifiers and request patterns and may retain logs. TLS protects transport in transit but does not prevent the provider from observing the request.</p>\n<p>Self-hosting reduces third-party query disclosure and provider dependence. It adds hardware, storage, patching, monitoring, backup, and availability responsibilities. Neither model guarantees privacy or uptime.</p>"
+    },
+    {
+      "heading": "Verifying indexed results",
+      "body_markdown": "Verification depends on the claim.\n\nA transaction’s bytes can be fetched and decoded. A block header can be checked for hash and proof of work. A Merkle proof can show a transaction commitment under that header. A validating node can confirm active-chain membership and consensus validity. Scripts and outpoints can be inspected directly.\n\nAn address history requires checking each mapped script and transaction. An application balance requires replaying the application’s rules. A mempool status requires identifying the observing node and time.\n\nThe more derived the claim, the more application logic must be reproduced to verify it.",
+      "body_html": "<p>Verification depends on the claim.</p>\n<p>A transaction’s bytes can be fetched and decoded. A block header can be checked for hash and proof of work. A Merkle proof can show a transaction commitment under that header. A validating node can confirm active-chain membership and consensus validity. Scripts and outpoints can be inspected directly.</p>\n<p>An address history requires checking each mapped script and transaction. An application balance requires replaying the application’s rules. A mempool status requires identifying the observing node and time.</p>\n<p>The more derived the claim, the more application logic must be reproduced to verify it.</p>"
+    },
+    {
+      "heading": "The working model",
+      "body_markdown": "Bitcoin Core’s required chainstate and block index support validation. Optional Bitcoin Core indexes add specific lookup capabilities. External indexers build address, script, explorer, wallet, or application views. API layers serve those views. None of those databases replaces Bitcoin consensus.\n\nA validating node can accept a chain while two indexers disagree about address summaries, mempool state, ordinal locations, Rune balances, BRC-20 balances, or explorer labels. The disagreement may come from versions, ordering, rollback, parsing, or schema state rather than from Bitcoin validity.\n\nA reliable indexer records its source chain tip, applies blocks atomically, stores or reconstructs undo state, labels mempool data as provisional, exposes freshness, supports rebuilds, and makes derived rules auditable.\n\nThe index is a map of Bitcoin data. It is not Bitcoin itself.",
+      "body_html": "<p>Bitcoin Core’s required chainstate and block index support validation. Optional Bitcoin Core indexes add specific lookup capabilities. External indexers build address, script, explorer, wallet, or application views. API layers serve those views. None of those databases replaces Bitcoin consensus.</p>\n<p>A validating node can accept a chain while two indexers disagree about address summaries, mempool state, ordinal locations, Rune balances, BRC-20 balances, or explorer labels. The disagreement may come from versions, ordering, rollback, parsing, or schema state rather than from Bitcoin validity.</p>\n<p>A reliable indexer records its source chain tip, applies blocks atomically, stores or reconstructs undo state, labels mempool data as provisional, exposes freshness, supports rebuilds, and makes derived rules auditable.</p>\n<p>The index is a map of Bitcoin data. It is not Bitcoin itself.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Indexer",
+      "definition": "Software that transforms ordered Bitcoin data into a database optimized for selected queries."
+    },
+    {
+      "term": "Chainstate",
+      "definition": "Bitcoin Core validation data representing a current UTXO set for a chainstate."
+    },
+    {
+      "term": "Block index",
+      "definition": "Bitcoin Core metadata for known blocks, chain relationships, status, work, and storage locations."
+    },
+    {
+      "term": "UTXO set",
+      "definition": "The set of currently unspent transaction outputs under the accepted chain."
+    },
+    {
+      "term": "Transaction index",
+      "definition": "An index mapping transaction IDs to stored transaction locations."
+    },
+    {
+      "term": "Address index",
+      "definition": "An external mapping from addresses or scripts to transaction history; it is not created by `txindex`."
+    },
+    {
+      "term": "Compact block filter",
+      "definition": "A probabilistic block summary defined by BIP 158 for matching scripts."
+    },
+    {
+      "term": "Coin statistics index",
+      "definition": "A Bitcoin Core optional index supporting historical UTXO-set statistics."
+    },
+    {
+      "term": "Chain tip",
+      "definition": "The block currently recorded as the end of a node or indexer’s active chain."
+    },
+    {
+      "term": "Checkpoint",
+      "definition": "A stored processed point used for restart, replay, or consistency checks."
+    },
+    {
+      "term": "Undo data",
+      "definition": "Information needed to reverse index changes from a disconnected block."
+    },
+    {
+      "term": "Reorganization",
+      "definition": "A switch to a different accepted chain requiring rollback and replay."
+    },
+    {
+      "term": "Mempool",
+      "definition": "A node’s local set of unconfirmed transactions accepted under current policy."
+    },
+    {
+      "term": "Derived state",
+      "definition": "Data calculated by an indexer or application rather than enforced directly by Bitcoin consensus."
+    },
+    {
+      "term": "Replay",
+      "definition": "Reprocessing source events to reconstruct index state."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bitcoin Core Downloads",
+      "author_or_publisher": "Bitcoin Core project",
+      "url": "https://bitcoincore.org/en/download/",
+      "supports": "Bitcoin Core 31.1 as the current release used for dated implementation references on July 23, 2026."
+    },
+    {
+      "title": "Bitcoin Core v31.1 Source Tree",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/tree/v31.1/src",
+      "supports": "Dated implementation evidence for validation, chainstate, block storage, pruning, indexes, mempool, and RPC behavior."
+    },
+    {
+      "title": "Bitcoin Core v31.1 Initialization Source",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/src/init.cpp",
+      "supports": "Current index configuration options for `txindex`, `txospenderindex`, `blockfilterindex`, and `coinstatsindex`, plus the pruning and `txindex` incompatibility."
+    },
+    {
+      "title": "Bitcoin Core Chainstate Documentation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/doc/design/assumeutxo.md",
+      "supports": "Bitcoin Core chainstate architecture and the distinction between validation state and application indexes."
+    },
+    {
+      "title": "Bitcoin Core Block Index Source",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/src/chain.h",
+      "supports": "Dated block-index metadata, chain relationships, height, work, status, and storage-location fields."
+    },
+    {
+      "title": "Bitcoin Core Transaction Index Source",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/tree/v31.1/src/index",
+      "supports": "Current optional transaction, transaction-output spender, compact-filter, and coin-statistics index implementations."
+    },
+    {
+      "title": "Bitcoin Core Blockchain RPC Source",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/src/rpc/blockchain.cpp",
+      "supports": "UTXO-set, chain-tip, block, index-info, and coin-statistics RPC behavior."
+    },
+    {
+      "title": "Bitcoin Core Raw Transaction RPC Source",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/src/rpc/rawtransaction.cpp",
+      "supports": "Transaction lookup and spender-query behavior associated with optional indexes."
+    },
+    {
+      "title": "Bitcoin Core Pruning Documentation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/doc/release-notes/release-notes-22.0.md",
+      "supports": "Historical implementation evidence that compact block-filter indexes can be maintained with pruning; current configuration is separately supported by v31.1 source."
+    },
+    {
+      "title": "BIP 157: Client Side Block Filtering",
+      "author_or_publisher": "Olaoluwa Osuntokun, Alex Akselrod, and Jim Posen",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0157.mediawiki",
+      "supports": "Peer serving and retrieval of compact block filters and filter headers."
+    },
+    {
+      "title": "BIP 158: Compact Block Filters",
+      "author_or_publisher": "Olaoluwa Osuntokun and Alex Akselrod",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0158.mediawiki",
+      "supports": "Compact-filter construction, matching, and false-positive behavior."
+    },
+    {
+      "title": "Electrum Protocol Documentation",
+      "author_or_publisher": "Electrum protocol contributors",
+      "url": "https://electrum-protocol.readthedocs.io/en/latest/",
+      "supports": "Script-hash histories, balances, UTXOs, subscriptions, mempool ordering, and protocol semantics served by external indexes."
+    },
+    {
+      "title": "electrs Repository",
+      "author_or_publisher": "Roman Zeyde and contributors",
+      "url": "https://github.com/romanz/electrs",
+      "supports": "A maintained Rust Electrum server architecture and its Bitcoin-backed script-history indexing model."
+    },
+    {
+      "title": "electrs Releases",
+      "author_or_publisher": "electrs contributors",
+      "url": "https://github.com/romanz/electrs/releases",
+      "supports": "Release and maintenance history used to date deployment claims; release tagging should be checked against current commits and package use."
+    },
+    {
+      "title": "Esplora Repository",
+      "author_or_publisher": "Blockstream contributors",
+      "url": "https://github.com/Blockstream/esplora",
+      "supports": "Explorer frontend behavior, deployment architecture, and dependence on an indexed backend."
+    },
+    {
+      "title": "Esplora API Documentation",
+      "author_or_publisher": "Blockstream contributors",
+      "url": "https://github.com/Blockstream/esplora/blob/master/API.md",
+      "supports": "Indexed transaction, address, script, block, UTXO, fee, and mempool endpoints."
+    },
+    {
+      "title": "Blockstream electrs Repository",
+      "author_or_publisher": "Blockstream contributors",
+      "url": "https://github.com/Blockstream/electrs",
+      "supports": "The electrs-derived HTTP and Electrum backend commonly used with Esplora deployments."
+    },
+    {
+      "title": "Fulcrum Repository",
+      "author_or_publisher": "Calin Culianu and contributors",
+      "url": "https://github.com/cculianu/Fulcrum",
+      "supports": "An independently maintained C++ Electrum server and a distinct high-performance index architecture."
+    },
+    {
+      "title": "Fulcrum Releases",
+      "author_or_publisher": "Fulcrum contributors",
+      "url": "https://github.com/cculianu/Fulcrum/releases",
+      "supports": "Current maintenance and release evidence, including the 2.1.x release line observed in 2026."
+    },
+    {
+      "title": "Ordinal Theory Handbook",
+      "author_or_publisher": "Ord project contributors",
+      "url": "https://docs.ordinals.com/",
+      "supports": "Ordinal numbering, inscription, and application-index concepts derived from Bitcoin transaction history."
+    },
+    {
+      "title": "Ord Repository",
+      "author_or_publisher": "Ord project contributors",
+      "url": "https://github.com/ordinals/ord",
+      "supports": "A maintained application-protocol indexer, database, explorer, and reindex behavior."
+    },
+    {
+      "title": "Runes Specification",
+      "author_or_publisher": "Ord project contributors",
+      "url": "https://docs.ordinals.com/runes/specification.html",
+      "supports": "Runestone event interpretation and Rune application state derived outside Bitcoin consensus."
+    },
+    {
+      "title": "BRC-20 Index Specification Repository",
+      "author_or_publisher": "Best in Slot contributors",
+      "url": "https://github.com/bestinslot-xyz/brc20-index",
+      "supports": "One maintained implementation’s explicit BRC-20 parsing and indexing rules; it is implementation evidence, not universal Bitcoin behavior."
+    },
+    {
+      "title": "Bitcoin Core Functional Index Tests",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/tree/v31.1/test/functional",
+      "supports": "Current implementation tests for optional indexes, pruning interactions, reorganization handling, RPC queries, and index synchronization."
+    },
+    {
+      "title": "Bitcoin Core ZMQ Documentation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/doc/zmq.md",
+      "supports": "Block connection and disconnection notifications, mempool sequence events, message loss, and subscriber reconciliation."
+    },
+    {
+      "title": "BIP 94: Testnet 4",
+      "author_or_publisher": "Fabian Jahr",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0094.mediawiki",
+      "supports": "Current testnet4 chain identity and test-network context relevant to index separation by network."
+    }
+  ],
+  "seo_title": "How Bitcoin Indexers Work | Mempool Surf Club",
+  "meta_description": "Learn how Bitcoin indexers build address, script, transaction, wallet, explorer, and application state—and why their databases are not consensus.",
+  "excerpt": "A technical guide to Bitcoin indexing, covering chainstate, optional Bitcoin Core indexes, address and script databases, Electrum and Esplora stacks, pruning, mempool state, reorganizations, rebuilds, privacy, and verification.",
+  "reading_time": "21 to 25 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-BUILDING",
+    "label": "Building on Bitcoin",
+    "subcategory": "Development",
+    "depth": "Deep",
+    "format": "Technical Analysis"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-043",
+      "title": "Bitcoin APIs Explained",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-045",
+      "title": "What Is BitVM?",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": []
+  },
+  "review_dates": {
+    "reviewed": "2026-07-24",
+    "copy_locked": "2026-07-24",
+    "human_verification": "2026-07-24"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "Block-to-Index Database Pipeline",
+      "educational_purpose": "Show how validated blocks become script, transaction, address, wallet, and application indexes without turning those databases into consensus.",
+      "recommended_placement": "After the section Validation and indexing are different jobs.",
+      "visual_description": "Vintage technical pipeline beginning with a validating node and ordered blocks, then splitting through event extraction into several labeled database channels and an API layer.",
+      "required_labels": "Validating node, Ordered blocks, Event extraction, Transaction index, Script index, Wallet index, Application index, API, Derived state",
+      "caption": "Validation establishes the accepted Bitcoin history; indexers reorganize that history for selected queries.",
+      "alt_text": "Layered pipeline showing validated Bitcoin blocks feeding transaction, script, wallet, and application indexes before an API layer.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack node, block stream, extraction, index databases, and API vertically.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "Reorganization Rollback and Replay Chart",
+      "educational_purpose": "Explain how an indexer disconnects old blocks, restores prior state, and applies a replacement branch.",
+      "recommended_placement": "After the section Undo data and reorganization rollback.",
+      "visual_description": "Nautical fork chart with an old chain route, a marked common ancestor, rollback arrows using undo records, and a replacement route processed forward through replay.",
+      "required_labels": "Stored tip, Disconnected block, Common ancestor, Undo data, Rollback, Replacement block, Replay, New indexed tip",
+      "caption": "An indexer must reverse every derived change from disconnected blocks before applying the replacement branch.",
+      "alt_text": "Technical chain-fork diagram showing index rollback to a common ancestor and replay along a replacement Bitcoin branch.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Use a vertical fork with rollback on the left and replay on the right.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Native, Optional, and External Index Layers",
+      "educational_purpose": "Distinguish Bitcoin Core validation data, optional Bitcoin Core indexes, and external address or application indexes.",
+      "recommended_placement": "After the section Optional Bitcoin Core indexes in version 31.1.",
+      "visual_description": "Three-tier cartographic cutaway with chainstate and block index at the foundation, optional transaction, spender, filter, and coin-statistics indexes in the middle, and external address, explorer, wallet, Ord, Runes, and BRC-20 indexes above.",
+      "required_labels": "Required validation data, Chainstate, Block index, txindex, txospenderindex, blockfilterindex, coinstatsindex, Address index, Explorer database, Application index, Not consensus",
+      "caption": "Bitcoin Core’s internal and optional indexes have defined purposes; external indexes add broader queries and application state.",
+      "alt_text": "Three-layer technical diagram separating required Bitcoin Core data, optional Core indexes, and external address and application indexes.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Present the three layers as stacked cards with a persistent “not consensus” marker on the external layer.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}
