@@ -69,6 +69,74 @@
         completed_count: 4,
         total_count: 16,
         remaining_count: 12,
+        next_active: true,
+        next_url: '/pages/learn-bitcoin-basics?view=msc-learn-guide-005'
+      %}
+    </template>
+  {%- when 'MSC-GUIDE-005' -%}
+    {% render 'msc-learn-guide-005-runtime' %}
+    <template data-msc-guide-next-template="MSC-GUIDE-005">
+      {% render 'msc-learn-guide-transition',
+        current_registry_id: 'MSC-GUIDE-005',
+        next_registry_id: 'MSC-GUIDE-006',
+        next_number: '006',
+        next_title: 'What Is Bitcoin Self-Custody?',
+        next_description: 'Bitcoin self-custody means directly controlling the keys needed to spend bitcoin.',
+        category_label: 'Bitcoin Basics',
+        completed_count: 5,
+        total_count: 16,
+        remaining_count: 11,
+        next_active: true,
+        next_url: '/pages/learn-bitcoin-basics?view=msc-learn-guide-006'
+      %}
+    </template>
+  {%- when 'MSC-GUIDE-006' -%}
+    {% render 'msc-learn-guide-006-runtime' %}
+    <template data-msc-guide-next-template="MSC-GUIDE-006">
+      {% render 'msc-learn-guide-transition',
+        current_registry_id: 'MSC-GUIDE-006',
+        next_registry_id: 'MSC-GUIDE-007',
+        next_number: '007',
+        next_title: 'How to Send and Receive Bitcoin',
+        next_description: 'Sending and receiving bitcoin involves more than copying an address and pressing a button.',
+        category_label: 'Bitcoin Basics',
+        completed_count: 6,
+        total_count: 16,
+        remaining_count: 10,
+        next_active: true,
+        next_url: '/pages/learn-bitcoin-basics?view=msc-learn-guide-007'
+      %}
+    </template>
+  {%- when 'MSC-GUIDE-007' -%}
+    {% render 'msc-learn-guide-007-runtime' %}
+    <template data-msc-guide-next-template="MSC-GUIDE-007">
+      {% render 'msc-learn-guide-transition',
+        current_registry_id: 'MSC-GUIDE-007',
+        next_registry_id: 'MSC-GUIDE-008',
+        next_number: '008',
+        next_title: 'How Bitcoin Transactions and Fees Work',
+        next_description: 'A Bitcoin transaction spends existing outputs and creates new ones.',
+        category_label: 'Bitcoin Basics',
+        completed_count: 7,
+        total_count: 16,
+        remaining_count: 9,
+        next_active: true,
+        next_url: '/pages/learn-bitcoin-basics?view=msc-learn-guide-008'
+      %}
+    </template>
+  {%- when 'MSC-GUIDE-008' -%}
+    {% render 'msc-learn-guide-008-runtime' %}
+    <template data-msc-guide-next-template="MSC-GUIDE-008">
+      {% render 'msc-learn-guide-transition',
+        current_registry_id: 'MSC-GUIDE-008',
+        next_registry_id: 'MSC-GUIDE-009',
+        next_number: '009',
+        next_title: 'What Is a Bitcoin Seed Phrase?',
+        next_description: 'A Bitcoin seed phrase is a human-readable backup representation used by many wallets to recreate key material.',
+        category_label: 'Bitcoin Basics',
+        completed_count: 8,
+        total_count: 16,
+        remaining_count: 8,
         next_active: false
       %}
     </template>
