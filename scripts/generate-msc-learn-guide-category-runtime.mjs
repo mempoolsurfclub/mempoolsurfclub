@@ -85,7 +85,7 @@ const flexibleNumberedSourceParser = String.raw`function parseNumberedSourceReco
   for (const rawLine of lines) {
     if (!rawLine.trim()) continue;
     const line = rawLine.replace(/\s+$/, '');
-    const opener = line.match(/^(\d+)\.\s+\*\*(.*?)\*\*$/);
+    const opener = line.match(/^(\d+)\.\s+\*\*(.*?)\*\*(?:\s*\|\s*(.+))?$/);
     if (opener) {
       finishRecord();
       const number = Number(opener[1]);
@@ -94,6 +94,7 @@ const flexibleNumberedSourceParser = String.raw`function parseNumberedSourceReco
       const title = opener[2].trim();
       if (!title) throw new Error('Numbered source record ' + number + ' has an empty title');
       current = { number, title, fields: {} };
+      if (opener[3]?.trim()) addSourceField(current.fields, 'Author or publisher', opener[3], 'Numbered source record ' + number);
       expectedNumber += 1;
       continue;
     }
