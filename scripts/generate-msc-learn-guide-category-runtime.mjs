@@ -52,14 +52,6 @@ function configFor(number) {
   };
 }
 
-const strictKeyTermParser = String.raw`function parseKeyTerms(markdown) {
-  return normalize(markdown).split(/\n\n+/).map((block) => {
-    const match = block.match(/^\*\*(.+?):\*\*\s+([\s\S]+)$/);
-    if (!match) throw new Error(\`Invalid key term block: \${block}\`);
-    return { term: match[1], definition: normalize(match[2]) };
-  });
-}`;
-
 const flexibleKeyTermParser = String.raw`function parseKeyTerms(markdown) {
   const normalized = normalize(markdown);
   if (/^-\s+\*\*/.test(normalized)) {
@@ -103,7 +95,13 @@ function transformedGenerator(config, tempJson, tempSnippet) {
     `const EXPECTED_ID = '${config.id}';`,
     'EXPECTED_ID',
   );
-  source = replaceOnce(source, strictKeyTermParser, flexibleKeyTermParser, 'parseKeyTerms');
+
+  const keyTermStart = source.indexOf('function parseKeyTerms(markdown) {');
+  const keyTermBoundary = source.indexOf('\n\nfunction parseHeadingRecords', keyTermStart);
+  assert.notEqual(keyTermStart, -1, 'Base guide generator drifted: missing parseKeyTerms start');
+  assert.notEqual(keyTermBoundary, -1, 'Base guide generator drifted: missing parseKeyTerms boundary');
+  source = source.slice(0, keyTermStart) + flexibleKeyTermParser + source.slice(keyTermBoundary);
+
   source = source
     .replaceAll('MscGuide001Terms', `${config.dom}Terms`)
     .replaceAll('MscGuide001Sources', `${config.dom}Sources`)
