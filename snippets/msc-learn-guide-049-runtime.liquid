@@ -1,0 +1,133 @@
+{% comment %}
+  Generated from docs/learn/content/guides/MSC-GUIDE-049-bitcoin-core.md.
+  Registry binding: MSC-GUIDE-049.
+  Preview only. Do not edit manually.
+  Rebuild with node scripts/generate-msc-learn-guide-category-runtime.mjs --start=49 --end=64 --write.
+{% endcomment %}
+<section class="msc-shell msc-learn-page" data-msc-registry-id="MSC-GUIDE-049" data-msc-preview-only="true">
+  <div class="msc-container msc-learn-page__container">
+    <nav class="msc-learn-breadcrumbs" aria-label="Learn breadcrumbs"><ol><li><span>Learn</span></li><li><span>Bitcoin Development</span></li><li aria-current="page"><span>What Is Bitcoin Core?</span></li></ol></nav>
+    <header class="msc-learn-page__header">
+      <p class="msc-section-kicker">Bitcoin Development</p>
+      <h1>What Is Bitcoin Core?</h1>
+      <p class="msc-learn-page__deck">Bitcoin Core is an open-source software project that implements a Bitcoin node and optional wallet interfaces. It validates blocks and transactions, maintains chainstate, communicates with peers, applies local relay policy, and exposes tools for operators and developers. It is influential software, but it is not Bitcoin itself and its maintainers do not control the network.</p>
+      <ul class="msc-learn-page-meta"><li>Bitcoin Core</li><li>Deep</li><li>Technical Explainer</li><li>16 to 19 minutes</li><li>Reviewed 2026-07-25</li></ul>
+      <p class="msc-learn-preview-note">Preview only. Publication records and confirmed URLs do not exist; all navigation remains inactive.</p>
+    </header>
+    <article class="msc-learn-article rte" data-msc-content-source="structured-runtime">
+<section class="msc-learn-article__section">
+<p>Bitcoin Core is one implementation of Bitcoin. The project publishes source code and release binaries for software that can connect to the Bitcoin peer-to-peer network, validate the block chain, relay transactions and blocks, maintain a mempool, serve application interfaces, and optionally manage wallets.</p>
+<p>That description contains several boundaries that matter. Bitcoin is a network and a set of rules enforced by independently operated software. Bitcoin Core is a project whose software implements those rules and many additional behaviors. A Bitcoin Core default can be a local policy choice rather than a consensus rule. A wallet feature can affect transaction construction without changing what blocks are valid. An RPC can change between software releases without changing the peer-to-peer protocol. A maintainer can merge code into a repository, but cannot compel node operators, miners, businesses, or other implementations to run it.</p>
+<p>This guide was reviewed on July 24, 2026 against Bitcoin Core 31.1, tag <code>v31.1</code>, commit <code>9be056a8a72b624dae9623b2f7bded92c2a21c91</code>. Current behavior should always be checked against the exact release a node runs.</p>
+</section>
+<section class="msc-learn-article__section"><h2>A project, an implementation, and a running node</h2>
+<p>“Bitcoin Core” can refer to the open-source project, its source repository, a tagged software release, or a running instance. Those are related but not identical.</p>
+<p>The project coordinates proposed code changes, review, testing, release engineering, documentation, and security maintenance. The repository contains both released code and unreleased development work. A stable tag identifies a particular release tree. A running node applies the code, configuration, databases, indexes, wallet state, and local operating environment selected by its operator.</p>
+<p>The distinction prevents a common mistake: treating a repository statement as a network rule. Bitcoin consensus emerges from compatible validation across independently chosen software. Bitcoin Core is widely referenced because it is a mature implementation and because its code and tests document deployed behavior, but neither its repository nor its maintainers are a central protocol authority.</p>
+</section>
+<section class="msc-learn-article__section"><h2>The main programs</h2>
+<p>A standard build can provide several programs.</p>
+<p><code>bitcoind</code> is the headless daemon. It connects to peers, validates and relays data, maintains node state, and can expose server interfaces.</p>
+<p><code>bitcoin-qt</code> provides a graphical interface around node and optional wallet functionality. The graphical application does not define a separate consensus system; it is another interface to components in the software.</p>
+<p><code>bitcoin-cli</code> is a command-line client for the JSON-RPC server. It sends requests to a running node. The client is not itself the validating node.</p>
+<p>Bitcoin Core can also build utilities such as <code>bitcoin-wallet</code>, <code>bitcoin-tx</code>, and <code>bitcoin-util</code>. Their presence and exact commands are release-specific.</p>
+<p>Wallet functionality is optional. A node can validate the chain without loading or even building the wallet component. Conversely, a wallet uses node and chain information but adds key management, descriptors, coin selection, transaction creation, fee decisions, address handling, and wallet-database behavior that are not Bitcoin consensus rules.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Block and transaction validation</h2>
+<p>A fully validating node checks blocks and transactions against the active consensus rules it implements. These checks include transaction structure, scripts, signatures, output values, coin availability, block structure, proof of work, and contextual rules that depend on chain history.</p>
+<p>Validation is not a single function or file. In Bitcoin Core 31.1 it crosses primitives, script execution, consensus helpers, chain parameters, validation logic, caches, and tests. Historical compatibility also matters: code must continue interpreting old blocks consistently while applying rules that became active later.</p>
+<p>A transaction can be consensus-valid yet absent from a node’s mempool. A node can refuse to relay a transaction because of policy while still accepting a later block that contains it. That separation is essential when reading logs, comparing implementations, or interpreting a configuration option.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Chainstate and the UTXO set</h2>
+<p>Bitcoin Core tracks the chain it currently considers to have the most accumulated proof of work among valid candidates. It also maintains chainstate: the information needed to validate the next block, especially the set of unspent transaction outputs, or UTXOs.</p>
+<p>The UTXO set is not a list of account balances. It records spendable outputs and the data needed to decide whether a new transaction may spend them. Bitcoin Core stores block data, undo data, chain indexes, and chainstate databases with different purposes and retention requirements.</p>
+<p>Validation and indexing should not be collapsed. The node needs chainstate to validate. Optional indexes exist to answer additional queries efficiently. Enabling an index can increase storage and synchronization work; disabling it does not make basic consensus validation incomplete.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Peer-to-peer networking</h2>
+<p>Bitcoin Core discovers and connects to peers, exchanges network messages, downloads headers and blocks, announces inventory, relays transactions, and manages peer behavior. Network code must handle untrusted input, resource limits, synchronization, timeouts, and misbehavior without assuming every peer runs Bitcoin Core.</p>
+<p>The software release version is not the peer-to-peer protocol version. Peers negotiate message capabilities through separate protocol mechanisms. A new Bitcoin Core release can change networking behavior without changing consensus, and different implementations can communicate if they support compatible protocol behavior.</p>
+</section>
+<section class="msc-learn-article__section"><h2>The mempool and relay policy</h2>
+<p>The mempool is a node’s local collection of unconfirmed transactions that currently satisfy its admission rules. It is not a global Bitcoin object. Two honest nodes can have different mempools because they received different transactions, use different configurations, restarted at different times, or apply different policy.</p>
+<p>Bitcoin Core policy includes standardness rules, fee and resource limits, replacement behavior, package handling, and other admission or relay decisions. These rules help manage denial-of-service exposure and resource use. Miners may use related but not identical policies when constructing blocks.</p>
+<p>Consensus asks whether a block is valid. Mempool policy asks whether a node will hold or relay an unconfirmed transaction. Mining policy asks what a block producer chooses to include. Confusing them can make a local rejection look like a protocol prohibition.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Mining and block-template interfaces</h2>
+<p>Bitcoin Core does not need to mine in order to validate. It does, however, expose interfaces that mining systems can use, including RPCs for constructing and submitting block candidates. <code>getblocktemplate</code> supplies data and constraints for external mining software; <code>submitblock</code> submits a completed candidate for validation.</p>
+<p>These interfaces do not give Bitcoin Core maintainers control over miners. A miner chooses its node software, transaction-selection logic, templates, and operational architecture. The node still validates submitted blocks according to its active rules.</p>
+</section>
+<section class="msc-learn-article__section"><h2>RPC, REST, and ZMQ</h2>
+<p>Bitcoin Core provides several application-facing interfaces.</p>
+<p>JSON-RPC is the primary command and automation interface. RPC methods can inspect node state, manage wallets when enabled, control networking, query the mempool, submit data, and administer indexes. The RPC interface is software-versioned behavior, not a stable consensus specification.</p>
+<p>The optional REST interface exposes selected read-oriented endpoints and is enabled by configuration. Some queries require optional indexes.</p>
+<p>ZeroMQ notifications can publish selected events, such as block or transaction notifications, to subscribers. Notifications are not a durable database or a consensus feed; applications must handle missed messages, reordering boundaries, restarts, and reorganization logic according to the interface documentation.</p>
+<p>Interfaces should be protected as operational services. Authentication, network binding, firewalling, transport security, and permission design are deployment responsibilities, not guarantees supplied merely by running a node.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Optional indexes and pruning</h2>
+<p>Indexes trade storage and build time for query capability. Examples include the transaction index and compact block filter index. An application should document which indexes it requires instead of assuming every node provides historical lookup.</p>
+<p>Pruning allows a node to discard old block files after validation while retaining the chainstate needed to validate new blocks. A pruned node still validates the chain; pruning changes local data retention and can limit rescans, historical serving, and index combinations. It does not convert the node into simplified payment verification.</p>
+<p>Exact storage needs and pruning constraints vary by release, configuration, and chain growth. Current operator documentation should be used rather than a fixed number copied into long-lived guidance.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Testing and regtest</h2>
+<p>Bitcoin Core includes unit tests, functional tests, fuzz targets, benchmarks, and continuous-integration configurations. Tests are evidence about specified cases, not proof that the implementation has no defects.</p>
+<p>Regtest creates a private testing chain whose blocks can be generated on demand. It is useful for learning RPCs, exercising wallet flows, testing reorganizations, and reproducing application behavior without real funds. Signet and public test networks serve different purposes and should not be treated as interchangeable with regtest.</p>
+<p>Developers should pin the release or commit they are testing. A test that passes on the development branch may depend on behavior not present in the latest stable release.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Source, contributions, and project governance</h2>
+<p>The <code>bitcoin/bitcoin</code> repository uses an open contributor workflow. Proposed changes arrive as pull requests and are reviewed, tested, revised, or rejected. Repository maintainers perform practical duties such as merging changes, managing releases, and moderating the repository.</p>
+<p>Merge access is not authority over Bitcoin. Maintainers cannot update independently operated nodes, force miners to include transactions, activate a consensus rule by declaration, or prevent compatible alternative software from participating. Operators decide what to run, and network consequences depend on actual deployment and compatibility.</p>
+<p>Consensus-related changes require especially careful analysis beyond ordinary software review. A merged pull request can remain unreleased. Released code can contain dormant logic. A proposal can be present without activation. Network adoption is a separate fact that must be measured and dated.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Releases, maintenance, and security updates</h2>
+<p>Bitcoin Core develops on its main integration branch and creates release branches and stable tags. Major releases introduce a broader set of changes. Maintenance releases generally backport selected bug and security fixes for supported release lines.</p>
+<p>As reviewed July 24, 2026, the project’s lifecycle page says the latest three major versions are maintained and lists 31.x, 30.x, and 29.x in that window. The page aims for major releases about every six to seven months, but schedules are proposals rather than consensus rules or guarantees.</p>
+<p>Security advisories and fixes should be evaluated by affected versions, disclosure date, patch release, and operator exposure. “Latest” is not enough: an operator may need to compare its exact version, platform, configuration, wallet use, and enabled interfaces.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Licensing and alternative implementations</h2>
+<p>Bitcoin Core is released under the MIT license. The license permits use, modification, and redistribution subject to its terms, and it comes without a warranty of correctness or fitness.</p>
+<p>Bitcoin Core is not the only possible implementation. Alternative software can participate when it enforces compatible active consensus rules and communicates compatibly with peers. Implementations may differ in architecture, policy, wallet behavior, interfaces, defaults, release process, and feature set.</p>
+<p>Diversity can reduce dependence on one codebase, but consensus-critical divergence can also create serious risk. Compatibility therefore has to be tested against exact versions, configurations, and network conditions rather than assumed from a product name.</p>
+</section>
+<section class="msc-learn-article__section"><h2>A practical boundary map</h2>
+<p>When evaluating a Bitcoin Core claim, classify it first:</p>
+<ul><li><strong>Consensus rule:</strong> determines whether blocks and transactions are valid.</li><li><strong>Consensus implementation:</strong> Bitcoin Core code that enforces those rules.</li><li><strong>Policy:</strong> local mempool, relay, or mining-selection behavior.</li><li><strong>Wallet behavior:</strong> key, coin-selection, fee, and transaction-construction logic.</li><li><strong>Interface behavior:</strong> RPC, REST, ZMQ, command-line, or graphical behavior.</li><li><strong>Default or configuration:</strong> an operator-adjustable choice in a specific release.</li><li><strong>Project governance:</strong> how repository and release work is coordinated.</li><li><strong>Network adoption:</strong> what independently operated systems actually run.</li></ul>
+<p>That map is more reliable than saying “Bitcoin Core does it” without identifying which layer is involved.</p>
+</section>
+    </article>
+    <section class="msc-learn-key-terms" aria-labelledby="MscGuide049Terms"><h2 id="MscGuide049Terms">Key Terms</h2><dl><div class="msc-learn-term"><dt>Bitcoin Core</dt><dd>An open-source Bitcoin node implementation and software project.</dd></div>
+<div class="msc-learn-term"><dt>Full validation</dt><dd>Independently checking blocks and transactions against active consensus rules.</dd></div>
+<div class="msc-learn-term"><dt>Consensus implementation</dt><dd>Code that enforces the implementation’s interpretation of Bitcoin consensus.</dd></div>
+<div class="msc-learn-term"><dt>Chainstate</dt><dd>Local state used to validate the active chain, including the UTXO set.</dd></div>
+<div class="msc-learn-term"><dt>UTXO set</dt><dd>The currently unspent transaction outputs available under the accepted chainstate.</dd></div>
+<div class="msc-learn-term"><dt>Mempool</dt><dd>A node-local set of unconfirmed transactions accepted under local policy.</dd></div>
+<div class="msc-learn-term"><dt>Relay policy</dt><dd>Rules a node uses when accepting and forwarding unconfirmed transactions.</dd></div>
+<div class="msc-learn-term"><dt>Mining policy</dt><dd>Rules and preferences used to construct a candidate block.</dd></div>
+<div class="msc-learn-term"><dt>RPC</dt><dd>A request-response interface for controlling or querying software.</dd></div>
+<div class="msc-learn-term"><dt>Index</dt><dd>Additional stored data built to support particular queries.</dd></div>
+<div class="msc-learn-term"><dt>Pruning</dt><dd>Discarding old block files after validation while retaining validation state.</dd></div>
+<div class="msc-learn-term"><dt>Regtest</dt><dd>A private Bitcoin testing network with locally generated blocks.</dd></div>
+<div class="msc-learn-term"><dt>Release branch</dt><dd>A branch maintained for a particular software release line.</dd></div>
+<div class="msc-learn-term"><dt>Stable tag</dt><dd>A Git reference identifying an official release source tree.</dd></div></dl></section>
+    <section class="msc-learn-sources" aria-labelledby="MscGuide049Sources"><h2 id="MscGuide049Sources">Sources</h2><article class="msc-learn-source"><h3>Bitcoin Core v31.1 README</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/README.md</li><li><strong>supports:</strong> Full validation, optional wallet and GUI, MIT licensing, stable tags, development-branch boundaries, and testing.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core v31.1 Tag Commit</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/commit/9be056a8a72b624dae9623b2f7bded92c2a21c91</li><li><strong>supports:</strong> Exact source commit reviewed for Bitcoin Core 31.1.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Download Page</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core project</li><li><strong>url:</strong> https://bitcoincore.org/en/download/</li><li><strong>supports:</strong> Current release, official binaries, checksum verification, multiple signatures, and pruning overview reviewed July 24, 2026.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Software Life Cycle</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core project</li><li><strong>url:</strong> https://bitcoincore.org/en/lifecycle/</li><li><strong>supports:</strong> Versioning, maintenance releases, supported branches, schedule aims, and separation from protocol versions.</li></ul></article>
+<article class="msc-learn-source"><h3>Contributing to Bitcoin Core at v31.1</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/CONTRIBUTING.md</li><li><strong>supports:</strong> Contributor workflow, peer review, maintainers’ practical responsibilities, testing, and component boundaries.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core v31.1 Source Tree</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/tree/v31.1/src</li><li><strong>supports:</strong> Current node, wallet, policy, script, RPC, index, networking, test, and interface organization.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core v31.1 Validation Source</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/src/validation.cpp</li><li><strong>supports:</strong> Chainstate and block and transaction validation implementation.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core v31.1 Script Interpreter</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/src/script/interpreter.cpp</li><li><strong>supports:</strong> Script execution as one part of consensus validation.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core v31.1 Network Processing</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/src/net_processing.cpp</li><li><strong>supports:</strong> Peer message processing, synchronization, relay, and network behavior.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core v31.1 Policy Directory</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/tree/v31.1/src/policy</li><li><strong>supports:</strong> Separation of standardness and relay policy from consensus.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core v31.1 Mining RPC Source</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/src/rpc/mining.cpp</li><li><strong>supports:</strong> Block-template and block-submission interfaces.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core JSON-RPC Interface</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/doc/JSON-RPC-interface.md</li><li><strong>supports:</strong> RPC consistency and interface-version boundaries.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core REST Interface</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/doc/REST-interface.md</li><li><strong>supports:</strong> Optional REST behavior and index-dependent queries.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core ZMQ Documentation</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/doc/zmq.md</li><li><strong>supports:</strong> Notification interfaces and subscriber responsibilities.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core v31.1 Index Source</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/tree/v31.1/src/index</li><li><strong>supports:</strong> Optional index architecture distinct from validation.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Reduce Memory Documentation</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/doc/reduce-memory.md</li><li><strong>supports:</strong> Pruning and resource-configuration boundaries.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Testing README</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/src/test/README.md</li><li><strong>supports:</strong> Unit-test organization and execution.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Functional Tests</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/tree/v31.1/test/functional</li><li><strong>supports:</strong> Integration and regtest-based functional testing.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Security Policy</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/SECURITY.md</li><li><strong>supports:</strong> Supported-version and vulnerability-reporting boundaries.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Release Process</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/doc/release-process.md</li><li><strong>supports:</strong> Release branches, tagging, Guix builds, signatures, and release artifacts.</li></ul></article></section>
+    <nav class="msc-learn-prev-next" aria-label="Guide navigation preview"><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Previous</span><strong>Emerging Protocols on Bitcoin: How to Evaluate Them</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Category</span><strong>Bitcoin Development</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Next</span><strong>What Is Bitcoin Knots?</strong><small>Link inactive</small></span></nav>
+  </div>
+</section>

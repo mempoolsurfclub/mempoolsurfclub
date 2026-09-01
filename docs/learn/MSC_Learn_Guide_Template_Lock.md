@@ -60,13 +60,13 @@ Content changes by guide. The template does not.
 
 When Guides 002–080 are activated, preserve this shared structure and styling. Add only the guide-specific runtime binding, copy-locked content, next-guide data, progress data, and eventual confirmed destination URL. Do not fork the stylesheet or add per-guide inline CSS to solve ordinary title or content-length differences.
 
-Guides 002–004 established the first controlled rollout. Guides 005–008 extended the same locked implementation through the `Using Bitcoin` subcategory. Guides 009–012 extended it through the `Security` subcategory. Guides 013–016 completed the 16-guide Bitcoin Basics category through `Essentials`. Guides 017–032 extend the same locked system through all four `The Bitcoin Network` subcategories — `Mining`, `Nodes`, `Network`, and `Consensus` — without changing the visual contract. Guides 033–048 extend that same locked system through the complete `Building on Bitcoin` category without changing the visual contract.
+Guides 002–004 established the first controlled rollout. Guides 005–008 extended the same locked implementation through the `Using Bitcoin` subcategory. Guides 009–012 extended it through the `Security` subcategory. Guides 013–016 completed the 16-guide Bitcoin Basics category through `Essentials`. Guides 017–032 extend the same locked system through all four `The Bitcoin Network` subcategories — `Mining`, `Nodes`, `Network`, and `Consensus` — without changing the visual contract. Guides 033–048 extend that same locked system through the complete `Building on Bitcoin` category without changing the visual contract. Guides 049–064 extend the same locked system through all four `Bitcoin Development` subcategories — `Bitcoin Core`, `Protocols`, `Cryptography`, and `Infrastructure` — without changing the visual contract.
 
-The Bitcoin Basics hub cards for Guides 001–016, The Bitcoin Network hub cards for Guides 017–032, and Building on Bitcoin hub cards for Guides 033–048 are active in preview. The visible sequence is wired continuously through all three categories:
+The Bitcoin Basics hub cards for Guides 001–016, The Bitcoin Network hub cards for Guides 017–032, Building on Bitcoin hub cards for Guides 033–048, and Bitcoin Development hub cards for Guides 049–064 are active in preview. The visible sequence is wired continuously through all four categories:
 
-`001 → 002 → 003 → 004 → 005 → 006 → 007 → 008 → 009 → 010 → 011 → 012 → 013 → 014 → 015 → 016 → 017 → 018 → 019 → 020 → 021 → 022 → 023 → 024 → 025 → 026 → 027 → 028 → 029 → 030 → 031 → 032 → 033 → 034 → 035 → 036 → 037 → 038 → 039 → 040 → 041 → 042 → 043 → 044 → 045 → 046 → 047 → 048`
+`001 → 002 → 003 → 004 → 005 → 006 → 007 → 008 → 009 → 010 → 011 → 012 → 013 → 014 → 015 → 016 → 017 → 018 → 019 → 020 → 021 → 022 → 023 → 024 → 025 → 026 → 027 → 028 → 029 → 030 → 031 → 032 → 033 → 034 → 035 → 036 → 037 → 038 → 039 → 040 → 041 → 042 → 043 → 044 → 045 → 046 → 047 → 048 → 049 → 050 → 051 → 052 → 053 → 054 → 055 → 056 → 057 → 058 → 059 → 060 → 061 → 062 → 063 → 064`
 
-Guide 016 continues into Guide 017 on `The Bitcoin Network`. Guide 032 now continues into Guide 033 on `Building on Bitcoin`. Guide 048 previews Guide 049 — **What Is Bitcoin Core?** — but does not activate it until the next category rollout exists.
+Guide 016 continues into Guide 017 on `The Bitcoin Network`. Guide 032 continues into Guide 033 on `Building on Bitcoin`. Guide 048 now continues into Guide 049 on `Bitcoin Development`. Guide 064 previews Guide 065 — **Who Builds on Bitcoin?** — but does not activate it until the `Bitcoin Ecosystem` rollout exists.
 
 Current preview views:
 
@@ -118,9 +118,25 @@ Current preview views:
 - Guide 046: `?view=msc-learn-guide-046`
 - Guide 047: `?view=msc-learn-guide-047`
 - Guide 048: `?view=msc-learn-guide-048`
+- Guide 049: `?view=msc-learn-guide-049`
+- Guide 050: `?view=msc-learn-guide-050`
+- Guide 051: `?view=msc-learn-guide-051`
+- Guide 052: `?view=msc-learn-guide-052`
+- Guide 053: `?view=msc-learn-guide-053`
+- Guide 054: `?view=msc-learn-guide-054`
+- Guide 055: `?view=msc-learn-guide-055`
+- Guide 056: `?view=msc-learn-guide-056`
+- Guide 057: `?view=msc-learn-guide-057`
+- Guide 058: `?view=msc-learn-guide-058`
+- Guide 059: `?view=msc-learn-guide-059`
+- Guide 060: `?view=msc-learn-guide-060`
+- Guide 061: `?view=msc-learn-guide-061`
+- Guide 062: `?view=msc-learn-guide-062`
+- Guide 063: `?view=msc-learn-guide-063`
+- Guide 064: `?view=msc-learn-guide-064`
 
 These views are QA routes, not canonical guide URLs.
 
 ## Publication boundary
 
-Guides 001–048 remain preview-bound runtimes until real Shopify publication records and canonical URLs exist. This template lock and rollout do not create Shopify Page objects, publish canonical guide URLs, or activate planned editorial links inside guide content.
+Guides 001–064 remain preview-bound runtimes until real Shopify publication records and canonical URLs exist. This template lock and rollout do not create Shopify Page objects, publish canonical guide URLs, or activate planned editorial links inside guide content.

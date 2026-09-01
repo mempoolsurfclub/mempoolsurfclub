@@ -1,0 +1,434 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-059-bitcoin-hash-functions.md",
+  "source_sha256": "f2675dad5c2ecee2690527a4660a8b3be7a79ba70a6a2bc2b4fd46a0ad1dd072",
+  "registry_id": "MSC-GUIDE-059",
+  "status": "COPY_LOCKED",
+  "h1": "How Hash Functions Work in Bitcoin",
+  "introductory_deck": "Bitcoin uses several hash constructions for different jobs: SHA-256, double SHA-256, HASH160, Taproot tagged hashes, script commitments, proof of work, transaction and block identifiers, and address checksums. These operations share the idea of mapping data to fixed-size outputs, but they do not provide identical properties or interchangeable meanings. Hashing is not encryption, miners do not reverse hashes, and a checksum does not prove ownership.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "A cryptographic hash function takes an input of arbitrary practical length and produces a fixed-size output called a hash or digest. The same input produces the same output. A small input change should unpredictably alter the digest.\n\nBitcoin relies on hash functions throughout transaction identification, block construction, proof of work, scripts, witness programs, Taproot, and address encodings. The word “hash” is therefore too broad by itself. Accurate explanations name the function, the serialization, the number of applications, the output length, and the purpose.\n\nThis guide was researched on July 25, 2026 against the deployed Bitcoin BIPs and Bitcoin Core 31.1 at tag `v31.1`, commit `9be056a8a72b624dae9623b2f7bded92c2a21c91`. Cryptographic confidence is not an absolute guarantee and should be revisited if standards, attacks, implementations, or consensus proposals change.",
+      "body_html": "<p>A cryptographic hash function takes an input of arbitrary practical length and produces a fixed-size output called a hash or digest. The same input produces the same output. A small input change should unpredictably alter the digest.</p>\n<p>Bitcoin relies on hash functions throughout transaction identification, block construction, proof of work, scripts, witness programs, Taproot, and address encodings. The word “hash” is therefore too broad by itself. Accurate explanations name the function, the serialization, the number of applications, the output length, and the purpose.</p>\n<p>This guide was researched on July 25, 2026 against the deployed Bitcoin BIPs and Bitcoin Core 31.1 at tag <code>v31.1</code>, commit <code>9be056a8a72b624dae9623b2f7bded92c2a21c91</code>. Cryptographic confidence is not an absolute guarantee and should be revisited if standards, attacks, implementations, or consensus proposals change.</p>"
+    },
+    {
+      "heading": "Core security properties",
+      "body_markdown": "Several properties are commonly discussed separately.\n\n**Preimage resistance** means that, given a target digest, finding any input that hashes to it should require infeasible work.\n\n**Second-preimage resistance** means that, given one particular input, finding a different input with the same digest should require infeasible work.\n\n**Collision resistance** means that finding any two different inputs with the same digest should require infeasible work.\n\nThese are related but not identical goals. An attack that finds arbitrary collisions does not automatically provide a preimage for a chosen target. A protocol may depend more heavily on one property than another.\n\nHash outputs are not guaranteed unique. A function with a finite output space and effectively unlimited possible inputs must have collisions. Security language is probabilistic and computational: collisions should be infeasible to find within the relevant threat model, not impossible by mathematics.",
+      "body_html": "<p>Several properties are commonly discussed separately.</p>\n<p><strong>Preimage resistance</strong> means that, given a target digest, finding any input that hashes to it should require infeasible work.</p>\n<p><strong>Second-preimage resistance</strong> means that, given one particular input, finding a different input with the same digest should require infeasible work.</p>\n<p><strong>Collision resistance</strong> means that finding any two different inputs with the same digest should require infeasible work.</p>\n<p>These are related but not identical goals. An attack that finds arbitrary collisions does not automatically provide a preimage for a chosen target. A protocol may depend more heavily on one property than another.</p>\n<p>Hash outputs are not guaranteed unique. A function with a finite output space and effectively unlimited possible inputs must have collisions. Security language is probabilistic and computational: collisions should be infeasible to find within the relevant threat model, not impossible by mathematics.</p>"
+    },
+    {
+      "heading": "Fixed-size output and the birthday bound",
+      "body_markdown": "SHA-256 produces 256 bits, or 32 bytes. An idealized 256-bit hash has approximately `2^256` possible outputs. Finding a preimage for a chosen output is expected to require work on the order of `2^256`, while finding any collision can exploit the birthday effect and is expected around `2^128` trials.\n\nThe birthday bound does not mean that ordinary users face a one-in-`2^128` chance each time they hash data. It describes the scale at which a deliberate search for any pairwise collision becomes plausible in an idealized model. Real risk analysis also depends on the exact construction, attacker control, target selection, and consequences of a collision.\n\nFor 160-bit HASH160 outputs, the corresponding generic collision scale is approximately `2^80`, while generic preimage work is approximately `2^160`. These figures are security-model approximations, not promises about implementations or future cryptanalysis.",
+      "body_html": "<p>SHA-256 produces 256 bits, or 32 bytes. An idealized 256-bit hash has approximately <code>2^256</code> possible outputs. Finding a preimage for a chosen output is expected to require work on the order of <code>2^256</code>, while finding any collision can exploit the birthday effect and is expected around <code>2^128</code> trials.</p>\n<p>The birthday bound does not mean that ordinary users face a one-in-<code>2^128</code> chance each time they hash data. It describes the scale at which a deliberate search for any pairwise collision becomes plausible in an idealized model. Real risk analysis also depends on the exact construction, attacker control, target selection, and consequences of a collision.</p>\n<p>For 160-bit HASH160 outputs, the corresponding generic collision scale is approximately <code>2^80</code>, while generic preimage work is approximately <code>2^160</code>. These figures are security-model approximations, not promises about implementations or future cryptanalysis.</p>"
+    },
+    {
+      "heading": "SHA-256",
+      "body_markdown": "SHA-256 is a member of the SHA-2 family standardized by NIST. It processes data in blocks and returns a 32-byte digest.\n\nBitcoin Core 31.1 has a dedicated SHA-256 implementation and uses SHA-256 both directly and inside larger constructions. Examples include:\n\n- the first stage of double SHA-256;\n- the first stage of HASH160;\n- P2WSH witness-script commitments;\n- BIP 340, BIP 341, and BIP 342 tagged hashes;\n- Taproot signature-message component hashes;\n- the witness commitment after a second SHA-256 stage;\n- proof-of-work block-header hashing as part of double SHA-256.\n\n“Bitcoin uses SHA-256” is true but incomplete. The surrounding serialization and construction determine what the digest means.",
+      "body_html": "<p>SHA-256 is a member of the SHA-2 family standardized by NIST. It processes data in blocks and returns a 32-byte digest.</p>\n<p>Bitcoin Core 31.1 has a dedicated SHA-256 implementation and uses SHA-256 both directly and inside larger constructions. Examples include:</p>\n<ul><li>the first stage of double SHA-256;</li><li>the first stage of HASH160;</li><li>P2WSH witness-script commitments;</li><li>BIP 340, BIP 341, and BIP 342 tagged hashes;</li><li>Taproot signature-message component hashes;</li><li>the witness commitment after a second SHA-256 stage;</li><li>proof-of-work block-header hashing as part of double SHA-256.</li></ul>\n<p>“Bitcoin uses SHA-256” is true but incomplete. The surrounding serialization and construction determine what the digest means.</p>"
+    },
+    {
+      "heading": "Double SHA-256",
+      "body_markdown": "Double SHA-256 means:\n\n`SHA256(SHA256(data))`\n\nBitcoin Core’s `CHash256`, `Hash`, and `HashWriter::GetHash()` implement this 256-bit construction.\n\nBitcoin uses double SHA-256 for several historically important objects, including:\n\n- transaction identifiers from the non-witness transaction serialization;\n- witness transaction identifiers when witness data is present;\n- block-header identifiers and proof-of-work hashes;\n- parent nodes in the block transaction Merkle tree;\n- the SegWit witness commitment;\n- Base58Check’s checksum source before truncation;\n- legacy, BIP 143, and some other signature-message digests.\n\nUsing SHA-256 twice should not be summarized as “twice as secure.” It does not double the output length or turn 256-bit collision resistance into 512-bit collision resistance. In some constructions it avoids Merkle–Damgård length-extension behavior on the inner digest, but each protocol must be analyzed in context.\n\nBIP 341 intentionally uses single-SHA-256 component hashes and a tagged final hash for Taproot signature messages. Its rationale notes that length extension is not a concern for this public, length-committed message construction. This demonstrates why counting hash invocations is not a reliable security ranking.",
+      "body_html": "<p>Double SHA-256 means:</p>\n<p><code>SHA256(SHA256(data))</code></p>\n<p>Bitcoin Core’s <code>CHash256</code>, <code>Hash</code>, and <code>HashWriter::GetHash()</code> implement this 256-bit construction.</p>\n<p>Bitcoin uses double SHA-256 for several historically important objects, including:</p>\n<ul><li>transaction identifiers from the non-witness transaction serialization;</li><li>witness transaction identifiers when witness data is present;</li><li>block-header identifiers and proof-of-work hashes;</li><li>parent nodes in the block transaction Merkle tree;</li><li>the SegWit witness commitment;</li><li>Base58Check’s checksum source before truncation;</li><li>legacy, BIP 143, and some other signature-message digests.</li></ul>\n<p>Using SHA-256 twice should not be summarized as “twice as secure.” It does not double the output length or turn 256-bit collision resistance into 512-bit collision resistance. In some constructions it avoids Merkle–Damgård length-extension behavior on the inner digest, but each protocol must be analyzed in context.</p>\n<p>BIP 341 intentionally uses single-SHA-256 component hashes and a tagged final hash for Taproot signature messages. Its rationale notes that length extension is not a concern for this public, length-committed message construction. This demonstrates why counting hash invocations is not a reliable security ranking.</p>"
+    },
+    {
+      "heading": "HASH160",
+      "body_markdown": "Bitcoin’s HASH160 construction is:\n\n`RIPEMD160(SHA256(data))`\n\nThe result is 20 bytes. Bitcoin Core implements this as `CHash160`.\n\nHASH160 appears in several legacy and SegWit version 0 constructions:\n\n- pay-to-public-key-hash scripts commit to the HASH160 of a public key;\n- pay-to-script-hash scripts commit to the HASH160 of a redeem script;\n- P2WPKH witness programs commit to the HASH160 of a compressed public key.\n\nRIPEMD-160 is therefore not used alone in these constructions. It compresses a SHA-256 digest to 160 bits.\n\nA 20-byte key hash is not a public key. Spending a P2PKH or P2WPKH output reveals a public key whose HASH160 must match the commitment, then verifies a signature under that public key. The hash commitment and the signature check perform different jobs.\n\nP2WSH does not use HASH160. It commits directly to `SHA256(witnessScript)`, producing a 32-byte witness program. Treating P2SH and P2WSH as the same “script hash” hides an important output-length and construction difference.",
+      "body_html": "<p>Bitcoin’s HASH160 construction is:</p>\n<p><code>RIPEMD160(SHA256(data))</code></p>\n<p>The result is 20 bytes. Bitcoin Core implements this as <code>CHash160</code>.</p>\n<p>HASH160 appears in several legacy and SegWit version 0 constructions:</p>\n<ul><li>pay-to-public-key-hash scripts commit to the HASH160 of a public key;</li><li>pay-to-script-hash scripts commit to the HASH160 of a redeem script;</li><li>P2WPKH witness programs commit to the HASH160 of a compressed public key.</li></ul>\n<p>RIPEMD-160 is therefore not used alone in these constructions. It compresses a SHA-256 digest to 160 bits.</p>\n<p>A 20-byte key hash is not a public key. Spending a P2PKH or P2WPKH output reveals a public key whose HASH160 must match the commitment, then verifies a signature under that public key. The hash commitment and the signature check perform different jobs.</p>\n<p>P2WSH does not use HASH160. It commits directly to <code>SHA256(witnessScript)</code>, producing a 32-byte witness program. Treating P2SH and P2WSH as the same “script hash” hides an important output-length and construction difference.</p>"
+    },
+    {
+      "heading": "Tagged hashes",
+      "body_markdown": "A BIP 340-style tagged hash is:\n\n`SHA256(SHA256(tag) || SHA256(tag) || message)`\n\nThe repeated tag hash fills one SHA-256 block and creates a context-specific initial state. Bitcoin Core’s `TaggedHash` helper and preinitialized Taproot hashers implement this pattern.\n\nBIP 340 uses distinct tags for auxiliary data, nonce derivation, and the signature challenge. BIP 341 and BIP 342 use tags including `TapTweak`, `TapLeaf`, `TapBranch`, and `TapSighash`.\n\nTagged hashing provides domain separation. A digest intended as a TapLeaf commitment should not be casually interchangeable with a signature challenge or nonce input. Domain separation reduces cross-context ambiguity under the assumed hash properties; it does not make collisions impossible.",
+      "body_html": "<p>A BIP 340-style tagged hash is:</p>\n<p><code>SHA256(SHA256(tag) || SHA256(tag) || message)</code></p>\n<p>The repeated tag hash fills one SHA-256 block and creates a context-specific initial state. Bitcoin Core’s <code>TaggedHash</code> helper and preinitialized Taproot hashers implement this pattern.</p>\n<p>BIP 340 uses distinct tags for auxiliary data, nonce derivation, and the signature challenge. BIP 341 and BIP 342 use tags including <code>TapTweak</code>, <code>TapLeaf</code>, <code>TapBranch</code>, and <code>TapSighash</code>.</p>\n<p>Tagged hashing provides domain separation. A digest intended as a TapLeaf commitment should not be casually interchangeable with a signature challenge or nonce input. Domain separation reduces cross-context ambiguity under the assumed hash properties; it does not make collisions impossible.</p>"
+    },
+    {
+      "heading": "Transaction identifiers",
+      "body_markdown": "A transaction identifier, or `txid`, is the double SHA-256 of the transaction’s legacy serialization without witness data. Bitcoin Core computes it with `TX_NO_WITNESS`.\n\nA witness transaction identifier, or `wtxid`, is the double SHA-256 of the witness-inclusive serialization when witness data exists. For a transaction without witness data, Bitcoin Core defines the `wtxid` to equal the `txid`.\n\nThe byte sequence fed to the hash is serialized in protocol order. Human-facing software commonly displays the internal 32-byte value with reversed byte order, so a hex string seen in a block explorer may appear reversed relative to bytes in a serialized outpoint.\n\nThis display convention does not change the hash function. It is an endianness and presentation issue. Documentation should identify whether it is showing wire bytes, an internal integer representation, or the conventional displayed identifier.\n\nA transaction signature hash is not a `txid`. Signature messages select and transform transaction fields under sighash rules. Two 32-byte digests can serve entirely different protocol roles.",
+      "body_html": "<p>A transaction identifier, or <code>txid</code>, is the double SHA-256 of the transaction’s legacy serialization without witness data. Bitcoin Core computes it with <code>TX_NO_WITNESS</code>.</p>\n<p>A witness transaction identifier, or <code>wtxid</code>, is the double SHA-256 of the witness-inclusive serialization when witness data exists. For a transaction without witness data, Bitcoin Core defines the <code>wtxid</code> to equal the <code>txid</code>.</p>\n<p>The byte sequence fed to the hash is serialized in protocol order. Human-facing software commonly displays the internal 32-byte value with reversed byte order, so a hex string seen in a block explorer may appear reversed relative to bytes in a serialized outpoint.</p>\n<p>This display convention does not change the hash function. It is an endianness and presentation issue. Documentation should identify whether it is showing wire bytes, an internal integer representation, or the conventional displayed identifier.</p>\n<p>A transaction signature hash is not a <code>txid</code>. Signature messages select and transform transaction fields under sighash rules. Two 32-byte digests can serve entirely different protocol roles.</p>"
+    },
+    {
+      "heading": "Block identifiers and proof of work",
+      "body_markdown": "A Bitcoin block header contains:\n\n- version;\n- previous-block hash;\n- transaction Merkle root;\n- time;\n- encoded target in `nBits`;\n- nonce.\n\nThe serialized 80-byte header is double-SHA-256 hashed. The resulting 256-bit value is interpreted as a number for proof-of-work comparison. A header is valid under the proof-of-work rule when its value is less than or equal to the target derived from `nBits`, subject to the other block and chain rules.\n\nThe commonly displayed block hash is the same digest presented in conventional reversed-byte hex notation. The proof-of-work comparison operates on the defined numeric interpretation, not on the visual number of leading zero characters alone.",
+      "body_html": "<p>A Bitcoin block header contains:</p>\n<ul><li>version;</li><li>previous-block hash;</li><li>transaction Merkle root;</li><li>time;</li><li>encoded target in <code>nBits</code>;</li><li>nonce.</li></ul>\n<p>The serialized 80-byte header is double-SHA-256 hashed. The resulting 256-bit value is interpreted as a number for proof-of-work comparison. A header is valid under the proof-of-work rule when its value is less than or equal to the target derived from <code>nBits</code>, subject to the other block and chain rules.</p>\n<p>The commonly displayed block hash is the same digest presented in conventional reversed-byte hex notation. The proof-of-work comparison operates on the defined numeric interpretation, not on the visual number of leading zero characters alone.</p>"
+    },
+    {
+      "heading": "Mining is repeated hashing, not decryption",
+      "body_markdown": "Miners assemble candidate block headers and vary fields such as the nonce, extra nonce in the coinbase transaction, time within allowed rules, and transaction selection. Each change can alter the Merkle root or header. Mining hardware repeatedly computes double SHA-256 and checks whether the output meets the current target.\n\nThere is no encrypted message to decrypt and no secret plaintext to recover. Miners are not reversing SHA-256. They are sampling candidate headers until one produces a sufficiently low output.\n\nBecause hash outputs are modeled as unpredictable, each validly constructed attempt behaves like another trial. Finding a block does not reveal how to shortcut the next search.",
+      "body_html": "<p>Miners assemble candidate block headers and vary fields such as the nonce, extra nonce in the coinbase transaction, time within allowed rules, and transaction selection. Each change can alter the Merkle root or header. Mining hardware repeatedly computes double SHA-256 and checks whether the output meets the current target.</p>\n<p>There is no encrypted message to decrypt and no secret plaintext to recover. Miners are not reversing SHA-256. They are sampling candidate headers until one produces a sufficiently low output.</p>\n<p>Because hash outputs are modeled as unpredictable, each validly constructed attempt behaves like another trial. Finding a block does not reveal how to shortcut the next search.</p>"
+    },
+    {
+      "heading": "Targets and difficulty",
+      "body_markdown": "The target is a 256-bit threshold. A lower target makes qualifying hashes rarer. The compact `nBits` field encodes the target in the block header.\n\n“Difficulty” is a human-facing ratio comparing a reference target to the current target. Bitcoin consensus validates the target and the block hash under exact chain rules; software and websites may present difficulty using different numeric precision or formatting.\n\nThe network periodically adjusts the target according to consensus rules. Hash rate is an estimate inferred from observed block production and target, not a field recorded directly in each block.\n\nThese distinctions matter because a block hash, target, difficulty, and estimated hash rate are different quantities even though all are discussed in mining explanations.",
+      "body_html": "<p>The target is a 256-bit threshold. A lower target makes qualifying hashes rarer. The compact <code>nBits</code> field encodes the target in the block header.</p>\n<p>“Difficulty” is a human-facing ratio comparing a reference target to the current target. Bitcoin consensus validates the target and the block hash under exact chain rules; software and websites may present difficulty using different numeric precision or formatting.</p>\n<p>The network periodically adjusts the target according to consensus rules. Hash rate is an estimate inferred from observed block production and target, not a field recorded directly in each block.</p>\n<p>These distinctions matter because a block hash, target, difficulty, and estimated hash rate are different quantities even though all are discussed in mining explanations.</p>"
+    },
+    {
+      "heading": "Merkle-tree hashing",
+      "body_markdown": "The transaction Merkle tree uses transaction identifiers as leaves. At each level, adjacent 32-byte values are concatenated in the algorithm’s internal byte order and double-SHA-256 hashed to create a parent.\n\nWhen a level has an odd number of nodes, Bitcoin duplicates the final node before hashing the pair. This historical rule contributes to a known mutation ambiguity and is not a general recommendation for new Merkle designs.\n\nThe witness Merkle tree similarly uses `wtxid` values, with a zero leaf for the coinbase transaction. Taproot script trees use different tagged leaf and branch hashes. “The Merkle hash” is therefore not one universal construction in Bitcoin.",
+      "body_html": "<p>The transaction Merkle tree uses transaction identifiers as leaves. At each level, adjacent 32-byte values are concatenated in the algorithm’s internal byte order and double-SHA-256 hashed to create a parent.</p>\n<p>When a level has an odd number of nodes, Bitcoin duplicates the final node before hashing the pair. This historical rule contributes to a known mutation ambiguity and is not a general recommendation for new Merkle designs.</p>\n<p>The witness Merkle tree similarly uses <code>wtxid</code> values, with a zero leaf for the coinbase transaction. Taproot script trees use different tagged leaf and branch hashes. “The Merkle hash” is therefore not one universal construction in Bitcoin.</p>"
+    },
+    {
+      "heading": "Script hash commitments",
+      "body_markdown": "Different output types commit to scripts or keys differently:\n\n- **P2PKH:** HASH160 of a public key.\n- **P2SH:** HASH160 of a redeem script.\n- **P2WPKH:** HASH160 of a compressed public key.\n- **P2WSH:** SHA-256 of a witness script.\n- **P2TR:** 32-byte x-only output key, which may be tweaked by a tagged hash committing to a Taproot script-tree root.\n\nA hash commitment does not itself prove that a party knows a preimage or controls a key. Script execution requires the spender to reveal or satisfy the data expected by the output program.",
+      "body_html": "<p>Different output types commit to scripts or keys differently:</p>\n<ul><li><strong>P2PKH:</strong> HASH160 of a public key.</li><li><strong>P2SH:</strong> HASH160 of a redeem script.</li><li><strong>P2WPKH:</strong> HASH160 of a compressed public key.</li><li><strong>P2WSH:</strong> SHA-256 of a witness script.</li><li><strong>P2TR:</strong> 32-byte x-only output key, which may be tweaked by a tagged hash committing to a Taproot script-tree root.</li></ul>\n<p>A hash commitment does not itself prove that a party knows a preimage or controls a key. Script execution requires the spender to reveal or satisfy the data expected by the output program.</p>"
+    },
+    {
+      "heading": "Taproot commitments",
+      "body_markdown": "Taproot combines an internal x-only public key with an optional script-tree root through the tagged `TapTweak` hash. The tweak modifies the output key. A key-path signature is checked under the tweaked output key.\n\nA script-path spend reveals a tapscript leaf, leaf version, control block, and the necessary branch hashes. The verifier recomputes:\n\n- the tagged `TapLeaf` hash from the leaf version and serialized script;\n- each tagged `TapBranch` parent after lexicographically ordering the two child hashes;\n- the tweak and output key;\n- the parity and internal-key relationship carried by the control block.\n\nTaproot’s branch ordering and tagged leaf encoding differ from the block transaction Merkle tree. They should not be described as the same hash tree with different data.",
+      "body_html": "<p>Taproot combines an internal x-only public key with an optional script-tree root through the tagged <code>TapTweak</code> hash. The tweak modifies the output key. A key-path signature is checked under the tweaked output key.</p>\n<p>A script-path spend reveals a tapscript leaf, leaf version, control block, and the necessary branch hashes. The verifier recomputes:</p>\n<ul><li>the tagged <code>TapLeaf</code> hash from the leaf version and serialized script;</li><li>each tagged <code>TapBranch</code> parent after lexicographically ordering the two child hashes;</li><li>the tweak and output key;</li><li>the parity and internal-key relationship carried by the control block.</li></ul>\n<p>Taproot’s branch ordering and tagged leaf encoding differ from the block transaction Merkle tree. They should not be described as the same hash tree with different data.</p>"
+    },
+    {
+      "heading": "Hashlocks",
+      "body_markdown": "A hashlock is a script condition that requires a spender to reveal a preimage whose hash matches a committed digest. Bitcoin Script includes operations such as `OP_SHA256`, `OP_HASH160`, and related hash opcodes.\n\nA typical construction commits to `H(x)` and later reveals `x`. This supports conditional protocols such as atomic-swap and payment-channel designs when combined with signatures and time locks.\n\nA hashlock proves only that the spending witness supplied a preimage satisfying the script. It does not prove who originally chose the secret, keep the secret private after publication, or make the broader protocol safe.",
+      "body_html": "<p>A hashlock is a script condition that requires a spender to reveal a preimage whose hash matches a committed digest. Bitcoin Script includes operations such as <code>OP_SHA256</code>, <code>OP_HASH160</code>, and related hash opcodes.</p>\n<p>A typical construction commits to <code>H(x)</code> and later reveals <code>x</code>. This supports conditional protocols such as atomic-swap and payment-channel designs when combined with signatures and time locks.</p>\n<p>A hashlock proves only that the spending witness supplied a preimage satisfying the script. It does not prove who originally chose the secret, keep the secret private after publication, or make the broader protocol safe.</p>"
+    },
+    {
+      "heading": "Commit-and-reveal patterns",
+      "body_markdown": "Hash commitments can separate a commitment phase from a later reveal phase. The committing party publishes a digest; later it reveals the data so others can recompute the hash.\n\nA secure commitment design may require:\n\n- domain separation;\n- unambiguous serialization;\n- sufficient secret entropy;\n- a salt or nonce;\n- binding to context, participants, and version;\n- a clear reveal and timeout process.\n\nHashing a predictable answer without a salt can allow brute-force guessing. Hashing concatenated fields without lengths or a canonical encoding can create ambiguity even when the hash function itself behaves correctly.",
+      "body_html": "<p>Hash commitments can separate a commitment phase from a later reveal phase. The committing party publishes a digest; later it reveals the data so others can recompute the hash.</p>\n<p>A secure commitment design may require:</p>\n<ul><li>domain separation;</li><li>unambiguous serialization;</li><li>sufficient secret entropy;</li><li>a salt or nonce;</li><li>binding to context, participants, and version;</li><li>a clear reveal and timeout process.</li></ul>\n<p>Hashing a predictable answer without a salt can allow brute-force guessing. Hashing concatenated fields without lengths or a canonical encoding can create ambiguity even when the hash function itself behaves correctly.</p>"
+    },
+    {
+      "heading": "Base58Check",
+      "body_markdown": "Legacy Bitcoin addresses and several key encodings use Base58Check. The encoded payload includes a version or type prefix and data. The checksum is the first four bytes of double SHA-256 applied to that payload.\n\nThis 32-bit checksum helps detect many transcription errors. It is not a cryptographic proof of ownership, authorization, or authenticity. An attacker can construct a different payload with its own valid checksum, and a maliciously substituted valid address will pass checksum verification.\n\nA sender must still verify the intended recipient and network. “The checksum is valid” means only that the string is internally consistent under the encoding.",
+      "body_html": "<p>Legacy Bitcoin addresses and several key encodings use Base58Check. The encoded payload includes a version or type prefix and data. The checksum is the first four bytes of double SHA-256 applied to that payload.</p>\n<p>This 32-bit checksum helps detect many transcription errors. It is not a cryptographic proof of ownership, authorization, or authenticity. An attacker can construct a different payload with its own valid checksum, and a maliciously substituted valid address will pass checksum verification.</p>\n<p>A sender must still verify the intended recipient and network. “The checksum is valid” means only that the string is internally consistent under the encoding.</p>"
+    },
+    {
+      "heading": "Bech32 and Bech32m",
+      "body_markdown": "BIP 173 defines Bech32 for version 0 witness addresses. Its six-character checksum uses a BCH-code-derived polymod calculation over the human-readable part and data symbols. It is not SHA-256.\n\nBIP 350 defines Bech32m by changing the final checksum constant. Version 0 witness programs continue to use Bech32. Witness versions 1 through 16, including Taproot’s version 1, use Bech32m.\n\nA decoder must check both the checksum and the expected encoding for the witness version. Accepting a valid Bech32 string where Bech32m is required, or vice versa, is an error.\n\nBech32 and Bech32m checksums are designed to detect common character errors. They do not prove that the witness program belongs to a specific person, that it is spendable, or that the recipient generated it.",
+      "body_html": "<p>BIP 173 defines Bech32 for version 0 witness addresses. Its six-character checksum uses a BCH-code-derived polymod calculation over the human-readable part and data symbols. It is not SHA-256.</p>\n<p>BIP 350 defines Bech32m by changing the final checksum constant. Version 0 witness programs continue to use Bech32. Witness versions 1 through 16, including Taproot’s version 1, use Bech32m.</p>\n<p>A decoder must check both the checksum and the expected encoding for the witness version. Accepting a valid Bech32 string where Bech32m is required, or vice versa, is an error.</p>\n<p>Bech32 and Bech32m checksums are designed to detect common character errors. They do not prove that the witness program belongs to a specific person, that it is spendable, or that the recipient generated it.</p>"
+    },
+    {
+      "heading": "Length extension",
+      "body_markdown": "SHA-256 follows a Merkle–Damgård construction. If a protocol uses a raw digest as though it authenticated `secret || message`, length-extension behavior can matter: knowledge of the digest and message length may allow computing a digest for a padded extension without learning the secret.\n\nThis does not mean every direct use of SHA-256 in Bitcoin is vulnerable. Many Bitcoin constructions hash public serialized data, use fixed lengths, double hash, use HMAC-like designs, or apply tagged hashes with committed structure.\n\nThe correct lesson is to analyze the full construction. “Single SHA-256 is unsafe” and “double SHA-256 fixes everything” are both misleading.",
+      "body_html": "<p>SHA-256 follows a Merkle–Damgård construction. If a protocol uses a raw digest as though it authenticated <code>secret || message</code>, length-extension behavior can matter: knowledge of the digest and message length may allow computing a digest for a padded extension without learning the secret.</p>\n<p>This does not mean every direct use of SHA-256 in Bitcoin is vulnerable. Many Bitcoin constructions hash public serialized data, use fixed lengths, double hash, use HMAC-like designs, or apply tagged hashes with committed structure.</p>\n<p>The correct lesson is to analyze the full construction. “Single SHA-256 is unsafe” and “double SHA-256 fixes everything” are both misleading.</p>"
+    },
+    {
+      "heading": "Collision language and protocol consequences",
+      "body_markdown": "A discovered collision in one context does not automatically spend coins. Consequences depend on what the attacker can choose and what the digest commits to.\n\nFor example:\n\n- A collision in an address checksum is not a private-key break.\n- A collision in a script commitment would still need to satisfy the exact output and script context.\n- A transaction-identifier collision could affect indexing and commitments differently from a preimage attack on an existing transaction.\n- A break in signature-hash collision resistance must be analyzed with the signature scheme and attacker control of messages.\n\nThis is why source notes should identify whether a claim depends on preimage, second-preimage, collision, or pseudorandom-output behavior.",
+      "body_html": "<p>A discovered collision in one context does not automatically spend coins. Consequences depend on what the attacker can choose and what the digest commits to.</p>\n<p>For example:</p>\n<ul><li>A collision in an address checksum is not a private-key break.</li><li>A collision in a script commitment would still need to satisfy the exact output and script context.</li><li>A transaction-identifier collision could affect indexing and commitments differently from a preimage attack on an existing transaction.</li><li>A break in signature-hash collision resistance must be analyzed with the signature scheme and attacker control of messages.</li></ul>\n<p>This is why source notes should identify whether a claim depends on preimage, second-preimage, collision, or pseudorandom-output behavior.</p>"
+    },
+    {
+      "heading": "Quantum-computing boundaries",
+      "body_markdown": "Grover’s algorithm gives a theoretical quadratic speedup for generic preimage search. In an idealized model, that changes a 256-bit preimage search scale toward roughly `2^128` quantum operations, while collision search and real implementations require more nuanced analysis.\n\nThat does not imply a practical current attack on Bitcoin’s hash functions. Fault-tolerant quantum resources, circuit depth, error correction, parallelism, and target-specific constraints matter. Hash functions are also affected differently from secp256k1 signatures, for which Shor’s algorithm targets the discrete-log assumption.\n\nBitcoin’s deployed rules do not automatically upgrade if technology changes. Any response would require evidence, software, wallet behavior, and potentially consensus coordination. Timelines should not be invented.",
+      "body_html": "<p>Grover’s algorithm gives a theoretical quadratic speedup for generic preimage search. In an idealized model, that changes a 256-bit preimage search scale toward roughly <code>2^128</code> quantum operations, while collision search and real implementations require more nuanced analysis.</p>\n<p>That does not imply a practical current attack on Bitcoin’s hash functions. Fault-tolerant quantum resources, circuit depth, error correction, parallelism, and target-specific constraints matter. Hash functions are also affected differently from secp256k1 signatures, for which Shor’s algorithm targets the discrete-log assumption.</p>\n<p>Bitcoin’s deployed rules do not automatically upgrade if technology changes. Any response would require evidence, software, wallet behavior, and potentially consensus coordination. Timelines should not be invented.</p>"
+    },
+    {
+      "heading": "Current confidence and version-sensitive claims",
+      "body_markdown": "As of the evidence reviewed July 25, 2026, Bitcoin Core 31.1 continues to implement SHA-256, double SHA-256, HASH160, tagged hashes, the established identifier constructions, proof-of-work checks, address decoders, and script hash operations described here.\n\nThat is an implementation and deployment statement, not an eternal cryptographic guarantee. New cryptanalysis, standards changes, consensus proposals, or implementation defects could alter an assessment. Claims about “security bits,” quantum implications, or address safety should state their assumptions and date.",
+      "body_html": "<p>As of the evidence reviewed July 25, 2026, Bitcoin Core 31.1 continues to implement SHA-256, double SHA-256, HASH160, tagged hashes, the established identifier constructions, proof-of-work checks, address decoders, and script hash operations described here.</p>\n<p>That is an implementation and deployment statement, not an eternal cryptographic guarantee. New cryptanalysis, standards changes, consensus proposals, or implementation defects could alter an assessment. Claims about “security bits,” quantum implications, or address safety should state their assumptions and date.</p>"
+    },
+    {
+      "heading": "A hash-construction checklist",
+      "body_markdown": "When reading or writing a Bitcoin hash claim, ask:\n\n- What exact bytes are serialized?\n- Which hash function or checksum algorithm is used?\n- Is it applied once, twice, or as part of HASH160 or a tagged construction?\n- What is the output length?\n- Is the goal identification, commitment, proof of work, error detection, or signature-message construction?\n- Does the claim depend on preimage, second-preimage, or collision resistance?\n- Is the value shown in internal byte order or conventional displayed order?\n- Does a checksum merely detect errors, or is a script/signature check also required?\n- Is the statement about consensus, Bitcoin Core 31.1, a wallet, or an application?\n\nBitcoin’s hash functions are best understood as a set of precise components, not one universal “hashing layer.”",
+      "body_html": "<p>When reading or writing a Bitcoin hash claim, ask:</p>\n<ul><li>What exact bytes are serialized?</li><li>Which hash function or checksum algorithm is used?</li><li>Is it applied once, twice, or as part of HASH160 or a tagged construction?</li><li>What is the output length?</li><li>Is the goal identification, commitment, proof of work, error detection, or signature-message construction?</li><li>Does the claim depend on preimage, second-preimage, or collision resistance?</li><li>Is the value shown in internal byte order or conventional displayed order?</li><li>Does a checksum merely detect errors, or is a script/signature check also required?</li><li>Is the statement about consensus, Bitcoin Core 31.1, a wallet, or an application?</li></ul>\n<p>Bitcoin’s hash functions are best understood as a set of precise components, not one universal “hashing layer.”</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Hash function",
+      "definition": "Deterministic function mapping arbitrary practical input to a fixed-size digest."
+    },
+    {
+      "term": "Preimage resistance",
+      "definition": "Difficulty of finding an input for a chosen digest."
+    },
+    {
+      "term": "Second-preimage resistance",
+      "definition": "Difficulty of finding a different input matching a given input’s digest."
+    },
+    {
+      "term": "Collision resistance",
+      "definition": "Difficulty of finding any two distinct inputs with the same digest."
+    },
+    {
+      "term": "SHA-256",
+      "definition": "NIST-standardized 256-bit hash function used directly and in Bitcoin constructions."
+    },
+    {
+      "term": "Double SHA-256",
+      "definition": "`SHA256(SHA256(data))`."
+    },
+    {
+      "term": "HASH160",
+      "definition": "`RIPEMD160(SHA256(data))`, producing 20 bytes."
+    },
+    {
+      "term": "Tagged hash",
+      "definition": "SHA-256 construction initialized with two copies of `SHA256(tag)`."
+    },
+    {
+      "term": "Domain separation",
+      "definition": "Design that keeps hashes for different purposes from being interpreted interchangeably."
+    },
+    {
+      "term": "txid",
+      "definition": "Double-SHA-256 identifier of non-witness transaction serialization."
+    },
+    {
+      "term": "wtxid",
+      "definition": "Double-SHA-256 identifier of witness-inclusive transaction serialization when witness is present."
+    },
+    {
+      "term": "Target",
+      "definition": "Numeric threshold a block-header hash must meet."
+    },
+    {
+      "term": "Difficulty",
+      "definition": "Ratio expressing target hardness relative to a reference target."
+    },
+    {
+      "term": "Hashlock",
+      "definition": "Script condition requiring revelation of a valid preimage."
+    },
+    {
+      "term": "Base58Check",
+      "definition": "Base58 encoding with a four-byte truncated double-SHA-256 checksum."
+    },
+    {
+      "term": "Bech32",
+      "definition": "Checksummed base32 encoding used for version 0 witness addresses."
+    },
+    {
+      "term": "Bech32m",
+      "definition": "Modified Bech32 checksum used for witness versions 1 through 16."
+    },
+    {
+      "term": "Birthday bound",
+      "definition": "Approximate square-root scale for generic collision search."
+    },
+    {
+      "term": "Length extension",
+      "definition": "Property of some iterative hash constructions relevant to certain unsafe authentication designs."
+    }
+  ],
+  "sources": [
+    {
+      "title": "FIPS PUB 180-4 — Secure Hash Standard",
+      "author_or_publisher": "National Institute of Standards and Technology",
+      "url": "https://csrc.nist.gov/pubs/fips/180-4/upd1/final",
+      "supports": "SHA-256 definition, block processing, and 256-bit output."
+    },
+    {
+      "title": "The RIPEMD-160 Cryptographic Hash Function",
+      "author_or_publisher": "Hans Dobbertin, Antoon Bosselaers, Bart Preneel",
+      "url": "https://homes.esat.kuleuven.be/~bosselae/ripemd160.html",
+      "supports": "RIPEMD-160 design and 160-bit output."
+    },
+    {
+      "title": "Bitcoin Core 31.1 Tag Commit",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/commit/9be056a8a72b624dae9623b2f7bded92c2a21c91",
+      "supports": "Exact source and test version reviewed July 25, 2026."
+    },
+    {
+      "title": "Bitcoin Core 31.1 Hash Primitives",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/src/hash.h",
+      "supports": "CHash256, CHash160, Hash, Hash160, single-SHA-256, double-SHA-256, and TaggedHash helpers."
+    },
+    {
+      "title": "Bitcoin Core 31.1 SHA-256 Implementation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/src/crypto/sha256.cpp",
+      "supports": "Release-specific SHA-256 implementation and optimized compression paths."
+    },
+    {
+      "title": "Bitcoin Core 31.1 RIPEMD-160 Implementation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/src/crypto/ripemd160.cpp",
+      "supports": "Release-specific RIPEMD-160 implementation used by HASH160."
+    },
+    {
+      "title": "Bitcoin Core 31.1 Transaction Primitives",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/src/primitives/transaction.cpp",
+      "supports": "txid and wtxid serialization and double-SHA-256 construction."
+    },
+    {
+      "title": "Bitcoin Core 31.1 Block Primitives",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/src/primitives/block.h",
+      "supports": "Block-header fields and transaction Merkle-root commitment."
+    },
+    {
+      "title": "Bitcoin Core 31.1 Block Hash Implementation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/src/primitives/block.cpp",
+      "supports": "Block-header identifier hashing."
+    },
+    {
+      "title": "Bitcoin Core 31.1 Proof-of-Work Validation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/src/pow.cpp",
+      "supports": "Compact target decoding, proof-of-work comparison, and retarget implementation."
+    },
+    {
+      "title": "Bitcoin Core 31.1 Consensus Merkle Implementation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/src/consensus/merkle.cpp",
+      "supports": "txid and wtxid leaves, double-SHA-256 parent hashing, odd-node duplication, and mutation handling."
+    },
+    {
+      "title": "BIP 16 — Pay to Script Hash",
+      "author_or_publisher": "Gavin Andresen",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0016.mediawiki",
+      "supports": "P2SH HASH160 redeem-script commitments."
+    },
+    {
+      "title": "BIP 141 — Segregated Witness",
+      "author_or_publisher": "Eric Lombrozo, Johnson Lau, Pieter Wuille",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki",
+      "supports": "wtxid, witness commitment, P2WPKH HASH160, and P2WSH SHA-256 commitments."
+    },
+    {
+      "title": "BIP 143 — Version 0 Witness Signature Hashing",
+      "author_or_publisher": "Johnson Lau, Pieter Wuille",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0143.mediawiki",
+      "supports": "Double-SHA-256 signature messages and component hashes for SegWit version 0."
+    },
+    {
+      "title": "BIP 340 — Schnorr Signatures for secp256k1",
+      "author_or_publisher": "Pieter Wuille, Jonas Nick, Tim Ruffing",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0340.mediawiki",
+      "supports": "Tagged-hash construction, nonce and challenge tags, and domain-separation rationale."
+    },
+    {
+      "title": "BIP 341 — Taproot: SegWit Version 1 Spending Rules",
+      "author_or_publisher": "Pieter Wuille, Jonas Nick, Anthony Towns",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki",
+      "supports": "TapTweak, TapLeaf, TapBranch, TapSighash, single-SHA-256 component hashes, and Taproot commitments."
+    },
+    {
+      "title": "BIP 342 — Validation of Taproot Scripts",
+      "author_or_publisher": "Pieter Wuille, Jonas Nick, Anthony Towns",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0342.mediawiki",
+      "supports": "Tapleaf-bound signature-message extensions and tapscript hash usage."
+    },
+    {
+      "title": "BIP 173 — Base32 Address Format",
+      "author_or_publisher": "Pieter Wuille, Greg Maxwell",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki",
+      "supports": "Bech32 polymod checksum, error-detection goals, and version 0 witness address encoding."
+    },
+    {
+      "title": "BIP 350 — Bech32m Format",
+      "author_or_publisher": "Pieter Wuille",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0350.mediawiki",
+      "supports": "Bech32m checksum constant and use for witness versions 1 through 16."
+    },
+    {
+      "title": "Bitcoin Core 31.1 Base58 Encoding",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/src/base58.cpp",
+      "supports": "Base58Check payload and four-byte double-SHA-256 checksum implementation."
+    },
+    {
+      "title": "Bitcoin Core 31.1 Bech32 and Bech32m Encoding",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/src/bech32.cpp",
+      "supports": "Release-specific checksum, decoding, and encoding behavior."
+    },
+    {
+      "title": "Bitcoin Core 31.1 Script Interpreter",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/src/script/interpreter.cpp",
+      "supports": "Hash opcodes and legacy, BIP 143, and Taproot signature-hash constructions."
+    },
+    {
+      "title": "Bitcoin Core 31.1 Hash Tests",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/src/test/hash_tests.cpp",
+      "supports": "SHA-256, double-SHA-256, HASH160, serialization, and helper test cases."
+    },
+    {
+      "title": "Bitcoin Core 31.1 BIP 341 Wallet Test Vectors",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/src/test/data/bip341_wallet_vectors.json",
+      "supports": "Exact TapLeaf, TapBranch, TapTweak, and output-key construction vectors for tagged-hash commitments."
+    },
+    {
+      "title": "NIST Post-Quantum Cryptography Project",
+      "author_or_publisher": "National Institute of Standards and Technology",
+      "url": "https://csrc.nist.gov/projects/post-quantum-cryptography",
+      "supports": "Current standards context for separately designed post-quantum cryptography."
+    }
+  ],
+  "seo_title": "How Hash Functions Work in Bitcoin | Mempool Surf Club",
+  "meta_description": "Learn how Bitcoin uses SHA-256, double SHA-256, HASH160, tagged hashes, proof of work, identifiers, script commitments, and address checksums.",
+  "excerpt": "Bitcoin does not use one interchangeable hash. Compare SHA-256, double SHA-256, HASH160, tagged hashes, mining targets, script commitments, and checksums.",
+  "reading_time": "18 to 21 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-DEVELOPMENT",
+    "label": "Bitcoin Development",
+    "subcategory": "Cryptography",
+    "depth": "Deep",
+    "format": "Technical Explainer"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-058",
+      "title": "How Digital Signatures Work in Bitcoin",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-060",
+      "title": "How Merkle Trees Work in Bitcoin",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": []
+  },
+  "review_dates": {
+    "reviewed": "2026-07-26",
+    "copy_locked": "2026-07-26",
+    "human_verification": "2026-07-26"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "Bitcoin Hash Function Signal Board",
+      "educational_purpose": "Separate SHA-256, double SHA-256, HASH160, and tagged hashing by construction and use.",
+      "recommended_placement": "After Tagged hashes.",
+      "visual_description": "Vintage maritime signal board with four distinct processing lanes: one SHA-256 drum, two chained SHA-256 drums, SHA-256 feeding a RIPEMD-160 drum, and a tagged-hash lane prefixed by two identical tag flags.",
+      "required_labels": "SHA-256, Double SHA-256, HASH160, RIPEMD-160, Tagged hash, 32 bytes, 20 bytes, Domain tag",
+      "caption": "Bitcoin combines hash functions differently depending on the protocol job.",
+      "alt_text": "Technical comparison of SHA-256, double SHA-256, HASH160, and BIP 340-style tagged hashing.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack four clearly labeled lanes with output sizes on the right.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "Proof-of-Work Target Sounding",
+      "educational_purpose": "Show mining as repeated block-header hashing against a numeric target.",
+      "recommended_placement": "After Targets and difficulty.",
+      "visual_description": "Nautical depth-sounding station where changing header fields generate a stream of 256-bit readings; only readings below a marked target depth qualify, while “decrypt” and “reverse SHA-256” routes are crossed out.",
+      "required_labels": "Block header, Nonce, Merkle root, Double SHA-256, 256-bit output, Target, Valid, Try again, Not decryption",
+      "caption": "Mining tests candidate headers until a hash value falls at or below the target.",
+      "alt_text": "Diagram of repeated Bitcoin block-header hashes being compared with a proof-of-work target.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Use a vertical sequence of candidate hashes crossing one bold target line.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Address Checksum and Ownership Boundary",
+      "educational_purpose": "Distinguish error detection from script and signature authorization.",
+      "recommended_placement": "After Bech32 and Bech32m.",
+      "visual_description": "Vintage harbor inspection gate with three lanes—Base58Check, Bech32, Bech32m—each validating a label’s internal checksum before a separate locked gate performs script and signature checks.",
+      "required_labels": "Base58Check, Bech32 v0, Bech32m v1+, Checksum valid, Network, Witness version, Script condition, Signature, Ownership not proven",
+      "caption": "A valid checksum catches many encoding errors; spending authority is established by the output script and required witness.",
+      "alt_text": "Boundary diagram showing address checksum validation followed by separate Bitcoin script and signature authorization.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Preserve the two-stage flow: checksum gate first, authorization gate second.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}

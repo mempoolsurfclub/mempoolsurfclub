@@ -1,0 +1,281 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-050-bitcoin-knots.md",
+  "source_sha256": "376c74013b668210a4e1ee56f9a1c07eb7e2bd05160e2c7a4e54d1eba66d086b",
+  "registry_id": "MSC-GUIDE-050",
+  "status": "COPY_LOCKED",
+  "h1": "What Is Bitcoin Knots?",
+  "introductory_deck": "Bitcoin Knots is an open-source Bitcoin node and wallet implementation derived from Bitcoin Core. It shares substantial upstream code while publishing separate releases and carrying additional, retained, or differently configured features. Comparisons must name exact versions and configurations because policy, interface, wallet, and even consensus-related behavior can change between releases.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "Bitcoin Knots is a Bitcoin software project with node, wallet, command-line, and graphical functionality. Its repository is derived from Bitcoin Core, and its own README says development generally happens in Bitcoin Core and is merged into Knots for releases. Knots also accepts changes that may not be included upstream and publishes separate tags, binaries, release notes, checksums, and project documentation.\n\nThat lineage does not make the two products interchangeable. Shared ancestry can reduce duplicated implementation work, but each release is its own artifact. A claim about compatibility, defaults, migration, or policy needs an exact Bitcoin Knots version, an exact Bitcoin Core version, the relevant configuration, and evidence from source or tests.\n\nThis guide was reviewed on July 24, 2026 against Bitcoin Knots `v29.3.knots20260508`, commit `f41f01e1e6de7025d52a865bef97f2a67277f0f3`, and Bitcoin Core `v31.1`, commit `9be056a8a72b624dae9623b2f7bded92c2a21c91`. These releases are from different major lines, so the comparison is useful for boundaries, not a one-to-one feature scorecard.",
+      "body_html": "<p>Bitcoin Knots is a Bitcoin software project with node, wallet, command-line, and graphical functionality. Its repository is derived from Bitcoin Core, and its own README says development generally happens in Bitcoin Core and is merged into Knots for releases. Knots also accepts changes that may not be included upstream and publishes separate tags, binaries, release notes, checksums, and project documentation.</p>\n<p>That lineage does not make the two products interchangeable. Shared ancestry can reduce duplicated implementation work, but each release is its own artifact. A claim about compatibility, defaults, migration, or policy needs an exact Bitcoin Knots version, an exact Bitcoin Core version, the relevant configuration, and evidence from source or tests.</p>\n<p>This guide was reviewed on July 24, 2026 against Bitcoin Knots <code>v29.3.knots20260508</code>, commit <code>f41f01e1e6de7025d52a865bef97f2a67277f0f3</code>, and Bitcoin Core <code>v31.1</code>, commit <code>9be056a8a72b624dae9623b2f7bded92c2a21c91</code>. These releases are from different major lines, so the comparison is useful for boundaries, not a one-to-one feature scorecard.</p>"
+    },
+    {
+      "heading": "Lineage and shared development",
+      "body_markdown": "The Knots repository is a fork of `bitcoin/bitcoin`. Much of its validation, networking, wallet, graphical, build, and testing code originates in Bitcoin Core. Knots release notes identify upstream Bitcoin pull requests alongside Knots-specific changes, making the provenance of individual changes inspectable.\n\n“Fork” here describes source-code lineage. It does not automatically mean a separate coin, network, or consensus history. Whether two running nodes remain on the same chain depends on the validation rules they enforce, the blocks they receive, and any relevant activation or configuration state.\n\nKnots can backport upstream work, retain behavior changed elsewhere, or add features maintained outside Bitcoin Core’s main tree. The result is not simply “Bitcoin Core with more options.” Some changes affect user interfaces, some affect policy, some affect resource management, and some can touch consensus-related code. Each must be classified separately.",
+      "body_html": "<p>The Knots repository is a fork of <code>bitcoin/bitcoin</code>. Much of its validation, networking, wallet, graphical, build, and testing code originates in Bitcoin Core. Knots release notes identify upstream Bitcoin pull requests alongside Knots-specific changes, making the provenance of individual changes inspectable.</p>\n<p>“Fork” here describes source-code lineage. It does not automatically mean a separate coin, network, or consensus history. Whether two running nodes remain on the same chain depends on the validation rules they enforce, the blocks they receive, and any relevant activation or configuration state.</p>\n<p>Knots can backport upstream work, retain behavior changed elsewhere, or add features maintained outside Bitcoin Core’s main tree. The result is not simply “Bitcoin Core with more options.” Some changes affect user interfaces, some affect policy, some affect resource management, and some can touch consensus-related code. Each must be classified separately.</p>"
+    },
+    {
+      "heading": "Separate releases and maintenance",
+      "body_markdown": "Bitcoin Knots has its own version scheme and release process. The reviewed release is `29.3.knots20260508`, published through the official Knots site with release-specific checksums, signatures, source, binaries, and detailed enhancement documentation.\n\nA Knots version number cannot be compared numerically with a Bitcoin Core version as if both projects shared one synchronized release train. The reviewed tag uses `29.3` plus a Knots release-date suffix, while the Core reference is `31.1`. Those labels identify different project release lines; they do not order every included change, because Knots can backport selected upstream work and carry separate changes absent from Core.\n\nThe correct question is therefore not “Which has the higher version?” It is “Which exact source trees, release notes, configurations, and tested behaviors are being compared?”",
+      "body_html": "<p>Bitcoin Knots has its own version scheme and release process. The reviewed release is <code>29.3.knots20260508</code>, published through the official Knots site with release-specific checksums, signatures, source, binaries, and detailed enhancement documentation.</p>\n<p>A Knots version number cannot be compared numerically with a Bitcoin Core version as if both projects shared one synchronized release train. The reviewed tag uses <code>29.3</code> plus a Knots release-date suffix, while the Core reference is <code>31.1</code>. Those labels identify different project release lines; they do not order every included change, because Knots can backport selected upstream work and carry separate changes absent from Core.</p>\n<p>The correct question is therefore not “Which has the higher version?” It is “Which exact source trees, release notes, configurations, and tested behaviors are being compared?”</p>"
+    },
+    {
+      "heading": "Node, wallet, and graphical interfaces",
+      "body_markdown": "Like Bitcoin Core, Knots can connect to peers, download and validate blocks and transactions, maintain chainstate and a mempool, expose RPCs, and optionally build wallet and graphical components.\n\nShared names do not guarantee identical interfaces. An RPC can be added, removed, or extended. A graphical setting can expose a Knots-specific policy. A command-line option can use the same name with a different default. Wallet migration behavior can differ by release.\n\nApplications should feature-detect or pin supported versions rather than assuming that every Bitcoin Core RPC, field, startup option, or wallet behavior is identical in Knots. Human-readable product descriptions are weaker evidence than tagged help output, source, release notes, and cross-implementation tests.",
+      "body_html": "<p>Like Bitcoin Core, Knots can connect to peers, download and validate blocks and transactions, maintain chainstate and a mempool, expose RPCs, and optionally build wallet and graphical components.</p>\n<p>Shared names do not guarantee identical interfaces. An RPC can be added, removed, or extended. A graphical setting can expose a Knots-specific policy. A command-line option can use the same name with a different default. Wallet migration behavior can differ by release.</p>\n<p>Applications should feature-detect or pin supported versions rather than assuming that every Bitcoin Core RPC, field, startup option, or wallet behavior is identical in Knots. Human-readable product descriptions are weaker evidence than tagged help output, source, release notes, and cross-implementation tests.</p>"
+    },
+    {
+      "heading": "Consensus compatibility and policy differences",
+      "body_markdown": "Consensus compatibility means two nodes enforce compatible block-validity rules for the chain state being evaluated. Policy compatibility means they make similar local decisions about unconfirmed transactions. These are different.\n\nMany Knots differences concern mempool admission, relay, mining selection, data-carrier handling, fee treatment, or configurable filters. Such differences can change which unconfirmed transactions a node sees or forwards without making confirmed blocks invalid.\n\nHowever, it is unsafe to state that all Knots releases always enforce exactly the same consensus rules as all Bitcoin Core releases. The reviewed Knots release notes describe RDTS/BIP 110 logic implemented as a modified BIP9 temporary deployment. They instruct `bitcoind` operators to add `consensusrules=rdts`, while the GUI asks for explicit confirmation; the same site also lists a closely dated build without RDTS support. Whatever view a reader takes of the proposal, this is direct evidence that version, executable, and configuration must be included in a compatibility claim.\n\nThe neutral method is to ask:\n\n1. Which exact release and commit is running?\n2. Which consensus-related configuration is active?\n3. Which chain and activation state are being evaluated?\n4. Which blocks or test vectors demonstrate agreement?\n5. Are observed differences consensus rejection, mempool policy, wallet construction, or interface presentation?\n\nA policy disagreement may fragment transaction relay while nodes still accept the same blocks. A consensus-rule disagreement can create a chain split. The labels “Core” and “Knots” do not answer which case applies.",
+      "body_html": "<p>Consensus compatibility means two nodes enforce compatible block-validity rules for the chain state being evaluated. Policy compatibility means they make similar local decisions about unconfirmed transactions. These are different.</p>\n<p>Many Knots differences concern mempool admission, relay, mining selection, data-carrier handling, fee treatment, or configurable filters. Such differences can change which unconfirmed transactions a node sees or forwards without making confirmed blocks invalid.</p>\n<p>However, it is unsafe to state that all Knots releases always enforce exactly the same consensus rules as all Bitcoin Core releases. The reviewed Knots release notes describe RDTS/BIP 110 logic implemented as a modified BIP9 temporary deployment. They instruct <code>bitcoind</code> operators to add <code>consensusrules=rdts</code>, while the GUI asks for explicit confirmation; the same site also lists a closely dated build without RDTS support. Whatever view a reader takes of the proposal, this is direct evidence that version, executable, and configuration must be included in a compatibility claim.</p>\n<p>The neutral method is to ask:</p>\n<ol><li>Which exact release and commit is running?</li><li>Which consensus-related configuration is active?</li><li>Which chain and activation state are being evaluated?</li><li>Which blocks or test vectors demonstrate agreement?</li><li>Are observed differences consensus rejection, mempool policy, wallet construction, or interface presentation?</li></ol>\n<p>A policy disagreement may fragment transaction relay while nodes still accept the same blocks. A consensus-rule disagreement can create a chain split. The labels “Core” and “Knots” do not answer which case applies.</p>"
+    },
+    {
+      "heading": "Release-specific policy and configuration differences",
+      "body_markdown": "The official enhancement document for `29.3.knots20260508` inventories project-described backports, retained changes, fixes, and enhancements across configuration, policy, wallet, RPC, graphical, networking, build, and other components. It does not identify a complete one-to-one comparison against Bitcoin Core 31.1. The Knots release notes separately describe a RAM-aware `dbcache` default, sub-dust effective-fee policy, data-carrier policy changes, wallet and GUI additions, and networking changes.\n\nThose facts belong to that release. They should not be rewritten as permanent product identities such as “Knots blocks X” or “Core always allows Y.” Defaults can change. Options can be removed. Upstream can later adopt similar functionality. Knots can rebase or backport changes.\n\nPolicy also has multiple stages. Mempool admission, relay to peers, and block-template selection can use related settings but are not necessarily identical. A configuration guide should state which stage an option affects and whether miners or downstream applications use separate logic.",
+      "body_html": "<p>The official enhancement document for <code>29.3.knots20260508</code> inventories project-described backports, retained changes, fixes, and enhancements across configuration, policy, wallet, RPC, graphical, networking, build, and other components. It does not identify a complete one-to-one comparison against Bitcoin Core 31.1. The Knots release notes separately describe a RAM-aware <code>dbcache</code> default, sub-dust effective-fee policy, data-carrier policy changes, wallet and GUI additions, and networking changes.</p>\n<p>Those facts belong to that release. They should not be rewritten as permanent product identities such as “Knots blocks X” or “Core always allows Y.” Defaults can change. Options can be removed. Upstream can later adopt similar functionality. Knots can rebase or backport changes.</p>\n<p>Policy also has multiple stages. Mempool admission, relay to peers, and block-template selection can use related settings but are not necessarily identical. A configuration guide should state which stage an option affects and whether miners or downstream applications use separate logic.</p>"
+    },
+    {
+      "heading": "Additional and retained features",
+      "body_markdown": "Knots may include features proposed for Bitcoin Core, maintained elsewhere, or retained after upstream changes. Examples in a particular release can include extra RPCs, graphical controls, policy settings, wallet tools, or build options.\n\n“Additional” does not mean “safer,” “more correct,” or “better.” It means the tagged Knots release includes behavior its project material identifies as Knots-specific, retained, or backported. Whether an exact Bitcoin Core release lacks the behavior must be checked directly against that Core tag. Every feature adds a review surface, maintenance burden, compatibility question, and possible operator benefit.\n\nLikewise, absence is not proof of a deficiency. Bitcoin Core may decline or defer a feature because of scope, maintenance, interface stability, review capacity, architecture, or a different risk tradeoff. Technical comparison should state behavior and evidence rather than infer motive.",
+      "body_html": "<p>Knots may include features proposed for Bitcoin Core, maintained elsewhere, or retained after upstream changes. Examples in a particular release can include extra RPCs, graphical controls, policy settings, wallet tools, or build options.</p>\n<p>“Additional” does not mean “safer,” “more correct,” or “better.” It means the tagged Knots release includes behavior its project material identifies as Knots-specific, retained, or backported. Whether an exact Bitcoin Core release lacks the behavior must be checked directly against that Core tag. Every feature adds a review surface, maintenance burden, compatibility question, and possible operator benefit.</p>\n<p>Likewise, absence is not proof of a deficiency. Bitcoin Core may decline or defer a feature because of scope, maintenance, interface stability, review capacity, architecture, or a different risk tradeoff. Technical comparison should state behavior and evidence rather than infer motive.</p>"
+    },
+    {
+      "heading": "Data directories, wallets, and migration",
+      "body_markdown": "Both projects descend from the same codebase and may support upgrades from older Bitcoin Core or Knots versions. The reviewed Knots release notes state that direct upgrades from very old versions are possible but may require data-directory migration, and that old wallet versions are generally supported.\n\nThat does not establish a universal safe downgrade or bidirectional switch between arbitrary releases. Databases can be migrated, indexes can change, wallet formats can change, and newer software can write state older software cannot interpret. A release note’s upgrade statement does not automatically authorize a rollback.\n\nBefore changing implementations, an operator should read both products’ release notes, back up wallet material using documented procedures, stop the old process cleanly, identify index and pruning requirements, and test the exact transition on copied data or regtest. Real funds should not be used for exploratory migration testing.\n\nThis guide does not claim that Core 31.1 and Knots 29.3.knots20260508 can safely share one live data directory or be alternated without migration. That requires direct documentation and testing for the exact pair.",
+      "body_html": "<p>Both projects descend from the same codebase and may support upgrades from older Bitcoin Core or Knots versions. The reviewed Knots release notes state that direct upgrades from very old versions are possible but may require data-directory migration, and that old wallet versions are generally supported.</p>\n<p>That does not establish a universal safe downgrade or bidirectional switch between arbitrary releases. Databases can be migrated, indexes can change, wallet formats can change, and newer software can write state older software cannot interpret. A release note’s upgrade statement does not automatically authorize a rollback.</p>\n<p>Before changing implementations, an operator should read both products’ release notes, back up wallet material using documented procedures, stop the old process cleanly, identify index and pruning requirements, and test the exact transition on copied data or regtest. Real funds should not be used for exploratory migration testing.</p>\n<p>This guide does not claim that Core 31.1 and Knots 29.3.knots20260508 can safely share one live data directory or be alternated without migration. That requires direct documentation and testing for the exact pair.</p>"
+    },
+    {
+      "heading": "Release verification and security updates",
+      "body_markdown": "Knots publishes binaries and source through its official site, with `SHA256SUMS` and `SHA256SUMS.asc` for the reviewed release. A checksum can show that a downloaded file matches the listed digest. A signature can show that a key attested to the checksum file. Neither fact, by itself, proves that the software is free of defects or that the signer should be trusted.\n\nUsers need an independently obtained expectation for signer keys and an understanding of the project’s build and release process. A GitHub tag, a site download, a platform code signature, and reproducible-build evidence each answer different questions.\n\nSecurity maintenance is also project-specific. A vulnerability fixed upstream may need to be incorporated into Knots, and a Knots-specific feature may need its own fix. Operators should follow the project’s official release and announcement channels and identify affected exact versions rather than relying on general Bitcoin news.",
+      "body_html": "<p>Knots publishes binaries and source through its official site, with <code>SHA256SUMS</code> and <code>SHA256SUMS.asc</code> for the reviewed release. A checksum can show that a downloaded file matches the listed digest. A signature can show that a key attested to the checksum file. Neither fact, by itself, proves that the software is free of defects or that the signer should be trusted.</p>\n<p>Users need an independently obtained expectation for signer keys and an understanding of the project’s build and release process. A GitHub tag, a site download, a platform code signature, and reproducible-build evidence each answer different questions.</p>\n<p>Security maintenance is also project-specific. A vulnerability fixed upstream may need to be incorporated into Knots, and a Knots-specific feature may need its own fix. Operators should follow the project’s official release and announcement channels and identify affected exact versions rather than relying on general Bitcoin news.</p>"
+    },
+    {
+      "heading": "Maintenance and change entry",
+      "body_markdown": "The Knots README says development generally occurs upstream and is merged into Knots for releases. It also provides a path for Knots-specific pull requests and expects accepted external branches to be maintained.\n\nThe official site identifies Luke Dashjr as the lead maintainer. That describes a project role, not control over Bitcoin or over independently operated nodes. Maintainers choose what enters their repository and releases; users choose what to run; network effects depend on deployed behavior.\n\nA comparison should inspect both upstream review and Knots-specific review. A change copied from Bitcoin Core may carry upstream discussion and tests. A Knots-only change may have a separate review history. Shared code does not transfer all review evidence automatically when surrounding code, configuration, or release context differs.",
+      "body_html": "<p>The Knots README says development generally occurs upstream and is merged into Knots for releases. It also provides a path for Knots-specific pull requests and expects accepted external branches to be maintained.</p>\n<p>The official site identifies Luke Dashjr as the lead maintainer. That describes a project role, not control over Bitcoin or over independently operated nodes. Maintainers choose what enters their repository and releases; users choose what to run; network effects depend on deployed behavior.</p>\n<p>A comparison should inspect both upstream review and Knots-specific review. A change copied from Bitcoin Core may carry upstream discussion and tests. A Knots-only change may have a separate review history. Shared code does not transfer all review evidence automatically when surrounding code, configuration, or release context differs.</p>"
+    },
+    {
+      "heading": "How to compare versions responsibly",
+      "body_markdown": "Use a claim-evidence table.\n\nFor each claimed difference, record:\n\n- the exact Knots tag and commit;\n- the exact Bitcoin Core tag and commit;\n- the source file, help output, test, or release-note entry;\n- whether the difference is consensus, policy, wallet, interface, default, build, or documentation;\n- the configuration needed to observe it;\n- whether cross-version migration or interoperability was actually tested;\n- the review date.\n\nFor this guide, Core 31.1 and Knots 29.3.knots20260508 were not treated as equivalent-base competitors. The comparison establishes how to read lineage and boundaries. A product-selection decision would need an operator’s requirements plus a more closely matched version pair.",
+      "body_html": "<p>Use a claim-evidence table.</p>\n<p>For each claimed difference, record:</p>\n<ul><li>the exact Knots tag and commit;</li><li>the exact Bitcoin Core tag and commit;</li><li>the source file, help output, test, or release-note entry;</li><li>whether the difference is consensus, policy, wallet, interface, default, build, or documentation;</li><li>the configuration needed to observe it;</li><li>whether cross-version migration or interoperability was actually tested;</li><li>the review date.</li></ul>\n<p>For this guide, Core 31.1 and Knots 29.3.knots20260508 were not treated as equivalent-base competitors. The comparison establishes how to read lineage and boundaries. A product-selection decision would need an operator’s requirements plus a more closely matched version pair.</p>"
+    },
+    {
+      "heading": "Limits of product-comparison claims",
+      "body_markdown": "Node software should not be ranked by slogans such as “pure,” “correct,” “safe,” “unsafe,” or “the real Bitcoin.” Those terms hide the rule, feature, threat model, or operating requirement being discussed.\n\nPopularity and node-share estimates do not prove correctness. Social-media sentiment does not prove a policy is harmful or beneficial. A maintainer’s opinion does not replace source and tests. An issue count does not measure security. A larger feature list does not establish reliability.\n\nA useful comparison is narrow and reproducible: exact versions, exact behavior, exact evidence, and remaining uncertainty.",
+      "body_html": "<p>Node software should not be ranked by slogans such as “pure,” “correct,” “safe,” “unsafe,” or “the real Bitcoin.” Those terms hide the rule, feature, threat model, or operating requirement being discussed.</p>\n<p>Popularity and node-share estimates do not prove correctness. Social-media sentiment does not prove a policy is harmful or beneficial. A maintainer’s opinion does not replace source and tests. An issue count does not measure security. A larger feature list does not establish reliability.</p>\n<p>A useful comparison is narrow and reproducible: exact versions, exact behavior, exact evidence, and remaining uncertainty.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Bitcoin Knots",
+      "definition": "A Bitcoin node and wallet implementation derived from Bitcoin Core with separate releases and additional or retained changes."
+    },
+    {
+      "term": "Fork",
+      "definition": "A source repository derived from another repository; not necessarily a separate block chain."
+    },
+    {
+      "term": "Upstream",
+      "definition": "The source project from which changes are incorporated."
+    },
+    {
+      "term": "Backport",
+      "definition": "Applying a change from a newer or different branch to an older release line."
+    },
+    {
+      "term": "Consensus compatibility",
+      "definition": "Agreement on block validity for the relevant chain state and configuration."
+    },
+    {
+      "term": "Policy difference",
+      "definition": "A difference in local mempool, relay, or mining-selection behavior."
+    },
+    {
+      "term": "Version pair",
+      "definition": "The exact releases compared across two implementations."
+    },
+    {
+      "term": "Configuration-sensitive behavior",
+      "definition": "Behavior that changes when an option or runtime setting changes."
+    },
+    {
+      "term": "Migration",
+      "definition": "Conversion or reuse of data across software versions or implementations."
+    },
+    {
+      "term": "Release artifact",
+      "definition": "A tagged source tree, binary, checksum, signature, or release note tied to a version."
+    },
+    {
+      "term": "Enhancement document",
+      "definition": "Release-specific project documentation listing backports, retained changes, fixes, and features included in a Knots artifact; not by itself a complete diff against a named Core release."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bitcoin Knots v29.3.knots20260508 README",
+      "author_or_publisher": "Bitcoin Knots contributors",
+      "url": "https://github.com/bitcoinknots/bitcoin/blob/v29.3.knots20260508/README.md",
+      "supports": "Project lineage, shared upstream development, optional wallet and GUI, Knots-specific contribution path, tests, and MIT licensing."
+    },
+    {
+      "title": "Bitcoin Knots v29.3.knots20260508 Tag Commit",
+      "author_or_publisher": "Bitcoin Knots contributors",
+      "url": "https://github.com/bitcoinknots/bitcoin/commit/f41f01e1e6de7025d52a865bef97f2a67277f0f3",
+      "supports": "Exact Knots source commit reviewed."
+    },
+    {
+      "title": "Bitcoin Knots Official Website",
+      "author_or_publisher": "Bitcoin Knots project",
+      "url": "https://bitcoinknots.org/",
+      "supports": "Current release listing, official distribution, project description, and maintainer information reviewed July 24, 2026."
+    },
+    {
+      "title": "Bitcoin Knots 29.3.knots20260508 Release Directory",
+      "author_or_publisher": "Bitcoin Knots project",
+      "url": "https://bitcoinknots.org/files/29.x/29.3.knots20260508/",
+      "supports": "Release binaries, source archive, checksums, signatures, and dated enhancement document."
+    },
+    {
+      "title": "Bitcoin Knots 29.3.knots20260508 Release Notes",
+      "author_or_publisher": "Bitcoin Knots contributors",
+      "url": "https://github.com/bitcoinknots/bitcoin/blob/v29.3.knots20260508/doc/release-notes.md",
+      "supports": "Exact release changes, upgrade wording, policy and configuration changes, RDTS executable and confirmation behavior, upstream and Knots-specific change provenance, and known bugs."
+    },
+    {
+      "title": "Bitcoin Knots 29.3.knots20260508 Enhancement Document",
+      "author_or_publisher": "Bitcoin Knots project",
+      "url": "https://bitcoinknots.org/files/29.x/29.3.knots20260508/bitcoin-29.3.knots20260508.desc.html",
+      "supports": "Release-specific inventory of project-described backports, retained changes, fixes, configuration, policy, wallet, RPC, GUI, networking, build, and other enhancements; not a complete diff against Core 31.1."
+    },
+    {
+      "title": "Bitcoin Knots Source Tree at v29.3.knots20260508",
+      "author_or_publisher": "Bitcoin Knots contributors",
+      "url": "https://github.com/bitcoinknots/bitcoin/tree/v29.3.knots20260508",
+      "supports": "Shared repository structure and Knots-specific source at the reviewed tag."
+    },
+    {
+      "title": "Bitcoin Knots Issues",
+      "author_or_publisher": "Bitcoin Knots contributors",
+      "url": "https://github.com/bitcoinknots/bitcoin/issues",
+      "supports": "Project-specific bug and change discussion; issue presence is not treated as a security metric."
+    },
+    {
+      "title": "Bitcoin Core v31.1 README",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/README.md",
+      "supports": "Upstream development, optional wallet and GUI, stable-tag boundaries, and test process."
+    },
+    {
+      "title": "Bitcoin Core v31.1 Tag Commit",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/commit/9be056a8a72b624dae9623b2f7bded92c2a21c91",
+      "supports": "Exact Core source commit used as the dated comparison reference."
+    },
+    {
+      "title": "Bitcoin Core Contributing Guide at v31.1",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/CONTRIBUTING.md",
+      "supports": "Upstream pull-request, review, test, and maintainer process."
+    },
+    {
+      "title": "Bitcoin Core Software Life Cycle",
+      "author_or_publisher": "Bitcoin Core project",
+      "url": "https://bitcoincore.org/en/lifecycle/",
+      "supports": "Bitcoin Core release versioning and why software versions must not be confused with protocol versions."
+    },
+    {
+      "title": "BIP 110",
+      "author_or_publisher": "Luke Dashjr",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0110.md",
+      "supports": "The proposal referenced by the reviewed Knots release; inclusion in a release is not treated as proof of network activation or agreement."
+    },
+    {
+      "title": "MIT License in Bitcoin Knots",
+      "author_or_publisher": "Bitcoin Knots contributors",
+      "url": "https://github.com/bitcoinknots/bitcoin/blob/v29.3.knots20260508/COPYING",
+      "supports": "Licensing terms and warranty boundary."
+    }
+  ],
+  "seo_title": "What Is Bitcoin Knots? Core Lineage and Differences | Mempool Surf Club",
+  "meta_description": "Learn how Bitcoin Knots relates to Bitcoin Core, where versions and policies differ, and how to evaluate consensus and migration claims.",
+  "excerpt": "Bitcoin Knots shares substantial Bitcoin Core code but has separate releases, features, defaults, and version-specific compatibility boundaries.",
+  "reading_time": "14 to 17 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-DEVELOPMENT",
+    "label": "Bitcoin Development",
+    "subcategory": "Bitcoin Core",
+    "depth": "Deep",
+    "format": "Comparative Technical Explainer"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-049",
+      "title": "What Is Bitcoin Core?",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-051",
+      "title": "How to Read the Bitcoin Source Code",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": []
+  },
+  "review_dates": {
+    "reviewed": "2026-07-25",
+    "copy_locked": "2026-07-25",
+    "human_verification": "2026-07-24"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "Shared Code, Separate Release Routes",
+      "educational_purpose": "Show common lineage without implying identical products.",
+      "recommended_placement": "After Lineage and shared development.",
+      "visual_description": "Vintage nautical chart where one upstream shipping lane branches into Bitcoin Core and Bitcoin Knots release harbors, with shared cargo and separate manifests.",
+      "required_labels": "Shared upstream code, Bitcoin Core release, Bitcoin Knots release, Backports, Knots-specific changes, Separate tags",
+      "caption": "Shared source lineage does not make two tagged releases identical.",
+      "alt_text": "Nautical branching chart showing shared upstream code flowing into separate Core and Knots releases.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Keep one upstream trunk and two clearly labeled destinations.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "Compatibility Classification Board",
+      "educational_purpose": "Separate consensus, policy, wallet, interface, and default differences.",
+      "recommended_placement": "After Consensus compatibility and policy differences.",
+      "visual_description": "Harbor inspection board sorting observed differences into five labeled bins, with a warning flag on configuration-sensitive consensus behavior.",
+      "required_labels": "Consensus, Mempool policy, Relay, Wallet, Interface, Defaults, Version, Configuration",
+      "caption": "A product difference matters only after identifying its layer, version, and configuration.",
+      "alt_text": "Classification board sorting software differences by consensus, policy, wallet, interface, and defaults.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Use stacked bins with version and configuration at the top.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Exact Version Comparison Log",
+      "educational_purpose": "Give readers a repeatable evidence checklist.",
+      "recommended_placement": "After How to compare versions responsibly.",
+      "visual_description": "Vintage ship log comparing two named releases with columns for tag, commit, rule layer, option, test, and uncertainty.",
+      "required_labels": "Knots tag, Core tag, Commit, Layer, Configuration, Evidence, Tested pair, Uncertainty",
+      "caption": "Reliable comparisons name the exact artifacts and the evidence used to observe each difference.",
+      "alt_text": "Technical log comparing exact Bitcoin Core and Bitcoin Knots release evidence.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Convert the comparison columns into two stacked release cards.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}
