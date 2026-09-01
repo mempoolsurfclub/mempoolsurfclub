@@ -1,0 +1,362 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-008-bitcoin-transactions-and-fees.md",
+  "source_sha256": "7fba71e60e016300873c8edad730e4a7ee29efc4997fdf8a7047aefa1962657c",
+  "registry_id": "MSC-GUIDE-008",
+  "status": "COPY_LOCKED",
+  "h1": "How Bitcoin Transactions and Fees Work",
+  "introductory_deck": "A Bitcoin transaction spends existing outputs and creates new ones. Its on-chain fee is the difference between total input value and total output value, while its fee rate expresses how much it pays for the block space its data uses.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "A Bitcoin transaction is not an instruction to subtract an amount from one account and add it to another.\n\nIt is a data structure that references existing unspent transaction outputs, satisfies their spending conditions, and creates new outputs. A wallet hides much of that structure behind a balance and send screen, but the underlying model explains change, fees, transaction size, mempool behavior, and confirmation.\n\nThis guide goes one level deeper than the sending walkthrough while staying below a protocol-level analysis.",
+      "body_html": "<p>A Bitcoin transaction is not an instruction to subtract an amount from one account and add it to another.</p>\n<p>It is a data structure that references existing unspent transaction outputs, satisfies their spending conditions, and creates new outputs. A wallet hides much of that structure behind a balance and send screen, but the underlying model explains change, fees, transaction size, mempool behavior, and confirmation.</p>\n<p>This guide goes one level deeper than the sending walkthrough while staying below a protocol-level analysis.</p>"
+    },
+    {
+      "heading": "Transactions spend outputs",
+      "body_markdown": "Every spend begins with one or more previously created outputs.\n\nAn unspent transaction output, or UTXO, contains value and a locking condition. It remains available until a later transaction uses it as an input and provides the data required to satisfy that condition.\n\nAn input identifies the previous transaction and output position being spent. The transaction also provides the unlocking data associated with that input, such as script data, signatures, or witness information, required for validation.\n\nThe input does not contain a mutable account balance. It consumes a specific output. That output cannot be partly spent and left in place. It is spent whole, and the new transaction creates replacement outputs.\n\nThis is why wallet coin selection matters. A wallet with a total balance of one million satoshis may hold that value in one UTXO, ten UTXOs, or hundreds of small UTXOs. Those arrangements can produce transactions with different sizes, fees, privacy characteristics, and spending flexibility.",
+      "body_html": "<p>Every spend begins with one or more previously created outputs.</p>\n<p>An unspent transaction output, or UTXO, contains value and a locking condition. It remains available until a later transaction uses it as an input and provides the data required to satisfy that condition.</p>\n<p>An input identifies the previous transaction and output position being spent. The transaction also provides the unlocking data associated with that input, such as script data, signatures, or witness information, required for validation.</p>\n<p>The input does not contain a mutable account balance. It consumes a specific output. That output cannot be partly spent and left in place. It is spent whole, and the new transaction creates replacement outputs.</p>\n<p>This is why wallet coin selection matters. A wallet with a total balance of one million satoshis may hold that value in one UTXO, ten UTXOs, or hundreds of small UTXOs. Those arrangements can produce transactions with different sizes, fees, privacy characteristics, and spending flexibility.</p>"
+    },
+    {
+      "heading": "Outputs define new spending conditions",
+      "body_markdown": "Each output assigns value to a new locking condition.\n\nA common payment creates an output for the recipient. The condition is expressed in Bitcoin Script or a witness program and can later be satisfied by the appropriate key or keys.\n\nA transaction can create several outputs. It may pay multiple recipients, return change to the sender, create an output for a service, or establish a more complex spending arrangement.\n\nAn address is a wallet-friendly destination representation used to construct a locking script. The address is not stored in every transaction as a universal account identifier, and it does not contain a balance. Wallets interpret scripts and related data to present addresses and ownership information to users.",
+      "body_html": "<p>Each output assigns value to a new locking condition.</p>\n<p>A common payment creates an output for the recipient. The condition is expressed in Bitcoin Script or a witness program and can later be satisfied by the appropriate key or keys.</p>\n<p>A transaction can create several outputs. It may pay multiple recipients, return change to the sender, create an output for a service, or establish a more complex spending arrangement.</p>\n<p>An address is a wallet-friendly destination representation used to construct a locking script. The address is not stored in every transaction as a universal account identifier, and it does not contain a balance. Wallets interpret scripts and related data to present addresses and ownership information to users.</p>"
+    },
+    {
+      "heading": "Change completes the transaction equation",
+      "body_markdown": "Suppose a wallet selects a UTXO worth 150,000 satoshis to pay a recipient 100,000 satoshis.\n\nThe wallet cannot mark 100,000 satoshis as spent while leaving 50,000 satoshis inside the original UTXO. It must consume the full input and create new outputs.\n\nA simplified transaction might create:\n\n- A recipient output of 100,000 satoshis.\n- A change output of 48,500 satoshis.\n- A fee of 1,500 satoshis.\n\nThe fee is not an explicit output paid to a miner. It is the difference between total input value and total output value. A miner who includes the transaction can claim the available fees through the block's coinbase transaction under the applicable rules.\n\nWallets usually send change to a newly derived wallet-controlled destination. Poor change handling can affect privacy or recovery, which is one reason wallet metadata and script configuration matter.",
+      "body_html": "<p>Suppose a wallet selects a UTXO worth 150,000 satoshis to pay a recipient 100,000 satoshis.</p>\n<p>The wallet cannot mark 100,000 satoshis as spent while leaving 50,000 satoshis inside the original UTXO. It must consume the full input and create new outputs.</p>\n<p>A simplified transaction might create:</p>\n<ul><li>A recipient output of 100,000 satoshis.</li><li>A change output of 48,500 satoshis.</li><li>A fee of 1,500 satoshis.</li></ul>\n<p>The fee is not an explicit output paid to a miner. It is the difference between total input value and total output value. A miner who includes the transaction can claim the available fees through the block&#39;s coinbase transaction under the applicable rules.</p>\n<p>Wallets usually send change to a newly derived wallet-controlled destination. Poor change handling can affect privacy or recovery, which is one reason wallet metadata and script configuration matter.</p>"
+    },
+    {
+      "heading": "Amount and fee are separate concepts",
+      "body_markdown": "The payment amount tells how much value is assigned to the recipient output. The fee tells how much input value is not assigned to ordinary outputs and is therefore available to the block producer.\n\nThe fee is not normally calculated as a percentage of the payment amount.\n\nA transaction sending a large amount can be compact if it spends one input and creates two simple outputs. A transaction sending a small amount can be larger if it combines many inputs or uses more complex spending conditions.\n\nServices may charge withdrawal, processing, exchange, or account fees in addition to the Bitcoin network fee. Those service charges are separate business decisions. A displayed service fee should not automatically be treated as the on-chain transaction fee.",
+      "body_html": "<p>The payment amount tells how much value is assigned to the recipient output. The fee tells how much input value is not assigned to ordinary outputs and is therefore available to the block producer.</p>\n<p>The fee is not normally calculated as a percentage of the payment amount.</p>\n<p>A transaction sending a large amount can be compact if it spends one input and creates two simple outputs. A transaction sending a small amount can be larger if it combines many inputs or uses more complex spending conditions.</p>\n<p>Services may charge withdrawal, processing, exchange, or account fees in addition to the Bitcoin network fee. Those service charges are separate business decisions. A displayed service fee should not automatically be treated as the on-chain transaction fee.</p>"
+    },
+    {
+      "heading": "Weight and virtual size measure block-space use",
+      "body_markdown": "Bitcoin limits block capacity using block weight.\n\nSegregated Witness assigns different weight to base transaction data and witness data. A transaction's virtual size, commonly measured in virtual bytes or vbytes, converts weight into a more convenient unit for fee-rate discussion.\n\nOne virtual byte represents four weight units, with rounding applied when virtual size is calculated. A wallet commonly expresses a fee rate in satoshis per virtual byte, written sat/vB.\n\nA transaction with a virtual size of 200 vbytes and a fee rate of 5 sat/vB would pay a 1,000-satoshi fee. This arithmetic is an example, not a fee recommendation.\n\nFee rate allows miners and wallets to compare transactions by the compensation offered for limited block space rather than by the value being transferred.",
+      "body_html": "<p>Bitcoin limits block capacity using block weight.</p>\n<p>Segregated Witness assigns different weight to base transaction data and witness data. A transaction&#39;s virtual size, commonly measured in virtual bytes or vbytes, converts weight into a more convenient unit for fee-rate discussion.</p>\n<p>One virtual byte represents four weight units, with rounding applied when virtual size is calculated. A wallet commonly expresses a fee rate in satoshis per virtual byte, written sat/vB.</p>\n<p>A transaction with a virtual size of 200 vbytes and a fee rate of 5 sat/vB would pay a 1,000-satoshi fee. This arithmetic is an example, not a fee recommendation.</p>\n<p>Fee rate allows miners and wallets to compare transactions by the compensation offered for limited block space rather than by the value being transferred.</p>"
+    },
+    {
+      "heading": "What makes a transaction larger",
+      "body_markdown": "The number and type of inputs and outputs affect transaction weight.\n\nEach input must identify a previous output and provide the data needed to satisfy its spending condition. Each output contains value and a new locking condition. More inputs and outputs generally add more data.\n\nScript type also matters. Legacy, SegWit, Taproot, single-key, and multisignature spends can have different data requirements. Witness data receives a different weight treatment from base data, but it still consumes block capacity.\n\nA wallet combining many small UTXOs may create a larger transaction than a wallet spending one larger UTXO. A batch payment with several recipient outputs may use more total space but less space per payment than several separate transactions.\n\nThe wallet's displayed balance does not reveal these details by itself. Coin selection and transaction preview can provide more context.",
+      "body_html": "<p>The number and type of inputs and outputs affect transaction weight.</p>\n<p>Each input must identify a previous output and provide the data needed to satisfy its spending condition. Each output contains value and a new locking condition. More inputs and outputs generally add more data.</p>\n<p>Script type also matters. Legacy, SegWit, Taproot, single-key, and multisignature spends can have different data requirements. Witness data receives a different weight treatment from base data, but it still consumes block capacity.</p>\n<p>A wallet combining many small UTXOs may create a larger transaction than a wallet spending one larger UTXO. A batch payment with several recipient outputs may use more total space but less space per payment than several separate transactions.</p>\n<p>The wallet&#39;s displayed balance does not reveal these details by itself. Coin selection and transaction preview can provide more context.</p>"
+    },
+    {
+      "heading": "A fee estimate is a forecast",
+      "body_markdown": "A wallet estimates fees by observing recent blocks, mempool conditions, historical confirmation behavior, node data, or external services.\n\nThe estimate attempts to answer a practical question: what fee rate may be competitive for a desired confirmation horizon?\n\nIt cannot guarantee the result.\n\nNew transactions can arrive after the estimate. Miners can use different selection policies. Blocks arrive at irregular intervals. A large block-space event can change competition quickly. The wallet's data source may see a different mempool from the miners who find the next blocks.\n\nFee estimation is therefore a forecast under uncertainty. A wallet may offer several targets, but labels such as fast, normal, or slow remain estimates rather than reservations.\n\nFixed fee-rate advice becomes stale because demand, policy, software, and transaction composition change.",
+      "body_html": "<p>A wallet estimates fees by observing recent blocks, mempool conditions, historical confirmation behavior, node data, or external services.</p>\n<p>The estimate attempts to answer a practical question: what fee rate may be competitive for a desired confirmation horizon?</p>\n<p>It cannot guarantee the result.</p>\n<p>New transactions can arrive after the estimate. Miners can use different selection policies. Blocks arrive at irregular intervals. A large block-space event can change competition quickly. The wallet&#39;s data source may see a different mempool from the miners who find the next blocks.</p>\n<p>Fee estimation is therefore a forecast under uncertainty. A wallet may offer several targets, but labels such as fast, normal, or slow remain estimates rather than reservations.</p>\n<p>Fixed fee-rate advice becomes stale because demand, policy, software, and transaction composition change.</p>"
+    },
+    {
+      "heading": "There is no single mempool",
+      "body_markdown": "A mempool is a node's local collection of valid unconfirmed transactions eligible for relay or block inclusion.\n\nEach node receives transactions at different times. Nodes can run different software versions, memory limits, minimum fee settings, relay configurations, and policy rules. They can also restart, evict transactions, or connect to different peers.\n\nAs a result, two nodes may hold different sets of unconfirmed transactions. A wallet or block explorer can report that a transaction is in its view of the mempool without proving that every miner or node has it.\n\nDuring heavy demand, nodes may raise their effective minimum for retaining transactions as lower-fee entries are evicted. A transaction can remain valid under consensus while disappearing from some mempools.\n\nThe phrase \"the mempool\" is useful shorthand, but it should not imply one global waiting room.",
+      "body_html": "<p>A mempool is a node&#39;s local collection of valid unconfirmed transactions eligible for relay or block inclusion.</p>\n<p>Each node receives transactions at different times. Nodes can run different software versions, memory limits, minimum fee settings, relay configurations, and policy rules. They can also restart, evict transactions, or connect to different peers.</p>\n<p>As a result, two nodes may hold different sets of unconfirmed transactions. A wallet or block explorer can report that a transaction is in its view of the mempool without proving that every miner or node has it.</p>\n<p>During heavy demand, nodes may raise their effective minimum for retaining transactions as lower-fee entries are evicted. A transaction can remain valid under consensus while disappearing from some mempools.</p>\n<p>The phrase &quot;the mempool&quot; is useful shorthand, but it should not imply one global waiting room.</p>"
+    },
+    {
+      "heading": "Consensus and policy answer different questions",
+      "body_markdown": "Consensus rules determine whether nodes can accept a transaction inside a valid block.\n\nPolicy rules affect how a node handles an unconfirmed transaction before it is mined. Policy can govern standardness, relay, replacement, package acceptance, resource limits, and mempool behavior.\n\nA nonstandard transaction may still be valid under consensus and potentially mineable, while many ordinary nodes decline to relay it. An invalid transaction cannot become valid merely because a miner prefers it or a service broadcasts it.\n\nBitcoin Core defaults influence a large part of the network, but node operators can configure software differently, and other implementations may use other policies. Current policy details should be verified against the software version and deployment being discussed.\n\nSeparating consensus from policy prevents two common mistakes: assuming every relayed transaction must be valid in every future context, and assuming every valid transaction will be relayed by every node.",
+      "body_html": "<p>Consensus rules determine whether nodes can accept a transaction inside a valid block.</p>\n<p>Policy rules affect how a node handles an unconfirmed transaction before it is mined. Policy can govern standardness, relay, replacement, package acceptance, resource limits, and mempool behavior.</p>\n<p>A nonstandard transaction may still be valid under consensus and potentially mineable, while many ordinary nodes decline to relay it. An invalid transaction cannot become valid merely because a miner prefers it or a service broadcasts it.</p>\n<p>Bitcoin Core defaults influence a large part of the network, but node operators can configure software differently, and other implementations may use other policies. Current policy details should be verified against the software version and deployment being discussed.</p>\n<p>Separating consensus from policy prevents two common mistakes: assuming every relayed transaction must be valid in every future context, and assuming every valid transaction will be relayed by every node.</p>"
+    },
+    {
+      "heading": "Miners choose candidate transactions",
+      "body_markdown": "Miners assemble candidate blocks from transactions available to them.\n\nFee rate is important, but transaction selection is not a simple global auction with one visible queue. Miners may consider ancestor and descendant relationships, package economics, local policy, operational agreements, block construction software, and other constraints.\n\nA low-fee parent may become attractive when paired with a high-fee child. A high-fee transaction may be temporarily unusable if it depends on missing data or conflicts with another transaction. A miner may receive a transaction directly even when some public nodes do not relay it.\n\nA fee estimate tries to anticipate this environment. It does not command miners or purchase a fixed place in the next block.",
+      "body_html": "<p>Miners assemble candidate blocks from transactions available to them.</p>\n<p>Fee rate is important, but transaction selection is not a simple global auction with one visible queue. Miners may consider ancestor and descendant relationships, package economics, local policy, operational agreements, block construction software, and other constraints.</p>\n<p>A low-fee parent may become attractive when paired with a high-fee child. A high-fee transaction may be temporarily unusable if it depends on missing data or conflicts with another transaction. A miner may receive a transaction directly even when some public nodes do not relay it.</p>\n<p>A fee estimate tries to anticipate this environment. It does not command miners or purchase a fixed place in the next block.</p>"
+    },
+    {
+      "heading": "Transaction IDs need context",
+      "body_markdown": "A transaction identifier, or txid, is derived from serialized transaction data.\n\nWallets and explorers use transaction IDs to identify and discuss transactions. They are useful references, but they are not human-readable payment receipts that explain intent, ownership, or final settlement by themselves.\n\nFor some non-SegWit spends, a third party can modify signature-related transaction serialization without invalidating the spend, changing the txid before confirmation. This property is known as transaction malleability.\n\nFor SegWit spends, witness data is excluded from the traditional txid calculation, which addresses the major form of third-party malleability affecting those spends. A separate witness transaction identifier, or wtxid, commits to the witness data. Other context still matters. A transaction can be replaced before confirmation, and a wallet may display a different identifier for a replacement.\n\nFor a Shallow-level mental model, treat the txid as an identifier for a particular serialized transaction form, not as proof that the payment is confirmed or final.",
+      "body_html": "<p>A transaction identifier, or txid, is derived from serialized transaction data.</p>\n<p>Wallets and explorers use transaction IDs to identify and discuss transactions. They are useful references, but they are not human-readable payment receipts that explain intent, ownership, or final settlement by themselves.</p>\n<p>For some non-SegWit spends, a third party can modify signature-related transaction serialization without invalidating the spend, changing the txid before confirmation. This property is known as transaction malleability.</p>\n<p>For SegWit spends, witness data is excluded from the traditional txid calculation, which addresses the major form of third-party malleability affecting those spends. A separate witness transaction identifier, or wtxid, commits to the witness data. Other context still matters. A transaction can be replaced before confirmation, and a wallet may display a different identifier for a replacement.</p>\n<p>For a Shallow-level mental model, treat the txid as an identifier for a particular serialized transaction form, not as proof that the payment is confirmed or final.</p>"
+    },
+    {
+      "heading": "Replace-by-fee changes an unconfirmed transaction",
+      "body_markdown": "Replace-by-fee, or RBF, is a fee-management approach in which a new transaction conflicts with an unconfirmed transaction by spending one or more of the same inputs and offers a more attractive fee outcome under applicable policy.\n\nA common wallet use is to recreate a payment with a higher fee while preserving the intended recipient amount. The replacement may also change other details, so users should review it as a new transaction.\n\nReplacement depends on transaction construction, wallet support, node policy, miner behavior, fee rules, and the state of related transactions. BIP 125 documented an opt-in signaling model. Bitcoin Core 29.0 removed the previous full-RBF configuration option and made full replace-by-fee its standard policy, so BIP 125 signaling no longer determines replaceability for nodes using current Bitcoin Core defaults. Other node software, operator configurations, wallets, and miners may still behave differently.\n\nRBF cannot replace a confirmed transaction. It also cannot guarantee that one particular version will be mined.",
+      "body_html": "<p>Replace-by-fee, or RBF, is a fee-management approach in which a new transaction conflicts with an unconfirmed transaction by spending one or more of the same inputs and offers a more attractive fee outcome under applicable policy.</p>\n<p>A common wallet use is to recreate a payment with a higher fee while preserving the intended recipient amount. The replacement may also change other details, so users should review it as a new transaction.</p>\n<p>Replacement depends on transaction construction, wallet support, node policy, miner behavior, fee rules, and the state of related transactions. BIP 125 documented an opt-in signaling model. Bitcoin Core 29.0 removed the previous full-RBF configuration option and made full replace-by-fee its standard policy, so BIP 125 signaling no longer determines replaceability for nodes using current Bitcoin Core defaults. Other node software, operator configurations, wallets, and miners may still behave differently.</p>\n<p>RBF cannot replace a confirmed transaction. It also cannot guarantee that one particular version will be mined.</p>"
+    },
+    {
+      "heading": "Child-pays-for-parent changes package economics",
+      "body_markdown": "Child-pays-for-parent, or CPFP, uses a new child transaction that spends an output from an unconfirmed parent.\n\nIf the child pays a sufficiently high fee, miners may evaluate the parent and child together and find the package attractive enough to include. The child does not alter the parent's fee. It changes the combined economics of mining both transactions.\n\nCPFP requires an available output that the party can spend. The wallet must construct the child correctly. Nodes and miners must accept and evaluate the relevant package under their current policy.\n\nThis makes CPFP useful in some situations, including when the recipient controls an output from the parent. It is not a universal rescue. Package limits, conflicting transactions, pinning, wallet support, and relay paths can prevent the desired result.",
+      "body_html": "<p>Child-pays-for-parent, or CPFP, uses a new child transaction that spends an output from an unconfirmed parent.</p>\n<p>If the child pays a sufficiently high fee, miners may evaluate the parent and child together and find the package attractive enough to include. The child does not alter the parent&#39;s fee. It changes the combined economics of mining both transactions.</p>\n<p>CPFP requires an available output that the party can spend. The wallet must construct the child correctly. Nodes and miners must accept and evaluate the relevant package under their current policy.</p>\n<p>This makes CPFP useful in some situations, including when the recipient controls an output from the parent. It is not a universal rescue. Package limits, conflicting transactions, pinning, wallet support, and relay paths can prevent the desired result.</p>"
+    },
+    {
+      "heading": "Pinning and policy limits matter",
+      "body_markdown": "A transaction or package can sometimes be structured so that another party has difficulty fee-bumping or replacing it efficiently. This broad class of problems is called transaction pinning.\n\nPinning depends on the spending arrangement, replacement rules, package limits, and policy. It is particularly important for protocols where several parties share unconfirmed transaction relationships.\n\nOrdinary wallet users do not need to master every pinning design, but the concept explains why RBF and CPFP should not be described as guaranteed fixes. The transaction graph and policy environment can constrain what a wallet can do.\n\nBitcoin Core policy continues to evolve around package relay, replacement, and cluster-based mempool management. Human review should verify current behavior before this guide is copy locked or substantially updated.",
+      "body_html": "<p>A transaction or package can sometimes be structured so that another party has difficulty fee-bumping or replacing it efficiently. This broad class of problems is called transaction pinning.</p>\n<p>Pinning depends on the spending arrangement, replacement rules, package limits, and policy. It is particularly important for protocols where several parties share unconfirmed transaction relationships.</p>\n<p>Ordinary wallet users do not need to master every pinning design, but the concept explains why RBF and CPFP should not be described as guaranteed fixes. The transaction graph and policy environment can constrain what a wallet can do.</p>\n<p>Bitcoin Core policy continues to evolve around package relay, replacement, and cluster-based mempool management. Human review should verify current behavior before this guide is copy locked or substantially updated.</p>"
+    },
+    {
+      "heading": "Confirmation and finality are risk-based",
+      "body_markdown": "A transaction receives its first confirmation when it is included in a valid block accepted by nodes.\n\nA later block adds another confirmation and increases settlement depth. Replacing the confirmed history would require a competing valid chain with more accumulated proof of work.\n\nOne confirmation is not absolute finality. Recent blocks can be reorganized, especially near the chain tip. The practical risk generally decreases as more blocks build on top, but the appropriate response depends on the amount, transaction structure, counterparty, and consequence of reversal.\n\nA low-value retail payment and a high-value irreversible delivery may use different acceptance standards. No universal confirmation count makes every payment equally safe.\n\nWallet labels such as completed or confirmed should be read as summaries of observed chain state, not as a guarantee that all risk has reached zero.",
+      "body_html": "<p>A transaction receives its first confirmation when it is included in a valid block accepted by nodes.</p>\n<p>A later block adds another confirmation and increases settlement depth. Replacing the confirmed history would require a competing valid chain with more accumulated proof of work.</p>\n<p>One confirmation is not absolute finality. Recent blocks can be reorganized, especially near the chain tip. The practical risk generally decreases as more blocks build on top, but the appropriate response depends on the amount, transaction structure, counterparty, and consequence of reversal.</p>\n<p>A low-value retail payment and a high-value irreversible delivery may use different acceptance standards. No universal confirmation count makes every payment equally safe.</p>\n<p>Wallet labels such as completed or confirmed should be read as summaries of observed chain state, not as a guarantee that all risk has reached zero.</p>"
+    },
+    {
+      "heading": "A complete example",
+      "body_markdown": "Consider a wallet with three UTXOs: 70,000, 50,000, and 20,000 satoshis. The user wants to pay 90,000 satoshis.\n\nThe wallet could select the 70,000 and 50,000 satoshi outputs as inputs. Their total input value is 120,000 satoshis.\n\nIt creates a 90,000-satoshi recipient output and a change output. After estimating the transaction's virtual size and choosing a fee rate, suppose the wallet assigns 28,800 satoshis to change and leaves 1,200 satoshis as the fee.\n\nThe transaction equation is:\n\n120,000 satoshis in = 90,000 to the recipient + 28,800 in change + 1,200 in fees.\n\nThe wallet signs the inputs and broadcasts the transaction. Nodes independently check the signatures, referenced outputs, value rules, and other validity conditions. Nodes may then apply local policy before accepting the transaction into their mempools and relaying it.\n\nMiners may evaluate its fee rate and transaction relationships. If a miner includes it in a valid block, the transaction receives one confirmation.\n\nIf it remains unconfirmed, the wallet may offer RBF or CPFP depending on the transaction and software. Neither option guarantees immediate inclusion.\n\nThe example shows why payment amount, fee, fee rate, UTXO selection, and confirmation are related but separate concepts.",
+      "body_html": "<p>Consider a wallet with three UTXOs: 70,000, 50,000, and 20,000 satoshis. The user wants to pay 90,000 satoshis.</p>\n<p>The wallet could select the 70,000 and 50,000 satoshi outputs as inputs. Their total input value is 120,000 satoshis.</p>\n<p>It creates a 90,000-satoshi recipient output and a change output. After estimating the transaction&#39;s virtual size and choosing a fee rate, suppose the wallet assigns 28,800 satoshis to change and leaves 1,200 satoshis as the fee.</p>\n<p>The transaction equation is:</p>\n<p>120,000 satoshis in = 90,000 to the recipient + 28,800 in change + 1,200 in fees.</p>\n<p>The wallet signs the inputs and broadcasts the transaction. Nodes independently check the signatures, referenced outputs, value rules, and other validity conditions. Nodes may then apply local policy before accepting the transaction into their mempools and relaying it.</p>\n<p>Miners may evaluate its fee rate and transaction relationships. If a miner includes it in a valid block, the transaction receives one confirmation.</p>\n<p>If it remains unconfirmed, the wallet may offer RBF or CPFP depending on the transaction and software. Neither option guarantees immediate inclusion.</p>\n<p>The example shows why payment amount, fee, fee rate, UTXO selection, and confirmation are related but separate concepts.</p>"
+    },
+    {
+      "heading": "Where to continue",
+      "body_markdown": "This guide provides the working structure behind everyday wallet activity.\n\nWhat Happens Inside the Bitcoin Mempool? goes deeper into node-local transaction storage, eviction, relay policy, conflicts, and fee competition.\n\nHow a Bitcoin Transaction Moves will connect wallet construction, UTXO selection, signing, relay, mempools, mining, block inclusion, confirmation, and settlement depth in one route.\n\nThe next canonical guide, What Is a Bitcoin Seed Phrase?, shifts from transaction mechanics back to wallet recovery and security.",
+      "body_html": "<p>This guide provides the working structure behind everyday wallet activity.</p>\n<p>What Happens Inside the Bitcoin Mempool? goes deeper into node-local transaction storage, eviction, relay policy, conflicts, and fee competition.</p>\n<p>How a Bitcoin Transaction Moves will connect wallet construction, UTXO selection, signing, relay, mempools, mining, block inclusion, confirmation, and settlement depth in one route.</p>\n<p>The next canonical guide, What Is a Bitcoin Seed Phrase?, shifts from transaction mechanics back to wallet recovery and security.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Transaction",
+      "definition": "A data structure that spends existing UTXOs and creates new outputs."
+    },
+    {
+      "term": "Input",
+      "definition": "A transaction field that spends a previous UTXO and supplies unlocking data."
+    },
+    {
+      "term": "Output",
+      "definition": "A transaction field that assigns value to a new locking condition."
+    },
+    {
+      "term": "Change output",
+      "definition": "A transaction output that returns unspent input value to a wallet-controlled destination."
+    },
+    {
+      "term": "UTXO",
+      "definition": "An unspent transaction output that can be used as an input in a later transaction."
+    },
+    {
+      "term": "Fee rate",
+      "definition": "The amount paid per unit of transaction weight or virtual size to compete for block space."
+    },
+    {
+      "term": "Mempool",
+      "definition": "A node's local collection of valid unconfirmed transactions eligible for relay or block inclusion."
+    },
+    {
+      "term": "Policy",
+      "definition": "Local software rules that influence transaction relay, mempool acceptance, or default behavior without changing consensus validity."
+    },
+    {
+      "term": "Standardness",
+      "definition": "Node policy rules used for transaction relay and mining defaults that are separate from consensus validity."
+    },
+    {
+      "term": "Confirmation",
+      "definition": "The inclusion of a transaction in a block, followed by additional blocks that increase settlement depth."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bitcoin: A Peer-to-Peer Electronic Cash System",
+      "author_or_publisher": "Satoshi Nakamoto",
+      "direct_url": "https://bitcoin.org/bitcoin.pdf",
+      "supports": "The input-and-output transaction model, transaction fees as input value not assigned to outputs, public transaction ordering, and proof-of-work confirmation context."
+    },
+    {
+      "title": "Bitcoin Developer Guide: Transactions",
+      "author_or_publisher": "Bitcoin Project developer documentation",
+      "direct_url": "https://developer.bitcoin.org/devguide/transactions.html",
+      "supports": "UTXOs, inputs, outputs, change, signatures, transaction identifiers, transaction fees, and wallet construction behavior."
+    },
+    {
+      "title": "Bitcoin Developer Guide: P2P Network",
+      "author_or_publisher": "Bitcoin Project developer documentation",
+      "direct_url": "https://developer.bitcoin.org/devguide/p2p_network.html",
+      "supports": "Transaction relay, node validation, mempool admission, inventory announcements, and block propagation."
+    },
+    {
+      "title": "BIP 141: Segregated Witness",
+      "author_or_publisher": "Eric Lombrozo, Johnson Lau, and Pieter Wuille",
+      "direct_url": "https://bips.dev/141/",
+      "supports": "Transaction weight, virtual size, witness data, txid and wtxid distinctions, and SegWit's transaction-malleability changes."
+    },
+    {
+      "title": "BIP 125: Opt-in Full Replace-by-Fee Signaling",
+      "author_or_publisher": "David Harding and Peter Todd",
+      "direct_url": "https://bips.dev/125/",
+      "supports": "The historical opt-in RBF signaling and replacement-policy model. Current Bitcoin Core behavior is supported separately."
+    },
+    {
+      "title": "Bitcoin Core 29.0 Release Notes",
+      "author_or_publisher": "Bitcoin Core developers",
+      "direct_url": "https://bitcoincore.org/en/releases/29.0/",
+      "supports": "The Bitcoin Core change making full replace-by-fee standard behavior and removing the prior configuration option."
+    },
+    {
+      "title": "Bitcoin Core 31.0 Release Notes",
+      "author_or_publisher": "Bitcoin Core developers",
+      "direct_url": "https://bitcoincore.org/en/releases/31.0/",
+      "supports": "Current Bitcoin Core cluster mempool, replacement, package, and mempool-policy changes relevant to fee management."
+    },
+    {
+      "title": "Fee estimation",
+      "author_or_publisher": "Bitcoin Optech",
+      "direct_url": "https://bitcoinops.org/en/topics/fee-estimation/",
+      "supports": "Fee estimation as a probabilistic process based on block-space demand, historical behavior, and miner selection rather than a timing guarantee."
+    },
+    {
+      "title": "Replace-by-fee",
+      "author_or_publisher": "Bitcoin Optech",
+      "direct_url": "https://bitcoinops.org/en/topics/replace-by-fee/",
+      "supports": "RBF design, current implementation context, wallet behavior, and replacement-policy tradeoffs."
+    },
+    {
+      "title": "Child pays for parent",
+      "author_or_publisher": "Bitcoin Optech",
+      "direct_url": "https://bitcoinops.org/en/topics/cpfp/",
+      "supports": "CPFP package economics, use of spendable child outputs, and the conditions required for miners to evaluate a parent and child together."
+    },
+    {
+      "title": "Transaction pinning",
+      "author_or_publisher": "Bitcoin Optech",
+      "direct_url": "https://bitcoinops.org/en/topics/transaction-pinning/",
+      "supports": "Transaction structures and policy interactions that can interfere with fee bumping, replacement, or package confirmation."
+    },
+    {
+      "title": "Package relay",
+      "author_or_publisher": "Bitcoin Optech",
+      "direct_url": "https://bitcoinops.org/en/topics/package-relay/",
+      "supports": "Relay and validation of related transaction packages and the evolving policy context for unconfirmed parent-child transaction graphs."
+    }
+  ],
+  "seo_title": "How Bitcoin Transactions and Fees Work: Inputs, Outputs, and Mempools",
+  "meta_description": "Learn how Bitcoin transactions spend UTXOs, create recipient and change outputs, calculate fees by transaction size, enter node mempools, and receive confirmations.",
+  "excerpt": "Bitcoin transactions spend existing outputs and create new ones. This guide explains inputs, change, transaction weight, sat/vB fee rates, node-local mempools, miner selection, RBF, CPFP, and confirmation risk.",
+  "reading_time": "11 to 13 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-BASICS",
+    "label": "Bitcoin Basics",
+    "subcategory": "Using Bitcoin",
+    "depth": "Shallow",
+    "format": "Explainer"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-007",
+      "title": "How to Send and Receive Bitcoin",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-009",
+      "title": "What Is a Bitcoin Seed Phrase?",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": [
+      {
+        "registry_id": "MSC-GUIDE-007",
+        "title": "How to Send and Receive Bitcoin",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-009",
+        "title": "What Is a Bitcoin Seed Phrase?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-013",
+        "title": "What Are UTXOs in Bitcoin?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-014",
+        "title": "How Bitcoin Confirmations Work",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-025",
+        "title": "What Happens Inside the Bitcoin Mempool?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-026",
+        "title": "How Bitcoin Blocks Work",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-027",
+        "title": "How the Bitcoin Blockchain Works",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-056",
+        "title": "How SegWit Changed Bitcoin",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-ROUTE-001",
+        "title": "How a Bitcoin Transaction Moves",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GLOSSARY-001",
+        "title": "Bitcoin Glossary",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-HUB-BASICS",
+        "title": "Bitcoin Basics",
+        "active": false,
+        "url": null
+      }
+    ]
+  },
+  "review_dates": {
+    "reviewed": "2026-07-17",
+    "copy_locked": "2026-07-17",
+    "human_verification": "2026-07-17"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "Inputs Become Recipient, Change, and Fee",
+      "educational_purpose": "Show that UTXOs are spent whole and replaced by new outputs.",
+      "recommended_placement": "After the section titled Change completes the transaction equation.",
+      "visual_description": "A technical navigation plate with two input channels flowing into one transaction frame, then splitting into recipient output, change output, and fee difference. The fee should appear as arithmetic difference rather than a standard output box.",
+      "required_labels": "Input UTXOs, Transaction, Recipient output, Change output, Fee",
+      "caption": "A Bitcoin transaction consumes complete input UTXOs, creates new outputs, and leaves the difference as the fee.",
+      "alt_text": "Diagram showing Bitcoin input UTXOs entering a transaction and becoming a recipient output, a change output, and a fee difference.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack inputs above the transaction and outputs below while preserving the fee equation.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "Payment Amount Is Not Transaction Size",
+      "educational_purpose": "Correct the idea that a larger payment automatically requires a larger network fee.",
+      "recommended_placement": "After the section titled Weight and virtual size measure block-space use.",
+      "visual_description": "Two side-by-side survey vessels. One carries a high-value payment in a compact one-input transaction. The other carries a low-value payment with many inputs and more data. A block-space ruler measures virtual bytes beneath both.",
+      "required_labels": "Payment amount, Inputs, Outputs, Virtual size, Fee rate",
+      "caption": "On-chain fees reflect transaction weight and fee rate, not simply the value being transferred.",
+      "alt_text": "Comparison showing a high-value compact Bitcoin transaction and a lower-value transaction with many inputs using more virtual bytes.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack the two examples and keep the virtual-size ruler visible under each.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Local Mempools and Fee-Management Paths",
+      "educational_purpose": "Show that nodes can hold different unconfirmed transaction sets and that RBF and CPFP follow different transaction paths.",
+      "recommended_placement": "After the section titled There is no single mempool.",
+      "visual_description": "An oceanographic chart with three node-local pools containing overlapping but nonidentical transaction markers. One route shows a replacement transaction conflicting with the original. Another shows a child attached to a parent. A miner selects from the transactions it can evaluate.",
+      "required_labels": "Node A mempool, Node B mempool, Miner view, RBF replacement, CPFP child, Candidate block",
+      "caption": "Mempools are local, and fee-management transactions depend on relay policy, transaction structure, and miner selection.",
+      "alt_text": "Chart showing different node mempools, an RBF replacement path, a CPFP parent-child path, and a miner constructing a candidate block.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Keep two node pools and both fee-management paths visible; the third node pool may move below in a narrow crop.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}

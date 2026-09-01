@@ -1,0 +1,149 @@
+{% comment %}
+  Generated from docs/learn/content/guides/MSC-GUIDE-007-send-and-receive-bitcoin.md.
+  Registry binding: MSC-GUIDE-007.
+  Preview only. Do not edit manually.
+  Rebuild with node scripts/generate-msc-learn-guide-rollout.mjs --write.
+{% endcomment %}
+<section class="msc-shell msc-learn-page" data-msc-registry-id="MSC-GUIDE-007" data-msc-preview-only="true">
+  <div class="msc-container msc-learn-page__container">
+    <nav class="msc-learn-breadcrumbs" aria-label="Learn breadcrumbs"><ol><li><span>Learn</span></li><li><span>Bitcoin Basics</span></li><li aria-current="page"><span>How to Send and Receive Bitcoin</span></li></ol></nav>
+    <header class="msc-learn-page__header">
+      <p class="msc-section-kicker">Bitcoin Basics</p>
+      <h1>How to Send and Receive Bitcoin</h1>
+      <p class="msc-learn-page__deck">Sending and receiving bitcoin involves more than copying an address and pressing a button. A wallet creates or reads payment information, constructs a transaction, signs it when authorized, broadcasts it to peers, and then tracks whether miners include it in a valid block.</p>
+      <ul class="msc-learn-page-meta"><li>Using Bitcoin</li><li>Surface</li><li>Walkthrough</li><li>10 to 11 minutes</li><li>Reviewed 2026-07-17</li></ul>
+      <p class="msc-learn-preview-note">Preview only. Publication records and confirmed URLs do not exist; all navigation remains inactive.</p>
+    </header>
+    <article class="msc-learn-article rte" data-msc-content-source="structured-runtime">
+<section class="msc-learn-article__section">
+<p>A Bitcoin payment can feel simple at the interface. One person presents receiving information. Another enters an amount and approves the payment.</p>
+<p>Behind that exchange, a wallet must choose the intended network and payment method, construct a valid transaction, authorize it with the required keys, and send it into a peer-to-peer network where confirmation is not guaranteed on a fixed schedule.</p>
+<p>This walkthrough stays at the user level while keeping those distinctions clear.</p>
+</section>
+<section class="msc-learn-article__section"><h2>First identify the payment path</h2>
+<p>Bitcoin supports more than one way to make a payment.</p>
+<p>An on-chain transaction creates outputs recorded in Bitcoin blocks. A Lightning payment uses a separate payment-channel network and settles according to different rules and assumptions. Both may be displayed as QR codes or payment requests, but they are not interchangeable.</p>
+<p>Bitcoin testing environments use coins with no intended monetary value and network-specific parameters or encodings. A mainnet wallet should not treat testnet, signet, or regtest payment information as a mainnet destination merely because the string or QR code appears structurally valid.</p>
+<p>Before sending or receiving, confirm the intended Bitcoin network and payment method. A wallet may detect some mismatches, but the interface cannot safely assume every string or QR code represents the path the user intended.</p>
+<p>This guide focuses on on-chain Bitcoin transactions.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Receiving begins with wallet-generated information</h2>
+<p>To receive an on-chain payment, the recipient asks a wallet to generate or select receiving information.</p>
+<p>That information commonly appears as a Bitcoin address, a QR code, or a payment request containing an address and optional details such as an amount. An address is a destination representation used by wallets to construct a Bitcoin locking script. It does not contain bitcoin and is not the wallet itself.</p>
+<p>A wallet may generate many addresses from related key material. Using a new address for each payment can reduce some forms of transaction linkage. Reusing an address can make it easier for outside observers to connect payments and activity.</p>
+<p>The recipient should confirm that the wallet is showing an address for the intended network and an address type supported by the sender. Modern wallets commonly support several address formats, but compatibility is not universal across older services and software.</p>
+</section>
+<section class="msc-learn-article__section"><h2>QR codes reduce typing, not verification</h2>
+<p>A QR code is an encoding method. It can reduce typing errors, but it does not establish that the destination is correct.</p>
+<p>Malware, a compromised website, a substituted image, a misleading invoice, or an incorrect wallet screen can display the wrong payment information in a perfectly readable QR code. A copied address can also be replaced in the clipboard.</p>
+<p>The sender should compare the destination shown by the sending wallet with information obtained through an appropriate trusted channel. The amount, network, and payment method also deserve review.</p>
+<p>For higher-risk payments, people may use additional verification steps suited to their circumstances. No single checking method is universally sufficient, and a test transaction is not universally required.</p>
+</section>
+<section class="msc-learn-article__section"><h2>The recipient does not need to remain online</h2>
+<p>For an on-chain payment, the recipient does not need to be online when the sender constructs or broadcasts the transaction.</p>
+<p>The sender&#39;s transaction creates an output using the receiving information. That output becomes part of the public transaction data if the transaction is confirmed in a block.</p>
+<p>The recipient&#39;s wallet can detect the output later by connecting to a node or service and scanning relevant transaction and block information. A watch-only wallet can perform this detection without holding the private keys needed to spend.</p>
+<p>Being offline does not prevent receipt, but the recipient needs reliable wallet information and a later way to learn about the transaction. The sender also needs valid receiving information before creating the payment.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Review before authorizing a send</h2>
+<p>A sending wallet typically asks for a destination and an amount. It may also display fee information, the selected network, and other transaction details.</p>
+<p>Before authorizing, review:</p>
+<ol><li>The destination.</li><li>The amount and unit.</li><li>The intended Bitcoin network.</li><li>Whether the payment is on-chain or uses another system.</li><li>The fee information and any stated confirmation target.</li><li>Whether the wallet is creating additional outputs, including change.</li><li>Any warning about compatibility, insufficient funds, dust, or unconfirmed inputs.</li></ol>
+<p>The exact interface differs by wallet. The principle is the same: authorization should follow review, not replace it.</p>
+<p>A wallet cannot know the human intent behind every destination. It can validate an address encoding or script type and still send to the wrong person if the user approves incorrect information.</p>
+</section>
+<section class="msc-learn-article__section"><h2>The wallet selects inputs</h2>
+<p>Bitcoin transactions spend existing UTXOs.</p>
+<p>When a wallet prepares a send, it selects one or more available outputs as inputs. Each input references a previously created output and supplies the data needed to satisfy its spending condition.</p>
+<p>UTXOs are spent whole. If the selected inputs contain more value than the recipient amount and fee, the wallet commonly creates a change output returning the remainder to a wallet-controlled destination.</p>
+<p>For example, a wallet might select an output worth 100,000 satoshis to pay 60,000 satoshis. It could create a recipient output, a change output, and leave the difference as the transaction fee. The exact values depend on the chosen fee rate and transaction structure.</p>
+<p>The wallet&#39;s balance display can make this process look like subtracting from one account. Underneath, the wallet is selecting and replacing discrete outputs.</p>
+</section>
+<section class="msc-learn-article__section"><h2>A signature authorizes the spend</h2>
+<p>After constructing the transaction, the wallet or signing device produces the signatures required by the selected inputs.</p>
+<p>A digital signature provides cryptographic proof that valid private key material authorized the transaction or message. The signature does not reveal the private key.</p>
+<p>Different spending conditions can require different authorization. A single-key wallet may need one signer. A multisignature wallet may require a threshold of several keys. A hardware signing device may receive transaction information from a coordinator and return a signature after the user approves the displayed details.</p>
+<p>Signing is the authorization step. It is not the same as broadcasting or confirming.</p>
+<p>A signed transaction can remain on a device, move through a Partially Signed Bitcoin Transaction workflow, or be passed to another system for broadcast.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Broadcasting sends the transaction to peers</h2>
+<p>Broadcasting means offering the transaction to one or more Bitcoin nodes.</p>
+<p>A receiving node checks the transaction against consensus rules and its own local policy. If the transaction is valid and acceptable under that node&#39;s policy, the node may store it in its local mempool and relay it to peers.</p>
+<p>There is no single universal mempool. Each node maintains its own collection of unconfirmed transactions and can use different settings, software, timing, and policy. A transaction may be present in many mempools, absent from others, or removed later.</p>
+<p>Broadcast success means at least one system accepted or forwarded the transaction. It does not mean the transaction is confirmed.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Nodes validate and relay under local rules</h2>
+<p>A node can reject a transaction because it is invalid under consensus rules, conflicts with another spend, fails local policy, has an insufficient fee rate for that node&#39;s current settings, depends on unavailable parents, or exceeds resource limits.</p>
+<p>Consensus rules determine whether a transaction can be valid in a block. Policy rules influence whether a node accepts and relays an unconfirmed transaction before mining. The two should not be treated as identical.</p>
+<p>A transaction declined by one node may still reach other peers or miners through another route. A transaction that violates consensus rules cannot become valid through wider broadcast.</p>
+<p>Wallet labels such as pending or failed may simplify a more specific network state.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Miners decide what enters candidate blocks</h2>
+<p>Miners construct candidate blocks from valid transactions available to them.</p>
+<p>They generally consider fees, transaction relationships, block limits, operational policy, and other factors. A wallet&#39;s fee estimate is an attempt to compete for block space. It is not a reservation or a promise.</p>
+<p>When a miner includes the transaction in a block and nodes accept that block, the transaction receives its first confirmation. Each valid block added afterward increases settlement depth.</p>
+<p>Confirmation time can vary. A transaction may confirm quickly, wait through several blocks, remain unconfirmed for a long period, be replaced by a conflicting transaction under applicable policy, or disappear from some mempools.</p>
+<p>The sender and recipient should treat confirmation as a network event, not as a button state controlled by the wallet company.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Fee information is an estimate</h2>
+<p>On-chain fees are related to the transaction&#39;s weight or virtual size and the chosen fee rate, not directly to the amount of bitcoin being sent.</p>
+<p>A small payment can require a larger fee than a large payment if its transaction uses more block space or competes during a period of higher demand. A wallet estimates an appropriate fee rate based on data and assumptions about current or expected block-space competition.</p>
+<p>The estimate cannot guarantee confirmation timing. Blocks arrive irregularly, demand changes, and node mempools differ.</p>
+<p>Guide 008 explains transaction structure, virtual bytes, fee rates, policy, replacement, and confirmation risk in more detail.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Fee bumping may be possible</h2>
+<p>Some wallets can increase the effective fee of an unconfirmed payment.</p>
+<p>Replace-by-fee can create a replacement transaction that spends one or more of the same inputs while paying a higher fee, subject to wallet support and the policies used by nodes and miners.</p>
+<p>Child-pays-for-parent can create a new transaction that spends an output from the unconfirmed parent with a fee high enough to make the package more attractive. This requires a suitable spendable output, compatible wallet behavior, and acceptance by relevant nodes and miners.</p>
+<p>Neither method is a guaranteed rescue. The original transaction structure, wallet capabilities, node policy, miner behavior, transaction relationships, and current fee market all matter. A wallet may offer one method, both methods, or neither.</p>
+</section>
+<section class="msc-learn-article__section"><h2>A test transaction is a tradeoff</h2>
+<p>A small test transaction can reduce some risks in some situations. It can confirm that a receiving setup detects an on-chain payment and that the sender has copied the intended destination format.</p>
+<p>It does not prove that every later transaction will be correct. A second payment still needs review. The test also creates another public transaction, another fee, and another piece of activity that may be connected through transaction analysis.</p>
+<p>A test may be reasonable for an unfamiliar or high-consequence workflow. It may be unnecessary for a routine payment where the destination and process are already well verified.</p>
+<p>The decision should reflect the situation rather than a universal rule.</p>
+</section>
+<section class="msc-learn-article__section"><h2>The recipient verifies the result</h2>
+<p>A recipient may see a transaction as soon as the wallet learns about it. That is usually an unconfirmed payment.</p>
+<p>The recipient should distinguish detection from confirmation. For low-risk situations, an unconfirmed payment may be informative. For higher-value or irreversible delivery, additional confirmation depth may be appropriate.</p>
+<p>The right level depends on the value, transaction characteristics, counterparty, reorganization risk, and what happens after acceptance. One confirmation is not an absolute finality guarantee, and no universal confirmation count fits every situation.</p>
+<p>A wallet should present confirmation state clearly, but the user or business still defines its acceptance policy.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Privacy does not happen automatically</h2>
+<p>On-chain Bitcoin transactions are public. Addresses do not automatically include legal names, but transaction relationships can reveal patterns.</p>
+<p>Address reuse can connect payments to the same destination. Input selection can connect UTXOs. Change detection, exchange records, merchant information, public posts, and network observations can create further links.</p>
+<p>Generating a new receiving address helps avoid one obvious reuse pattern. It does not make the transaction anonymous.</p>
+<p>Wallet choice, node connection, transaction construction, payment communication, and later spending behavior all affect privacy. A complete privacy treatment belongs in How Bitcoin Privacy Works.</p>
+</section>
+<section class="msc-learn-article__section"><h2>A compact on-chain walkthrough</h2>
+<p>For a basic on-chain payment, the sequence is:</p>
+<ol><li>The recipient selects receiving information from a wallet.</li><li>Both parties confirm the intended Bitcoin network and payment method.</li><li>The sender enters or scans the destination.</li><li>The sender reviews the destination, amount, fee information, and network.</li><li>The wallet selects UTXOs and creates recipient and possible change outputs.</li><li>The required signer or signers authorize the spend.</li><li>The transaction is broadcast to one or more nodes.</li><li>Nodes validate it and may relay it under local policy.</li><li>The transaction may enter individual node mempools.</li><li>A miner may include it in a candidate block.</li><li>Nodes validate the block.</li><li>The transaction receives a confirmation when accepted in a valid block.</li><li>Later blocks add settlement depth.</li></ol>
+<p>Every stage has limits. A valid address can still be the wrong destination. A signed transaction can remain unbroadcast. A broadcast transaction can remain unconfirmed. A confirmed transaction can face small recent-chain reorganization risk.</p>
+<p>Understanding the stages makes the wallet interface less mysterious and helps users respond more calmly when a payment does not move exactly as expected.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Where to continue</h2>
+<p>This walkthrough explains the practical path without opening every technical layer.</p>
+<p>How Bitcoin Transactions and Fees Work goes deeper into inputs, outputs, change, transaction weight, fee rate, node-local mempools, miner selection, replacement, and confirmation risk.</p>
+<p>The featured route, How a Bitcoin Transaction Moves, will later connect transaction creation with UTXO selection, mempool behavior, mining, blocks, and settlement depth across the wider Learn library.</p>
+</section>
+    </article>
+    <section class="msc-learn-key-terms" aria-labelledby="MscGuide007Terms"><h2 id="MscGuide007Terms">Key Terms</h2><dl><div class="msc-learn-term"><dt>Address</dt><dd>A destination representation used by wallets to construct a Bitcoin locking script.</dd></div>
+<div class="msc-learn-term"><dt>Payment</dt><dd>A transfer of value from a payer to a recipient using an agreed settlement method.</dd></div>
+<div class="msc-learn-term"><dt>Transaction</dt><dd>A data structure that spends existing UTXOs and creates new outputs.</dd></div>
+<div class="msc-learn-term"><dt>Wallet</dt><dd>Software or hardware that manages keys, constructs transactions, and helps users interact with Bitcoin.</dd></div>
+<div class="msc-learn-term"><dt>Mempool</dt><dd>A node&#39;s local collection of valid unconfirmed transactions eligible for relay or block inclusion.</dd></div>
+<div class="msc-learn-term"><dt>Confirmation</dt><dd>The inclusion of a transaction in a block, followed by additional blocks that increase settlement depth.</dd></div></dl></section>
+    <section class="msc-learn-sources" aria-labelledby="MscGuide007Sources"><h2 id="MscGuide007Sources">Sources</h2><article class="msc-learn-source"><h3>Bitcoin Developer Guide: Payment Processing</h3><ul><li><strong>author or publisher:</strong> Bitcoin Project developer documentation</li><li><strong>supports:</strong> Wallet-neutral payment workflows, receiving information, transaction detection, confirmation monitoring, and payment-processing considerations.</li></ul><p><strong>Direct URL:</strong> <code>https://developer.bitcoin.org/devguide/payment_processing.html</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Developer Guide: Transactions</h3><ul><li><strong>author or publisher:</strong> Bitcoin Project developer documentation</li><li><strong>supports:</strong> Inputs, outputs, UTXOs, change, signatures, transaction construction, and wallet balance behavior.</li></ul><p><strong>Direct URL:</strong> <code>https://developer.bitcoin.org/devguide/transactions.html</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Developer Guide: P2P Network</h3><ul><li><strong>author or publisher:</strong> Bitcoin Project developer documentation</li><li><strong>supports:</strong> Transaction broadcast, peer relay, node validation, mempool behavior, and block propagation.</li></ul><p><strong>Direct URL:</strong> <code>https://developer.bitcoin.org/devguide/p2p_network.html</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Network Parameters</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core developers</li><li><strong>supports:</strong> The separate mainnet, testnet, signet, and regtest network parameters and their network-specific address and encoding configuration.</li></ul><p><strong>Direct URL:</strong> <code>https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp</code></p></article>
+<article class="msc-learn-source"><h3>BIP 21: URI Scheme</h3><ul><li><strong>author or publisher:</strong> Nils Schneider and Matt Corallo</li><li><strong>supports:</strong> Bitcoin payment-request URIs containing addresses, optional amounts, labels, messages, and extensible parameters.</li></ul><p><strong>Direct URL:</strong> <code>https://bips.dev/21/</code></p></article>
+<article class="msc-learn-source"><h3>BIP 173: Base32 Address Format for Native v0-16 Witness Outputs</h3><ul><li><strong>author or publisher:</strong> Pieter Wuille and Greg Maxwell</li><li><strong>supports:</strong> Bech32 encoding for native witness version 0 addresses and network-readable human-readable prefixes.</li></ul><p><strong>Direct URL:</strong> <code>https://bips.dev/173/</code></p></article>
+<article class="msc-learn-source"><h3>BIP 350: Bech32m Format for v1+ Witness Addresses</h3><ul><li><strong>author or publisher:</strong> Pieter Wuille</li><li><strong>supports:</strong> Bech32m encoding for witness version 1 and later addresses and the compatibility distinction between address formats.</li></ul><p><strong>Direct URL:</strong> <code>https://bips.dev/350/</code></p></article>
+<article class="msc-learn-source"><h3>BIP 125: Opt-in Full Replace-by-Fee Signaling</h3><ul><li><strong>author or publisher:</strong> David Harding and Peter Todd</li><li><strong>supports:</strong> The historical opt-in replace-by-fee signaling design and replacement-policy considerations. Current node behavior must be verified separately.</li></ul><p><strong>Direct URL:</strong> <code>https://bips.dev/125/</code></p></article>
+<article class="msc-learn-source"><h3>Replace-by-fee</h3><ul><li><strong>author or publisher:</strong> Bitcoin Optech</li><li><strong>supports:</strong> Current technical context for replacing unconfirmed transactions, wallet and node policy differences, and the limits of fee-bumping assumptions.</li></ul><p><strong>Direct URL:</strong> <code>https://bitcoinops.org/en/topics/replace-by-fee/</code></p></article>
+<article class="msc-learn-source"><h3>Child pays for parent</h3><ul><li><strong>author or publisher:</strong> Bitcoin Optech</li><li><strong>supports:</strong> CPFP as a method for increasing the combined fee incentive of an unconfirmed parent and child transaction package.</li></ul><p><strong>Direct URL:</strong> <code>https://bitcoinops.org/en/topics/cpfp/</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Core 31.0 Release Notes</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core developers</li><li><strong>supports:</strong> Current Bitcoin Core mempool and replacement-policy changes that affect how wallet developers should reason about fee management and relay behavior.</li></ul><p><strong>Direct URL:</strong> <code>https://bitcoincore.org/en/releases/31.0/</code></p></article></section>
+    <nav class="msc-learn-prev-next" aria-label="Guide navigation preview"><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Previous</span><strong>What Is Bitcoin Self-Custody?</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Category</span><strong>Bitcoin Basics</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Next</span><strong>How Bitcoin Transactions and Fees Work</strong><small>Link inactive</small></span></nav>
+  </div>
+</section>

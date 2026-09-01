@@ -1,0 +1,126 @@
+{% comment %}
+  Generated from docs/learn/content/guides/MSC-GUIDE-006-bitcoin-self-custody.md.
+  Registry binding: MSC-GUIDE-006.
+  Preview only. Do not edit manually.
+  Rebuild with node scripts/generate-msc-learn-guide-rollout.mjs --write.
+{% endcomment %}
+<section class="msc-shell msc-learn-page" data-msc-registry-id="MSC-GUIDE-006" data-msc-preview-only="true">
+  <div class="msc-container msc-learn-page__container">
+    <nav class="msc-learn-breadcrumbs" aria-label="Learn breadcrumbs"><ol><li><span>Learn</span></li><li><span>Bitcoin Basics</span></li><li aria-current="page"><span>What Is Bitcoin Self-Custody?</span></li></ol></nav>
+    <header class="msc-learn-page__header">
+      <p class="msc-section-kicker">Bitcoin Basics</p>
+      <h1>What Is Bitcoin Self-Custody?</h1>
+      <p class="msc-learn-page__deck">Bitcoin self-custody means directly controlling the keys needed to spend bitcoin. It can reduce dependence on a custodian, but it also places backup, recovery, device, privacy, and continuity responsibilities on the user or the arrangement they design.</p>
+      <ul class="msc-learn-page-meta"><li>Using Bitcoin</li><li>Surface</li><li>Guide</li><li>10 to 11 minutes</li><li>Reviewed 2026-07-17</li></ul>
+      <p class="msc-learn-preview-note">Preview only. Publication records and confirmed URLs do not exist; all navigation remains inactive.</p>
+    </header>
+    <article class="msc-learn-article rte" data-msc-content-source="structured-runtime">
+<section class="msc-learn-article__section">
+<p>Custody answers a practical question: who controls the keys or authorization needed to move bitcoin?</p>
+<p>In a custodial account, a company or service controls those keys. The customer sees an account balance and can request a withdrawal, but the service decides whether and how the on-chain transaction is created.</p>
+<p>In self-custody, the user or a user-defined setup controls the keys needed to authorize spending. The setup may involve one device, several keys, multiple people, a collaborative service, or a combination of tools. The common feature is that spending does not depend entirely on one custodian approving a withdrawal from its own wallet.</p>
+<p>Self-custody is not a product category, a moral label, or a promise of safety. It is a custody arrangement with particular benefits, responsibilities, and failure modes.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Custody is about authorization</h2>
+<p>Bitcoin ownership is represented through spendable transaction outputs. Spending an output requires satisfying its locking conditions, usually with one or more valid signatures.</p>
+<p>The party that controls the required private keys can authorize that spend. This is why custody is fundamentally about control of authorization, not about who installed an app or who appears as the account holder.</p>
+<p>A person can use a wallet interface without controlling the underlying keys. A company can call an account a wallet while holding all spending authority. A user can also control keys through a setup that depends on software, hardware, backups, coordinators, or other people.</p>
+<p>The interface matters, but it does not define custody by itself.</p>
+</section>
+<section class="msc-learn-article__section"><h2>A custodial balance is a claim on a service</h2>
+<p>When a person deposits bitcoin with a custodian, the custodian usually combines or manages funds through its own wallet system. The customer&#39;s displayed balance is an internal record showing what the service owes or permits the customer to withdraw.</p>
+<p>That arrangement may provide support, password recovery, account controls, compliance services, or simplified transactions. It also creates counterparty risk. The service may be hacked, become insolvent, freeze withdrawals, make an accounting error, change its rules, or be compelled to restrict access.</p>
+<p>A customer may have a legal or contractual claim, but not direct cryptographic control of the relevant Bitcoin outputs.</p>
+<p>This distinction does not make every custodian unsafe or every self-custody setup sound. It identifies where the spending authority and recovery process reside.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Self-custody shifts the failure boundary</h2>
+<p>Direct key control can reduce the risk that one company loses, freezes, or mismanages the bitcoin. It also removes some of the support that a company account can provide.</p>
+<p>A self-custody wallet may not have a password-reset department capable of restoring access. If the required keys and recovery information are lost, the network cannot create a replacement. If secret material is exposed, another party may be able to spend the funds. If a transaction is authorized incorrectly, there may be no institution with authority to reverse it.</p>
+<p>The risk has not disappeared. It has moved.</p>
+<p>Self-custody replaces some counterparty dependence with operational responsibility. Whether that tradeoff is appropriate depends on the amount at risk, technical ability, recovery needs, privacy concerns, threat model, and personal circumstances.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Self-custody is a spectrum of arrangements</h2>
+<p>The phrase self-custody can suggest one person holding one key on one device. That is only one arrangement.</p>
+<p>A single-signature arrangement requires one authorized signature for each applicable spending path. A hierarchical deterministic wallet may still derive many distinct signing keys over time, but one signer or one underlying recovery arrangement controls them. This can be relatively simple to understand and recover, while the signer and recovery information may remain concentrated points of failure.</p>
+<p>A multisignature setup can require a threshold of several keys. A two-of-three arrangement, for example, may allow spending when any two of three authorized keys sign. This can reduce dependence on one device or one backup, but it adds coordination, configuration, compatibility, and recovery complexity.</p>
+<p>A collaborative arrangement may distribute keys between the user and one or more service providers. The user may retain enough control to prevent unilateral spending by the service, while the service helps with coordination or recovery. The exact rights and dependencies depend on the threshold, key locations, software, policies, and contract.</p>
+<p>Some arrangements use time delays, inheritance procedures, organizational approvals, or geographically separated signers. These designs solve different problems. They should not all be treated as equivalent forms of self-custody.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Single-signature arrangements</h2>
+<p>A single-signature setup can be appropriate when simplicity is the main priority and the risks are understood.</p>
+<p>The wallet may derive many addresses and signing keys from one underlying backup. That does not mean every address uses the same private key. Hierarchical deterministic wallets can derive a tree of related keys from seed material.</p>
+<p>The main advantage is a smaller coordination burden. The user needs to understand one wallet arrangement and preserve the information required to recover it.</p>
+<p>The main weakness is concentration. Loss or exposure of the key material, backup, or required recovery information can become decisive. A device failure may be manageable if the backup is correct and compatible. A backup failure may not be.</p>
+<p>Single-signature does not mean careless, and multisignature does not automatically mean secure. Each arrangement must be evaluated against its own threat model.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Multisignature arrangements</h2>
+<p>Multisignature uses a spending condition that requires a defined threshold of multiple keys.</p>
+<p>This can reduce some single points of failure. One lost device may not prevent recovery. One compromised key may not be enough to spend. Several people or locations can share authorization responsibility.</p>
+<p>The added resilience comes with added information requirements. Recovery may depend not only on seed material, but also on the full wallet configuration, public keys, key origins, derivation paths, script type, threshold, and signer order. The participants need compatible tools and a clear process for verifying the setup.</p>
+<p>A misconfigured multisignature wallet can produce addresses that signers do not recognize or cannot later reconstruct. A coordinator can provide incorrect transaction information. A service used for collaboration may become unavailable. Signers can lose track of which backup belongs to which wallet.</p>
+<p>Standards such as Partially Signed Bitcoin Transactions, output script descriptors, and Bitcoin Secure Multisig Setup can improve interoperability and verification. They do not remove the need to understand what must be preserved.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Hardware signing devices reduce specific risks</h2>
+<p>A hardware signing device is designed to keep private keys in a restricted signing environment. It can receive transaction information from another device, show details for approval, and return signatures without directly exporting the private keys.</p>
+<p>This can reduce exposure to malware on a general-purpose computer or phone. It does not eliminate every risk.</p>
+<p>The device may display incomplete or misleading information if the surrounding software constructs a confusing transaction. The user may fail to verify the destination or amount. Firmware, manufacturing, transport, initialization, and update processes create supply-chain and implementation dependencies. The device can be damaged or lost. Recovery material can be exposed even when the device remains secure.</p>
+<p>The meaningful question is which risks the device reduces and which risks remain elsewhere in the setup.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Backup, recovery, and testing are separate concerns</h2>
+<p>A backup preserves information needed to recover access. Recovery is the process of using that information with compatible tools and the correct wallet configuration. Recovery testing checks whether the process works before an emergency.</p>
+<p>These are related but distinct.</p>
+<p>Many wallets present a sequence of words, often called a seed phrase or recovery phrase. BIP 39 defines one mnemonic system, but not every wallet uses BIP 39. A phrase may be combined with a passphrase, derivation scheme, account index, script type, or multisignature configuration.</p>
+<p>A backup can be complete for one wallet and incomplete for another. A phrase that recreates the key tree may still fail to identify the expected addresses if the restoring wallet uses different derivation or script assumptions. A multisignature setup may require public configuration data from the other signers.</p>
+<p>Testing can reveal missing information, but a careless test can also expose secrets or create confusion. The method should match the setup and avoid turning a backup check into a new security problem.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Device security is not backup security</h2>
+<p>The device used for daily access and the backup used for recovery face different risks.</p>
+<p>A phone or computer may be exposed to malware, theft, remote access, weak authentication, or accidental deletion. A hardware signer may be exposed to physical tampering, malicious firmware, a deceptive host interface, or loss.</p>
+<p>A backup may be exposed to fire, water, copying, photography, coercion, poor labeling, accidental disposal, or discovery by someone who should not have access.</p>
+<p>Protecting one layer does not automatically protect the others. A strong device cannot compensate for a plainly exposed recovery phrase. A durable backup cannot prevent a user from authorizing a malicious transaction. A multisignature threshold cannot help if all backups are stored together and compromised at once.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Privacy, physical security, and inheritance are separate layers</h2>
+<p>Self-custody decisions also affect information beyond the keys.</p>
+<p>A wallet connected to a third-party server may reveal addresses or transaction relationships. A watch-only setup may improve operational separation while exposing public wallet data to whoever operates the server. Address reuse can make activity easier to connect.</p>
+<p>Physical security concerns who can access devices, backups, or locations. It also includes the risk of drawing attention to the existence or value of a custody setup.</p>
+<p>Inheritance asks whether another person can identify the assets, understand the wallet arrangement, find the required information, and act without exposing it prematurely. A technically secure setup that no successor can recover may fail its continuity goal.</p>
+<p>These concerns interact, but solving one does not solve all of them. A custody plan should name the problem it is designed to address.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Collaborative custody changes, rather than removes, trust</h2>
+<p>Some setups combine user-controlled keys with a service that coordinates transactions, holds one key, assists recovery, or enforces policies.</p>
+<p>This can reduce the chance that one lost key causes total loss. It can also add a service dependency. The provider may learn wallet information, become unavailable, change fees, restrict access, or fail to support a future recovery process.</p>
+<p>The threshold determines whether the service can spend alone, block spending, or merely assist. The software and recovery documentation determine whether the user can continue without the service.</p>
+<p>Collaborative custody should be described by its actual key and authorization structure. The label does not tell the whole story.</p>
+</section>
+<section class="msc-learn-article__section"><h2>A threat model keeps the decision grounded</h2>
+<p>A threat model is a defined view of the assets, adversaries, capabilities, failure modes, and assumptions relevant to a security decision.</p>
+<p>For self-custody, useful questions include:</p>
+<ol><li>What amount and time horizon are involved?</li><li>Which failures are most plausible: theft, loss, coercion, device compromise, service failure, or user error?</li><li>Who needs access now, and who may need access later?</li><li>What technical procedures can the participants perform reliably?</li><li>Which dependencies are acceptable?</li><li>What information must remain private?</li><li>How will the arrangement be maintained as devices, software, and people change?</li></ol>
+<p>A setup designed for an experienced organization may be inappropriate for a first-time user. A simple setup may be more robust than a complex one that no participant can recover correctly.</p>
+<p>No custody arrangement is universally correct. The goal is not maximum complexity. It is a setup whose tradeoffs are understood and whose procedures can be followed.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Self-custody without mythology</h2>
+<p>Self-custody can provide direct control and reduce reliance on a custodian. It does not remove trust from software, hardware, standards, documentation, communication, or human judgment.</p>
+<p>It can reduce one single point of failure while creating several coordination points. It can improve privacy in one arrangement and weaken it in another. It can make inheritance more deliberate or more difficult.</p>
+<p>The useful distinction is not responsible people versus irresponsible people, or freedom versus failure. It is where authorization sits, which dependencies remain, and what recovery process exists.</p>
+<p>The next guide turns from custody structure to transaction practice. How to Send and Receive Bitcoin explains the checks involved in generating receiving information, reviewing a destination, authorizing a spend, broadcasting a transaction, and waiting for confirmation.</p>
+</section>
+    </article>
+    <section class="msc-learn-key-terms" aria-labelledby="MscGuide006Terms"><h2 id="MscGuide006Terms">Key Terms</h2><dl><div class="msc-learn-term"><dt>Self-Custody</dt><dd>Direct control of the keys needed to spend bitcoin.</dd></div>
+<div class="msc-learn-term"><dt>Custody</dt><dd>Control over the keys or authorization needed to move bitcoin.</dd></div>
+<div class="msc-learn-term"><dt>Threat model</dt><dd>A defined view of the assets, adversaries, capabilities, failure modes, and assumptions relevant to a security decision.</dd></div>
+<div class="msc-learn-term"><dt>Multisig</dt><dd>A spending condition requiring a defined threshold of multiple keys to authorize a transaction.</dd></div>
+<div class="msc-learn-term"><dt>Seed phrase</dt><dd>A human-readable backup representation used by many wallets to derive keys under a wallet standard.</dd></div>
+<div class="msc-learn-term"><dt>Cold storage</dt><dd>A custody setup intended to keep signing keys away from internet-connected systems.</dd></div></dl></section>
+    <section class="msc-learn-sources" aria-labelledby="MscGuide006Sources"><h2 id="MscGuide006Sources">Sources</h2><article class="msc-learn-source"><h3>Bitcoin Developer Guide: Wallets</h3><ul><li><strong>author or publisher:</strong> Bitcoin Project developer documentation</li><li><strong>supports:</strong> Deterministic wallets, wallet backups, key derivation, and wallet structures relevant to direct key control and recovery.</li></ul><p><strong>Direct URL:</strong> <code>https://developer.bitcoin.org/devguide/wallets.html</code></p></article>
+<article class="msc-learn-source"><h3>BIP 32: Hierarchical Deterministic Wallets</h3><ul><li><strong>author or publisher:</strong> Pieter Wuille</li><li><strong>supports:</strong> Hierarchical deterministic key trees, extended keys, and the relationship between seed material and multiple derived keys.</li></ul><p><strong>Direct URL:</strong> <code>https://bips.dev/32/</code></p></article>
+<article class="msc-learn-source"><h3>BIP 39: Mnemonic Code for Generating Deterministic Keys</h3><ul><li><strong>author or publisher:</strong> Marek Palatinus, Pavol Rusnak, Aaron Voisine, and Sean Bowe</li><li><strong>supports:</strong> One specific mnemonic method for producing deterministic-wallet seed material and the optional passphrase mechanism defined by that standard.</li></ul><p><strong>Direct URL:</strong> <code>https://bips.dev/39/</code></p></article>
+<article class="msc-learn-source"><h3>BIP 174: Partially Signed Bitcoin Transaction Format</h3><ul><li><strong>author or publisher:</strong> Andrew Chow</li><li><strong>supports:</strong> Coordinating transaction construction and multiple signing roles without placing every private key in one wallet process.</li></ul><p><strong>Direct URL:</strong> <code>https://bips.dev/174/</code></p></article>
+<article class="msc-learn-source"><h3>BIP 129: Bitcoin Secure Multisig Setup</h3><ul><li><strong>author or publisher:</strong> Hugo Nguyen, Peter Gray, Marko Bencun, Aaron Chen, and Rodolfo Novak</li><li><strong>supports:</strong> Multisignature setup risks, signer and coordinator roles, configuration verification, and preserving an interoperable multisignature descriptor record.</li></ul><p><strong>Direct URL:</strong> <code>https://bips.dev/129/</code></p></article>
+<article class="msc-learn-source"><h3>BIP 380: Output Script Descriptors General Operation</h3><ul><li><strong>author or publisher:</strong> Pieter Wuille and Ava Chow</li><li><strong>supports:</strong> Descriptors as a representation of wallet scripts, key origins, derivation information, and recovery-relevant configuration.</li></ul><p><strong>Direct URL:</strong> <code>https://bips.dev/380/</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Core: Partially Signed Bitcoin Transactions</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core developers</li><li><strong>supports:</strong> Bitcoin Core workflows that separate transaction creation, signing, finalization, and broadcast.</li></ul><p><strong>Direct URL:</strong> <code>https://github.com/bitcoin/bitcoin/blob/master/doc/psbt.md</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Core: Output Script Descriptors</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core developers</li><li><strong>supports:</strong> Descriptor-wallet concepts, watch-only information, script descriptions, and key-origin data used in wallet recovery and coordination.</li></ul><p><strong>Direct URL:</strong> <code>https://github.com/bitcoin/bitcoin/blob/master/doc/descriptors.md</code></p></article>
+<article class="msc-learn-source"><h3>Hardware Wallet Interface</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core HWI contributors</li><li><strong>supports:</strong> The separation between Bitcoin wallet software and supported hardware signing devices through a common interface.</li></ul><p><strong>Direct URL:</strong> <code>https://github.com/bitcoin-core/HWI/blob/master/README.md</code></p></article></section>
+    <nav class="msc-learn-prev-next" aria-label="Guide navigation preview"><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Previous</span><strong>What Is a Bitcoin Wallet?</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Category</span><strong>Bitcoin Basics</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Next</span><strong>How to Send and Receive Bitcoin</strong><small>Link inactive</small></span></nav>
+  </div>
+</section>
