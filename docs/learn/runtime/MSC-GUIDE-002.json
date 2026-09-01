@@ -1,0 +1,296 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-002-why-bitcoin.md",
+  "source_sha256": "be14ee3143dd294d374b725e6fe368ebba3ce55b93ed047b1495f74c4029f300",
+  "registry_id": "MSC-GUIDE-002",
+  "status": "COPY_LOCKED",
+  "h1": "Why Does Bitcoin Matter?",
+  "introductory_deck": "Bitcoin matters because it combines open participation, independently verifiable rules, scarce digital units, and ownership through cryptographic keys. Those properties can reduce dependence on central intermediaries, but they also shift more responsibility and risk to the people who use the network.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "Bitcoin does not matter for one single reason, and it does not matter equally to everyone.\n\nFor one person, the useful feature may be the ability to receive value without opening an account with a particular company. For another, it may be the ability to verify the monetary rules instead of trusting an issuer's promise. A business may care about settlement. A developer may care about open infrastructure. A saver may care about the issuance schedule. Someone else may decide that Bitcoin's volatility, custody demands, or practical limits outweigh those benefits.\n\nThat range of views is part of the subject. The useful question is not whether Bitcoin should matter to every person. It is why a system with open participation, verifiable rules, scarce digital units, and user-controlled keys may matter at all.",
+      "body_html": "<p>Bitcoin does not matter for one single reason, and it does not matter equally to everyone.</p>\n<p>For one person, the useful feature may be the ability to receive value without opening an account with a particular company. For another, it may be the ability to verify the monetary rules instead of trusting an issuer&#39;s promise. A business may care about settlement. A developer may care about open infrastructure. A saver may care about the issuance schedule. Someone else may decide that Bitcoin&#39;s volatility, custody demands, or practical limits outweigh those benefits.</p>\n<p>That range of views is part of the subject. The useful question is not whether Bitcoin should matter to every person. It is why a system with open participation, verifiable rules, scarce digital units, and user-controlled keys may matter at all.</p>"
+    },
+    {
+      "heading": "A different kind of monetary network",
+      "body_markdown": "Most digital money moves through accounts maintained by institutions. Banks, payment processors, card networks, and financial applications record balances, identify users, decide which transactions they will process, and provide support when something goes wrong.\n\nThose systems can be convenient and effective. They can also create points of dependence. Access may require permission, settlement may pass through several companies, and the rules may differ across borders or change according to institutional policy.\n\nBitcoin offers another model. It is an open monetary network whose basic transaction and issuance rules can be checked by independently operated software. No central company creates accounts for the base protocol, and no single operator maintains the only valid copy of its transaction history.\n\nThis does not remove every intermediary. Many people acquire bitcoin through exchanges, use hosted wallets, or rely on internet providers, hardware manufacturers, software developers, and other services. The distinction is that those companies operate around Bitcoin. They are not the Bitcoin protocol itself.",
+      "body_html": "<p>Most digital money moves through accounts maintained by institutions. Banks, payment processors, card networks, and financial applications record balances, identify users, decide which transactions they will process, and provide support when something goes wrong.</p>\n<p>Those systems can be convenient and effective. They can also create points of dependence. Access may require permission, settlement may pass through several companies, and the rules may differ across borders or change according to institutional policy.</p>\n<p>Bitcoin offers another model. It is an open monetary network whose basic transaction and issuance rules can be checked by independently operated software. No central company creates accounts for the base protocol, and no single operator maintains the only valid copy of its transaction history.</p>\n<p>This does not remove every intermediary. Many people acquire bitcoin through exchanges, use hosted wallets, or rely on internet providers, hardware manufacturers, software developers, and other services. The distinction is that those companies operate around Bitcoin. They are not the Bitcoin protocol itself.</p>"
+    },
+    {
+      "heading": "Open participation",
+      "body_markdown": "Bitcoin's peer-to-peer network is designed so that participants can join without receiving a membership from a central network owner. A user can download compatible software, create keys, receive transaction data, and interact with peers.\n\nOpen participation does not mean access is equally easy everywhere. A person still needs suitable technology, connectivity, electricity, and enough knowledge to use the system safely. Governments and companies can regulate services, restrict access points, block websites, or make participation more difficult. Network fees can also make some transactions impractical at certain times.\n\nEven with those limits, the base protocol offers an unusual starting condition: participation does not depend on being entered into one company's master customer database. That can matter when account access is unavailable, expensive, politically restricted, or simply not desired.",
+      "body_html": "<p>Bitcoin&#39;s peer-to-peer network is designed so that participants can join without receiving a membership from a central network owner. A user can download compatible software, create keys, receive transaction data, and interact with peers.</p>\n<p>Open participation does not mean access is equally easy everywhere. A person still needs suitable technology, connectivity, electricity, and enough knowledge to use the system safely. Governments and companies can regulate services, restrict access points, block websites, or make participation more difficult. Network fees can also make some transactions impractical at certain times.</p>\n<p>Even with those limits, the base protocol offers an unusual starting condition: participation does not depend on being entered into one company&#39;s master customer database. That can matter when account access is unavailable, expensive, politically restricted, or simply not desired.</p>"
+    },
+    {
+      "heading": "Rules that can be checked",
+      "body_markdown": "Bitcoin asks users to trust software and cryptographic methods, but it does not require them to accept the monetary rules as a private claim made by an issuer.\n\nA full node can independently check blocks and transactions against consensus rules. It can verify that transactions do not spend nonexistent outputs, that required authorization is present, that proof of work meets the target, and that new bitcoin is created only within the permitted issuance schedule.\n\nMost users do not inspect every line of code or operate their own node. Independent verification still matters because the option exists and is exercised by people, businesses, developers, and infrastructure operators across the network. Competing implementations, public review, and reproducible observations make it harder for one party to quietly change the base rules for everyone else.\n\nThis is different from saying Bitcoin's software is perfect. Bugs can exist. Developers can disagree. Users can run outdated or unsafe software. Verification provides a method for checking rules, not a guarantee that every participant makes a good decision.",
+      "body_html": "<p>Bitcoin asks users to trust software and cryptographic methods, but it does not require them to accept the monetary rules as a private claim made by an issuer.</p>\n<p>A full node can independently check blocks and transactions against consensus rules. It can verify that transactions do not spend nonexistent outputs, that required authorization is present, that proof of work meets the target, and that new bitcoin is created only within the permitted issuance schedule.</p>\n<p>Most users do not inspect every line of code or operate their own node. Independent verification still matters because the option exists and is exercised by people, businesses, developers, and infrastructure operators across the network. Competing implementations, public review, and reproducible observations make it harder for one party to quietly change the base rules for everyone else.</p>\n<p>This is different from saying Bitcoin&#39;s software is perfect. Bugs can exist. Developers can disagree. Users can run outdated or unsafe software. Verification provides a method for checking rules, not a guarantee that every participant makes a good decision.</p>"
+    },
+    {
+      "heading": "Reduced dependence on central intermediaries",
+      "body_markdown": "Bitcoin was introduced as a peer-to-peer electronic cash system that could allow payments without routing every transaction through a financial institution.\n\nThat property can reduce the number of parties whose approval is needed for a base-layer transfer. A valid transaction can be created and broadcast without asking a central payment processor to update its private ledger.\n\nReduced dependence is not the same as complete independence. A user may still depend on a custodial service, a wallet provider, an exchange, or a communications network. A merchant may need accounting, tax, or compliance systems. A transaction may wait for block space, and a user's local software may fail.\n\nThe practical value depends on the setup. Someone holding bitcoin through a company account has a different relationship to the network than someone controlling keys and verifying through a full node. Bitcoin creates the possibility of reducing intermediaries. It does not automatically remove them from every user's experience.",
+      "body_html": "<p>Bitcoin was introduced as a peer-to-peer electronic cash system that could allow payments without routing every transaction through a financial institution.</p>\n<p>That property can reduce the number of parties whose approval is needed for a base-layer transfer. A valid transaction can be created and broadcast without asking a central payment processor to update its private ledger.</p>\n<p>Reduced dependence is not the same as complete independence. A user may still depend on a custodial service, a wallet provider, an exchange, or a communications network. A merchant may need accounting, tax, or compliance systems. A transaction may wait for block space, and a user&#39;s local software may fail.</p>\n<p>The practical value depends on the setup. Someone holding bitcoin through a company account has a different relationship to the network than someone controlling keys and verifying through a full node. Bitcoin creates the possibility of reducing intermediaries. It does not automatically remove them from every user&#39;s experience.</p>"
+    },
+    {
+      "heading": "Predictable issuance and digital scarcity",
+      "body_markdown": "Bitcoin's issuance rules are enforced through consensus. New bitcoin enters circulation through the block subsidy, which began at 50 BTC per block and is reduced by half every 210,000 blocks. Under the current rules, total issuance remains below the commonly cited limit of 21 million BTC.\n\nThis schedule is visible and independently checkable. No central issuer can decide to create additional bitcoin because a budget expanded, demand increased, or a political authority requested it.\n\nThat predictability may matter to people who prefer a monetary unit with a constrained issuance process. It does not prove that bitcoin will rise in price, preserve purchasing power over every period, or maintain demand. Scarcity is only one property. An asset can be scarce and still be unwanted, difficult to use, or volatile.\n\nBitcoin's significance comes from combining scarcity with a network that can verify ownership and transfer. The economic conclusions people draw from that combination remain open to debate.",
+      "body_html": "<p>Bitcoin&#39;s issuance rules are enforced through consensus. New bitcoin enters circulation through the block subsidy, which began at 50 BTC per block and is reduced by half every 210,000 blocks. Under the current rules, total issuance remains below the commonly cited limit of 21 million BTC.</p>\n<p>This schedule is visible and independently checkable. No central issuer can decide to create additional bitcoin because a budget expanded, demand increased, or a political authority requested it.</p>\n<p>That predictability may matter to people who prefer a monetary unit with a constrained issuance process. It does not prove that bitcoin will rise in price, preserve purchasing power over every period, or maintain demand. Scarcity is only one property. An asset can be scarce and still be unwanted, difficult to use, or volatile.</p>\n<p>Bitcoin&#39;s significance comes from combining scarcity with a network that can verify ownership and transfer. The economic conclusions people draw from that combination remain open to debate.</p>"
+    },
+    {
+      "heading": "Ownership through keys",
+      "body_markdown": "Bitcoin allows value to be controlled through cryptographic keys rather than solely through an account administrator.\n\nWhen a person controls the keys required to spend a bitcoin output, that person can authorize a valid transaction under the network's rules. This makes direct digital ownership possible without asking a central issuer to recognize a transfer.\n\nThe strength of that model is also its sharp edge. A bank may reset a password, reverse certain payments, investigate fraud, or restore account access. Bitcoin's base protocol does not offer a universal recovery desk. Exposed keys can allow theft. Lost backup material can make funds inaccessible. Incorrect transactions may be difficult or impossible to correct.\n\nSelf-Custody can reduce counterparty risk, but it adds operational responsibility. Custodial services can simplify the experience, but they reintroduce dependence on the custodian. Neither choice is automatically right for every person.",
+      "body_html": "<p>Bitcoin allows value to be controlled through cryptographic keys rather than solely through an account administrator.</p>\n<p>When a person controls the keys required to spend a bitcoin output, that person can authorize a valid transaction under the network&#39;s rules. This makes direct digital ownership possible without asking a central issuer to recognize a transfer.</p>\n<p>The strength of that model is also its sharp edge. A bank may reset a password, reverse certain payments, investigate fraud, or restore account access. Bitcoin&#39;s base protocol does not offer a universal recovery desk. Exposed keys can allow theft. Lost backup material can make funds inaccessible. Incorrect transactions may be difficult or impossible to correct.</p>\n<p>Self-Custody can reduce counterparty risk, but it adds operational responsibility. Custodial services can simplify the experience, but they reintroduce dependence on the custodian. Neither choice is automatically right for every person.</p>"
+    },
+    {
+      "heading": "Settlement across an open network",
+      "body_markdown": "Bitcoin can settle value between parties who do not share the same bank, payment application, or national payment rail. The network operates continuously, and its base rules do not define business hours or national borders.\n\nThis can be useful for cross-border payments, online commerce, long-term savings, machine-operated services, or situations where traditional settlement is slow or difficult. It can also be less convenient than existing systems. On-chain fees vary, confirmation takes time, exchange access may be regulated, and recipients may face accounting or conversion needs.\n\nBitcoin settlement is not always instant, free, or final after one block. Transactions compete for limited block space. Recent blocks can be reorganized, and users must choose an appropriate level of confirmation for the value and risk involved.\n\nThe important change is that settlement can occur through a shared open network rather than only through a chain of private ledgers.",
+      "body_html": "<p>Bitcoin can settle value between parties who do not share the same bank, payment application, or national payment rail. The network operates continuously, and its base rules do not define business hours or national borders.</p>\n<p>This can be useful for cross-border payments, online commerce, long-term savings, machine-operated services, or situations where traditional settlement is slow or difficult. It can also be less convenient than existing systems. On-chain fees vary, confirmation takes time, exchange access may be regulated, and recipients may face accounting or conversion needs.</p>\n<p>Bitcoin settlement is not always instant, free, or final after one block. Transactions compete for limited block space. Recent blocks can be reorganized, and users must choose an appropriate level of confirmation for the value and risk involved.</p>\n<p>The important change is that settlement can occur through a shared open network rather than only through a chain of private ledgers.</p>"
+    },
+    {
+      "heading": "Censorship resistance, with limits",
+      "body_markdown": "Censorship resistance describes a system's ability to continue processing valid activity even when some participants try to prevent it.\n\nBitcoin supports this property through a distributed peer network, independent transaction broadcasting, multiple miners, and validation rules that do not ask nodes to judge a transaction's owner or purpose. If one service refuses a transaction, a user may be able to broadcast through another route. If one miner excludes it, another miner may include it.\n\nThis resistance is not absolute. Miners choose which valid transactions to include. Network access can be disrupted. Public transactions can be analyzed. Companies can freeze custodial accounts. Governments can regulate businesses and penalize users. A transaction with an inadequate fee may remain unconfirmed even without targeted censorship.\n\nCensorship resistance is best understood as a system property that raises the cost of blocking valid transactions across the whole network. It is not a promise that every user can transact privately, safely, or without interference in every environment.",
+      "body_html": "<p>Censorship resistance describes a system&#39;s ability to continue processing valid activity even when some participants try to prevent it.</p>\n<p>Bitcoin supports this property through a distributed peer network, independent transaction broadcasting, multiple miners, and validation rules that do not ask nodes to judge a transaction&#39;s owner or purpose. If one service refuses a transaction, a user may be able to broadcast through another route. If one miner excludes it, another miner may include it.</p>\n<p>This resistance is not absolute. Miners choose which valid transactions to include. Network access can be disrupted. Public transactions can be analyzed. Companies can freeze custodial accounts. Governments can regulate businesses and penalize users. A transaction with an inadequate fee may remain unconfirmed even without targeted censorship.</p>\n<p>Censorship resistance is best understood as a system property that raises the cost of blocking valid transactions across the whole network. It is not a promise that every user can transact privately, safely, or without interference in every environment.</p>"
+    },
+    {
+      "heading": "Portability and divisibility",
+      "body_markdown": "Bitcoin can be represented and transferred through digital information. One bitcoin is divided into 100 million satoshis, allowing the network to account for values much smaller than one BTC.\n\nKeys or recovery information can be backed up in forms that are easier to transport than many physical assets. That portability may be valuable, but it should not be romanticized. Carrying key material safely requires planning. A backup can be lost, copied, seized, or damaged. Moving across borders may also carry legal and reporting obligations.\n\nDivisibility makes bitcoin usable in small denominations. It does not guarantee that small on-chain payments are economical when fees are high. Other payment layers and services may handle smaller transfers differently, each with its own tradeoffs.",
+      "body_html": "<p>Bitcoin can be represented and transferred through digital information. One bitcoin is divided into 100 million satoshis, allowing the network to account for values much smaller than one BTC.</p>\n<p>Keys or recovery information can be backed up in forms that are easier to transport than many physical assets. That portability may be valuable, but it should not be romanticized. Carrying key material safely requires planning. A backup can be lost, copied, seized, or damaged. Moving across borders may also carry legal and reporting obligations.</p>\n<p>Divisibility makes bitcoin usable in small denominations. It does not guarantee that small on-chain payments are economical when fees are high. Other payment layers and services may handle smaller transfers differently, each with its own tradeoffs.</p>"
+    },
+    {
+      "heading": "Transparent base-layer rules",
+      "body_markdown": "Bitcoin is an open-source project. Its source code, proposals, release history, and technical discussions can be inspected publicly.\n\nPublic code does not mean every user understands it, and visibility does not automatically produce security. The value comes from sustained review, testing, disagreement, and the ability for different participants to compare software behavior against shared expectations.\n\nThe protocol also changes cautiously. Proposed upgrades require design, review, implementation, testing, and adoption by relevant participants. No developer can simply publish code and compel every node to accept a new consensus rule.\n\nThis slow process can frustrate people who want rapid feature development. It can also protect a monetary network where unexpected behavior may affect users across the world.",
+      "body_html": "<p>Bitcoin is an open-source project. Its source code, proposals, release history, and technical discussions can be inspected publicly.</p>\n<p>Public code does not mean every user understands it, and visibility does not automatically produce security. The value comes from sustained review, testing, disagreement, and the ability for different participants to compare software behavior against shared expectations.</p>\n<p>The protocol also changes cautiously. Proposed upgrades require design, review, implementation, testing, and adoption by relevant participants. No developer can simply publish code and compel every node to accept a new consensus rule.</p>\n<p>This slow process can frustrate people who want rapid feature development. It can also protect a monetary network where unexpected behavior may affect users across the world.</p>"
+    },
+    {
+      "heading": "Different people value different properties",
+      "body_markdown": "Bitcoin's properties do not lead everyone to the same conclusion.\n\nSomeone living with reliable banking may value Bitcoin mainly as an open technical system. A person facing capital controls may focus on portability. A developer may care about programmable settlement. A business may care about receiving payments without card chargebacks. A long-term holder may focus on issuance. A critic may see volatility, energy use, user error, illicit activity, or unequal access as more important.\n\nThose positions can overlap. Bitcoin is not required to fit one political identity or one economic story. The protocol defines rules for valid transactions and blocks. People decide what those rules mean for their own lives.",
+      "body_html": "<p>Bitcoin&#39;s properties do not lead everyone to the same conclusion.</p>\n<p>Someone living with reliable banking may value Bitcoin mainly as an open technical system. A person facing capital controls may focus on portability. A developer may care about programmable settlement. A business may care about receiving payments without card chargebacks. A long-term holder may focus on issuance. A critic may see volatility, energy use, user error, illicit activity, or unequal access as more important.</p>\n<p>Those positions can overlap. Bitcoin is not required to fit one political identity or one economic story. The protocol defines rules for valid transactions and blocks. People decide what those rules mean for their own lives.</p>"
+    },
+    {
+      "heading": "Control and responsibility arrive together",
+      "body_markdown": "Bitcoin reduces certain forms of institutional control by allowing direct key ownership and independent verification. It also reduces some institutional protections.\n\nThat exchange is central to understanding why Bitcoin matters. The system offers more room for personal control, but control without preparation can become loss. It provides transparent issuance, but not stable market value. It offers open participation, but not equal access. It resists centralized transaction control, but not every form of pressure. It can reduce reliance on trusted intermediaries, but it cannot remove trust from software, hardware, information, or human judgment.\n\nBitcoin matters because those tradeoffs are real, not because the system is flawless.",
+      "body_html": "<p>Bitcoin reduces certain forms of institutional control by allowing direct key ownership and independent verification. It also reduces some institutional protections.</p>\n<p>That exchange is central to understanding why Bitcoin matters. The system offers more room for personal control, but control without preparation can become loss. It provides transparent issuance, but not stable market value. It offers open participation, but not equal access. It resists centralized transaction control, but not every form of pressure. It can reduce reliance on trusted intermediaries, but it cannot remove trust from software, hardware, information, or human judgment.</p>\n<p>Bitcoin matters because those tradeoffs are real, not because the system is flawless.</p>"
+    },
+    {
+      "heading": "The larger significance",
+      "body_markdown": "Before Bitcoin, digitally native value generally depended on an issuer or central ledger operator. Bitcoin demonstrated that a public network could maintain scarce digital units, order transactions through proof of work, and allow participants to verify the rules independently.\n\nThat achievement does not settle every argument about money, banking, privacy, energy, law, or governance. It creates a working alternative that can be studied, used, criticized, and improved without a central owner.\n\nThe next step is to understand how that alternative developed. Bitcoin's history shows that the network did not arrive fully formed, and its survival was never guaranteed.",
+      "body_html": "<p>Before Bitcoin, digitally native value generally depended on an issuer or central ledger operator. Bitcoin demonstrated that a public network could maintain scarce digital units, order transactions through proof of work, and allow participants to verify the rules independently.</p>\n<p>That achievement does not settle every argument about money, banking, privacy, energy, law, or governance. It creates a working alternative that can be studied, used, criticized, and improved without a central owner.</p>\n<p>The next step is to understand how that alternative developed. Bitcoin&#39;s history shows that the network did not arrive fully formed, and its survival was never guaranteed.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Bitcoin",
+      "definition": "An open monetary network and asset governed by independently verified consensus rules."
+    },
+    {
+      "term": "Bitcoin's purpose",
+      "definition": "The monetary and technical goals Bitcoin is designed to serve, including scarce digital ownership without a central issuer."
+    },
+    {
+      "term": "Scarcity",
+      "definition": "A condition in which the available supply of something is limited relative to possible demand."
+    },
+    {
+      "term": "Consensus",
+      "definition": "The shared validation rules independently enforced by Bitcoin nodes."
+    },
+    {
+      "term": "Self-Custody",
+      "definition": "Direct control of the keys needed to spend bitcoin."
+    },
+    {
+      "term": "Full node",
+      "definition": "Software that independently verifies Bitcoin blocks and transactions against consensus rules."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bitcoin: A Peer-to-Peer Electronic Cash System",
+      "author_or_publisher": "Satoshi Nakamoto",
+      "direct_url": "https://bitcoin.org/bitcoin.pdf",
+      "supports": "Bitcoin's peer-to-peer payment model, reduced reliance on trusted third parties, public transaction history, proof of work, and issuance incentives."
+    },
+    {
+      "title": "Bitcoin P2P e-cash paper",
+      "author_or_publisher": "Satoshi Nakamoto, Cryptography Mailing List archive",
+      "direct_url": "https://www.metzdowd.com/pipermail/cryptography/2008-October/014810.html",
+      "supports": "The original public framing of Bitcoin as a peer-to-peer electronic cash system without a trusted central party."
+    },
+    {
+      "title": "Bitcoin Core README",
+      "author_or_publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/README.md",
+      "supports": "Bitcoin Core's open-source status and role in connecting to the peer-to-peer network and fully validating blocks and transactions."
+    },
+    {
+      "title": "Bitcoin Developer Guide: Block Chain",
+      "author_or_publisher": "Bitcoin Project developer documentation",
+      "direct_url": "https://developer.bitcoin.org/devguide/block_chain.html",
+      "supports": "Independent validation, the block chain, transaction outputs, proof of work, confirmations, and consensus-related limits."
+    },
+    {
+      "title": "Bitcoin Developer Guide: P2P Network",
+      "author_or_publisher": "Bitcoin Project developer documentation",
+      "direct_url": "https://developer.bitcoin.org/devguide/p2p_network.html",
+      "supports": "Peer communication, transaction and block relay, and the network's distributed operating model."
+    },
+    {
+      "title": "Bitcoin Developer Guide: Transactions",
+      "author_or_publisher": "Bitcoin Project developer documentation",
+      "direct_url": "https://developer.bitcoin.org/devguide/transactions.html",
+      "supports": "Key-controlled transaction authorization, inputs, outputs, and the practical role of wallets."
+    },
+    {
+      "title": "Bitcoin Core Mainnet Consensus Parameters",
+      "author_or_publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp",
+      "supports": "Bitcoin mainnet's 210,000-block subsidy-halving interval and other network consensus parameters."
+    },
+    {
+      "title": "Bitcoin Core Block Subsidy Function",
+      "author_or_publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp",
+      "supports": "The initial 50 BTC block subsidy and the subsidy-halving calculation applied at each configured halving interval."
+    },
+    {
+      "title": "Bitcoin Core Consensus Amount Definitions",
+      "author_or_publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/src/consensus/amount.h",
+      "supports": "One BTC equals 100 million satoshis and Bitcoin Core's consensus-critical monetary range check. The file explicitly states that MAX_MONEY is not the total money supply."
+    }
+  ],
+  "seo_title": "Why Does Bitcoin Matter? Its Purpose, Properties, and Limits",
+  "meta_description": "Learn why Bitcoin's open participation, verifiable rules, digital scarcity, and key-based ownership may matter, along with the system's practical limits.",
+  "excerpt": "Bitcoin combines open participation, independently verifiable rules, scarce digital units, and ownership through cryptographic keys. This guide explains why those properties may matter and where their practical limits remain.",
+  "reading_time": "9 to 10 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-BASICS",
+    "label": "Bitcoin Basics",
+    "subcategory": "Foundations",
+    "depth": "Surface",
+    "format": "Explainer"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-001",
+      "title": "What Is Bitcoin?",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-003",
+      "title": "A History of Bitcoin",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": [
+      {
+        "registry_id": "MSC-GUIDE-001",
+        "title": "What Is Bitcoin?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-003",
+        "title": "A History of Bitcoin",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-004",
+        "title": "Who Was Satoshi Nakamoto?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-006",
+        "title": "What Is Bitcoin Self-Custody?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-021",
+        "title": "What Is a Bitcoin Full Node?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-079",
+        "title": "Major Milestones in Bitcoin History",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-080",
+        "title": "How Bitcoin Open-Source Projects Work",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GLOSSARY-001",
+        "title": "Bitcoin Glossary",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-HUB-BASICS",
+        "title": "Bitcoin Basics",
+        "active": false,
+        "url": null
+      }
+    ]
+  },
+  "review_dates": {
+    "reviewed": "2026-07-15",
+    "copy_locked": "2026-07-15",
+    "human_verification": "2026-07-15"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "Open Network, Many Entry Points",
+      "educational_purpose": "Show that people can enter the Bitcoin network through different peers without passing through one central gate.",
+      "recommended_placement": "After the section titled Open participation.",
+      "visual_description": "A restrained navigation-chart drawing with several small user or device markers connecting into a distributed mesh. One separate company gateway appears at the edge to show that services can provide access without owning the network. Use simple editorial linework on Paper or transparent background.",
+      "required_labels": "User, Peer network, Optional service, No central network account",
+      "caption": "Bitcoin's base network allows participants to connect through peers rather than one central account operator.",
+      "alt_text": "Editorial line drawing of several users connecting through different peers to the Bitcoin network, with an optional service shown outside the network.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Keep the peer mesh centered and preserve at least three visible entry points in a narrow crop.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "Verification Instead of One Issuer",
+      "educational_purpose": "Clarify the difference between accepting one institution's ledger and independently checking shared Bitcoin rules.",
+      "recommended_placement": "After the section titled Rules that can be checked.",
+      "visual_description": "Split field-guide diagram. The left side shows one central ledger issuing a single approval stamp. The right side shows several independent nodes checking the same block against a compact rule card. Use Ink and Deep linework with small Sea accents.",
+      "required_labels": "Central ledger, Independent nodes, Shared consensus rules, Valid block",
+      "caption": "Bitcoin participants can independently check the same base rules instead of relying on one private ledger operator.",
+      "alt_text": "Split diagram comparing a central ledger approval system with multiple Bitcoin nodes independently validating a block.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack the two models vertically on mobile while keeping the comparison labels beside each model.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Control and Responsibility",
+      "educational_purpose": "Show that direct key control reduces some intermediary risk while increasing personal operational responsibility.",
+      "recommended_placement": "After the section titled Control and responsibility arrive together.",
+      "visual_description": "A balanced field-guide scale. One side contains a key, direct authorization, and independent access. The other contains backup care, device security, and irreversible mistakes. Avoid warning icons that make the image feel alarmist.",
+      "required_labels": "Direct control, Backup responsibility, Device security, User error",
+      "caption": "Bitcoin can increase personal control, but the responsibility for keys and backups moves with it.",
+      "alt_text": "Minimal balance-scale illustration comparing direct Bitcoin key control with backup, device security, and user-error responsibilities.",
+      "image_orientation": "Square",
+      "mobile_crop_notes": "Keep the central scale and all four labels inside the center 80 percent of the composition.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}
