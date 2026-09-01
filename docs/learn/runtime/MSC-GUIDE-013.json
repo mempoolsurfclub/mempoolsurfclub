@@ -1,0 +1,339 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-013-bitcoin-utxos.md",
+  "source_sha256": "f51e971ac0e5d39805556015c4ecf4f1d8957a9297fe900e1583a2e272173677",
+  "registry_id": "MSC-GUIDE-013",
+  "status": "COPY_LOCKED",
+  "h1": "What Are UTXOs in Bitcoin?",
+  "introductory_deck": "Bitcoin does not maintain account balances at the protocol level. It tracks unspent transaction outputs, or UTXOs, that can be referenced and spent by later transactions. Wallet balances are calculated views over those outputs, not entries in a central account database.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "A Bitcoin wallet may display a single balance, but the network does not store that balance as one number attached to an account.\n\nBitcoin uses an output-based accounting model. Transactions spend specific outputs created by earlier transactions and create new outputs for later use. The set of outputs that remain available to spend is commonly called the UTXO set.\n\nUnderstanding this model makes transaction inputs, change, fees, wallet balances, coin selection, privacy, and node validation much easier to follow.",
+      "body_html": "<p>A Bitcoin wallet may display a single balance, but the network does not store that balance as one number attached to an account.</p>\n<p>Bitcoin uses an output-based accounting model. Transactions spend specific outputs created by earlier transactions and create new outputs for later use. The set of outputs that remain available to spend is commonly called the UTXO set.</p>\n<p>Understanding this model makes transaction inputs, change, fees, wallet balances, coin selection, privacy, and node validation much easier to follow.</p>"
+    },
+    {
+      "heading": "UTXO means unspent transaction output",
+      "body_markdown": "A transaction output assigns a value to a locking condition. That condition defines what must be provided in a later transaction to spend the output.\n\nWhen the transaction that created the output is part of the active chain and the output has not been spent, the output is an unspent transaction output, or UTXO. It is part of the chain state that nodes use when checking new transactions and blocks.\n\nA UTXO is not a physical coin stored inside an address. It is an output record with a value and a locking condition. An address is a destination representation that a wallet can use to construct a locking script. The address, script, output, key, and wallet are related, but they are not the same object.\n\nA UTXO also does not contain a legal owner's name. Bitcoin validation checks whether the spending conditions are satisfied, not whether the spender matches an identity record.",
+      "body_html": "<p>A transaction output assigns a value to a locking condition. That condition defines what must be provided in a later transaction to spend the output.</p>\n<p>When the transaction that created the output is part of the active chain and the output has not been spent, the output is an unspent transaction output, or UTXO. It is part of the chain state that nodes use when checking new transactions and blocks.</p>\n<p>A UTXO is not a physical coin stored inside an address. It is an output record with a value and a locking condition. An address is a destination representation that a wallet can use to construct a locking script. The address, script, output, key, and wallet are related, but they are not the same object.</p>\n<p>A UTXO also does not contain a legal owner&#39;s name. Bitcoin validation checks whether the spending conditions are satisfied, not whether the spender matches an identity record.</p>"
+    },
+    {
+      "heading": "Outputs are created by transactions",
+      "body_markdown": "Every ordinary Bitcoin transaction creates one or more outputs.\n\nAn output includes an amount and a script that locks that value under defined conditions. A common output may require a valid signature from a key associated with a destination. Other scripts can require multiple signatures, timelocks, hashes, or Taproot spending conditions.\n\nAn output can remain unspent for a short time or many years. While the transaction that created it remains in the active chain, the output stays unspent until a valid transaction spending it enters that chain. A chain reorganization can also remove the creating transaction or undo a later spend, changing the output's active-chain status.\n\nThis is why a UTXO is better understood as a spendable transaction result than as a balance entry.",
+      "body_html": "<p>Every ordinary Bitcoin transaction creates one or more outputs.</p>\n<p>An output includes an amount and a script that locks that value under defined conditions. A common output may require a valid signature from a key associated with a destination. Other scripts can require multiple signatures, timelocks, hashes, or Taproot spending conditions.</p>\n<p>An output can remain unspent for a short time or many years. While the transaction that created it remains in the active chain, the output stays unspent until a valid transaction spending it enters that chain. A chain reorganization can also remove the creating transaction or undo a later spend, changing the output&#39;s active-chain status.</p>\n<p>This is why a UTXO is better understood as a spendable transaction result than as a balance entry.</p>"
+    },
+    {
+      "heading": "Inputs reference specific earlier outputs",
+      "body_markdown": "A transaction input does not say, \"subtract this amount from an account.\" It identifies a specific output from a previous transaction.\n\nThe reference uses the previous transaction identifier and the output index within that transaction. Together, those values point to one earlier output.\n\nThe spending transaction also provides the unlocking data required by that output's script. Depending on the spending condition, that data may include script elements, signatures, public keys, or witness information.\n\nDuring block validation, a node uses the reference to find the previous output in the applicable coins view. During mempool validation, that view can also account for accepted unconfirmed ancestors. The node examines the output's value and locking condition and verifies that the new transaction satisfies the applicable rules.",
+      "body_html": "<p>A transaction input does not say, &quot;subtract this amount from an account.&quot; It identifies a specific output from a previous transaction.</p>\n<p>The reference uses the previous transaction identifier and the output index within that transaction. Together, those values point to one earlier output.</p>\n<p>The spending transaction also provides the unlocking data required by that output&#39;s script. Depending on the spending condition, that data may include script elements, signatures, public keys, or witness information.</p>\n<p>During block validation, a node uses the reference to find the previous output in the applicable coins view. During mempool validation, that view can also account for accepted unconfirmed ancestors. The node examines the output&#39;s value and locking condition and verifies that the new transaction satisfies the applicable rules.</p>"
+    },
+    {
+      "heading": "An output is spent as a complete unit",
+      "body_markdown": "A transaction does not partially consume one UTXO and leave the unused portion inside the original output.\n\nWhen an input spends an output, that output is consumed as a complete unit. If its value is larger than the intended payment and fee, the transaction normally creates a new change output.\n\nSuppose a wallet selects an output worth 100,000 satoshis to make a payment of 60,000 satoshis. The original 100,000-satoshi output is fully spent. The new transaction might create a 60,000-satoshi recipient output and a change output returning the remaining value, less the transaction fee, to a wallet-controlled destination.\n\nThe change is a newly created transaction output. It is not an untouched remainder still sitting inside the original output.",
+      "body_html": "<p>A transaction does not partially consume one UTXO and leave the unused portion inside the original output.</p>\n<p>When an input spends an output, that output is consumed as a complete unit. If its value is larger than the intended payment and fee, the transaction normally creates a new change output.</p>\n<p>Suppose a wallet selects an output worth 100,000 satoshis to make a payment of 60,000 satoshis. The original 100,000-satoshi output is fully spent. The new transaction might create a 60,000-satoshi recipient output and a change output returning the remaining value, less the transaction fee, to a wallet-controlled destination.</p>\n<p>The change is a newly created transaction output. It is not an untouched remainder still sitting inside the original output.</p>"
+    },
+    {
+      "heading": "Transactions can combine and split value",
+      "body_markdown": "A transaction can have multiple inputs and multiple outputs.\n\nA wallet may need several UTXOs to fund one payment. It can reference each selected output as an input, combine their values, and create a new set of outputs.\n\nThe outputs can include one or more recipients, change destinations, or other script conditions. The new output values do not need to match the old output values individually. What matters for an ordinary valid transaction is that the total output value does not exceed the available input value, subject to the applicable rules.\n\nThis structure lets Bitcoin value be combined, divided, and reassigned without maintaining account balances.",
+      "body_html": "<p>A transaction can have multiple inputs and multiple outputs.</p>\n<p>A wallet may need several UTXOs to fund one payment. It can reference each selected output as an input, combine their values, and create a new set of outputs.</p>\n<p>The outputs can include one or more recipients, change destinations, or other script conditions. The new output values do not need to match the old output values individually. What matters for an ordinary valid transaction is that the total output value does not exceed the available input value, subject to the applicable rules.</p>\n<p>This structure lets Bitcoin value be combined, divided, and reassigned without maintaining account balances.</p>"
+    },
+    {
+      "heading": "Fees are the difference between inputs and outputs",
+      "body_markdown": "For an ordinary non-coinbase transaction, the transaction fee equals total input value minus total output value.\n\nThe fee is generally not stored in a separate transaction field. A node determines the input values by looking up the referenced UTXOs, adds the output values in the new transaction, and calculates the difference.\n\nIf the inputs total 150,000 satoshis and the outputs total 148,500 satoshis, the fee is 1,500 satoshis.\n\nFees depend primarily on transaction weight and the fee rate needed to compete for block space. The amount of bitcoin transferred does not determine the fee by itself. Spending several inputs can make a transaction heavier than spending one input, even when both transactions send the same amount.\n\nThe dedicated transaction and fee guide covers fee estimation, replacement, CPFP, and package behavior in more detail.",
+      "body_html": "<p>For an ordinary non-coinbase transaction, the transaction fee equals total input value minus total output value.</p>\n<p>The fee is generally not stored in a separate transaction field. A node determines the input values by looking up the referenced UTXOs, adds the output values in the new transaction, and calculates the difference.</p>\n<p>If the inputs total 150,000 satoshis and the outputs total 148,500 satoshis, the fee is 1,500 satoshis.</p>\n<p>Fees depend primarily on transaction weight and the fee rate needed to compete for block space. The amount of bitcoin transferred does not determine the fee by itself. Spending several inputs can make a transaction heavier than spending one input, even when both transactions send the same amount.</p>\n<p>The dedicated transaction and fee guide covers fee estimation, replacement, CPFP, and package behavior in more detail.</p>"
+    },
+    {
+      "heading": "Nodes maintain the UTXO set",
+      "body_markdown": "A validating node maintains a view of outputs that are currently available to spend under its active chain.\n\nWhen a node validates a transaction, it checks that each referenced output exists, is unspent in the relevant state, and can be spent under its locking condition. It also checks values, scripts, maturity rules, and other consensus requirements.\n\nWhen a block becomes part of the active chain, outputs spent by its transactions are removed from the spendable UTXO state. Newly created outputs are added, except for outputs that are created and spent within the same block before the final state is recorded.\n\nIf a chain reorganization changes the active chain, the node updates its view by undoing the affected chain state and applying the competing chain. A UTXO's status is therefore connected to the node's current active-chain view.",
+      "body_html": "<p>A validating node maintains a view of outputs that are currently available to spend under its active chain.</p>\n<p>When a node validates a transaction, it checks that each referenced output exists, is unspent in the relevant state, and can be spent under its locking condition. It also checks values, scripts, maturity rules, and other consensus requirements.</p>\n<p>When a block becomes part of the active chain, outputs spent by its transactions are removed from the spendable UTXO state. Newly created outputs are added, except for outputs that are created and spent within the same block before the final state is recorded.</p>\n<p>If a chain reorganization changes the active chain, the node updates its view by undoing the affected chain state and applying the competing chain. A UTXO&#39;s status is therefore connected to the node&#39;s current active-chain view.</p>"
+    },
+    {
+      "heading": "The UTXO set supports independent validation",
+      "body_markdown": "A node does not need a central institution to report account balances.\n\nIt can verify the blockchain history, build the current UTXO set, and independently check whether a new transaction attempts to spend available outputs under valid conditions.\n\nThe full blockchain provides history. The UTXO set provides a compact working view of the outputs relevant to future spending validation.\n\nThis does not mean the UTXO set is the only data a node stores or that every implementation organizes it identically. It means the output-based state can be derived and checked from Bitcoin's validated chain history.",
+      "body_html": "<p>A node does not need a central institution to report account balances.</p>\n<p>It can verify the blockchain history, build the current UTXO set, and independently check whether a new transaction attempts to spend available outputs under valid conditions.</p>\n<p>The full blockchain provides history. The UTXO set provides a compact working view of the outputs relevant to future spending validation.</p>\n<p>This does not mean the UTXO set is the only data a node stores or that every implementation organizes it identically. It means the output-based state can be derived and checked from Bitcoin&#39;s validated chain history.</p>"
+    },
+    {
+      "heading": "Wallet balances are calculated views",
+      "body_markdown": "A wallet balance is produced by wallet software.\n\nThe wallet identifies outputs associated with keys, scripts, descriptors, or watch-only information it manages. It then classifies and totals those outputs according to its own interface and policy.\n\nWallets may distinguish confirmed, unconfirmed, immature, locked, frozen, watch-only, or otherwise unavailable outputs. One wallet may include certain unconfirmed change in a displayed total while another separates it. A watch-only wallet may display outputs it can monitor but cannot sign for.\n\nThese differences do not create different protocol balances. They are different wallet views over transaction outputs and wallet state.",
+      "body_html": "<p>A wallet balance is produced by wallet software.</p>\n<p>The wallet identifies outputs associated with keys, scripts, descriptors, or watch-only information it manages. It then classifies and totals those outputs according to its own interface and policy.</p>\n<p>Wallets may distinguish confirmed, unconfirmed, immature, locked, frozen, watch-only, or otherwise unavailable outputs. One wallet may include certain unconfirmed change in a displayed total while another separates it. A watch-only wallet may display outputs it can monitor but cannot sign for.</p>\n<p>These differences do not create different protocol balances. They are different wallet views over transaction outputs and wallet state.</p>"
+    },
+    {
+      "heading": "Coin selection is wallet behavior",
+      "body_markdown": "When building a transaction, wallet software chooses which UTXOs to spend. This process is called coin selection.\n\nCoin selection is not a Bitcoin consensus rule. Different wallets can make different choices while constructing equally valid transactions.\n\nA wallet may consider transaction weight, change creation, privacy, labels, confirmation status, output age, user-selected coin control, and other local goals. A user may also select UTXOs manually when the wallet provides coin-control features.\n\nThe chosen inputs affect the resulting fee, change, privacy profile, and future wallet structure.",
+      "body_html": "<p>When building a transaction, wallet software chooses which UTXOs to spend. This process is called coin selection.</p>\n<p>Coin selection is not a Bitcoin consensus rule. Different wallets can make different choices while constructing equally valid transactions.</p>\n<p>A wallet may consider transaction weight, change creation, privacy, labels, confirmation status, output age, user-selected coin control, and other local goals. A user may also select UTXOs manually when the wallet provides coin-control features.</p>\n<p>The chosen inputs affect the resulting fee, change, privacy profile, and future wallet structure.</p>"
+    },
+    {
+      "heading": "Input selection affects fees",
+      "body_markdown": "Each additional input adds data and increases transaction weight.\n\nA wallet containing many small UTXOs may need to combine several of them to make a larger payment. That transaction may require a higher absolute fee than one funded by a single suitable output at the same fee rate.\n\nReceiving many small payments can therefore increase the weight of future transactions. The outputs remain valid and spendable if their conditions are met, but spending them may become uneconomical under some fee conditions.\n\nThere is no simple Bitcoin-wide consensus amount below which every output is invalid. Economic usefulness depends on script type, fee conditions, wallet behavior, and policy.",
+      "body_html": "<p>Each additional input adds data and increases transaction weight.</p>\n<p>A wallet containing many small UTXOs may need to combine several of them to make a larger payment. That transaction may require a higher absolute fee than one funded by a single suitable output at the same fee rate.</p>\n<p>Receiving many small payments can therefore increase the weight of future transactions. The outputs remain valid and spendable if their conditions are met, but spending them may become uneconomical under some fee conditions.</p>\n<p>There is no simple Bitcoin-wide consensus amount below which every output is invalid. Economic usefulness depends on script type, fee conditions, wallet behavior, and policy.</p>"
+    },
+    {
+      "heading": "Dust is usually a policy concept",
+      "body_markdown": "The term dust is often used for an output whose value is small relative to the cost of spending it.\n\nBitcoin Core's dust rules are standardness and relay policy, not a universal rule that makes every smaller output invalid under consensus. Policy thresholds can depend on the output script and an assumed relay fee.\n\nA node can refuse to relay or accept a transaction under its local policy even when the transaction would not violate consensus if included in a valid block. Wallets may also avoid creating outputs they consider uneconomical.\n\nThis distinction matters. There is no single fixed \"minimum UTXO size\" that functions as a simple Bitcoin-wide consensus amount for every script and circumstance.",
+      "body_html": "<p>The term dust is often used for an output whose value is small relative to the cost of spending it.</p>\n<p>Bitcoin Core&#39;s dust rules are standardness and relay policy, not a universal rule that makes every smaller output invalid under consensus. Policy thresholds can depend on the output script and an assumed relay fee.</p>\n<p>A node can refuse to relay or accept a transaction under its local policy even when the transaction would not violate consensus if included in a valid block. Wallets may also avoid creating outputs they consider uneconomical.</p>\n<p>This distinction matters. There is no single fixed &quot;minimum UTXO size&quot; that functions as a simple Bitcoin-wide consensus amount for every script and circumstance.</p>"
+    },
+    {
+      "heading": "Input selection affects privacy",
+      "body_markdown": "Combining UTXOs in one transaction can create a visible relationship among their histories.\n\nObservers often apply the common-input-ownership heuristic, while recognizing that collaborative transactions can produce exceptions. Change detection and later spending can create additional links.\n\nCoin control can help keep unrelated outputs separate, but it also adds operational complexity. Labels can improve context for the user while becoming sensitive metadata if exposed.\n\nConsolidating several UTXOs may reduce future input count and future transaction weight. It can also link those outputs publicly in one transaction. The right choice depends on fee conditions, privacy goals, and the user's ability to understand the resulting wallet state.\n\nThe privacy guide covers these tradeoffs in greater depth.",
+      "body_html": "<p>Combining UTXOs in one transaction can create a visible relationship among their histories.</p>\n<p>Observers often apply the common-input-ownership heuristic, while recognizing that collaborative transactions can produce exceptions. Change detection and later spending can create additional links.</p>\n<p>Coin control can help keep unrelated outputs separate, but it also adds operational complexity. Labels can improve context for the user while becoming sensitive metadata if exposed.</p>\n<p>Consolidating several UTXOs may reduce future input count and future transaction weight. It can also link those outputs publicly in one transaction. The right choice depends on fee conditions, privacy goals, and the user&#39;s ability to understand the resulting wallet state.</p>\n<p>The privacy guide covers these tradeoffs in greater depth.</p>"
+    },
+    {
+      "heading": "Unconfirmed outputs require context",
+      "body_markdown": "A transaction can create outputs before it is confirmed. A wallet may allow those unconfirmed outputs to fund a descendant transaction.\n\nWhether that descendant is accepted or relayed depends on the transaction relationships, wallet construction, node policy, fees, replacement behavior, and miner policy. Different nodes can hold different mempool contents.\n\nAn unconfirmed output is not yet part of the active-chain UTXO set. It may exist in a node's mempool view as part of an accepted chain of unconfirmed transactions.\n\nIf its parent transaction is replaced, removed, or never confirmed, the descendant's status can change with it.",
+      "body_html": "<p>A transaction can create outputs before it is confirmed. A wallet may allow those unconfirmed outputs to fund a descendant transaction.</p>\n<p>Whether that descendant is accepted or relayed depends on the transaction relationships, wallet construction, node policy, fees, replacement behavior, and miner policy. Different nodes can hold different mempool contents.</p>\n<p>An unconfirmed output is not yet part of the active-chain UTXO set. It may exist in a node&#39;s mempool view as part of an accepted chain of unconfirmed transactions.</p>\n<p>If its parent transaction is replaced, removed, or never confirmed, the descendant&#39;s status can change with it.</p>"
+    },
+    {
+      "heading": "Coinbase outputs have a maturity rule",
+      "body_markdown": "The first transaction in a block is the coinbase transaction. It can create the permitted block subsidy and collect transaction fees.\n\nBitcoin Core defines coinbase maturity as 100 blocks. A coinbase output can be spent only in a block whose height is at least 100 greater than the height of the block that created it. A reorganization can change active-chain depth, so wallet maturity status can change with the selected chain view.\n\nThe maturity rule protects the system from spending newly created block rewards before the block has sufficient depth. It is a consensus rule, not a wallet preference.\n\nWallets may label these outputs as immature until they become spendable.",
+      "body_html": "<p>The first transaction in a block is the coinbase transaction. It can create the permitted block subsidy and collect transaction fees.</p>\n<p>Bitcoin Core defines coinbase maturity as 100 blocks. A coinbase output can be spent only in a block whose height is at least 100 greater than the height of the block that created it. A reorganization can change active-chain depth, so wallet maturity status can change with the selected chain view.</p>\n<p>The maturity rule protects the system from spending newly created block rewards before the block has sufficient depth. It is a consensus rule, not a wallet preference.</p>\n<p>Wallets may label these outputs as immature until they become spendable.</p>"
+    },
+    {
+      "heading": "UTXOs are state, not identity",
+      "body_markdown": "A UTXO tells a validating node what value is available and which locking condition controls its next spend.\n\nIt does not say who legally owns the value, why it was received, which wallet interface displays it, or whether the relevant person can still access the required keys.\n\nBitcoin's output model separates protocol validation from a central identity and account database. Wallets and services build user-facing records around that model, but the underlying transaction state remains based on outputs and spending conditions.\n\nThe next guide explains what happens after a transaction spends those outputs and begins accumulating confirmations.",
+      "body_html": "<p>A UTXO tells a validating node what value is available and which locking condition controls its next spend.</p>\n<p>It does not say who legally owns the value, why it was received, which wallet interface displays it, or whether the relevant person can still access the required keys.</p>\n<p>Bitcoin&#39;s output model separates protocol validation from a central identity and account database. Wallets and services build user-facing records around that model, but the underlying transaction state remains based on outputs and spending conditions.</p>\n<p>The next guide explains what happens after a transaction spends those outputs and begins accumulating confirmations.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "UTXO",
+      "definition": "An unspent transaction output that can be used as an input in a later transaction."
+    },
+    {
+      "term": "Transaction",
+      "definition": "A data structure that spends existing UTXOs and creates new outputs."
+    },
+    {
+      "term": "Input",
+      "definition": "A transaction field that spends a previous UTXO and supplies unlocking data."
+    },
+    {
+      "term": "Output",
+      "definition": "A transaction field that assigns value to a new locking condition."
+    },
+    {
+      "term": "Change output",
+      "definition": "A transaction output that returns unspent input value to a wallet-controlled destination."
+    },
+    {
+      "term": "Coin control",
+      "definition": "Wallet functionality that lets a user choose which UTXOs fund a transaction."
+    },
+    {
+      "term": "Wallet",
+      "definition": "Software or hardware that manages keys, constructs transactions, and helps users interact with Bitcoin."
+    },
+    {
+      "term": "Node",
+      "definition": "Bitcoin software that communicates with peers and may validate, relay, store, or serve network data."
+    },
+    {
+      "term": "Mempool",
+      "definition": "A node's local collection of valid unconfirmed transactions eligible for relay or block inclusion."
+    },
+    {
+      "term": "Validation",
+      "definition": "The process of checking transactions and blocks against applicable rules."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bitcoin: A Peer-to-Peer Electronic Cash System",
+      "author_or_publisher": "Satoshi Nakamoto",
+      "direct_url": "https://bitcoin.org/bitcoin.pdf",
+      "supports": "Bitcoin's transaction-chain model, transaction inputs and outputs, double-spend prevention, and validation without a central account database."
+    },
+    {
+      "title": "Bitcoin Developer Guide: Transactions",
+      "author_or_publisher": "Bitcoin Project developer documentation",
+      "direct_url": "https://developer.bitcoin.org/devguide/transactions.html",
+      "supports": "UTXOs, inputs, outputs, change, transaction fees, coinbase transactions, and wallet transaction construction."
+    },
+    {
+      "title": "Bitcoin Developer Reference: Transactions",
+      "author_or_publisher": "Bitcoin Project developer documentation",
+      "direct_url": "https://developer.bitcoin.org/reference/transactions.html",
+      "supports": "Transaction serialization, outpoints, input references, output values, scripts, witness data, and coinbase transaction structure."
+    },
+    {
+      "title": "Bitcoin Core Coins View Interface",
+      "author_or_publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/src/coins.h",
+      "supports": "Bitcoin Core's representation and access patterns for unspent transaction outputs used during validation."
+    },
+    {
+      "title": "Bitcoin Core Coins View Implementation",
+      "author_or_publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/src/coins.cpp",
+      "supports": "Bitcoin Core's UTXO cache and database behavior, including adding, spending, and flushing coin records."
+    },
+    {
+      "title": "Bitcoin Core Consensus Constants",
+      "author_or_publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/src/consensus/consensus.h",
+      "supports": "The consensus coinbase maturity constant used when validating spends of coinbase outputs."
+    },
+    {
+      "title": "Bitcoin Core Validation",
+      "author_or_publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp",
+      "supports": "Transaction and block validation against the coins view, input-value checks, coinbase maturity enforcement, active-chain state updates, and reorganization handling."
+    },
+    {
+      "title": "Bitcoin Core Transaction Policy",
+      "author_or_publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/src/policy/policy.cpp",
+      "supports": "Dust-threshold calculations and the separation of relay or standardness policy from consensus validity."
+    },
+    {
+      "title": "Bitcoin Optech: Coin Selection",
+      "author_or_publisher": "Bitcoin Optech",
+      "direct_url": "https://bitcoinops.org/en/topics/coin-selection/",
+      "supports": "Wallet coin selection, input count, change, fees, privacy considerations, consolidation, and policy-sensitive wallet behavior."
+    },
+    {
+      "title": "Bitcoin Developer Guide: Block Chain",
+      "author_or_publisher": "Bitcoin Project developer documentation",
+      "direct_url": "https://developer.bitcoin.org/devguide/block_chain.html",
+      "supports": "Chain state, transaction inclusion, block validation, and the relationship between validated history and spendable outputs."
+    }
+  ],
+  "seo_title": "What Are UTXOs in Bitcoin? Outputs, Inputs, and Change",
+  "meta_description": "Learn how Bitcoin tracks unspent transaction outputs, how inputs consume whole outputs, how change is created, and how wallets calculate balances and select UTXOs.",
+  "excerpt": "Bitcoin uses unspent transaction outputs instead of protocol-level account balances. This guide explains inputs, outputs, change, fees, wallet balances, coin selection, the UTXO set, and policy limits.",
+  "reading_time": "10 to 12 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-BASICS",
+    "label": "Bitcoin Basics",
+    "subcategory": "Essentials",
+    "depth": "Shallow",
+    "format": "Explainer"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-012",
+      "title": "How Bitcoin Privacy Works",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-014",
+      "title": "How Bitcoin Confirmations Work",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": [
+      {
+        "registry_id": "MSC-GUIDE-012",
+        "title": "How Bitcoin Privacy Works",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-014",
+        "title": "How Bitcoin Confirmations Work",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-ROUTE-001",
+        "title": "How a Bitcoin Transaction Moves",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-008",
+        "title": "How Bitcoin Transactions and Fees Work",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-005",
+        "title": "What Is a Bitcoin Wallet?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-025",
+        "title": "What Happens Inside the Bitcoin Mempool?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GLOSSARY-001",
+        "title": "Bitcoin Glossary",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-HUB-BASICS",
+        "title": "Bitcoin Basics",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-PATH-NETWORK",
+        "title": "Understand the Network",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-PATH-START",
+        "title": "Start With Bitcoin",
+        "active": false,
+        "url": null
+      }
+    ]
+  },
+  "review_dates": {
+    "reviewed": "2026-07-17",
+    "copy_locked": "2026-07-17",
+    "human_verification": "2026-07-17"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "The UTXO Lifecycle",
+      "educational_purpose": "Show how an output moves from creation to available chain state, then becomes an input that creates new outputs.",
+      "recommended_placement": "After the section titled An output is spent as a complete unit.",
+      "visual_description": "Old technical field-guide flow on Paper. An earlier transaction creates Output 0. The output enters an active UTXO set, is referenced by a later input, and is replaced by two newly created outputs. Use simple boxes and directional lines, not coin icons.",
+      "required_labels": "Earlier transaction, Output 0, Available UTXO, Later input, Recipient output, Change output",
+      "caption": "A UTXO is created by one transaction, spent as a complete input, and replaced by newly created outputs.",
+      "alt_text": "Field-guide diagram showing a transaction output entering the UTXO set, being spent by a later input, and creating recipient and change outputs.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack the lifecycle vertically and keep the UTXO-set stage centered.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "A Wallet Balance Is a View",
+      "educational_purpose": "Explain that a displayed wallet balance aggregates separate outputs rather than reading one protocol-level account number.",
+      "recommended_placement": "After the section titled Wallet balances are calculated views.",
+      "visual_description": "Oceanographic survey chart with five separate output markers of different values feeding a wallet display. Add small status flags for confirmed, unconfirmed, watch-only, and locked without showing commercial interface elements.",
+      "required_labels": "Separate outputs, Confirmed, Unconfirmed, Watch-only, Locked, Wallet-displayed balance",
+      "caption": "Wallet software identifies and classifies separate outputs, then presents a calculated balance.",
+      "alt_text": "Editorial diagram showing several separate Bitcoin outputs aggregated into a wallet-displayed balance with different status classifications.",
+      "image_orientation": "Square",
+      "mobile_crop_notes": "Keep output markers in two rows above one centered wallet-balance panel.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Inputs, Payment, Change, and Fee",
+      "educational_purpose": "Show that whole inputs are consumed, new recipient and change outputs are created, and the fee is the value difference.",
+      "recommended_placement": "After the section titled Fees are the difference between inputs and outputs.",
+      "visual_description": "Infrastructure-manual balance diagram. Two complete input boxes enter a transaction frame. Two output boxes leave for recipient and change. A narrow labeled gap shows total input value minus total output value as the fee.",
+      "required_labels": "Input A, Input B, Total input value, Recipient output, Change output, Transaction fee",
+      "caption": "Ordinary transaction fees are the difference between the value of consumed inputs and newly created outputs.",
+      "alt_text": "Technical balance diagram showing two complete inputs funding a recipient output, a change output, and a fee represented by the input-output difference.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Use a top-to-bottom balance flow with the fee gap directly beneath the output total.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}

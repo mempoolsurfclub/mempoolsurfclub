@@ -1,0 +1,174 @@
+{% comment %}
+  Generated from docs/learn/content/guides/MSC-GUIDE-016-bitcoin-best-practices.md.
+  Registry binding: MSC-GUIDE-016.
+  Preview only. Do not edit manually.
+  Rebuild with node scripts/generate-msc-learn-guide-rollout.mjs --write.
+{% endcomment %}
+<section class="msc-shell msc-learn-page" data-msc-registry-id="MSC-GUIDE-016" data-msc-preview-only="true">
+  <div class="msc-container msc-learn-page__container">
+    <nav class="msc-learn-breadcrumbs" aria-label="Learn breadcrumbs"><ol><li><span>Learn</span></li><li><span>Bitcoin Basics</span></li><li aria-current="page"><span>Bitcoin Best Practices for Safe Everyday Use</span></li></ol></nav>
+    <header class="msc-learn-page__header">
+      <p class="msc-section-kicker">Bitcoin Basics</p>
+      <h1>Bitcoin Best Practices for Safe Everyday Use</h1>
+      <p class="msc-learn-page__deck">Safe everyday Bitcoin use comes from understanding the wallet, payment, recovery, and privacy systems involved in each action. The best practices are not one product or universal checklist. They are habits that reduce avoidable risk and remain understandable enough to maintain.</p>
+      <ul class="msc-learn-page-meta"><li>Essentials</li><li>Surface</li><li>Guide</li><li>11 to 13 minutes</li><li>Reviewed 2026-07-17</li></ul>
+      <p class="msc-learn-preview-note">Preview only. Publication records and confirmed URLs do not exist; all navigation remains inactive.</p>
+    </header>
+    <article class="msc-learn-article rte" data-msc-content-source="structured-runtime">
+<section class="msc-learn-article__section">
+<p>Bitcoin gives users several ways to hold, receive, send, and verify value. Each arrangement places control and responsibility in different places.</p>
+<p>Everyday safety is less about finding a perfect setup than knowing what the current setup does, checking important information before acting, and maintaining a recovery plan that still works later.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Start by locating control</h2>
+<p>Before choosing a wallet or service, identify who controls the keys or authorization needed to move the bitcoin.</p>
+<p>A custodial balance is a claim recorded by a service. The service controls withdrawal authority and may apply account, identity, legal, availability, or policy rules.</p>
+<p>In self-custody, the user or a user-defined group controls the keys needed to spend. This reduces dependence on a custodian while increasing responsibility for backups, signing, verification, software, and recovery.</p>
+<p>Neither label explains every risk. A useful review asks:</p>
+<ul><li>Who can authorize a transaction?</li><li>Which devices or services are required?</li><li>What happens if one component disappears?</li><li>How is the setup recovered?</li><li>Which information must remain secret?</li><li>Which parties can observe activity?</li></ul>
+<p>The best arrangement is one whose dependencies and failure modes are understood.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Obtain software through the expected source</h2>
+<p>Wallet and node software should come from the expected project source.</p>
+<p>Attackers can distribute copied websites, fake applications, malicious advertisements, and false update notices. A familiar name or logo is not enough to establish authenticity.</p>
+<p>Projects may provide checksums, digital signatures, reproducible-build information, app-store references, or platform-specific verification instructions. Use the methods supported by the project when practical and understood.</p>
+<p>Release notes can also matter. An update may fix security or compatibility problems, change defaults, modify wallet behavior, or require a backup review.</p>
+<p>Avoid making a major software change through an unexpected prompt. Find the current project documentation through a known route and understand the recovery path before changing the environment.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Know what each security control protects</h2>
+<p>Passwords, PINs, seed phrases, optional passphrases, private keys, and devices have different roles.</p>
+<p>A wallet password may encrypt a local file or restrict access to an application. A device PIN may control access to a signer. A seed phrase may recreate key material under a wallet standard. An optional passphrase may change the derived wallet. A private key can authorize spending under an applicable condition.</p>
+<p>These controls are not interchangeable.</p>
+<p>Changing an application password does not change the keys controlling existing outputs. Losing a device does not necessarily mean losing the wallet if recovery information is complete. Revealing recovery material can expose far more than one session or device.</p>
+<p>A safe routine begins with knowing which layer each control protects.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Record recovery information for the exact arrangement</h2>
+<p>Recovery instructions should match the wallet and custody system that created them.</p>
+<p>A phrase alone may not preserve:</p>
+<ul><li>An optional passphrase.</li><li>Derivation paths.</li><li>Script or output types.</li><li>Account indexes.</li><li>Wallet descriptors.</li><li>Multisignature thresholds.</li><li>Cosigner information.</li><li>Hardware or software dependencies.</li><li>Labels needed to understand the wallet history.</li></ul>
+<p>The record should explain what the backup represents without copying secrets into unnecessary systems.</p>
+<p>Recovery information should not be entered into websites, search engines, support chats, cloud documents, screenshots, or unverified applications. Someone claiming to be support should not need a seed phrase or private key to answer ordinary questions.</p>
+<p>Backups need recoverability and secrecy. More copies can reduce the chance of loss while creating more exposure points. No one material, copy count, or location is universally correct.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Verify the network and payment path</h2>
+<p>Before receiving or sending, identify the intended Bitcoin network and payment path.</p>
+<p>Mainnet information should not be confused with testnet, signet, or regtest information. An on-chain address and a Lightning invoice are different payment instructions. A service may support one format and not another.</p>
+<p>A QR code is an encoding, not independent proof that the destination is correct. Clipboard contents and displayed addresses can be substituted by malware or human error.</p>
+<p>Use the verification methods supported by the wallet arrangement. A separate signing device display can help verify a destination, but only within the information and wallet configuration it can reliably show.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Receiving safely still requires checks</h2>
+<p>When receiving bitcoin, confirm that the displayed destination belongs to the intended wallet and network.</p>
+<p>Avoid unnecessary address reuse. Reusing an address creates a direct public link among payments and can expose activity to customers, services, or observers.</p>
+<p>Wallets may generate new receiving information from public wallet data without holding private keys. That can be useful for watch-only or merchant workflows, but the configuration itself must be correct.</p>
+<p>After sharing a destination, distinguish observation from settlement. A payment can appear as unconfirmed without being included in a block. Wallet labels such as pending or received describe the wallet&#39;s current view.</p>
+<p>For unfamiliar workflows, a small test transaction may reduce uncertainty about compatibility or procedure. It is not a universal requirement or a security guarantee. It adds fees and can create additional on-chain links.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Review a transaction before signing</h2>
+<p>Before authorizing a spend, review the information the wallet and signer can show:</p>
+<ul><li>Destination.</li><li>Amount.</li><li>Transaction fee.</li><li>Network and payment path.</li><li>Change output.</li><li>Other transaction details relevant to the setup.</li></ul>
+<p>A signing device can reduce some exposure by keeping keys in a restricted environment. It cannot guarantee that the coordinator, connected computer, wallet configuration, backup, or human interpretation is correct.</p>
+<p>A valid signature proves that applicable key material authorized transaction data. It does not prove that the displayed recipient is honest or that the commercial agreement is correct.</p>
+<p>Pause when the details are unclear. An irreversible action should not be rushed because an interface or message creates urgency.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Understand the fee before sending</h2>
+<p>For an ordinary transaction, the fee is the input value not reassigned to outputs.</p>
+<p>Fee competition depends primarily on transaction weight and fee rate, not the amount of bitcoin transferred. A transaction spending several inputs can weigh more than one spending a single input, even when the payment amount is smaller.</p>
+<p>Wallet estimates are based on current information and assumptions. Mempools are node-local, demand can change, and miners choose transactions under their own selection strategies.</p>
+<p>The fee guide explains replacement and fee-bumping mechanisms in more depth. Everyday practice is to review the fee, understand the urgency, and avoid assuming that one estimate guarantees a confirmation time.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Confirmation needs depend on circumstances</h2>
+<p>Mempool acceptance is not confirmation.</p>
+<p>The first confirmation begins when the transaction is included in a block on the wallet&#39;s active chain view. Additional blocks increase confirmation depth and generally reduce practical reorganization risk.</p>
+<p>No universal count fits every payment. The appropriate waiting policy can depend on value, counterparty, replacement risk, delivery, reversibility, and the consequences of a reorganization.</p>
+<p>Zero-confirmation acceptance is a risk decision. A transaction identifier or wallet notification does not guarantee eventual inclusion.</p>
+<p>Confirmation depth also does not settle legal identity, delivery quality, or contractual disputes. It provides increasing technical assurance within Bitcoin&#39;s chain.</p>
+</section>
+<section class="msc-learn-article__section"><h2>UTXOs affect everyday fees and privacy</h2>
+<p>A wallet balance is usually a view over separate transaction outputs.</p>
+<p>When sending, the wallet selects one or more UTXOs as inputs. Each selected output is spent completely. The wallet normally creates a new change output when input value exceeds the payment and fee.</p>
+<p>Combining many UTXOs can increase transaction weight and link their histories. Receiving many small outputs can increase the input count required later.</p>
+<p>Coin control lets a user select UTXOs, which can improve operational control but also add complexity. Incorrect selection can increase fees, create unnecessary links, or produce confusing change.</p>
+<p>Wallet labels can help record the source and purpose of outputs. Labels may contain sensitive information, so they should not include private keys, seed phrases, passphrases, or details intended for public notes.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Privacy involves more than addresses</h2>
+<p>A new receiving address reduces direct reuse, but it does not create automatic anonymity.</p>
+<p>Services may connect accounts to withdrawals or deposits. Merchants may retain invoices and delivery records. Wallet servers can observe queries. Network peers may observe transaction relay. Later spending can connect earlier outputs.</p>
+<p>A personal full node can reduce some third-party wallet-query exposure by validating and serving local chain data. It does not hide public transaction structure or automatically anonymize network traffic.</p>
+<p>Tor can reduce direct source-IP exposure for supported connections. It does not change inputs, outputs, amounts, service records, or on-chain links.</p>
+<p>Privacy tools address different information leaks. Their limits and dependencies should be understood before relying on them.</p>
+<p>PayJoin can weaken a common transaction-graph assumption when compatible sender and receiver software negotiate a payment, but it requires careful validation and does not guarantee anonymity. Lightning can keep individual routed payments out of the public blockchain while still exposing information through invoices, routing relationships, node observations, and channel transactions.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Keep spending and long-term recovery conceptually separate</h2>
+<p>Everyday spending emphasizes availability, clear transaction review, and manageable amounts of operational complexity.</p>
+<p>Long-term recovery emphasizes durable instructions, controlled access, compatibility, continuity, and the possibility that another person may need to act.</p>
+<p>The same product or wallet structure does not need to serve every purpose. This does not require a particular allocation, device, or custody design. It means the operating routine and recovery plan should reflect the role of the funds.</p>
+<p>Mixing all activity into one unlabeled wallet can make recovery, privacy, accounting, and transaction review harder to understand.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Test recovery carefully</h2>
+<p>A recovery test can reveal missing words, an unknown passphrase, incomplete descriptors, unavailable cosigners, or unclear instructions.</p>
+<p>Testing can also create risk if secret material is entered into an unverified application, exposed to a connected device, copied into a cloud service, or observed by another person.</p>
+<p>Use current documentation for the exact wallet arrangement and an environment suitable for the threat model. A checksum test is not a complete recovery test.</p>
+<p>The goal is to confirm that the required information and participants can recreate the intended wallet without spreading authority unnecessarily.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Treat support requests as an information boundary</h2>
+<p>A legitimate support conversation should begin with non-secret information.</p>
+<p>Be cautious when someone asks for a seed phrase, private key, remote access, screen sharing, or an urgent transfer to a new destination. Titles, logos, technical language, and account details can be copied.</p>
+<p>Use a known project or service channel rather than a link supplied by an unexpected message. Verify what the real support process requires.</p>
+<p>When compromise is suspected, keep the response high level:</p>
+<ol><li>Pause.</li><li>Identify the affected layer.</li><li>Consult verified documentation.</li><li>Avoid acting through an unverified interface.</li><li>Follow the recovery procedure for the exact setup.</li></ol>
+<p>The correct action depends on whether the issue affects a service account, device, wallet file, recovery phrase, private key, transaction coordinator, or another component.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Maintain software and documentation together</h2>
+<p>Software updates can fix known problems and improve compatibility. They can also change defaults, supported scripts, file formats, or workflows.</p>
+<p>Before a major change, read current release notes and verified documentation. Confirm that backups and recovery instructions still match the wallet arrangement.</p>
+<p>Records may need to include wallet type, script type, derivation information, descriptors, multisignature policy, participant roles, or required devices.</p>
+<p>Do not store secret material inside ordinary wallet labels, public notes, issue trackers, or documentation systems not designed to protect it.</p>
+<p>A maintenance routine should include both software state and recovery state.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Plan for continuity</h2>
+<p>A secure setup can still fail if the only knowledgeable person becomes unavailable.</p>
+<p>An inheritance or continuity plan should fit the actual custody arrangement. It may need to explain where instructions are located, which people or signers are involved, and how to distinguish legitimate recovery from a scam.</p>
+<p>Giving one person complete authority too early can create risk. Leaving nobody enough information can create permanent loss.</p>
+<p>The plan should be reviewed when participants, relationships, devices, software, locations, or legal circumstances change. This guide does not provide legal or tax advice, and professional guidance may be appropriate for those parts.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Review the setup as conditions change</h2>
+<p>Bitcoin security is not finished on setup day.</p>
+<p>Review the arrangement when:</p>
+<ul><li>The value or role of the funds changes.</li><li>A device is replaced or fails.</li><li>Software becomes unsupported.</li><li>A participant becomes unavailable.</li><li>A service changes policy.</li><li>A location or physical risk changes.</li><li>Recovery instructions no longer match the wallet.</li><li>Privacy needs or threat assumptions change.</li></ul>
+<p>Complexity is not automatically security. A design that cannot be understood, maintained, or recovered can create its own failure modes.</p>
+<p>A best practice is a method that reduces avoidable risk while remaining appropriate to the user, tool, and threat model. The strongest everyday routine is the one that people can actually verify and maintain.</p>
+<p>The next guide begins the Bitcoin Network category with a closer look at how mining turns valid transactions into candidate blocks and extends the chain.</p>
+</section>
+    </article>
+    <section class="msc-learn-key-terms" aria-labelledby="MscGuide016Terms"><h2 id="MscGuide016Terms">Key Terms</h2><dl><div class="msc-learn-term"><dt>Best practice</dt><dd>A generally recommended method that reduces avoidable risk while remaining appropriate to the user, tool, and threat model.</dd></div>
+<div class="msc-learn-term"><dt>Wallet</dt><dd>Software or hardware that manages keys, constructs transactions, and helps users interact with Bitcoin.</dd></div>
+<div class="msc-learn-term"><dt>Self-Custody</dt><dd>Direct control of the keys needed to spend bitcoin.</dd></div>
+<div class="msc-learn-term"><dt>Custody</dt><dd>Control over the keys or authorization needed to move bitcoin.</dd></div>
+<div class="msc-learn-term"><dt>Seed phrase</dt><dd>A human-readable backup representation used by many wallets to derive keys under a wallet standard.</dd></div>
+<div class="msc-learn-term"><dt>Private key</dt><dd>Secret cryptographic material used to authorize spending.</dd></div>
+<div class="msc-learn-term"><dt>Address</dt><dd>A destination representation used by wallets to construct a Bitcoin locking script.</dd></div>
+<div class="msc-learn-term"><dt>Confirmation</dt><dd>The inclusion of a transaction in a block, followed by additional blocks that increase settlement depth.</dd></div>
+<div class="msc-learn-term"><dt>Transaction fee</dt><dd>The input value not reassigned to transaction outputs and available to the block&#39;s miner.</dd></div>
+<div class="msc-learn-term"><dt>UTXO</dt><dd>An unspent transaction output that can be used as an input in a later transaction.</dd></div>
+<div class="msc-learn-term"><dt>Coin control</dt><dd>Wallet functionality that lets a user choose which UTXOs fund a transaction.</dd></div>
+<div class="msc-learn-term"><dt>Node</dt><dd>Bitcoin software that communicates with peers and may validate, relay, store, or serve network data.</dd></div>
+<div class="msc-learn-term"><dt>Bitcoin security</dt><dd>The practices and system properties used to protect keys, funds, software, devices, and network validation.</dd></div>
+<div class="msc-learn-term"><dt>Bitcoin privacy</dt><dd>The degree to which transaction activity, ownership relationships, and user identity can remain difficult to observe or connect.</dd></div></dl></section>
+    <section class="msc-learn-sources" aria-labelledby="MscGuide016Sources"><h2 id="MscGuide016Sources">Sources</h2><article class="msc-learn-source"><h3>Bitcoin Developer Guide: Wallets</h3><ul><li><strong>author or publisher:</strong> Bitcoin Project developer documentation</li><li><strong>supports:</strong> Wallet roles, deterministic backups, encrypted wallet files, key management, and wallet interaction with Bitcoin network data.</li></ul><p><strong>Direct URL:</strong> <code>https://developer.bitcoin.org/devguide/wallets.html</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Developer Guide: Transactions</h3><ul><li><strong>author or publisher:</strong> Bitcoin Project developer documentation</li><li><strong>supports:</strong> Addresses, inputs, outputs, change, fees, transaction construction, address reuse, and transaction privacy considerations.</li></ul><p><strong>Direct URL:</strong> <code>https://developer.bitcoin.org/devguide/transactions.html</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Developer Guide: Payment Processing</h3><ul><li><strong>author or publisher:</strong> Bitcoin Project developer documentation</li><li><strong>supports:</strong> Receiving and monitoring payments, confirmation handling, payment-processing risks, and operational responses to chain changes.</li></ul><p><strong>Direct URL:</strong> <code>https://developer.bitcoin.org/devguide/payment_processing.html</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Core: Managing Wallets</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core developers</li><li><strong>supports:</strong> Current Bitcoin Core wallet creation, loading, backups, descriptor wallets, and wallet-management behavior.</li></ul><p><strong>Direct URL:</strong> <code>https://github.com/bitcoin/bitcoin/blob/master/doc/managing-wallets.md</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Binary Verification</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core developers</li><li><strong>supports:</strong> Project-supported procedures for checking Bitcoin Core release artifacts and signatures.</li></ul><p><strong>Direct URL:</strong> <code>https://github.com/bitcoin/bitcoin/blob/master/contrib/verify-binaries/README.md</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Downloads</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core project</li><li><strong>supports:</strong> The official Bitcoin Core release channel, current release files, checksums, signatures, and verification references.</li></ul><p><strong>Direct URL:</strong> <code>https://bitcoincore.org/en/download/</code></p></article>
+<article class="msc-learn-source"><h3>BIP 21: URI Scheme</h3><ul><li><strong>author or publisher:</strong> Nils Schneider and Matt Corallo</li><li><strong>supports:</strong> The Bitcoin payment URI structure for an address, optional amount, label, message, and extensible parameters.</li></ul><p><strong>Direct URL:</strong> <code>https://bips.dev/21/</code></p></article>
+<article class="msc-learn-source"><h3>BIP 32: Hierarchical Deterministic Wallets</h3><ul><li><strong>author or publisher:</strong> Pieter Wuille</li><li><strong>supports:</strong> Hierarchical wallet derivation, extended keys, receiving branches, and recovery dependencies.</li></ul><p><strong>Direct URL:</strong> <code>https://bips.dev/32/</code></p></article>
+<article class="msc-learn-source"><h3>BIP 39: Mnemonic Code for Generating Deterministic Keys</h3><ul><li><strong>author or publisher:</strong> Marek Palatinus, Pavol Rusnak, Aaron Voisine, and Sean Bowe</li><li><strong>supports:</strong> Mnemonic backups, optional passphrases, seed generation, and limits of assuming universal wallet compatibility.</li></ul><p><strong>Direct URL:</strong> <code>https://bips.dev/39/</code></p></article>
+<article class="msc-learn-source"><h3>BIP 78: A Simple PayJoin Proposal</h3><ul><li><strong>author or publisher:</strong> Nicolas Dorier</li><li><strong>supports:</strong> Payment negotiation, receiver input contribution, sender validation requirements, and privacy and compatibility considerations for PayJoin.</li></ul><p><strong>Direct URL:</strong> <code>https://bips.dev/78/</code></p></article>
+<article class="msc-learn-source"><h3>BIP 129: Bitcoin Secure Multisig Setup</h3><ul><li><strong>author or publisher:</strong> Hugo Nguyen, Peter Gray, Marko Bencun, Aaron Chen, and Rodolfo Novak</li><li><strong>supports:</strong> Multisignature setup records, participant verification, wallet policy, and recovery information.</li></ul><p><strong>Direct URL:</strong> <code>https://bips.dev/129/</code></p></article>
+<article class="msc-learn-source"><h3>BIP 174: Partially Signed Bitcoin Transaction Format</h3><ul><li><strong>author or publisher:</strong> Andrew Chow</li><li><strong>supports:</strong> Separation of transaction creation, updating, signing, and finalization across devices or participants.</li></ul><p><strong>Direct URL:</strong> <code>https://bips.dev/174/</code></p></article>
+<article class="msc-learn-source"><h3>BIP 380: Output Script Descriptors General Operation</h3><ul><li><strong>author or publisher:</strong> Pieter Wuille and Ava Chow</li><li><strong>supports:</strong> Representing wallet scripts, key origins, derivation paths, and recovery-relevant structure.</li></ul><p><strong>Direct URL:</strong> <code>https://bips.dev/380/</code></p></article>
+<article class="msc-learn-source"><h3>Bitcoin Optech: Coin Selection</h3><ul><li><strong>author or publisher:</strong> Bitcoin Optech</li><li><strong>supports:</strong> Input selection, coin control, fees, change, consolidation, privacy, and wallet-complexity tradeoffs.</li></ul><p><strong>Direct URL:</strong> <code>https://bitcoinops.org/en/topics/coin-selection/</code></p></article>
+<article class="msc-learn-source"><h3>Tor Project: What Is Tor?</h3><ul><li><strong>author or publisher:</strong> The Tor Project</li><li><strong>supports:</strong> Tor&#39;s layered routing model and its limited role in reducing direct source-IP disclosure.</li></ul><p><strong>Direct URL:</strong> <code>https://support.torproject.org/about/what-is-tor/</code></p></article>
+<article class="msc-learn-source"><h3>BOLT 4: Onion Routing Protocol</h3><ul><li><strong>author or publisher:</strong> Lightning specification contributors</li><li><strong>supports:</strong> Lightning onion routing, adjacent-hop information, and the distinction between routed-payment privacy and public on-chain information.</li></ul><p><strong>Direct URL:</strong> <code>https://github.com/lightning/bolts/blob/master/04-onion-routing.md</code></p></article></section>
+    <nav class="msc-learn-prev-next" aria-label="Guide navigation preview"><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Previous</span><strong>What Is the Bitcoin Halving?</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Category</span><strong>Bitcoin Basics</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Next</span><strong>How Bitcoin Mining Works</strong><small>Link inactive</small></span></nav>
+  </div>
+</section>
