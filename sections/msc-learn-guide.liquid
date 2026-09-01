@@ -48,6 +48,12 @@
         text-wrap: balance;
       }
 
+      @media screen and (min-width: 750px) {
+        .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-article {
+          width: min(90rem, calc(100% - 2rem));
+        }
+      }
+
       @media screen and (min-width: 990px) {
         .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-guide-transition {
           grid-template-columns: minmax(0, 1.12fr) minmax(28rem, .88fr);
