@@ -48,6 +48,14 @@
         text-wrap: balance;
       }
 
+      .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-guide-transition__description {
+        max-width: 48rem;
+        margin: 1.1rem 0 0;
+        color: rgba(251, 248, 239, .62);
+        font-size: clamp(1.15rem, 1.15vw, 1.3rem);
+        line-height: 1.5;
+      }
+
       @media screen and (min-width: 750px) {
         .msc-learn-page[data-msc-registry-id="MSC-GUIDE-001"] .msc-learn-article {
           width: min(100rem, calc(100% - 2rem));
@@ -66,6 +74,7 @@
         <div class="msc-learn-hub-transition__destination" aria-disabled="true">
           <span class="msc-learn-hub-transition__eyebrow">Next guide · 002</span>
           <strong class="msc-learn-hub-transition__title">Why Does Bitcoin Matter?</strong>
+          <p class="msc-learn-guide-transition__description">Bitcoin matters because it combines open participation, independently verifiable rules, scarce digital units, and ownership through cryptographic keys.</p>
         </div>
         <aside class="msc-learn-hub-transition__progress" aria-label="Bitcoin Basics progress">
           <div class="msc-learn-hub-transition__progress-top">
