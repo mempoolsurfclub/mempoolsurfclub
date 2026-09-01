@@ -60,13 +60,13 @@ Content changes by guide. The template does not.
 
 When Guides 002–080 are activated, preserve this shared structure and styling. Add only the guide-specific runtime binding, copy-locked content, next-guide data, progress data, and eventual confirmed destination URL. Do not fork the stylesheet or add per-guide inline CSS to solve ordinary title or content-length differences.
 
-Guides 002–004 established the first controlled rollout. Guides 005–008 extended the same locked implementation through the `Using Bitcoin` subcategory. Guides 009–012 extend it through the `Security` subcategory without changing the visual contract.
+Guides 002–004 established the first controlled rollout. Guides 005–008 extended the same locked implementation through the `Using Bitcoin` subcategory. Guides 009–012 extended it through the `Security` subcategory. Guides 013–016 extend the same system through `Essentials` and complete the 16-guide Bitcoin Basics category without changing the visual contract.
 
-The Bitcoin Basics hub cards for Guides 001–012 are active in preview. The visible sequence is wired:
+The Bitcoin Basics hub cards for Guides 001–016 are active in preview. The visible sequence is wired:
 
-`001 → 002 → 003 → 004 → 005 → 006 → 007 → 008 → 009 → 010 → 011 → 012`
+`001 → 002 → 003 → 004 → 005 → 006 → 007 → 008 → 009 → 010 → 011 → 012 → 013 → 014 → 015 → 016`
 
-Guide 012 previews Guide 013 but does not activate it.
+Guide 016 previews Guide 017 — **How Bitcoin Mining Works** — but does not activate it. Guide 017 belongs to the next category rollout, `The Bitcoin Network`.
 
 Current preview views:
 
@@ -82,9 +82,13 @@ Current preview views:
 - Guide 010: `?view=msc-learn-guide-010`
 - Guide 011: `?view=msc-learn-guide-011`
 - Guide 012: `?view=msc-learn-guide-012`
+- Guide 013: `?view=msc-learn-guide-013`
+- Guide 014: `?view=msc-learn-guide-014`
+- Guide 015: `?view=msc-learn-guide-015`
+- Guide 016: `?view=msc-learn-guide-016`
 
 These views are QA routes, not canonical guide URLs.
 
 ## Publication boundary
 
-Guides 001–012 remain preview-bound runtimes until real Shopify publication records and canonical URLs exist. This template lock and rollout do not create Shopify Page objects, publish canonical guide URLs, or activate planned editorial links inside guide content.
+Guides 001–016 remain preview-bound runtimes until real Shopify publication records and canonical URLs exist. This template lock and rollout do not create Shopify Page objects, publish canonical guide URLs, or activate planned editorial links inside guide content.
