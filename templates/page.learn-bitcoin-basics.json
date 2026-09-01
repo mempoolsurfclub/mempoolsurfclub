@@ -5,9 +5,19 @@
       "settings": {
         "registry_id": "MSC-HUB-BASICS"
       }
+    },
+    "guide001preview": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<script>(() => { const page = document.querySelector('.msc-learn-page[data-msc-registry-id=\\\"MSC-HUB-BASICS\\\"]'); const card = page ? page.querySelector('.msc-learn-guide-card[data-msc-guide-id=\\\"MSC-GUIDE-001\\\"]') : null; if (!card || card.querySelector('.msc-learn-guide-live-link')) return; card.removeAttribute('aria-disabled'); card.classList.add('is-live-guide'); const note = card.querySelector('.msc-learn-preview-note'); if (note) note.remove(); const link = document.createElement('a'); link.href = '/pages/learn-bitcoin-basics?view=msc-learn-guide'; link.className = 'msc-button msc-learn-guide-live-link'; link.textContent = 'Read guide'; link.setAttribute('aria-label', 'Read What Is Bitcoin?'); card.appendChild(link); })();</script>",
+        "color_scheme": "scheme-1",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "guide001preview"
   ]
 }
