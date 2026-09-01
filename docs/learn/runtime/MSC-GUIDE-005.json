@@ -1,0 +1,286 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-005-what-is-a-bitcoin-wallet.md",
+  "source_sha256": "bc8039fee99757fdfdad7737383232d2804c9420469200ae63b608a8e482a1e6",
+  "registry_id": "MSC-GUIDE-005",
+  "status": "COPY_LOCKED",
+  "h1": "What Is a Bitcoin Wallet?",
+  "introductory_deck": "A Bitcoin wallet is software or hardware that manages keys, constructs transactions, and helps a user interact with Bitcoin. It does not hold bitcoin as files. It organizes the information and signing tools needed to identify spendable outputs, receive payments, and authorize new transactions.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "A Bitcoin wallet is often described as a place where bitcoin is stored. That description is convenient, but it creates the wrong mental model.\n\nBitcoin does not move into an app, a phone, or a hardware device as a digital coin file. The Bitcoin network records transactions that create spendable outputs. A wallet watches for outputs related to the keys or scripts it manages, calculates what can be spent, and helps construct the next transaction.\n\nThe wallet is therefore better understood as a coordinated set of tools. It may generate keys, derive receiving information, track relevant transaction history, estimate a balance, select inputs, create outputs, calculate fees, and produce or request signatures. Different wallets perform different combinations of those jobs.",
+      "body_html": "<p>A Bitcoin wallet is often described as a place where bitcoin is stored. That description is convenient, but it creates the wrong mental model.</p>\n<p>Bitcoin does not move into an app, a phone, or a hardware device as a digital coin file. The Bitcoin network records transactions that create spendable outputs. A wallet watches for outputs related to the keys or scripts it manages, calculates what can be spent, and helps construct the next transaction.</p>\n<p>The wallet is therefore better understood as a coordinated set of tools. It may generate keys, derive receiving information, track relevant transaction history, estimate a balance, select inputs, create outputs, calculate fees, and produce or request signatures. Different wallets perform different combinations of those jobs.</p>"
+    },
+    {
+      "heading": "A wallet manages access, not coin files",
+      "body_markdown": "The network does not maintain a folder of coins for each user. It maintains a public transaction history that nodes validate according to Bitcoin's rules.\n\nTransactions create outputs with spending conditions. When an output has not yet been spent, it is an unspent transaction output, or UTXO. A wallet identifies the UTXOs that its keys or other authorization setup can spend. It then presents their combined value as a balance.\n\nThat displayed balance is a wallet calculation. It may include confirmed outputs, unconfirmed outputs, or outputs subject to different spending conditions, depending on the wallet's design and settings. Two wallet interfaces can present the same underlying information differently without changing the Bitcoin network itself.\n\nWhen the wallet sends bitcoin, it does not remove a portion from an account balance in the way a bank updates an internal ledger. It constructs a transaction that spends one or more existing UTXOs and creates new outputs. One output may pay the recipient. Another may return remaining value to a wallet-controlled destination as change.",
+      "body_html": "<p>The network does not maintain a folder of coins for each user. It maintains a public transaction history that nodes validate according to Bitcoin&#39;s rules.</p>\n<p>Transactions create outputs with spending conditions. When an output has not yet been spent, it is an unspent transaction output, or UTXO. A wallet identifies the UTXOs that its keys or other authorization setup can spend. It then presents their combined value as a balance.</p>\n<p>That displayed balance is a wallet calculation. It may include confirmed outputs, unconfirmed outputs, or outputs subject to different spending conditions, depending on the wallet&#39;s design and settings. Two wallet interfaces can present the same underlying information differently without changing the Bitcoin network itself.</p>\n<p>When the wallet sends bitcoin, it does not remove a portion from an account balance in the way a bank updates an internal ledger. It constructs a transaction that spends one or more existing UTXOs and creates new outputs. One output may pay the recipient. Another may return remaining value to a wallet-controlled destination as change.</p>"
+    },
+    {
+      "heading": "Keys, wallets, and addresses are different things",
+      "body_markdown": "Several related terms are often blended together.\n\nA private key is secret cryptographic material used to authorize spending. Public information can be derived from private key material and used in Bitcoin spending conditions. An address is a destination representation that helps a wallet construct a particular locking script.\n\nThe wallet coordinates these pieces, but it is not identical to any one of them.\n\nAn address is not a wallet. A wallet may generate many addresses over time. A private key is not an address. A wallet may manage many private keys. A seed phrase or other recovery representation is not simply another name for one private key. Depending on the wallet standard and setup, recovery material may allow the wallet to recreate many related keys, addresses, and scripts.\n\nKeeping these terms separate becomes especially important during backup and recovery. Having the correct words or private key material may not be enough if the restored wallet does not know the required script type, derivation path, account structure, or multisignature configuration.",
+      "body_html": "<p>Several related terms are often blended together.</p>\n<p>A private key is secret cryptographic material used to authorize spending. Public information can be derived from private key material and used in Bitcoin spending conditions. An address is a destination representation that helps a wallet construct a particular locking script.</p>\n<p>The wallet coordinates these pieces, but it is not identical to any one of them.</p>\n<p>An address is not a wallet. A wallet may generate many addresses over time. A private key is not an address. A wallet may manage many private keys. A seed phrase or other recovery representation is not simply another name for one private key. Depending on the wallet standard and setup, recovery material may allow the wallet to recreate many related keys, addresses, and scripts.</p>\n<p>Keeping these terms separate becomes especially important during backup and recovery. Having the correct words or private key material may not be enough if the restored wallet does not know the required script type, derivation path, account structure, or multisignature configuration.</p>"
+    },
+    {
+      "heading": "How a wallet calculates a balance",
+      "body_markdown": "A wallet learns about the Bitcoin network through its own node, a connected node, or a service that provides transaction and block information.\n\nIt looks for outputs that match the scripts or public information it is watching. It also tracks whether those outputs have already been spent. The set of available outputs becomes the basis for the displayed balance.\n\nThis process explains why a wallet can show a balance without possessing a coin file. It also explains why a watch-only wallet can display activity without holding the private keys needed to spend.\n\nA watch-only wallet contains public information that lets it identify relevant outputs without holding the private keys needed to spend. Depending on its configuration, it may also generate or display receiving information. It may help with monitoring, accounting, transaction construction, or verification. Signing can occur somewhere else.\n\nThe separation between watching and signing is useful in many wallet designs. An online wallet can prepare a transaction while a separate signing device authorizes it. A multisignature wallet can coordinate several signers. A custodial service can show a customer balance while the service controls the actual keys.",
+      "body_html": "<p>A wallet learns about the Bitcoin network through its own node, a connected node, or a service that provides transaction and block information.</p>\n<p>It looks for outputs that match the scripts or public information it is watching. It also tracks whether those outputs have already been spent. The set of available outputs becomes the basis for the displayed balance.</p>\n<p>This process explains why a wallet can show a balance without possessing a coin file. It also explains why a watch-only wallet can display activity without holding the private keys needed to spend.</p>\n<p>A watch-only wallet contains public information that lets it identify relevant outputs without holding the private keys needed to spend. Depending on its configuration, it may also generate or display receiving information. It may help with monitoring, accounting, transaction construction, or verification. Signing can occur somewhere else.</p>\n<p>The separation between watching and signing is useful in many wallet designs. An online wallet can prepare a transaction while a separate signing device authorizes it. A multisignature wallet can coordinate several signers. A custodial service can show a customer balance while the service controls the actual keys.</p>"
+    },
+    {
+      "heading": "Wallets can separate several jobs",
+      "body_markdown": "The word wallet covers several functions that do not always live in one place.\n\nA wallet interface may display balances and transaction history. A coordinator may choose inputs and outputs. A signer may protect private keys and produce signatures. A node or server may provide network data. A backup may preserve the information required to recreate the setup.\n\nIn a simple mobile wallet, these functions may appear inside one application. In another setup, they may be divided across a desktop coordinator, a hardware signing device, a watch-only application, and a separate node.\n\nThis separation does not automatically make a setup safer or more private. It changes where trust, complexity, and failure risk sit. A remote server may learn wallet activity. A signing device may protect keys from one type of exposure while depending on its firmware, display, manufacturing process, and backup procedure. A coordinator may construct a transaction correctly or incorrectly. The user still needs a way to verify important details.",
+      "body_html": "<p>The word wallet covers several functions that do not always live in one place.</p>\n<p>A wallet interface may display balances and transaction history. A coordinator may choose inputs and outputs. A signer may protect private keys and produce signatures. A node or server may provide network data. A backup may preserve the information required to recreate the setup.</p>\n<p>In a simple mobile wallet, these functions may appear inside one application. In another setup, they may be divided across a desktop coordinator, a hardware signing device, a watch-only application, and a separate node.</p>\n<p>This separation does not automatically make a setup safer or more private. It changes where trust, complexity, and failure risk sit. A remote server may learn wallet activity. A signing device may protect keys from one type of exposure while depending on its firmware, display, manufacturing process, and backup procedure. A coordinator may construct a transaction correctly or incorrectly. The user still needs a way to verify important details.</p>"
+    },
+    {
+      "heading": "Custodial and noncustodial wallets",
+      "body_markdown": "Wallet language can become confusing when a service controls the keys.\n\nIn a noncustodial wallet, the user or a user-defined setup controls the keys needed to authorize spending. The wallet software may be created by a company, but that does not necessarily mean the company can move the funds.\n\nIn a custodial account, a company or service controls the spending keys. The customer usually sees an account balance and can request withdrawals, but the customer does not directly authorize a Bitcoin transaction with their own keys. The balance is a claim on the custodian under the service's rules.\n\nBoth arrangements can use an interface called a wallet. Their custody models are different.\n\nCustodial services may simplify recovery, support, and account access. They also introduce counterparty, policy, operational, and withdrawal risk. Noncustodial wallets can provide direct key control, but they place more responsibility on the user or the user's chosen arrangement. The next guide examines that custody question directly.",
+      "body_html": "<p>Wallet language can become confusing when a service controls the keys.</p>\n<p>In a noncustodial wallet, the user or a user-defined setup controls the keys needed to authorize spending. The wallet software may be created by a company, but that does not necessarily mean the company can move the funds.</p>\n<p>In a custodial account, a company or service controls the spending keys. The customer usually sees an account balance and can request withdrawals, but the customer does not directly authorize a Bitcoin transaction with their own keys. The balance is a claim on the custodian under the service&#39;s rules.</p>\n<p>Both arrangements can use an interface called a wallet. Their custody models are different.</p>\n<p>Custodial services may simplify recovery, support, and account access. They also introduce counterparty, policy, operational, and withdrawal risk. Noncustodial wallets can provide direct key control, but they place more responsibility on the user or the user&#39;s chosen arrangement. The next guide examines that custody question directly.</p>"
+    },
+    {
+      "heading": "Common wallet roles",
+      "body_markdown": "Wallet categories describe useful tendencies, not universal guarantees.\n\nA software wallet runs on a general-purpose device such as a phone or computer. It may watch the network, construct transactions, hold keys, and sign. Its security and privacy depend on the software, device, connections, configuration, and user behavior.\n\nA hardware signing device is designed to keep signing keys in a more restricted environment and approve transactions without exposing those keys directly to the connected computer. It is a key-protection and signing tool, not a complete security guarantee. The user still depends on backups, transaction verification, compatible software, device integrity, and a correct recovery plan.\n\nA watch-only wallet tracks selected scripts or public information without holding the private keys required to spend. It can help separate monitoring and transaction preparation from signing.\n\nA custodial account lets a service manage keys and process withdrawals for the customer. It may feel similar to a conventional financial account because access and recovery are governed by the service.\n\nSome wallets combine these roles. Others use collaborative or multisignature arrangements. The label alone does not reveal the complete trust and recovery model.",
+      "body_html": "<p>Wallet categories describe useful tendencies, not universal guarantees.</p>\n<p>A software wallet runs on a general-purpose device such as a phone or computer. It may watch the network, construct transactions, hold keys, and sign. Its security and privacy depend on the software, device, connections, configuration, and user behavior.</p>\n<p>A hardware signing device is designed to keep signing keys in a more restricted environment and approve transactions without exposing those keys directly to the connected computer. It is a key-protection and signing tool, not a complete security guarantee. The user still depends on backups, transaction verification, compatible software, device integrity, and a correct recovery plan.</p>\n<p>A watch-only wallet tracks selected scripts or public information without holding the private keys required to spend. It can help separate monitoring and transaction preparation from signing.</p>\n<p>A custodial account lets a service manage keys and process withdrawals for the customer. It may feel similar to a conventional financial account because access and recovery are governed by the service.</p>\n<p>Some wallets combine these roles. Others use collaborative or multisignature arrangements. The label alone does not reveal the complete trust and recovery model.</p>"
+    },
+    {
+      "heading": "Backups depend on the wallet design",
+      "body_markdown": "Many modern wallets derive a sequence of keys from underlying seed material. Some present a human-readable sequence of words as a backup. BIP 39 defines one mnemonic method, but not every wallet uses BIP 39, and not every recovery phrase should be assumed to follow that standard.\n\nEven when two wallets use the same word standard, recovery may depend on additional information. Derivation paths, script types, passphrases, account indexes, multisignature participants, descriptors, or wallet-specific metadata can affect what the restored software discovers.\n\nOutput script descriptors are one method for describing the scripts and key relationships a wallet watches. Partially Signed Bitcoin Transactions are one method for moving an unsigned or partly signed transaction between separate wallet roles. These standards improve coordination, but wallet support and implementation still vary.\n\nA backup should therefore be understood as the information needed to recover a particular wallet arrangement, not merely as a generic object that works everywhere.",
+      "body_html": "<p>Many modern wallets derive a sequence of keys from underlying seed material. Some present a human-readable sequence of words as a backup. BIP 39 defines one mnemonic method, but not every wallet uses BIP 39, and not every recovery phrase should be assumed to follow that standard.</p>\n<p>Even when two wallets use the same word standard, recovery may depend on additional information. Derivation paths, script types, passphrases, account indexes, multisignature participants, descriptors, or wallet-specific metadata can affect what the restored software discovers.</p>\n<p>Output script descriptors are one method for describing the scripts and key relationships a wallet watches. Partially Signed Bitcoin Transactions are one method for moving an unsigned or partly signed transaction between separate wallet roles. These standards improve coordination, but wallet support and implementation still vary.</p>\n<p>A backup should therefore be understood as the information needed to recover a particular wallet arrangement, not merely as a generic object that works everywhere.</p>"
+    },
+    {
+      "heading": "Receiving information is not ownership by itself",
+      "body_markdown": "A wallet can generate receiving information before it receives a payment. That information may appear as an address, a QR code, or a payment request.\n\nThe address helps the sender's wallet create an output with a particular spending condition. It does not hold bitcoin. After the transaction is broadcast and recognized, the recipient's wallet detects the relevant output and updates its view.\n\nDifferent address formats represent different script types. Wallets and services may not support every format or network. Mainnet, test networks, on-chain payments, and Lightning payments are not interchangeable simply because they can all appear as a string or QR code.\n\nA wallet should help the user distinguish these payment paths, but the user still needs to verify that the intended network, amount, and destination are being used.",
+      "body_html": "<p>A wallet can generate receiving information before it receives a payment. That information may appear as an address, a QR code, or a payment request.</p>\n<p>The address helps the sender&#39;s wallet create an output with a particular spending condition. It does not hold bitcoin. After the transaction is broadcast and recognized, the recipient&#39;s wallet detects the relevant output and updates its view.</p>\n<p>Different address formats represent different script types. Wallets and services may not support every format or network. Mainnet, test networks, on-chain payments, and Lightning payments are not interchangeable simply because they can all appear as a string or QR code.</p>\n<p>A wallet should help the user distinguish these payment paths, but the user still needs to verify that the intended network, amount, and destination are being used.</p>"
+    },
+    {
+      "heading": "Wallet choice is a tradeoff",
+      "body_markdown": "There is no universal best wallet arrangement.\n\nA person may prioritize convenience, direct control, privacy, compatibility, recovery assistance, transaction verification, or separation of duties. A small everyday balance may justify a different arrangement from funds intended for long-term storage. A business may need accounting, approval workflows, or several authorized signers. An individual may need a recovery plan that another trusted person can understand.\n\nThe relevant questions include:\n\n1. Who controls the keys?\n2. What information does the wallet or its server learn?\n3. How are transactions constructed and verified?\n4. What must be backed up?\n5. How does recovery work?\n6. Which address, script, and transaction types are supported?\n7. What happens if a device, service, or person becomes unavailable?\n8. What technical ability does the setup require?\n\nBrand names and category labels do not answer all of these questions. The wallet's architecture and the user's threat model matter more than a single marketing term.",
+      "body_html": "<p>There is no universal best wallet arrangement.</p>\n<p>A person may prioritize convenience, direct control, privacy, compatibility, recovery assistance, transaction verification, or separation of duties. A small everyday balance may justify a different arrangement from funds intended for long-term storage. A business may need accounting, approval workflows, or several authorized signers. An individual may need a recovery plan that another trusted person can understand.</p>\n<p>The relevant questions include:</p>\n<ol><li>Who controls the keys?</li><li>What information does the wallet or its server learn?</li><li>How are transactions constructed and verified?</li><li>What must be backed up?</li><li>How does recovery work?</li><li>Which address, script, and transaction types are supported?</li><li>What happens if a device, service, or person becomes unavailable?</li><li>What technical ability does the setup require?</li></ol>\n<p>Brand names and category labels do not answer all of these questions. The wallet&#39;s architecture and the user&#39;s threat model matter more than a single marketing term.</p>"
+    },
+    {
+      "heading": "What a wallet does not guarantee",
+      "body_markdown": "A wallet cannot guarantee that every transaction will confirm, that every fee estimate will be accurate, or that every destination is correct.\n\nIt cannot make public on-chain activity anonymous. It cannot prevent a user from revealing recovery information or approving a malicious transaction. A hardware signing device cannot eliminate risks created by an incorrect backup, a compromised interface, a misleading display, or a flawed recovery process.\n\nA wallet also cannot remove every dependency. Software must be obtained and updated. Network data must come from somewhere. Devices and operating systems have supply chains. Users rely on documentation and human judgment.\n\nA good wallet design can reduce specific risks and make important details easier to verify. It does not replace understanding.",
+      "body_html": "<p>A wallet cannot guarantee that every transaction will confirm, that every fee estimate will be accurate, or that every destination is correct.</p>\n<p>It cannot make public on-chain activity anonymous. It cannot prevent a user from revealing recovery information or approving a malicious transaction. A hardware signing device cannot eliminate risks created by an incorrect backup, a compromised interface, a misleading display, or a flawed recovery process.</p>\n<p>A wallet also cannot remove every dependency. Software must be obtained and updated. Network data must come from somewhere. Devices and operating systems have supply chains. Users rely on documentation and human judgment.</p>\n<p>A good wallet design can reduce specific risks and make important details easier to verify. It does not replace understanding.</p>"
+    },
+    {
+      "heading": "Where the sequence continues",
+      "body_markdown": "A wallet is the toolset through which most people first manage Bitcoin keys and transactions. The next question is who controls those keys and what responsibility follows from that control.\n\nWhat Is Bitcoin Self-Custody? examines custodial accounts, direct key control, backups, recovery, multisignature, hardware signing devices, and the tradeoffs between convenience and operational responsibility.",
+      "body_html": "<p>A wallet is the toolset through which most people first manage Bitcoin keys and transactions. The next question is who controls those keys and what responsibility follows from that control.</p>\n<p>What Is Bitcoin Self-Custody? examines custodial accounts, direct key control, backups, recovery, multisignature, hardware signing devices, and the tradeoffs between convenience and operational responsibility.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Wallet",
+      "definition": "Software or hardware that manages keys, constructs transactions, and helps users interact with Bitcoin."
+    },
+    {
+      "term": "Address",
+      "definition": "A destination representation used by wallets to construct a Bitcoin locking script."
+    },
+    {
+      "term": "Private key",
+      "definition": "Secret cryptographic material used to authorize spending."
+    },
+    {
+      "term": "Seed phrase",
+      "definition": "A human-readable backup representation used by many wallets to derive keys under a wallet standard."
+    },
+    {
+      "term": "Hot wallet",
+      "definition": "A wallet whose signing environment is connected to an online device or service."
+    },
+    {
+      "term": "Custody",
+      "definition": "Control over the keys or authorization needed to move bitcoin."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bitcoin Developer Guide: Wallets",
+      "author_or_publisher": "Bitcoin Project developer documentation",
+      "direct_url": "https://developer.bitcoin.org/devguide/wallets.html",
+      "supports": "Wallet key management, deterministic wallets, wallet files, backups, and the distinction between wallet functions and Bitcoin transaction outputs."
+    },
+    {
+      "title": "Bitcoin Developer Guide: Transactions",
+      "author_or_publisher": "Bitcoin Project developer documentation",
+      "direct_url": "https://developer.bitcoin.org/devguide/transactions.html",
+      "supports": "UTXOs, transaction inputs and outputs, change, authorization, wallet balance calculation, and address-related transaction construction."
+    },
+    {
+      "title": "BIP 32: Hierarchical Deterministic Wallets",
+      "author_or_publisher": "Pieter Wuille",
+      "direct_url": "https://bips.dev/32/",
+      "supports": "Hierarchical key derivation, extended keys, and deriving multiple related keys from underlying seed material."
+    },
+    {
+      "title": "BIP 39: Mnemonic Code for Generating Deterministic Keys",
+      "author_or_publisher": "Marek Palatinus, Pavol Rusnak, Aaron Voisine, and Sean Bowe",
+      "direct_url": "https://bips.dev/39/",
+      "supports": "One specific mnemonic method for generating deterministic-wallet seed material. It does not establish that every Bitcoin wallet uses BIP 39."
+    },
+    {
+      "title": "BIP 174: Partially Signed Bitcoin Transaction Format",
+      "author_or_publisher": "Andrew Chow",
+      "direct_url": "https://bips.dev/174/",
+      "supports": "Separation of transaction creation, updating, signing, and finalization across compatible wallet roles and devices."
+    },
+    {
+      "title": "BIP 173: Base32 Address Format for Native v0-16 Witness Outputs",
+      "author_or_publisher": "Pieter Wuille and Greg Maxwell",
+      "direct_url": "https://bips.dev/173/",
+      "supports": "The Bech32 address format for native witness version 0 outputs and address error-detection properties."
+    },
+    {
+      "title": "BIP 350: Bech32m Format for v1+ Witness Addresses",
+      "author_or_publisher": "Pieter Wuille",
+      "direct_url": "https://bips.dev/350/",
+      "supports": "Bech32m encoding for witness version 1 and later addresses and the compatibility distinction from Bech32."
+    },
+    {
+      "title": "Output Script Descriptors General Operation",
+      "author_or_publisher": "Pieter Wuille and Ava Chow, Bitcoin Improvement Proposals",
+      "direct_url": "https://bips.dev/380/",
+      "supports": "Descriptors as a method for representing wallet script types, keys, origins, derivation paths, and recovery-relevant wallet structure."
+    },
+    {
+      "title": "Bitcoin Core: Managing Wallets",
+      "author_or_publisher": "Bitcoin Core developers",
+      "direct_url": "https://github.com/bitcoin/bitcoin/blob/master/doc/managing-wallets.md",
+      "supports": "Current Bitcoin Core wallet loading, creation, descriptor-wallet operation, and wallet-management behavior."
+    }
+  ],
+  "seo_title": "What Is a Bitcoin Wallet? Keys, Addresses, and Balances Explained",
+  "meta_description": "Learn what a Bitcoin wallet actually does, how it manages keys and transactions, why it does not store coin files, and how wallet types differ.",
+  "excerpt": "A Bitcoin wallet manages keys, constructs transactions, and calculates a balance from spendable outputs. This guide separates wallets from addresses, private keys, backups, signing devices, and custodial accounts.",
+  "reading_time": "9 to 10 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-BASICS",
+    "label": "Bitcoin Basics",
+    "subcategory": "Using Bitcoin",
+    "depth": "Surface",
+    "format": "Explainer"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-004",
+      "title": "Who Was Satoshi Nakamoto?",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-006",
+      "title": "What Is Bitcoin Self-Custody?",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": [
+      {
+        "registry_id": "MSC-GUIDE-004",
+        "title": "Who Was Satoshi Nakamoto?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-006",
+        "title": "What Is Bitcoin Self-Custody?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-007",
+        "title": "How to Send and Receive Bitcoin",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-009",
+        "title": "What Is a Bitcoin Seed Phrase?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-010",
+        "title": "How Bitcoin Public and Private Keys Work",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-011",
+        "title": "How to Keep Bitcoin Secure",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GUIDE-013",
+        "title": "What Are UTXOs in Bitcoin?",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-GLOSSARY-001",
+        "title": "Bitcoin Glossary",
+        "active": false,
+        "url": null
+      },
+      {
+        "registry_id": "MSC-HUB-BASICS",
+        "title": "Bitcoin Basics",
+        "active": false,
+        "url": null
+      }
+    ]
+  },
+  "review_dates": {
+    "reviewed": "2026-07-17",
+    "copy_locked": "2026-07-17",
+    "human_verification": "2026-07-17"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "A Wallet Is a Manager, Not a Container",
+      "educational_purpose": "Correct the misconception that a wallet stores bitcoin as coin files.",
+      "recommended_placement": "After the section titled A wallet manages access, not coin files.",
+      "visual_description": "A technical field-guide plate showing a wallet interface coordinating private-key material, spendable outputs, a transaction draft, and a signature. The outputs remain on a separate network ledger chart rather than inside the wallet. Use Ink linework, Sea structure, Sand callouts, and Paper background.",
+      "required_labels": "Wallet, Keys, Spendable outputs, Transaction draft, Signature",
+      "caption": "A wallet manages keys and transaction activity. The Bitcoin network records the spendable outputs.",
+      "alt_text": "Editorial diagram showing a wallet coordinating keys, spendable outputs, a transaction draft, and a signature without containing coin files.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Keep the wallet at center with the ledger and signing elements arranged above and below in a narrow crop.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "Wallet Roles and Custody Arrangements",
+      "educational_purpose": "Show that software wallets, signing devices, watch-only wallets, and custodial accounts perform different roles.",
+      "recommended_placement": "After the section titled Common wallet roles.",
+      "visual_description": "Four-column infrastructure-manual comparison without logos. Each column shows which functions are present: watch, construct, sign, provide network data, and control keys. Avoid ranking the columns or implying one universal best choice.",
+      "required_labels": "Software wallet, Signing device, Watch-only wallet, Custodial account, Watches, Constructs, Signs, Controls keys",
+      "caption": "The word wallet can describe different combinations of monitoring, construction, signing, and custody.",
+      "alt_text": "Four-column comparison of software wallets, signing devices, watch-only wallets, and custodial accounts by the functions they perform.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack the four roles vertically and preserve the function markers beside each role.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "From Outputs to Displayed Balance",
+      "educational_purpose": "Explain how a wallet calculates a balance from relevant unspent transaction outputs.",
+      "recommended_placement": "After the section titled How a wallet calculates a balance.",
+      "visual_description": "An oceanographic survey chart with several transaction outputs plotted as marked stations. The wallet filters for outputs matching watched scripts, removes already spent outputs, and totals the remaining values into a displayed balance.",
+      "required_labels": "Transaction outputs, Watched scripts, Spent, Unspent, Displayed balance",
+      "caption": "A wallet derives its displayed balance by identifying relevant outputs that remain available to spend.",
+      "alt_text": "Field-guide diagram showing a wallet filtering transaction outputs, excluding spent outputs, and totaling remaining UTXOs into a balance.",
+      "image_orientation": "Square",
+      "mobile_crop_notes": "Keep the filtering sequence vertical with the displayed balance at the bottom.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}

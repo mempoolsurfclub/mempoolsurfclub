@@ -17,7 +17,7 @@ This document freezes the approved Mempool Surf Club topic-guide reading experie
 - Shared topic-guide stylesheet: `assets/msc-learn-guide-template.css`
 - Shared Next Guide component: `snippets/msc-learn-guide-transition.liquid`
 - Structured Guide 001 runtime: `snippets/msc-learn-guide-001-runtime.liquid`
-- Guide 002–004 rollout materializer: `scripts/generate-msc-learn-guide-rollout.mjs`
+- Controlled guide rollout materializer: `scripts/generate-msc-learn-guide-rollout.mjs`
 - Template drift validation: `scripts/validate-msc-learn-guide-template.mjs`
 - Rollout validation: `scripts/validate-msc-learn-guide-rollout.mjs`
 
@@ -60,7 +60,13 @@ Content changes by guide. The template does not.
 
 When Guides 002–080 are activated, preserve this shared structure and styling. Add only the guide-specific runtime binding, copy-locked content, next-guide data, progress data, and eventual confirmed destination URL. Do not fork the stylesheet or add per-guide inline CSS to solve ordinary title or content-length differences.
 
-The first rollout batch, Guides 002–004, is active as preview-only alternate-template views on the existing Bitcoin Basics Shopify page. The Bitcoin Basics hub cards for Guides 001–004 are clickable in preview, and the visible sequence is wired 001 → 002 → 003 → 004. Guide 004 previews Guide 005 but does not activate it.
+Guides 002–004 established the first controlled rollout. Guides 005–008 extend the same locked implementation through the `Using Bitcoin` subcategory without changing the visual contract.
+
+The Bitcoin Basics hub cards for Guides 001–008 are active in preview. The visible sequence is wired:
+
+`001 → 002 → 003 → 004 → 005 → 006 → 007 → 008`
+
+Guide 008 previews Guide 009 but does not activate it.
 
 Current preview views:
 
@@ -68,9 +74,13 @@ Current preview views:
 - Guide 002: `?view=msc-learn-guide-002`
 - Guide 003: `?view=msc-learn-guide-003`
 - Guide 004: `?view=msc-learn-guide-004`
+- Guide 005: `?view=msc-learn-guide-005`
+- Guide 006: `?view=msc-learn-guide-006`
+- Guide 007: `?view=msc-learn-guide-007`
+- Guide 008: `?view=msc-learn-guide-008`
 
 These views are QA routes, not canonical guide URLs.
 
 ## Publication boundary
 
-Guides 001–004 remain preview-bound runtimes until real Shopify publication records and canonical URLs exist. This template lock and rollout do not create Shopify Page objects, publish canonical guide URLs, or activate planned editorial links inside guide content.
+Guides 001–008 remain preview-bound runtimes until real Shopify publication records and canonical URLs exist. This template lock and rollout do not create Shopify Page objects, publish canonical guide URLs, or activate planned editorial links inside guide content.
