@@ -253,6 +253,14 @@
     .msc-ecosystem-tug { grid-column:1;grid-row:3 / 5;align-self:stretch; }
   }
 
+  @media screen and (min-width:990px) {
+    .msc-learn-page[data-msc-registry-id="MSC-HUB-ECOSYSTEM"] .msc-learn-guide-card[data-msc-guide-id="MSC-GUIDE-068"] .msc-ecosystem-tug {
+      width:calc(100% - 1.5rem);
+      justify-self:center;
+      transform:translateY(-.55rem);
+    }
+  }
+
   @media screen and (max-width:989px) and (min-width:750px) {
     .msc-ecosystem-tug { grid-template-columns:minmax(7rem,1fr) minmax(7rem,1.15fr) minmax(7rem,1fr);gap:.65rem;padding:.8rem; }
     .msc-ecosystem-tug__side { min-height:3.9rem;padding:.65rem .55rem;font-size:.66rem;letter-spacing:.065em; }
