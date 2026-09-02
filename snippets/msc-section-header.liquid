@@ -6,6 +6,9 @@
   assign header_align = align | default: 'left'
   assign header_id = heading_id | default: nil
 -%}
+{%- if header_id contains 'MscLearnIndex-' -%}
+  <script src="{{ 'msc-learn-home-refinements.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
 <header class="msc-section-header msc-section-header--{{ header_align }}">
   {%- if kicker != blank -%}
     <p class="msc-section-kicker">{{ kicker | escape }}</p>

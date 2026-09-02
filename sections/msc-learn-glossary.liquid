@@ -1,4 +1,5 @@
 {{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'msc-learn-glossary.js' | asset_url }}" defer="defer"></script>
 {%- assign pilot_registry_id = section.settings.registry_id | strip -%}
 {%- case pilot_registry_id -%}
   {%- when 'MSC-GLOSSARY-001' -%}
@@ -7,8 +8,8 @@
     <section class="msc-shell msc-learn-page" data-msc-preview-only="true">
       <div class="msc-container msc-learn-page__container">
         <header class="msc-learn-page__header">
-          <p class="msc-section-kicker">Learn runtime preview</p>
-          <h1>Glossary preview unavailable</h1>
+          <p class="msc-section-kicker">Learn runtime</p>
+          <h1>Glossary unavailable</h1>
           <p>No structured runtime package is registered for {{ pilot_registry_id | escape }}.</p>
         </header>
       </div>
@@ -23,7 +24,7 @@
       "id": "registry_id",
       "label": "Registry ID",
       "default": "MSC-GLOSSARY-001",
-      "info": "Preview-only binding. Do not enter a handle or URL."
+      "info": "Structured glossary registry binding. Do not enter a handle or URL."
     }
   ]
 }
