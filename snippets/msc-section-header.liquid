@@ -7,6 +7,7 @@
   assign header_id = heading_id | default: nil
 -%}
 {%- if header_id contains 'MscLearnIndex-' -%}
+  {{ 'msc-learn-accessibility.css' | asset_url | stylesheet_tag }}
   <script src="{{ 'msc-learn-home-refinements.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'msc-learn-index-polish.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
