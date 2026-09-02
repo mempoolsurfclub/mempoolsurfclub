@@ -50,6 +50,27 @@
     background-image: none !important;
   }
 
+  /* Atlas top-bar final alignment. On desktop, align the outer labels to the
+   * marked rounded-corner transition points and give the centered search
+   * control approximately 15% more horizontal room. */
+  @media screen and (min-width: 901px) {
+    #MainContent:has(.section--msc-explore-page-continuity) .msc-atlas-window__top.msc-atlas-window__top--site-search {
+      --msc-atlas-header-columns: minmax(0, 1fr) minmax(28rem, 55.2rem) minmax(0, 1fr) !important;
+    }
+
+    #MainContent:has(.section--msc-explore-page-continuity) .msc-atlas-window__top--site-search .msc-atlas-window__identity {
+      padding-left: 4rem !important;
+    }
+
+    #MainContent:has(.section--msc-explore-page-continuity) .msc-atlas-header-search {
+      max-width: 55.2rem !important;
+    }
+
+    #MainContent:has(.section--msc-explore-page-continuity) .msc-atlas-window__top--site-search .msc-atlas-window__location {
+      padding-right: 4rem !important;
+    }
+  }
+
   /* The Field Journal eyebrow is intentionally blank on Explore. Remove the
    * empty node from layout so there is no leftover gap above the title. */
   .msc-explore-journal__kicker:empty {
