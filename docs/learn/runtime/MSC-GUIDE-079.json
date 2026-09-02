@@ -1,0 +1,389 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-079-bitcoin-historical-milestones.md",
+  "source_sha256": "f796b0b7ead616a6adef330d60845c307e9301e3b9cafbb71b7611c9812eac2c",
+  "registry_id": "MSC-GUIDE-079",
+  "status": "COPY_LOCKED",
+  "h1": "Major Milestones in Bitcoin History",
+  "introductory_deck": "Bitcoin history includes protocol events, software releases, network activations, business failures, legal decisions, cultural moments, and adoption claims. These events can influence one another, but they are not interchangeable.\n\nThis guide selects milestones that changed what Bitcoin could do, how people coordinated around it, or how institutions treated it. It does not rank them by price impact, and it keeps documented facts separate from later interpretation.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "A milestone is more than a famous date. For this guide, an event qualifies when it produced a durable change in at least one of four areas: Bitcoin’s technical rules or operation; the software and infrastructure people used; the institutions and markets surrounding the network; or the culture through which people understood and adopted it.\n\nThat method excludes many price records, product announcements, and temporary headlines. Price can affect attention and investment, but a higher exchange rate does not by itself show that the protocol improved, that adoption broadened, or that a service became safer.\n\nA careful timeline also separates stages that are often compressed together:\n\n`proposal → implementation → software release → signaling or coordination → network activation → user adoption`\n\nNot every change follows every step, and no single organization controls the sequence.",
+      "body_html": "<p>A milestone is more than a famous date. For this guide, an event qualifies when it produced a durable change in at least one of four areas: Bitcoin’s technical rules or operation; the software and infrastructure people used; the institutions and markets surrounding the network; or the culture through which people understood and adopted it.</p>\n<p>That method excludes many price records, product announcements, and temporary headlines. Price can affect attention and investment, but a higher exchange rate does not by itself show that the protocol improved, that adoption broadened, or that a service became safer.</p>\n<p>A careful timeline also separates stages that are often compressed together:</p>\n<p><code>proposal → implementation → software release → signaling or coordination → network activation → user adoption</code></p>\n<p>Not every change follows every step, and no single organization controls the sequence.</p>"
+    },
+    {
+      "heading": "October 31, 2008 — the white paper made the proposal public",
+      "body_markdown": "Satoshi Nakamoto announced “Bitcoin: A Peer-to-Peer Electronic Cash System” on the Cryptography Mailing List on October 31, 2008.\n\nThis was a **proposal milestone**. The paper described a peer-to-peer payment system using digital signatures, proof of work, public transaction ordering, and incentives to address double-spending without a central ledger operator. It did not launch the network, release production software, or prove that the design would survive real use.\n\nThe distinction matters because later retellings sometimes treat publication as deployment. The paper established the design and invited technical scrutiny. Running code and a live chain came later.",
+      "body_html": "<p>Satoshi Nakamoto announced “Bitcoin: A Peer-to-Peer Electronic Cash System” on the Cryptography Mailing List on October 31, 2008.</p>\n<p>This was a <strong>proposal milestone</strong>. The paper described a peer-to-peer payment system using digital signatures, proof of work, public transaction ordering, and incentives to address double-spending without a central ledger operator. It did not launch the network, release production software, or prove that the design would survive real use.</p>\n<p>The distinction matters because later retellings sometimes treat publication as deployment. The paper established the design and invited technical scrutiny. Running code and a live chain came later.</p>"
+    },
+    {
+      "heading": "January 3 and January 9, 2009 — the chain and public software began",
+      "body_markdown": "Bitcoin Core’s current mainnet parameters preserve the genesis block timestamp data associated with January 3, 2009. Satoshi Nakamoto Institute’s code archive dates Bitcoin v0.1.0 to January 9, 2009, while the original release thread began on January 8 UTC.\n\nThese are related but different milestones. The genesis block is a **network-history event**. The first public software release is a **software event** that let other people connect, generate blocks, and send transactions.\n\nNeither date represents instant broad adoption. Early releases were experimental, networking bugs appeared quickly, and Satoshi published follow-up versions. The importance is that Bitcoin moved from a paper into an independently runnable system.",
+      "body_html": "<p>Bitcoin Core’s current mainnet parameters preserve the genesis block timestamp data associated with January 3, 2009. Satoshi Nakamoto Institute’s code archive dates Bitcoin v0.1.0 to January 9, 2009, while the original release thread began on January 8 UTC.</p>\n<p>These are related but different milestones. The genesis block is a <strong>network-history event</strong>. The first public software release is a <strong>software event</strong> that let other people connect, generate blocks, and send transactions.</p>\n<p>Neither date represents instant broad adoption. Early releases were experimental, networking bugs appeared quickly, and Satoshi published follow-up versions. The importance is that Bitcoin moved from a paper into an independently runnable system.</p>"
+    },
+    {
+      "heading": "May 18–22, 2010 — the pizza trade became a cultural use milestone",
+      "body_markdown": "On May 18, 2010, Laszlo Hanyecz offered 10,000 bitcoin on BitcoinTalk for two pizzas. On May 22, he confirmed that the trade had been completed.\n\nThis was not Bitcoin’s first transaction, and it should not be remembered only through the later market value of the bitcoin. Its historical importance is narrower: a participant publicly offered bitcoin for an ordinary good, another person arranged the purchase, and the completed trade created a durable record of practical exchange.\n\nThe event became a **cultural and commercial milestone** because communities could point to a real-world use rather than only software testing or informal valuation.",
+      "body_html": "<p>On May 18, 2010, Laszlo Hanyecz offered 10,000 bitcoin on BitcoinTalk for two pizzas. On May 22, he confirmed that the trade had been completed.</p>\n<p>This was not Bitcoin’s first transaction, and it should not be remembered only through the later market value of the bitcoin. Its historical importance is narrower: a participant publicly offered bitcoin for an ordinary good, another person arranged the purchase, and the completed trade created a durable record of practical exchange.</p>\n<p>The event became a <strong>cultural and commercial milestone</strong> because communities could point to a real-world use rather than only software testing or informal valuation.</p>"
+    },
+    {
+      "heading": "August 15, 2010 — the value-overflow incident tested recovery",
+      "body_markdown": "At block 74,638, a bug allowed a transaction with outputs far beyond Bitcoin’s intended monetary range. Participants identified the problem on August 15, 2010, and Satoshi announced version 0.3.10 as a patch later that day. The valid chain overtook the affected chain after upgraded nodes rejected the invalid history under the corrected rules.\n\nThis was a **software-security and network-recovery milestone**. It showed that early Bitcoin software contained severe defects and that recovery depended on detection, a corrective release, node upgrades, and chain reorganization.\n\nThe lesson is not that Bitcoin became invulnerable. It is that protocol history includes failures and coordinated repairs, not only planned upgrades.",
+      "body_html": "<p>At block 74,638, a bug allowed a transaction with outputs far beyond Bitcoin’s intended monetary range. Participants identified the problem on August 15, 2010, and Satoshi announced version 0.3.10 as a patch later that day. The valid chain overtook the affected chain after upgraded nodes rejected the invalid history under the corrected rules.</p>\n<p>This was a <strong>software-security and network-recovery milestone</strong>. It showed that early Bitcoin software contained severe defects and that recovery depended on detection, a corrective release, node upgrades, and chain reorganization.</p>\n<p>The lesson is not that Bitcoin became invulnerable. It is that protocol history includes failures and coordinated repairs, not only planned upgrades.</p>"
+    },
+    {
+      "heading": "November 28, 2012 — the first subsidy halving executed a rule",
+      "body_markdown": "Bitcoin’s mainnet consensus parameters set a subsidy-halving interval of 210,000 blocks. At block 210,000, the permitted subsidy moved from 50 BTC to 25 BTC.\n\nThis was a **protocol-schedule milestone**. It demonstrated that issuance changed by block height under rules validated by nodes, not by a central announcement or a calendar ceremony.\n\nThe first halving later became a major market and cultural event, but the durable technical fact is limited: the maximum subsidy permitted in future blocks changed. The event did not guarantee price appreciation, miner profitability, or a fixed schedule in clock time.",
+      "body_html": "<p>Bitcoin’s mainnet consensus parameters set a subsidy-halving interval of 210,000 blocks. At block 210,000, the permitted subsidy moved from 50 BTC to 25 BTC.</p>\n<p>This was a <strong>protocol-schedule milestone</strong>. It demonstrated that issuance changed by block height under rules validated by nodes, not by a central announcement or a calendar ceremony.</p>\n<p>The first halving later became a major market and cultural event, but the durable technical fact is limited: the maximum subsidy permitted in future blocks changed. The event did not guarantee price appreciation, miner profitability, or a fixed schedule in clock time.</p>"
+    },
+    {
+      "heading": "March 11–12, 2013 — incompatible software behavior caused a chain fork",
+      "body_markdown": "On March 11, 2013, a miner running Bitcoin 0.8.0 produced block 225,430. Newer software accepted the block, while older versions rejected it, creating competing chains. Large mining pools were asked to return temporarily to version 0.7, and Bitcoin 0.8.1 added rules intended to avoid repeating the incompatibility.\n\nThis was a **software-compatibility and operational-coordination milestone**. No planned consensus proposal had activated. Different implementations of the expected rules behaved differently under a real block.\n\nThe response also illustrates a boundary: miners influenced which chain accumulated work during the incident, but the incompatibility originated in software behavior, and users, businesses, developers, and miners all had operational decisions to make. “The network decided” is too vague to explain what happened.",
+      "body_html": "<p>On March 11, 2013, a miner running Bitcoin 0.8.0 produced block 225,430. Newer software accepted the block, while older versions rejected it, creating competing chains. Large mining pools were asked to return temporarily to version 0.7, and Bitcoin 0.8.1 added rules intended to avoid repeating the incompatibility.</p>\n<p>This was a <strong>software-compatibility and operational-coordination milestone</strong>. No planned consensus proposal had activated. Different implementations of the expected rules behaved differently under a real block.</p>\n<p>The response also illustrates a boundary: miners influenced which chain accumulated work during the incident, but the incompatibility originated in software behavior, and users, businesses, developers, and miners all had operational decisions to make. “The network decided” is too vague to explain what happened.</p>"
+    },
+    {
+      "heading": "February 2014 — Mt. Gox separated business failure from protocol failure",
+      "body_markdown": "Mt. Gox ceased operations in 2014 after losses and theft were revealed. Later U.S. criminal charges alleged that attackers had stolen approximately 647,000 bitcoin from the exchange beginning in 2011.\n\nThis was a **market-infrastructure and custody milestone**, not a Bitcoin consensus failure. Customers had claims against a company that controlled keys and account records. The Bitcoin network continuing to produce blocks did not make those customers whole.\n\nMt. Gox became a lasting warning that an exchange balance is a counterparty relationship. A business can make Bitcoin easier to access while introducing security, custody, legal, accounting, and insolvency risks outside the protocol.",
+      "body_html": "<p>Mt. Gox ceased operations in 2014 after losses and theft were revealed. Later U.S. criminal charges alleged that attackers had stolen approximately 647,000 bitcoin from the exchange beginning in 2011.</p>\n<p>This was a <strong>market-infrastructure and custody milestone</strong>, not a Bitcoin consensus failure. Customers had claims against a company that controlled keys and account records. The Bitcoin network continuing to produce blocks did not make those customers whole.</p>\n<p>Mt. Gox became a lasting warning that an exchange balance is a counterparty relationship. A business can make Bitcoin easier to access while introducing security, custody, legal, accounting, and insolvency risks outside the protocol.</p>"
+    },
+    {
+      "heading": "2015–2017 — the scaling dispute exposed separate forms of influence",
+      "body_markdown": "Debate over block capacity, transaction malleability, and upgrade methods intensified over several years. BIP 141 specified Segregated Witness in December 2015. Bitcoin Core 0.13.1 released SegWit-capable software in October 2016. Miner signaling under BIP 9 did not immediately reach the original threshold. BIP 148 proposed a user-activated enforcement path. SegWit ultimately activated at block 481,824 on August 24, 2017.\n\nThis was not one milestone but a **sequence of proposal, implementation, signaling, coordination, and activation events**. It demonstrated why these terms must remain separate. A BIP documented a specification. A software release implemented rules. Signaling communicated miner readiness under a deployment mechanism. Nodes enforcing the activated rules determined which blocks they accepted.\n\nThe period also produced incompatible software and chain histories outside the rules enforced by Bitcoin nodes. Participants continue to assign different importance to companies, miners, developers, users, and economic actors. The documented activation sequence is firmer than any single heroic narrative about who “controlled” the outcome.",
+      "body_html": "<p>Debate over block capacity, transaction malleability, and upgrade methods intensified over several years. BIP 141 specified Segregated Witness in December 2015. Bitcoin Core 0.13.1 released SegWit-capable software in October 2016. Miner signaling under BIP 9 did not immediately reach the original threshold. BIP 148 proposed a user-activated enforcement path. SegWit ultimately activated at block 481,824 on August 24, 2017.</p>\n<p>This was not one milestone but a <strong>sequence of proposal, implementation, signaling, coordination, and activation events</strong>. It demonstrated why these terms must remain separate. A BIP documented a specification. A software release implemented rules. Signaling communicated miner readiness under a deployment mechanism. Nodes enforcing the activated rules determined which blocks they accepted.</p>\n<p>The period also produced incompatible software and chain histories outside the rules enforced by Bitcoin nodes. Participants continue to assign different importance to companies, miners, developers, users, and economic actors. The documented activation sequence is firmer than any single heroic narrative about who “controlled” the outcome.</p>"
+    },
+    {
+      "heading": "September 7, 2021 — El Salvador changed the legal environment",
+      "body_markdown": "El Salvador’s Bitcoin Law took effect on September 7, 2021, creating a national legal and public-sector milestone around Bitcoin. The event did not change Bitcoin’s protocol, and a government designation did not prove widespread voluntary use.\n\nThe legal framework also changed later. Amendments approved in 2025 removed essential features of legal tender, made private-sector acceptance voluntary, required taxes to be paid in U.S. dollars, and confined public-sector involvement under an International Monetary Fund program.\n\nThis is why government action must be dated precisely. “Bitcoin is legal tender in El Salvador” became an incomplete description after the 2025 reforms. The milestone remains historically significant, but adoption levels, financial inclusion, public spending, and long-term effects require separate evidence.",
+      "body_html": "<p>El Salvador’s Bitcoin Law took effect on September 7, 2021, creating a national legal and public-sector milestone around Bitcoin. The event did not change Bitcoin’s protocol, and a government designation did not prove widespread voluntary use.</p>\n<p>The legal framework also changed later. Amendments approved in 2025 removed essential features of legal tender, made private-sector acceptance voluntary, required taxes to be paid in U.S. dollars, and confined public-sector involvement under an International Monetary Fund program.</p>\n<p>This is why government action must be dated precisely. “Bitcoin is legal tender in El Salvador” became an incomplete description after the 2025 reforms. The milestone remains historically significant, but adoption levels, financial inclusion, public spending, and long-term effects require separate evidence.</p>"
+    },
+    {
+      "heading": "November 14, 2021 — Taproot activated at block 709,632",
+      "body_markdown": "Taproot was specified through BIPs 340, 341, and 342, implemented in compatible node software, and activated on mainnet at block 709,632 on November 14, 2021.\n\nThis was a **network-activation milestone**. Taproot added Schnorr-signature-based key-path spending and new script capabilities. Activation meant upgraded nodes began enforcing the additional rules at the designated height.\n\nIt did not mean every wallet, exchange, miner, or application immediately used Taproot. Protocol availability and ecosystem adoption are different measurements. A feature can be active in consensus while practical use grows gradually.",
+      "body_html": "<p>Taproot was specified through BIPs 340, 341, and 342, implemented in compatible node software, and activated on mainnet at block 709,632 on November 14, 2021.</p>\n<p>This was a <strong>network-activation milestone</strong>. Taproot added Schnorr-signature-based key-path spending and new script capabilities. Activation meant upgraded nodes began enforcing the additional rules at the designated height.</p>\n<p>It did not mean every wallet, exchange, miner, or application immediately used Taproot. Protocol availability and ecosystem adoption are different measurements. A feature can be active in consensus while practical use grows gradually.</p>"
+    },
+    {
+      "heading": "January 10, 2024 — U.S. spot bitcoin ETP approvals changed market access",
+      "body_markdown": "The U.S. Securities and Exchange Commission approved exchange rule changes allowing the listing and trading of multiple spot bitcoin exchange-traded products on January 10, 2024.\n\nThis was a **legal and market-structure milestone**. It gave investors another regulated-market route to economic exposure through securities accounts. It did not make ETP shares equivalent to holding private keys, change Bitcoin’s rules, or constitute an endorsement of bitcoin by the SEC.\n\nThe approval followed litigation and a changed administrative record. Its significance belongs to market access and regulation, not protocol adoption.",
+      "body_html": "<p>The U.S. Securities and Exchange Commission approved exchange rule changes allowing the listing and trading of multiple spot bitcoin exchange-traded products on January 10, 2024.</p>\n<p>This was a <strong>legal and market-structure milestone</strong>. It gave investors another regulated-market route to economic exposure through securities accounts. It did not make ETP shares equivalent to holding private keys, change Bitcoin’s rules, or constitute an endorsement of bitcoin by the SEC.</p>\n<p>The approval followed litigation and a changed administrative record. Its significance belongs to market access and regulation, not protocol adoption.</p>"
+    },
+    {
+      "heading": "April 20, 2024 — the fourth halving continued the issuance schedule",
+      "body_markdown": "At block 840,000, Bitcoin’s permitted subsidy fell from 6.25 BTC to 3.125 BTC. This was the fourth execution of the 210,000-block halving schedule.\n\nLike earlier halvings, it was a **protocol event** rather than a forecast. Market participants, miners, media, and businesses could respond, but those responses were not encoded in the rule itself.\n\nHalvings matter historically because they make the issuance constraint observable in live operation. Their effects on price, hashrate, fees, and mining businesses must be measured rather than assumed.",
+      "body_html": "<p>At block 840,000, Bitcoin’s permitted subsidy fell from 6.25 BTC to 3.125 BTC. This was the fourth execution of the 210,000-block halving schedule.</p>\n<p>Like earlier halvings, it was a <strong>protocol event</strong> rather than a forecast. Market participants, miners, media, and businesses could respond, but those responses were not encoded in the rule itself.</p>\n<p>Halvings matter historically because they make the issuance constraint observable in live operation. Their effects on price, hashrate, fees, and mining businesses must be measured rather than assumed.</p>"
+    },
+    {
+      "heading": "Some historical claims remain disputed or difficult to measure",
+      "body_markdown": "Bitcoin history contains clear records and uncertain interpretations.\n\nBlock heights, release tags, mailing-list posts, BIPs, court orders, statutes, and archived forum messages can often establish that an event occurred. They do not automatically establish why it happened, which participant mattered most, or how much adoption resulted.\n\nClaims such as “the first real purchase,” “the moment Bitcoin became decentralized,” “the upgrade users forced through,” or “the country that proved national adoption” depend on definitions and evidence. A careful history should state the method, identify the source type, and preserve uncertainty.\n\nThe most useful milestone timeline is therefore not a victory parade. It is a map of different systems interacting: protocol rules, software, miners, node operators, businesses, governments, markets, and communities. Their actions can influence one another without becoming the same thing.",
+      "body_html": "<p>Bitcoin history contains clear records and uncertain interpretations.</p>\n<p>Block heights, release tags, mailing-list posts, BIPs, court orders, statutes, and archived forum messages can often establish that an event occurred. They do not automatically establish why it happened, which participant mattered most, or how much adoption resulted.</p>\n<p>Claims such as “the first real purchase,” “the moment Bitcoin became decentralized,” “the upgrade users forced through,” or “the country that proved national adoption” depend on definitions and evidence. A careful history should state the method, identify the source type, and preserve uncertainty.</p>\n<p>The most useful milestone timeline is therefore not a victory parade. It is a map of different systems interacting: protocol rules, software, miners, node operators, businesses, governments, markets, and communities. Their actions can influence one another without becoming the same thing.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Historical milestone",
+      "definition": "An event or development that materially changed Bitcoin’s technology, operation, markets, institutions, adoption, or culture."
+    },
+    {
+      "term": "Protocol event",
+      "definition": "A change or scheduled execution of rules enforced by validating nodes."
+    },
+    {
+      "term": "Software release",
+      "definition": "A published version of an implementation; release does not guarantee adoption or activation."
+    },
+    {
+      "term": "Network activation",
+      "definition": "The point at which specified consensus rules begin being enforced under their deployment conditions."
+    },
+    {
+      "term": "Miner signaling",
+      "definition": "Information encoded in mined blocks to indicate readiness or preference under a deployment mechanism."
+    },
+    {
+      "term": "Chain fork",
+      "definition": "A temporary or lasting divergence in accepted block history or consensus rules."
+    },
+    {
+      "term": "Counterparty risk",
+      "definition": "The risk that a service holding funds or making promises cannot or will not meet its obligations."
+    },
+    {
+      "term": "Legal-tender rule",
+      "definition": "A legal designation governing acceptance or discharge of monetary obligations within a jurisdiction."
+    },
+    {
+      "term": "ETP",
+      "definition": "An exchange-traded product whose shares trade on a securities exchange and provide exposure to an underlying asset or strategy."
+    },
+    {
+      "term": "Adoption",
+      "definition": "Actual use or integration, which must be defined and measured rather than inferred from announcements."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bitcoin: A Peer-to-Peer Electronic Cash System",
+      "author_or_publisher": "Satoshi Nakamoto",
+      "url": "[https://bitcoin.org/bitcoin.pdf](https://bitcoin.org/bitcoin.pdf)",
+      "published_or_updated": "October 31, 2008",
+      "accessed": "July 31, 2026",
+      "supports": "The proposed peer-to-peer electronic cash design, proof of work, public transaction ordering, and incentive model.",
+      "limitation": "The paper is a proposal and does not establish later deployment, adoption, software behavior, or institutional history."
+    },
+    {
+      "title": "Bitcoin P2P e-cash paper",
+      "author_or_publisher": "Satoshi Nakamoto Institute archive",
+      "url": "[https://satoshi.nakamotoinstitute.org/emails/cryptography/1/](https://satoshi.nakamotoinstitute.org/emails/cryptography/1/)",
+      "published_or_updated": "October 31, 2008",
+      "accessed": "July 31, 2026",
+      "supports": "The date and text of the public white-paper announcement.",
+      "limitation": "An archived mailing-list record; it does not prove how broadly the paper was read or accepted."
+    },
+    {
+      "title": "Bitcoin Core mainnet consensus parameters",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "[https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp](https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp)",
+      "published_or_updated": "Current repository file reviewed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "Genesis block parameters and timestamp text, the 210,000-block subsidy interval, SegWit activation height 481,824, and current mainnet consensus constants.",
+      "limitation": "Current source code records parameters but does not independently narrate the social or market history surrounding them."
+    },
+    {
+      "title": "Code archive",
+      "author_or_publisher": "Satoshi Nakamoto Institute",
+      "url": "[https://satoshi.nakamotoinstitute.org/code/](https://satoshi.nakamotoinstitute.org/code/)",
+      "published_or_updated": "Historical archive; current page reviewed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "Bitcoin v0.1.0 dated January 9, 2009 and archived early code identities.",
+      "limitation": "Archive metadata does not prove how many people ran each release."
+    },
+    {
+      "title": "Cryptography Mailing List threads",
+      "author_or_publisher": "Satoshi Nakamoto Institute",
+      "url": "[https://satoshi.nakamotoinstitute.org/emails/threads/](https://satoshi.nakamotoinstitute.org/emails/threads/)",
+      "published_or_updated": "Historical archive",
+      "accessed": "July 31, 2026",
+      "supports": "The January 8, 2009 UTC start of the public Bitcoin v0.1 release thread and the October 31, 2008 white-paper thread.",
+      "limitation": "Thread timestamps and archived messages do not establish network size or adoption."
+    },
+    {
+      "title": "Pizza for bitcoins?",
+      "author_or_publisher": "BitcoinTalk",
+      "url": "[https://bitcointalk.org/index.php?topic=137.0](https://bitcointalk.org/index.php?topic=137.0)",
+      "published_or_updated": "May 18–22, 2010",
+      "accessed": "July 31, 2026",
+      "supports": "The original 10,000-bitcoin pizza offer and the later confirmation that the trade was completed.",
+      "limitation": "A forum record; it does not establish that this was the first purchase of any kind."
+    },
+    {
+      "title": "Overflow bug SERIOUS",
+      "author_or_publisher": "Satoshi Nakamoto Institute archive of BitcoinTalk",
+      "url": "[https://satoshi.nakamotoinstitute.org/posts/bitcointalk/threads/185/](https://satoshi.nakamotoinstitute.org/posts/bitcointalk/threads/185/)",
+      "published_or_updated": "August 15, 2010",
+      "accessed": "July 31, 2026",
+      "supports": "Discovery of the block 74,638 value-overflow problem and contemporaneous discussion.",
+      "limitation": "Forum discussion is incomplete without the patch record and later software history."
+    },
+    {
+      "title": "Version 0.3.10 — block 74638 overflow PATCH!",
+      "author_or_publisher": "Satoshi Nakamoto Institute archive",
+      "url": "[https://satoshi.nakamotoinstitute.org/posts/bitcointalk/376/](https://satoshi.nakamotoinstitute.org/posts/bitcointalk/376/)",
+      "published_or_updated": "August 15, 2010",
+      "accessed": "July 31, 2026",
+      "supports": "Satoshi’s patch announcement and statement that the valid chain had overtaken the affected chain.",
+      "limitation": "A developer announcement; it does not measure every node upgrade or operational consequence."
+    },
+    {
+      "title": "Bitcoin Core subsidy and block validation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "[https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp](https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp)",
+      "published_or_updated": "Current repository file reviewed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "The height-based subsidy calculation and validation of coinbase value against subsidy plus fees.",
+      "limitation": "Current implementation source does not by itself establish the historical timestamp of each halving block."
+    },
+    {
+      "title": "Bitcoin block 210,000",
+      "author_or_publisher": "mempool.space",
+      "url": "[https://mempool.space/block/000000000000048b95347e83192f69cf0366076336c639f9b7228e9ba171342e](https://mempool.space/block/000000000000048b95347e83192f69cf0366076336c639f9b7228e9ba171342e)",
+      "published_or_updated": "Historical block data",
+      "accessed": "July 31, 2026",
+      "supports": "Block height 210,000 and its timestamp of November 28, 2012.",
+      "limitation": "Explorer data reflects decoded chain data and does not explain the social or market interpretation of the first halving."
+    },
+    {
+      "title": "Bitcoin block 840,000",
+      "author_or_publisher": "mempool.space",
+      "url": "[https://mempool.space/block/0000000000000000000320283a032748cef8227873ff4872689bf23f1cda83a5](https://mempool.space/block/0000000000000000000320283a032748cef8227873ff4872689bf23f1cda83a5)",
+      "published_or_updated": "Historical block data",
+      "accessed": "July 31, 2026",
+      "supports": "Block height 840,000, its April 20, 2024 timestamp, and the 3.125 BTC coinbase subsidy shown in the block.",
+      "limitation": "Explorer data does not establish later market, mining, or adoption effects."
+    },
+    {
+      "title": "11/12 March 2013 Chain Fork Information",
+      "author_or_publisher": "bitcoin.org",
+      "url": "[https://bitcoin.org/chainfork](https://bitcoin.org/chainfork)",
+      "published_or_updated": "March 11, 2013; last updated May 16, 2013",
+      "accessed": "July 31, 2026",
+      "supports": "The block 225,430 incompatibility, competing chains, miner rollback request, and 0.8.1 response.",
+      "limitation": "A contemporaneous operational notice, not a complete independent postmortem of every participant’s decision."
+    },
+    {
+      "title": "Bitcoin Core version 0.8.1 released",
+      "author_or_publisher": "bitcoin.org",
+      "url": "[https://bitcoin.org/en/release/v0.8.1](https://bitcoin.org/en/release/v0.8.1)",
+      "published_or_updated": "March 18, 2013",
+      "accessed": "July 31, 2026",
+      "supports": "The maintenance rule intended to avoid chain-forking incompatibility and the checkpoint around block 225,430.",
+      "limitation": "Release notes describe the software response, not all economic or operational effects."
+    },
+    {
+      "title": "Russian Nationals Charged With Hacking One Cryptocurrency Exchange and Illicitly Operating Another",
+      "author_or_publisher": "U.S. Department of Justice",
+      "url": "[https://www.justice.gov/usao-ndca/pr/russian-nationals-charged-hacking-one-cryptocurrency-exchange-and-illicitly-operating](https://www.justice.gov/usao-ndca/pr/russian-nationals-charged-hacking-one-cryptocurrency-exchange-and-illicitly-operating)",
+      "published_or_updated": "June 9, 2023",
+      "accessed": "July 31, 2026",
+      "supports": "Mt. Gox’s role as a custodial exchange, its 2014 cessation, and allegations concerning approximately 647,000 stolen bitcoin.",
+      "limitation": "Criminal charges contain allegations; defendants are presumed innocent unless proven guilty, and the release is not a full civil-rehabilitation record."
+    },
+    {
+      "title": "BIP 141: Segregated Witness",
+      "author_or_publisher": "Bitcoin Improvement Proposals",
+      "url": "[https://bips.dev/141/](https://bips.dev/141/)",
+      "published_or_updated": "Assigned December 21, 2015; deployed",
+      "accessed": "July 31, 2026",
+      "supports": "SegWit’s consensus specification, technical purpose, BIP 9 deployment design, and distinction between specification and activation.",
+      "limitation": "The BIP does not alone document every social dispute, implementation decision, or adoption outcome."
+    },
+    {
+      "title": "Bitcoin Core 0.13.1 released with Segregated Witness",
+      "author_or_publisher": "Bitcoin Core",
+      "url": "[https://bitcoincore.org/en/2016/10/27/release-0.13.1/](https://bitcoincore.org/en/2016/10/27/release-0.13.1/)",
+      "published_or_updated": "October 27, 2016",
+      "accessed": "July 31, 2026",
+      "supports": "Release of Bitcoin Core 0.13.1 with SegWit implementation and BIP 9 activation parameters.",
+      "limitation": "A software release did not itself activate SegWit or prove adoption by miners, nodes, wallets, or businesses."
+    },
+    {
+      "title": "BIP 148: Mandatory activation of segwit deployment",
+      "author_or_publisher": "Bitcoin Improvement Proposals",
+      "url": "[https://bips.dev/148/](https://bips.dev/148/)",
+      "published_or_updated": "Assigned March 12, 2017; deployed",
+      "accessed": "July 31, 2026",
+      "supports": "The proposed flag-day enforcement path and its relationship to the existing SegWit deployment.",
+      "limitation": "The proposal reflects one activation strategy and does not prove a single account of why SegWit ultimately activated."
+    },
+    {
+      "title": "Segregated Witness Wallet Development Guide",
+      "author_or_publisher": "Bitcoin Core",
+      "url": "[https://bitcoincore.org/en/segwit_wallet_dev/](https://bitcoincore.org/en/segwit_wallet_dev/)",
+      "published_or_updated": "Current historical guide reviewed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "Enforcement of SegWit rules from block height 481,824.",
+      "limitation": "Developer guidance does not measure wallet, exchange, or user adoption."
+    },
+    {
+      "title": "BIP 341: Taproot",
+      "author_or_publisher": "Bitcoin Improvement Proposals",
+      "url": "[https://bips.dev/341/](https://bips.dev/341/)",
+      "published_or_updated": "Assigned January 19, 2020; deployed",
+      "accessed": "July 31, 2026",
+      "supports": "Taproot’s consensus design and relationship to Schnorr signatures and Tapscript.",
+      "limitation": "Specification does not establish deployment completion or later usage by itself."
+    },
+    {
+      "title": "Bitcoin Optech Newsletter #175",
+      "author_or_publisher": "Bitcoin Optech",
+      "url": "[https://bitcoinops.org/en/newsletters/2021/11/17/](https://bitcoinops.org/en/newsletters/2021/11/17/)",
+      "published_or_updated": "November 17, 2021",
+      "accessed": "July 31, 2026",
+      "supports": "Taproot activation at block 709,632 and the distinction between activation and immediate transaction inclusion by mining pools.",
+      "limitation": "Technical newsletter coverage is not a complete measurement of ecosystem adoption."
+    },
+    {
+      "title": "Decreto No. 57 — Ley Bitcoin",
+      "author_or_publisher": "Asamblea Legislativa de El Salvador",
+      "url": "[https://www.asamblea.gob.sv/leyes-y-decretos/decretos-por-anios/2021/0](https://www.asamblea.gob.sv/leyes-y-decretos/decretos-por-anios/2021/0)",
+      "published_or_updated": "June 8, 2021",
+      "accessed": "July 31, 2026",
+      "supports": "The official legislative record identifying Decreto No. 57 as the Bitcoin Law and its 2021 enactment.",
+      "limitation": "The index record does not by itself measure implementation, voluntary use, public costs, or later legal amendments."
+    },
+    {
+      "title": "El Salvador: Request for Extended Arrangement Under the Extended Fund Facility",
+      "author_or_publisher": "International Monetary Fund",
+      "url": "[https://www.elibrary.imf.org/view/journals/002/2025/058/article-A001-en.xml](https://www.elibrary.imf.org/view/journals/002/2025/058/article-A001-en.xml)",
+      "published_or_updated": "February 2025",
+      "accessed": "July 31, 2026",
+      "supports": "The 2025 amendments removing essential legal-tender features, making private acceptance voluntary, requiring tax payments in U.S. dollars, and confining public-sector use.",
+      "limitation": "IMF program documentation is not the original 2021 statute and does not independently measure every private transaction or public attitude."
+    },
+    {
+      "title": "Statement on the Approval of Spot Bitcoin Exchange-Traded Products",
+      "author_or_publisher": "U.S. Securities and Exchange Commission",
+      "url": "[https://www.sec.gov/newsroom/speeches-statements/gensler-statement-spot-bitcoin-011023](https://www.sec.gov/newsroom/speeches-statements/gensler-statement-spot-bitcoin-011023)",
+      "published_or_updated": "January 10, 2024",
+      "accessed": "July 31, 2026",
+      "supports": "Commission approval of listing and trading for multiple spot bitcoin ETP shares and the agency’s stated limits on that action.",
+      "limitation": "A chair statement summarizes the action; the controlling details are in the Commission’s approval order."
+    },
+    {
+      "title": "Order Granting Accelerated Approval, Release No. 34-99306",
+      "author_or_publisher": "U.S. Securities and Exchange Commission",
+      "url": "[https://www.sec.gov/files/rules/sro/nysearca/2024/34-99306.pdf](https://www.sec.gov/files/rules/sro/nysearca/2024/34-99306.pdf)",
+      "published_or_updated": "January 10, 2024",
+      "accessed": "July 31, 2026",
+      "supports": "The exchange rule changes approved for multiple bitcoin-based commodity trust shares and trust units.",
+      "limitation": "The order concerns securities-exchange listing rules, not Bitcoin consensus, custody equivalence, or investment performance."
+    }
+  ],
+  "seo_title": "Major Bitcoin Milestones: What Changed and Why It Mattered",
+  "meta_description": "Explore major Bitcoin milestones from the white paper and network launch through security incidents, SegWit, Taproot, legal changes, and market access.",
+  "excerpt": "Bitcoin’s history is more than a price chart. This guide separates protocol events, software releases, network activations, business failures, legal changes, and cultural milestones.",
+  "reading_time": "Approximately 10 minutes for the Full Article.",
+  "category": {
+    "registry_id": "MSC-HUB-ECOSYSTEM",
+    "label": "Bitcoin Ecosystem",
+    "subcategory": "Community",
+    "depth": "Surface",
+    "format": "History"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-078",
+      "title": "How Bitcoin Communities Form and Grow",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-080",
+      "title": "How Bitcoin Open-Source Projects Work",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": []
+  },
+  "review_dates": {
+    "reviewed": "2026-07-31",
+    "copy_locked": "2026-07-31",
+    "human_verification": null
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1 — A milestone classification chart"
+    },
+    {
+      "title": "Illustration 2 — The 2017 activation sequence"
+    },
+    {
+      "title": "Illustration 3 — Protocol versus surrounding institutions"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}

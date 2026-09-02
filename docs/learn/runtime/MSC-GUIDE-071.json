@@ -1,0 +1,311 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-071-bitcoin-mining-companies.md",
+  "source_sha256": "1bbaedb1dc084bd56bebb3e77ab940dd995a1e9db67f49b7c219763c2fe7e85f",
+  "registry_id": "MSC-GUIDE-071",
+  "status": "COPY_LOCKED",
+  "h1": "How Bitcoin Mining Companies Operate",
+  "introductory_deck": "Bitcoin mining companies combine computing hardware, power contracts, sites, cooling, networking, software, labor, financing, and pool relationships into an industrial operation. Their economics depend on realized hashrate, network difficulty, transaction fees, bitcoin price, energy cost, equipment performance, and capital structure. A mining company is not the same as a mining pool or an ASIC manufacturer, and even a large share of network hashrate does not give one company unilateral authority over Bitcoin consensus.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "A Bitcoin mining company operates or supports specialized computers that repeatedly hash block-header candidates. When a miner or its pool finds a valid block, the block can earn the subsidy and transaction fees if other nodes accept it under the consensus rules they enforce.\n\nThe protocol description is compact. The company operating around it is not. Industrial mining requires sites, power, transformers, switchgear, containers or buildings, cooling, network connectivity, ASIC miners, firmware, monitoring, repair, security, accounting, treasury management, and capital. A company may own all of these components, lease some, host machines for others, or contract with several counterparties.\n\nThis guide was researched on July 27, 2026. Company production, hashrate, capacity, power prices, pool relationships, equipment, financing, holdings, grid programs, and environmental claims change frequently. Current examples are company disclosures unless otherwise stated and must be renewed immediately before publication.",
+      "body_html": "<p>A Bitcoin mining company operates or supports specialized computers that repeatedly hash block-header candidates. When a miner or its pool finds a valid block, the block can earn the subsidy and transaction fees if other nodes accept it under the consensus rules they enforce.</p>\n<p>The protocol description is compact. The company operating around it is not. Industrial mining requires sites, power, transformers, switchgear, containers or buildings, cooling, network connectivity, ASIC miners, firmware, monitoring, repair, security, accounting, treasury management, and capital. A company may own all of these components, lease some, host machines for others, or contract with several counterparties.</p>\n<p>This guide was researched on July 27, 2026. Company production, hashrate, capacity, power prices, pool relationships, equipment, financing, holdings, grid programs, and environmental claims change frequently. Current examples are company disclosures unless otherwise stated and must be renewed immediately before publication.</p>"
+    },
+    {
+      "heading": "A mining company is not a mining pool",
+      "body_markdown": "A mining company generally owns, leases, hosts, manages, or operates physical mining equipment and facilities. A mining pool coordinates proof-of-work submissions from many miners, constructs or distributes mining jobs, measures shares, and allocates rewards under a payout method.\n\nThe same organization can participate in both roles, but the functions remain distinct. A company may point its machines to a third-party pool. A pool may coordinate machines owned by many unrelated operators. The pool’s reported share of found blocks is not necessarily the hashrate owned by the pool operator.\n\nThis distinction affects control. Pool software or operators may influence block-template construction, transaction selection, job distribution, and payout policy. Individual miners control whether to connect, subject to contracts and technical capability. Newer protocols and implementations can redistribute parts of template construction. None of these arrangements lets a miner or pool create blocks that violate the rules enforced by validating nodes and expect those blocks to be accepted.\n\nMining companies are also not necessarily ASIC manufacturers. A miner may buy hardware from one or more manufacturers, while an ASIC manufacturer may sell machines without operating a material self-mining fleet. Equipment supply, warranties, firmware, repair parts, and purchase deposits can still create concentrated dependencies.",
+      "body_html": "<p>A mining company generally owns, leases, hosts, manages, or operates physical mining equipment and facilities. A mining pool coordinates proof-of-work submissions from many miners, constructs or distributes mining jobs, measures shares, and allocates rewards under a payout method.</p>\n<p>The same organization can participate in both roles, but the functions remain distinct. A company may point its machines to a third-party pool. A pool may coordinate machines owned by many unrelated operators. The pool’s reported share of found blocks is not necessarily the hashrate owned by the pool operator.</p>\n<p>This distinction affects control. Pool software or operators may influence block-template construction, transaction selection, job distribution, and payout policy. Individual miners control whether to connect, subject to contracts and technical capability. Newer protocols and implementations can redistribute parts of template construction. None of these arrangements lets a miner or pool create blocks that violate the rules enforced by validating nodes and expect those blocks to be accepted.</p>\n<p>Mining companies are also not necessarily ASIC manufacturers. A miner may buy hardware from one or more manufacturers, while an ASIC manufacturer may sell machines without operating a material self-mining fleet. Equipment supply, warranties, firmware, repair parts, and purchase deposits can still create concentrated dependencies.</p>"
+    },
+    {
+      "heading": "Self-mining",
+      "body_markdown": "In self-mining, the company deploys machines for its own account and receives the economic result of the mining activity, subject to pool fees and other contracts.\n\nThe company’s gross mining revenue depends on the bitcoin it earns and the accounting value assigned when earned. The number of bitcoin produced depends on the company’s realized contribution to network hashrate, network difficulty, transaction fees, block subsidies, uptime, and pool payout structure. The value in dollars or another reporting currency also depends on bitcoin’s market price.\n\nSelf-mining costs can include:\n\n- electricity;\n- site rent or ownership costs;\n- operations and maintenance;\n- network and software;\n- pool fees;\n- labor and security;\n- insurance;\n- repairs and spare parts;\n- equipment depreciation;\n- taxes and regulatory costs; and\n- corporate overhead.\n\nA company may highlight a narrow “cost to mine” metric that excludes depreciation, corporate expenses, stock compensation, interest, or site-development costs. The metric can still be useful if the definition is clear. It should not be treated as the company’s complete economic cost.",
+      "body_html": "<p>In self-mining, the company deploys machines for its own account and receives the economic result of the mining activity, subject to pool fees and other contracts.</p>\n<p>The company’s gross mining revenue depends on the bitcoin it earns and the accounting value assigned when earned. The number of bitcoin produced depends on the company’s realized contribution to network hashrate, network difficulty, transaction fees, block subsidies, uptime, and pool payout structure. The value in dollars or another reporting currency also depends on bitcoin’s market price.</p>\n<p>Self-mining costs can include:</p>\n<ul><li>electricity;</li><li>site rent or ownership costs;</li><li>operations and maintenance;</li><li>network and software;</li><li>pool fees;</li><li>labor and security;</li><li>insurance;</li><li>repairs and spare parts;</li><li>equipment depreciation;</li><li>taxes and regulatory costs; and</li><li>corporate overhead.</li></ul>\n<p>A company may highlight a narrow “cost to mine” metric that excludes depreciation, corporate expenses, stock compensation, interest, or site-development costs. The metric can still be useful if the definition is clear. It should not be treated as the company’s complete economic cost.</p>"
+    },
+    {
+      "heading": "Hosting",
+      "body_markdown": "In a hosting arrangement, a company provides power, space, cooling, network access, maintenance, or management for mining equipment owned by a customer. The host may charge a fixed fee, pass through electricity costs, share revenue, or combine structures.\n\nHosting changes the risk allocation. The customer may bear bitcoin-price and machine-performance risk while the host bears facility and service obligations. Contracts may address uptime, curtailment, repair, deposits, power-price changes, insurance, termination, and what happens if either party defaults.\n\nA company can both self-mine and host. Segment reporting and contract disclosures help separate the revenue and costs. A machine physically located at a company site is not necessarily owned by the company. Likewise, a company-owned machine may be located at a third-party site.\n\nRiot’s historical filings describe both self-mining and hosting activities, including changes to its hosting business. MARA’s 2025 Form 10-K describes owned and hosted sites and third-party arrangements. These are company disclosures about particular periods, not a universal industry template.",
+      "body_html": "<p>In a hosting arrangement, a company provides power, space, cooling, network access, maintenance, or management for mining equipment owned by a customer. The host may charge a fixed fee, pass through electricity costs, share revenue, or combine structures.</p>\n<p>Hosting changes the risk allocation. The customer may bear bitcoin-price and machine-performance risk while the host bears facility and service obligations. Contracts may address uptime, curtailment, repair, deposits, power-price changes, insurance, termination, and what happens if either party defaults.</p>\n<p>A company can both self-mine and host. Segment reporting and contract disclosures help separate the revenue and costs. A machine physically located at a company site is not necessarily owned by the company. Likewise, a company-owned machine may be located at a third-party site.</p>\n<p>Riot’s historical filings describe both self-mining and hosting activities, including changes to its hosting business. MARA’s 2025 Form 10-K describes owned and hosted sites and third-party arrangements. These are company disclosures about particular periods, not a universal industry template.</p>"
+    },
+    {
+      "heading": "Power procurement is an operating foundation",
+      "body_markdown": "Electricity is usually the largest direct input. Mining companies obtain it through utility tariffs, retail contracts, power-purchase agreements, behind-the-meter generation, joint ventures, site ownership, or other structures.\n\nThe quoted energy price may not include transmission, demand charges, congestion, taxes, capacity payments, curtailment effects, or infrastructure costs. A low headline rate at one facility should not be generalized across a fleet.\n\nPower contracts can be:\n\n- fixed-price or variable;\n- long-term or short-term;\n- firm or interruptible;\n- indexed to a wholesale market;\n- linked to a generation asset;\n- subject to demand-response programs; or\n- limited by interconnection and local grid conditions.\n\nMining is unusually flexible compared with some industrial loads because machines can be reduced or switched off. That flexibility can support grid programs or reduce exposure during high prices. It can also reduce production. Curtailment payments or power credits should be reported separately from bitcoin production so readers can see whether revenue came from mining or from changing electricity consumption.",
+      "body_html": "<p>Electricity is usually the largest direct input. Mining companies obtain it through utility tariffs, retail contracts, power-purchase agreements, behind-the-meter generation, joint ventures, site ownership, or other structures.</p>\n<p>The quoted energy price may not include transmission, demand charges, congestion, taxes, capacity payments, curtailment effects, or infrastructure costs. A low headline rate at one facility should not be generalized across a fleet.</p>\n<p>Power contracts can be:</p>\n<ul><li>fixed-price or variable;</li><li>long-term or short-term;</li><li>firm or interruptible;</li><li>indexed to a wholesale market;</li><li>linked to a generation asset;</li><li>subject to demand-response programs; or</li><li>limited by interconnection and local grid conditions.</li></ul>\n<p>Mining is unusually flexible compared with some industrial loads because machines can be reduced or switched off. That flexibility can support grid programs or reduce exposure during high prices. It can also reduce production. Curtailment payments or power credits should be reported separately from bitcoin production so readers can see whether revenue came from mining or from changing electricity consumption.</p>"
+    },
+    {
+      "heading": "Site development is more than buying miners",
+      "body_markdown": "A site may require land rights, permits, interconnection studies, substations, transformers, transmission upgrades, switchgear, buildings or containers, cooling, fiber, fire protection, security, and trained staff.\n\nCapacity passes through stages:\n\n1. **Contracted or planned capacity** may exist in an agreement or development plan.\n2. **Nameplate capacity** describes a designed maximum under specified conditions.\n3. **Developed capacity** may mean infrastructure is built to a company-defined stage.\n4. **Energized capacity** means power is available to equipment.\n5. **Deployed capacity** means machines are installed.\n6. **Operational capacity** means machines are actually running, subject to downtime and curtailment.\n\nCompanies do not use these terms identically. The filing or production report must define the measure. Announcing a future site or megawatt target does not prove the capacity is financed, built, interconnected, energized, or productive.\n\nDevelopment can be delayed by equipment, weather, permitting, utility work, transmission, financing, or contractor performance. Capital can remain tied up before any bitcoin is produced.",
+      "body_html": "<p>A site may require land rights, permits, interconnection studies, substations, transformers, transmission upgrades, switchgear, buildings or containers, cooling, fiber, fire protection, security, and trained staff.</p>\n<p>Capacity passes through stages:</p>\n<ol><li><strong>Contracted or planned capacity</strong> may exist in an agreement or development plan.</li><li><strong>Nameplate capacity</strong> describes a designed maximum under specified conditions.</li><li><strong>Developed capacity</strong> may mean infrastructure is built to a company-defined stage.</li><li><strong>Energized capacity</strong> means power is available to equipment.</li><li><strong>Deployed capacity</strong> means machines are installed.</li><li><strong>Operational capacity</strong> means machines are actually running, subject to downtime and curtailment.</li></ol>\n<p>Companies do not use these terms identically. The filing or production report must define the measure. Announcing a future site or megawatt target does not prove the capacity is financed, built, interconnected, energized, or productive.</p>\n<p>Development can be delayed by equipment, weather, permitting, utility work, transmission, financing, or contractor performance. Capital can remain tied up before any bitcoin is produced.</p>"
+    },
+    {
+      "heading": "Hardware acquisition and fleet economics",
+      "body_markdown": "ASIC miners convert electricity into hashes. Their economic value depends on hashrate, energy efficiency, reliability, price, delivery timing, useful life, firmware, and the conditions at the site.\n\nMining companies may purchase machines with cash, debt, equity, bitcoin, deposits, purchase commitments, or vendor financing. Large orders can require substantial prepayments months before delivery. The buyer may face supplier concentration, shipping delays, tariffs, defects, warranty disputes, or technology obsolescence.\n\nA fleet is rarely uniform. Different models have different power requirements and efficiency. Some machines may be installed but offline. Others may be held in inventory, under repair, or pledged. A count of “owned miners” is not the same as miners operating.\n\nDepreciation allocates equipment cost over an estimated useful life. The estimate affects reported expense but does not determine physical performance. A machine can remain usable after its accounting life or become uneconomic earlier because difficulty, power prices, failure rates, or newer hardware changed.\n\nCleanSpark’s 2025 Form 10-K, for example, distinguishes miners in service from owned units and reports company-defined operational hashrate. MARA and Riot also disclose fleets, commitments, depreciation, and equipment risks. The measures should be compared only after definitions and dates are aligned.",
+      "body_html": "<p>ASIC miners convert electricity into hashes. Their economic value depends on hashrate, energy efficiency, reliability, price, delivery timing, useful life, firmware, and the conditions at the site.</p>\n<p>Mining companies may purchase machines with cash, debt, equity, bitcoin, deposits, purchase commitments, or vendor financing. Large orders can require substantial prepayments months before delivery. The buyer may face supplier concentration, shipping delays, tariffs, defects, warranty disputes, or technology obsolescence.</p>\n<p>A fleet is rarely uniform. Different models have different power requirements and efficiency. Some machines may be installed but offline. Others may be held in inventory, under repair, or pledged. A count of “owned miners” is not the same as miners operating.</p>\n<p>Depreciation allocates equipment cost over an estimated useful life. The estimate affects reported expense but does not determine physical performance. A machine can remain usable after its accounting life or become uneconomic earlier because difficulty, power prices, failure rates, or newer hardware changed.</p>\n<p>CleanSpark’s 2025 Form 10-K, for example, distinguishes miners in service from owned units and reports company-defined operational hashrate. MARA and Riot also disclose fleets, commitments, depreciation, and equipment risks. The measures should be compared only after definitions and dates are aligned.</p>"
+    },
+    {
+      "heading": "Firmware, fleet management, and maintenance",
+      "body_markdown": "Firmware controls how an ASIC operates. Fleet software monitors hashrate, temperature, fans, power, errors, pools, and availability. Operators may tune machines for efficiency, output, or site conditions.\n\nChanging firmware can affect warranties, security, stability, and performance. Remote-management systems can become high-value targets because they can alter configurations or redirect hashrate. Access controls, signed updates, network segmentation, logging, and incident response matter.\n\nMaintenance includes cleaning, fan and power-supply replacement, board repair, cable and network work, cooling-system service, and inventory management. Failure rates can rise with heat, dust, humidity, voltage conditions, or aggressive tuning.\n\nA company’s installed fleet can therefore produce less than its nameplate capability. Realized performance reflects both machine efficiency and operational discipline.",
+      "body_html": "<p>Firmware controls how an ASIC operates. Fleet software monitors hashrate, temperature, fans, power, errors, pools, and availability. Operators may tune machines for efficiency, output, or site conditions.</p>\n<p>Changing firmware can affect warranties, security, stability, and performance. Remote-management systems can become high-value targets because they can alter configurations or redirect hashrate. Access controls, signed updates, network segmentation, logging, and incident response matter.</p>\n<p>Maintenance includes cleaning, fan and power-supply replacement, board repair, cable and network work, cooling-system service, and inventory management. Failure rates can rise with heat, dust, humidity, voltage conditions, or aggressive tuning.</p>\n<p>A company’s installed fleet can therefore produce less than its nameplate capability. Realized performance reflects both machine efficiency and operational discipline.</p>"
+    },
+    {
+      "heading": "Pool relationships and revenue allocation",
+      "body_markdown": "Bitcoin’s developer documentation explains solo and pooled mining. In a pool, miners submit lower-difficulty shares as evidence of contributed work. The pool uses a payout method to distribute value, while a valid network block must still satisfy Bitcoin’s target and consensus rules.\n\nPool arrangements differ in:\n\n- who builds the block template;\n- which transactions are included;\n- how shares are measured;\n- whether payouts are pay-per-share, full-pay-per-share, proportional, or another model;\n- pool fees;\n- payout timing and minimums;\n- reserve and counterparty risk;\n- orphan or stale-block treatment; and\n- whether miners can select or construct templates.\n\nStratum V2 specifications, protocol libraries, and application repositories document ongoing work on mining communication, including job negotiation. As of July 27, 2026, the `sv2-apps` repository describes its application-level crates as alpha. Public specification or implementation availability does not prove that a mining company or pool has deployed every component or feature.\n\nA company should disclose material pool concentration and settlement exposure. Mining through a pool can reduce payout variance, but it adds operational and counterparty dependence.",
+      "body_html": "<p>Bitcoin’s developer documentation explains solo and pooled mining. In a pool, miners submit lower-difficulty shares as evidence of contributed work. The pool uses a payout method to distribute value, while a valid network block must still satisfy Bitcoin’s target and consensus rules.</p>\n<p>Pool arrangements differ in:</p>\n<ul><li>who builds the block template;</li><li>which transactions are included;</li><li>how shares are measured;</li><li>whether payouts are pay-per-share, full-pay-per-share, proportional, or another model;</li><li>pool fees;</li><li>payout timing and minimums;</li><li>reserve and counterparty risk;</li><li>orphan or stale-block treatment; and</li><li>whether miners can select or construct templates.</li></ul>\n<p>Stratum V2 specifications, protocol libraries, and application repositories document ongoing work on mining communication, including job negotiation. As of July 27, 2026, the <code>sv2-apps</code> repository describes its application-level crates as alpha. Public specification or implementation availability does not prove that a mining company or pool has deployed every component or feature.</p>\n<p>A company should disclose material pool concentration and settlement exposure. Mining through a pool can reduce payout variance, but it adds operational and counterparty dependence.</p>"
+    },
+    {
+      "heading": "Hashrate metrics are not interchangeable",
+      "body_markdown": "Hashrate is a rate of hashing attempts, commonly expressed in hashes per second and large multiples such as terahashes or exahashes per second. Company reports use several related measures.\n\n- **Nameplate hashrate** is a designed or rated capability under assumptions.\n- **Installed hashrate** usually refers to machines placed at sites.\n- **Deployed hashrate** may refer to installed and available equipment under a company definition.\n- **Operational hashrate** usually refers to active capacity at a date.\n- **Average operating hashrate** averages performance over a period.\n- **Realized hashrate** can be inferred from accepted pool shares or production and may capture downtime and variance.\n- **Network hashrate** is an estimate derived from block production and difficulty, not a direct meter of every machine.\n\nRiot’s 2025 Form 10-K explicitly defines “deployed hash rate” and “average operating hash rate” differently. That is why a headline number cannot be compared safely without the definition, date, and averaging period.\n\nA company’s share of estimated network hashrate can affect expected production and concentration analysis. It does not create unilateral consensus authority. Miners propose blocks. Independently operated nodes decide whether those blocks satisfy the rules they enforce.",
+      "body_html": "<p>Hashrate is a rate of hashing attempts, commonly expressed in hashes per second and large multiples such as terahashes or exahashes per second. Company reports use several related measures.</p>\n<ul><li><strong>Nameplate hashrate</strong> is a designed or rated capability under assumptions.</li><li><strong>Installed hashrate</strong> usually refers to machines placed at sites.</li><li><strong>Deployed hashrate</strong> may refer to installed and available equipment under a company definition.</li><li><strong>Operational hashrate</strong> usually refers to active capacity at a date.</li><li><strong>Average operating hashrate</strong> averages performance over a period.</li><li><strong>Realized hashrate</strong> can be inferred from accepted pool shares or production and may capture downtime and variance.</li><li><strong>Network hashrate</strong> is an estimate derived from block production and difficulty, not a direct meter of every machine.</li></ul>\n<p>Riot’s 2025 Form 10-K explicitly defines “deployed hash rate” and “average operating hash rate” differently. That is why a headline number cannot be compared safely without the definition, date, and averaging period.</p>\n<p>A company’s share of estimated network hashrate can affect expected production and concentration analysis. It does not create unilateral consensus authority. Miners propose blocks. Independently operated nodes decide whether those blocks satisfy the rules they enforce.</p>"
+    },
+    {
+      "heading": "Revenue, costs, and operating leverage",
+      "body_markdown": "Mining revenue can be volatile because several variables move at once.\n\nThe block subsidy changes at protocol-defined intervals. Transaction fees vary with block-space demand. Network difficulty adjusts based on block timing. Bitcoin price changes the reporting-currency value of rewards. Power, maintenance, pool fees, and uptime affect cost and output.\n\nA simplified operating view is:\n\n**bitcoin earned × market value at recognition**\nminus\n**power + pool + site operating costs**\nbefore\n**depreciation + corporate overhead + financing + taxes**\n\nThe simplification is not an accounting formula. It shows why a company can report improving production while cash generation weakens, or lower production while benefiting from power credits or higher bitcoin prices.\n\nOperating leverage can be strong. Once a site and fleet are built, changes in bitcoin price, difficulty, fees, or power cost can move margins quickly. High fixed costs and debt can amplify stress.\n\nReaders should compare revenue with cash from operations, capital expenditures, equipment commitments, debt maturities, share issuance, and depreciation. Earnings affected by fair-value changes in held bitcoin should be separated from mining operations.",
+      "body_html": "<p>Mining revenue can be volatile because several variables move at once.</p>\n<p>The block subsidy changes at protocol-defined intervals. Transaction fees vary with block-space demand. Network difficulty adjusts based on block timing. Bitcoin price changes the reporting-currency value of rewards. Power, maintenance, pool fees, and uptime affect cost and output.</p>\n<p>A simplified operating view is:</p>\n<p><strong>bitcoin earned × market value at recognition</strong> minus <strong>power + pool + site operating costs</strong> before <strong>depreciation + corporate overhead + financing + taxes</strong></p>\n<p>The simplification is not an accounting formula. It shows why a company can report improving production while cash generation weakens, or lower production while benefiting from power credits or higher bitcoin prices.</p>\n<p>Operating leverage can be strong. Once a site and fleet are built, changes in bitcoin price, difficulty, fees, or power cost can move margins quickly. High fixed costs and debt can amplify stress.</p>\n<p>Readers should compare revenue with cash from operations, capital expenditures, equipment commitments, debt maturities, share issuance, and depreciation. Earnings affected by fair-value changes in held bitcoin should be separated from mining operations.</p>"
+    },
+    {
+      "heading": "Curtailment and grid programs",
+      "body_markdown": "Curtailment means reducing load. A mining company may curtail voluntarily because power prices are high, under a utility agreement, in response to grid conditions, or through a demand-response program.\n\nBenefits can include avoided energy expense, power credits, demand-response payments, or improved grid flexibility. Costs include reduced hashing and lower expected bitcoin production. The net result depends on contract terms, market prices, timing, and machine restart performance.\n\nRiot’s filings describe participation in power markets and curtailment-related credits under its arrangements in Texas. Those company disclosures establish the reported program and accounting treatment for the period. They do not prove a universal grid benefit, nor do they establish how every local grid would respond.\n\nClaims such as “mining stabilizes the grid” or “mining wastes energy” are too broad without a defined site, market, counterfactual, time period, and methodology.",
+      "body_html": "<p>Curtailment means reducing load. A mining company may curtail voluntarily because power prices are high, under a utility agreement, in response to grid conditions, or through a demand-response program.</p>\n<p>Benefits can include avoided energy expense, power credits, demand-response payments, or improved grid flexibility. Costs include reduced hashing and lower expected bitcoin production. The net result depends on contract terms, market prices, timing, and machine restart performance.</p>\n<p>Riot’s filings describe participation in power markets and curtailment-related credits under its arrangements in Texas. Those company disclosures establish the reported program and accounting treatment for the period. They do not prove a universal grid benefit, nor do they establish how every local grid would respond.</p>\n<p>Claims such as “mining stabilizes the grid” or “mining wastes energy” are too broad without a defined site, market, counterfactual, time period, and methodology.</p>"
+    },
+    {
+      "heading": "Treasury and financing decisions",
+      "body_markdown": "A mining company decides whether to sell mined bitcoin, retain it, pledge it, borrow against it, or use it to acquire equipment and services. These choices can matter as much as site efficiency.\n\nSelling bitcoin can fund power, payroll, taxes, debt, and expansion. Retaining bitcoin increases price exposure and may support financing, but it does not create operating cash. Pledging bitcoin or equipment can introduce collateral risk.\n\nMining companies frequently use common-stock issuance because the business is capital intensive. They may also use equipment finance, leases, convertible notes, secured loans, joint ventures, or purchase credits. Share issuance can fund growth while diluting existing holders.\n\nA company can report growing hashrate and bitcoin reserves while depending on continued capital-market access. The financial statements should be read with the fleet and production reports.",
+      "body_html": "<p>A mining company decides whether to sell mined bitcoin, retain it, pledge it, borrow against it, or use it to acquire equipment and services. These choices can matter as much as site efficiency.</p>\n<p>Selling bitcoin can fund power, payroll, taxes, debt, and expansion. Retaining bitcoin increases price exposure and may support financing, but it does not create operating cash. Pledging bitcoin or equipment can introduce collateral risk.</p>\n<p>Mining companies frequently use common-stock issuance because the business is capital intensive. They may also use equipment finance, leases, convertible notes, secured loans, joint ventures, or purchase credits. Share issuance can fund growth while diluting existing holders.</p>\n<p>A company can report growing hashrate and bitcoin reserves while depending on continued capital-market access. The financial statements should be read with the fleet and production reports.</p>"
+    },
+    {
+      "heading": "Jurisdictional and environmental exposure",
+      "body_markdown": "Mining is tied to physical locations. Local law, power-market design, land use, noise, water, taxes, labor, transmission, climate, and political decisions can affect operations.\n\nEnergy-source claims require careful boundaries. A facility may contract with a renewable generator while drawing from a mixed grid. A company may report a percentage based on contracts, certificates, modeled generation, or direct supply. “Carbon neutral,” “zero-carbon,” “renewable,” and “low-carbon” are not interchangeable.\n\nAn emissions claim should state:\n\n- which sites and time period are covered;\n- whether the boundary is operational electricity, full lifecycle, or another scope;\n- whether the result uses location-based or market-based accounting;\n- which generation data, certificates, offsets, or assumptions are used;\n- whether embodied hardware and construction are included; and\n- who prepared or assured the calculation.\n\nCompany sustainability reports are self-reported unless independently assured within a stated scope. Even an assurance report has materiality and methodology limits.",
+      "body_html": "<p>Mining is tied to physical locations. Local law, power-market design, land use, noise, water, taxes, labor, transmission, climate, and political decisions can affect operations.</p>\n<p>Energy-source claims require careful boundaries. A facility may contract with a renewable generator while drawing from a mixed grid. A company may report a percentage based on contracts, certificates, modeled generation, or direct supply. “Carbon neutral,” “zero-carbon,” “renewable,” and “low-carbon” are not interchangeable.</p>\n<p>An emissions claim should state:</p>\n<ul><li>which sites and time period are covered;</li><li>whether the boundary is operational electricity, full lifecycle, or another scope;</li><li>whether the result uses location-based or market-based accounting;</li><li>which generation data, certificates, offsets, or assumptions are used;</li><li>whether embodied hardware and construction are included; and</li><li>who prepared or assured the calculation.</li></ul>\n<p>Company sustainability reports are self-reported unless independently assured within a stated scope. Even an assurance report has materiality and methodology limits.</p>"
+    },
+    {
+      "heading": "Production updates are disclosures, not independent measurement",
+      "body_markdown": "Many mining companies publish monthly production reports. These can provide timely figures for bitcoin produced, bitcoin sold, holdings, deployed hashrate, fleet size, power, and curtailment.\n\nThe reports are useful, but they are usually prepared by the company and may contain non-GAAP or company-defined metrics. A press release does not receive the same audit work as annual financial statements. Estimates may later be revised.\n\nA careful summary should say “the company reported” and preserve the date and definition. It should not convert self-reported production into independently verified fact.",
+      "body_html": "<p>Many mining companies publish monthly production reports. These can provide timely figures for bitcoin produced, bitcoin sold, holdings, deployed hashrate, fleet size, power, and curtailment.</p>\n<p>The reports are useful, but they are usually prepared by the company and may contain non-GAAP or company-defined metrics. A press release does not receive the same audit work as annual financial statements. Estimates may later be revised.</p>\n<p>A careful summary should say “the company reported” and preserve the date and definition. It should not convert self-reported production into independently verified fact.</p>"
+    },
+    {
+      "heading": "How to evaluate a mining company",
+      "body_markdown": "Ask:\n\n1. Does the company self-mine, host, operate a pool, manufacture equipment, or combine roles?\n2. Which sites and legal entities are included?\n3. Which power capacity is planned, contracted, developed, energized, and operational?\n4. Which hashrate measure is reported, at what date, and over what period?\n5. How many machines are owned, installed, active, offline, hosted, or pledged?\n6. Which manufacturers, firmware, pools, utilities, and sites create concentration?\n7. What does the company’s cost metric include and exclude?\n8. How much capital is required for expansion and replacement?\n9. How are equipment life and depreciation estimated?\n10. How are curtailment credits and mining revenue separated?\n11. Does the company sell, hold, or pledge mined bitcoin?\n12. Which figures are audited, filed, self-reported, estimated, or forward-looking?\n13. What methodology supports energy and emissions claims?\n14. Which authority can change company policy, and which independent actors enforce Bitcoin rules?\n\nMining companies are industrial operators within Bitcoin’s incentive system. Their importance is real but bounded. They compete through power, sites, hardware, operations, capital, and execution. They do not own the protocol.",
+      "body_html": "<p>Ask:</p>\n<ol><li>Does the company self-mine, host, operate a pool, manufacture equipment, or combine roles?</li><li>Which sites and legal entities are included?</li><li>Which power capacity is planned, contracted, developed, energized, and operational?</li><li>Which hashrate measure is reported, at what date, and over what period?</li><li>How many machines are owned, installed, active, offline, hosted, or pledged?</li><li>Which manufacturers, firmware, pools, utilities, and sites create concentration?</li><li>What does the company’s cost metric include and exclude?</li><li>How much capital is required for expansion and replacement?</li><li>How are equipment life and depreciation estimated?</li><li>How are curtailment credits and mining revenue separated?</li><li>Does the company sell, hold, or pledge mined bitcoin?</li><li>Which figures are audited, filed, self-reported, estimated, or forward-looking?</li><li>What methodology supports energy and emissions claims?</li><li>Which authority can change company policy, and which independent actors enforce Bitcoin rules?</li></ol>\n<p>Mining companies are industrial operators within Bitcoin’s incentive system. Their importance is real but bounded. They compete through power, sites, hardware, operations, capital, and execution. They do not own the protocol.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Self-mining",
+      "definition": "Operating mining equipment for the company’s own economic account."
+    },
+    {
+      "term": "Hosting",
+      "definition": "Providing site, power, cooling, network, maintenance, or management services for another party’s miners."
+    },
+    {
+      "term": "Mining pool",
+      "definition": "Coordinator that distributes work, measures contributed shares, and allocates payouts among miners."
+    },
+    {
+      "term": "ASIC manufacturer",
+      "definition": "Company that designs or produces application-specific mining hardware; distinct from a mining operator."
+    },
+    {
+      "term": "Nameplate capacity",
+      "definition": "Designed maximum capability under stated assumptions."
+    },
+    {
+      "term": "Energized capacity",
+      "definition": "Infrastructure or equipment with electrical power available."
+    },
+    {
+      "term": "Operational hashrate",
+      "definition": "Company-defined measure of hashing capability operating at a date or during a period."
+    },
+    {
+      "term": "Realized hashrate",
+      "definition": "Effective work reflected in accepted shares or production, subject to measurement and variance."
+    },
+    {
+      "term": "Network hashrate",
+      "definition": "Estimate of total hashing rate derived from network difficulty and observed block timing."
+    },
+    {
+      "term": "Curtailment",
+      "definition": "Reduction of electrical load under operational, market, utility, or grid conditions."
+    },
+    {
+      "term": "Fleet efficiency",
+      "definition": "Hashing output relative to power consumption, usually measured for defined equipment and conditions."
+    },
+    {
+      "term": "Depreciation",
+      "definition": "Accounting allocation of equipment or infrastructure cost over an estimated useful life."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bitcoin Developer Guide: Mining",
+      "author_or_publisher": "Bitcoin.org developer documentation contributors",
+      "url": "https://developer.bitcoin.org/devguide/mining.html",
+      "accessed": "July 27, 2026",
+      "supports": "Technical description of solo and pooled mining, block templates, share work, reward allocation, and the distinction between pool coordination and valid network blocks."
+    },
+    {
+      "title": "Riot Platforms, Inc. 2025 Form 10-K",
+      "author_or_publisher": "Riot Platforms, Inc.; U.S. Securities and Exchange Commission",
+      "url": "https://www.sec.gov/Archives/edgar/data/1167419/000110465926022322/riot-20251231x10k.htm",
+      "filed": "March 2, 2026",
+      "accessed": "July 27, 2026",
+      "supports": "Company-defined deployed and average operating hashrate, self-mining, power strategy, site development, curtailment, equipment, costs, depreciation, financing, and risk disclosures."
+    },
+    {
+      "title": "Riot Platforms, Inc. First-Quarter 2026 Form 10-Q",
+      "author_or_publisher": "Riot Platforms, Inc.; U.S. Securities and Exchange Commission",
+      "url": "https://www.sec.gov/Archives/edgar/data/1167419/000110465926053120/riot-20260331x10q.htm",
+      "filed": "April 30, 2026",
+      "accessed": "July 27, 2026",
+      "supports": "Interim company disclosures about mining revenue, power credits, fleet operations, bitcoin, costs, assets, and financing for the quarter ended March 31, 2026."
+    },
+    {
+      "title": "MARA Holdings, Inc. 2025 Form 10-K",
+      "author_or_publisher": "MARA Holdings, Inc.; U.S. Securities and Exchange Commission",
+      "url": "https://www.sec.gov/Archives/edgar/data/1507605/000150760526000007/mara-20251231.htm",
+      "filed": "March 2, 2026",
+      "accessed": "July 27, 2026",
+      "supports": "Company disclosures about owned and hosted sites, self-mining, mining pools, energy, equipment, depreciation, bitcoin production, holdings, financing, and operational risks."
+    },
+    {
+      "title": "MARA First-Quarter 2026 Shareholder Letter, Exhibit 99.1 to Form 8-K",
+      "author_or_publisher": "MARA Holdings, Inc.; U.S. Securities and Exchange Commission",
+      "url": "https://www.sec.gov/Archives/edgar/data/1507605/000150760526000014/q126shareholderletter.htm",
+      "furnished": "May 11, 2026",
+      "accessed": "July 27, 2026",
+      "supports": "Dated company-reported production, energized hashrate, site and energy developments, financial results, and management-defined metrics. The letter was furnished under Item 2.02 rather than deemed filed and establishes company reporting, not independent verification."
+    },
+    {
+      "title": "CleanSpark, Inc. 2025 Form 10-K",
+      "author_or_publisher": "CleanSpark, Inc.; U.S. Securities and Exchange Commission",
+      "url": "https://www.sec.gov/Archives/edgar/data/827876/000119312525297510/clsk-20250930.htm",
+      "filed": "November 25, 2025",
+      "accessed": "July 27, 2026",
+      "supports": "Company disclosures about self-mining, miners in service versus owned, operational hashrate, energy, sites, pool activity, equipment, depreciation, financing, and risks."
+    },
+    {
+      "title": "Stratum V2 Specifications",
+      "author_or_publisher": "Stratum Mining contributors",
+      "url": "https://github.com/stratum-mining/sv2-spec",
+      "accessed": "July 27, 2026",
+      "supports": "Current public specifications for mining communication, roles, channels, work negotiation, and job negotiation; does not establish universal deployment."
+    },
+    {
+      "title": "Stratum V2 Applications and Reference Implementation",
+      "author_or_publisher": "Stratum Mining contributors",
+      "url": "https://github.com/stratum-mining/sv2-apps",
+      "accessed": "July 27, 2026",
+      "supports": "Current public application-level pool and miner components, releases, integration tests, and the repository’s stated alpha project status. It does not establish production deployment by any particular company or pool."
+    },
+    {
+      "title": "Bitcoin Core Integration and Staging Tree",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin",
+      "accessed": "July 27, 2026",
+      "supports": "Independent block validation by node software and the boundary between miner block construction and consensus-rule enforcement."
+    },
+    {
+      "title": "Strategy Inc. 2025 Form 10-K",
+      "author_or_publisher": "Strategy Inc.; U.S. Securities and Exchange Commission",
+      "url": "https://www.sec.gov/Archives/edgar/data/1050446/000105044626000020/mstr-20251231.htm",
+      "filed": "February 19, 2026",
+      "accessed": "July 27, 2026",
+      "supports": "Comparative treasury, custody, fair-value, financing, and risk disclosures used to separate holding bitcoin from industrial mining operations."
+    },
+    {
+      "title": "Accounting Standards Update 2023-08: Crypto Assets",
+      "author_or_publisher": "Financial Accounting Standards Board",
+      "url": "https://fasb.org/Page/Document?pdf=ASU%202023-08.pdf&title=ACCOUNTING%20STANDARDS%20UPDATE%202023-08%E2%80%94Intangibles%E2%80%94Goodwill%20and%20Other%E2%80%94Crypto%20Assets%20%28Subtopic%20350-60%29",
+      "published": "December 2023",
+      "supports": "U.S. GAAP fair-value measurement and disclosure framework relevant to bitcoin held after mining, distinct from mining revenue and operating cash."
+    },
+    {
+      "title": "SEC Filings and Forms",
+      "author_or_publisher": "U.S. Securities and Exchange Commission",
+      "url": "https://www.sec.gov/edgar/search-and-access",
+      "accessed": "July 27, 2026",
+      "supports": "Primary filing access for annual, quarterly, current, and exhibit records used to distinguish audited, interim, filed, furnished, and promotional company information."
+    }
+  ],
+  "seo_title": "How Bitcoin Mining Companies Operate",
+  "meta_description": "Learn how Bitcoin mining companies manage self-mining, hosting, power, sites, ASIC fleets, pools, hashrate, costs, curtailment, financing, and risk.",
+  "excerpt": "Bitcoin mining companies coordinate industrial power, sites, hardware, software, pools, labor, and capital while remaining separate from pools, manufacturers, and Bitcoin consensus.",
+  "reading_time": "20 to 24 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-ECOSYSTEM",
+    "label": "Bitcoin Ecosystem",
+    "subcategory": "Companies",
+    "depth": "Shallow",
+    "format": "Ecosystem Overview"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-070",
+      "title": "How Bitcoin Startups Build and Compete",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-072",
+      "title": "What Bitcoin Infrastructure Companies Do",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": []
+  },
+  "review_dates": {
+    "reviewed": "2026-07-27",
+    "copy_locked": "2026-07-27",
+    "human_verification": "July 27, 2026"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "The Industrial Mining Works",
+      "educational_purpose": "Map the physical and organizational systems required to operate a mining company.",
+      "recommended_placement": "After Self-mining.",
+      "visual_description": "Vintage industrial harbor cutaway connecting Power Source, Substation, Switchgear, Mining Hall, Cooling, Network, ASIC Fleet, Firmware Control Room, Repair Shop, Pool Connection, Treasury, and Finance Office. A separate offshore buoy labeled Validating nodes accepts or rejects the resulting block independently.",
+      "required_labels": "Power, Substation, Switchgear, Site, Cooling, Network, ASIC fleet, Firmware, Monitoring, Repair, Mining pool, Bitcoin rewards, Treasury, Financing, Validating nodes",
+      "caption": "Industrial mining combines physical infrastructure, software, operations, and capital; finding a block still does not bypass independent validation.",
+      "alt_text": "Technical nautical-industrial diagram of a Bitcoin mining facility from power and ASICs through pool connection and independently validating nodes.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Use a left-to-right flow with validating nodes retained as a separate final stage.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "Capacity and Hashrate Soundings Chart",
+      "educational_purpose": "Distinguish planned, nameplate, energized, deployed, operating, and realized capacity and hashrate.",
+      "recommended_placement": "After Hashrate metrics are not interchangeable.",
+      "visual_description": "Vintage depth-sounding chart with six horizontal bands. Planned capacity sits above the waterline, followed by designed nameplate, built infrastructure, energized equipment, operating fleet, and realized work below. Loss markers show delays, offline machines, curtailment, failures, and pool variance.",
+      "required_labels": "Planned, Nameplate, Developed, Energized, Deployed, Operational, Average operating, Realized, Offline, Curtailment, Failure, Pool variance, Network hashrate",
+      "caption": "Each capacity and hashrate measure answers a different question; headline figures are comparable only when definitions and dates match.",
+      "alt_text": "Layered sounding chart showing how planned mining capacity narrows through energized and operating equipment to realized hashrate.",
+      "image_orientation": "Portrait",
+      "mobile_crop_notes": "Preserve the vertical sequence and show loss markers on the right margin.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Mining Economics Tide Table",
+      "educational_purpose": "Show how revenue, operating costs, capital costs, and market variables interact.",
+      "recommended_placement": "After Revenue, costs, and operating leverage.",
+      "visual_description": "Vintage tide table with incoming variables—block subsidy, transaction fees, bitcoin price, network difficulty, and uptime—feeding bitcoin production. Outgoing channels show power, pool fees, labor, repairs, depreciation, capital expenditure, interest, and taxes. A separate inlet marks curtailment credits so it is not confused with mining output.",
+      "required_labels": "Block subsidy, Transaction fees, Bitcoin price, Difficulty, Uptime, Bitcoin produced, Power, Pool fees, Labor, Repairs, Depreciation, Capital expenditure, Interest, Taxes, Curtailment credits, Cash flow",
+      "caption": "Mining economics reflect several moving variables, and a narrow production-cost metric does not capture the full company.",
+      "alt_text": "Tide-table diagram connecting Bitcoin mining revenue variables to operating costs, capital costs, curtailment credits, and cash flow.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack inputs above production and costs below, with curtailment credits visually separate.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}

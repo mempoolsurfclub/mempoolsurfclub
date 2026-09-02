@@ -54,10 +54,10 @@ function configFor(number) {
 
 const flexibleKeyTermParser = String.raw`function parseKeyTerms(markdown) {
   const normalized = normalize(markdown);
-  if (/^-\s+\*\*/.test(normalized)) {
-    return normalized.split(/\n(?=-\s+\*\*)/).map((block) => {
+  if (/^[-*]\s+\*\*/.test(normalized)) {
+    return normalized.split(/\n(?=[-*]\s+\*\*)/).map((block) => {
       const clean = normalize(block);
-      const match = clean.match(/^-\s+\*\*(.+?):\*\*\s+([\s\S]+)$/);
+      const match = clean.match(/^[-*]\s+\*\*(.+?):\*\*\s+([\s\S]+)$/);
       if (!match) throw new Error('Invalid key term bullet: ' + clean);
       return { term: match[1], definition: normalize(match[2]) };
     });
@@ -103,7 +103,7 @@ const flexibleNumberedSourceParser = String.raw`function parseNumberedSourceReco
 
     const continuationIndent = String(current.number).length + 2;
     const allowedIndents = new Set([3, continuationIndent]);
-    const bullet = line.match(/^(\s*)-\s+(.*)$/);
+    const bullet = line.match(/^(\s*)[-*]\s+(.*)$/);
     if (bullet) {
       if (!allowedIndents.has(bullet[1].length)) {
         throw new Error('Numbered source record ' + current.number + ' field is not indented by exactly ' + continuationIndent + ' spaces: ' + line);
@@ -125,6 +125,87 @@ const flexibleNumberedSourceParser = String.raw`function parseNumberedSourceReco
   finishRecord();
   if (!records.length) throw new Error('Sources section did not contain any numbered records');
   return records;
+}`;
+
+const flexibleBuildData = String.raw`function buildData() {
+  const source = read(SOURCE_PATH).replace(/\r\n/g, '\n');
+  const registry = JSON.parse(read(REGISTRY_PATH));
+  const records = registryRecords(registry);
+  const byId = new Map(records.map((record) => [recordId(record), record]));
+  const { data: frontmatter, body } = parseFrontmatter(source);
+  const sections = parseNumberedSections(body);
+  const sectionByTitle = (pattern) => {
+    const matches = [...sections.values()].filter((section) => pattern.test(section.title));
+    if (matches.length !== 1) throw new Error('Expected exactly one section matching ' + pattern + ', found ' + matches.length);
+    return matches[0];
+  };
+  const introSection = sectionByTitle(/^Introductory deck$/i);
+  const articleSection = sectionByTitle(/^Full article$/i);
+  const keyTermsSection = sectionByTitle(/^Key Terms$/i);
+  const sourcesSection = sectionByTitle(/^Sources$/i);
+  const seoTitleSection = sectionByTitle(/^SEO title$/i);
+  const metaDescriptionSection = sectionByTitle(/^Meta description$/i);
+  const excerptSection = sectionByTitle(/^(?:Page )?excerpt$/i);
+  const readingTimeSection = sectionByTitle(/^(?:Estimated )?reading time(?: estimate)?$/i);
+  const plannedLinksSection = sectionByTitle(/^Planned internal links$/i);
+  const humanSection = sectionByTitle(/^Human verification$/i);
+  const illustrationSection = sectionByTitle(/^Illustration briefs?$/i);
+  const illustrationBriefs = parseHeadingRecords(illustrationSection.body).filter((record) => /^Illustration\s+\d+\b/i.test(record.title));
+  if (illustrationBriefs.length !== 3) throw new Error('Expected exactly three illustration briefs, found ' + illustrationBriefs.length);
+  if (frontmatter.registry_id !== EXPECTED_ID) throw new Error('Expected ' + EXPECTED_ID + ', found ' + frontmatter.registry_id);
+  const order = valueOf(registry.navigation || {}, ['canonical_topic_order'], []);
+  const index = order.indexOf(EXPECTED_ID);
+  if (index === -1) throw new Error(EXPECTED_ID + ' is missing from canonical_topic_order');
+  const previousId = index > 0 ? refId(order[index - 1]) : null;
+  const nextId = index + 1 < order.length ? refId(order[index + 1]) : null;
+  const currentRecord = byId.get(EXPECTED_ID);
+  const parentId = refId(valueOf(currentRecord, ['Parent destination', 'Canonical category', 'Parent category ID', 'parent_category_id']));
+  const plannedLinks = plannedLinksSection.body.split('\n').filter((line) => /^-\s+MSC-/.test(line)).map((line) => {
+    const [registry_id, title] = line.replace(/^-\s+/, '').split('|').map((value) => value.trim());
+    return { registry_id, title, active: false, url: null };
+  });
+  const human = humanSection.body;
+  const humanReviewDate = human.match(/^- Review date:\s*(.+)$/m)?.[1]?.trim() || null;
+  return {
+    schema_version: 1,
+    source_file: SOURCE_PATH,
+    source_sha256: crypto.createHash('sha256').update(source).digest('hex'),
+    registry_id: frontmatter.registry_id,
+    status: frontmatter.status,
+    h1: frontmatter.h1,
+    introductory_deck: introSection.body,
+    article_sections: parseArticle(articleSection.body),
+    key_terms: parseKeyTerms(keyTermsSection.body),
+    sources: parseSourceRecords(sourcesSection.body),
+    seo_title: seoTitleSection.body,
+    meta_description: metaDescriptionSection.body,
+    excerpt: excerptSection.body,
+    reading_time: readingTimeSection.body,
+    category: {
+      registry_id: parentId || null,
+      label: frontmatter.category,
+      subcategory: frontmatter.subcategory,
+      depth: frontmatter.depth,
+      format: frontmatter.format,
+    },
+    relationships: {
+      previous: previousId ? { registry_id: previousId, title: recordTitle(byId.get(previousId)), active: false, url: null } : null,
+      next: nextId ? { registry_id: nextId, title: recordTitle(byId.get(nextId)), active: false, url: null } : null,
+      planned_internal_links: plannedLinks,
+    },
+    review_dates: {
+      reviewed: frontmatter.reviewed_date,
+      copy_locked: frontmatter.copy_locked_date,
+      human_verification: humanReviewDate,
+    },
+    illustration_briefs: illustrationBriefs,
+    publication: {
+      state: 'PREVIEW_ONLY',
+      public_url: null,
+      links_active: false,
+      shopify_page_id: null,
+    },
+  };
 }`;
 
 function transformedGenerator(config, tempJson, tempSnippet) {
@@ -165,6 +246,12 @@ function transformedGenerator(config, tempJson, tempSnippet) {
   assert.notEqual(numberedSourceStart, -1, 'Base guide generator drifted: missing parseNumberedSourceRecords start');
   assert.notEqual(numberedSourceBoundary, -1, 'Base guide generator drifted: missing parseNumberedSourceRecords boundary');
   source = source.slice(0, numberedSourceStart) + flexibleNumberedSourceParser + source.slice(numberedSourceBoundary);
+
+  const buildDataStart = source.indexOf('function buildData() {');
+  const buildDataBoundary = source.indexOf('\n\nfunction buildSnippet', buildDataStart);
+  assert.notEqual(buildDataStart, -1, 'Base guide generator drifted: missing buildData start');
+  assert.notEqual(buildDataBoundary, -1, 'Base guide generator drifted: missing buildData boundary');
+  source = source.slice(0, buildDataStart) + flexibleBuildData + source.slice(buildDataBoundary);
 
   source = source
     .replaceAll('MscGuide001Terms', `${config.dom}Terms`)

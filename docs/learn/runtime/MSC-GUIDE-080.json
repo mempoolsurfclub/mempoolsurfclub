@@ -1,0 +1,345 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-080-bitcoin-open-source-projects.md",
+  "source_sha256": "94ef73214951fd50bf23e261017d0410b2b483ab386d6bf47f920c62c5b0ee8e",
+  "registry_id": "MSC-GUIDE-080",
+  "status": "COPY_LOCKED",
+  "h1": "How Bitcoin Open-Source Projects Work",
+  "introductory_deck": "Bitcoin open-source projects include node software, wallets, Lightning implementations, libraries, hardware interfaces, developer tools, documentation, and infrastructure. Their source may be public, but each project has its own license, permissions, review process, release practices, funding, and maintenance risks.\n\nOpen source makes inspection, contribution, modification, and competition possible under the project’s license. It does not guarantee secure code, decentralized governance, active maintenance, reproducible binaries, compatibility, or adoption.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "An open-source Bitcoin project is a software or documentation project whose license grants defined rights to inspect, use, modify, and redistribute its source. A public repository is often where that work happens, but repository visibility alone is not the definition. The license determines the legal permissions.\n\nThe Open Source Initiative’s definition requires more than readable code. Among other conditions, an open-source license must allow redistribution, provide source in a form suitable for modification, and permit derived works. Projects can choose different qualifying licenses, and those licenses can create different obligations for users and downstream distributors.\n\nBitcoin projects also differ in purpose. Bitcoin Core is a node implementation. LND is a Lightning implementation. Bitcoin Dev Kit provides wallet-development libraries. BTCPay Server is a payment application. A small library, a specification repository, and a full application can all be open source while having very different users, risks, and governance.\n\nThis guide was reviewed on July 31, 2026. Repository roles, maintainers, release branches, supported versions, funding relationships, dependencies, and security procedures can change and must be renewed before publication.",
+      "body_html": "<p>An open-source Bitcoin project is a software or documentation project whose license grants defined rights to inspect, use, modify, and redistribute its source. A public repository is often where that work happens, but repository visibility alone is not the definition. The license determines the legal permissions.</p>\n<p>The Open Source Initiative’s definition requires more than readable code. Among other conditions, an open-source license must allow redistribution, provide source in a form suitable for modification, and permit derived works. Projects can choose different qualifying licenses, and those licenses can create different obligations for users and downstream distributors.</p>\n<p>Bitcoin projects also differ in purpose. Bitcoin Core is a node implementation. LND is a Lightning implementation. Bitcoin Dev Kit provides wallet-development libraries. BTCPay Server is a payment application. A small library, a specification repository, and a full application can all be open source while having very different users, risks, and governance.</p>\n<p>This guide was reviewed on July 31, 2026. Repository roles, maintainers, release branches, supported versions, funding relationships, dependencies, and security procedures can change and must be renewed before publication.</p>"
+    },
+    {
+      "heading": "A repository organizes work, not authority over Bitcoin",
+      "body_markdown": "A repository stores source history, branches, issues, pull requests, releases, documentation, and project settings. Anyone may be able to read or fork a public repository, while only selected accounts have permission to merge, push, manage releases, change access, or administer security settings.\n\nGitHub’s standard organization roles illustrate the difference. Read, triage, write, maintain, and admin permissions grant progressively broader capabilities within a repository. These are platform permissions, not ranks in Bitcoin consensus.\n\nRepository access therefore needs precise language:\n\n- **Public access** lets people inspect and usually copy the repository under its license.\n- **Contribution access** may mean opening an issue, submitting a patch, reviewing, testing, or documenting.\n- **Write or merge access** lets designated people integrate work into that project.\n- **Administrative access** can change repository settings and permissions.\n- **Protocol authority** is not created by any of those permissions.\n\nA Bitcoin Core maintainer can help integrate an accepted patch into Bitcoin Core. That does not force node operators to install a release, make other implementations accept the change, or alter the rules already enforced by the network.",
+      "body_html": "<p>A repository stores source history, branches, issues, pull requests, releases, documentation, and project settings. Anyone may be able to read or fork a public repository, while only selected accounts have permission to merge, push, manage releases, change access, or administer security settings.</p>\n<p>GitHub’s standard organization roles illustrate the difference. Read, triage, write, maintain, and admin permissions grant progressively broader capabilities within a repository. These are platform permissions, not ranks in Bitcoin consensus.</p>\n<p>Repository access therefore needs precise language:</p>\n<ul><li><strong>Public access</strong> lets people inspect and usually copy the repository under its license.</li><li><strong>Contribution access</strong> may mean opening an issue, submitting a patch, reviewing, testing, or documenting.</li><li><strong>Write or merge access</strong> lets designated people integrate work into that project.</li><li><strong>Administrative access</strong> can change repository settings and permissions.</li><li><strong>Protocol authority</strong> is not created by any of those permissions.</li></ul>\n<p>A Bitcoin Core maintainer can help integrate an accepted patch into Bitcoin Core. That does not force node operators to install a release, make other implementations accept the change, or alter the rules already enforced by the network.</p>"
+    },
+    {
+      "heading": "Licenses define what others may do",
+      "body_markdown": "A project’s license answers questions that the repository interface cannot. It may permit commercial use, modification, redistribution, and sublicensing, while requiring preservation of notices or imposing other conditions.\n\nBitcoin Core uses the MIT License. Other Bitcoin projects may use MIT, Apache, BSD, GPL, dual licensing, or a combination across components. “Source available” is not automatically the same as open source if the license withholds rights required by the Open Source Definition.\n\nBefore adopting a project, users and builders should identify:\n\n- the license for each relevant component;\n- whether bundled dependencies use compatible licenses;\n- whether trademarks or data have separate terms;\n- whether generated code or firmware blobs are included;\n- what obligations apply when redistributing modified binaries.\n\nA familiar license does not prove that the code is secure or well maintained. It establishes permissions and conditions.",
+      "body_html": "<p>A project’s license answers questions that the repository interface cannot. It may permit commercial use, modification, redistribution, and sublicensing, while requiring preservation of notices or imposing other conditions.</p>\n<p>Bitcoin Core uses the MIT License. Other Bitcoin projects may use MIT, Apache, BSD, GPL, dual licensing, or a combination across components. “Source available” is not automatically the same as open source if the license withholds rights required by the Open Source Definition.</p>\n<p>Before adopting a project, users and builders should identify:</p>\n<ul><li>the license for each relevant component;</li><li>whether bundled dependencies use compatible licenses;</li><li>whether trademarks or data have separate terms;</li><li>whether generated code or firmware blobs are included;</li><li>what obligations apply when redistributing modified binaries.</li></ul>\n<p>A familiar license does not prove that the code is secure or well maintained. It establishes permissions and conditions.</p>"
+    },
+    {
+      "heading": "Contributors, reviewers, maintainers, and release engineers do different work",
+      "body_markdown": "Open-source projects often use overlapping roles.\n\nA **contributor** may submit code, tests, documentation, design, issue reports, or review. A **reviewer** examines a proposed change and its evidence. A **maintainer** may triage issues, guide scope, integrate accepted work, coordinate releases, or manage a subsystem. A **release engineer** prepares, signs, packages, and publishes a version. A project may also have security contacts, specification editors, translators, moderators, and infrastructure operators.\n\nThe same person can hold several roles, but the roles remain project-specific. A contributor count does not show how many people perform deep review. A list of repository members does not reveal who understands a critical subsystem. A maintainer title does not mean one person can safely change every component.\n\nHealthy projects make expectations visible through contribution guides, developer notes, review norms, release procedures, security policies, and public history. Bitcoin Core’s repository explicitly describes testing and review as a development bottleneck and directs contributors to its contribution and developer documentation. LND’s repository encourages new contributors to begin with code review. Those practices are examples, not universal rules.",
+      "body_html": "<p>Open-source projects often use overlapping roles.</p>\n<p>A <strong>contributor</strong> may submit code, tests, documentation, design, issue reports, or review. A <strong>reviewer</strong> examines a proposed change and its evidence. A <strong>maintainer</strong> may triage issues, guide scope, integrate accepted work, coordinate releases, or manage a subsystem. A <strong>release engineer</strong> prepares, signs, packages, and publishes a version. A project may also have security contacts, specification editors, translators, moderators, and infrastructure operators.</p>\n<p>The same person can hold several roles, but the roles remain project-specific. A contributor count does not show how many people perform deep review. A list of repository members does not reveal who understands a critical subsystem. A maintainer title does not mean one person can safely change every component.</p>\n<p>Healthy projects make expectations visible through contribution guides, developer notes, review norms, release procedures, security policies, and public history. Bitcoin Core’s repository explicitly describes testing and review as a development bottleneck and directs contributors to its contribution and developer documentation. LND’s repository encourages new contributors to begin with code review. Those practices are examples, not universal rules.</p>"
+    },
+    {
+      "heading": "Changes move through a project-specific process",
+      "body_markdown": "A typical contribution begins with an issue, design discussion, or pull request. The author explains the problem, proposes a change, adds tests, and responds to review. Reviewers may test the branch, inspect edge cases, challenge assumptions, request smaller scope, or reject the approach.\n\nIntegration is a judgment inside that project. Maintainers decide whether the proposed change is sufficiently understood, useful, compatible, tested, and maintainable for that codebase. They may wait for specialist review or leave a patch unmerged indefinitely.\n\nThis process is not a vote where the largest number of comments wins. Nor is a merge proof of correctness. Review quality depends on relevant expertise, time, adversarial thinking, testing, and the clarity of the change.\n\nFor software that affects funds or consensus behavior, cautious projects may prefer small changes, long review, fuzzing, release candidates, compatibility testing, or delayed disclosure of vulnerabilities. Other projects may move faster because their consequences and user expectations differ.",
+      "body_html": "<p>A typical contribution begins with an issue, design discussion, or pull request. The author explains the problem, proposes a change, adds tests, and responds to review. Reviewers may test the branch, inspect edge cases, challenge assumptions, request smaller scope, or reject the approach.</p>\n<p>Integration is a judgment inside that project. Maintainers decide whether the proposed change is sufficiently understood, useful, compatible, tested, and maintainable for that codebase. They may wait for specialist review or leave a patch unmerged indefinitely.</p>\n<p>This process is not a vote where the largest number of comments wins. Nor is a merge proof of correctness. Review quality depends on relevant expertise, time, adversarial thinking, testing, and the clarity of the change.</p>\n<p>For software that affects funds or consensus behavior, cautious projects may prefer small changes, long review, fuzzing, release candidates, compatibility testing, or delayed disclosure of vulnerabilities. Other projects may move faster because their consequences and user expectations differ.</p>"
+    },
+    {
+      "heading": "A release is a packaged project decision, not automatic adoption",
+      "body_markdown": "Projects publish releases to identify versions that users can install or depend on. A release may contain new features, bug fixes, security corrections, dependency changes, documentation, and migration instructions.\n\nVersioning conventions vary. Some projects use Semantic Versioning, where changes to a declared public API influence major, minor, and patch numbers. Others use calendar versions, project-specific numbering, rolling branches, or separate versions for multiple packages.\n\nBitcoin Core uses release branches and tags for official stable versions, while its development branch is not guaranteed to be stable. Its release process includes freezes, release candidates, builds, signatures, notes, and staged publication. That is one project’s process, not a governance template for every Bitcoin repository.\n\nPublishing a release does not establish adoption. Operators may stay on older versions, wait for downstream packaging, test a release candidate, choose a competing implementation, or stop using the project. Adoption must be measured among the relevant users and versions.",
+      "body_html": "<p>Projects publish releases to identify versions that users can install or depend on. A release may contain new features, bug fixes, security corrections, dependency changes, documentation, and migration instructions.</p>\n<p>Versioning conventions vary. Some projects use Semantic Versioning, where changes to a declared public API influence major, minor, and patch numbers. Others use calendar versions, project-specific numbering, rolling branches, or separate versions for multiple packages.</p>\n<p>Bitcoin Core uses release branches and tags for official stable versions, while its development branch is not guaranteed to be stable. Its release process includes freezes, release candidates, builds, signatures, notes, and staged publication. That is one project’s process, not a governance template for every Bitcoin repository.</p>\n<p>Publishing a release does not establish adoption. Operators may stay on older versions, wait for downstream packaging, test a release candidate, choose a competing implementation, or stop using the project. Adoption must be measured among the relevant users and versions.</p>"
+    },
+    {
+      "heading": "Public source is different from a reproducible build",
+      "body_markdown": "Reading source code does not prove that a downloaded binary was built from that source.\n\nA build is reproducible when independent parties using the specified source, environment, and instructions can create bit-for-bit identical designated artifacts. Reproducibility provides a path for comparing binaries with source. It does not prove that the source is correct, that the build environment is trustworthy at every layer, or that users actually performed the verification.\n\nBitcoin Core uses a Guix-based release process and a separate repository of build attestations. That provides evidence around release artifacts, but the relevant signatures, source revision, build instructions, and signer set still need to be checked for the specific release.\n\nProjects without reproducible builds may still publish source, hashes, and signatures. Those controls answer different questions and should not be collapsed into one “verified” label.",
+      "body_html": "<p>Reading source code does not prove that a downloaded binary was built from that source.</p>\n<p>A build is reproducible when independent parties using the specified source, environment, and instructions can create bit-for-bit identical designated artifacts. Reproducibility provides a path for comparing binaries with source. It does not prove that the source is correct, that the build environment is trustworthy at every layer, or that users actually performed the verification.</p>\n<p>Bitcoin Core uses a Guix-based release process and a separate repository of build attestations. That provides evidence around release artifacts, but the relevant signatures, source revision, build instructions, and signer set still need to be checked for the specific release.</p>\n<p>Projects without reproducible builds may still publish source, hashes, and signatures. Those controls answer different questions and should not be collapsed into one “verified” label.</p>"
+    },
+    {
+      "heading": "Funding supports work but does not equal technical control",
+      "body_markdown": "Open-source work can be volunteer, employer-funded, grant-funded, sponsored, contracted, or supported through donations. Funding affects who has time to review, maintain, document, test, and respond to incidents.\n\nOpenSats and Brink are examples of nonprofit funders supporting Bitcoin open-source contributors. Their published processes show that funding decisions belong to those organizations. The resulting code still enters project-specific review and release processes.\n\nA funder can influence capacity and priorities by choosing what to support. That is not the same as holding repository permissions, merging a patch, producing a release, or changing Bitcoin consensus. Conversely, the absence of formal control does not make funding irrelevant. Concentrated funding, undisclosed conflicts, short grant horizons, or dependence on one employer can create operational and incentive risks.\n\nUseful disclosure asks who funded the work, for what period and scope, whether milestones are required, and whether the recipient retains technical independence.",
+      "body_html": "<p>Open-source work can be volunteer, employer-funded, grant-funded, sponsored, contracted, or supported through donations. Funding affects who has time to review, maintain, document, test, and respond to incidents.</p>\n<p>OpenSats and Brink are examples of nonprofit funders supporting Bitcoin open-source contributors. Their published processes show that funding decisions belong to those organizations. The resulting code still enters project-specific review and release processes.</p>\n<p>A funder can influence capacity and priorities by choosing what to support. That is not the same as holding repository permissions, merging a patch, producing a release, or changing Bitcoin consensus. Conversely, the absence of formal control does not make funding irrelevant. Concentrated funding, undisclosed conflicts, short grant horizons, or dependence on one employer can create operational and incentive risks.</p>\n<p>Useful disclosure asks who funded the work, for what period and scope, whether milestones are required, and whether the recipient retains technical independence.</p>"
+    },
+    {
+      "heading": "Forks make alternatives possible, not easy",
+      "body_markdown": "An open-source license can permit someone to copy a codebase and create a fork. A fork may be a temporary development branch, a maintained alternative, a compatibility layer, or an incompatible project with a new direction.\n\nLegal and technical permission to fork does not create a sustainable project. A practical fork needs maintainers, reviewers, security response, release engineering, infrastructure, documentation, funding, users, and a plan for upstream changes. It may also inherit old defects and dependencies.\n\nA competing implementation can improve resilience by providing different engineering choices and independent review. It can also introduce compatibility risk if behavior diverges unexpectedly. The effect depends on what the fork changes and who runs it.\n\nForkability limits some forms of lock-in, but it does not guarantee that a community can maintain a complex security-critical codebase after a split.",
+      "body_html": "<p>An open-source license can permit someone to copy a codebase and create a fork. A fork may be a temporary development branch, a maintained alternative, a compatibility layer, or an incompatible project with a new direction.</p>\n<p>Legal and technical permission to fork does not create a sustainable project. A practical fork needs maintainers, reviewers, security response, release engineering, infrastructure, documentation, funding, users, and a plan for upstream changes. It may also inherit old defects and dependencies.</p>\n<p>A competing implementation can improve resilience by providing different engineering choices and independent review. It can also introduce compatibility risk if behavior diverges unexpectedly. The effect depends on what the fork changes and who runs it.</p>\n<p>Forkability limits some forms of lock-in, but it does not guarantee that a community can maintain a complex security-critical codebase after a split.</p>"
+    },
+    {
+      "heading": "Dependencies expand both capability and risk",
+      "body_markdown": "Bitcoin projects rely on compilers, operating systems, cryptographic libraries, package registries, build tools, GitHub Actions, and other upstream packages. A small dependency can be used by many downstream wallets or services.\n\nSupply-chain risk includes:\n\n- malicious or compromised upstream releases;\n- vulnerable transitive dependencies;\n- abandoned packages;\n- dependency name confusion;\n- unsafe build or CI workflows;\n- compromised maintainer credentials;\n- incompatible license or API changes;\n- binaries that do not correspond to reviewed source.\n\nDependency graphs, pinned versions, lockfiles, review of dependency changes, signatures, reproducible builds, minimal privilege, and timely updates can reduce risk. None removes the need to understand what is being trusted. GitHub’s dependency-review documentation, for example, describes tools that surface added, removed, updated, licensed, aged, and known-vulnerable dependencies in pull requests; the tool does not prove that every dependency is safe.",
+      "body_html": "<p>Bitcoin projects rely on compilers, operating systems, cryptographic libraries, package registries, build tools, GitHub Actions, and other upstream packages. A small dependency can be used by many downstream wallets or services.</p>\n<p>Supply-chain risk includes:</p>\n<ul><li>malicious or compromised upstream releases;</li><li>vulnerable transitive dependencies;</li><li>abandoned packages;</li><li>dependency name confusion;</li><li>unsafe build or CI workflows;</li><li>compromised maintainer credentials;</li><li>incompatible license or API changes;</li><li>binaries that do not correspond to reviewed source.</li></ul>\n<p>Dependency graphs, pinned versions, lockfiles, review of dependency changes, signatures, reproducible builds, minimal privilege, and timely updates can reduce risk. None removes the need to understand what is being trusted. GitHub’s dependency-review documentation, for example, describes tools that surface added, removed, updated, licensed, aged, and known-vulnerable dependencies in pull requests; the tool does not prove that every dependency is safe.</p>"
+    },
+    {
+      "heading": "Security reporting often begins privately",
+      "body_markdown": "A public issue is usually the wrong first channel for a vulnerability that could expose funds or enable exploitation. Projects should publish a current security policy with supported versions and a private reporting method.\n\nBitcoin Core publishes a security email and encryption keys. LND also directs researchers to a private security address. GitHub repository advisories can support private discussion, remediation, and later public disclosure.\n\nA complete process includes acknowledgement, reproduction, severity assessment, affected-version analysis, patch development, testing, release coordination, and accurate disclosure. Timing and detail may be restricted while users remain exposed.\n\nA security policy does not guarantee fast response, and the absence of a published advisory does not prove the absence of vulnerabilities. Users should examine the project’s actual history and current contacts.",
+      "body_html": "<p>A public issue is usually the wrong first channel for a vulnerability that could expose funds or enable exploitation. Projects should publish a current security policy with supported versions and a private reporting method.</p>\n<p>Bitcoin Core publishes a security email and encryption keys. LND also directs researchers to a private security address. GitHub repository advisories can support private discussion, remediation, and later public disclosure.</p>\n<p>A complete process includes acknowledgement, reproduction, severity assessment, affected-version analysis, patch development, testing, release coordination, and accurate disclosure. Timing and detail may be restricted while users remain exposed.</p>\n<p>A security policy does not guarantee fast response, and the absence of a published advisory does not prove the absence of vulnerabilities. Users should examine the project’s actual history and current contacts.</p>"
+    },
+    {
+      "heading": "Maintenance is observable but not reducible to one metric",
+      "body_markdown": "A project is not healthy merely because its repository is public or its last commit is recent.\n\nMaintenance signals include:\n\n- supported versions and release cadence;\n- response to security reports and serious bugs;\n- meaningful review across critical areas;\n- updated tests, dependencies, and documentation;\n- clear ownership of releases and infrastructure;\n- migration guidance for deprecated components;\n- ability to onboard reviewers and replace departing maintainers;\n- communication when support changes.\n\nRaw contributor counts, stars, forks, commit frequency, and open-issue totals can be misleading. Automated commits can inflate activity. A stable library may need few changes. A busy repository may accumulate review debt. A project can publish releases while lacking people who understand a critical subsystem.\n\nThe Bitcoin Dev Kit project provides a useful distinction between abandonment and managed transition: its release history marks the older `bdk` library as deprecated, names its replacement, and provides migration guidance while limiting future bug-fix support. Deprecation communicates a plan. Abandonment often leaves users to infer that support has ended.",
+      "body_html": "<p>A project is not healthy merely because its repository is public or its last commit is recent.</p>\n<p>Maintenance signals include:</p>\n<ul><li>supported versions and release cadence;</li><li>response to security reports and serious bugs;</li><li>meaningful review across critical areas;</li><li>updated tests, dependencies, and documentation;</li><li>clear ownership of releases and infrastructure;</li><li>migration guidance for deprecated components;</li><li>ability to onboard reviewers and replace departing maintainers;</li><li>communication when support changes.</li></ul>\n<p>Raw contributor counts, stars, forks, commit frequency, and open-issue totals can be misleading. Automated commits can inflate activity. A stable library may need few changes. A busy repository may accumulate review debt. A project can publish releases while lacking people who understand a critical subsystem.</p>\n<p>The Bitcoin Dev Kit project provides a useful distinction between abandonment and managed transition: its release history marks the older <code>bdk</code> library as deprecated, names its replacement, and provides migration guidance while limiting future bug-fix support. Deprecation communicates a plan. Abandonment often leaves users to infer that support has ended.</p>"
+    },
+    {
+      "heading": "Users and operators make the final project choice",
+      "body_markdown": "Open-source project governance determines what enters a repository and release. It does not determine what every user must run.\n\nA wallet team chooses libraries and versions. A node operator chooses an implementation and release. A business chooses deployment timing. A downstream project may patch, vendor, or replace a dependency. These choices are constrained by compatibility, expertise, security, regulation, hardware, and switching costs, but they remain distinct from maintainer judgment.\n\nEvaluation should therefore ask separate questions:\n\n1. **License:** What rights and obligations apply?\n2. **Project control:** Who can merge, release, administer, and respond to security reports?\n3. **Evidence:** How are changes reviewed, tested, built, signed, and documented?\n4. **Maintenance:** Which versions are supported, and what happens when maintainers leave?\n5. **Dependencies:** What upstream software and services are trusted?\n6. **Adoption:** Who actually runs or depends on the release?\n7. **Exit:** Can users migrate, fork, or choose an alternative in practice?\n\nOpen source creates the possibility of inspection, competition, and independent operation. Those possibilities become meaningful only when people have the skill, time, process, and incentives to use them.",
+      "body_html": "<p>Open-source project governance determines what enters a repository and release. It does not determine what every user must run.</p>\n<p>A wallet team chooses libraries and versions. A node operator chooses an implementation and release. A business chooses deployment timing. A downstream project may patch, vendor, or replace a dependency. These choices are constrained by compatibility, expertise, security, regulation, hardware, and switching costs, but they remain distinct from maintainer judgment.</p>\n<p>Evaluation should therefore ask separate questions:</p>\n<ol><li><strong>License:</strong> What rights and obligations apply?</li><li><strong>Project control:</strong> Who can merge, release, administer, and respond to security reports?</li><li><strong>Evidence:</strong> How are changes reviewed, tested, built, signed, and documented?</li><li><strong>Maintenance:</strong> Which versions are supported, and what happens when maintainers leave?</li><li><strong>Dependencies:</strong> What upstream software and services are trusted?</li><li><strong>Adoption:</strong> Who actually runs or depends on the release?</li><li><strong>Exit:</strong> Can users migrate, fork, or choose an alternative in practice?</li></ol>\n<p>Open source creates the possibility of inspection, competition, and independent operation. Those possibilities become meaningful only when people have the skill, time, process, and incentives to use them.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Open-source license",
+      "definition": "License granting rights to inspect, use, modify, and redistribute software under stated conditions."
+    },
+    {
+      "term": "Repository",
+      "definition": "Version-controlled workspace containing source history and project collaboration records."
+    },
+    {
+      "term": "Contributor",
+      "definition": "Person who supplies code, tests, documentation, design, reports, or review."
+    },
+    {
+      "term": "Reviewer",
+      "definition": "Person who evaluates a proposed change and its evidence."
+    },
+    {
+      "term": "Maintainer",
+      "definition": "Project-specific person responsible for coordination, integration, releases, or a subsystem."
+    },
+    {
+      "term": "Commit authority",
+      "definition": "Technical permission to write or merge in a repository."
+    },
+    {
+      "term": "Release",
+      "definition": "Identified project version packaged or tagged for users."
+    },
+    {
+      "term": "Versioning",
+      "definition": "Scheme used to communicate relationships among releases."
+    },
+    {
+      "term": "Reproducible build",
+      "definition": "Process allowing independent builders to produce bit-for-bit identical specified artifacts from defined inputs."
+    },
+    {
+      "term": "Fork",
+      "definition": "Copy of a codebase developed separately from its source repository."
+    },
+    {
+      "term": "Dependency",
+      "definition": "External component, tool, package, or service a project relies on."
+    },
+    {
+      "term": "Supply-chain risk",
+      "definition": "Risk introduced through dependencies, build systems, distribution, credentials, or upstream infrastructure."
+    },
+    {
+      "term": "Security policy",
+      "definition": "Published instructions describing supported versions and vulnerability-reporting procedures."
+    },
+    {
+      "term": "Deprecation",
+      "definition": "Announced reduction or end of support, usually with replacement or migration guidance."
+    },
+    {
+      "term": "Abandonment",
+      "definition": "Effective end of maintenance without a reliable continuing support process."
+    }
+  ],
+  "sources": [
+    {
+      "title": "The Open Source Definition",
+      "author_or_publisher": "Open Source Initiative",
+      "url": "[https://opensource.org/osd](https://opensource.org/osd)",
+      "published_or_updated": "Last modified February 16, 2024",
+      "accessed": "July 31, 2026",
+      "supports": "Open source requires defined redistribution, source-code, and derived-work rights rather than mere source visibility.",
+      "limitation": "Defines qualifying licensing conditions; it does not evaluate project security, governance, maintenance, or adoption."
+    },
+    {
+      "title": "Bitcoin Core integration and staging tree",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "[https://github.com/bitcoin/bitcoin](https://github.com/bitcoin/bitcoin)",
+      "published_or_updated": "Current repository reviewed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "MIT license, project scope, development versus stable-release branches, testing, review, and public contribution structure.",
+      "limitation": "Repository documentation describes Bitcoin Core, not all Bitcoin projects or current user adoption."
+    },
+    {
+      "title": "Contributing to Bitcoin Core",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "[https://github.com/bitcoin/bitcoin/blob/master/CONTRIBUTING.md](https://github.com/bitcoin/bitcoin/blob/master/CONTRIBUTING.md)",
+      "published_or_updated": "Current repository file reviewed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "Bitcoin Core pull-request, review, testing, communication, and contribution expectations.",
+      "limitation": "Project-specific guidance; it does not grant protocol authority or describe every maintainer permission."
+    },
+    {
+      "title": "Bitcoin Core developer notes",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "[https://github.com/bitcoin/bitcoin/blob/master/doc/developer-notes.md](https://github.com/bitcoin/bitcoin/blob/master/doc/developer-notes.md)",
+      "published_or_updated": "Current repository file reviewed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "Engineering and review practices, dependency subtrees, testing considerations, and release-note requirements.",
+      "limitation": "Internal development guidance does not prove that every change is defect-free or reviewed equally."
+    },
+    {
+      "title": "Bitcoin Core security policy",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "[https://github.com/bitcoin/bitcoin/blob/master/SECURITY.md](https://github.com/bitcoin/bitcoin/blob/master/SECURITY.md)",
+      "published_or_updated": "Current repository file reviewed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "Current supported-version reference, private reporting address, and encryption-key information.",
+      "limitation": "A reporting policy does not establish response time, vulnerability absence, or safety of unsupported versions."
+    },
+    {
+      "title": "Bitcoin Core release process",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "[https://github.com/bitcoin/bitcoin/blob/master/doc/release-process.md](https://github.com/bitcoin/bitcoin/blob/master/doc/release-process.md)",
+      "published_or_updated": "Current repository file reviewed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "Bitcoin Core’s current project-specific branching, release-candidate, build, signing, and publication workflow.",
+      "limitation": "Operational instructions can change and do not define governance for other projects."
+    },
+    {
+      "title": "Bitcoin Core release attestations",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "[https://github.com/bitcoin-core/guix.sigs](https://github.com/bitcoin-core/guix.sigs)",
+      "published_or_updated": "Current repository reviewed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "Separate repository of Guix build attestations used in the Bitcoin Core release process.",
+      "limitation": "Attestations must be checked for the specific release and signer; their existence does not certify source correctness."
+    },
+    {
+      "title": "Definitions: reproducible builds",
+      "author_or_publisher": "Reproducible Builds project",
+      "url": "[https://reproducible-builds.org/docs/definition/](https://reproducible-builds.org/docs/definition/)",
+      "published_or_updated": "Current definition reviewed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "Bit-for-bit reproducibility from specified source, build environment, instructions, and designated artifacts.",
+      "limitation": "Reproducibility does not establish that source, dependencies, or behavior are secure."
+    },
+    {
+      "title": "Repository roles for an organization",
+      "author_or_publisher": "GitHub Docs",
+      "url": "[https://docs.github.com/en/organizations/managing-user-access-to-your-organizations-repositories/managing-repository-roles/repository-roles-for-an-organization](https://docs.github.com/en/organizations/managing-user-access-to-your-organizations-repositories/managing-repository-roles/repository-roles-for-an-organization)",
+      "published_or_updated": "Current documentation reviewed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "Distinct read, triage, write, maintain, and admin permission levels within GitHub repositories.",
+      "limitation": "Platform permissions do not reveal informal influence, project expertise, or Bitcoin consensus behavior."
+    },
+    {
+      "title": "Semantic Versioning 2.0.0",
+      "author_or_publisher": "Semantic Versioning",
+      "url": "[https://semver.org/](https://semver.org/)",
+      "published_or_updated": "Version 2.0.0",
+      "accessed": "July 31, 2026",
+      "supports": "One formal versioning scheme for communicating changes to a declared public API.",
+      "limitation": "Not every Bitcoin project uses Semantic Versioning, and version numbers do not prove compatibility or quality."
+    },
+    {
+      "title": "LND repository",
+      "author_or_publisher": "Lightning Labs and LND contributors",
+      "url": "[https://github.com/lightningnetwork/lnd](https://github.com/lightningnetwork/lnd)",
+      "published_or_updated": "Current repository reviewed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "A distinct Bitcoin-related project with its own license, contribution guidance, review-first onboarding, release history, and private security reporting.",
+      "limitation": "LND practices do not represent every Lightning or Bitcoin project and may change."
+    },
+    {
+      "title": "Bitcoin Dev Kit releases",
+      "author_or_publisher": "Bitcoin Dev Kit contributors",
+      "url": "[https://github.com/bitcoindevkit/bdk/releases](https://github.com/bitcoindevkit/bdk/releases)",
+      "published_or_updated": "Current releases page reviewed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "Project-specific package releases and explicit deprecation and migration guidance for the older `bdk` library.",
+      "limitation": "A releases page does not independently establish downstream migration, security, or long-term staffing."
+    },
+    {
+      "title": "Dependency review",
+      "author_or_publisher": "GitHub Docs",
+      "url": "[https://docs.github.com/en/code-security/concepts/supply-chain-security/dependency-review](https://docs.github.com/en/code-security/concepts/supply-chain-security/dependency-review)",
+      "published_or_updated": "Current documentation reviewed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "Review of dependency additions, removals, updates, licenses, age, and known vulnerability information.",
+      "limitation": "Tooling detects documented conditions and cannot prove a dependency has no unknown defects or malicious behavior."
+    },
+    {
+      "title": "Repository security advisories",
+      "author_or_publisher": "GitHub Docs",
+      "url": "[https://docs.github.com/en/code-security/concepts/vulnerability-reporting-and-management/repository-security-advisories](https://docs.github.com/en/code-security/concepts/vulnerability-reporting-and-management/repository-security-advisories)",
+      "published_or_updated": "Current documentation reviewed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "Private vulnerability discussion, remediation, temporary private collaboration, and later public advisory publication.",
+      "limitation": "Availability of the feature does not prove a project enabled it or responds effectively."
+    },
+    {
+      "title": "OpenSats General Fund",
+      "author_or_publisher": "OpenSats",
+      "url": "[https://opensats.org/funds/general](https://opensats.org/funds/general)",
+      "published_or_updated": "Current page reviewed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "One nonprofit grant model for Bitcoin developers and open-source dependencies, including board selection and public categories of funded work.",
+      "limitation": "Describes OpenSats’ funding process, not technical control over recipient repositories or every recipient’s independence."
+    },
+    {
+      "title": "OpenSats transparency records",
+      "author_or_publisher": "OpenSats",
+      "url": "[https://opensats.org/transparency](https://opensats.org/transparency)",
+      "published_or_updated": "Current page reviewed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "Availability of financial statements, grant lists, policies, meeting minutes, and long-term-support records.",
+      "limitation": "Published transparency materials do not by themselves evaluate the technical quality of funded work."
+    },
+    {
+      "title": "Developer grants",
+      "author_or_publisher": "Brink",
+      "url": "[https://brink.dev/donate](https://brink.dev/donate)",
+      "published_or_updated": "Current page reviewed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "Brink’s stated nonprofit grant support for Bitcoin Core building, security, testing, review, mentorship, and educational work.",
+      "limitation": "Funding descriptions do not establish repository permissions, merge outcomes, or Bitcoin consensus control."
+    },
+    {
+      "title": "Guide 066: What Bitcoin Developers Do",
+      "author_or_publisher": "Mempool Surf Club",
+      "reference": "docs/learn/content/guides/MSC-GUIDE-066-bitcoin-developers.md",
+      "published_or_updated": "Copy-locked July 26, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "Approved MSC terminology for developer, contributor, reviewer, maintainer, committer, funding, release, and consensus boundaries.",
+      "limitation": "Internal editorial reference; material external claims were independently renewed from direct sources for this guide."
+    }
+  ],
+  "seo_title": "How Bitcoin Open-Source Projects Work",
+  "meta_description": "Learn how Bitcoin open-source projects use repositories, licenses, maintainers, review, releases, funding, forks, security reporting, and maintenance.",
+  "excerpt": "Bitcoin open-source projects make code inspectable and forkable, but each has its own governance, permissions, releases, funding, dependencies, and maintenance risks.",
+  "reading_time": "Approximately 12 minutes for the Full Article.",
+  "category": {
+    "registry_id": "MSC-HUB-ECOSYSTEM",
+    "label": "Bitcoin Ecosystem",
+    "subcategory": "Community",
+    "depth": "Shallow",
+    "format": "Ecosystem Overview"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-079",
+      "title": "Major Milestones in Bitcoin History",
+      "active": false,
+      "url": null
+    },
+    "next": null,
+    "planned_internal_links": []
+  },
+  "review_dates": {
+    "reviewed": "2026-07-31",
+    "copy_locked": "2026-07-31",
+    "human_verification": null
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1 — The open-source project control map"
+    },
+    {
+      "title": "Illustration 2 — Source-to-release verification chain"
+    },
+    {
+      "title": "Illustration 3 — Project sustainability and exit routes"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}

@@ -1,0 +1,382 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-076-bitcoin-service-providers.md",
+  "source_sha256": "3f04c6777ece60eea1728be5f4b02bf18575c26b0f89b1857bb09106a6a3853b",
+  "registry_id": "MSC-GUIDE-076",
+  "status": "COPY_LOCKED",
+  "h1": "What Bitcoin Service Providers Do",
+  "introductory_deck": "Bitcoin service providers supply software, payment processing, infrastructure, custody, conversion, data, liquidity, compliance, support, or other operational functions. The category is broad, and the label alone does not reveal who controls funds, which systems are outsourced, or what information the provider can observe.\n\nA useful evaluation begins with the service boundary: what function is being supplied, which authority and credentials the provider receives, what the customer can verify independently, and how operations continue if the service becomes unavailable.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "A Bitcoin service provider supplies software, infrastructure, payment processing, custody, conversion, liquidity, data, compliance, support, or another operational function around Bitcoin. The label is broad. It does not reveal whether the provider controls funds, validates Bitcoin independently, operates a Lightning node, transmits money, stores personal data, or merely sells software.\n\nA useful service map is:\n\n`user or business → application → service provider → Bitcoin or Lightning → banking, commerce, or reporting systems`\n\nA provider may occupy one box or several. The important questions are what job it performs, what authority it receives, what information it observes, which systems it depends on, and what happens if the service stops.",
+      "body_html": "<p>A Bitcoin service provider supplies software, infrastructure, payment processing, custody, conversion, liquidity, data, compliance, support, or another operational function around Bitcoin. The label is broad. It does not reveal whether the provider controls funds, validates Bitcoin independently, operates a Lightning node, transmits money, stores personal data, or merely sells software.</p>\n<p>A useful service map is:</p>\n<p><code>user or business → application → service provider → Bitcoin or Lightning → banking, commerce, or reporting systems</code></p>\n<p>A provider may occupy one box or several. The important questions are what job it performs, what authority it receives, what information it observes, which systems it depends on, and what happens if the service stops.</p>"
+    },
+    {
+      "heading": "Service provider is a functional description",
+      "body_markdown": "Bitcoin’s consensus rules define valid blocks and transactions. They do not create a registry of approved service providers or guarantee a company’s uptime, solvency, security, pricing, support, or legal compliance.\n\n“Service provider” is therefore a functional description rather than one technical or legal category. An exchange organizes trades or conversion. A wallet provider supplies wallet-related software or services. A marketplace connects counterparties around offers or listings. A broader service provider might process merchant payments, host nodes, provide APIs, manage Lightning liquidity, produce accounting records, monitor compliance, secure keys, or help deploy infrastructure.\n\nOne company can perform several of these roles. Evaluation must follow the actual activity rather than the company’s name or marketing category.",
+      "body_html": "<p>Bitcoin’s consensus rules define valid blocks and transactions. They do not create a registry of approved service providers or guarantee a company’s uptime, solvency, security, pricing, support, or legal compliance.</p>\n<p>“Service provider” is therefore a functional description rather than one technical or legal category. An exchange organizes trades or conversion. A wallet provider supplies wallet-related software or services. A marketplace connects counterparties around offers or listings. A broader service provider might process merchant payments, host nodes, provide APIs, manage Lightning liquidity, produce accounting records, monitor compliance, secure keys, or help deploy infrastructure.</p>\n<p>One company can perform several of these roles. Evaluation must follow the actual activity rather than the company’s name or marketing category.</p>"
+    },
+    {
+      "heading": "The main service categories",
+      "body_markdown": "Payment services help a business or application request, detect, reconcile, convert, refund, or pay out Bitcoin and Lightning payments. A payment gateway may create invoices, calculate a temporary exchange rate, monitor payment status, send webhooks, and connect the result to an order or accounting system.\n\nInfrastructure services operate technical components such as Bitcoin nodes, Lightning nodes, indexers, databases, APIs, monitoring systems, backups, and network connectivity. They reduce deployment and maintenance work but create dependencies on the provider’s platform, access controls, incident response, and continuity.\n\nFinancial services may hold funds, convert between bitcoin and national currencies, execute withdrawals, manage settlement accounts, or provide liquidity. These activities can introduce custody, counterparty, banking, licensing, and solvency risks that do not exist in a software-only product.\n\nOperational services include security reviews, accounting, tax reporting, compliance tooling, customer support, managed deployments, and incident response. These services may never touch private keys while still receiving sensitive business, transaction, identity, or infrastructure data.",
+      "body_html": "<p>Payment services help a business or application request, detect, reconcile, convert, refund, or pay out Bitcoin and Lightning payments. A payment gateway may create invoices, calculate a temporary exchange rate, monitor payment status, send webhooks, and connect the result to an order or accounting system.</p>\n<p>Infrastructure services operate technical components such as Bitcoin nodes, Lightning nodes, indexers, databases, APIs, monitoring systems, backups, and network connectivity. They reduce deployment and maintenance work but create dependencies on the provider’s platform, access controls, incident response, and continuity.</p>\n<p>Financial services may hold funds, convert between bitcoin and national currencies, execute withdrawals, manage settlement accounts, or provide liquidity. These activities can introduce custody, counterparty, banking, licensing, and solvency risks that do not exist in a software-only product.</p>\n<p>Operational services include security reviews, accounting, tax reporting, compliance tooling, customer support, managed deployments, and incident response. These services may never touch private keys while still receiving sensitive business, transaction, identity, or infrastructure data.</p>"
+    },
+    {
+      "heading": "Software-only, managed infrastructure, and hosted processing",
+      "body_markdown": "The same user-facing function can be delivered through different operating models.\n\nIn a software-only or self-hosted model, the user runs the software and controls the connected wallets, nodes, databases, credentials, and backups. This can reduce provider authority and data exposure, but it transfers maintenance, monitoring, patching, recovery, and configuration responsibilities to the operator.\n\nBTCPay Server documents a self-hosted payment gateway built from several components, including BTCPay Server, NBXplorer, Bitcoin Core, and PostgreSQL, with optional Lightning implementations. Its documentation also recognizes third-party hosting. The same software can therefore be operated directly or delivered as a managed service, with different infrastructure and continuity assumptions.\n\nIn a managed-infrastructure model, a provider runs some of the technical stack while the customer retains defined credentials or signing authority. As of July 31, 2026, Voltage documents hosted LND nodes with access through the full LND API, macaroons, and TLS credentials. Its recovery documentation also explains that external recovery requires the relevant seed and a compatible LND deployment. Hosted access can provide substantial node control without eliminating provider availability, backup, authentication, and recovery dependencies.\n\nIn a hosted-processing model, the provider exposes an account or API that combines several functions. OpenNode’s current developer portal includes charges, account balances, withdrawals, exchanges, rates, refunds, and bank-withdrawal settings. Strike’s current API documentation describes receiving and sending through Bitcoin or Lightning, currency conversion, account settlement, and eligible bank payouts. Lightspark documents APIs and SDKs that manage Lightning operational complexity and payment routing. These are provider descriptions of current services, not independent proof of availability, security, cost, legal status, or suitability.",
+      "body_html": "<p>The same user-facing function can be delivered through different operating models.</p>\n<p>In a software-only or self-hosted model, the user runs the software and controls the connected wallets, nodes, databases, credentials, and backups. This can reduce provider authority and data exposure, but it transfers maintenance, monitoring, patching, recovery, and configuration responsibilities to the operator.</p>\n<p>BTCPay Server documents a self-hosted payment gateway built from several components, including BTCPay Server, NBXplorer, Bitcoin Core, and PostgreSQL, with optional Lightning implementations. Its documentation also recognizes third-party hosting. The same software can therefore be operated directly or delivered as a managed service, with different infrastructure and continuity assumptions.</p>\n<p>In a managed-infrastructure model, a provider runs some of the technical stack while the customer retains defined credentials or signing authority. As of July 31, 2026, Voltage documents hosted LND nodes with access through the full LND API, macaroons, and TLS credentials. Its recovery documentation also explains that external recovery requires the relevant seed and a compatible LND deployment. Hosted access can provide substantial node control without eliminating provider availability, backup, authentication, and recovery dependencies.</p>\n<p>In a hosted-processing model, the provider exposes an account or API that combines several functions. OpenNode’s current developer portal includes charges, account balances, withdrawals, exchanges, rates, refunds, and bank-withdrawal settings. Strike’s current API documentation describes receiving and sending through Bitcoin or Lightning, currency conversion, account settlement, and eligible bank payouts. Lightspark documents APIs and SDKs that manage Lightning operational complexity and payment routing. These are provider descriptions of current services, not independent proof of availability, security, cost, legal status, or suitability.</p>"
+    },
+    {
+      "heading": "Authority and custody must be mapped directly",
+      "body_markdown": "A provider can influence a payment without controlling the funds. It may generate an invoice, observe a transaction, estimate a fee, operate an indexer, route a Lightning payment, or notify a merchant while the user keeps the relevant private keys.\n\nCustody begins when the provider controls the signing authority or account mechanism required to move the applicable funds. A provider may also control only one part of a threshold arrangement, hold funds temporarily, or control a national-currency balance while the customer controls a separate Bitcoin wallet.\n\nAPI access can itself carry authority. A credential may be read-only, create invoices, initiate payments, withdraw funds, manage a node, or change account settings. “Noncustodial” does not mean that every API token, server, webhook, database, or administrator account is low risk. Permissions, key storage, withdrawal rules, approval workflows, and recovery paths must be inspected separately.",
+      "body_html": "<p>A provider can influence a payment without controlling the funds. It may generate an invoice, observe a transaction, estimate a fee, operate an indexer, route a Lightning payment, or notify a merchant while the user keeps the relevant private keys.</p>\n<p>Custody begins when the provider controls the signing authority or account mechanism required to move the applicable funds. A provider may also control only one part of a threshold arrangement, hold funds temporarily, or control a national-currency balance while the customer controls a separate Bitcoin wallet.</p>\n<p>API access can itself carry authority. A credential may be read-only, create invoices, initiate payments, withdraw funds, manage a node, or change account settings. “Noncustodial” does not mean that every API token, server, webhook, database, or administrator account is low risk. Permissions, key storage, withdrawal rules, approval workflows, and recovery paths must be inspected separately.</p>"
+    },
+    {
+      "heading": "Payment processing is more than receiving a transaction",
+      "body_markdown": "A Bitcoin payment workflow can include:\n\n`price → invoice or address → payment detection → confirmation policy → order update → reconciliation → refund or payout`\n\nThe Bitcoin transaction is one event in that sequence. A provider may calculate a fiat-to-bitcoin quote, reserve that rate temporarily, identify underpayments or overpayments, wait for a selected confirmation threshold, convert proceeds, and send a webhook to another system.\n\nThe Bitcoin developer documentation distinguishes address creation, transaction detection, confirmations, and refunds. Provider APIs add application states such as unpaid, pending, paid, completed, failed, expired, or reversed. Those labels are provider records. They should be mapped to the underlying on-chain transaction, Lightning payment, account movement, or bank payout rather than treated as Bitcoin consensus states.\n\nLightning also adds liquidity, routing, invoice expiry, and node-availability considerations. A provider may improve payment reliability by managing channels or routing, but it cannot guarantee that every route, wallet, peer, or downstream system will remain available.",
+      "body_html": "<p>A Bitcoin payment workflow can include:</p>\n<p><code>price → invoice or address → payment detection → confirmation policy → order update → reconciliation → refund or payout</code></p>\n<p>The Bitcoin transaction is one event in that sequence. A provider may calculate a fiat-to-bitcoin quote, reserve that rate temporarily, identify underpayments or overpayments, wait for a selected confirmation threshold, convert proceeds, and send a webhook to another system.</p>\n<p>The Bitcoin developer documentation distinguishes address creation, transaction detection, confirmations, and refunds. Provider APIs add application states such as unpaid, pending, paid, completed, failed, expired, or reversed. Those labels are provider records. They should be mapped to the underlying on-chain transaction, Lightning payment, account movement, or bank payout rather than treated as Bitcoin consensus states.</p>\n<p>Lightning also adds liquidity, routing, invoice expiry, and node-availability considerations. A provider may improve payment reliability by managing channels or routing, but it cannot guarantee that every route, wallet, peer, or downstream system will remain available.</p>"
+    },
+    {
+      "heading": "Data, validation, and privacy",
+      "body_markdown": "A service can return accurate-looking balances or payment statuses without giving the customer independent validation. A hosted node or indexer may supply blockchain-derived data, while a customer-operated full node validates blocks and transactions according to the rules it enforces.\n\nThe provider may observe IP addresses, account identities, invoices, addresses, transaction amounts, timing, counterparties, payment metadata, API calls, device details, bank information, customer records, and support communications. A provider that cannot spend bitcoin may still learn commercially or personally sensitive information.\n\nData retention, sharing, deletion, export, and breach-notification terms therefore matter. Privacy claims should identify which data is reduced, what still leaves the customer’s control, and whether third-party subprocessors receive it.",
+      "body_html": "<p>A service can return accurate-looking balances or payment statuses without giving the customer independent validation. A hosted node or indexer may supply blockchain-derived data, while a customer-operated full node validates blocks and transactions according to the rules it enforces.</p>\n<p>The provider may observe IP addresses, account identities, invoices, addresses, transaction amounts, timing, counterparties, payment metadata, API calls, device details, bank information, customer records, and support communications. A provider that cannot spend bitcoin may still learn commercially or personally sensitive information.</p>\n<p>Data retention, sharing, deletion, export, and breach-notification terms therefore matter. Privacy claims should identify which data is reduced, what still leaves the customer’s control, and whether third-party subprocessors receive it.</p>"
+    },
+    {
+      "heading": "Reliability, security, and continuity",
+      "body_markdown": "Managed services can provide monitoring, redundancy, expertise, and support that an individual operator may not maintain alone. They also concentrate dependencies. A failure can affect API access, invoice creation, payment detection, liquidity, withdrawals, conversion, customer support, or historical records.\n\nA useful continuity review asks what can be exported: wallet backups, seeds, descriptors, channel backups, invoices, transaction records, accounting data, customer records, API configuration, and audit logs. It should also identify how credentials are rotated, how incidents are communicated, and whether another provider or self-hosted system can replace the service.\n\nSecurity evidence must be read by scope. Architecture documents describe intended design. Source code enables inspection. Penetration tests, audits, certifications, and control reports cover defined systems and periods. Status pages show reported availability. None alone proves that funds, data, integrations, employees, or subprocessors cannot fail.\n\nNIST’s Cybersecurity Framework 2.0 explicitly includes supplier and service-provider risk. The U.S. Federal Trade Commission advises businesses to put security requirements in vendor contracts, limit access, verify compliance, and require incident handling rather than relying on promises alone.",
+      "body_html": "<p>Managed services can provide monitoring, redundancy, expertise, and support that an individual operator may not maintain alone. They also concentrate dependencies. A failure can affect API access, invoice creation, payment detection, liquidity, withdrawals, conversion, customer support, or historical records.</p>\n<p>A useful continuity review asks what can be exported: wallet backups, seeds, descriptors, channel backups, invoices, transaction records, accounting data, customer records, API configuration, and audit logs. It should also identify how credentials are rotated, how incidents are communicated, and whether another provider or self-hosted system can replace the service.</p>\n<p>Security evidence must be read by scope. Architecture documents describe intended design. Source code enables inspection. Penetration tests, audits, certifications, and control reports cover defined systems and periods. Status pages show reported availability. None alone proves that funds, data, integrations, employees, or subprocessors cannot fail.</p>\n<p>NIST’s Cybersecurity Framework 2.0 explicitly includes supplier and service-provider risk. The U.S. Federal Trade Commission advises businesses to put security requirements in vendor contracts, limit access, verify compliance, and require incident handling rather than relying on promises alone.</p>"
+    },
+    {
+      "heading": "Pricing and provider incentives",
+      "body_markdown": "Service costs can include subscriptions, usage charges, payment percentages, spreads, conversion fees, withdrawal fees, network fees, routing fees, liquidity costs, support plans, storage, and professional services. A “zero processing fee” claim may still leave network, infrastructure, maintenance, support, or conversion costs.\n\nThe provider’s incentives depend on what it sells. A software project may seek hosting revenue or donations. A processor may earn payment or conversion fees. An infrastructure provider may charge for compute, storage, liquidity, or support. A custodian may benefit from assets held on the platform. These incentives do not automatically make a service harmful, but they affect product design, default settings, lock-in, and which risks the provider absorbs or transfers to the customer.",
+      "body_html": "<p>Service costs can include subscriptions, usage charges, payment percentages, spreads, conversion fees, withdrawal fees, network fees, routing fees, liquidity costs, support plans, storage, and professional services. A “zero processing fee” claim may still leave network, infrastructure, maintenance, support, or conversion costs.</p>\n<p>The provider’s incentives depend on what it sells. A software project may seek hosting revenue or donations. A processor may earn payment or conversion fees. An infrastructure provider may charge for compute, storage, liquidity, or support. A custodian may benefit from assets held on the platform. These incentives do not automatically make a service harmful, but they affect product design, default settings, lock-in, and which risks the provider absorbs or transfers to the customer.</p>"
+    },
+    {
+      "heading": "Legal and tax boundaries",
+      "body_markdown": "Legal obligations depend on the activity, entity, customer, jurisdiction, and flow of value. In the United States, FinCEN applies a facts-and-circumstances analysis. Its guidance distinguishes activities such as software provision from accepting and transmitting value for others; labels do not control the result.\n\nIn the European Union, MiCA defines and regulates specified crypto-asset services, including custody, exchange, transfer, advice, and trading-platform activities within scope. A web host, software developer, merchant tool, payment intermediary, and custodian are not automatically the same legal category.\n\nTax treatment also remains separate from the service architecture. The U.S. Internal Revenue Service treats digital assets as property for federal tax purposes and identifies payments for goods or services as potentially reportable transactions. A provider’s receipt, dashboard, or export can assist recordkeeping without determining the final tax treatment. This guide is general education, not legal or tax advice.\n\nA practical service-provider evaluation asks:\n\n1. **Function:** What exact service is being supplied?\n2. **Authority:** Which keys, funds, accounts, credentials, and settings can the provider control?\n3. **Validation:** Which data comes from the provider, and what can the customer verify independently?\n4. **Dependencies:** Which nodes, banks, APIs, subprocessors, liquidity sources, and software components are required?\n5. **Privacy:** What business, customer, payment, identity, and network data is collected or shared?\n6. **Recovery:** What can be exported, restored, or migrated if the service becomes unavailable?\n7. **Security:** What controls and evidence apply to the exact system and time period?\n8. **Cost:** Which subscription, usage, spread, network, routing, withdrawal, and support costs apply?\n9. **Legal scope:** Which entity, terms, jurisdiction, and regulated activities govern the relationship?\n\nThe goal is not to identify a universally best provider. It is to define the service boundary clearly enough to understand what is being outsourced, what authority remains, and how the system behaves when a component fails.",
+      "body_html": "<p>Legal obligations depend on the activity, entity, customer, jurisdiction, and flow of value. In the United States, FinCEN applies a facts-and-circumstances analysis. Its guidance distinguishes activities such as software provision from accepting and transmitting value for others; labels do not control the result.</p>\n<p>In the European Union, MiCA defines and regulates specified crypto-asset services, including custody, exchange, transfer, advice, and trading-platform activities within scope. A web host, software developer, merchant tool, payment intermediary, and custodian are not automatically the same legal category.</p>\n<p>Tax treatment also remains separate from the service architecture. The U.S. Internal Revenue Service treats digital assets as property for federal tax purposes and identifies payments for goods or services as potentially reportable transactions. A provider’s receipt, dashboard, or export can assist recordkeeping without determining the final tax treatment. This guide is general education, not legal or tax advice.</p>\n<p>A practical service-provider evaluation asks:</p>\n<ol><li><strong>Function:</strong> What exact service is being supplied?</li><li><strong>Authority:</strong> Which keys, funds, accounts, credentials, and settings can the provider control?</li><li><strong>Validation:</strong> Which data comes from the provider, and what can the customer verify independently?</li><li><strong>Dependencies:</strong> Which nodes, banks, APIs, subprocessors, liquidity sources, and software components are required?</li><li><strong>Privacy:</strong> What business, customer, payment, identity, and network data is collected or shared?</li><li><strong>Recovery:</strong> What can be exported, restored, or migrated if the service becomes unavailable?</li><li><strong>Security:</strong> What controls and evidence apply to the exact system and time period?</li><li><strong>Cost:</strong> Which subscription, usage, spread, network, routing, withdrawal, and support costs apply?</li><li><strong>Legal scope:</strong> Which entity, terms, jurisdiction, and regulated activities govern the relationship?</li></ol>\n<p>The goal is not to identify a universally best provider. It is to define the service boundary clearly enough to understand what is being outsourced, what authority remains, and how the system behaves when a component fails.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Bitcoin service provider",
+      "definition": "A company, project, or professional that supplies software, infrastructure, payment, custody, data, liquidity, compliance, support, or another operational function related to Bitcoin."
+    },
+    {
+      "term": "Payment gateway",
+      "definition": "Software or a service that creates payment requests, detects payments, updates order state, and connects payment events to a merchant or application."
+    },
+    {
+      "term": "Payment processor",
+      "definition": "A provider that performs one or more payment functions such as invoicing, conversion, settlement, reconciliation, refunds, or payouts."
+    },
+    {
+      "term": "Managed infrastructure",
+      "definition": "Nodes, databases, APIs, monitoring, networking, or related systems operated by a provider for a customer."
+    },
+    {
+      "term": "Hosted service",
+      "definition": "Software or infrastructure run in a provider-controlled environment and accessed through an account, interface, or API."
+    },
+    {
+      "term": "Self-hosted",
+      "definition": "Software operated by the user or organization on infrastructure it controls or administers."
+    },
+    {
+      "term": "Custody",
+      "definition": "Control or administration of the signing authority or account mechanism required to move another party’s funds."
+    },
+    {
+      "term": "API",
+      "definition": "A defined software interface through which one system requests data or actions from another."
+    },
+    {
+      "term": "API credential",
+      "definition": "A secret or signed authorization used to authenticate software and grant defined permissions."
+    },
+    {
+      "term": "Webhook",
+      "definition": "An automated message sent from one system to another when a defined event occurs."
+    },
+    {
+      "term": "Indexer",
+      "definition": "A system that organizes blockchain-derived information for efficient lookup by wallets, payment systems, explorers, and applications."
+    },
+    {
+      "term": "Liquidity",
+      "definition": "Funds and channel capacity available to complete conversions, withdrawals, or routed payments."
+    },
+    {
+      "term": "Settlement",
+      "definition": "Completion of the transfer used to satisfy a payment or financial obligation."
+    },
+    {
+      "term": "Reconciliation",
+      "definition": "Matching payment, order, invoice, account, fee, and payout records so that systems agree."
+    },
+    {
+      "term": "Subprocessor",
+      "definition": "A third party used by a provider to process data or perform part of the service."
+    },
+    {
+      "term": "Service-level agreement",
+      "definition": "Contractual terms describing defined availability, support, response, or performance commitments."
+    },
+    {
+      "term": "Vendor lock-in",
+      "definition": "Difficulty or cost involved in moving data, credentials, infrastructure, or operations away from a provider."
+    },
+    {
+      "term": "Recovery path",
+      "definition": "The information, authority, backups, procedures, and replacement systems required to restore or migrate a service."
+    },
+    {
+      "term": "Security evidence",
+      "definition": "Documentation or assessment with a defined scope, such as architecture records, audits, tests, certifications, control reports, or incident history."
+    },
+    {
+      "term": "Operational dependency",
+      "definition": "A system, provider, credential, employee, bank, network, or process that must remain available for the service to function."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Payment Processing",
+      "author_or_publisher": "Bitcoin developer documentation",
+      "url": "[https://developer.bitcoin.org/devguide/payment_processing.html](https://developer.bitcoin.org/devguide/payment_processing.html)",
+      "published_or_updated": "Not displayed",
+      "accessed": "July 31, 2026",
+      "supports": "The separation of price calculation, payment requests, address assignment, transaction detection, confirmation policy, refunds, and merchant order handling.",
+      "limitation": "The page contains some legacy payment-protocol material; this guide uses it only for general Bitcoin payment-processing concepts."
+    },
+    {
+      "title": "Transactions",
+      "author_or_publisher": "Bitcoin developer documentation",
+      "url": "[https://developer.bitcoin.org/devguide/transactions.html](https://developer.bitcoin.org/devguide/transactions.html)",
+      "published_or_updated": "Not displayed",
+      "accessed": "July 31, 2026",
+      "supports": "Bitcoin transaction inputs, outputs, signatures, confirmation, and the limits of what a Bitcoin transaction establishes.",
+      "limitation": "It does not describe provider account states, bank payouts, contractual performance, or every current wallet and node implementation."
+    },
+    {
+      "title": "BTCPay Server Documentation",
+      "author_or_publisher": "BTCPay Server",
+      "url": "[https://docs.btcpayserver.org/Guide/](https://docs.btcpayserver.org/Guide/)",
+      "published_or_updated": "Current documentation accessed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "BTCPay Server’s documented self-hosted, noncustodial payment-gateway model, invoice workflow, wallet control, refunds, and Lightning support.",
+      "limitation": "Project documentation; this review did not independently audit every release, deployment, plugin, or host."
+    },
+    {
+      "title": "Architecture",
+      "author_or_publisher": "BTCPay Server",
+      "url": "[https://docs.btcpayserver.org/Development/](https://docs.btcpayserver.org/Development/)",
+      "published_or_updated": "Current documentation accessed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "The documented BTCPay Server architecture using BTCPay Server, NBXplorer, Bitcoin Core, PostgreSQL, and optional Lightning implementations.",
+      "limitation": "Describes intended architecture and deployment components, not the security or availability of every installation."
+    },
+    {
+      "title": "Choosing a Deployment Method",
+      "author_or_publisher": "BTCPay Server",
+      "url": "[https://docs.btcpayserver.org/Deployment/](https://docs.btcpayserver.org/Deployment/)",
+      "published_or_updated": "Current documentation accessed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "The distinction between self-hosted and third-party-hosted BTCPay deployments and the transfer of maintenance responsibilities between operating models.",
+      "limitation": "The project’s description of its own deployment options; third-party hosting terms and practices must be reviewed separately."
+    },
+    {
+      "title": "OpenNode Docs Portal",
+      "author_or_publisher": "OpenNode",
+      "url": "[https://developers.opennode.com/](https://developers.opennode.com/)",
+      "published_or_updated": "Current portal accessed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "The current API surface for charges, balances, withdrawals, exchanges, rates, refunds, static addresses, and bank-withdrawal settings.",
+      "limitation": "Provider documentation and endpoint inventory; this review did not test production availability, custody controls, pricing, or every regional restriction."
+    },
+    {
+      "title": "Getting Started Overview",
+      "author_or_publisher": "OpenNode",
+      "url": "[https://developers.opennode.com/docs/getting-started](https://developers.opennode.com/docs/getting-started)",
+      "published_or_updated": "Current documentation accessed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "OpenNode’s documented REST API, Lightning and on-chain operations, events, authentication, and development environment.",
+      "limitation": "Provider documentation; exact supported functions and account requirements can change."
+    },
+    {
+      "title": "Introduction",
+      "author_or_publisher": "Strike API documentation",
+      "url": "[https://docs.strike.me/](https://docs.strike.me/)",
+      "published_or_updated": "Current documentation accessed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "Strike’s documented API functions involving Bitcoin, Lightning, cash balances, conversion, receiving, sending, directing, and eligible bank payouts.",
+      "limitation": "Provider claims about current services and performance; regional, account, eligibility, compliance, and product restrictions apply."
+    },
+    {
+      "title": "Receiving Payments",
+      "author_or_publisher": "Strike API documentation",
+      "url": "[https://docs.strike.me/walkthrough/receiving-payments/](https://docs.strike.me/walkthrough/receiving-payments/)",
+      "published_or_updated": "Current documentation accessed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "Invoice and receive-request states, quote expiration, Lightning and on-chain receiving, settlement-currency choices, and webhook-driven order updates.",
+      "limitation": "Provider-specific workflow; invoice and account states are not Bitcoin consensus states."
+    },
+    {
+      "title": "Sending Payments",
+      "author_or_publisher": "Strike API documentation",
+      "url": "[https://docs.strike.me/walkthrough/sending-payments/](https://docs.strike.me/walkthrough/sending-payments/)",
+      "published_or_updated": "Current documentation accessed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "The use of payment quotes, source currencies, Bitcoin addresses, Lightning invoices, and API-controlled payment initiation.",
+      "limitation": "Applies to supported Strike accounts and current API behavior; this review did not execute a payment."
+    },
+    {
+      "title": "Voltage API",
+      "author_or_publisher": "Voltage documentation",
+      "url": "[https://docs.voltage.cloud/voltage-api](https://docs.voltage.cloud/voltage-api)",
+      "published_or_updated": "Current documentation accessed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "Programmatic creation, configuration, starting, stopping, and administration of hosted Lightning nodes.",
+      "limitation": "Provider documentation; it does not independently establish availability, security, custody, or recovery quality."
+    },
+    {
+      "title": "LND Node API",
+      "author_or_publisher": "Voltage documentation",
+      "url": "[https://docs.voltage.cloud/lnd-node-api](https://docs.voltage.cloud/lnd-node-api)",
+      "published_or_updated": "Current documentation accessed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "Voltage’s documented exposure of the full LND API through gRPC and REST and the use of macaroons and TLS credentials.",
+      "limitation": "API access and credentials do not eliminate infrastructure, authentication, backup, liquidity, or provider-continuity dependencies."
+    },
+    {
+      "title": "Node Security and Backups",
+      "author_or_publisher": "Voltage documentation",
+      "url": "[https://docs.voltage.cloud/node-security-and-backups](https://docs.voltage.cloud/node-security-and-backups)",
+      "published_or_updated": "Current documentation accessed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "The documented importance of seeds, backups, credentials, and compatible LND recovery outside the hosted environment.",
+      "limitation": "Provider documentation; this review did not perform a full external recovery or test every channel state."
+    },
+    {
+      "title": "Getting Started",
+      "author_or_publisher": "Lightspark documentation",
+      "url": "[https://docs.lightspark.com/lightspark-sdk/getting-started](https://docs.lightspark.com/lightspark-sdk/getting-started)",
+      "published_or_updated": "Current documentation accessed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "Lightspark’s documented API and SDK model for managing Lightning operational complexity and payment routing.",
+      "limitation": "Provider description; product architecture, custody, pricing, supported regions, and operational behavior require exact current review."
+    },
+    {
+      "title": "The NIST Cybersecurity Framework 2.0",
+      "author_or_publisher": "National Institute of Standards and Technology",
+      "url": "[https://www.nist.gov/publications/nist-cybersecurity-framework-csf-20](https://www.nist.gov/publications/nist-cybersecurity-framework-csf-20)",
+      "published_or_updated": "February 26, 2024",
+      "accessed": "July 31, 2026",
+      "supports": "A general framework for governing, identifying, protecting against, detecting, responding to, and recovering from cybersecurity risk.",
+      "limitation": "Voluntary, high-level guidance; it does not certify a provider or prescribe a complete Bitcoin-specific control set."
+    },
+    {
+      "title": "Cybersecurity Framework Frequently Asked Questions",
+      "author_or_publisher": "National Institute of Standards and Technology",
+      "url": "[https://www.nist.gov/cyberframework/faqs](https://www.nist.gov/cyberframework/faqs)",
+      "published_or_updated": "Current page accessed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "Applying CSF outcomes to externally operated assets and using the framework to evaluate suppliers and service providers.",
+      "limitation": "General risk-management guidance and not a provider audit or endorsement."
+    },
+    {
+      "title": "Cybersecurity for Small Business — Vendor Security",
+      "author_or_publisher": "U.S. Federal Trade Commission",
+      "url": "[https://www.ftc.gov/business-guidance/small-businesses/cybersecurity](https://www.ftc.gov/business-guidance/small-businesses/cybersecurity)",
+      "published_or_updated": "Current page accessed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "Contractual security requirements, access limitation, vendor-compliance verification, encryption, incident response, and breach handling.",
+      "limitation": "General U.S. business guidance and not Bitcoin-specific legal advice."
+    },
+    {
+      "title": "Application of FinCEN’s Regulations to Certain Business Models Involving Convertible Virtual Currencies",
+      "author_or_publisher": "Financial Crimes Enforcement Network",
+      "url": "[https://www.fincen.gov/resources/statutes-regulations/guidance/application-fincens-regulations-certain-business-models](https://www.fincen.gov/resources/statutes-regulations/guidance/application-fincens-regulations-certain-business-models)",
+      "published_or_updated": "May 9, 2019",
+      "accessed": "July 31, 2026",
+      "supports": "The United States facts-and-circumstances analysis for activities involving convertible virtual currency and money transmission.",
+      "limitation": "U.S. federal guidance; classification depends on actual facts, and other federal and state requirements may apply."
+    },
+    {
+      "title": "Application of FinCEN’s Regulations to Virtual Currency Software Development and Certain Investment Activity",
+      "author_or_publisher": "Financial Crimes Enforcement Network",
+      "url": "[https://www.fincen.gov/resources/statutes-regulations/administrative-rulings/application-fincens-regulations-virtual](https://www.fincen.gov/resources/statutes-regulations/administrative-rulings/application-fincens-regulations-virtual)",
+      "published_or_updated": "January 30, 2014",
+      "accessed": "July 31, 2026",
+      "supports": "The distinction between software provision and activities that accept, transmit, or exchange value for others under the stated facts.",
+      "limitation": "A fact-specific administrative ruling; it is not a universal exemption for software companies or service providers."
+    },
+    {
+      "title": "Regulation (EU) 2023/1114 on Markets in Crypto-assets",
+      "author_or_publisher": "Official Journal of the European Union",
+      "url": "[https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32023R1114](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32023R1114)",
+      "published_or_updated": "June 9, 2023; current consolidated status reviewed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "Defined crypto-asset services and operating requirements for providers within MiCA’s scope, including custody, exchange, transfer, advice, and trading-platform activities.",
+      "limitation": "EU law; classification and obligations depend on the entity, activity, authorization, transition rules, and current consolidated text."
+    },
+    {
+      "title": "Digital Assets",
+      "author_or_publisher": "U.S. Internal Revenue Service",
+      "url": "[https://www.irs.gov/filing/digital-assets](https://www.irs.gov/filing/digital-assets)",
+      "published_or_updated": "Current page accessed July 31, 2026",
+      "accessed": "July 31, 2026",
+      "supports": "U.S. federal treatment of digital assets as property and reporting considerations for receiving or disposing of digital assets in transactions.",
+      "limitation": "U.S. federal tax information only; it does not determine the treatment of every business, transaction, state, or jurisdiction."
+    }
+  ],
+  "seo_title": "What Bitcoin Service Providers Do | Mempool Surf Club",
+  "meta_description": "Learn how Bitcoin service providers handle payments, infrastructure, custody, APIs, data, support, security, fees, compliance, and continuity.",
+  "excerpt": "Bitcoin service providers can simplify payments, infrastructure, data, custody, conversion, and support. This guide maps what is outsourced, what authority remains, and how to evaluate failure and recovery.",
+  "reading_time": "Approximately 9 minutes for the Full Article.",
+  "category": {
+    "registry_id": "MSC-HUB-ECOSYSTEM",
+    "label": "Bitcoin Ecosystem",
+    "subcategory": "Markets",
+    "depth": "Surface",
+    "format": "Ecosystem Overview"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-075",
+      "title": "How Bitcoin Marketplaces Work",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-077",
+      "title": "Why Bitcoin Conferences Matter",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": []
+  },
+  "review_dates": {
+    "reviewed": "2026-07-31",
+    "copy_locked": "2026-07-31",
+    "human_verification": null
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1 — Bitcoin service-provider systems map"
+    },
+    {
+      "title": "Illustration 2 — Operating-model and authority spectrum"
+    },
+    {
+      "title": "Illustration 3 — Provider failure and recovery route"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}
