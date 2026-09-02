@@ -98,6 +98,6 @@ assert.ok(sharedCss.includes('margin-top: .4rem;'), 'Locked Next Guide spacing d
 assert.ok(sharedCss.includes('.msc-learn-guide-transition.is-active:hover'), 'Locked border-only active transition interaction drifted');
 
 const lock = read('docs/learn/MSC_Learn_Guide_Template_Lock.md');
-assert.ok(lock.includes('Guides 001–064 remain preview-bound runtimes'), 'Template lock publication boundary must include Guides 001–064 after Development activation');
+assert.ok(lock.includes('Guides 001–080 remain preview-bound runtimes'), 'Template lock publication boundary must include all 80 guides after the final Ecosystem rollout');
 
 console.log('MSC Learn Building Guide 033–048 rollout validation passed: COPY_LOCKED runtimes are synchronized, source-derived transitions are preserved, all 16 Building hub cards are active, Guide 032 continues into Guide 033, transitions are wired through Guide 048, and Guide 048 continues into Bitcoin Development Guide 049.');

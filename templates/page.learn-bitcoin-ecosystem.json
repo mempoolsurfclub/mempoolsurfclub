@@ -3,9 +3,19 @@
     "main": {
       "type": "msc-learn-ecosystem-category",
       "settings": {}
+    },
+    "guidepreviews": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<style>.msc-learn-page[data-msc-registry-id=\"MSC-HUB-ECOSYSTEM\"] .msc-learn-guide-card.is-live-guide{cursor:pointer;transition:border-color .2s ease}.msc-learn-page[data-msc-registry-id=\"MSC-HUB-ECOSYSTEM\"] .msc-learn-guide-card.is-live-guide:hover,.msc-learn-page[data-msc-registry-id=\"MSC-HUB-ECOSYSTEM\"] .msc-learn-guide-card.is-live-guide:focus-within{border-color:rgba(212,190,153,.82)}.msc-learn-guide-card__link-cover{position:absolute;inset:0;z-index:5;border-radius:inherit;color:inherit;text-decoration:none;outline:none}</style><script>(()=>{const page=document.querySelector('.msc-learn-page[data-msc-registry-id=\"MSC-HUB-ECOSYSTEM\"]');if(!page)return;const guides=[[\"MSC-GUIDE-065\",\"Who Builds on Bitcoin?\",\"/pages/learn-bitcoin-ecosystem?view=msc-learn-guide-065\"],[\"MSC-GUIDE-066\",\"What Bitcoin Developers Do\",\"/pages/learn-bitcoin-ecosystem?view=msc-learn-guide-066\"],[\"MSC-GUIDE-067\",\"Bitcoin Artists and the Culture They Shape\",\"/pages/learn-bitcoin-ecosystem?view=msc-learn-guide-067\"],[\"MSC-GUIDE-068\",\"How Bitcoin Industry Leaders Shape the Ecosystem\",\"/pages/learn-bitcoin-ecosystem?view=msc-learn-guide-068\"],[\"MSC-GUIDE-069\",\"How Public Companies Participate in Bitcoin\",\"/pages/learn-bitcoin-ecosystem?view=msc-learn-guide-069\"],[\"MSC-GUIDE-070\",\"How Bitcoin Startups Build and Compete\",\"/pages/learn-bitcoin-ecosystem?view=msc-learn-guide-070\"],[\"MSC-GUIDE-071\",\"How Bitcoin Mining Companies Operate\",\"/pages/learn-bitcoin-ecosystem?view=msc-learn-guide-071\"],[\"MSC-GUIDE-072\",\"What Bitcoin Infrastructure Companies Do\",\"/pages/learn-bitcoin-ecosystem?view=msc-learn-guide-072\"],[\"MSC-GUIDE-073\",\"How Bitcoin Exchanges Work\",\"/pages/learn-bitcoin-ecosystem?view=msc-learn-guide-073\"],[\"MSC-GUIDE-074\",\"How Bitcoin Wallet Providers Operate\",\"/pages/learn-bitcoin-ecosystem?view=msc-learn-guide-074\"],[\"MSC-GUIDE-075\",\"How Bitcoin Marketplaces Work\",\"/pages/learn-bitcoin-ecosystem?view=msc-learn-guide-075\"],[\"MSC-GUIDE-076\",\"What Bitcoin Service Providers Do\",\"/pages/learn-bitcoin-ecosystem?view=msc-learn-guide-076\"],[\"MSC-GUIDE-077\",\"Why Bitcoin Conferences Matter\",\"/pages/learn-bitcoin-ecosystem?view=msc-learn-guide-077\"],[\"MSC-GUIDE-078\",\"How Bitcoin Communities Form and Grow\",\"/pages/learn-bitcoin-ecosystem?view=msc-learn-guide-078\"],[\"MSC-GUIDE-079\",\"Major Milestones in Bitcoin History\",\"/pages/learn-bitcoin-ecosystem?view=msc-learn-guide-079\"],[\"MSC-GUIDE-080\",\"How Bitcoin Open-Source Projects Work\",\"/pages/learn-bitcoin-ecosystem?view=msc-learn-guide-080\"]];guides.forEach(([id,title,url])=>{const card=page.querySelector(`.msc-learn-guide-card[data-msc-guide-id=\"${id}\"]`);if(!card||card.querySelector('.msc-learn-guide-card__link-cover'))return;card.removeAttribute('aria-disabled');card.classList.add('is-live-guide');const note=card.querySelector('.msc-learn-preview-note');if(note)note.remove();const link=document.createElement('a');link.href=url;link.className='msc-learn-guide-card__link-cover';link.setAttribute('aria-label',`Read ${title}`);const label=document.createElement('span');label.className='visually-hidden';label.textContent=`Read ${title}`;link.appendChild(label);card.appendChild(link);});})();</script>",
+        "color_scheme": "scheme-1",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "guidepreviews"
   ]
 }

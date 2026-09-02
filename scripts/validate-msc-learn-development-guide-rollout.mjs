@@ -89,13 +89,14 @@ for (let index = 0; index < 15; index += 1) {
 const guide064 = sources[15];
 const guide065 = sources[16];
 const guide064Block = bindings.match(/{%- when 'MSC-GUIDE-064' -%}([\s\S]*?){%- else -%}/)?.[1] || '';
-assert.ok(guide064Block.includes("next_registry_id: 'MSC-GUIDE-065'"), 'Guide 064 must preview Guide 065 next');
+assert.ok(guide064Block.includes("next_registry_id: 'MSC-GUIDE-065'"), 'Guide 064 must continue to Guide 065 next');
 assert.ok(guide064Block.includes(`next_title: ${liquid(guide065.h1)}`), 'Guide 064 must preview the approved Guide 065 title');
 assert.ok(guide064Block.includes(`next_description: ${liquid(guide065.teaser)}`), 'Guide 064 teaser must come from Guide 065 locked introductory deck');
-assert.ok(guide064Block.includes('next_active: false'), 'Guide 064 → Guide 065 must remain inactive until Bitcoin Ecosystem rolls out');
-assert.ok(!guide064Block.includes('next_url:'), 'Guide 064 must not invent a Guide 065 preview URL');
+assert.ok(guide064Block.includes('next_active: true'), 'Guide 064 → Guide 065 must be active once Bitcoin Ecosystem exists');
+assert.ok(guide064Block.includes("next_url: '/pages/learn-bitcoin-ecosystem?view=msc-learn-guide-065'"), 'Guide 064 is missing the active Guide 065 Ecosystem preview URL');
 assert.ok(guide064Block.includes('completed_count: 16'), 'Guide 064 must show Bitcoin Development complete');
 assert.ok(guide064Block.includes('remaining_count: 0'), 'Guide 064 must show zero Development guides remaining');
+assert.ok(bindings.includes("{% render 'msc-learn-guide-ecosystem-bindings', pilot_registry_id: pilot_registry_id %}"), 'Development bindings must delegate Guides 065–080 to the Ecosystem bindings');
 
 assert.ok(hub.includes('data-msc-registry-id=\\"MSC-HUB-DEVELOPMENT\\"'), 'Development hub activation must be scoped to MSC-HUB-DEVELOPMENT');
 assert.ok(hub.includes('is-live-guide:hover'), 'Development hub must preserve the locked border-only card hover treatment');
@@ -108,6 +109,6 @@ assert.ok(sharedCss.includes('margin-top: .4rem;'), 'Locked Next Guide spacing d
 assert.ok(sharedCss.includes('.msc-learn-guide-transition.is-active:hover'), 'Locked border-only active transition interaction drifted');
 
 const lock = read('docs/learn/MSC_Learn_Guide_Template_Lock.md');
-assert.ok(lock.includes('Guides 001–064 remain preview-bound runtimes'), 'Template lock publication boundary must include Guides 001–064');
+assert.ok(lock.includes('Guides 001–080 remain preview-bound runtimes'), 'Template lock publication boundary must include all 80 guides');
 
-console.log('MSC Learn Development Guide 049–064 rollout validation passed: COPY_LOCKED runtimes are synchronized, all four Development subcategories preserve the locked guide system, all 16 Development hub cards are active, Guide 048 continues into Guide 049, transitions are wired through Guide 064, and Guide 065 remains inactive.');
+console.log('MSC Learn Development Guide 049–064 rollout validation passed: COPY_LOCKED runtimes are synchronized, all four Development subcategories preserve the locked guide system, all 16 Development hub cards are active, Guide 048 continues into Guide 049, transitions are wired through Guide 064, and Guide 064 continues into active Bitcoin Ecosystem Guide 065.');

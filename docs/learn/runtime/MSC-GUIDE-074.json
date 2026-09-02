@@ -1,0 +1,386 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-074-bitcoin-wallet-providers.md",
+  "source_sha256": "a1dcd12b82581b38f834436b914447d38bf730c3e68aa404dca8b05f06c71d7f",
+  "registry_id": "MSC-GUIDE-074",
+  "status": "COPY_LOCKED",
+  "h1": "How Bitcoin Wallet Providers Operate",
+  "introductory_deck": "A Bitcoin wallet provider may develop an application, manufacture a signing device, operate network servers, coordinate several keys, maintain customer accounts, or combine several of these roles. The provider and the wallet are not the same thing, and provider involvement does not automatically mean that the provider controls the bitcoin.\n\nThe important boundaries are who can authorize spending, where the wallet obtains transaction information, what must be preserved for recovery, what information the provider can observe, and whether the wallet can continue operating without that provider. Understanding these boundaries helps readers evaluate wallet designs without relying on product labels, feature counts, rankings, or promotional security claims.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "A wallet provider can build or operate one or more parts of a Bitcoin wallet system. The wallet is the combined state and functions used to derive receiving information, recognize relevant transactions, construct spends, obtain required signatures, and communicate with the Bitcoin network. The provider is the company or project supplying some of those parts.\n\nA useful map is:\n\n`interface → wallet state → transaction construction → signing → network data → broadcast → backup and recovery`\n\nOne organization may supply the whole path. Another may publish only an interface, manufacture a signing device, run a wallet server, coordinate several signers, or provide support around software that can continue without it. The important questions are which functions the provider performs, which information it can observe, and which actions it can authorize.",
+      "body_html": "<p>A wallet provider can build or operate one or more parts of a Bitcoin wallet system. The wallet is the combined state and functions used to derive receiving information, recognize relevant transactions, construct spends, obtain required signatures, and communicate with the Bitcoin network. The provider is the company or project supplying some of those parts.</p>\n<p>A useful map is:</p>\n<p><code>interface → wallet state → transaction construction → signing → network data → broadcast → backup and recovery</code></p>\n<p>One organization may supply the whole path. Another may publish only an interface, manufacture a signing device, run a wallet server, coordinate several signers, or provide support around software that can continue without it. The important questions are which functions the provider performs, which information it can observe, and which actions it can authorize.</p>"
+    },
+    {
+      "heading": "What a wallet provider is",
+      "body_markdown": "A wallet provider develops, distributes, or operates wallet software or related services. A wallet is not merely the screen a user sees. The interface presents information and collects instructions, while wallet state can include keys or public-key information, descriptors, watched scripts, transaction history, labels, and the wallet’s current view of spendable outputs.\n\nWallet responsibilities can be separated. One component may generate keys, another may store them, another may construct transactions, another may sign, and another may obtain network data or broadcast. A software developer, hardware manufacturer, hosted account service, signing coordinator, server operator, and custodian can therefore occupy different roles. Some providers combine several roles; others provide only one.",
+      "body_html": "<p>A wallet provider develops, distributes, or operates wallet software or related services. A wallet is not merely the screen a user sees. The interface presents information and collects instructions, while wallet state can include keys or public-key information, descriptors, watched scripts, transaction history, labels, and the wallet’s current view of spendable outputs.</p>\n<p>Wallet responsibilities can be separated. One component may generate keys, another may store them, another may construct transactions, another may sign, and another may obtain network data or broadcast. A software developer, hardware manufacturer, hosted account service, signing coordinator, server operator, and custodian can therefore occupy different roles. Some providers combine several roles; others provide only one.</p>"
+    },
+    {
+      "heading": "Provider responsibility is not Bitcoin authority",
+      "body_markdown": "Bitcoin consensus determines whether transactions and blocks satisfy the rules enforced by validating nodes. A wallet provider controls different matters: interface design, supported script types, coin selection, fee estimates, server defaults, account policy, update distribution, backup workflows, and customer support.\n\nA provider can display an incomplete balance, construct an unsuitable transaction, recommend a poor fee, or fail to broadcast. Those outcomes do not make an invalid transaction valid. Conversely, a valid transaction may be absent or delayed in an application because the wallet has not discovered it, the provider’s server is unavailable, or an account policy has not recognized it.\n\nBitcoin Core can operate as a validating node and can include wallet functionality, but its wallet is one implementation. Other wallets can divide the same responsibilities differently.",
+      "body_html": "<p>Bitcoin consensus determines whether transactions and blocks satisfy the rules enforced by validating nodes. A wallet provider controls different matters: interface design, supported script types, coin selection, fee estimates, server defaults, account policy, update distribution, backup workflows, and customer support.</p>\n<p>A provider can display an incomplete balance, construct an unsuitable transaction, recommend a poor fee, or fail to broadcast. Those outcomes do not make an invalid transaction valid. Conversely, a valid transaction may be absent or delayed in an application because the wallet has not discovered it, the provider’s server is unavailable, or an account policy has not recognized it.</p>\n<p>Bitcoin Core can operate as a validating node and can include wallet functionality, but its wallet is one implementation. Other wallets can divide the same responsibilities differently.</p>"
+    },
+    {
+      "heading": "How a wallet learns about Bitcoin activity",
+      "body_markdown": "Bitcoin does not send a ready-made account balance to a wallet. Transactions create outputs, and outputs that remain unspent are UTXOs. A wallet derives a balance by identifying outputs associated with scripts it watches and determining whether those outputs remain available to spend under its wallet model.\n\nThat information can come from a user-operated full node, a provider wallet server, a public server, an API or indexer, or a compact-filter workflow. These paths can produce similar-looking screens while carrying different validation, privacy, completeness, and availability assumptions.\n\nA full node validates blocks and transactions against the Bitcoin rules it enforces. A wallet server or indexer organizes blockchain-derived information for efficient lookup. An API is an interface through which a wallet may request that information. These systems are not interchangeable merely because they return balances or transaction histories.\n\nAs of July 30, 2026, Sparrow documents connections through a public server, Bitcoin Core, or a private Electrum server, and warns that a public server receives public-key information. Electrum’s documentation on that date describes a client-server design and explains that a server can omit transactions or learn queried addresses, while users seeking stronger privacy or independent data can operate their own server. These are product-specific examples of a general boundary: a server can influence or observe a wallet’s view without holding the private keys needed to spend.\n\nBIP 157 and BIP 158 describe compact-filter workflows in which clients obtain filters and retrieve potentially relevant blocks for local scanning. This can reduce direct disclosure of address queries. It does not by itself turn the client into a full validating node or remove peer-selection, network-privacy, and availability considerations.",
+      "body_html": "<p>Bitcoin does not send a ready-made account balance to a wallet. Transactions create outputs, and outputs that remain unspent are UTXOs. A wallet derives a balance by identifying outputs associated with scripts it watches and determining whether those outputs remain available to spend under its wallet model.</p>\n<p>That information can come from a user-operated full node, a provider wallet server, a public server, an API or indexer, or a compact-filter workflow. These paths can produce similar-looking screens while carrying different validation, privacy, completeness, and availability assumptions.</p>\n<p>A full node validates blocks and transactions against the Bitcoin rules it enforces. A wallet server or indexer organizes blockchain-derived information for efficient lookup. An API is an interface through which a wallet may request that information. These systems are not interchangeable merely because they return balances or transaction histories.</p>\n<p>As of July 30, 2026, Sparrow documents connections through a public server, Bitcoin Core, or a private Electrum server, and warns that a public server receives public-key information. Electrum’s documentation on that date describes a client-server design and explains that a server can omit transactions or learn queried addresses, while users seeking stronger privacy or independent data can operate their own server. These are product-specific examples of a general boundary: a server can influence or observe a wallet’s view without holding the private keys needed to spend.</p>\n<p>BIP 157 and BIP 158 describe compact-filter workflows in which clients obtain filters and retrieve potentially relevant blocks for local scanning. This can reduce direct disclosure of address queries. It does not by itself turn the client into a full validating node or remove peer-selection, network-privacy, and availability considerations.</p>"
+    },
+    {
+      "heading": "Key generation, storage, construction, signing, and broadcast",
+      "body_markdown": "Key generation, key storage, transaction construction, signing, and broadcasting are separate jobs. A connected software wallet may perform all of them on one device. A watch-only wallet can monitor activity and construct unsigned transactions while an external signer keeps the private keys elsewhere.\n\nBIP 174’s Partially Signed Bitcoin Transaction format allows transaction information and partial signatures to move among constructors, coordinators, and signers. PSBT is a coordination format, not proof that a particular device or person verified the recipient, amount, fee, or change correctly.\n\nA hardware wallet is most precisely described as a dedicated signing device. It can keep key material separate from a general-purpose computer and may provide an independent display for review. It does not remove the need to protect recovery material, verify transaction details, maintain firmware, assess the companion interface, or account for supply-chain and human risks.\n\nSigning is also different from broadcasting. A validly signed transaction can be passed to a node or service for broadcast, and the broadcaster does not need the private keys. Broadcast does not guarantee relay, mining, or confirmation.",
+      "body_html": "<p>Key generation, key storage, transaction construction, signing, and broadcasting are separate jobs. A connected software wallet may perform all of them on one device. A watch-only wallet can monitor activity and construct unsigned transactions while an external signer keeps the private keys elsewhere.</p>\n<p>BIP 174’s Partially Signed Bitcoin Transaction format allows transaction information and partial signatures to move among constructors, coordinators, and signers. PSBT is a coordination format, not proof that a particular device or person verified the recipient, amount, fee, or change correctly.</p>\n<p>A hardware wallet is most precisely described as a dedicated signing device. It can keep key material separate from a general-purpose computer and may provide an independent display for review. It does not remove the need to protect recovery material, verify transaction details, maintain firmware, assess the companion interface, or account for supply-chain and human risks.</p>\n<p>Signing is also different from broadcasting. A validly signed transaction can be passed to a node or service for broadcast, and the broadcaster does not need the private keys. Broadcast does not guarantee relay, mining, or confirmation.</p>"
+    },
+    {
+      "heading": "Custodial, noncustodial, and collaborative arrangements",
+      "body_markdown": "In a custodial model, the provider or its appointed custodian controls the signing process for the applicable funds. The user submits an instruction through an account, while the provider can authorize, delay, refuse, or condition the resulting spend under its systems and terms. The provider may use multiple internal keys or approval steps, but the user does not independently hold the authority required to move those funds.\n\nIn a noncustodial model, the user controls the keys required to authorize spending. That does not make the wallet provider-independent. The application may still depend on provider servers, cloud backups, account login, update infrastructure, or proprietary components. “Noncustodial” is therefore a statement about spending authority, not a complete description of privacy, availability, recovery, or software provenance.\n\nCollaborative arrangements divide signing authority. A two-of-three wallet, for example, requires two signatures from three defined keys. A provider holding one key cannot spend alone, but its participation may still matter for a particular recovery or service path.\n\nAs of July 30, 2026, Casa documents both three-key and five-key vault designs. In its stated three-key model, Casa holds one recovery key and says it cannot satisfy the two-signature threshold alone. Unchained describes a model in which clients hold two keys and the provider holds a third. These examples illustrate provider-assisted threshold arrangements. They are provider descriptions, not independent proof of implementation quality, security, future availability, or suitability.",
+      "body_html": "<p>In a custodial model, the provider or its appointed custodian controls the signing process for the applicable funds. The user submits an instruction through an account, while the provider can authorize, delay, refuse, or condition the resulting spend under its systems and terms. The provider may use multiple internal keys or approval steps, but the user does not independently hold the authority required to move those funds.</p>\n<p>In a noncustodial model, the user controls the keys required to authorize spending. That does not make the wallet provider-independent. The application may still depend on provider servers, cloud backups, account login, update infrastructure, or proprietary components. “Noncustodial” is therefore a statement about spending authority, not a complete description of privacy, availability, recovery, or software provenance.</p>\n<p>Collaborative arrangements divide signing authority. A two-of-three wallet, for example, requires two signatures from three defined keys. A provider holding one key cannot spend alone, but its participation may still matter for a particular recovery or service path.</p>\n<p>As of July 30, 2026, Casa documents both three-key and five-key vault designs. In its stated three-key model, Casa holds one recovery key and says it cannot satisfy the two-signature threshold alone. Unchained describes a model in which clients hold two keys and the provider holds a third. These examples illustrate provider-assisted threshold arrangements. They are provider descriptions, not independent proof of implementation quality, security, future availability, or suitability.</p>"
+    },
+    {
+      "heading": "Account recovery and cryptographic wallet recovery",
+      "body_markdown": "An account password reset restores access to an account. It does not automatically recreate private keys. Some designs may connect an account process to encrypted key material or provider-controlled custody, but the result depends on the specific architecture.\n\nA seed or recovery phrase serves a different purpose. BIP 39 defines one mnemonic system in which the words and an optional passphrase derive a seed commonly used with hierarchical deterministic wallets. BIP 39 is not universal, and the words alone may not reproduce the wallet a user expects. A passphrase, derivation path, script type, account index, wallet descriptor, or multisignature configuration can change what is recovered.\n\nOutput script descriptors describe scripts, keys, and derivation information a wallet watches or uses. BIP 380 explains why private keys alone may not identify the intended wallet structure. Multisignature recovery can also require the threshold, participating extended public keys, master fingerprints, derivation paths, and script type.\n\nProvider continuity belongs in the recovery model. As of July 30, 2026, Casa documents a sovereign-recovery process for supported vaults using independent software and exported public information. Unchained’s documentation on that date explains that its multisignature configuration file, together with the required user-held keys, can reconstruct a wallet outside its service. These are documented recovery claims. This Accuracy Review confirmed the current provider documentation but did not independently execute the recovery procedures or test every supported configuration.",
+      "body_html": "<p>An account password reset restores access to an account. It does not automatically recreate private keys. Some designs may connect an account process to encrypted key material or provider-controlled custody, but the result depends on the specific architecture.</p>\n<p>A seed or recovery phrase serves a different purpose. BIP 39 defines one mnemonic system in which the words and an optional passphrase derive a seed commonly used with hierarchical deterministic wallets. BIP 39 is not universal, and the words alone may not reproduce the wallet a user expects. A passphrase, derivation path, script type, account index, wallet descriptor, or multisignature configuration can change what is recovered.</p>\n<p>Output script descriptors describe scripts, keys, and derivation information a wallet watches or uses. BIP 380 explains why private keys alone may not identify the intended wallet structure. Multisignature recovery can also require the threshold, participating extended public keys, master fingerprints, derivation paths, and script type.</p>\n<p>Provider continuity belongs in the recovery model. As of July 30, 2026, Casa documents a sovereign-recovery process for supported vaults using independent software and exported public information. Unchained’s documentation on that date explains that its multisignature configuration file, together with the required user-held keys, can reconstruct a wallet outside its service. These are documented recovery claims. This Accuracy Review confirmed the current provider documentation but did not independently execute the recovery procedures or test every supported configuration.</p>"
+    },
+    {
+      "heading": "Software distribution, updates, and provenance",
+      "body_markdown": "A wallet’s software path can include:\n\n`source repository → license → release tag → build process → packaged artifact → distribution channel → installed software → update`\n\nEach step answers a different question. Open source concerns licensing rights, including access, use, modification, and redistribution. Source that can merely be viewed is not necessarily open source. An open-source client can also rely on a closed server, proprietary firmware, an app store, or provider-operated infrastructure.\n\nA release signature can show that an artifact or manifest was approved by whoever controlled a particular signing key, assuming the key’s identity and handling are established. A checksum can show that a file matches a referenced artifact. Neither proves that the source is safe, the build environment was trustworthy, or the signing process was uncompromised.\n\nA reproducible build asks whether the same defined source, instructions, and environment can produce bit-for-bit identical specified artifacts. As of July 30, 2026, Trezor documents a firmware-reproduction process that accounts for signatures and model-specific headers. Sparrow’s documentation on that date describes release signatures and hashes and separately identifies build and packaging boundaries. These processes can provide evidence about source-to-binary correspondence when independently performed for an exact release. They do not prove that the code, hardware, servers, or operating procedures are free of vulnerabilities.",
+      "body_html": "<p>A wallet’s software path can include:</p>\n<p><code>source repository → license → release tag → build process → packaged artifact → distribution channel → installed software → update</code></p>\n<p>Each step answers a different question. Open source concerns licensing rights, including access, use, modification, and redistribution. Source that can merely be viewed is not necessarily open source. An open-source client can also rely on a closed server, proprietary firmware, an app store, or provider-operated infrastructure.</p>\n<p>A release signature can show that an artifact or manifest was approved by whoever controlled a particular signing key, assuming the key’s identity and handling are established. A checksum can show that a file matches a referenced artifact. Neither proves that the source is safe, the build environment was trustworthy, or the signing process was uncompromised.</p>\n<p>A reproducible build asks whether the same defined source, instructions, and environment can produce bit-for-bit identical specified artifacts. As of July 30, 2026, Trezor documents a firmware-reproduction process that accounts for signatures and model-specific headers. Sparrow’s documentation on that date describes release signatures and hashes and separately identifies build and packaging boundaries. These processes can provide evidence about source-to-binary correspondence when independently performed for an exact release. They do not prove that the code, hardware, servers, or operating procedures are free of vulnerabilities.</p>"
+    },
+    {
+      "heading": "Privacy, metadata, and evidence",
+      "body_markdown": "A provider may be unable to spend bitcoin while still learning substantial wallet information. Depending on the design, it may observe an account identity, IP address, device details, extended public keys, address or script queries, transaction history, broadcast timing, telemetry, crash reports, and support communications.\n\nAn extended public key is not a signing secret, but it can reveal or derive broad sets of public wallet information. Running a node or scanning locally can reduce particular third-party disclosures, but it does not erase on-chain relationships, network metadata, device telemetry, or information shared through account and support systems.\n\nSecurity evidence should be read by scope. Architecture documentation describes intended design. A repository exposes source for inspection. A signed release addresses a signing key and artifact. Reproducibility addresses source-to-artifact correspondence. An audit, penetration test, or recovery exercise covers a defined target and time period. None of these alone proves the absence of vulnerabilities or operational failure.",
+      "body_html": "<p>A provider may be unable to spend bitcoin while still learning substantial wallet information. Depending on the design, it may observe an account identity, IP address, device details, extended public keys, address or script queries, transaction history, broadcast timing, telemetry, crash reports, and support communications.</p>\n<p>An extended public key is not a signing secret, but it can reveal or derive broad sets of public wallet information. Running a node or scanning locally can reduce particular third-party disclosures, but it does not erase on-chain relationships, network metadata, device telemetry, or information shared through account and support systems.</p>\n<p>Security evidence should be read by scope. Architecture documentation describes intended design. A repository exposes source for inspection. A signed release addresses a signing key and artifact. Reproducibility addresses source-to-artifact correspondence. An audit, penetration test, or recovery exercise covers a defined target and time period. None of these alone proves the absence of vulnerabilities or operational failure.</p>"
+    },
+    {
+      "heading": "Continuity, legal boundaries, and a practical evaluation",
+      "body_markdown": "Continuity depends on more than whether a company remains in business. A wallet may rely on an application, server, app-store listing, firmware repository, cloud-backup service, account system, update key, or support team. A useful description identifies what must remain available and what information permits independent recovery.\n\nLegal obligations depend on activity, entity, jurisdiction, and facts. In the United States, FinCEN’s 2019 guidance applies a facts-and-circumstances analysis to certain convertible-virtual-currency business models. In the European Union, MiCA establishes duties for defined crypto-asset service providers performing activities within its scope, including custody and administration for clients. Neither source makes every wallet developer a regulated custodian, and regulatory status does not prove technical security. This guide is general education, not legal advice.\n\nA practical evaluation can use seven questions:\n\n1. **Authority:** Who can authorize spending, alone or together?\n2. **Network data:** Where do balances, fee estimates, and transaction status come from?\n3. **Recovery:** Which keys, phrases, descriptors, files, accounts, and signers are required?\n4. **Software provenance:** Which licenses, releases, signatures, hashes, and builds can be checked?\n5. **Privacy:** What wallet, device, account, and network data leaves the user’s control?\n6. **Continuity:** Can the wallet be reconstructed and spent from if the provider disappears?\n7. **Legal and contractual scope:** Which entity, terms, and jurisdiction govern the service?\n\nThe goal is not to identify a universally best provider. It is to describe the system accurately enough to understand who controls what, which dependencies remain, and how failure or recovery would work.",
+      "body_html": "<p>Continuity depends on more than whether a company remains in business. A wallet may rely on an application, server, app-store listing, firmware repository, cloud-backup service, account system, update key, or support team. A useful description identifies what must remain available and what information permits independent recovery.</p>\n<p>Legal obligations depend on activity, entity, jurisdiction, and facts. In the United States, FinCEN’s 2019 guidance applies a facts-and-circumstances analysis to certain convertible-virtual-currency business models. In the European Union, MiCA establishes duties for defined crypto-asset service providers performing activities within its scope, including custody and administration for clients. Neither source makes every wallet developer a regulated custodian, and regulatory status does not prove technical security. This guide is general education, not legal advice.</p>\n<p>A practical evaluation can use seven questions:</p>\n<ol><li><strong>Authority:</strong> Who can authorize spending, alone or together?</li><li><strong>Network data:</strong> Where do balances, fee estimates, and transaction status come from?</li><li><strong>Recovery:</strong> Which keys, phrases, descriptors, files, accounts, and signers are required?</li><li><strong>Software provenance:</strong> Which licenses, releases, signatures, hashes, and builds can be checked?</li><li><strong>Privacy:</strong> What wallet, device, account, and network data leaves the user’s control?</li><li><strong>Continuity:</strong> Can the wallet be reconstructed and spent from if the provider disappears?</li><li><strong>Legal and contractual scope:</strong> Which entity, terms, and jurisdiction govern the service?</li></ol>\n<p>The goal is not to identify a universally best provider. It is to describe the system accurately enough to understand who controls what, which dependencies remain, and how failure or recovery would work.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Wallet provider",
+      "definition": "A company or project that develops, distributes, or operates wallet software, signing devices, network services, account systems, or related wallet support."
+    },
+    {
+      "term": "Bitcoin wallet",
+      "definition": "Software, hardware, or a coordinated system that manages information and functions used to receive, identify, and spend bitcoin."
+    },
+    {
+      "term": "Wallet state",
+      "definition": "The keys or public-key information, watched scripts, descriptors, transaction records, labels, and other information a wallet uses to represent its activity."
+    },
+    {
+      "term": "Custody",
+      "definition": "An arrangement in which a person or organization controls or administers the signing authority required to move another party’s funds."
+    },
+    {
+      "term": "Self-custody",
+      "definition": "An arrangement in which the user independently controls the private keys required to authorize spending."
+    },
+    {
+      "term": "Private key",
+      "definition": "Secret information used to produce a signature that satisfies an applicable Bitcoin spending condition."
+    },
+    {
+      "term": "Signing device",
+      "definition": "A device designed to protect key material and sign transactions, commonly called a hardware wallet."
+    },
+    {
+      "term": "Wallet server",
+      "definition": "A network service that supplies wallet applications with transaction, script, UTXO, fee, or broadcast information."
+    },
+    {
+      "term": "Full node",
+      "definition": "Software that independently validates blocks and transactions against the Bitcoin rules it enforces."
+    },
+    {
+      "term": "Indexer",
+      "definition": "A system that organizes blockchain-derived information for efficient lookup by wallets, explorers, APIs, or other applications."
+    },
+    {
+      "term": "API",
+      "definition": "A defined interface through which software requests data or actions from another service."
+    },
+    {
+      "term": "Seed phrase or recovery phrase",
+      "definition": "A sequence of words used by a particular wallet design to derive or restore key material."
+    },
+    {
+      "term": "Wallet descriptor",
+      "definition": "A structured description of the scripts, keys, derivation information, and related details a wallet watches or uses."
+    },
+    {
+      "term": "PSBT",
+      "definition": "A format for carrying unsigned or partially signed Bitcoin transaction data among separate constructors, coordinators, and signers."
+    },
+    {
+      "term": "Multisignature",
+      "definition": "A spending arrangement that requires a defined threshold of signatures from a larger set of keys."
+    },
+    {
+      "term": "Collaborative custody",
+      "definition": "An arrangement in which a user and one or more other parties hold different keys or signing roles; actual authority depends on the signing threshold and recovery design."
+    },
+    {
+      "term": "Open source",
+      "definition": "Software distributed under licensing terms that provide defined rights involving source access, use, modification, and redistribution."
+    },
+    {
+      "term": "Source available",
+      "definition": "Software whose source can be viewed under terms that may not provide the rights required by an open-source definition."
+    },
+    {
+      "term": "Signed release",
+      "definition": "A software artifact or manifest accompanied by a digital signature associated with a particular signing key."
+    },
+    {
+      "term": "Reproducible build",
+      "definition": "A build for which the same defined source, instructions, and environment can produce bit-for-bit identical specified artifacts."
+    },
+    {
+      "term": "Software provenance",
+      "definition": "Evidence about where software came from and how a distributed artifact relates to a source, release process, signing key, or build procedure."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Wallets",
+      "author_or_publisher": "Bitcoin developer documentation",
+      "url": "[https://developer.bitcoin.org/devguide/wallets.html](https://developer.bitcoin.org/devguide/wallets.html)",
+      "published_or_updated": "Not displayed",
+      "accessed": "July 30, 2026",
+      "supports": "The separation of wallet functions among key distribution, transaction construction, signing, and network communication, including watch-only, offline, and hardware-signing arrangements.",
+      "limitation": "The page is educational Bitcoin documentation and does not describe every current wallet implementation or provider service."
+    },
+    {
+      "title": "Transactions",
+      "author_or_publisher": "Bitcoin developer documentation",
+      "url": "[https://developer.bitcoin.org/devguide/transactions.html](https://developer.bitcoin.org/devguide/transactions.html)",
+      "published_or_updated": "Not displayed",
+      "accessed": "July 30, 2026",
+      "supports": "Transaction inputs, outputs, UTXOs, change, and the wallet work involved in identifying and constructing spends.",
+      "limitation": "It does not establish any provider’s balance display, server behavior, coin-selection method, or custody model."
+    },
+    {
+      "title": "Block Chain",
+      "author_or_publisher": "Bitcoin developer documentation",
+      "url": "[https://developer.bitcoin.org/devguide/block_chain.html](https://developer.bitcoin.org/devguide/block_chain.html)",
+      "published_or_updated": "Not displayed",
+      "accessed": "July 30, 2026",
+      "supports": "Node validation, transaction inclusion, block chaining, and the distinction between Bitcoin data and wallet representations.",
+      "limitation": "It does not determine wallet-provider interfaces, server policies, account records, or recovery procedures."
+    },
+    {
+      "title": "BIP 32: Hierarchical Deterministic Wallets",
+      "author_or_publisher": "Bitcoin Improvement Proposals",
+      "url": "[https://bips.dev/32/](https://bips.dev/32/)",
+      "published_or_updated": "Assigned February 11, 2012; revision history displayed on the page",
+      "accessed": "July 30, 2026",
+      "supports": "Hierarchical derivation and the ability to use extended public information without sharing the corresponding private spending authority.",
+      "limitation": "BIP 32 does not define every backup format, script type, provider recovery process, or privacy practice."
+    },
+    {
+      "title": "BIP 39: Mnemonic Code for Generating Deterministic Keys",
+      "author_or_publisher": "Bitcoin Improvement Proposals",
+      "url": "[https://bips.dev/39/](https://bips.dev/39/)",
+      "published_or_updated": "Assigned September 10, 2013",
+      "accessed": "July 30, 2026",
+      "supports": "One mnemonic system in which words and an optional passphrase derive a seed for deterministic-wallet use.",
+      "limitation": "BIP 39 is not universal and does not preserve script type, derivation path, wallet descriptor, account index, or multisignature configuration by itself."
+    },
+    {
+      "title": "BIP 174: Partially Signed Bitcoin Transaction Format",
+      "author_or_publisher": "Bitcoin Improvement Proposals",
+      "url": "[https://bips.dev/174/](https://bips.dev/174/)",
+      "published_or_updated": "Assigned July 12, 2017; revision history displayed on the page",
+      "accessed": "July 30, 2026",
+      "supports": "A format for carrying transaction information and partial signatures among separate constructors, coordinators, and signers.",
+      "limitation": "PSBT support does not prove that a wallet or signer verifies transaction details correctly or that a particular workflow is secure."
+    },
+    {
+      "title": "BIP 380: Output Script Descriptors General Operation",
+      "author_or_publisher": "Bitcoin Improvement Proposals",
+      "url": "[https://bips.dev/380/](https://bips.dev/380/)",
+      "published_or_updated": "Assigned June 27, 2021; revision history displayed on the page",
+      "accessed": "July 30, 2026",
+      "supports": "Descriptors as a language for expressing scripts, keys, derivation paths, and wallet export information.",
+      "limitation": "Descriptor support varies among applications, and a descriptor does not necessarily contain the private keys, account credentials, or provider procedures required for recovery."
+    },
+    {
+      "title": "BIP 157: Client Side Block Filtering",
+      "author_or_publisher": "Bitcoin Improvement Proposals",
+      "url": "[https://bips.dev/157/](https://bips.dev/157/)",
+      "published_or_updated": "Assigned May 24, 2017",
+      "accessed": "July 30, 2026",
+      "supports": "A light-client protocol in which clients obtain compact-filter information from peers and retrieve potentially relevant blocks.",
+      "limitation": "It does not make a light client a full validating node or remove every privacy, peer-selection, and availability consideration."
+    },
+    {
+      "title": "BIP 158: Compact Block Filters for Light Clients",
+      "author_or_publisher": "Bitcoin Improvement Proposals",
+      "url": "[https://bips.dev/158/](https://bips.dev/158/)",
+      "published_or_updated": "Assigned May 24, 2017",
+      "accessed": "July 30, 2026",
+      "supports": "The construction and contents of compact block filters used in BIP 157 workflows.",
+      "limitation": "It does not describe every wallet’s implemented scanning, peer selection, validation, or privacy behavior."
+    },
+    {
+      "title": "Quick Start Guide",
+      "author_or_publisher": "Sparrow Wallet",
+      "url": "[https://sparrowwallet.com/docs/quick-start.html](https://sparrowwallet.com/docs/quick-start.html)",
+      "published_or_updated": "Not displayed",
+      "accessed": "July 30, 2026",
+      "supports": "Sparrow’s documented public-server, Bitcoin Core, and private Electrum-server connection choices and its warning about public-key information shared with public servers.",
+      "limitation": "Provider documentation establishes Sparrow’s stated behavior only and does not describe every wallet-server architecture."
+    },
+    {
+      "title": "Download",
+      "author_or_publisher": "Sparrow Wallet",
+      "url": "[https://sparrowwallet.com/download/](https://sparrowwallet.com/download/)",
+      "published_or_updated": "Current release 2.5.3 displayed; page update date not displayed",
+      "accessed": "July 30, 2026",
+      "supports": "Sparrow’s documented manifest-signature, signer-key, and release-hash verification process.",
+      "limitation": "A valid signature and matching hash do not prove that the application is vulnerability-free or that the signing key and release infrastructure were uncompromised."
+    },
+    {
+      "title": "Frequently Asked Questions",
+      "author_or_publisher": "Electrum documentation",
+      "url": "[https://electrum.readthedocs.io/en/latest/faq.html](https://electrum.readthedocs.io/en/latest/faq.html)",
+      "published_or_updated": "Not displayed",
+      "accessed": "July 30, 2026",
+      "supports": "Electrum’s documented client-server architecture, server privacy and omission boundaries, and personal-server option.",
+      "limitation": "The documentation describes Electrum and does not establish a universal server model or guarantee server accuracy, privacy, or availability."
+    },
+    {
+      "title": "Electrum Bitcoin Wallet",
+      "author_or_publisher": "Electrum",
+      "url": "[https://electrum.org/](https://electrum.org/)",
+      "published_or_updated": "Electrum 4.8.0 displayed; page update date not displayed",
+      "accessed": "July 30, 2026",
+      "supports": "Electrum’s official source and binary distribution, signature-verification material, and reproducibility statements.",
+      "limitation": "These are project statements and release artifacts; this editorial review did not independently reproduce binaries or validate every signing key."
+    },
+    {
+      "title": "Reproducible Builds",
+      "author_or_publisher": "Trezor Firmware documentation",
+      "url": "[https://docs.trezor.io/trezor-firmware/common/reproducible-build.html](https://docs.trezor.io/trezor-firmware/common/reproducible-build.html)",
+      "published_or_updated": "Not displayed",
+      "accessed": "July 30, 2026",
+      "supports": "Trezor’s documented procedure for building tagged firmware and comparing it with official firmware after accounting for signatures and model-specific headers.",
+      "limitation": "Provider documentation does not establish that this assignment independently reproduced a firmware release or assessed device hardware, manufacturing, or distribution."
+    },
+    {
+      "title": "The Open Source Definition",
+      "author_or_publisher": "Open Source Initiative",
+      "url": "[https://opensource.org/osd](https://opensource.org/osd)",
+      "published_or_updated": "Last modified February 16, 2024",
+      "accessed": "July 30, 2026",
+      "supports": "The licensing and distribution criteria associated with open-source software and the distinction between source visibility and open-source rights.",
+      "limitation": "Open-source licensing does not establish software security, build provenance, maintenance quality, or provider continuity."
+    },
+    {
+      "title": "Definitions: When Is a Build Reproducible?",
+      "author_or_publisher": "Reproducible Builds project",
+      "url": "[https://reproducible-builds.org/docs/definition/](https://reproducible-builds.org/docs/definition/)",
+      "published_or_updated": "Not displayed",
+      "accessed": "July 30, 2026",
+      "supports": "The definition of reproducibility using the same source, build environment, instructions, and bit-for-bit identical specified artifacts.",
+      "limitation": "Reproducibility addresses a source-to-artifact property and does not prove that the source, dependencies, or resulting software are safe."
+    },
+    {
+      "title": "What Is Multisig?",
+      "author_or_publisher": "Casa",
+      "url": "[https://support.casa.io/knowledge/what-is-multisig](https://support.casa.io/knowledge/what-is-multisig)",
+      "published_or_updated": "May 28, 2026",
+      "accessed": "July 30, 2026",
+      "supports": "Casa’s current descriptions of three-key and five-key vault designs, signing thresholds, and the provider-held recovery key in its stated three-key model.",
+      "limitation": "This is Casa’s description of its service and does not independently prove implementation, operational controls, future availability, or suitability."
+    },
+    {
+      "title": "Sovereign Recovery: Sending Funds Outside of Casa",
+      "author_or_publisher": "Casa",
+      "url": "[https://support.casa.io/knowledge/sovereign-recovery-sending-funds-outside-of-casa](https://support.casa.io/knowledge/sovereign-recovery-sending-funds-outside-of-casa)",
+      "published_or_updated": "May 14, 2026",
+      "accessed": "July 30, 2026",
+      "supports": "Casa’s documented provider-independent recovery process for supported vault configurations.",
+      "limitation": "This editorial review did not independently execute recovery for each configuration or verify compatibility with every current or future software release."
+    },
+    {
+      "title": "What Is a Multisig Wallet Configuration File and What Is It For?",
+      "author_or_publisher": "Unchained",
+      "url": "[https://www.unchained.com/blog/what-is-a-multisig-wallet-configuration-file](https://www.unchained.com/blog/what-is-a-multisig-wallet-configuration-file)",
+      "published_or_updated": "First published December 1, 2021; last updated April 17, 2026",
+      "accessed": "July 30, 2026",
+      "supports": "Unchained’s stated key arrangement and the role of thresholds, extended public keys, derivation paths, fingerprints, script type, and configuration files in multisignature recovery.",
+      "limitation": "The page describes Unchained and related workflows and does not independently establish universal compatibility or successful recovery for every wallet."
+    },
+    {
+      "title": "Application of FinCEN’s Regulations to Certain Business Models Involving Convertible Virtual Currencies",
+      "author_or_publisher": "Financial Crimes Enforcement Network",
+      "url": "[https://www.fincen.gov/resources/statutes-regulations/guidance/application-fincens-regulations-certain-business-models](https://www.fincen.gov/resources/statutes-regulations/guidance/application-fincens-regulations-certain-business-models)",
+      "published_or_updated": "May 9, 2019",
+      "accessed": "July 30, 2026",
+      "supports": "The activity- and facts-based application of United States Bank Secrecy Act rules to defined convertible-virtual-currency business models.",
+      "limitation": "The guidance does not classify every wallet developer, software publisher, provider, or current product and is not legal advice."
+    },
+    {
+      "title": "Regulation (EU) 2023/1114 on Markets in Crypto-Assets",
+      "author_or_publisher": "European Union",
+      "url": "[https://eur-lex.europa.eu/eli/reg/2023/1114/oj](https://eur-lex.europa.eu/eli/reg/2023/1114/oj)",
+      "published_or_updated": "Published June 9, 2023; consolidated text displayed by EUR-Lex",
+      "accessed": "July 30, 2026",
+      "supports": "Defined European Union requirements for crypto-asset service providers performing custody and administration for clients.",
+      "limitation": "Applicability depends on the service, entity, activity, jurisdiction, transitional provisions, and facts; the regulation does not make every software developer a custodian or prove technical security."
+    }
+  ],
+  "seo_title": "How Bitcoin Wallet Providers Operate",
+  "meta_description": "Learn how Bitcoin wallet providers divide key control, signing, network access, recovery, privacy, software updates, and provider dependencies.",
+  "excerpt": "Bitcoin wallet providers may supply an interface, signing device, network service, recovery process, account, or custody arrangement. This guide maps who can spend, what data may be exposed, what recovery requires, and whether a wallet can continue without its provider.",
+  "reading_time": "9 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-ECOSYSTEM",
+    "label": "Bitcoin Ecosystem",
+    "subcategory": "Markets",
+    "depth": "Surface",
+    "format": "Guide"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-073",
+      "title": "How Bitcoin Exchanges Work",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-075",
+      "title": "How Bitcoin Marketplaces Work",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": []
+  },
+  "review_dates": {
+    "reviewed": "2026-07-30",
+    "copy_locked": "2026-07-30",
+    "human_verification": null
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1"
+    },
+    {
+      "title": "Illustration 2"
+    },
+    {
+      "title": "Illustration 3"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}

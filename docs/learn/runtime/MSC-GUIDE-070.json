@@ -1,0 +1,312 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-070-bitcoin-startups.md",
+  "source_sha256": "c9c5fd091dc0b3154618ab62c765d534e019402b7daa2ff790ef8c8583dfe385",
+  "registry_id": "MSC-GUIDE-070",
+  "status": "COPY_LOCKED",
+  "h1": "How Bitcoin Startups Build and Compete",
+  "introductory_deck": "Bitcoin startups turn technical capabilities into products, services, and operating businesses. They compete through product design, security, distribution, liquidity, cost, reliability, regulation, integrations, and trust. Funding or attention can extend a startup’s runway, but neither proves that its product works, protects users, or will survive. The useful questions are what the company builds, which Bitcoin layer it depends on, who controls assets and infrastructure, how it earns revenue, and what fails when a vendor, investor, or service disappears.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "A Bitcoin startup is a young company whose product, revenue, or operating model materially depends on Bitcoin or a Bitcoin-related system. That definition should be applied narrowly. A company that occasionally accepts bitcoin is not necessarily a Bitcoin startup. A company may be Bitcoin-dependent even when users never see an onchain transaction, such as an infrastructure provider whose software, APIs, custody controls, or Lightning operations support another business.\n\nStartups can build wallets, payment systems, Lightning services, mining software, hardware, node tools, data platforms, security products, accounting systems, developer tools, enterprise integrations, or educational services. Some operate custody. Some provide software that users run themselves. Some publish open-source components and sell hosted operations around them. Others are proprietary from end to end.\n\nThe category does not establish quality. A startup can have prominent investors, accelerator participation, high user growth, or extensive media coverage and still have weak controls, unclear economics, concentrated dependencies, or an unfinished product. It can also build durable infrastructure without attracting broad public attention.\n\nThis guide was researched on July 27, 2026. Company status, funding, products, licenses, repositories, terms, pricing, custody models, and security claims can change quickly. Current examples are used only to explain structures and must be renewed immediately before publication.",
+      "body_html": "<p>A Bitcoin startup is a young company whose product, revenue, or operating model materially depends on Bitcoin or a Bitcoin-related system. That definition should be applied narrowly. A company that occasionally accepts bitcoin is not necessarily a Bitcoin startup. A company may be Bitcoin-dependent even when users never see an onchain transaction, such as an infrastructure provider whose software, APIs, custody controls, or Lightning operations support another business.</p>\n<p>Startups can build wallets, payment systems, Lightning services, mining software, hardware, node tools, data platforms, security products, accounting systems, developer tools, enterprise integrations, or educational services. Some operate custody. Some provide software that users run themselves. Some publish open-source components and sell hosted operations around them. Others are proprietary from end to end.</p>\n<p>The category does not establish quality. A startup can have prominent investors, accelerator participation, high user growth, or extensive media coverage and still have weak controls, unclear economics, concentrated dependencies, or an unfinished product. It can also build durable infrastructure without attracting broad public attention.</p>\n<p>This guide was researched on July 27, 2026. Company status, funding, products, licenses, repositories, terms, pricing, custody models, and security claims can change quickly. Current examples are used only to explain structures and must be renewed immediately before publication.</p>"
+    },
+    {
+      "heading": "Start with the product layer",
+      "body_markdown": "The first question is where the startup operates.\n\nA base-layer software company may build node tooling, transaction systems, signing software, or operational services around Bitcoin. A Lightning company may operate nodes, routing, liquidity, wallets, or payment APIs. A mining startup may sell firmware, management software, cooling, repair, energy coordination, or site services. A financial startup may provide custody, brokerage, credit, accounting, or risk tools. A hardware startup may design signing devices, miners, secure components, or point-of-sale equipment.\n\nThese layers have different failure modes. A hosted API can fail because the service is unavailable even while Bitcoin continues operating. A Lightning payment can fail because of route, liquidity, channel, or implementation conditions even though an onchain transaction remains possible. A hardware product can depend on manufacturing, firmware, companion software, and recovery procedures. A custody product can create a direct claim on the startup rather than giving the customer control of keys.\n\nThe startup’s product documentation should identify which system is responsible for each function. “Built on Bitcoin” does not mean every component inherits Bitcoin’s availability, privacy, finality, or security.",
+      "body_html": "<p>The first question is where the startup operates.</p>\n<p>A base-layer software company may build node tooling, transaction systems, signing software, or operational services around Bitcoin. A Lightning company may operate nodes, routing, liquidity, wallets, or payment APIs. A mining startup may sell firmware, management software, cooling, repair, energy coordination, or site services. A financial startup may provide custody, brokerage, credit, accounting, or risk tools. A hardware startup may design signing devices, miners, secure components, or point-of-sale equipment.</p>\n<p>These layers have different failure modes. A hosted API can fail because the service is unavailable even while Bitcoin continues operating. A Lightning payment can fail because of route, liquidity, channel, or implementation conditions even though an onchain transaction remains possible. A hardware product can depend on manufacturing, firmware, companion software, and recovery procedures. A custody product can create a direct claim on the startup rather than giving the customer control of keys.</p>\n<p>The startup’s product documentation should identify which system is responsible for each function. “Built on Bitcoin” does not mean every component inherits Bitcoin’s availability, privacy, finality, or security.</p>"
+    },
+    {
+      "heading": "Measure Bitcoin dependency",
+      "body_markdown": "Bitcoin dependency describes how much of the business stops working if Bitcoin activity, fees, price, software, regulation, or user demand changes.\n\nA startup can be dependent on:\n\n- bitcoin transaction volume;\n- Lightning payment volume or channel liquidity;\n- bitcoin’s market price;\n- block-space demand;\n- mining economics;\n- a particular node implementation;\n- a custodian or exchange;\n- a hosted node, API, indexer, or data vendor;\n- one hardware manufacturer;\n- one jurisdiction or banking partner;\n- a proprietary protocol or open-source project;\n- a small group of enterprise customers; or\n- investor financing rather than customer revenue.\n\nDependency is not automatically a weakness. Every company relies on something. The important work is to make the dependency visible and evaluate whether the company can survive interruption, substitution, or changed economics.\n\nA startup that claims to be “Bitcoin native” may still depend heavily on ordinary cloud hosting, app stores, banks, identity vendors, sanctions screening, card networks, telecommunications, and third-party custody. Conversely, a startup may offer a self-hosted product while operating proprietary update, analytics, or support systems. The label should not replace a component map.",
+      "body_html": "<p>Bitcoin dependency describes how much of the business stops working if Bitcoin activity, fees, price, software, regulation, or user demand changes.</p>\n<p>A startup can be dependent on:</p>\n<ul><li>bitcoin transaction volume;</li><li>Lightning payment volume or channel liquidity;</li><li>bitcoin’s market price;</li><li>block-space demand;</li><li>mining economics;</li><li>a particular node implementation;</li><li>a custodian or exchange;</li><li>a hosted node, API, indexer, or data vendor;</li><li>one hardware manufacturer;</li><li>one jurisdiction or banking partner;</li><li>a proprietary protocol or open-source project;</li><li>a small group of enterprise customers; or</li><li>investor financing rather than customer revenue.</li></ul>\n<p>Dependency is not automatically a weakness. Every company relies on something. The important work is to make the dependency visible and evaluate whether the company can survive interruption, substitution, or changed economics.</p>\n<p>A startup that claims to be “Bitcoin native” may still depend heavily on ordinary cloud hosting, app stores, banks, identity vendors, sanctions screening, card networks, telecommunications, and third-party custody. Conversely, a startup may offer a self-hosted product while operating proprietary update, analytics, or support systems. The label should not replace a component map.</p>"
+    },
+    {
+      "heading": "Business models must connect a user problem to revenue",
+      "body_markdown": "A startup needs more than a technically interesting feature. It must identify a customer, a problem, a delivery method, and an economic exchange.\n\nCommon revenue models include:\n\n- transaction or payment fees;\n- custody or assets-under-administration fees;\n- subscriptions;\n- usage-based API pricing;\n- enterprise software contracts;\n- hardware margins;\n- mining-pool or management fees;\n- spreads or execution fees;\n- financing income;\n- implementation and support services;\n- licensing; and\n- open-source software paired with managed hosting.\n\nRevenue quality depends on what the number represents. Gross payment volume is not revenue. Revenue is not gross profit. Gross profit is not free cash flow. A startup may subsidize fees to acquire users, pay routing or liquidity costs, absorb fraud losses, or rely on promotional pricing. A growing top-line metric can therefore coexist with deteriorating unit economics.\n\nThe business model should also identify who bears expensive failures. If a payment is reversed outside Bitcoin, a custodian loses keys, a Lightning channel is force-closed, a device is recalled, or a regulated partner terminates service, which party pays?",
+      "body_html": "<p>A startup needs more than a technically interesting feature. It must identify a customer, a problem, a delivery method, and an economic exchange.</p>\n<p>Common revenue models include:</p>\n<ul><li>transaction or payment fees;</li><li>custody or assets-under-administration fees;</li><li>subscriptions;</li><li>usage-based API pricing;</li><li>enterprise software contracts;</li><li>hardware margins;</li><li>mining-pool or management fees;</li><li>spreads or execution fees;</li><li>financing income;</li><li>implementation and support services;</li><li>licensing; and</li><li>open-source software paired with managed hosting.</li></ul>\n<p>Revenue quality depends on what the number represents. Gross payment volume is not revenue. Revenue is not gross profit. Gross profit is not free cash flow. A startup may subsidize fees to acquire users, pay routing or liquidity costs, absorb fraud losses, or rely on promotional pricing. A growing top-line metric can therefore coexist with deteriorating unit economics.</p>\n<p>The business model should also identify who bears expensive failures. If a payment is reversed outside Bitcoin, a custodian loses keys, a Lightning channel is force-closed, a device is recalled, or a regulated partner terminates service, which party pays?</p>"
+    },
+    {
+      "heading": "Custody changes the company’s responsibilities",
+      "body_markdown": "Custody is one of the most important startup boundaries.\n\nIn a self-custodial product, the user controls the keys or authorization required to move bitcoin. The company may provide software, updates, coordination, or optional services, but it should not be able to move funds unilaterally under the intended model.\n\nIn a custodial product, the company or its provider controls the keys or internal ledger. The user may have a contractual claim rather than direct control of an onchain output. The company must manage key security, withdrawals, accounting, compliance, liquidity, access controls, incident response, and legal obligations.\n\nSome products use collaborative or multiparty controls. A company may hold one key, operate a recovery service, enforce policy, or provide a cosigner. Those models cannot be classified by marketing language alone. Readers should ask what happens if the company refuses, disappears, is compromised, or is legally compelled to act.\n\nFinCEN’s May 2019 guidance discusses how U.S. Bank Secrecy Act obligations may apply to certain convertible virtual currency business models. It is a jurisdiction-specific regulatory record, not a universal classification for every startup. A company’s legal analysis, licenses, or registration should be checked for the current product, location, and date.",
+      "body_html": "<p>Custody is one of the most important startup boundaries.</p>\n<p>In a self-custodial product, the user controls the keys or authorization required to move bitcoin. The company may provide software, updates, coordination, or optional services, but it should not be able to move funds unilaterally under the intended model.</p>\n<p>In a custodial product, the company or its provider controls the keys or internal ledger. The user may have a contractual claim rather than direct control of an onchain output. The company must manage key security, withdrawals, accounting, compliance, liquidity, access controls, incident response, and legal obligations.</p>\n<p>Some products use collaborative or multiparty controls. A company may hold one key, operate a recovery service, enforce policy, or provide a cosigner. Those models cannot be classified by marketing language alone. Readers should ask what happens if the company refuses, disappears, is compromised, or is legally compelled to act.</p>\n<p>FinCEN’s May 2019 guidance discusses how U.S. Bank Secrecy Act obligations may apply to certain convertible virtual currency business models. It is a jurisdiction-specific regulatory record, not a universal classification for every startup. A company’s legal analysis, licenses, or registration should be checked for the current product, location, and date.</p>"
+    },
+    {
+      "heading": "Funding buys time and creates incentives",
+      "body_markdown": "Startups can be funded by founders, customers, grants, angel investors, venture funds, strategic investors, debt, token or security offerings where lawful, or a combination of sources.\n\nEarly-stage equity and simple agreements for future equity can provide capital before a priced financing round. Y Combinator publishes multiple current post-money SAFE forms and related documents for U.S. companies, along with forms for certain other jurisdictions. The forms use different contractual terms, including valuation-cap, discount, and most-favored-nation structures. They illustrate common early-stage financing arrangements but are not identical, do not guarantee a future financing round, and do not establish product success or a fair outcome for every party.\n\nU.S. private offerings may rely on exemptions from public registration. The SEC’s current exempt-offering resources and Form D materials explain regulatory pathways and filing records. A Form D notice establishes that an issuer reported an exempt offering. It does not show that the company is profitable, technically sound, fully funded, or endorsed by the SEC.\n\nFunding affects:\n\n- how long the company can operate before reaching sustainability;\n- which milestones investors expect;\n- founder and employee ownership;\n- pressure for growth, acquisition, or another financing;\n- governance and information rights;\n- willingness to serve unprofitable users or markets;\n- tolerance for open-source work without direct revenue; and\n- the consequences of a difficult capital market.\n\nVenture capital can support security work, hiring, audits, liquidity, and distribution. It can also encourage fast expansion, platform dependence, market concentration, or a product scope designed for investor returns. The effect must be evaluated from contracts, governance, and operating decisions rather than assumed.",
+      "body_html": "<p>Startups can be funded by founders, customers, grants, angel investors, venture funds, strategic investors, debt, token or security offerings where lawful, or a combination of sources.</p>\n<p>Early-stage equity and simple agreements for future equity can provide capital before a priced financing round. Y Combinator publishes multiple current post-money SAFE forms and related documents for U.S. companies, along with forms for certain other jurisdictions. The forms use different contractual terms, including valuation-cap, discount, and most-favored-nation structures. They illustrate common early-stage financing arrangements but are not identical, do not guarantee a future financing round, and do not establish product success or a fair outcome for every party.</p>\n<p>U.S. private offerings may rely on exemptions from public registration. The SEC’s current exempt-offering resources and Form D materials explain regulatory pathways and filing records. A Form D notice establishes that an issuer reported an exempt offering. It does not show that the company is profitable, technically sound, fully funded, or endorsed by the SEC.</p>\n<p>Funding affects:</p>\n<ul><li>how long the company can operate before reaching sustainability;</li><li>which milestones investors expect;</li><li>founder and employee ownership;</li><li>pressure for growth, acquisition, or another financing;</li><li>governance and information rights;</li><li>willingness to serve unprofitable users or markets;</li><li>tolerance for open-source work without direct revenue; and</li><li>the consequences of a difficult capital market.</li></ul>\n<p>Venture capital can support security work, hiring, audits, liquidity, and distribution. It can also encourage fast expansion, platform dependence, market concentration, or a product scope designed for investor returns. The effect must be evaluated from contracts, governance, and operating decisions rather than assumed.</p>"
+    },
+    {
+      "heading": "Open-source and proprietary boundaries",
+      "body_markdown": "“Open source” should describe a specific repository, license, component, and version.\n\nA startup may publish a client library while keeping the server proprietary. It may open-source a node implementation but operate a closed liquidity platform. It may use open-source Bitcoin software inside a hosted service whose deployment, data, keys, and policies are controlled by the company. It may publish code but retain trademarks, hardware designs, cloud tooling, or signing infrastructure.\n\nCurrent public repositories for projects such as lnd and LDK show how implementation code, issues, version tags or packages, contribution processes, and licenses can be examined directly. A repository can establish what code is available and how a project accepts contributions. It does not prove that a company’s hosted deployment uses an unmodified build, has reliable operations, or preserves user privacy.\n\nOpen source can reduce switching costs by allowing inspection, independent builds, and forks. It does not remove all dependencies. Users may still rely on hosted APIs, channel liquidity, device manufacturing, update servers, or a company-controlled database.\n\nProprietary software can be commercially sustainable and operationally mature. Its limits are different: customers may have less ability to inspect behavior, migrate data, reproduce builds, or continue service after the vendor exits. The tradeoff should be stated without treating either licensing model as a complete security verdict.",
+      "body_html": "<p>“Open source” should describe a specific repository, license, component, and version.</p>\n<p>A startup may publish a client library while keeping the server proprietary. It may open-source a node implementation but operate a closed liquidity platform. It may use open-source Bitcoin software inside a hosted service whose deployment, data, keys, and policies are controlled by the company. It may publish code but retain trademarks, hardware designs, cloud tooling, or signing infrastructure.</p>\n<p>Current public repositories for projects such as lnd and LDK show how implementation code, issues, version tags or packages, contribution processes, and licenses can be examined directly. A repository can establish what code is available and how a project accepts contributions. It does not prove that a company’s hosted deployment uses an unmodified build, has reliable operations, or preserves user privacy.</p>\n<p>Open source can reduce switching costs by allowing inspection, independent builds, and forks. It does not remove all dependencies. Users may still rely on hosted APIs, channel liquidity, device manufacturing, update servers, or a company-controlled database.</p>\n<p>Proprietary software can be commercially sustainable and operationally mature. Its limits are different: customers may have less ability to inspect behavior, migrate data, reproduce builds, or continue service after the vendor exits. The tradeoff should be stated without treating either licensing model as a complete security verdict.</p>"
+    },
+    {
+      "heading": "Distribution determines who can reach the product",
+      "body_markdown": "A technically capable product can fail because users cannot discover, understand, obtain, integrate, or support it.\n\nDistribution channels can include app stores, hardware distributors, payment processors, exchanges, developer ecosystems, enterprise sales, open-source communities, social media, conferences, banking partners, and integrations with other products. Each channel can become a gatekeeper.\n\nAn app-store policy change can block an update. A hardware distributor can create inventory risk. An enterprise sales cycle can consume months of runway. A platform integration can produce rapid growth but leave the startup dependent on another company’s terms. An open-source project can attract developers while the commercial product struggles to convert usage into revenue.\n\nDistribution claims should be tied to active users, paying customers, retained usage, transaction success, supported regions, or another defined measure. Downloads, registrations, wallet creations, and social followers are not interchangeable.",
+      "body_html": "<p>A technically capable product can fail because users cannot discover, understand, obtain, integrate, or support it.</p>\n<p>Distribution channels can include app stores, hardware distributors, payment processors, exchanges, developer ecosystems, enterprise sales, open-source communities, social media, conferences, banking partners, and integrations with other products. Each channel can become a gatekeeper.</p>\n<p>An app-store policy change can block an update. A hardware distributor can create inventory risk. An enterprise sales cycle can consume months of runway. A platform integration can produce rapid growth but leave the startup dependent on another company’s terms. An open-source project can attract developers while the commercial product struggles to convert usage into revenue.</p>\n<p>Distribution claims should be tied to active users, paying customers, retained usage, transaction success, supported regions, or another defined measure. Downloads, registrations, wallet creations, and social followers are not interchangeable.</p>"
+    },
+    {
+      "heading": "Startups compete on systems, not only features",
+      "body_markdown": "Features are visible, but durable competition often depends on less visible systems:\n\n- security engineering and incident response;\n- uptime and operational controls;\n- liquidity and capital efficiency;\n- hardware supply and repair;\n- integrations and developer experience;\n- regulatory permissions and banking access;\n- customer support;\n- data portability;\n- privacy;\n- pricing and unit economics;\n- reputation earned through reliable behavior; and\n- the cost and difficulty of switching.\n\nA startup can create network effects when the product becomes more useful as participants, liquidity, integrations, or data increase. But “network effect” is often used loosely. A larger customer base does not automatically prevent switching. Interoperable standards may let users move between providers, while proprietary data, identity, liquidity, or hardware can create lock-in.\n\nThe right question is what becomes more valuable or harder to replace as usage grows. If the answer is only brand awareness or investor spending, the claimed network effect may be weak.",
+      "body_html": "<p>Features are visible, but durable competition often depends on less visible systems:</p>\n<ul><li>security engineering and incident response;</li><li>uptime and operational controls;</li><li>liquidity and capital efficiency;</li><li>hardware supply and repair;</li><li>integrations and developer experience;</li><li>regulatory permissions and banking access;</li><li>customer support;</li><li>data portability;</li><li>privacy;</li><li>pricing and unit economics;</li><li>reputation earned through reliable behavior; and</li><li>the cost and difficulty of switching.</li></ul>\n<p>A startup can create network effects when the product becomes more useful as participants, liquidity, integrations, or data increase. But “network effect” is often used loosely. A larger customer base does not automatically prevent switching. Interoperable standards may let users move between providers, while proprietary data, identity, liquidity, or hardware can create lock-in.</p>\n<p>The right question is what becomes more valuable or harder to replace as usage grows. If the answer is only brand awareness or investor spending, the claimed network effect may be weak.</p>"
+    },
+    {
+      "heading": "Hosted infrastructure trades control for operational convenience",
+      "body_markdown": "Current documentation from managed Bitcoin and Lightning infrastructure providers illustrates a recurring tradeoff. A service can provision nodes, expose APIs, manage backups, monitor operations, or provide software development kits. This can reduce setup time and staffing requirements.\n\nIt also introduces a provider into the availability, privacy, security, billing, and policy path. The provider may see metadata, restrict regions, change pricing, deprecate an API, enforce usage limits, or experience an outage. A customer may be able to export keys or data, or may be tightly coupled to proprietary infrastructure.\n\nThe evaluation should ask:\n\n1. Which keys does the provider control?\n2. Is the node dedicated or shared?\n3. Which data can the provider observe?\n4. Can the customer run the software elsewhere?\n5. What is backed up, by whom, and how is recovery tested?\n6. Are APIs standard or proprietary?\n7. Which service-level commitments exist?\n8. What happens if billing, compliance, or support is interrupted?\n\nConvenience is a real product benefit. It should be priced together with dependency.",
+      "body_html": "<p>Current documentation from managed Bitcoin and Lightning infrastructure providers illustrates a recurring tradeoff. A service can provision nodes, expose APIs, manage backups, monitor operations, or provide software development kits. This can reduce setup time and staffing requirements.</p>\n<p>It also introduces a provider into the availability, privacy, security, billing, and policy path. The provider may see metadata, restrict regions, change pricing, deprecate an API, enforce usage limits, or experience an outage. A customer may be able to export keys or data, or may be tightly coupled to proprietary infrastructure.</p>\n<p>The evaluation should ask:</p>\n<ol><li>Which keys does the provider control?</li><li>Is the node dedicated or shared?</li><li>Which data can the provider observe?</li><li>Can the customer run the software elsewhere?</li><li>What is backed up, by whom, and how is recovery tested?</li><li>Are APIs standard or proprietary?</li><li>Which service-level commitments exist?</li><li>What happens if billing, compliance, or support is interrupted?</li></ol>\n<p>Convenience is a real product benefit. It should be priced together with dependency.</p>"
+    },
+    {
+      "heading": "Security maturity is an operating practice",
+      "body_markdown": "A startup may advertise encryption, multisignature, cold storage, secure hardware, audits, or bug bounties. These claims need boundaries.\n\nSecurity maturity includes:\n\n- a documented threat model;\n- separation of duties;\n- key lifecycle and recovery controls;\n- reproducible or controlled builds;\n- dependency management;\n- test coverage;\n- release procedures;\n- access logging;\n- incident response;\n- vulnerability reporting;\n- business continuity;\n- backups and restoration tests;\n- vendor review; and\n- transparent communication after failures.\n\nAn audit is a dated examination of a defined scope. It does not guarantee future security. A bug bounty does not prove all bugs will be found. Cold storage does not explain authorization, backups, insiders, or withdrawal operations. “Non-custodial” does not explain whether a company can block, delay, or observe activity through another control.\n\nEarly-stage companies may have strong engineering and incomplete operations. Mature appearance may also hide weak controls. Evidence should come from technical documentation, independent audit scope where available, repository history, incident records, and actual product behavior.",
+      "body_html": "<p>A startup may advertise encryption, multisignature, cold storage, secure hardware, audits, or bug bounties. These claims need boundaries.</p>\n<p>Security maturity includes:</p>\n<ul><li>a documented threat model;</li><li>separation of duties;</li><li>key lifecycle and recovery controls;</li><li>reproducible or controlled builds;</li><li>dependency management;</li><li>test coverage;</li><li>release procedures;</li><li>access logging;</li><li>incident response;</li><li>vulnerability reporting;</li><li>business continuity;</li><li>backups and restoration tests;</li><li>vendor review; and</li><li>transparent communication after failures.</li></ul>\n<p>An audit is a dated examination of a defined scope. It does not guarantee future security. A bug bounty does not prove all bugs will be found. Cold storage does not explain authorization, backups, insiders, or withdrawal operations. “Non-custodial” does not explain whether a company can block, delay, or observe activity through another control.</p>\n<p>Early-stage companies may have strong engineering and incomplete operations. Mature appearance may also hide weak controls. Evidence should come from technical documentation, independent audit scope where available, repository history, incident records, and actual product behavior.</p>"
+    },
+    {
+      "heading": "Regulation is product- and jurisdiction-specific",
+      "body_markdown": "A Bitcoin startup may encounter money-transmission, payments, securities, commodities, banking, lending, consumer-protection, privacy, sanctions, tax, cybersecurity, or data-residency rules. The applicable framework depends on what the company does, where it operates, who its customers are, and which assets or claims it handles.\n\nRegistration is not the same as approval. A license may cover one entity, product, or jurisdiction. A legal opinion is not a court ruling. Terms can exclude certain customers even when the company markets globally.\n\nRegulatory exposure can create a competitive advantage for firms able to maintain licenses, reporting, and compliance. It can also create concentration by raising entry costs. A startup that avoids custody may reduce some obligations while still facing others.\n\nLegal claims must be dated and tied to the responsible entity and jurisdiction. This guide does not provide legal advice.",
+      "body_html": "<p>A Bitcoin startup may encounter money-transmission, payments, securities, commodities, banking, lending, consumer-protection, privacy, sanctions, tax, cybersecurity, or data-residency rules. The applicable framework depends on what the company does, where it operates, who its customers are, and which assets or claims it handles.</p>\n<p>Registration is not the same as approval. A license may cover one entity, product, or jurisdiction. A legal opinion is not a court ruling. Terms can exclude certain customers even when the company markets globally.</p>\n<p>Regulatory exposure can create a competitive advantage for firms able to maintain licenses, reporting, and compliance. It can also create concentration by raising entry costs. A startup that avoids custody may reduce some obligations while still facing others.</p>\n<p>Legal claims must be dated and tied to the responsible entity and jurisdiction. This guide does not provide legal advice.</p>"
+    },
+    {
+      "heading": "Why Bitcoin startups fail",
+      "body_markdown": "Startups can fail for ordinary business reasons and Bitcoin-specific reasons.\n\nCommon failure paths include:\n\n- no durable customer problem;\n- insufficient revenue or negative unit economics;\n- inability to raise another round;\n- loss of a banking, custody, cloud, hardware, or liquidity partner;\n- security incidents;\n- regulatory restrictions;\n- founder or governance conflict;\n- unreliable operations;\n- a product that depends on high transaction volume or favorable bitcoin prices;\n- inability to differentiate from open-source alternatives;\n- poor user experience or recovery design;\n- excessive customer-acquisition cost;\n- concentration in one customer or jurisdiction;\n- inventory or hardware delays; and\n- a protocol assumption that does not mature or gain adoption.\n\nFailure does not prove that the underlying Bitcoin capability was useless. It may show that a particular company, timing, capital structure, product, or distribution method was not durable. The software may continue under another maintainer, be acquired, be forked, or disappear.\n\nCustomers and developers should therefore plan for vendor exit before it happens. Export formats, open standards, backups, migration procedures, key control, and contract termination terms are part of product quality.",
+      "body_html": "<p>Startups can fail for ordinary business reasons and Bitcoin-specific reasons.</p>\n<p>Common failure paths include:</p>\n<ul><li>no durable customer problem;</li><li>insufficient revenue or negative unit economics;</li><li>inability to raise another round;</li><li>loss of a banking, custody, cloud, hardware, or liquidity partner;</li><li>security incidents;</li><li>regulatory restrictions;</li><li>founder or governance conflict;</li><li>unreliable operations;</li><li>a product that depends on high transaction volume or favorable bitcoin prices;</li><li>inability to differentiate from open-source alternatives;</li><li>poor user experience or recovery design;</li><li>excessive customer-acquisition cost;</li><li>concentration in one customer or jurisdiction;</li><li>inventory or hardware delays; and</li><li>a protocol assumption that does not mature or gain adoption.</li></ul>\n<p>Failure does not prove that the underlying Bitcoin capability was useless. It may show that a particular company, timing, capital structure, product, or distribution method was not durable. The software may continue under another maintainer, be acquired, be forked, or disappear.</p>\n<p>Customers and developers should therefore plan for vendor exit before it happens. Export formats, open standards, backups, migration procedures, key control, and contract termination terms are part of product quality.</p>"
+    },
+    {
+      "heading": "How to evaluate a Bitcoin startup",
+      "body_markdown": "Ask:\n\n1. What exact problem does the product solve?\n2. Which Bitcoin or Lightning functions are required?\n3. Is the product custodial, self-custodial, collaborative, or mixed?\n4. What is open source, and what remains company-controlled?\n5. How does the company earn revenue?\n6. Which costs grow with usage?\n7. Who funds the company, and what outcomes do those investors seek?\n8. Which vendors, platforms, banks, custodians, pools, clouds, or manufacturers are critical?\n9. Can users export keys, data, liquidity, or configurations?\n10. What evidence supports security and reliability claims?\n11. Which legal entity and jurisdiction provide the service?\n12. Which metrics show retained, paying usage rather than attention?\n13. What happens if the company fails?\n\nA startup should be evaluated as a system of product, capital, operations, dependencies, and incentives. Bitcoin can provide a durable base protocol. It does not make every company built around it durable.",
+      "body_html": "<p>Ask:</p>\n<ol><li>What exact problem does the product solve?</li><li>Which Bitcoin or Lightning functions are required?</li><li>Is the product custodial, self-custodial, collaborative, or mixed?</li><li>What is open source, and what remains company-controlled?</li><li>How does the company earn revenue?</li><li>Which costs grow with usage?</li><li>Who funds the company, and what outcomes do those investors seek?</li><li>Which vendors, platforms, banks, custodians, pools, clouds, or manufacturers are critical?</li><li>Can users export keys, data, liquidity, or configurations?</li><li>What evidence supports security and reliability claims?</li><li>Which legal entity and jurisdiction provide the service?</li><li>Which metrics show retained, paying usage rather than attention?</li><li>What happens if the company fails?</li></ol>\n<p>A startup should be evaluated as a system of product, capital, operations, dependencies, and incentives. Bitcoin can provide a durable base protocol. It does not make every company built around it durable.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Bitcoin startup",
+      "definition": "Early-stage company whose product, revenue, or operations materially depend on Bitcoin or a Bitcoin-related system."
+    },
+    {
+      "term": "Product layer",
+      "definition": "Technical layer where a product operates, such as base-layer software, Lightning, mining, custody, hardware, or data."
+    },
+    {
+      "term": "Bitcoin dependency",
+      "definition": "Business reliance on Bitcoin activity, price, software, block space, mining, liquidity, or related demand."
+    },
+    {
+      "term": "Runway",
+      "definition": "Estimated time a company can operate before it needs additional cash or reaches sustainability."
+    },
+    {
+      "term": "SAFE",
+      "definition": "Contract for a potential future equity interest under specified financing or liquidity conditions."
+    },
+    {
+      "term": "Unit economics",
+      "definition": "Revenue and direct costs associated with a customer, transaction, device, or other unit of activity."
+    },
+    {
+      "term": "Custodial product",
+      "definition": "Product in which a company or provider controls keys or an internal ledger for users."
+    },
+    {
+      "term": "Self-custodial product",
+      "definition": "Product designed so the user controls the authorization needed to move bitcoin."
+    },
+    {
+      "term": "Vendor dependence",
+      "definition": "Reliance on another provider for a critical function."
+    },
+    {
+      "term": "Switching cost",
+      "definition": "Time, money, operational effort, lost data, liquidity, or risk involved in changing providers."
+    },
+    {
+      "term": "Network effect",
+      "definition": "Increase in a product’s usefulness or defensibility as participation, liquidity, integrations, or data grow."
+    },
+    {
+      "term": "Security maturity",
+      "definition": "Demonstrated operational practice across design, testing, access, recovery, incident response, and maintenance."
+    }
+  ],
+  "sources": [
+    {
+      "title": "SAFE Financing Documents",
+      "author_or_publisher": "Y Combinator",
+      "url": "https://www.ycombinator.com/documents",
+      "accessed": "July 27, 2026",
+      "supports": "Multiple current post-money SAFE forms and related documents, including differing valuation-cap, discount, most-favored-nation, side-letter, and jurisdiction-specific contractual structures; does not establish that every SAFE is identical."
+    },
+    {
+      "title": "Exempt Offerings",
+      "author_or_publisher": "U.S. Securities and Exchange Commission",
+      "url": "https://www.sec.gov/resources-small-businesses/exempt-offerings",
+      "updated": "January 26, 2026",
+      "supports": "Current U.S. overview of common exemptions from securities registration for startup and private-company capital raising."
+    },
+    {
+      "title": "Frequently Asked Questions and Answers on Form D",
+      "author_or_publisher": "U.S. Securities and Exchange Commission",
+      "url": "https://www.sec.gov/about/divisions-offices/division-corporation-finance/frequently-asked-questions-answers-form-d",
+      "updated": "July 9, 2026",
+      "supports": "Current Form D purpose, filing mechanics, and boundaries; a notice filing is not proof that an offering closed, company quality, or SEC endorsement."
+    },
+    {
+      "title": "Form D Data Sets",
+      "author_or_publisher": "U.S. Securities and Exchange Commission",
+      "url": "https://www.sec.gov/data-research/sec-markets-data/form-d-data-sets",
+      "accessed": "July 27, 2026",
+      "supports": "Availability and scope of structured Form D filing data for reported exempt offerings."
+    },
+    {
+      "title": "Application of FinCEN’s Regulations to Certain Business Models Involving Convertible Virtual Currencies",
+      "author_or_publisher": "Financial Crimes Enforcement Network",
+      "url": "https://www.fincen.gov/resources/statutes-regulations/guidance/application-fincens-regulations-certain-business-models",
+      "published": "May 9, 2019",
+      "supports": "U.S. Bank Secrecy Act analysis for defined convertible-virtual-currency business models and the need to classify actual activities rather than labels."
+    },
+    {
+      "title": "Lightning Network Daemon Repository",
+      "author_or_publisher": "Lightning Labs and lnd contributors",
+      "url": "https://github.com/lightningnetwork/lnd",
+      "accessed": "July 27, 2026",
+      "supports": "Current public Lightning implementation code, license, tagged releases, APIs, contribution process, operational warnings, and security-reporting boundary."
+    },
+    {
+      "title": "LDK rust-lightning Repository",
+      "author_or_publisher": "Lightning Dev Kit contributors",
+      "url": "https://github.com/lightningdevkit/rust-lightning",
+      "accessed": "July 27, 2026",
+      "supports": "Current modular Lightning library code, licensing, documentation, repository tags and versioned package context, and the distinction between reusable software and a hosted commercial service."
+    },
+    {
+      "title": "Lightning Dev Kit Repositories",
+      "author_or_publisher": "Lightning Dev Kit",
+      "url": "https://github.com/orgs/lightningdevkit/repositories",
+      "accessed": "July 27, 2026",
+      "supports": "Public component boundaries across libraries, sample applications, bindings, and tooling."
+    },
+    {
+      "title": "Integrating Lightning Network for Enterprise: A Practical Guide",
+      "author_or_publisher": "Lightspark",
+      "url": "https://www.lightspark.com/knowledge/integrating-lightning-network-for-enterprise",
+      "published": "January 30, 2026",
+      "accessed": "July 27, 2026",
+      "supports": "Lightspark’s provider-stated Lightspark Node and Lightspark Connect scope for node operations, channel and liquidity management, routing, APIs and SDKs, monitoring, and remote-key or provider-managed signing options; does not independently establish uptime, security, custody outcomes, recovery performance, or suitability."
+    },
+    {
+      "title": "The Lightspark JS+TS SDK",
+      "author_or_publisher": "Lightspark",
+      "url": "https://github.com/lightsparkdev/js-sdk/blob/main/packages/lightspark-sdk/README.md",
+      "accessed": "July 27, 2026",
+      "supports": "Current public SDK availability, API-token and OAuth authentication paths, invoice creation, node event subscriptions, and loading a node signing key with a node ID and password before a sensitive payment operation; does not establish hosted node operations, liquidity, backups, or recovery."
+    },
+    {
+      "title": "Creating a Node Walkthrough",
+      "author_or_publisher": "Voltage",
+      "url": "https://docs.voltage.cloud/creating-a-node-walkthrough",
+      "updated": "June 25, 2026",
+      "accessed": "July 27, 2026",
+      "supports": "Voltage’s documented API workflow for Lightning-node provisioning, customer seed generation, wallet initialization with a password, macaroon return, and encrypted seed and macaroon backup uploads."
+    },
+    {
+      "title": "Node Security and Backups",
+      "author_or_publisher": "Voltage",
+      "url": "https://docs.voltage.cloud/node-security-and-backups",
+      "updated": "June 25, 2026",
+      "accessed": "July 27, 2026",
+      "supports": "Voltage’s documented Aezeed access and external LND recovery procedure, node-password use and non-storage statement, and macaroon-plus-endpoint authentication for API access; does not establish successful restoration, provider continuity, or a complete migration path."
+    },
+    {
+      "title": "Bitcoin Core Integration and Staging Tree",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin",
+      "accessed": "July 27, 2026",
+      "supports": "Open-source implementation and review context used to distinguish a startup’s product from Bitcoin consensus and from upstream software."
+    },
+    {
+      "title": "Bitcoin Design Guide: Open Design",
+      "author_or_publisher": "Bitcoin Design Community",
+      "url": "https://bitcoin.design/guide/getting-started/open-design/",
+      "accessed": "July 27, 2026",
+      "supports": "Open design and contribution practices relevant to usability, accessibility, collaboration, and the limits of treating code alone as a complete product."
+    }
+  ],
+  "seo_title": "How Bitcoin Startups Build, Fund, and Compete",
+  "meta_description": "Learn how Bitcoin startups choose products, funding, custody, revenue, open-source boundaries, vendors, security, distribution, and competitive strategies.",
+  "excerpt": "Bitcoin startups compete through products, capital, security, distribution, operations, and dependencies—not through funding announcements or attention alone.",
+  "reading_time": "18 to 22 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-ECOSYSTEM",
+    "label": "Bitcoin Ecosystem",
+    "subcategory": "Companies",
+    "depth": "Shallow",
+    "format": "Ecosystem Overview"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-069",
+      "title": "How Public Companies Participate in Bitcoin",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-071",
+      "title": "How Bitcoin Mining Companies Operate",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": []
+  },
+  "review_dates": {
+    "reviewed": "2026-07-27",
+    "copy_locked": "2026-07-27",
+    "human_verification": "July 27, 2026"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "The Startup Dependency Vessel",
+      "educational_purpose": "Show that a Bitcoin startup is a system of product, capital, vendors, regulation, and operations rather than a single feature.",
+      "recommended_placement": "After Measure Bitcoin dependency.",
+      "visual_description": "Vintage cutaway of a working vessel. The hull contains Product, Revenue, Security, Operations, and Support. Supply lines from shore feed Funding, Cloud, Banking, Custody, Hardware, Liquidity, App Stores, and Regulation. The vessel navigates a Bitcoin and Lightning chart but is not fused with the network itself.",
+      "required_labels": "Product, Revenue, Security, Operations, Support, Funding, Cloud, Banking, Custody, Hardware, Liquidity, Distribution, Regulation, Bitcoin, Lightning, Dependency",
+      "caption": "A startup can depend on Bitcoin while also depending on many companies and institutions outside the protocol.",
+      "alt_text": "Cutaway nautical vessel showing a Bitcoin startup’s internal systems and external dependencies on funding, cloud, banking, custody, hardware, liquidity, distribution, and regulation.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Keep the vessel centered and arrange external dependencies as a compact ring around it.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "Custody Control Compass",
+      "educational_purpose": "Distinguish self-custodial, custodial, collaborative, and hosted startup products by control rather than marketing labels.",
+      "recommended_placement": "After Custody changes the company’s responsibilities.",
+      "visual_description": "Four-quadrant compass rose. Each quadrant maps who can authorize movement, block access, observe activity, recover funds, and continue operation if the company disappears. A key legend separates user key, company key, provider key, and internal ledger.",
+      "required_labels": "Self-custodial, Custodial, Collaborative, Hosted, User key, Company key, Provider key, Internal ledger, Authorization, Recovery, Observation, Company failure",
+      "caption": "The custody model is defined by keys, authorization, and failure behavior—not by a product slogan.",
+      "alt_text": "Compass diagram comparing key control, authorization, recovery, and company-failure behavior across four Bitcoin startup custody models.",
+      "image_orientation": "Square",
+      "mobile_crop_notes": "Preserve the four quadrants and place the key legend below them.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Runway, Revenue, and Exit Chart",
+      "educational_purpose": "Explain how financing, customer revenue, costs, and vendor exit shape startup durability.",
+      "recommended_placement": "After Why Bitcoin startups fail.",
+      "visual_description": "Vintage navigation ledger showing a startup’s cash reservoir feeding monthly operations. Separate streams enter from founders, investors, grants, and customers. Outflows lead to engineering, security, compliance, liquidity, hardware, support, and vendors. Three routes show sustainability, another financing, and shutdown or migration, with exportable keys and data marked as lifeboats.",
+      "required_labels": "Founder capital, Investor capital, Grants, Customer revenue, Runway, Engineering, Security, Compliance, Liquidity, Hardware, Support, Vendors, Sustainability, New financing, Shutdown, Migration, Export keys, Export data",
+      "caption": "Funding extends runway, but durable operations require revenue, controlled costs, and a credible exit path for users.",
+      "alt_text": "Nautical financial chart showing startup capital inflows, operating outflows, runway, and routes toward sustainability, new financing, or shutdown with user migration.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Use a vertical cash-flow path and preserve all three outcome routes.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}

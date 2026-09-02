@@ -1,0 +1,340 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-065-bitcoin-builders.md",
+  "source_sha256": "2d129a3532ec6159966ac7abe2e6b829780a5596768d21bf4901c26976bcf997",
+  "registry_id": "MSC-GUIDE-065",
+  "status": "COPY_LOCKED",
+  "h1": "Who Builds on Bitcoin?",
+  "introductory_deck": "Bitcoin is built and used by overlapping groups: protocol researchers, software contributors, reviewers, wallet and hardware teams, miners, Lightning developers, infrastructure operators, educators, designers, artists, journalists, policy specialists, and communities. They do not belong to one organization, follow one roadmap, or receive authority from one title. Understanding the ecosystem means separating contribution, funding, employment, visibility, product influence, and protocol control.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "Bitcoin is open-source software, a peer-to-peer network, a monetary system, and a growing collection of tools and institutions. The people who build around it do not work inside one organization. They do not receive assignments from a central product manager, and there is no official membership list that decides who counts as a builder.\n\nThe phrase “building on Bitcoin” therefore covers several different kinds of work. A protocol researcher may study consensus or networking behavior. A node contributor may propose and review changes to an implementation. A wallet team may design transaction construction, key management, and recovery flows. A mining company may operate hardware and energy infrastructure. An educator may translate a technical concept into another language. An artist may shape how people interpret the system. These activities can overlap, but they are not interchangeable.\n\nThis guide was researched on July 26, 2026. Current projects, funding programs, company relationships, and organizational examples must be renewed before publication because they can change even when the underlying role distinctions remain useful.",
+      "body_html": "<p>Bitcoin is open-source software, a peer-to-peer network, a monetary system, and a growing collection of tools and institutions. The people who build around it do not work inside one organization. They do not receive assignments from a central product manager, and there is no official membership list that decides who counts as a builder.</p>\n<p>The phrase “building on Bitcoin” therefore covers several different kinds of work. A protocol researcher may study consensus or networking behavior. A node contributor may propose and review changes to an implementation. A wallet team may design transaction construction, key management, and recovery flows. A mining company may operate hardware and energy infrastructure. An educator may translate a technical concept into another language. An artist may shape how people interpret the system. These activities can overlap, but they are not interchangeable.</p>\n<p>This guide was researched on July 26, 2026. Current projects, funding programs, company relationships, and organizational examples must be renewed before publication because they can change even when the underlying role distinctions remain useful.</p>"
+    },
+    {
+      "heading": "Bitcoin has no central builder organization",
+      "body_markdown": "Bitcoin does not have a central hiring authority, official roadmap, or governing board that assigns ecosystem work. People participate through separate repositories, businesses, nonprofits, universities, standards discussions, informal communities, and independent projects. Some work is coordinated tightly within a team. Other work is public, asynchronous, and spread across many organizations.\n\nThat structure creates resilience and friction at the same time. Independent teams can pursue different approaches, duplicate work, or compete on product design. They can also disagree about priorities, security assumptions, policy, user experience, or acceptable tradeoffs. Coordination usually depends on public discussion, code review, testing, interoperability work, market demand, and voluntary adoption rather than a single command chain.\n\nA contributor can influence one project without representing Bitcoin as a whole. A company can build a widely used service without receiving protocol authority. A nonprofit can fund valuable work without controlling network consensus. Visibility, money, or access may increase practical influence, but none creates a universal right to define Bitcoin for everyone else.",
+      "body_html": "<p>Bitcoin does not have a central hiring authority, official roadmap, or governing board that assigns ecosystem work. People participate through separate repositories, businesses, nonprofits, universities, standards discussions, informal communities, and independent projects. Some work is coordinated tightly within a team. Other work is public, asynchronous, and spread across many organizations.</p>\n<p>That structure creates resilience and friction at the same time. Independent teams can pursue different approaches, duplicate work, or compete on product design. They can also disagree about priorities, security assumptions, policy, user experience, or acceptable tradeoffs. Coordination usually depends on public discussion, code review, testing, interoperability work, market demand, and voluntary adoption rather than a single command chain.</p>\n<p>A contributor can influence one project without representing Bitcoin as a whole. A company can build a widely used service without receiving protocol authority. A nonprofit can fund valuable work without controlling network consensus. Visibility, money, or access may increase practical influence, but none creates a universal right to define Bitcoin for everyone else.</p>"
+    },
+    {
+      "heading": "Building Bitcoin and building with Bitcoin",
+      "body_markdown": "A useful first distinction is between work on the base system and work that uses the base system.\n\n**Building Bitcoin** can include research into consensus rules, peer-to-peer networking, cryptography, validation, mempool behavior, or software architecture. It can also include implementation work in Bitcoin Core or another node project, along with review, testing, release engineering, documentation, and security response.\n\n**Building with Bitcoin** can include wallets, payment applications, exchanges, custody systems, accounting software, merchant tools, Lightning services, explorers, analytics, educational products, art, and media. These products rely on Bitcoin, but their internal rules and business policies are not automatically Bitcoin protocol rules.\n\nThe boundary is not absolute. A wallet developer may discover a protocol edge case. A mining software engineer may contribute to standards. A company employee may review open-source code independently. The important question is not the person’s title. It is which system they are changing, what authority that system grants, and who must adopt the result.",
+      "body_html": "<p>A useful first distinction is between work on the base system and work that uses the base system.</p>\n<p><strong>Building Bitcoin</strong> can include research into consensus rules, peer-to-peer networking, cryptography, validation, mempool behavior, or software architecture. It can also include implementation work in Bitcoin Core or another node project, along with review, testing, release engineering, documentation, and security response.</p>\n<p><strong>Building with Bitcoin</strong> can include wallets, payment applications, exchanges, custody systems, accounting software, merchant tools, Lightning services, explorers, analytics, educational products, art, and media. These products rely on Bitcoin, but their internal rules and business policies are not automatically Bitcoin protocol rules.</p>\n<p>The boundary is not absolute. A wallet developer may discover a protocol edge case. A mining software engineer may contribute to standards. A company employee may review open-source code independently. The important question is not the person’s title. It is which system they are changing, what authority that system grants, and who must adopt the result.</p>"
+    },
+    {
+      "heading": "Protocol research, specifications, and implementations",
+      "body_markdown": "Protocol researchers examine how Bitcoin behaves and how proposed changes might affect security, privacy, incentives, interoperability, and deployment. Research can appear in papers, mailing-list posts, issue discussions, repositories, talks, or test implementations.\n\nBitcoin Improvement Proposals provide a publication and documentation process for mature ideas. A BIP author describes a proposal; the author does not command its adoption. BIP 3, currently marked Deployed in the BIPs repository, explicitly separates publication from consensus and states that no formal or informal decision body governs Bitcoin development or decides adoption.\n\nNode implementations translate protocol rules and engineering choices into software. Bitcoin Core is one major implementation, but the ecosystem also contains other node software and specialized libraries. A patch to any repository is only a proposal to that project. Acceptance depends on its maintainers, reviewers, tests, project norms, and release process. Even after software is released, users choose whether to run it.\n\nCode authorship is therefore different from code acceptance. Code acceptance is different from release. Release is different from deployment. Deployment is different from network-wide adoption.",
+      "body_html": "<p>Protocol researchers examine how Bitcoin behaves and how proposed changes might affect security, privacy, incentives, interoperability, and deployment. Research can appear in papers, mailing-list posts, issue discussions, repositories, talks, or test implementations.</p>\n<p>Bitcoin Improvement Proposals provide a publication and documentation process for mature ideas. A BIP author describes a proposal; the author does not command its adoption. BIP 3, currently marked Deployed in the BIPs repository, explicitly separates publication from consensus and states that no formal or informal decision body governs Bitcoin development or decides adoption.</p>\n<p>Node implementations translate protocol rules and engineering choices into software. Bitcoin Core is one major implementation, but the ecosystem also contains other node software and specialized libraries. A patch to any repository is only a proposal to that project. Acceptance depends on its maintainers, reviewers, tests, project norms, and release process. Even after software is released, users choose whether to run it.</p>\n<p>Code authorship is therefore different from code acceptance. Code acceptance is different from release. Release is different from deployment. Deployment is different from network-wide adoption.</p>"
+    },
+    {
+      "heading": "Review, testing, maintenance, and security",
+      "body_markdown": "Much of the work that keeps Bitcoin software usable is less visible than writing a new feature.\n\nReviewers examine design assumptions, code paths, tests, performance, compatibility, and failure modes. Testers reproduce behavior across platforms and configurations. Fuzzing searches for unexpected inputs and states. Release engineers assemble, verify, and communicate releases. Maintainers triage issues, organize changes, and preserve repository quality. Documentation contributors explain interfaces and operational limits.\n\nSecurity researchers may investigate vulnerabilities privately before public disclosure. Responsible disclosure requires careful coordination because premature publication can expose users before fixes are available. Incident response can include reproducing the issue, narrowing affected versions, preparing patches, coordinating releases, and documenting the boundary without overstating certainty.\n\nReview and maintenance are development work. Their value is not measured by the number of new features shipped.",
+      "body_html": "<p>Much of the work that keeps Bitcoin software usable is less visible than writing a new feature.</p>\n<p>Reviewers examine design assumptions, code paths, tests, performance, compatibility, and failure modes. Testers reproduce behavior across platforms and configurations. Fuzzing searches for unexpected inputs and states. Release engineers assemble, verify, and communicate releases. Maintainers triage issues, organize changes, and preserve repository quality. Documentation contributors explain interfaces and operational limits.</p>\n<p>Security researchers may investigate vulnerabilities privately before public disclosure. Responsible disclosure requires careful coordination because premature publication can expose users before fixes are available. Incident response can include reproducing the issue, narrowing affected versions, preparing patches, coordinating releases, and documenting the boundary without overstating certainty.</p>\n<p>Review and maintenance are development work. Their value is not measured by the number of new features shipped.</p>"
+    },
+    {
+      "heading": "Wallets, hardware, and user security",
+      "body_markdown": "Wallet development combines cryptography, transaction construction, storage, backups, hardware integration, fee estimation, privacy, and user experience. A wallet can be self-custodial, custodial, or combine user and service controls. Those models create different responsibilities and failure modes.\n\nHardware-wallet work includes device electronics, secure elements or general-purpose chips, firmware, host software, signing protocols, reproducible builds, manufacturing, supply-chain controls, and recovery design. A product may use open-source components while retaining proprietary hardware or services. “Open source” should be applied to the specific component, not used as a blanket ownership claim.\n\nDesigners, researchers, accessibility specialists, and translators are also builders here. A technically correct signing flow can still fail users if warnings are unclear, screen readers cannot interpret it, translations change meaning, or recovery steps assume knowledge the user does not have.",
+      "body_html": "<p>Wallet development combines cryptography, transaction construction, storage, backups, hardware integration, fee estimation, privacy, and user experience. A wallet can be self-custodial, custodial, or combine user and service controls. Those models create different responsibilities and failure modes.</p>\n<p>Hardware-wallet work includes device electronics, secure elements or general-purpose chips, firmware, host software, signing protocols, reproducible builds, manufacturing, supply-chain controls, and recovery design. A product may use open-source components while retaining proprietary hardware or services. “Open source” should be applied to the specific component, not used as a blanket ownership claim.</p>\n<p>Designers, researchers, accessibility specialists, and translators are also builders here. A technically correct signing flow can still fail users if warnings are unclear, screen readers cannot interpret it, translations change meaning, or recovery steps assume knowledge the user does not have.</p>"
+    },
+    {
+      "heading": "Mining infrastructure",
+      "body_markdown": "Mining is supported by several layers of builders: semiconductor designers, ASIC manufacturers, firmware developers, pool software teams, protocol and standards contributors, facility engineers, energy specialists, operators, repair technicians, and monitoring providers.\n\nThese roles affect efficiency, transaction selection interfaces, geographic distribution, and operational concentration. They do not give a miner or manufacturer unilateral power to rewrite consensus rules. Mining influence is real but bounded. Miners construct candidate blocks and choose among transactions that satisfy the rules enforced by the software they run. Other nodes independently validate those blocks.\n\nMining pools add another distinction. A pool can coordinate work and payouts for many miners without owning every machine. Pool policy, block-template construction, and miner choice should not be collapsed into one actor.",
+      "body_html": "<p>Mining is supported by several layers of builders: semiconductor designers, ASIC manufacturers, firmware developers, pool software teams, protocol and standards contributors, facility engineers, energy specialists, operators, repair technicians, and monitoring providers.</p>\n<p>These roles affect efficiency, transaction selection interfaces, geographic distribution, and operational concentration. They do not give a miner or manufacturer unilateral power to rewrite consensus rules. Mining influence is real but bounded. Miners construct candidate blocks and choose among transactions that satisfy the rules enforced by the software they run. Other nodes independently validate those blocks.</p>\n<p>Mining pools add another distinction. A pool can coordinate work and payouts for many miners without owning every machine. Pool policy, block-template construction, and miner choice should not be collapsed into one actor.</p>"
+    },
+    {
+      "heading": "Lightning and payment systems",
+      "body_markdown": "Lightning development includes protocol specifications, node implementations, routing, channel management, wallet integration, liquidity tools, watchtowers, service infrastructure, testing, and user-interface work.\n\nThe Lightning ecosystem demonstrates why “builder” is not one role. An implementation team can make local software choices. Standards participants can propose interoperability rules. Node operators can decide which software and policies to run. Wallet providers can choose defaults and custody models. Merchants can integrate one provider or several. None of those actors alone defines the entire network.\n\nOther payment systems and protocols may use different trust, custody, settlement, and availability assumptions. Their relationship to Bitcoin must be described precisely rather than grouped under a vague claim that everything “inherits Bitcoin security.”",
+      "body_html": "<p>Lightning development includes protocol specifications, node implementations, routing, channel management, wallet integration, liquidity tools, watchtowers, service infrastructure, testing, and user-interface work.</p>\n<p>The Lightning ecosystem demonstrates why “builder” is not one role. An implementation team can make local software choices. Standards participants can propose interoperability rules. Node operators can decide which software and policies to run. Wallet providers can choose defaults and custody models. Merchants can integrate one provider or several. None of those actors alone defines the entire network.</p>\n<p>Other payment systems and protocols may use different trust, custody, settlement, and availability assumptions. Their relationship to Bitcoin must be described precisely rather than grouped under a vague claim that everything “inherits Bitcoin security.”</p>"
+    },
+    {
+      "heading": "Libraries, APIs, indexers, explorers, and tools",
+      "body_markdown": "Libraries and software development kits package reusable functions for key handling, transaction construction, networking, Lightning, hardware communication, or data parsing. APIs expose selected operations from a node or service. Indexers derive searchable views from blockchain or mempool data. Explorers present those views to people.\n\nThese tools make development faster, but they introduce dependencies. A hosted API can become an availability, privacy, and policy intermediary. An indexer can disagree with another indexer because of configuration, software, or data-model choices. An explorer is an interface to a data source, not an independent consensus authority.\n\nDeveloper tooling also includes debuggers, simulators, test frameworks, reproducible build systems, package maintenance, continuous integration, and local development environments. The people who maintain these layers may never appear in a consumer product, yet their decisions affect many downstream teams.",
+      "body_html": "<p>Libraries and software development kits package reusable functions for key handling, transaction construction, networking, Lightning, hardware communication, or data parsing. APIs expose selected operations from a node or service. Indexers derive searchable views from blockchain or mempool data. Explorers present those views to people.</p>\n<p>These tools make development faster, but they introduce dependencies. A hosted API can become an availability, privacy, and policy intermediary. An indexer can disagree with another indexer because of configuration, software, or data-model choices. An explorer is an interface to a data source, not an independent consensus authority.</p>\n<p>Developer tooling also includes debuggers, simulators, test frameworks, reproducible build systems, package maintenance, continuous integration, and local development environments. The people who maintain these layers may never appear in a consumer product, yet their decisions affect many downstream teams.</p>"
+    },
+    {
+      "heading": "Custody, exchanges, and market infrastructure",
+      "body_markdown": "Custodians and exchanges build key-management systems, transaction workflows, internal ledgers, compliance systems, market interfaces, risk controls, and customer support. Their product policies can strongly shape user experience. They may decide which deposit types to accept, how many confirmations to require, which forks or assets to support, and when withdrawals are paused.\n\nThose are company policies, not Bitcoin consensus rules. A platform balance may be an internal claim rather than an onchain output controlled by the customer. An exchange can influence market access and liquidity without controlling the protocol.\n\nPublic filings are useful primary evidence for understanding custody arrangements, vendor dependence, insurance limits, operational discretion, and conflicts. They should be read as company or issuer disclosures, not as proof that the disclosed controls eliminate risk.",
+      "body_html": "<p>Custodians and exchanges build key-management systems, transaction workflows, internal ledgers, compliance systems, market interfaces, risk controls, and customer support. Their product policies can strongly shape user experience. They may decide which deposit types to accept, how many confirmations to require, which forks or assets to support, and when withdrawals are paused.</p>\n<p>Those are company policies, not Bitcoin consensus rules. A platform balance may be an internal claim rather than an onchain output controlled by the customer. An exchange can influence market access and liquidity without controlling the protocol.</p>\n<p>Public filings are useful primary evidence for understanding custody arrangements, vendor dependence, insurance limits, operational discretion, and conflicts. They should be read as company or issuer disclosures, not as proof that the disclosed controls eliminate risk.</p>"
+    },
+    {
+      "heading": "Privacy, civil liberties, policy, and law",
+      "body_markdown": "Privacy and security builders develop coin-selection tools, network protections, collaborative transaction protocols, secure communication, custody practices, and threat models. Civil-liberties organizations may analyze surveillance, financial access, sanctions, speech, or due-process questions. Lawyers and policy specialists interpret laws, participate in rulemaking, litigate, advise organizations, or explain regulatory risk.\n\nLegal and policy work can alter the environment in which products and users operate. It does not change Bitcoin consensus by itself. A regulation can affect companies in a jurisdiction while nodes elsewhere continue enforcing the same protocol rules. Conversely, protocol behavior does not remove legal obligations from a person or business.\n\nClaims about law, regulation, enforcement, or a current official’s position require jurisdiction and date.",
+      "body_html": "<p>Privacy and security builders develop coin-selection tools, network protections, collaborative transaction protocols, secure communication, custody practices, and threat models. Civil-liberties organizations may analyze surveillance, financial access, sanctions, speech, or due-process questions. Lawyers and policy specialists interpret laws, participate in rulemaking, litigate, advise organizations, or explain regulatory risk.</p>\n<p>Legal and policy work can alter the environment in which products and users operate. It does not change Bitcoin consensus by itself. A regulation can affect companies in a jurisdiction while nodes elsewhere continue enforcing the same protocol rules. Conversely, protocol behavior does not remove legal obligations from a person or business.</p>\n<p>Claims about law, regulation, enforcement, or a current official’s position require jurisdiction and date.</p>"
+    },
+    {
+      "heading": "Education, documentation, journalism, and media",
+      "body_markdown": "Education can include technical documentation, courses, workshops, translations, tutorials, diagrams, community support, and curriculum design. Good education distinguishes protocol facts from implementation details, product choices, economic interpretation, and opinion.\n\nJournalists and media producers investigate companies, public records, technical disputes, security events, and community narratives. Their work can improve accountability or amplify incomplete claims. Editorial reach is a form of influence, not technical authority.\n\nDocumentation and localization are often maintenance systems. They require version tracking, review, accessibility, and updates when software or terminology changes. A translation is not merely word replacement; it can change risk understanding if concepts do not map cleanly across languages.",
+      "body_html": "<p>Education can include technical documentation, courses, workshops, translations, tutorials, diagrams, community support, and curriculum design. Good education distinguishes protocol facts from implementation details, product choices, economic interpretation, and opinion.</p>\n<p>Journalists and media producers investigate companies, public records, technical disputes, security events, and community narratives. Their work can improve accountability or amplify incomplete claims. Editorial reach is a form of influence, not technical authority.</p>\n<p>Documentation and localization are often maintenance systems. They require version tracking, review, accessibility, and updates when software or terminology changes. A translation is not merely word replacement; it can change risk understanding if concepts do not map cleanly across languages.</p>"
+    },
+    {
+      "heading": "Design, art, and culture",
+      "body_markdown": "Designers shape interfaces, research user behavior, create icons, establish visual language, and make complex operations more legible. The Bitcoin Design Guide is a current example of an open-source design project whose contribution process is public.\n\nArtists, filmmakers, musicians, writers, photographers, and makers shape cultural meaning. Their work can create shared symbols, critique power, preserve history, or invite participation. Cultural production is part of the ecosystem, but artistic claims do not become technical facts through repetition.\n\nA creator may sell work, accept patronage, use inscriptions, or receive grants. Those funding relationships matter when evaluating incentives, but they do not determine artistic merit or protocol authority.",
+      "body_html": "<p>Designers shape interfaces, research user behavior, create icons, establish visual language, and make complex operations more legible. The Bitcoin Design Guide is a current example of an open-source design project whose contribution process is public.</p>\n<p>Artists, filmmakers, musicians, writers, photographers, and makers shape cultural meaning. Their work can create shared symbols, critique power, preserve history, or invite participation. Cultural production is part of the ecosystem, but artistic claims do not become technical facts through repetition.</p>\n<p>A creator may sell work, accept patronage, use inscriptions, or receive grants. Those funding relationships matter when evaluating incentives, but they do not determine artistic merit or protocol authority.</p>"
+    },
+    {
+      "heading": "Funding without control",
+      "body_markdown": "Open-source work can be funded through employment, contracts, grants, donations, sponsorships, fellowships, or personal resources. As of July 26, 2026, Brink and OpenSats publish current reports describing grants and funded work. Those disclosures help readers evaluate who funds what.\n\nFunding can influence which work is feasible, who has time to participate, and which research receives attention. It can also create dependency, concentration, or conflict-of-interest risk. But funding a contributor does not automatically make the funder the author of the work, the maintainer of a repository, or the controller of network consensus.\n\nThe relevant questions include: Who selected the work? What reporting is required? Is the relationship public? Can the contributor disagree with the funder? Can other teams compete or fork? What happens if funding ends?",
+      "body_html": "<p>Open-source work can be funded through employment, contracts, grants, donations, sponsorships, fellowships, or personal resources. As of July 26, 2026, Brink and OpenSats publish current reports describing grants and funded work. Those disclosures help readers evaluate who funds what.</p>\n<p>Funding can influence which work is feasible, who has time to participate, and which research receives attention. It can also create dependency, concentration, or conflict-of-interest risk. But funding a contributor does not automatically make the funder the author of the work, the maintainer of a repository, or the controller of network consensus.</p>\n<p>The relevant questions include: Who selected the work? What reporting is required? Is the relationship public? Can the contributor disagree with the funder? Can other teams compete or fork? What happens if funding ends?</p>"
+    },
+    {
+      "heading": "Volunteers, employees, contractors, and communities",
+      "body_markdown": "A builder may be:\n\n- a volunteer contributing outside paid work;\n- an employee assigned to a product or open-source project;\n- an independent contractor;\n- a grant-funded contributor;\n- a university researcher;\n- a nonprofit staff member;\n- an anonymous or pseudonymous participant;\n- a community organizer working through informal networks.\n\nThese categories can overlap and change. Employment does not prove authorship. Independent contribution does not prove neutrality. Pseudonymity does not prove expertise or misconduct. The work, evidence, permissions, disclosures, and review process matter more than a label.",
+      "body_html": "<p>A builder may be:</p>\n<ul><li>a volunteer contributing outside paid work;</li><li>an employee assigned to a product or open-source project;</li><li>an independent contractor;</li><li>a grant-funded contributor;</li><li>a university researcher;</li><li>a nonprofit staff member;</li><li>an anonymous or pseudonymous participant;</li><li>a community organizer working through informal networks.</li></ul>\n<p>These categories can overlap and change. Employment does not prove authorship. Independent contribution does not prove neutrality. Pseudonymity does not prove expertise or misconduct. The work, evidence, permissions, disclosures, and review process matter more than a label.</p>"
+    },
+    {
+      "heading": "How to evaluate a builder claim",
+      "body_markdown": "When someone is described as “building Bitcoin,” ask:\n\n1. What project, product, research, or community work is involved?\n2. Is the work on protocol rules, an implementation, an application, infrastructure, education, policy, or culture?\n3. Is the person an author, reviewer, maintainer, employee, contractor, funder, operator, or spokesperson?\n4. What public evidence supports the role?\n5. Who can accept, reject, deploy, or stop the work?\n6. What commercial or organizational interests are relevant?\n7. Is the claim current, historical, or inferred?\n8. Would the explanation remain accurate if the person changed jobs tomorrow?\n\nThat method keeps attention on systems and responsibilities. Bitcoin’s ecosystem is built by many overlapping participants, but participation is not membership in a centralized organization. The absence of a central builder hierarchy does not eliminate power, incentives, or conflict. It makes those relationships something readers must examine directly.",
+      "body_html": "<p>When someone is described as “building Bitcoin,” ask:</p>\n<ol><li>What project, product, research, or community work is involved?</li><li>Is the work on protocol rules, an implementation, an application, infrastructure, education, policy, or culture?</li><li>Is the person an author, reviewer, maintainer, employee, contractor, funder, operator, or spokesperson?</li><li>What public evidence supports the role?</li><li>Who can accept, reject, deploy, or stop the work?</li><li>What commercial or organizational interests are relevant?</li><li>Is the claim current, historical, or inferred?</li><li>Would the explanation remain accurate if the person changed jobs tomorrow?</li></ol>\n<p>That method keeps attention on systems and responsibilities. Bitcoin’s ecosystem is built by many overlapping participants, but participation is not membership in a centralized organization. The absence of a central builder hierarchy does not eliminate power, incentives, or conflict. It makes those relationships something readers must examine directly.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Builder",
+      "definition": "Person or organization contributing to Bitcoin-related protocol, software, products, infrastructure, knowledge, policy, or culture."
+    },
+    {
+      "term": "Protocol contribution",
+      "definition": "Research, specification, review, testing, or implementation work that concerns shared Bitcoin rules or interfaces."
+    },
+    {
+      "term": "Application development",
+      "definition": "Work on products that use Bitcoin without necessarily changing Bitcoin’s consensus rules."
+    },
+    {
+      "term": "Code review",
+      "definition": "Technical examination of a proposed change before or after integration."
+    },
+    {
+      "term": "Maintainer",
+      "definition": "Project-specific role with repository or release responsibilities; not a protocol ruler."
+    },
+    {
+      "term": "Open-source funding",
+      "definition": "Grants, employment, donations, or sponsorships supporting publicly licensed software or related work."
+    },
+    {
+      "term": "Responsible disclosure",
+      "definition": "Private reporting and coordinated handling of a security vulnerability before broad publication."
+    },
+    {
+      "term": "Indexer",
+      "definition": "System that derives a searchable data model from blockchain, mempool, or related data."
+    },
+    {
+      "term": "Custody",
+      "definition": "Arrangement in which a person or service controls keys or authorization needed to move bitcoin."
+    },
+    {
+      "term": "Localization",
+      "definition": "Adaptation of software or educational material for a language, region, and cultural context."
+    },
+    {
+      "term": "Infrastructure influence",
+      "definition": "Practical influence created through ownership or operation of services, hardware, distribution, or dependencies."
+    },
+    {
+      "term": "Protocol authority",
+      "definition": "Claimed power to determine Bitcoin consensus; no builder title or company role grants unilateral protocol authority."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bitcoin Core Integration and Staging Tree",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin",
+      "accessed": "July 26, 2026",
+      "supports": "Public repository, contribution workflow, testing emphasis, implementation scope, and distinction between proposing and integrating code."
+    },
+    {
+      "title": "Contributing to Bitcoin Core",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/master/CONTRIBUTING.md",
+      "accessed": "July 26, 2026",
+      "supports": "Current project-specific contribution, review, testing, and pull-request process."
+    },
+    {
+      "title": "Bitcoin Core Developer Notes",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/master/doc/developer-notes.md",
+      "accessed": "July 26, 2026",
+      "supports": "Current engineering, review, testing, fuzzing, logging, and maintenance practices."
+    },
+    {
+      "title": "Bitcoin Core Security Policy",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/master/SECURITY.md",
+      "accessed": "July 26, 2026",
+      "supports": "Current private vulnerability-reporting boundary and supported-version reference."
+    },
+    {
+      "title": "BIP 3: Updated BIP Process",
+      "author_or_publisher": "Murch; Bitcoin BIPs repository",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0003.md",
+      "accessed": "July 26, 2026",
+      "supports": "BIP publication, author and editor roles, lack of a formal Bitcoin decision body, and separation of a published proposal from consensus or adoption."
+    },
+    {
+      "title": "Bitcoin Improvement Proposals Repository",
+      "author_or_publisher": "Bitcoin BIPs maintainers",
+      "url": "https://github.com/bitcoin/bips",
+      "accessed": "July 26, 2026",
+      "supports": "Current BIP archive, proposal workflow, statuses, and repository scope."
+    },
+    {
+      "title": "Lightning Network Daemon Repository",
+      "author_or_publisher": "Lightning Labs and lnd contributors",
+      "url": "https://github.com/lightningnetwork/lnd",
+      "accessed": "July 26, 2026",
+      "supports": "Current Lightning implementation scope, contribution and review guidance, APIs, operational warnings, and responsible disclosure."
+    },
+    {
+      "title": "LDK rust-lightning Repository",
+      "author_or_publisher": "Lightning Dev Kit contributors",
+      "url": "https://github.com/lightningdevkit/rust-lightning",
+      "accessed": "July 26, 2026",
+      "supports": "Current modular Lightning library work and public implementation repository."
+    },
+    {
+      "title": "Bitcoin Design Guide",
+      "author_or_publisher": "Bitcoin Design Community",
+      "url": "https://bitcoin.design/guide/",
+      "accessed": "July 26, 2026",
+      "supports": "Open-source wallet and payment design work, public contribution, research, accessibility, and interface responsibilities."
+    },
+    {
+      "title": "Open Design",
+      "author_or_publisher": "Bitcoin Design Community",
+      "url": "https://bitcoin.design/guide/getting-started/open-design/",
+      "accessed": "July 26, 2026",
+      "supports": "Open design contribution model, public collaboration, licensing, and design as ecosystem work."
+    },
+    {
+      "title": "Brink’s 2025 Annual Report",
+      "author_or_publisher": "Brink",
+      "url": "https://brink.dev/blog/2026/05/26/2025-annual-report/",
+      "published": "May 26, 2026",
+      "supports": "Dated organizational and financial disclosure for Bitcoin development funding, meetings, education, and testing support."
+    },
+    {
+      "title": "Brink’s 2025 Engineering Impact Report",
+      "author_or_publisher": "Brink",
+      "url": "https://brink.dev/blog/2026/03/26/engineering-impact-report-2025/",
+      "published": "March 26, 2026",
+      "supports": "Dated description of funded engineering, review, release, testing, library, and mentoring work; establishes a funding relationship, not protocol control."
+    },
+    {
+      "title": "OpenSats Transparency",
+      "author_or_publisher": "Open Sats Initiative, Inc.",
+      "url": "https://opensats.org/transparency",
+      "accessed": "July 26, 2026",
+      "supports": "Current grant, financial, policy, meeting-minute, and conflict-of-interest disclosure framework."
+    },
+    {
+      "title": "OpenSats 2025 Year in Review",
+      "author_or_publisher": "Open Sats Initiative, Inc.",
+      "url": "https://opensats.org/blog/2025-year-in-review",
+      "published": "2026",
+      "supports": "Dated grant activity and grantee progress reporting across open-source Bitcoin-related work."
+    },
+    {
+      "title": "Ordinal Theory Handbook: Inscriptions",
+      "author_or_publisher": "Ord project maintainers",
+      "url": "https://docs.ordinals.com/inscriptions.html",
+      "accessed": "July 26, 2026",
+      "supports": "Project-defined inscription mechanism and distinction between ordinary Bitcoin transactions and ordinal-theory tracking."
+    },
+    {
+      "title": "Coinbase Global 2025 Form 10-K",
+      "author_or_publisher": "Coinbase Global, Inc.",
+      "url": "https://www.sec.gov/Archives/edgar/data/1679788/000167978826000015/coin-20251231.htm",
+      "filed": "2026",
+      "supports": "Current company disclosures about exchange, custody, internal ledger, product, regulatory, and operational infrastructure; company policy is not protocol policy."
+    },
+    {
+      "title": "iShares Bitcoin Trust 2025 Form 10-K",
+      "author_or_publisher": "iShares Delaware Trust Sponsor LLC",
+      "url": "https://www.sec.gov/Archives/edgar/data/1980994/000143774926006058/bit20251231_10k.htm",
+      "filed": "2026",
+      "supports": "Current disclosures about custodian discretion, fork support, insurance limits, vendor dependence, and custody arrangements."
+    }
+  ],
+  "seo_title": "Who Builds on Bitcoin? Roles Across the Ecosystem",
+  "meta_description": "Learn who builds Bitcoin protocol software, wallets, mining and payment systems, tools, education, design, culture, and policy—and where each role’s authority ends.",
+  "excerpt": "Explore the overlapping technical, commercial, educational, cultural, and civic roles that build around Bitcoin without forming a central organization.",
+  "reading_time": "21 to 25 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-ECOSYSTEM",
+    "label": "Bitcoin Ecosystem",
+    "subcategory": "People",
+    "depth": "Surface",
+    "format": "Ecosystem Overview"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-064",
+      "title": "How to Run Reliable Bitcoin Infrastructure",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-066",
+      "title": "What Bitcoin Developers Do",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": []
+  },
+  "review_dates": {
+    "reviewed": "2026-07-26",
+    "copy_locked": "2026-07-26",
+    "human_verification": "July 26, 2026"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "The Bitcoin Shipyard",
+      "educational_purpose": "Map the many kinds of work described as building on Bitcoin without implying a central employer.",
+      "recommended_placement": "After Bitcoin has no central builder organization.",
+      "visual_description": "Vintage shipyard chart with separate docks for protocol research, node software, wallets, mining, Lightning, developer tools, custody, education, design, art, policy, and community work. Independent vessels move between docks, while the center remains an open waterway labeled Bitcoin network rather than a headquarters.",
+      "required_labels": "Protocol research, Node implementations, Review, Testing, Wallets, Hardware, Mining, Lightning, Libraries, APIs, Indexers, Custody, Education, Design, Art, Policy, Community, Bitcoin network, No central hiring authority",
+      "caption": "Bitcoin’s ecosystem is built through overlapping projects and institutions, not one centrally managed organization.",
+      "alt_text": "Nautical shipyard map showing independent Bitcoin builder roles around an open network with no central headquarters.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack the docks in three bands and preserve the open central waterway and no-central-authority label.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "Contribution-to-Adoption Navigation Chart",
+      "educational_purpose": "Distinguish a proposed change from acceptance, release, deployment, and network adoption.",
+      "recommended_placement": "After Protocol research, specifications, and implementations.",
+      "visual_description": "Nautical route with gated buoys labeled idea, research, patch, tests, review, repository acceptance, release, operator deployment, and ecosystem adoption. Side channels show rejection, revision, competing implementation, and no adoption.",
+      "required_labels": "Idea, Research, Patch, Tests, Review, Accepted by project, Release, Deployment, Adoption, Revision, Rejection, Competing implementation",
+      "caption": "Authorship begins a process; it does not guarantee acceptance or adoption.",
+      "alt_text": "Navigation chart showing the separate stages from a Bitcoin proposal to possible adoption, including revision and rejection routes.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Preserve the main route vertically and keep revision and rejection as visible side channels.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Funding and Authority Boundary Ledger",
+      "educational_purpose": "Show how grants, employment, contracts, and donations can enable work without transferring protocol control.",
+      "recommended_placement": "After Funding without control.",
+      "visual_description": "Vintage harbor ledger with four funding streams entering a workshop: employment, grants, contracts, and donations. Outputs leave as research, review, code, testing, documentation, and design. A heavy boundary line separates funding influence from repository decisions, software deployment, and consensus enforcement.",
+      "required_labels": "Employment, Grant, Contract, Donation, Time, Research, Review, Code, Testing, Documentation, Design, Repository decision, Deployment choice, Consensus enforcement, Funding is not control",
+      "caption": "Funding changes capacity and incentives, but it does not automatically grant authorship, maintenance authority, adoption, or consensus control.",
+      "alt_text": "Ledger-style diagram separating open-source funding inputs from project decisions, deployment choices, and Bitcoin consensus.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Place funding inputs above outputs and retain the authority boundary as the central visual element.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}

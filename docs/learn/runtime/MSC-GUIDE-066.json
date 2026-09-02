@@ -1,0 +1,358 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-066-bitcoin-developers.md",
+  "source_sha256": "582292ddc3e1343ea3639b34274d773f92d89a061fcf8d5df5dce2cf7343574f",
+  "registry_id": "MSC-GUIDE-066",
+  "status": "COPY_LOCKED",
+  "h1": "What Bitcoin Developers Do",
+  "introductory_deck": "Bitcoin development includes research, implementation, review, testing, security, wallets, Lightning, libraries, infrastructure, documentation, design, and maintenance. “Developer” is not one official job, and a repository role does not grant authority over Bitcoin’s consensus. The work becomes meaningful through evidence, review, release, voluntary deployment, and continued maintenance.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "“Bitcoin developer” is a convenient label, but it is not one standardized job. The phrase may describe a protocol researcher, a Bitcoin Core contributor, a wallet engineer, a Lightning developer, a library maintainer, a security researcher, a release engineer, or an application developer. Their tools, responsibilities, permissions, and users can be very different.\n\nThe title also does not establish authority. A person may write important code without having repository permissions. A maintainer may have project-specific integration duties without being able to impose consensus changes. A BIP author may document a proposal that is never adopted. A company may employ developers while users and operators remain free to reject its software.\n\nThis guide was researched on July 26, 2026. Repository roles, funding relationships, project structures, and current software practices should be rechecked before publication.",
+      "body_html": "<p>“Bitcoin developer” is a convenient label, but it is not one standardized job. The phrase may describe a protocol researcher, a Bitcoin Core contributor, a wallet engineer, a Lightning developer, a library maintainer, a security researcher, a release engineer, or an application developer. Their tools, responsibilities, permissions, and users can be very different.</p>\n<p>The title also does not establish authority. A person may write important code without having repository permissions. A maintainer may have project-specific integration duties without being able to impose consensus changes. A BIP author may document a proposal that is never adopted. A company may employ developers while users and operators remain free to reject its software.</p>\n<p>This guide was researched on July 26, 2026. Repository roles, funding relationships, project structures, and current software practices should be rechecked before publication.</p>"
+    },
+    {
+      "heading": "Development begins with a defined system",
+      "body_markdown": "Before evaluating development work, identify the system involved.\n\nBitcoin’s base protocol includes transaction and block validity, proof of work, peer-to-peer behavior, and consensus rules. A node implementation enforces and exposes those rules through a particular codebase. A wallet constructs transactions and manages keys. Lightning software manages channels and offchain payment state. A library packages reusable functions. A hosted service adds its own database, policies, and trust boundaries.\n\nA change in one system may not change the others. A wallet feature can improve usability without modifying consensus. A new RPC can change an implementation interface without changing block validity. A BIP can describe an interoperable application standard without becoming mandatory for every project.\n\nDevelopers therefore need to state the layer, implementation, release, and user assumptions behind their work.",
+      "body_html": "<p>Before evaluating development work, identify the system involved.</p>\n<p>Bitcoin’s base protocol includes transaction and block validity, proof of work, peer-to-peer behavior, and consensus rules. A node implementation enforces and exposes those rules through a particular codebase. A wallet constructs transactions and manages keys. Lightning software manages channels and offchain payment state. A library packages reusable functions. A hosted service adds its own database, policies, and trust boundaries.</p>\n<p>A change in one system may not change the others. A wallet feature can improve usability without modifying consensus. A new RPC can change an implementation interface without changing block validity. A BIP can describe an interoperable application standard without becoming mandatory for every project.</p>\n<p>Developers therefore need to state the layer, implementation, release, and user assumptions behind their work.</p>"
+    },
+    {
+      "heading": "Protocol research",
+      "body_markdown": "Protocol researchers analyze proposed behavior before production code is accepted. Work may include cryptographic reasoning, incentive analysis, network simulations, privacy studies, deployment design, compatibility analysis, and adversarial review.\n\nResearch does not automatically produce a recommendation. A useful result may show that a proposal is unsafe, incomplete, difficult to deploy, or dependent on assumptions that are not widely shared. Competing proposals can be a healthy outcome when tradeoffs cannot be reconciled.\n\nResearch discussions often take place through mailing lists, repositories, papers, workshops, and implementation experiments. The relevant evidence is the argument, model, code, tests, and review—not the researcher’s public profile.",
+      "body_html": "<p>Protocol researchers analyze proposed behavior before production code is accepted. Work may include cryptographic reasoning, incentive analysis, network simulations, privacy studies, deployment design, compatibility analysis, and adversarial review.</p>\n<p>Research does not automatically produce a recommendation. A useful result may show that a proposal is unsafe, incomplete, difficult to deploy, or dependent on assumptions that are not widely shared. Competing proposals can be a healthy outcome when tradeoffs cannot be reconciled.</p>\n<p>Research discussions often take place through mailing lists, repositories, papers, workshops, and implementation experiments. The relevant evidence is the argument, model, code, tests, and review—not the researcher’s public profile.</p>"
+    },
+    {
+      "heading": "Node implementation work",
+      "body_markdown": "Node developers work on validation, networking, storage, mempool policy, wallets, RPCs, performance, platform support, build systems, and user interfaces. Bitcoin Core is a major implementation with a public contribution process. Other node projects make their own engineering choices and maintain their own repositories.\n\nA proposed patch normally enters through a pull request. Reviewers examine whether the change is necessary, correctly scoped, tested, compatible, maintainable, and safe. The author may revise it many times. The patch may be closed without integration even if it is technically interesting.\n\nRepository integration is not equivalent to changing Bitcoin’s consensus. First, the change belongs to a specific codebase. Second, a release must include it. Third, users and organizations decide whether to install that release. Consensus changes face additional coordination and deployment requirements because incompatible rule enforcement can split participants.",
+      "body_html": "<p>Node developers work on validation, networking, storage, mempool policy, wallets, RPCs, performance, platform support, build systems, and user interfaces. Bitcoin Core is a major implementation with a public contribution process. Other node projects make their own engineering choices and maintain their own repositories.</p>\n<p>A proposed patch normally enters through a pull request. Reviewers examine whether the change is necessary, correctly scoped, tested, compatible, maintainable, and safe. The author may revise it many times. The patch may be closed without integration even if it is technically interesting.</p>\n<p>Repository integration is not equivalent to changing Bitcoin’s consensus. First, the change belongs to a specific codebase. Second, a release must include it. Third, users and organizations decide whether to install that release. Consensus changes face additional coordination and deployment requirements because incompatible rule enforcement can split participants.</p>"
+    },
+    {
+      "heading": "Wallet development",
+      "body_markdown": "Wallet developers work across security and usability. Typical responsibilities include:\n\n- key generation, storage, import, export, and recovery;\n- descriptor and address management;\n- transaction construction and signing;\n- fee estimation and replacement;\n- coin selection and privacy controls;\n- hardware-wallet communication;\n- backup and restore behavior;\n- multisignature and policy workflows;\n- onchain and Lightning integration;\n- accessibility, translation, and error handling.\n\nA wallet developer must understand which operations are local and which rely on a node, indexer, coordinator, custodian, or hosted API. Product defaults can influence user behavior, but they are not Bitcoin defaults.\n\nCustodial wallet developers also build internal ledgers, authorization systems, withdrawal controls, monitoring, and compliance processes. That is materially different from software in which users control the spending keys.",
+      "body_html": "<p>Wallet developers work across security and usability. Typical responsibilities include:</p>\n<ul><li>key generation, storage, import, export, and recovery;</li><li>descriptor and address management;</li><li>transaction construction and signing;</li><li>fee estimation and replacement;</li><li>coin selection and privacy controls;</li><li>hardware-wallet communication;</li><li>backup and restore behavior;</li><li>multisignature and policy workflows;</li><li>onchain and Lightning integration;</li><li>accessibility, translation, and error handling.</li></ul>\n<p>A wallet developer must understand which operations are local and which rely on a node, indexer, coordinator, custodian, or hosted API. Product defaults can influence user behavior, but they are not Bitcoin defaults.</p>\n<p>Custodial wallet developers also build internal ledgers, authorization systems, withdrawal controls, monitoring, and compliance processes. That is materially different from software in which users control the spending keys.</p>"
+    },
+    {
+      "heading": "Lightning development",
+      "body_markdown": "Lightning development spans protocol specifications, node implementations, routing, channel state, watchtowers, liquidity, wallet interfaces, payment services, testing, and operations.\n\nImplementation teams coordinate around BOLTs and other interoperability work, but each project still has its own code, release process, and policy. A feature supported by one implementation may not yet be interoperable or widely deployed. A standards discussion can guide coordination without forcing an operator to upgrade.\n\nLightning code handles funds and complex state transitions. Developers must consider crashes, backups, chain reorganizations, peer behavior, timing, fee changes, and adversarial inputs. Operational monitoring and incident response are part of the engineering problem.",
+      "body_html": "<p>Lightning development spans protocol specifications, node implementations, routing, channel state, watchtowers, liquidity, wallet interfaces, payment services, testing, and operations.</p>\n<p>Implementation teams coordinate around BOLTs and other interoperability work, but each project still has its own code, release process, and policy. A feature supported by one implementation may not yet be interoperable or widely deployed. A standards discussion can guide coordination without forcing an operator to upgrade.</p>\n<p>Lightning code handles funds and complex state transitions. Developers must consider crashes, backups, chain reorganizations, peer behavior, timing, fee changes, and adversarial inputs. Operational monitoring and incident response are part of the engineering problem.</p>"
+    },
+    {
+      "heading": "Libraries, SDKs, and developer tools",
+      "body_markdown": "Library developers build reusable components such as cryptographic primitives, transaction parsers, wallet engines, Lightning modules, hardware interfaces, and test utilities. SDKs can make complex functions accessible through higher-level APIs.\n\nThis work creates leverage: one library may be used by many downstream products. It also creates dependency risk. A breaking API, security defect, licensing change, abandoned package, or incorrect default can affect projects far from the original repository.\n\nTooling developers maintain compilers, formatters, linters, debuggers, test frameworks, simulators, package definitions, continuous integration, reproducible builds, and developer documentation. These systems are not secondary conveniences. They shape which errors are caught and who can participate effectively.",
+      "body_html": "<p>Library developers build reusable components such as cryptographic primitives, transaction parsers, wallet engines, Lightning modules, hardware interfaces, and test utilities. SDKs can make complex functions accessible through higher-level APIs.</p>\n<p>This work creates leverage: one library may be used by many downstream products. It also creates dependency risk. A breaking API, security defect, licensing change, abandoned package, or incorrect default can affect projects far from the original repository.</p>\n<p>Tooling developers maintain compilers, formatters, linters, debuggers, test frameworks, simulators, package definitions, continuous integration, reproducible builds, and developer documentation. These systems are not secondary conveniences. They shape which errors are caught and who can participate effectively.</p>"
+    },
+    {
+      "heading": "Mining software, hardware, and firmware",
+      "body_markdown": "Mining developers may work on ASIC control, firmware, pool protocols, block-template construction, payout systems, monitoring, thermal management, or facility automation.\n\nFirmware can change efficiency, safety limits, telemetry, and operator control. Pool software can affect work distribution and transaction-selection interfaces. Standards such as Stratum-related protocols can alter communication between miners and pools.\n\nThese developers influence mining infrastructure, but they do not gain unilateral authority over the validity rules checked by nodes. A block produced by expensive hardware is still rejected if it violates the rules enforced by validating software.",
+      "body_html": "<p>Mining developers may work on ASIC control, firmware, pool protocols, block-template construction, payout systems, monitoring, thermal management, or facility automation.</p>\n<p>Firmware can change efficiency, safety limits, telemetry, and operator control. Pool software can affect work distribution and transaction-selection interfaces. Standards such as Stratum-related protocols can alter communication between miners and pools.</p>\n<p>These developers influence mining infrastructure, but they do not gain unilateral authority over the validity rules checked by nodes. A block produced by expensive hardware is still rejected if it violates the rules enforced by validating software.</p>"
+    },
+    {
+      "heading": "Application and infrastructure development",
+      "body_markdown": "Application developers build payment processors, exchanges, custody systems, merchant integrations, accounting tools, explorers, indexers, analytics, educational applications, and media products.\n\nTheir work often involves ordinary software engineering: databases, queues, APIs, authentication, deployment, observability, incident management, and customer support. Bitcoin-specific correctness adds requirements around confirmations, reorganizations, transaction replacement, key security, fee behavior, and chain identity.\n\nDevOps and infrastructure engineers keep these systems available and recoverable. They plan backups, upgrades, monitoring, capacity, secrets, redundancy, and disaster recovery. A service being online does not prove that its chain, wallet, index, or accounting state is correct.",
+      "body_html": "<p>Application developers build payment processors, exchanges, custody systems, merchant integrations, accounting tools, explorers, indexers, analytics, educational applications, and media products.</p>\n<p>Their work often involves ordinary software engineering: databases, queues, APIs, authentication, deployment, observability, incident management, and customer support. Bitcoin-specific correctness adds requirements around confirmations, reorganizations, transaction replacement, key security, fee behavior, and chain identity.</p>\n<p>DevOps and infrastructure engineers keep these systems available and recoverable. They plan backups, upgrades, monitoring, capacity, secrets, redundancy, and disaster recovery. A service being online does not prove that its chain, wallet, index, or accounting state is correct.</p>"
+    },
+    {
+      "heading": "Security engineering and responsible disclosure",
+      "body_markdown": "Security researchers and engineers look for vulnerabilities in protocol assumptions, implementations, wallets, libraries, hardware, web services, and operational practices. Methods include code review, threat modeling, fuzzing, static analysis, dynamic testing, hardware analysis, and controlled exploitation.\n\nWhen a defect could endanger users, the first useful action may be private disclosure rather than public demonstration. A responsible process gives maintainers time to reproduce the problem, assess affected versions, prepare a fix, coordinate releases, and communicate accurately.\n\nSecurity work must also avoid impossible guarantees. A completed audit covers a defined scope and time. It does not prove that a system has no vulnerabilities.",
+      "body_html": "<p>Security researchers and engineers look for vulnerabilities in protocol assumptions, implementations, wallets, libraries, hardware, web services, and operational practices. Methods include code review, threat modeling, fuzzing, static analysis, dynamic testing, hardware analysis, and controlled exploitation.</p>\n<p>When a defect could endanger users, the first useful action may be private disclosure rather than public demonstration. A responsible process gives maintainers time to reproduce the problem, assess affected versions, prepare a fix, coordinate releases, and communicate accurately.</p>\n<p>Security work must also avoid impossible guarantees. A completed audit covers a defined scope and time. It does not prove that a system has no vulnerabilities.</p>"
+    },
+    {
+      "heading": "Testing is development",
+      "body_markdown": "Testing includes unit tests, functional tests, integration tests, regression tests, property tests, fuzzing, benchmarks, compatibility testing, and manual review.\n\nA good test does more than confirm the expected path. It exercises boundaries, invalid inputs, interrupted operations, reorganization behavior, resource limits, upgrade paths, and historical bugs. Test infrastructure itself needs maintenance because a flaky or misleading test can hide risk.\n\nReproducible builds address a different question: whether independent builders can produce matching binaries from the same source and documented environment. Reproducibility can improve verification, but it does not establish that the source is safe.",
+      "body_html": "<p>Testing includes unit tests, functional tests, integration tests, regression tests, property tests, fuzzing, benchmarks, compatibility testing, and manual review.</p>\n<p>A good test does more than confirm the expected path. It exercises boundaries, invalid inputs, interrupted operations, reorganization behavior, resource limits, upgrade paths, and historical bugs. Test infrastructure itself needs maintenance because a flaky or misleading test can hide risk.</p>\n<p>Reproducible builds address a different question: whether independent builders can produce matching binaries from the same source and documented environment. Reproducibility can improve verification, but it does not establish that the source is safe.</p>"
+    },
+    {
+      "heading": "Documentation, design, and accessibility",
+      "body_markdown": "Developers write interface documentation, release notes, migration guides, examples, comments, and operational warnings. Documentation should state version and implementation boundaries. An example that silently depends on a hosted service or unsafe default can teach the wrong trust model.\n\nUser-experience and accessibility work may involve designers and researchers as well as software engineers. Clear transaction review, readable addresses, error recovery, keyboard navigation, screen-reader support, localization, and safe defaults are technical responsibilities because interface failures can cause loss.",
+      "body_html": "<p>Developers write interface documentation, release notes, migration guides, examples, comments, and operational warnings. Documentation should state version and implementation boundaries. An example that silently depends on a hosted service or unsafe default can teach the wrong trust model.</p>\n<p>User-experience and accessibility work may involve designers and researchers as well as software engineers. Clear transaction review, readable addresses, error recovery, keyboard navigation, screen-reader support, localization, and safe defaults are technical responsibilities because interface failures can cause loss.</p>"
+    },
+    {
+      "heading": "Standards and interoperability",
+      "body_markdown": "Standards work attempts to make independently built systems communicate predictably. BIPs, Lightning specifications, wallet formats, payment requests, QR encodings, and hardware protocols can all support interoperability.\n\nA standards author defines or documents behavior. An editor may check formatting and process. Implementers decide whether and how to support it. Users and operators decide whether to deploy supporting software. Those are separate roles.\n\nBIP 3, currently marked Deployed in the BIPs repository, makes the boundary explicit: publication indicates that a proposal meets repository criteria, not that it has community consensus or guaranteed adoption.",
+      "body_html": "<p>Standards work attempts to make independently built systems communicate predictably. BIPs, Lightning specifications, wallet formats, payment requests, QR encodings, and hardware protocols can all support interoperability.</p>\n<p>A standards author defines or documents behavior. An editor may check formatting and process. Implementers decide whether and how to support it. Users and operators decide whether to deploy supporting software. Those are separate roles.</p>\n<p>BIP 3, currently marked Deployed in the BIPs repository, makes the boundary explicit: publication indicates that a proposal meets repository criteria, not that it has community consensus or guaranteed adoption.</p>"
+    },
+    {
+      "heading": "The practical workflow",
+      "body_markdown": "A realistic development workflow is iterative:\n\n1. **Identify an issue.** Reproduce a bug, define a missing capability, or document a risk.\n2. **Research.** Read existing code, specifications, history, discussions, and prior attempts.\n3. **Discuss design.** Clarify scope, alternatives, compatibility, and deployment.\n4. **Write code or documentation.** Keep the change reviewable and explain assumptions.\n5. **Add tests.** Cover expected behavior, failure paths, and regressions.\n6. **Request review.** Reviewers challenge the design and implementation.\n7. **Revise.** Address findings, reduce scope, or abandon the approach.\n8. **Integrate.** A project-specific maintainer or committer with the required repository permission may merge an accepted change.\n9. **Release.** Release engineers package and communicate a version.\n10. **Deploy.** Users, operators, and businesses choose whether to install it.\n11. **Monitor.** Observe production behavior, compatibility, and security.\n12. **Maintain.** Fix defects, update dependencies, improve tests, and document changes.\n\nNot every task passes through every stage, and the stages may repeat. The important point is that writing code is one part of a larger evidence and adoption process.",
+      "body_html": "<p>A realistic development workflow is iterative:</p>\n<ol><li><strong>Identify an issue.</strong> Reproduce a bug, define a missing capability, or document a risk.</li><li><strong>Research.</strong> Read existing code, specifications, history, discussions, and prior attempts.</li><li><strong>Discuss design.</strong> Clarify scope, alternatives, compatibility, and deployment.</li><li><strong>Write code or documentation.</strong> Keep the change reviewable and explain assumptions.</li><li><strong>Add tests.</strong> Cover expected behavior, failure paths, and regressions.</li><li><strong>Request review.</strong> Reviewers challenge the design and implementation.</li><li><strong>Revise.</strong> Address findings, reduce scope, or abandon the approach.</li><li><strong>Integrate.</strong> A project-specific maintainer or committer with the required repository permission may merge an accepted change.</li><li><strong>Release.</strong> Release engineers package and communicate a version.</li><li><strong>Deploy.</strong> Users, operators, and businesses choose whether to install it.</li><li><strong>Monitor.</strong> Observe production behavior, compatibility, and security.</li><li><strong>Maintain.</strong> Fix defects, update dependencies, improve tests, and document changes.</li></ol>\n<p>Not every task passes through every stage, and the stages may repeat. The important point is that writing code is one part of a larger evidence and adoption process.</p>"
+    },
+    {
+      "heading": "Contributor, reviewer, maintainer, and committer",
+      "body_markdown": "A **contributor** submits code, tests, review, documentation, or research. A **reviewer** examines proposed work. A **maintainer** performs project-specific coordination, integration, or release duties. A **committer** has technical permission to write or merge in a specific repository. Release engineering and release signing are separate responsibilities unless a project assigns both to the same person.\n\nOne person may hold several roles, but permissions remain scoped to a project. Commit access can help integrate an accepted change; it does not make the committer a ruler over users, miners, businesses, or other implementations.\n\nTitles can also be informal. The safest source is the project’s current documentation, repository permissions, and actual public work, dated when the claim is made.",
+      "body_html": "<p>A <strong>contributor</strong> submits code, tests, review, documentation, or research. A <strong>reviewer</strong> examines proposed work. A <strong>maintainer</strong> performs project-specific coordination, integration, or release duties. A <strong>committer</strong> has technical permission to write or merge in a specific repository. Release engineering and release signing are separate responsibilities unless a project assigns both to the same person.</p>\n<p>One person may hold several roles, but permissions remain scoped to a project. Commit access can help integrate an accepted change; it does not make the committer a ruler over users, miners, businesses, or other implementations.</p>\n<p>Titles can also be informal. The safest source is the project’s current documentation, repository permissions, and actual public work, dated when the claim is made.</p>"
+    },
+    {
+      "heading": "BIP author, researcher, and implementer",
+      "body_markdown": "A BIP author is responsible for describing and maintaining a proposal, and may appoint a deputy under the BIP process. A researcher may analyze it. An implementer may write code. A reviewer may find problems. A project may publish support. Operators may deploy it. These roles can belong to different people and organizations.\n\nA BIP number is not a certification. A draft can remain unused. A complete specification can be adopted by some projects and ignored by others. A consensus proposal requires coordination beyond the BIP repository because the repository does not govern network adoption.",
+      "body_html": "<p>A BIP author is responsible for describing and maintaining a proposal, and may appoint a deputy under the BIP process. A researcher may analyze it. An implementer may write code. A reviewer may find problems. A project may publish support. Operators may deploy it. These roles can belong to different people and organizations.</p>\n<p>A BIP number is not a certification. A draft can remain unused. A complete specification can be adopted by some projects and ignored by others. A consensus proposal requires coordination beyond the BIP repository because the repository does not govern network adoption.</p>"
+    },
+    {
+      "heading": "Employee, contractor, and grant-funded contributor",
+      "body_markdown": "An employee may be directed to work on a company product, or may contribute to open-source software under an employer-funded program. A contractor works under a defined engagement that may differ from both employment and independent volunteer contribution. A grant-funded contributor may have more independence but still report milestones or operate within a funder’s selection process.\n\nEmployment or funding should be disclosed when materially relevant. Neither proves that the employer or funder authored every change. Neither gives the organization control over Bitcoin consensus.\n\nFunding does influence capacity and priorities. Concentrated funding can create dependency. Transparent reports, diverse funding sources, public review, and the ability to fork or compete can reduce some risks without eliminating them.",
+      "body_html": "<p>An employee may be directed to work on a company product, or may contribute to open-source software under an employer-funded program. A contractor works under a defined engagement that may differ from both employment and independent volunteer contribution. A grant-funded contributor may have more independence but still report milestones or operate within a funder’s selection process.</p>\n<p>Employment or funding should be disclosed when materially relevant. Neither proves that the employer or funder authored every change. Neither gives the organization control over Bitcoin consensus.</p>\n<p>Funding does influence capacity and priorities. Concentrated funding can create dependency. Transparent reports, diverse funding sources, public review, and the ability to fork or compete can reduce some risks without eliminating them.</p>"
+    },
+    {
+      "heading": "Pathways into Bitcoin development",
+      "body_markdown": "There is no official certification or guaranteed hiring path. Common entry routes include:\n\n- running and using the software being studied;\n- reading documentation and source history;\n- reproducing issues;\n- reviewing small pull requests;\n- adding tests for existing behavior;\n- improving documentation or translations;\n- joining public review clubs or study groups;\n- contributing to wallets, libraries, design systems, or local tools;\n- learning security practices before handling mainnet funds;\n- documenting work clearly enough for others to verify.\n\nStarting with review and tests can reveal project norms more effectively than proposing a large feature immediately. A small, well-researched contribution may be more useful than a broad redesign.\n\nMentorship and contributor onboarding can lower the cost of learning a large codebase, but they do not replace independent verification. Review clubs, study groups, annotated code walks, issue triage, and paired testing can teach how a project reasons about risk. Mentors should explain where a practice is project convention, implementation behavior, or protocol requirement. New contributors should be able to trace claims back to code, tests, specifications, and history rather than treating a mentor’s status as authority.\n\nThe work is demanding because Bitcoin combines adversarial security, long-lived compatibility, financial consequences, distributed coordination, and voluntary adoption. There is no title that removes those constraints. Bitcoin developers earn trust through specific, reviewable work—not through a centralized credential or claim of authority.",
+      "body_html": "<p>There is no official certification or guaranteed hiring path. Common entry routes include:</p>\n<ul><li>running and using the software being studied;</li><li>reading documentation and source history;</li><li>reproducing issues;</li><li>reviewing small pull requests;</li><li>adding tests for existing behavior;</li><li>improving documentation or translations;</li><li>joining public review clubs or study groups;</li><li>contributing to wallets, libraries, design systems, or local tools;</li><li>learning security practices before handling mainnet funds;</li><li>documenting work clearly enough for others to verify.</li></ul>\n<p>Starting with review and tests can reveal project norms more effectively than proposing a large feature immediately. A small, well-researched contribution may be more useful than a broad redesign.</p>\n<p>Mentorship and contributor onboarding can lower the cost of learning a large codebase, but they do not replace independent verification. Review clubs, study groups, annotated code walks, issue triage, and paired testing can teach how a project reasons about risk. Mentors should explain where a practice is project convention, implementation behavior, or protocol requirement. New contributors should be able to trace claims back to code, tests, specifications, and history rather than treating a mentor’s status as authority.</p>\n<p>The work is demanding because Bitcoin combines adversarial security, long-lived compatibility, financial consequences, distributed coordination, and voluntary adoption. There is no title that removes those constraints. Bitcoin developers earn trust through specific, reviewable work—not through a centralized credential or claim of authority.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Contributor",
+      "definition": "Person who submits code, tests, documentation, research, or review to a project."
+    },
+    {
+      "term": "Reviewer",
+      "definition": "Person who evaluates a proposed change and its evidence."
+    },
+    {
+      "term": "Maintainer",
+      "definition": "Project-specific coordinator or integrator with defined repository or release responsibilities."
+    },
+    {
+      "term": "Committer",
+      "definition": "Person with technical permission to write to a repository; permission is not protocol control."
+    },
+    {
+      "term": "BIP author",
+      "definition": "Author or deputy responsible for describing and maintaining a Bitcoin Improvement Proposal."
+    },
+    {
+      "term": "Protocol researcher",
+      "definition": "Person studying Bitcoin rules, incentives, networking, cryptography, privacy, or deployment."
+    },
+    {
+      "term": "Application developer",
+      "definition": "Developer building a product that uses Bitcoin without necessarily changing consensus."
+    },
+    {
+      "term": "Wallet developer",
+      "definition": "Developer responsible for key, transaction, recovery, privacy, and signing workflows."
+    },
+    {
+      "term": "Lightning developer",
+      "definition": "Developer working on Lightning specifications, implementations, libraries, wallets, or services."
+    },
+    {
+      "term": "Fuzzing",
+      "definition": "Automated testing with generated or mutated inputs to find unexpected behavior."
+    },
+    {
+      "term": "Reproducible build",
+      "definition": "Build process designed to let independent builders produce matching artifacts from the same source."
+    },
+    {
+      "term": "Release engineering",
+      "definition": "Work that packages, verifies, signs, documents, and distributes a software release."
+    },
+    {
+      "term": "Responsible disclosure",
+      "definition": "Coordinated private handling of a vulnerability before broad publication."
+    },
+    {
+      "term": "Technical debt",
+      "definition": "Maintenance burden created by past design, implementation, testing, or documentation choices."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bitcoin Core Integration and Staging Tree",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin",
+      "accessed": "July 26, 2026",
+      "supports": "Current project scope, testing and review bottleneck, public repository, and contributor workflow."
+    },
+    {
+      "title": "Contributing to Bitcoin Core",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/master/CONTRIBUTING.md",
+      "accessed": "July 26, 2026",
+      "supports": "Pull-request, review, testing, communication, and contribution expectations."
+    },
+    {
+      "title": "Bitcoin Core Developer Notes",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/master/doc/developer-notes.md",
+      "accessed": "July 26, 2026",
+      "supports": "Coding, review, fuzzing, sanitizers, interfaces, maintenance, and engineering practices."
+    },
+    {
+      "title": "Bitcoin Core Test Documentation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/tree/master/test",
+      "accessed": "July 26, 2026",
+      "supports": "Current unit, functional, fuzz, lint, and test infrastructure maintained with Bitcoin Core."
+    },
+    {
+      "title": "Bitcoin Core Security Policy",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/master/SECURITY.md",
+      "accessed": "July 26, 2026",
+      "supports": "Current private vulnerability-reporting channel and supported-version boundary."
+    },
+    {
+      "title": "BIP 3: Updated BIP Process",
+      "author_or_publisher": "Murch; Bitcoin BIPs repository",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0003.md",
+      "accessed": "July 26, 2026",
+      "supports": "BIP author, deputy, editor, publication, status, adoption, and consensus boundaries."
+    },
+    {
+      "title": "Bitcoin Improvement Proposals Repository",
+      "author_or_publisher": "Bitcoin BIPs maintainers",
+      "url": "https://github.com/bitcoin/bips",
+      "accessed": "July 26, 2026",
+      "supports": "Current proposal archive and explicit statement that publication is not endorsement or consensus."
+    },
+    {
+      "title": "Lightning Network Daemon Repository",
+      "author_or_publisher": "Lightning Labs and lnd contributors",
+      "url": "https://github.com/lightningnetwork/lnd",
+      "accessed": "July 26, 2026",
+      "supports": "Current Lightning node implementation work, APIs, contribution guidance, review-first onboarding, security disclosure, and operational responsibility."
+    },
+    {
+      "title": "rust-lightning Repository",
+      "author_or_publisher": "Lightning Dev Kit contributors",
+      "url": "https://github.com/lightningdevkit/rust-lightning",
+      "accessed": "July 26, 2026",
+      "supports": "Current modular Lightning library development and public review surface."
+    },
+    {
+      "title": "Bitcoin Development Kit Repository",
+      "author_or_publisher": "BDK Foundation and contributors",
+      "url": "https://github.com/bitcoindevkit/bdk",
+      "accessed": "July 26, 2026",
+      "supports": "Current wallet library and SDK development as a role distinct from node and application development."
+    },
+    {
+      "title": "Bitcoin Core Hardware Wallet Interface",
+      "author_or_publisher": "HWI contributors",
+      "url": "https://github.com/bitcoin-core/HWI",
+      "accessed": "July 26, 2026",
+      "supports": "Current hardware-wallet communication, device integration, testing, and host-software development."
+    },
+    {
+      "title": "Bitcoin Core secp256k1 Library",
+      "author_or_publisher": "libsecp256k1 contributors",
+      "url": "https://github.com/bitcoin-core/secp256k1",
+      "accessed": "July 26, 2026",
+      "supports": "Specialized cryptographic library maintenance, testing, and downstream dependency role."
+    },
+    {
+      "title": "Bitcoin Design Guide",
+      "author_or_publisher": "Bitcoin Design Community",
+      "url": "https://bitcoin.design/guide/",
+      "accessed": "July 26, 2026",
+      "supports": "Design, accessibility, research, language, and interface work as part of Bitcoin product development."
+    },
+    {
+      "title": "Propose a Change to the Bitcoin Design Guide",
+      "author_or_publisher": "Bitcoin Design Community",
+      "url": "https://bitcoin.design/guide/contribute/propose-a-change/",
+      "accessed": "July 26, 2026",
+      "supports": "Public contribution, review, revision, and integration workflow outside code-only development."
+    },
+    {
+      "title": "Brink’s 2025 Engineering Impact Report",
+      "author_or_publisher": "Brink",
+      "url": "https://brink.dev/blog/2026/03/26/engineering-impact-report-2025/",
+      "published": "March 26, 2026",
+      "supports": "Dated examples of funded review, release, testing, library, mentoring, and contributor work; funding is not consensus authority."
+    },
+    {
+      "title": "OpenSats Transparency",
+      "author_or_publisher": "Open Sats Initiative, Inc.",
+      "url": "https://opensats.org/transparency",
+      "accessed": "July 26, 2026",
+      "supports": "Current public framework for grant selection, grantees, financial reports, policies, and conflicts."
+    },
+    {
+      "title": "Stratum V2 Protocol Libraries",
+      "author_or_publisher": "Stratum Mining contributors",
+      "url": "https://github.com/stratum-mining/stratum",
+      "accessed": "July 26, 2026",
+      "supports": "Current low-level Stratum V1 and V2 protocol libraries, contribution and testing surface, and the repository’s distinction from the separate alpha-stage `sv2-apps` application repository; mining communication software remains distinct from node consensus enforcement."
+    }
+  ],
+  "seo_title": "What Bitcoin Developers Do: Roles and Workflow",
+  "meta_description": "Learn what Bitcoin protocol, node, wallet, Lightning, library, security, testing, and infrastructure developers do—and how review and adoption actually work.",
+  "excerpt": "Understand the many forms of Bitcoin development, the workflow from issue to maintenance, and the limits of contributor, maintainer, employer, and BIP-author authority.",
+  "reading_time": "22 to 26 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-ECOSYSTEM",
+    "label": "Bitcoin Ecosystem",
+    "subcategory": "People",
+    "depth": "Surface",
+    "format": "Ecosystem Overview"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-065",
+      "title": "Who Builds on Bitcoin?",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-067",
+      "title": "Bitcoin Artists and the Culture They Shape",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": []
+  },
+  "review_dates": {
+    "reviewed": "2026-07-26",
+    "copy_locked": "2026-07-26",
+    "human_verification": "July 26, 2026"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "The Developer Role Deck",
+      "educational_purpose": "Distinguish common Bitcoin development roles and their project-specific permissions.",
+      "recommended_placement": "After Contributor, reviewer, maintainer, and committer.",
+      "visual_description": "Vintage ship bridge with separate stations for contributor, reviewer, maintainer, committer, BIP author, researcher, wallet developer, Lightning developer, and security researcher. Each station has a limited instrument panel and no station has a wheel labeled Bitcoin control.",
+      "required_labels": "Contributor, Reviewer, Maintainer, Committer, BIP author, Researcher, Wallet developer, Lightning developer, Security researcher, Project-specific permission, No protocol ruler",
+      "caption": "Development roles overlap, but every permission is scoped to a project, repository, or task.",
+      "alt_text": "Ship-bridge diagram showing distinct Bitcoin development roles with limited project permissions and no central protocol-control station.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Arrange roles in two stacked rows and preserve the no-protocol-ruler note.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "Patch-to-Maintenance Workflow",
+      "educational_purpose": "Explain the practical development cycle from issue discovery through long-term maintenance.",
+      "recommended_placement": "After The practical workflow.",
+      "visual_description": "Nautical maintenance route moving through issue, research, design, code, tests, review, revision, integration, release, deployment, monitoring, and maintenance. Arrows loop from review and monitoring back to research and revision.",
+      "required_labels": "Issue, Research, Design, Code, Tests, Review, Revision, Integration, Release, Deployment, Monitoring, Maintenance, Rejection, Rework",
+      "caption": "Bitcoin development is an iterative evidence process, not a straight line from code to adoption.",
+      "alt_text": "Circular development workflow showing review, revision, release, deployment, monitoring, and maintenance loops.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Convert the route into a vertical loop and keep review and monitoring return arrows visible.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Layer and Authority Soundings",
+      "educational_purpose": "Show that protocol, implementation, wallet, Lightning, library, and hosted-service changes occur at different layers.",
+      "recommended_placement": "After Development begins with a defined system.",
+      "visual_description": "Vintage depth-sounding chart with six horizontal layers: consensus rules, node implementation, wallet, Lightning, library or SDK, and hosted application. Example changes sit inside their layer, while deployment arrows show who must choose them.",
+      "required_labels": "Consensus rules, Node implementation, Wallet, Lightning, Library or SDK, Hosted service, Proposal, Project acceptance, User deployment, Operator choice, Company policy",
+      "caption": "Before evaluating a developer’s influence, identify which layer is changing and who must adopt the result.",
+      "alt_text": "Depth chart separating Bitcoin protocol, node, wallet, Lightning, library, and hosted-service development layers.",
+      "image_orientation": "Portrait",
+      "mobile_crop_notes": "Preserve all six layers and place adoption arrows along the right edge.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}
