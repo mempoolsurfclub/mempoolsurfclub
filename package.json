@@ -6,6 +6,7 @@
     "build:learn-path-pilot": "node scripts/generate-msc-learn-start-path-runtime.mjs",
     "build:learn-route-pilot": "node scripts/generate-msc-learn-transaction-route-runtime.mjs",
     "build:learn-glossary-pilot": "node scripts/generate-msc-learn-glossary-runtime.mjs",
+    "build:explore-runtime": "node scripts/explore-runtime/build.mjs",
     "materialize:learn-runtime-audit": "node scripts/learn-runtime/audit.mjs --write",
     "audit:learn-runtime": "node scripts/learn-runtime/audit.mjs --check",
     "validate:learn-registry": "node scripts/generate-msc-learn-data.mjs --validate-only",
@@ -15,6 +16,7 @@
     "validate:learn-path-pilot": "node scripts/generate-msc-learn-start-path-runtime.mjs --check",
     "validate:learn-route-pilot": "node scripts/generate-msc-learn-transaction-route-runtime.mjs --check",
     "validate:learn-glossary-pilot": "node scripts/generate-msc-learn-glossary-runtime.mjs --check",
+    "validate:explore-runtime": "node scripts/explore-runtime/build.mjs --check",
     "test:json": "node scripts/parse-json-templates.mjs",
     "test:learn-runtime-contract": "node scripts/learn-runtime/test-contract.mjs"
   },
