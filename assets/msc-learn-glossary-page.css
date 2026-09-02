@@ -1,0 +1,315 @@
+/* MSC Learn glossary visual treatment.
+   Keeps the canonical glossary content/runtime intact while matching the shared Learn surface. */
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] {
+  --msc-glossary-ink: #10282d;
+  --msc-glossary-deep: #173c43;
+  --msc-glossary-sea: #4e6b71;
+  --msc-glossary-sand: #d4be99;
+  --msc-glossary-paper: #fbf8ef;
+  position: relative;
+  min-height: 100vh;
+  padding: clamp(3.4rem, 5vw, 5.8rem) 0 clamp(6rem, 9vw, 9rem);
+  overflow: visible;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(212, 190, 153, .12), transparent 30rem),
+    radial-gradient(circle at 88% 24%, rgba(78, 107, 113, .25), transparent 42rem),
+    linear-gradient(180deg, #10282d 0%, #173c43 48%, #10282d 100%) !important;
+  color: var(--msc-glossary-paper) !important;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(251, 248, 239, .03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(251, 248, 239, .03) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, .86), transparent 97%);
+  pointer-events: none;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-page__container {
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-breadcrumbs {
+  margin: 0 0 1.8rem;
+  color: rgba(251, 248, 239, .58);
+  font-size: 1rem;
+  font-weight: 750;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-breadcrumbs li:not(:last-child)::after {
+  content: "/";
+  margin-left: .55rem;
+  color: rgba(212, 190, 153, .5);
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-page__header {
+  position: relative;
+  max-width: none;
+  padding: clamp(2.7rem, 5vw, 4.8rem);
+  overflow: hidden;
+  border: 1px solid rgba(212, 190, 153, .27);
+  border-radius: 28px;
+  background: linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.028)), rgba(16,40,45,.46);
+  box-shadow: 0 26px 70px rgba(5, 13, 24, .22);
+  backdrop-filter: blur(14px);
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-page__header > * {
+  position: relative;
+  z-index: 1;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-page__header .msc-section-kicker {
+  margin: 0 0 1rem;
+  color: rgba(212, 190, 153, .78) !important;
+  font-size: 1rem;
+  font-weight: 850;
+  letter-spacing: .16em;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-page__header h1 {
+  max-width: 13ch;
+  margin: 0;
+  color: var(--msc-glossary-sand) !important;
+  font-size: clamp(4.6rem, 7vw, 7.7rem);
+  line-height: .92;
+  letter-spacing: -.055em;
+  text-wrap: balance;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-page__deck {
+  max-width: 76rem;
+  margin: 1.8rem 0 0;
+  color: rgba(251, 248, 239, .8) !important;
+  font-size: clamp(1.5rem, 1.75vw, 1.82rem);
+  line-height: 1.62;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-page-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .55rem;
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-page-meta li {
+  padding: .48rem .7rem;
+  border: 1px solid rgba(212,190,153,.22);
+  border-radius: 999px;
+  background: rgba(255,255,255,.035);
+  color: rgba(251,248,239,.64) !important;
+  font-size: .92rem;
+  font-weight: 780;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-article {
+  width: min(82rem, calc(100% - 2rem));
+  margin: clamp(3.5rem, 5vw, 5rem) auto 0;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-article__section {
+  padding: 0 0 clamp(2.8rem, 4vw, 4rem);
+  border-bottom: 1px solid rgba(212,190,153,.14);
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-article__section::before {
+  content: "REFERENCE NOTES";
+  display: block;
+  margin: 0 0 1rem;
+  color: rgba(212,190,153,.58);
+  font-size: .92rem;
+  font-weight: 850;
+  letter-spacing: .14em;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-article__section p {
+  margin: 0 0 1.35rem;
+  color: rgba(251,248,239,.76) !important;
+  font-size: clamp(1.42rem, 1.5vw, 1.62rem);
+  line-height: 1.72;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-article__section p:last-child { margin-bottom: 0; }
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-article__section code { color: var(--msc-glossary-sand); }
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-glossary-letters {
+  margin: clamp(3.2rem, 5vw, 4.8rem) 0 0;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-glossary-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 3rem;
+  min-height: 3rem;
+  padding: .55rem .7rem;
+  border: 1px solid rgba(212,190,153,.18);
+  border-radius: 10px;
+  background: rgba(255,255,255,.035);
+  font-weight: 800;
+  letter-spacing: .06em;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-glossary-letter small {
+  margin-left: .3rem;
+  color: rgba(212,190,153,.58);
+  font-size: .72em;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-glossary-groups {
+  margin-top: clamp(3rem, 5vw, 5rem);
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-glossary-group + .msc-learn-glossary-group {
+  margin-top: clamp(4rem, 6vw, 6rem);
+  padding-top: clamp(3rem, 4vw, 4rem);
+  border-top: 1px solid rgba(212,190,153,.15);
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-glossary-group > h2 {
+  margin: 0 0 1.8rem;
+  color: var(--msc-glossary-sand) !important;
+  font-size: clamp(3rem, 4vw, 4.8rem);
+  line-height: 1;
+  letter-spacing: -.045em;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .85rem;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-glossary-term {
+  min-height: 11.5rem;
+  padding: 1.55rem;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,.075), rgba(255,255,255,.028));
+  box-shadow: none;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-glossary-term h3 {
+  margin: 0 0 .65rem;
+  color: var(--msc-glossary-sand) !important;
+  font-size: 1.35rem;
+  line-height: 1.25;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-glossary-term > p:not(.msc-learn-preview-note) {
+  margin: 0;
+  color: rgba(251,248,239,.7) !important;
+  font-size: 1.18rem;
+  line-height: 1.6;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-key-terms,
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-sources {
+  margin-top: clamp(5rem, 7vw, 7rem);
+  padding-top: 2.5rem;
+  border-top: 1px solid rgba(212,190,153,.24);
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-key-terms > h2,
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-sources > h2 {
+  margin: 0 0 2rem;
+  color: var(--msc-glossary-sand) !important;
+  font-size: clamp(3rem, 4vw, 4.5rem);
+  line-height: 1;
+  letter-spacing: -.045em;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-key-terms dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: .8rem;
+  margin: 0;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-term {
+  padding: 1.45rem;
+  border: 1px solid rgba(212,190,153,.16);
+  border-radius: 14px;
+  background: rgba(255,255,255,.025);
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-term dt {
+  margin-bottom: .55rem;
+  color: var(--msc-glossary-sand) !important;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-term dd {
+  margin: 0;
+  color: rgba(251,248,239,.68) !important;
+  font-size: 1.2rem;
+  line-height: 1.55;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-source {
+  display: grid;
+  grid-template-columns: minmax(16rem,.8fr) minmax(0,1.5fr);
+  gap: 1.2rem 2rem;
+  padding: 1.45rem 0;
+  border-bottom: 1px solid rgba(212,190,153,.12);
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-source h3 {
+  margin: 0;
+  color: rgba(251,248,239,.84) !important;
+  font-size: 1.35rem;
+  line-height: 1.35;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-source ul,
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-source p {
+  grid-column: 2;
+  margin: 0;
+  color: rgba(251,248,239,.62) !important;
+  font-size: 1.15rem;
+  line-height: 1.55;
+}
+
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-source ul { padding-left: 1.4rem; }
+.msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-source code { color: rgba(212,190,153,.7); overflow-wrap: anywhere; }
+
+@media screen and (max-width: 989px) {
+  .msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-card-grid,
+  .msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-key-terms dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] { padding-top: 2.6rem; }
+  .msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-page__header { padding: 2.25rem 1.8rem; border-radius: 20px; }
+  .msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-article { width: 100%; }
+  .msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-card-grid,
+  .msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-key-terms dl { grid-template-columns: 1fr; }
+  .msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-source { grid-template-columns: 1fr; }
+  .msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-source ul,
+  .msc-learn-page[data-msc-registry-id="MSC-GLOSSARY-001"] .msc-learn-source p { grid-column: 1; }
+}
