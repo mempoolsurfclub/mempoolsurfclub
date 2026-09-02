@@ -9,7 +9,6 @@ on:
       - 'config/explore/**'
       - 'scripts/explore-runtime/**'
       - 'assets/msc-explore-runtime.json'
-      - 'package.json'
       - '.github/workflows/explore-validation.yml'
   pull_request:
     paths:
@@ -17,7 +16,6 @@ on:
       - 'config/explore/**'
       - 'scripts/explore-runtime/**'
       - 'assets/msc-explore-runtime.json'
-      - 'package.json'
       - '.github/workflows/explore-validation.yml'
 
 permissions:
@@ -39,10 +37,10 @@ jobs:
         run: node --check scripts/explore-runtime/build.mjs
 
       - name: Build Explore runtime
-        run: npm run build:explore-runtime
+        run: node scripts/explore-runtime/build.mjs
 
       - name: Validate generated contract
-        run: npm run validate:explore-runtime
+        run: node scripts/explore-runtime/build.mjs --check
 
       - name: Upload generated contract
         if: always()

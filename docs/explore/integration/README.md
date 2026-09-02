@@ -11,13 +11,13 @@ Stage 1 establishes a deterministic production data contract without wiring the 
 
 ## Generated outputs
 
-`npm run build:explore-runtime` materializes:
+`node scripts/explore-runtime/build.mjs` materializes:
 
 - `assets/msc-explore-runtime.json`
 - `docs/explore/integration/MSC_Explore_Route_Manifest.json`
 - `docs/explore/integration/MSC_Explore_Validation_Report.json`
 
-`npm run validate:explore-runtime` regenerates in memory and fails when committed outputs are missing or stale.
+`node scripts/explore-runtime/build.mjs --check` regenerates in memory and fails when committed outputs are missing or stale.
 
 ## Publication gate
 
