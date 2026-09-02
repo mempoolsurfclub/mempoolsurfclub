@@ -21,7 +21,7 @@ on:
       - '.github/workflows/explore-validation.yml'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   validate:
@@ -55,7 +55,25 @@ jobs:
             docs/explore/integration/MSC_Explore_Route_Manifest.json
             docs/explore/integration/MSC_Explore_Validation_Report.json
 
+      - name: Materialize generated outputs on foundation branch
+        if: github.event_name == 'push' && github.ref == 'refs/heads/explore/atlas-ecosystem-foundation'
+        run: |
+          if git status --porcelain --untracked-files=all -- \
+            assets/msc-explore-runtime.json \
+            docs/explore/integration/MSC_Explore_Route_Manifest.json \
+            docs/explore/integration/MSC_Explore_Validation_Report.json | grep -q .; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add \
+              assets/msc-explore-runtime.json \
+              docs/explore/integration/MSC_Explore_Route_Manifest.json \
+              docs/explore/integration/MSC_Explore_Validation_Report.json
+            git commit -m 'Materialize Explore runtime'
+            git push origin HEAD:explore/atlas-ecosystem-foundation
+          fi
+
       - name: Require committed deterministic outputs
+        if: github.event_name != 'push' || github.ref != 'refs/heads/explore/atlas-ecosystem-foundation'
         run: |
           git status --porcelain --untracked-files=all -- \
             assets/msc-explore-runtime.json \
