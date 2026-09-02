@@ -1,0 +1,338 @@
+{
+  "schema_version": 1,
+  "source_file": "docs/learn/content/guides/MSC-GUIDE-055-bitcoin-taproot.md",
+  "source_sha256": "b0bea46cf477a248df3bfaa1a6b3ba8ce8821b664835bff2c9acc1ade1680cfe",
+  "registry_id": "MSC-GUIDE-055",
+  "status": "COPY_LOCKED",
+  "h1": "How Taproot Changed Bitcoin",
+  "introductory_deck": "Taproot added a SegWit version 1 output type with two spending paths: a Schnorr-signature key path and a script path that reveals only the selected committed script branch. BIPs 340, 341, and 342 define separate parts of the system. Taproot improves flexibility, selective disclosure, and some transaction efficiency, but its benefits depend on the construction and software support used.",
+  "article_sections": [
+    {
+      "heading": null,
+      "body_markdown": "Taproot is a deployed Bitcoin consensus upgrade built on Segregated Witness. It did not create a separate chain or replace Bitcoin Script. It introduced pay-to-Taproot outputs, Schnorr signature validation, a new script version called tapscript, and commitment structures that let one output represent a cooperative key path plus one or more hidden script alternatives.\n\nThree BIPs divide the work. BIP 340 specifies Schnorr signatures for secp256k1. BIP 341 defines SegWit version 1 Taproot outputs, output-key commitments, key-path spending, script-path spending, and the Taproot signature message. BIP 342 defines the first tapscript leaf version and its opcode and resource rules.\n\nThis guide was reviewed July 25, 2026 against the live deployed BIPs and Bitcoin Core 31.1, tag `v31.1`, commit `9be056a8a72b624dae9623b2f7bded92c2a21c91`, including tagged validation, policy, unit, functional, and wallet-vector evidence. Consensus deployment is established; wallet, exchange, service, threshold-signing, and application support remain implementation-specific and must be checked separately.",
+      "body_html": "<p>Taproot is a deployed Bitcoin consensus upgrade built on Segregated Witness. It did not create a separate chain or replace Bitcoin Script. It introduced pay-to-Taproot outputs, Schnorr signature validation, a new script version called tapscript, and commitment structures that let one output represent a cooperative key path plus one or more hidden script alternatives.</p>\n<p>Three BIPs divide the work. BIP 340 specifies Schnorr signatures for secp256k1. BIP 341 defines SegWit version 1 Taproot outputs, output-key commitments, key-path spending, script-path spending, and the Taproot signature message. BIP 342 defines the first tapscript leaf version and its opcode and resource rules.</p>\n<p>This guide was reviewed July 25, 2026 against the live deployed BIPs and Bitcoin Core 31.1, tag <code>v31.1</code>, commit <code>9be056a8a72b624dae9623b2f7bded92c2a21c91</code>, including tagged validation, policy, unit, functional, and wallet-vector evidence. Consensus deployment is established; wallet, exchange, service, threshold-signing, and application support remain implementation-specific and must be checked separately.</p>"
+    },
+    {
+      "heading": "BIP 340: the signature scheme",
+      "body_markdown": "BIP 340 defines 64-byte Schnorr signatures using x-only public keys on secp256k1. The specification includes tagged hashing, deterministic nonce derivation with auxiliary randomness, verification rules, and test vectors.\n\nSchnorr signatures have algebraic properties useful for key aggregation and threshold protocols, but BIP 340 by itself does not define a multisignature coordination protocol. MuSig2, FROST, hardware-wallet workflows, nonce management, and distributed key generation require separate specifications and implementations.\n\nTaproot key-path and tapscript signature checks use BIP 340 signatures under BIP 341 and BIP 342 message rules. Saying “Taproot uses Schnorr” is accurate; saying “Schnorr automatically makes every multisig one signature” is not.",
+      "body_html": "<p>BIP 340 defines 64-byte Schnorr signatures using x-only public keys on secp256k1. The specification includes tagged hashing, deterministic nonce derivation with auxiliary randomness, verification rules, and test vectors.</p>\n<p>Schnorr signatures have algebraic properties useful for key aggregation and threshold protocols, but BIP 340 by itself does not define a multisignature coordination protocol. MuSig2, FROST, hardware-wallet workflows, nonce management, and distributed key generation require separate specifications and implementations.</p>\n<p>Taproot key-path and tapscript signature checks use BIP 340 signatures under BIP 341 and BIP 342 message rules. Saying “Taproot uses Schnorr” is accurate; saying “Schnorr automatically makes every multisig one signature” is not.</p>"
+    },
+    {
+      "heading": "BIP 341: pay-to-Taproot outputs",
+      "body_markdown": "A pay-to-Taproot, or P2TR, output is a native SegWit version 1 output with a 32-byte witness program. The program represents an x-only output key. P2SH-wrapped version 1 programs and version 1 programs of other lengths are not P2TR under BIP 341.\n\nLet the internal x-only key represent point `P`. An optional script tree produces Merkle root `m`; when there is no script tree, the commitment uses an empty byte string instead. The tagged hash `TapTweak(bytes(P) || m)` produces scalar `t`, and the output point is `Q = P + tG`. The construction fails if the tweak is outside the secp256k1 scalar range or the resulting point is invalid. The output commits to `x(Q)`.\n\nThis binds the output to the internal key and the exact script-tree root. A verifier learns neither the tree nor whether one exists when the output is created. A later script-path spend reveals only one leaf and the authentication path needed to reconstruct the root.\n\nThe internal key is a construction input, not automatically the key a wallet shows to a user. Some protocols use an internal key with known signing control; others use a NUMS-style point designed so no practical key-path spend exists. Those choices have different setup and backup assumptions.",
+      "body_html": "<p>A pay-to-Taproot, or P2TR, output is a native SegWit version 1 output with a 32-byte witness program. The program represents an x-only output key. P2SH-wrapped version 1 programs and version 1 programs of other lengths are not P2TR under BIP 341.</p>\n<p>Let the internal x-only key represent point <code>P</code>. An optional script tree produces Merkle root <code>m</code>; when there is no script tree, the commitment uses an empty byte string instead. The tagged hash <code>TapTweak(bytes(P) || m)</code> produces scalar <code>t</code>, and the output point is <code>Q = P + tG</code>. The construction fails if the tweak is outside the secp256k1 scalar range or the resulting point is invalid. The output commits to <code>x(Q)</code>.</p>\n<p>This binds the output to the internal key and the exact script-tree root. A verifier learns neither the tree nor whether one exists when the output is created. A later script-path spend reveals only one leaf and the authentication path needed to reconstruct the root.</p>\n<p>The internal key is a construction input, not automatically the key a wallet shows to a user. Some protocols use an internal key with known signing control; others use a NUMS-style point designed so no practical key-path spend exists. Those choices have different setup and backup assumptions.</p>"
+    },
+    {
+      "heading": "Key-path spending",
+      "body_markdown": "A key-path spend supplies a Schnorr signature valid for the tweaked output key. No script, control block, or Merkle path is revealed.\n\nThis path is useful for a simple single-key output and for cooperative multiparty constructions that can produce one valid signature for an aggregate or threshold key. On chain, those cases can have the same key-path structure.\n\nThat similarity can improve privacy, but it is not anonymity. Amounts, timing, input ownership heuristics, address reuse, wallet fingerprints, change behavior, and off-chain information can still reveal relationships. A key-path spend reveals the output type and key-path witness form, even though it does not reveal whether one signer or a coordinated group produced the signature.\n\nKey-path spending is not available merely because multiple parties possess separate keys. They need a correct coordination protocol, nonce handling, signing implementation, backup plan, and compatible wallet or device support.",
+      "body_html": "<p>A key-path spend supplies a Schnorr signature valid for the tweaked output key. No script, control block, or Merkle path is revealed.</p>\n<p>This path is useful for a simple single-key output and for cooperative multiparty constructions that can produce one valid signature for an aggregate or threshold key. On chain, those cases can have the same key-path structure.</p>\n<p>That similarity can improve privacy, but it is not anonymity. Amounts, timing, input ownership heuristics, address reuse, wallet fingerprints, change behavior, and off-chain information can still reveal relationships. A key-path spend reveals the output type and key-path witness form, even though it does not reveal whether one signer or a coordinated group produced the signature.</p>\n<p>Key-path spending is not available merely because multiple parties possess separate keys. They need a correct coordination protocol, nonce handling, signing implementation, backup plan, and compatible wallet or device support.</p>"
+    },
+    {
+      "heading": "Script trees and leaves",
+      "body_markdown": "Each script leaf commits to a leaf version and exact script bytes. BIP 341 defines the tapleaf hash as `TapLeaf(leaf_version || compact_size(script_size) || script)`.\n\nChild hashes are combined with the `TapBranch` tagged hash after sorting each pair lexicographically. That ordering means a control block does not need separate left-or-right direction bits. Repeating this operation produces the root committed by the TapTweak.\n\nThe tree does not need to be balanced. Frequently expected paths can be placed at shallower depth to reduce the Merkle proof revealed when spent. That optimization can also create identifiable shapes, so efficiency and privacy can point in different directions.\n\nDifferent tree constructions can commit to the same set of spending conditions while producing different roots, output keys, and disclosure sizes. Wallets and protocols must agree on the exact tree, leaf versions, script bytes, internal key, and branch construction before funds are received.",
+      "body_html": "<p>Each script leaf commits to a leaf version and exact script bytes. BIP 341 defines the tapleaf hash as <code>TapLeaf(leaf_version || compact_size(script_size) || script)</code>.</p>\n<p>Child hashes are combined with the <code>TapBranch</code> tagged hash after sorting each pair lexicographically. That ordering means a control block does not need separate left-or-right direction bits. Repeating this operation produces the root committed by the TapTweak.</p>\n<p>The tree does not need to be balanced. Frequently expected paths can be placed at shallower depth to reduce the Merkle proof revealed when spent. That optimization can also create identifiable shapes, so efficiency and privacy can point in different directions.</p>\n<p>Different tree constructions can commit to the same set of spending conditions while producing different roots, output keys, and disclosure sizes. Wallets and protocols must agree on the exact tree, leaf versions, script bytes, internal key, and branch construction before funds are received.</p>"
+    },
+    {
+      "heading": "Script-path spending",
+      "body_markdown": "A script-path spend reveals:\n\n- stack arguments needed by the chosen script;\n- the selected script leaf;\n- a control block containing the internal key, leaf version and parity information, and the Merkle path.\n\nThe validator computes the tapleaf hash, combines it with each 32-byte branch node in lexicographic order, computes the TapTweak, reconstructs the output point, and checks both its x-coordinate and parity against the output and control block. It then applies the rules associated with the revealed leaf version.\n\nOnly the selected leaf and its authentication path are revealed. Other leaves remain hidden unless disclosed elsewhere. The path depth, script content, control block, witness shape, and surrounding transaction can still reveal information about the wallet or protocol.\n\nA script-path spend is normally larger than a key-path spend because it publishes the script and proof. Whether it is cheaper than an equivalent P2WSH construction depends on script size, tree depth, witness data, signature structure, and fee conditions.",
+      "body_html": "<p>A script-path spend reveals:</p>\n<ul><li>stack arguments needed by the chosen script;</li><li>the selected script leaf;</li><li>a control block containing the internal key, leaf version and parity information, and the Merkle path.</li></ul>\n<p>The validator computes the tapleaf hash, combines it with each 32-byte branch node in lexicographic order, computes the TapTweak, reconstructs the output point, and checks both its x-coordinate and parity against the output and control block. It then applies the rules associated with the revealed leaf version.</p>\n<p>Only the selected leaf and its authentication path are revealed. Other leaves remain hidden unless disclosed elsewhere. The path depth, script content, control block, witness shape, and surrounding transaction can still reveal information about the wallet or protocol.</p>\n<p>A script-path spend is normally larger than a key-path spend because it publishes the script and proof. Whether it is cheaper than an equivalent P2WSH construction depends on script size, tree depth, witness data, signature structure, and fee conditions.</p>"
+    },
+    {
+      "heading": "Control blocks and revealed paths",
+      "body_markdown": "The control block is commitment-proof data, not an authorization signature. Its length must be `33 + 32m` bytes, where `m` is the number of Merkle nodes and ranges from 0 through 128.\n\nThe low bit of its first byte records the output point’s y-coordinate parity; masking that bit yields the leaf version. The next 32 bytes encode the x-only internal key. Each remaining 32-byte element is one node in the authentication path.\n\nA malformed size, invalid internal key, out-of-range tweak, incorrect output-key x-coordinate or parity, or mismatched branch path makes the spend fail. A valid control block proves only that the revealed leaf was committed by the output. It does not prove the script is safe, hidden leaves are harmless, or an unexpected party cannot use the internal key.",
+      "body_html": "<p>The control block is commitment-proof data, not an authorization signature. Its length must be <code>33 + 32m</code> bytes, where <code>m</code> is the number of Merkle nodes and ranges from 0 through 128.</p>\n<p>The low bit of its first byte records the output point’s y-coordinate parity; masking that bit yields the leaf version. The next 32 bytes encode the x-only internal key. Each remaining 32-byte element is one node in the authentication path.</p>\n<p>A malformed size, invalid internal key, out-of-range tweak, incorrect output-key x-coordinate or parity, or mismatched branch path makes the spend fail. A valid control block proves only that the revealed leaf was committed by the output. It does not prove the script is safe, hidden leaves are harmless, or an unexpected party cannot use the internal key.</p>"
+    },
+    {
+      "heading": "BIP 342: tapscript",
+      "body_markdown": "BIP 342 defines the initial script semantics for Taproot leaves using leaf version `0xc0`. Tapscript retains much of Bitcoin Script while changing signature operations and upgrade behavior.\n\nIt adds `OP_CHECKSIGADD`, which supports threshold-style scripts by accumulating successful checks. It makes `OP_CHECKMULTISIG` and `OP_CHECKMULTISIGVERIFY` fail when executed, while those bytes remain ignored in unexecuted branches. It consensus-enforces MINIMALIF.\n\nTapscript removes the older 10,000-byte script and 201-non-push-opcode limits. If no `OP_SUCCESSx` is present, the 520-byte stack-element limit and 1,000 combined stack-and-altstack item limit remain, including the initial stack. Script size is bounded indirectly by transaction and block weight.\n\nIts signature budget equals 50 plus the serialized byte size of the input’s full witness, including the compact-size prefix. Each executed signature opcode with a non-empty signature consumes 50 units; if the budget drops below zero, validation fails.",
+      "body_html": "<p>BIP 342 defines the initial script semantics for Taproot leaves using leaf version <code>0xc0</code>. Tapscript retains much of Bitcoin Script while changing signature operations and upgrade behavior.</p>\n<p>It adds <code>OP_CHECKSIGADD</code>, which supports threshold-style scripts by accumulating successful checks. It makes <code>OP_CHECKMULTISIG</code> and <code>OP_CHECKMULTISIGVERIFY</code> fail when executed, while those bytes remain ignored in unexecuted branches. It consensus-enforces MINIMALIF.</p>\n<p>Tapscript removes the older 10,000-byte script and 201-non-push-opcode limits. If no <code>OP_SUCCESSx</code> is present, the 520-byte stack-element limit and 1,000 combined stack-and-altstack item limit remain, including the initial stack. Script size is bounded indirectly by transaction and block weight.</p>\n<p>Its signature budget equals 50 plus the serialized byte size of the input’s full witness, including the compact-size prefix. Each executed signature opcode with a non-empty signature consumes 50 units; if the budget drops below zero, validation fails.</p>"
+    },
+    {
+      "heading": "Upgrade paths are separate",
+      "body_markdown": "Tapscript defines designated `OP_SUCCESSx` byte values. The script is scanned for them before ordinary parsing, initial-stack checks, pushed-element limits, and execution. Encountering one makes the current script succeed at consensus, even if later bytes would not parse. Standard policy discourages spending an undefined `OP_SUCCESSx` path.\n\nA future tapleaf version is a different mechanism. After the control block and output commitment are verified, a currently unknown leaf version succeeds without executing its script; Bitcoin Core policy can discourage that upgrade path. Unknown tapscript public-key types form another boundary. These mechanisms are not interchangeable, and none means arbitrary future behavior is already deployed.",
+      "body_html": "<p>Tapscript defines designated <code>OP_SUCCESSx</code> byte values. The script is scanned for them before ordinary parsing, initial-stack checks, pushed-element limits, and execution. Encountering one makes the current script succeed at consensus, even if later bytes would not parse. Standard policy discourages spending an undefined <code>OP_SUCCESSx</code> path.</p>\n<p>A future tapleaf version is a different mechanism. After the control block and output commitment are verified, a currently unknown leaf version succeeds without executing its script; Bitcoin Core policy can discourage that upgrade path. Unknown tapscript public-key types form another boundary. These mechanisms are not interchangeable, and none means arbitrary future behavior is already deployed.</p>"
+    },
+    {
+      "heading": "Taproot signature hashes",
+      "body_markdown": "BIP 341 defines a new signature message. Depending on the sighash mode, it commits to the transaction version and locktime; input outpoints, amounts, spent `scriptPubKey` values, and sequences; outputs; the current input; and annex presence and content.\n\nCommitting to spent amounts and scripts helps offline signers understand what they are authorizing when complete previous-output data is supplied. It does not make an untrusted signing device safe by itself.\n\nTaproot introduces `SIGHASH_DEFAULT`. A 64-byte signature omits the sighash byte and implies this mode, whose output-selection behavior matches `SIGHASH_ALL`. A 65-byte Taproot signature must append a nonzero defined sighash byte; explicitly appending `0x00` is invalid.\n\nFor tapscript signatures, BIP 342 extends the BIP 341 message with the tapleaf hash, key version `0x00`, and the opcode position of the last executed `OP_CODESEPARATOR`, or `0xffffffff` if none executed. The tapleaf hash commits to the entire script; the separator position is an additional execution-path commitment.",
+      "body_html": "<p>BIP 341 defines a new signature message. Depending on the sighash mode, it commits to the transaction version and locktime; input outpoints, amounts, spent <code>scriptPubKey</code> values, and sequences; outputs; the current input; and annex presence and content.</p>\n<p>Committing to spent amounts and scripts helps offline signers understand what they are authorizing when complete previous-output data is supplied. It does not make an untrusted signing device safe by itself.</p>\n<p>Taproot introduces <code>SIGHASH_DEFAULT</code>. A 64-byte signature omits the sighash byte and implies this mode, whose output-selection behavior matches <code>SIGHASH_ALL</code>. A 65-byte Taproot signature must append a nonzero defined sighash byte; explicitly appending <code>0x00</code> is invalid.</p>\n<p>For tapscript signatures, BIP 342 extends the BIP 341 message with the tapleaf hash, key version <code>0x00</code>, and the opcode position of the last executed <code>OP_CODESEPARATOR</code>, or <code>0xffffffff</code> if none executed. The tapleaf hash commits to the entire script; the separator position is an additional execution-path commitment.</p>"
+    },
+    {
+      "heading": "The annex boundary",
+      "body_markdown": "If a Taproot witness has at least two elements and the last element begins with byte `0x50`, BIP 341 recognizes that element as the annex and removes it before key-path or script-path interpretation.\n\nThe annex, or its absence, is committed by the signature message and contributes to transaction weight, but current Taproot consensus rules do not otherwise assign it application meaning. As of Bitcoin Core 31.1, annex-bearing Taproot spends are nonstandard under default policy.\n\nThe annex is an upgrade boundary, not a general metadata recommendation. Applications should not assume arbitrary annex data will be relayed, understood, or useful without a separate deployed specification and implementation evidence.",
+      "body_html": "<p>If a Taproot witness has at least two elements and the last element begins with byte <code>0x50</code>, BIP 341 recognizes that element as the annex and removes it before key-path or script-path interpretation.</p>\n<p>The annex, or its absence, is committed by the signature message and contributes to transaction weight, but current Taproot consensus rules do not otherwise assign it application meaning. As of Bitcoin Core 31.1, annex-bearing Taproot spends are nonstandard under default policy.</p>\n<p>The annex is an upgrade boundary, not a general metadata recommendation. Applications should not assume arbitrary annex data will be relayed, understood, or useful without a separate deployed specification and implementation evidence.</p>"
+    },
+    {
+      "heading": "What Taproot improved",
+      "body_markdown": "Taproot can reduce on-chain disclosure by hiding unused script branches and allowing cooperative outcomes to use a key path. It provides a uniform P2TR output form for key and script commitments. It replaces ECDSA with BIP 340 Schnorr signatures in Taproot validation. It introduces cleaner signature hashing, tapscript, and explicit upgrade mechanisms.\n\nFor some multisignature or contract constructions, a separate key-aggregation or threshold-signing protocol can reduce the number of public keys and signatures visible on chain. For script policies with many alternatives, revealing one Merkle path can be smaller than revealing a full script containing every branch.\n\nThese are construction-dependent benefits. A large or deep script path can be expensive. A simple P2WPKH spend may be comparable or smaller in some dimensions. A service can use P2TR while retaining centralized custody. Taproot does not guarantee better privacy, lower fees, stronger backups, or safer wallet design.",
+      "body_html": "<p>Taproot can reduce on-chain disclosure by hiding unused script branches and allowing cooperative outcomes to use a key path. It provides a uniform P2TR output form for key and script commitments. It replaces ECDSA with BIP 340 Schnorr signatures in Taproot validation. It introduces cleaner signature hashing, tapscript, and explicit upgrade mechanisms.</p>\n<p>For some multisignature or contract constructions, a separate key-aggregation or threshold-signing protocol can reduce the number of public keys and signatures visible on chain. For script policies with many alternatives, revealing one Merkle path can be smaller than revealing a full script containing every branch.</p>\n<p>These are construction-dependent benefits. A large or deep script path can be expensive. A simple P2WPKH spend may be comparable or smaller in some dimensions. A service can use P2TR while retaining centralized custody. Taproot does not guarantee better privacy, lower fees, stronger backups, or safer wallet design.</p>"
+    },
+    {
+      "heading": "What Taproot did not solve",
+      "body_markdown": "Taproot did not remove blockchain transparency. It did not hide amounts, prevent address reuse, stop input clustering, or conceal every script spend. It did not add a general covenant mechanism, arbitrary computation, automatic privacy, or unlimited scaling.\n\nIt did not standardize every threshold-signing system. BIP 327 MuSig2 is separate. Other threshold protocols have separate assumptions, review histories, and implementation maturity.\n\nIt did not make all existing wallets compatible. Receiving requires correct Bech32m address support and output construction. Spending requires key management, signing, tree storage, PSBT or proprietary coordination, fee estimation, hardware support, and recovery design.\n\nIt also did not make experimental protocols built on Taproot part of Bitcoin consensus. A protocol can use Taproot outputs while adding separate servers, federations, bridges, or off-chain trust assumptions.",
+      "body_html": "<p>Taproot did not remove blockchain transparency. It did not hide amounts, prevent address reuse, stop input clustering, or conceal every script spend. It did not add a general covenant mechanism, arbitrary computation, automatic privacy, or unlimited scaling.</p>\n<p>It did not standardize every threshold-signing system. BIP 327 MuSig2 is separate. Other threshold protocols have separate assumptions, review histories, and implementation maturity.</p>\n<p>It did not make all existing wallets compatible. Receiving requires correct Bech32m address support and output construction. Spending requires key management, signing, tree storage, PSBT or proprietary coordination, fee estimation, hardware support, and recovery design.</p>\n<p>It also did not make experimental protocols built on Taproot part of Bitcoin consensus. A protocol can use Taproot outputs while adding separate servers, federations, bridges, or off-chain trust assumptions.</p>"
+    },
+    {
+      "heading": "Activation and continuing support",
+      "body_markdown": "BIPs 340, 341, and 342 were deployed together through the version-bits process specified by BIP 341. Bitcoin Core’s release-specific `doc/bips.md` records validation implementation in 0.21.0, mainnet activation support in 0.21.1, and the rules as always active beginning with version 24.0.\n\nActivation means upgraded validation rules apply on the network. It does not measure the percentage of outputs using P2TR or the quality of wallet, exchange, signer, or service support.\n\nBitcoin Core 31.1 validates Taproot and includes P2TR descriptors and PSBT support. Its `doc/bips.md` records MuSig2 key aggregation through `musig()` descriptors in version 30.0 and signing support in version 31.0. Those are Bitcoin Core implementation milestones, not proof that other wallets or hardware devices interoperate.",
+      "body_html": "<p>BIPs 340, 341, and 342 were deployed together through the version-bits process specified by BIP 341. Bitcoin Core’s release-specific <code>doc/bips.md</code> records validation implementation in 0.21.0, mainnet activation support in 0.21.1, and the rules as always active beginning with version 24.0.</p>\n<p>Activation means upgraded validation rules apply on the network. It does not measure the percentage of outputs using P2TR or the quality of wallet, exchange, signer, or service support.</p>\n<p>Bitcoin Core 31.1 validates Taproot and includes P2TR descriptors and PSBT support. Its <code>doc/bips.md</code> records MuSig2 key aggregation through <code>musig()</code> descriptors in version 30.0 and signing support in version 31.0. Those are Bitcoin Core implementation milestones, not proof that other wallets or hardware devices interoperate.</p>"
+    },
+    {
+      "heading": "Evaluating a Taproot claim",
+      "body_markdown": "Ask which layer is being discussed:\n\n- **Consensus:** Are BIP 340/341/342 validation rules active?\n- **Output construction:** Can the wallet create the intended internal key and tree?\n- **Address encoding:** Does it use Bech32m correctly for witness version 1?\n- **Signing:** Does it support the required key-path, script-path, sighash, or threshold protocol?\n- **Coordination:** Can all devices exchange the required scripts, control blocks, nonces, and PSBT fields?\n- **Recovery:** Can the wallet reconstruct hidden branches and backups?\n- **Policy and relay:** Will the transaction be accepted and propagated under current policy?\n- **Application adoption:** Do counterparties actually recognize and use the output type?\n\nTaproot is deployed consensus behavior. Everything built with it still needs separate evidence.",
+      "body_html": "<p>Ask which layer is being discussed:</p>\n<ul><li><strong>Consensus:</strong> Are BIP 340/341/342 validation rules active?</li><li><strong>Output construction:</strong> Can the wallet create the intended internal key and tree?</li><li><strong>Address encoding:</strong> Does it use Bech32m correctly for witness version 1?</li><li><strong>Signing:</strong> Does it support the required key-path, script-path, sighash, or threshold protocol?</li><li><strong>Coordination:</strong> Can all devices exchange the required scripts, control blocks, nonces, and PSBT fields?</li><li><strong>Recovery:</strong> Can the wallet reconstruct hidden branches and backups?</li><li><strong>Policy and relay:</strong> Will the transaction be accepted and propagated under current policy?</li><li><strong>Application adoption:</strong> Do counterparties actually recognize and use the output type?</li></ul>\n<p>Taproot is deployed consensus behavior. Everything built with it still needs separate evidence.</p>"
+    }
+  ],
+  "key_terms": [
+    {
+      "term": "Taproot",
+      "definition": "Deployed SegWit version 1 spending rules combining a key path with optional committed script paths."
+    },
+    {
+      "term": "BIP 340",
+      "definition": "Schnorr signature specification used by Taproot."
+    },
+    {
+      "term": "BIP 341",
+      "definition": "P2TR output, commitment, spending, and signature-message specification."
+    },
+    {
+      "term": "BIP 342",
+      "definition": "Tapscript validation specification."
+    },
+    {
+      "term": "P2TR",
+      "definition": "Pay-to-Taproot output using a native version 1, 32-byte witness program."
+    },
+    {
+      "term": "Internal key",
+      "definition": "X-only public key used before applying the Taproot tweak."
+    },
+    {
+      "term": "Output key",
+      "definition": "Tweaked key committed in the P2TR output."
+    },
+    {
+      "term": "TapTweak",
+      "definition": "Tagged hash used to bind the internal key to an optional script-tree root."
+    },
+    {
+      "term": "Key-path spend",
+      "definition": "Spend authorized by a Schnorr signature for the output key."
+    },
+    {
+      "term": "Script-path spend",
+      "definition": "Spend revealing a committed script leaf and its proof."
+    },
+    {
+      "term": "Tapleaf",
+      "definition": "Tagged hash commitment to a leaf version and exact script bytes."
+    },
+    {
+      "term": "TapBranch",
+      "definition": "Tagged hash combining two lexicographically ordered Taproot tree nodes."
+    },
+    {
+      "term": "Control block",
+      "definition": "Proof data connecting a revealed tapleaf to the output key."
+    },
+    {
+      "term": "Tapscript",
+      "definition": "Script semantics defined by BIP 342 for leaf version `0xc0`."
+    },
+    {
+      "term": "OP_CHECKSIGADD",
+      "definition": "Tapscript opcode supporting additive signature checks."
+    },
+    {
+      "term": "Annex",
+      "definition": "Optional Taproot witness element reserved for future meaning."
+    },
+    {
+      "term": "Bech32m",
+      "definition": "Address checksum format used for native witness version 1+ addresses."
+    }
+  ],
+  "sources": [
+    {
+      "title": "BIP 340 — Schnorr Signatures for secp256k1",
+      "author_or_publisher": "Pieter Wuille, Jonas Nick, Tim Ruffing",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0340.mediawiki",
+      "supports": "X-only public keys, 64-byte signatures, tagged hashes, nonce derivation, verification, and test vectors."
+    },
+    {
+      "title": "BIP 341 — Taproot: SegWit Version 1 Spending Rules",
+      "author_or_publisher": "Pieter Wuille, Jonas Nick, Anthony Towns",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki",
+      "supports": "P2TR recognition, internal and output keys, TapTweak, tapleaf and TapBranch hashing, control blocks, parity, key path, script path, sighash, annex, privacy limits, and deployment."
+    },
+    {
+      "title": "BIP 342 — Validation of Taproot Scripts",
+      "author_or_publisher": "Pieter Wuille, Jonas Nick, Anthony Towns",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0342.mediawiki",
+      "supports": "Tapscript, OP_CHECKSIGADD, executed-only multisig failures, MINIMALIF, OP_SUCCESSx ordering, signature-message extension, contextual limits, signature budget, and future leaf behavior."
+    },
+    {
+      "title": "BIP 350 — Bech32m Format for Version 1+ Witness Addresses",
+      "author_or_publisher": "Pieter Wuille",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0350.mediawiki",
+      "supports": "Address encoding for P2TR and other witness version 1+ programs."
+    },
+    {
+      "title": "BIP 327 — MuSig2 for BIP 340-Compatible Multisignatures",
+      "author_or_publisher": "Jonas Nick, Tim Ruffing, Elliott Jin",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0327.mediawiki",
+      "supports": "Separate key-aggregation and signing protocol boundaries."
+    },
+    {
+      "title": "BIP 371 — Taproot Fields for PSBT",
+      "author_or_publisher": "Ava Chow",
+      "url": "https://github.com/bitcoin/bips/blob/master/bip-0371.mediawiki",
+      "supports": "PSBT fields needed to coordinate Taproot key and script-path signing."
+    },
+    {
+      "title": "Bitcoin Core 31.1 BIP Support Document",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/doc/bips.md",
+      "supports": "Release-specific validation, activation, descriptor, PSBT, and MuSig2 implementation evidence."
+    },
+    {
+      "title": "Bitcoin Core 31.1 Interpreter Interface",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/src/script/interpreter.h",
+      "supports": "Taproot and tapscript signature versions, precomputed data, tapleaf, branch, control-block, and annex execution data."
+    },
+    {
+      "title": "Bitcoin Core 31.1 Script Interpreter",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/src/script/interpreter.cpp",
+      "supports": "Key-path and script-path validation, tapleaf and branch hashing, control-block parity, signature messages, annex handling, tapscript execution, and future-version behavior."
+    },
+    {
+      "title": "Bitcoin Core 31.1 Transaction Policy",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/src/policy/policy.cpp",
+      "supports": "Default-policy rejection of annexes and Taproot witness standardness boundaries."
+    },
+    {
+      "title": "Bitcoin Core 31.1 Script Definitions",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/src/script/script.h",
+      "supports": "Annex tag, tapscript signature-budget constants, stack and element limits, OP_CHECKSIGADD, and opcode definitions."
+    },
+    {
+      "title": "Bitcoin Core 31.1 Taproot Functional Test",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/test/functional/feature_taproot.py",
+      "supports": "End-to-end key-path, script-path, control-block, sighash, annex, future-version, and policy test cases."
+    },
+    {
+      "title": "Bitcoin Core 31.1 Script Unit Tests and BIP 341 Vectors",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/src/test/script_tests.cpp",
+      "supports": "Taproot wallet vectors and Taproot and tapscript validation edge cases."
+    },
+    {
+      "title": "Bitcoin Core 31.1 Output Descriptor Documentation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/doc/descriptors.md",
+      "supports": "`tr()` descriptors, script trees, tapscript multisig expressions, and MuSig2 descriptor support."
+    },
+    {
+      "title": "Bitcoin Core 31.1 PSBT Documentation",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v31.1/doc/psbt.md",
+      "supports": "Implementation-specific signing workflow and PSBT boundaries."
+    },
+    {
+      "title": "Bitcoin Core 0.21.1 Release Notes",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/blob/v0.21.1/doc/release-notes.md",
+      "supports": "Historical mainnet Taproot activation support in that release line."
+    },
+    {
+      "title": "Bitcoin Core 31.1 Tag Commit",
+      "author_or_publisher": "Bitcoin Core contributors",
+      "url": "https://github.com/bitcoin/bitcoin/commit/9be056a8a72b624dae9623b2f7bded92c2a21c91",
+      "supports": "Exact current source and test version reviewed."
+    }
+  ],
+  "seo_title": "How Taproot Changed Bitcoin | Mempool Surf Club",
+  "meta_description": "Learn how Taproot uses Schnorr signatures, key-path and script-path spending, script trees, control blocks, tapscript, and Bech32m.",
+  "excerpt": "See how BIPs 340, 341, and 342 changed Bitcoin spending conditions—and where Taproot’s privacy, efficiency, and support limits remain.",
+  "reading_time": "17 to 20 minutes",
+  "category": {
+    "registry_id": "MSC-HUB-DEVELOPMENT",
+    "label": "Bitcoin Development",
+    "subcategory": "Protocols",
+    "depth": "Deep",
+    "format": "Protocol Explainer"
+  },
+  "relationships": {
+    "previous": {
+      "registry_id": "MSC-GUIDE-054",
+      "title": "How Bitcoin Script Works",
+      "active": false,
+      "url": null
+    },
+    "next": {
+      "registry_id": "MSC-GUIDE-056",
+      "title": "How SegWit Changed Bitcoin",
+      "active": false,
+      "url": null
+    },
+    "planned_internal_links": []
+  },
+  "review_dates": {
+    "reviewed": "2026-07-25",
+    "copy_locked": "2026-07-25",
+    "human_verification": "2026-07-25"
+  },
+  "illustration_briefs": [
+    {
+      "title": "Illustration 1",
+      "concept_title": "The Taproot Output Key Chart",
+      "educational_purpose": "Show how an internal key and optional script-tree root commit into one output key.",
+      "recommended_placement": "After BIP 341: pay-to-Taproot outputs.",
+      "visual_description": "Vintage drafting plate with an internal key line and Taproot tree root entering a tagged-hash compass, producing a tweak and final P2TR output key.",
+      "required_labels": "Internal key, Script-tree root, TapTweak, Tweak point, Output key, P2TR",
+      "caption": "A Taproot output key commits to an internal key and, when present, a script-tree root.",
+      "alt_text": "Technical diagram of a Taproot internal key and script root being tweaked into a P2TR output key.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Use a single left-to-right construction with large labels.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 2",
+      "concept_title": "Key Path and Script Path",
+      "educational_purpose": "Compare the two ways a Taproot output can be spent.",
+      "recommended_placement": "After Script-path spending.",
+      "visual_description": "Nautical fork with a short cooperative key-path channel showing one Schnorr signature and a longer script-path channel revealing stack items, tapscript, control block, and one Merkle branch.",
+      "required_labels": "Key path, Schnorr signature, Script path, Tapscript, Control block, Merkle path, Hidden leaves",
+      "caption": "Key-path spends reveal a signature; script-path spends reveal one committed condition and its proof.",
+      "alt_text": "Forked diagram comparing Taproot key-path and script-path spending disclosures.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Stack the paths vertically and align their final validation point.",
+      "status": "PLANNED"
+    },
+    {
+      "title": "Illustration 3",
+      "concept_title": "Taproot Benefit Boundary Map",
+      "educational_purpose": "Show which benefits are conditional rather than guaranteed.",
+      "recommended_placement": "After What Taproot did not solve.",
+      "visual_description": "Cartographic legend with conditional zones for selective disclosure, cooperative efficiency, threshold protocols, wallet support, fee outcomes, and chain-analysis exposure.",
+      "required_labels": "Selective disclosure, Cooperative spend, Script depth, Threshold protocol, Wallet support, Chain analysis",
+      "caption": "Taproot expands design choices, but privacy, cost, and compatibility depend on how those choices are used.",
+      "alt_text": "Boundary map showing conditional Taproot privacy, efficiency, and support benefits.",
+      "image_orientation": "Landscape",
+      "mobile_crop_notes": "Use six labeled islands around a central P2TR marker.",
+      "status": "PLANNED"
+    }
+  ],
+  "publication": {
+    "state": "PREVIEW_ONLY",
+    "public_url": null,
+    "links_active": false,
+    "shopify_page_id": null
+  }
+}

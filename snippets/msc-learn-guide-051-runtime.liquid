@@ -1,0 +1,153 @@
+{% comment %}
+  Generated from docs/learn/content/guides/MSC-GUIDE-051-bitcoin-source-code.md.
+  Registry binding: MSC-GUIDE-051.
+  Preview only. Do not edit manually.
+  Rebuild with node scripts/generate-msc-learn-guide-category-runtime.mjs --start=49 --end=64 --write.
+{% endcomment %}
+<section class="msc-shell msc-learn-page" data-msc-registry-id="MSC-GUIDE-051" data-msc-preview-only="true">
+  <div class="msc-container msc-learn-page__container">
+    <nav class="msc-learn-breadcrumbs" aria-label="Learn breadcrumbs"><ol><li><span>Learn</span></li><li><span>Bitcoin Development</span></li><li aria-current="page"><span>How to Read the Bitcoin Source Code</span></li></ol></nav>
+    <header class="msc-learn-page__header">
+      <p class="msc-section-kicker">Bitcoin Development</p>
+      <h1>How to Read the Bitcoin Source Code</h1>
+      <p class="msc-learn-page__deck">Reading Bitcoin source code is an evidence-tracing exercise, not a search for one authoritative file. Start from a stable tag, identify the component and interface, follow data into implementation and tests, and verify observations on regtest. Consensus behavior may span code paths, historical compatibility, tests, and deployed network state.</p>
+      <ul class="msc-learn-page-meta"><li>Bitcoin Core</li><li>Deep</li><li>Source Code Walkthrough</li><li>18 to 21 minutes</li><li>Reviewed 2026-07-25</li></ul>
+      <p class="msc-learn-preview-note">Preview only. Publication records and confirmed URLs do not exist; all navigation remains inactive.</p>
+    </header>
+    <article class="msc-learn-article rte" data-msc-content-source="structured-runtime">
+<section class="msc-learn-article__section">
+<p>Bitcoin Core is a large, security-critical C++ project with supporting Python, shell, build, test, and documentation code. It becomes easier to read when the question is narrow.</p>
+<p>Instead of asking “Where is Bitcoin implemented?”, ask “How does this tagged release handle one incoming transaction?”, “Where is this RPC registered?”, “Which test demonstrates this mempool rule?”, or “What code constructs this wallet transaction?” A precise question defines the interface, data flow, rule layer, and expected evidence.</p>
+<p>This guide uses Bitcoin Core 31.1, tag <code>v31.1</code>, commit <code>9be056a8a72b624dae9623b2f7bded92c2a21c91</code>, reviewed July 24, 2026. Directory and file names can move, so future readers should inspect the tree at the release they are studying.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Pin the artifact before reading</h2>
+<p>Start with a stable tag, not the repository’s default branch. Bitcoin Core’s README says the main integration branch is built and tested but is not guaranteed to be completely stable; stable tags are created from release branches.</p>
+<p>Record:</p>
+<ul><li>repository;</li><li>tag;</li><li>full commit SHA;</li><li>review date;</li><li>build configuration;</li><li>network used for testing;</li><li>relevant runtime options.</li></ul>
+<p>A source observation from <code>master</code> may describe unreleased work. A pull request may never merge. A merged change may not yet be released. Code supporting a proposal may be dormant. A BIP may be specified but not active. These states must remain separate.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Read the repository from the outside inward</h2>
+<p>At <code>v31.1</code>, the repository root contains build and dependency material, continuous-integration configuration, contribution guidance, documentation, source, and tests. High-level starting points include:</p>
+<ul><li><code>README.md</code> for project and release-branch boundaries;</li><li><code>CONTRIBUTING.md</code> for workflow and review expectations;</li><li><code>doc/</code> for interfaces, build instructions, developer notes, release notes, and operating guidance;</li><li><code>src/</code> for node, wallet, interface, validation, network, script, policy, index, GUI, utility, and test code;</li><li><code>test/functional/</code> for multi-process and regtest scenarios;</li><li><code>contrib/</code>, <code>depends/</code>, <code>cmake/</code>, and <code>ci/</code> for tooling, dependency builds, build configuration, and automation.</li></ul>
+<p>Do not memorize a directory map as a protocol specification. Use it as an index into a particular release.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Application entry points and initialization</h2>
+<p>Program entry points establish which executable is running and which services it starts.</p>
+<p>For a headless node, begin with <code>src/bitcoind.cpp</code>. For the graphical application, begin with the Qt application entry code under <code>src/qt/</code>. For command-line RPC requests, begin with <code>src/bitcoin-cli.cpp</code>.</p>
+<p>Entry-point files quickly hand work to shared initialization and node components. Follow calls rather than expecting the full startup sequence to remain in one file. Initialization parses configuration, selects a chain, prepares logging and data directories, opens databases, starts interfaces, loads wallets if requested, initializes networking, and coordinates shutdown.</p>
+<p>When reading startup behavior, distinguish compile-time inclusion from runtime enablement. Wallet, IPC, GUI, indexes, REST, ZMQ, and other components can be optional or configuration-dependent.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Node and kernel boundaries</h2>
+<p>Bitcoin Core has been separating reusable consensus and chain-processing code from application-level node services. The <code>src/kernel/</code> and <code>src/node/</code> areas are useful landmarks, but the boundary is an ongoing architecture, not a claim that all consensus behavior lives in one self-contained library.</p>
+<p>Node code coordinates networking, mempool, block storage, indexes, RPC, validation interfaces, context, and process lifecycle. Kernel-oriented code aims to expose chainstate and validation functionality with fewer application dependencies.</p>
+<p>Read boundary documentation and actual includes together. A directory name expresses design intent; it does not by itself prove that code is consensus-critical, public API, or stable across releases.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Consensus-related constants and validation</h2>
+<p>The <code>src/consensus/</code> directory contains consensus-related definitions and helpers, but it is not the complete Bitcoin protocol. Chain parameters, primitives, script execution, validation state, block storage, historical deployment logic, and tests also contribute to observed behavior.</p>
+<p><code>src/validation.cpp</code> is a major junction for chainstate, transaction and block checks, connection and disconnection of blocks, and accepted-chain processing. It is large because validation is contextual: whether an input is spendable or a block can extend a chain depends on state accumulated from earlier valid history.</p>
+<p>Do not infer a network rule from a constant’s name alone. Find where the value is used, under what chain and deployment conditions, how failure is reported, and which tests cover the boundary.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Trace block and transaction validation</h2>
+<p>A useful trace starts with the source of the data.</p>
+<p>For peer-received data, follow message handling from <code>src/net_processing.cpp</code> into transaction or block processing. For RPC-submitted transactions, find the RPC registration and handler under <code>src/rpc/</code>, then follow the call into node or validation interfaces. For blocks from a mining interface, begin in <code>src/rpc/mining.cpp</code>.</p>
+<p>Next identify the layers:</p>
+<ol><li>parsing and deserialization;</li><li>context-free structural checks;</li><li>contextual checks against chainstate or mempool state;</li><li>script and signature verification;</li><li>policy checks when the object is unconfirmed;</li><li>state updates or rejection;</li><li>notifications and interface results.</li></ol>
+<p>The same transaction can travel through different entry paths before converging on shared checks. A complete explanation should identify both the shared validation and the path-specific policy or error handling.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Read script interpretation carefully</h2>
+<p>Bitcoin Script behavior is implemented across script data types, opcode definitions, interpreter logic, signature checking, flags, consensus rules, and tests. <code>src/script/interpreter.cpp</code> is central, but it is not enough by itself.</p>
+<p>Check which script version is being evaluated, which verification flags are active, whether the flags are consensus-mandated or policy-only, and whether the code path is legacy script, SegWit v0, or Tapscript. An opcode byte can have different meaning under different script versions.</p>
+<p>A comment saying an opcode is “disabled” or “reserved” must be read with the controlling branch and tests. BIP text, source, and active deployment state answer different questions.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Peer and network-message processing</h2>
+<p><code>src/net_processing.cpp</code> handles much of the logic around peer messages, synchronization, announcements, transaction relay, and block download. Connection management and lower-level transport involve additional networking code.</p>
+<p>Network behavior is adversarial and stateful. Search for limits, timers, peer permissions, service bits, inventory tracking, request state, and disconnect paths. Avoid reading only the successful branch.</p>
+<p>Protocol version constants are not Bitcoin Core software versions. A peer can advertise capabilities independently of the node’s release number. Message support can also be conditional on negotiation, chain, or configuration.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Mempool and relay policy</h2>
+<p>Mempool code and the <code>src/policy/</code> directory are the starting points for unconfirmed-transaction rules. Trace admission through the current mempool-acceptance path, fee and size calculations, ancestor or package handling, replacement logic, and policy error results.</p>
+<p>Then confirm whether a check is used for mempool admission, relay, mining selection, or block validation. Names such as “standard” usually indicate policy, but follow the call sites rather than relying on naming.</p>
+<p>A functional test is often clearer than a comment because it shows setup, transactions, expected rejection or acceptance, and observable RPC results.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Wallet code</h2>
+<p>Wallet code lives under <code>src/wallet/</code>, with graphical wallet presentation under <code>src/qt/</code> and wallet RPCs registered in wallet-specific code.</p>
+<p>The wallet is not required for a validating node. It adds descriptors, keys, addresses, transaction creation, coin selection, fee management, signing, database persistence, rescan behavior, and migration logic.</p>
+<p>When tracing a wallet RPC, separate:</p>
+<ul><li>request parsing;</li><li>wallet selection;</li><li>locking and synchronization;</li><li>coin or descriptor logic;</li><li>transaction construction;</li><li>node submission;</li><li>wallet-database updates;</li><li>response formatting.</li></ul>
+<p>A wallet refusing to create or broadcast a transaction does not necessarily mean the transaction would violate consensus.</p>
+</section>
+<section class="msc-learn-article__section"><h2>RPC implementations and interfaces</h2>
+<p>RPC commands are grouped by component, commonly under <code>src/rpc/</code>, with wallet RPCs under <code>src/wallet/rpc/</code>. Find the command name, then its registration table, argument schema, handler, downstream call, and test.</p>
+<p>RPC behavior is an implementation interface. Its fields, defaults, errors, and consistency guarantees can change by software release. Documentation generated from command help is useful, but source and tests show edge conditions.</p>
+<p>REST and ZMQ have separate documentation and code paths. Do not infer that an RPC guarantee applies automatically to notifications or an unauthenticated REST endpoint.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Indexes and chainstate</h2>
+<p><code>src/index/</code> contains optional indexes that derive additional lookup structures from validated chain data. Chainstate is required for validation; optional indexes are built for queries.</p>
+<p>When an RPC returns historical transaction or filter data, determine whether it reads block files, chainstate, wallet records, mempool data, or an optional index. Also inspect behavior on pruned nodes and during initial index synchronization.</p>
+<p>An index can be correct relative to the chain it processed while still being behind the node’s tip. Applications should check synchronization state where exposed.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Tests are part of the reading path</h2>
+<p>Bitcoin Core has several test layers:</p>
+<ul><li>unit tests under <code>src/test/</code>;</li><li>functional tests under <code>test/functional/</code>;</li><li>fuzz targets under <code>src/test/fuzz/</code>;</li><li>benchmarks under <code>src/bench/</code>;</li><li>continuous-integration jobs under <code>ci/</code>.</li></ul>
+<p>Unit tests exercise components in-process. Functional tests start nodes and use RPCs, P2P test peers, and regtest chains to test observable behavior. Fuzzing explores parser and state-machine inputs for crashes or invariant violations. Benchmarks measure selected workloads; they do not establish safety.</p>
+<p>Search tests by RPC name, error string, class, function, option, or pull-request number. A test may reveal intended behavior more clearly than the implementation alone. It can also show gaps: absence of a test is not proof that a behavior is unsupported, but it is a reason to seek more evidence.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Use history, blame, and pull requests</h2>
+<p><code>git blame</code> identifies the commit that last changed a line, not the person who invented or fully owns the behavior. Follow the commit to its pull request, discussion, earlier commits, and tests.</p>
+<p>Review context can explain threat models and tradeoffs that comments omit. But pull-request discussion is not deployed behavior until the code is merged, released, and—where relevant—activated or adopted.</p>
+<p>Use <code>git log -S</code> to search for when a string or condition appeared, and <code>git log -L</code> to follow a function’s history. Compare release tags to identify when behavior entered a stable release. Preserve full SHAs in research notes because short prefixes can become ambiguous.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Trace one behavior end to end</h2>
+<p>For a practical exercise, trace a harmless regtest RPC such as submitting a raw transaction.</p>
+<ol><li>Read the command help at the pinned release.</li><li>Find the RPC registration and handler.</li><li>Follow the request into node interfaces.</li><li>Identify mempool acceptance and policy checks.</li><li>Find validation and script checks reached by that path.</li><li>Search functional tests for the RPC and expected errors.</li><li>Run a regtest node with a temporary data directory.</li><li>construct a transaction using regtest coins;</li><li>observe success and one controlled failure;</li><li>record logs, result fields, tag, commit, and configuration.</li></ol>
+<p>Then repeat through a different entry path, such as P2P submission, and note what is shared versus interface-specific.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Test safely</h2>
+<p>Use regtest for experiments. Generate local blocks, use valueless test keys, and delete the temporary environment when finished. Do not paste production seed phrases or private keys into commands, test fixtures, issue reports, AI tools, or shell history.</p>
+<p>Public test networks can involve externally supplied coins and changing network conditions. They are useful for interoperability, but they are not required for learning a code path. Never use real funds to verify an interpretation of source code.</p>
+</section>
+<section class="msc-learn-article__section"><h2>What source reading cannot prove</h2>
+<p>One source file is not the complete Bitcoin protocol. A code path can depend on flags, chainstate, historical activation, database state, configuration, and caller behavior.</p>
+<p>A BIP is not active because code exists for it. A pull request is not released behavior. The default branch can contain unreleased work. Comments can be incomplete or stale. Tests cover cases but do not prove absence of bugs. Reproducible builds can link source to binaries without proving the source is correct.</p>
+<p>Strong conclusions combine tagged source, tests, release notes, history, deployment evidence, and independent review.</p>
+</section>
+    </article>
+    <section class="msc-learn-key-terms" aria-labelledby="MscGuide051Terms"><h2 id="MscGuide051Terms">Key Terms</h2><dl><div class="msc-learn-term"><dt>Stable tag</dt><dd>A Git reference identifying a released source tree.</dd></div>
+<div class="msc-learn-term"><dt>Entry point</dt><dd>The initial code path for an executable or interface.</dd></div>
+<div class="msc-learn-term"><dt>Call site</dt><dd>A location where a function or method is invoked.</dd></div>
+<div class="msc-learn-term"><dt>Chainstate</dt><dd>State used to validate the accepted chain and future spends.</dd></div>
+<div class="msc-learn-term"><dt>Contextual validation</dt><dd>Checks whose result depends on chain or mempool state.</dd></div>
+<div class="msc-learn-term"><dt>Policy flag</dt><dd>A local validation or standardness setting not necessarily required by consensus.</dd></div>
+<div class="msc-learn-term"><dt>Registration table</dt><dd>Code connecting an interface command or message to its handler.</dd></div>
+<div class="msc-learn-term"><dt>Functional test</dt><dd>A test that runs node processes and observes external behavior.</dd></div>
+<div class="msc-learn-term"><dt>Fuzz target</dt><dd>A harness that feeds generated inputs to code to find failures.</dd></div>
+<div class="msc-learn-term"><dt>Regtest</dt><dd>A private test chain controlled by the developer.</dd></div>
+<div class="msc-learn-term"><dt>Blame</dt><dd>Git metadata identifying the commit that last changed each line.</dd></div>
+<div class="msc-learn-term"><dt>Deployed behavior</dt><dd>Behavior actually released and active in the relevant environment.</dd></div></dl></section>
+    <section class="msc-learn-sources" aria-labelledby="MscGuide051Sources"><h2 id="MscGuide051Sources">Sources</h2><article class="msc-learn-source"><h3>Bitcoin Core v31.1 Source Tree</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/tree/v31.1</li><li><strong>supports:</strong> Exact repository structure inspected for this guide.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core v31.1 Tag Commit</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/commit/9be056a8a72b624dae9623b2f7bded92c2a21c91</li><li><strong>supports:</strong> Full commit pin for the stable source tree.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core v31.1 README</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/README.md</li><li><strong>supports:</strong> Stable-tag and development-branch boundaries, tests, wallet, and GUI.</li></ul></article>
+<article class="msc-learn-source"><h3>Contributing to Bitcoin Core at v31.1</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/CONTRIBUTING.md</li><li><strong>supports:</strong> Repository workflow, component labels, review, tests, commit history, and maintainer boundaries.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Developer Notes</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/doc/developer-notes.md</li><li><strong>supports:</strong> Development conventions, architecture guidance, synchronization, and code-review context.</li></ul></article>
+<article class="msc-learn-source"><h3>bitcoind Entry Point at v31.1</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/src/bitcoind.cpp</li><li><strong>supports:</strong> Headless daemon entry path.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin CLI Entry Point at v31.1</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/src/bitcoin-cli.cpp</li><li><strong>supports:</strong> Command-line RPC client entry path.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Qt Source at v31.1</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/tree/v31.1/src/qt</li><li><strong>supports:</strong> Graphical application and interface organization.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Node Source at v31.1</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/tree/v31.1/src/node</li><li><strong>supports:</strong> Node context, block storage, chainstate coordination, interfaces, and services.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Kernel Source at v31.1</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/tree/v31.1/src/kernel</li><li><strong>supports:</strong> Current kernel-oriented source boundary without claiming a complete standalone protocol.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Consensus Directory at v31.1</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/tree/v31.1/src/consensus</li><li><strong>supports:</strong> Consensus-related helpers and definitions as one part of validation.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Validation Source at v31.1</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/src/validation.cpp</li><li><strong>supports:</strong> Chainstate and contextual block and transaction processing.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Script Interpreter at v31.1</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/src/script/interpreter.cpp</li><li><strong>supports:</strong> Script execution paths and verification flags.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Network Processing at v31.1</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/src/net_processing.cpp</li><li><strong>supports:</strong> Peer messages, synchronization, announcement, download, and relay paths.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Mempool Source at v31.1</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/src/txmempool.cpp</li><li><strong>supports:</strong> Mempool data and behavior.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Policy Source at v31.1</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/tree/v31.1/src/policy</li><li><strong>supports:</strong> Policy boundaries separate from block consensus.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Wallet Source at v31.1</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/tree/v31.1/src/wallet</li><li><strong>supports:</strong> Wallet, descriptors, transaction construction, RPC, database, and migration code.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core RPC Source at v31.1</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/tree/v31.1/src/rpc</li><li><strong>supports:</strong> RPC registration and implementation organization.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Index Source at v31.1</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/tree/v31.1/src/index</li><li><strong>supports:</strong> Optional index implementations.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Unit Tests at v31.1</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/tree/v31.1/src/test</li><li><strong>supports:</strong> In-process unit tests and test utilities.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Functional Tests at v31.1</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/tree/v31.1/test/functional</li><li><strong>supports:</strong> Node-process, RPC, P2P, and regtest testing.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Fuzz Tests at v31.1</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/tree/v31.1/src/test/fuzz</li><li><strong>supports:</strong> Fuzz-target organization.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Benchmarks at v31.1</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/tree/v31.1/src/bench</li><li><strong>supports:</strong> Benchmark harnesses and workload evidence.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core JSON-RPC Interface</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/doc/JSON-RPC-interface.md</li><li><strong>supports:</strong> Interface consistency and software-version boundaries.</li></ul></article></section>
+    <nav class="msc-learn-prev-next" aria-label="Guide navigation preview"><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Previous</span><strong>What Is Bitcoin Knots?</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Category</span><strong>Bitcoin Development</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Next</span><strong>How Bitcoin Core Releases Work</strong><small>Link inactive</small></span></nav>
+  </div>
+</section>

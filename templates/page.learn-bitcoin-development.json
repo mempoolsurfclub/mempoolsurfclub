@@ -3,9 +3,19 @@
     "main": {
       "type": "msc-learn-development-category",
       "settings": {}
+    },
+    "guidepreviews": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<style>.msc-learn-page[data-msc-registry-id=\"MSC-HUB-DEVELOPMENT\"] .msc-learn-guide-card.is-live-guide{cursor:pointer;transition:border-color .2s ease}.msc-learn-page[data-msc-registry-id=\"MSC-HUB-DEVELOPMENT\"] .msc-learn-guide-card.is-live-guide:hover,.msc-learn-page[data-msc-registry-id=\"MSC-HUB-DEVELOPMENT\"] .msc-learn-guide-card.is-live-guide:focus-within{border-color:rgba(212,190,153,.82)}.msc-learn-guide-card__link-cover{position:absolute;inset:0;z-index:5;border-radius:inherit;color:inherit;text-decoration:none;outline:none}</style><script>(()=>{const page=document.querySelector('.msc-learn-page[data-msc-registry-id=\"MSC-HUB-DEVELOPMENT\"]');if(!page)return;const guides=[[\"MSC-GUIDE-049\",\"What Is Bitcoin Core?\",\"/pages/learn-bitcoin-development?view=msc-learn-guide-049\"],[\"MSC-GUIDE-050\",\"What Is Bitcoin Knots?\",\"/pages/learn-bitcoin-development?view=msc-learn-guide-050\"],[\"MSC-GUIDE-051\",\"How to Read the Bitcoin Source Code\",\"/pages/learn-bitcoin-development?view=msc-learn-guide-051\"],[\"MSC-GUIDE-052\",\"How Bitcoin Core Releases Work\",\"/pages/learn-bitcoin-development?view=msc-learn-guide-052\"],[\"MSC-GUIDE-053\",\"How Bitcoin Improvement Proposals Work\",\"/pages/learn-bitcoin-development?view=msc-learn-guide-053\"],[\"MSC-GUIDE-054\",\"How Bitcoin Script Works\",\"/pages/learn-bitcoin-development?view=msc-learn-guide-054\"],[\"MSC-GUIDE-055\",\"How Taproot Changed Bitcoin\",\"/pages/learn-bitcoin-development?view=msc-learn-guide-055\"],[\"MSC-GUIDE-056\",\"How SegWit Changed Bitcoin\",\"/pages/learn-bitcoin-development?view=msc-learn-guide-056\"],[\"MSC-GUIDE-057\",\"How Schnorr Signatures Work in Bitcoin\",\"/pages/learn-bitcoin-development?view=msc-learn-guide-057\"],[\"MSC-GUIDE-058\",\"How Digital Signatures Work in Bitcoin\",\"/pages/learn-bitcoin-development?view=msc-learn-guide-058\"],[\"MSC-GUIDE-059\",\"How Hash Functions Work in Bitcoin\",\"/pages/learn-bitcoin-development?view=msc-learn-guide-059\"],[\"MSC-GUIDE-060\",\"How Merkle Trees Work in Bitcoin\",\"/pages/learn-bitcoin-development?view=msc-learn-guide-060\"],[\"MSC-GUIDE-061\",\"How Bitcoin RPC Works\",\"/pages/learn-bitcoin-development?view=msc-learn-guide-061\"],[\"MSC-GUIDE-062\",\"How to Set Up a Bitcoin Development Environment\",\"/pages/learn-bitcoin-development?view=msc-learn-guide-062\"],[\"MSC-GUIDE-063\",\"How Bitcoin Software Is Tested\",\"/pages/learn-bitcoin-development?view=msc-learn-guide-063\"],[\"MSC-GUIDE-064\",\"How to Run Reliable Bitcoin Infrastructure\",\"/pages/learn-bitcoin-development?view=msc-learn-guide-064\"]];guides.forEach(([id,title,url])=>{const card=page.querySelector(`.msc-learn-guide-card[data-msc-guide-id=\"${id}\"]`);if(!card||card.querySelector('.msc-learn-guide-card__link-cover'))return;card.removeAttribute('aria-disabled');card.classList.add('is-live-guide');const note=card.querySelector('.msc-learn-preview-note');if(note)note.remove();const link=document.createElement('a');link.href=url;link.className='msc-learn-guide-card__link-cover';link.setAttribute('aria-label',`Read ${title}`);const label=document.createElement('span');label.className='visually-hidden';label.textContent=`Read ${title}`;link.appendChild(label);card.appendChild(link);});})();</script>",
+        "color_scheme": "scheme-1",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "guidepreviews"
   ]
 }

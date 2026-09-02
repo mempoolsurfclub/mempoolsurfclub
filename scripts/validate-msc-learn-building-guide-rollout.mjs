@@ -34,6 +34,7 @@ const sources = Array.from({ length: 17 }, (_, index) => sourceFor(index + 33));
 assert.equal(sources[16].id, 'MSC-GUIDE-049', 'Building handoff must resolve Guide 049');
 
 assert.ok(networkBindings.includes("{% render 'msc-learn-guide-building-bindings', pilot_registry_id: pilot_registry_id %}"), 'Network bindings must delegate Guides 033–048 to the Building bindings');
+assert.ok(bindings.includes("{% render 'msc-learn-guide-development-bindings', pilot_registry_id: pilot_registry_id %}"), 'Building bindings must delegate Guides 049–064 to the Development bindings');
 
 for (const source of sources.slice(0, 16)) {
   assert.equal(source.status, 'COPY_LOCKED', `${source.id} source must remain COPY_LOCKED`);
@@ -78,11 +79,11 @@ for (let index = 0; index < 15; index += 1) {
 const guide048 = sources[15];
 const guide049 = sources[16];
 const guide048Block = bindings.match(/{%- when 'MSC-GUIDE-048' -%}([\s\S]*?){%- else -%}/)?.[1] || '';
-assert.ok(guide048Block.includes("next_registry_id: 'MSC-GUIDE-049'"), 'Guide 048 must preview Guide 049 next');
+assert.ok(guide048Block.includes("next_registry_id: 'MSC-GUIDE-049'"), 'Guide 048 must continue to Guide 049');
 assert.ok(guide048Block.includes(`next_title: ${liquid(guide049.h1)}`), 'Guide 048 must preview the approved Guide 049 title');
 assert.ok(guide048Block.includes(`next_description: ${liquid(guide049.teaser)}`), 'Guide 048 teaser must come from Guide 049 locked introductory deck');
-assert.ok(guide048Block.includes('next_active: false'), 'Guide 048 → Guide 049 must remain inactive until the next category rollout');
-assert.ok(!guide048Block.includes('next_url:'), 'Guide 048 must not invent a Guide 049 preview URL');
+assert.ok(guide048Block.includes('next_active: true'), 'Guide 048 → Guide 049 must be active once Bitcoin Development exists');
+assert.ok(guide048Block.includes("next_url: '/pages/learn-bitcoin-development?view=msc-learn-guide-049'"), 'Guide 048 is missing the active Guide 049 Development preview URL');
 assert.ok(guide048Block.includes('completed_count: 16'), 'Guide 048 must show Building on Bitcoin complete');
 assert.ok(guide048Block.includes('remaining_count: 0'), 'Guide 048 must show zero Building guides remaining');
 
@@ -97,6 +98,6 @@ assert.ok(sharedCss.includes('margin-top: .4rem;'), 'Locked Next Guide spacing d
 assert.ok(sharedCss.includes('.msc-learn-guide-transition.is-active:hover'), 'Locked border-only active transition interaction drifted');
 
 const lock = read('docs/learn/MSC_Learn_Guide_Template_Lock.md');
-assert.ok(lock.includes('Guides 001–048 remain preview-bound runtimes'), 'Template lock publication boundary must include Guides 001–048');
+assert.ok(lock.includes('Guides 001–064 remain preview-bound runtimes'), 'Template lock publication boundary must include Guides 001–064 after Development activation');
 
-console.log('MSC Learn Building Guide 033–048 rollout validation passed: COPY_LOCKED runtimes are synchronized, source-derived transitions are preserved, all 16 Building hub cards are active, Guide 032 continues into Guide 033, transitions are wired through Guide 048, and Guide 049 remains inactive.');
+console.log('MSC Learn Building Guide 033–048 rollout validation passed: COPY_LOCKED runtimes are synchronized, source-derived transitions are preserved, all 16 Building hub cards are active, Guide 032 continues into Guide 033, transitions are wired through Guide 048, and Guide 048 continues into Bitcoin Development Guide 049.');

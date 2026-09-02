@@ -1,0 +1,136 @@
+{% comment %}
+  Generated from docs/learn/content/guides/MSC-GUIDE-052-bitcoin-core-releases.md.
+  Registry binding: MSC-GUIDE-052.
+  Preview only. Do not edit manually.
+  Rebuild with node scripts/generate-msc-learn-guide-category-runtime.mjs --start=49 --end=64 --write.
+{% endcomment %}
+<section class="msc-shell msc-learn-page" data-msc-registry-id="MSC-GUIDE-052" data-msc-preview-only="true">
+  <div class="msc-container msc-learn-page__container">
+    <nav class="msc-learn-breadcrumbs" aria-label="Learn breadcrumbs"><ol><li><span>Learn</span></li><li><span>Bitcoin Development</span></li><li aria-current="page"><span>How Bitcoin Core Releases Work</span></li></ol></nav>
+    <header class="msc-learn-page__header">
+      <p class="msc-section-kicker">Bitcoin Development</p>
+      <h1>How Bitcoin Core Releases Work</h1>
+      <p class="msc-learn-page__deck">A Bitcoin Core release is the result of branch management, review, testing, release candidates, tagged source, reproducible-build work, checksums, and multiple attestations. Each artifact supplies limited evidence. A software release does not by itself activate consensus rules, prove source correctness, or require every user to upgrade.</p>
+      <ul class="msc-learn-page-meta"><li>Bitcoin Core</li><li>Deep</li><li>Release Process Explainer</li><li>17 to 20 minutes</li><li>Reviewed 2026-07-25</li></ul>
+      <p class="msc-learn-preview-note">Preview only. Publication records and confirmed URLs do not exist; all navigation remains inactive.</p>
+    </header>
+    <article class="msc-learn-article rte" data-msc-content-source="structured-runtime">
+<section class="msc-learn-article__section">
+<p>Bitcoin Core releases turn a changing source repository into identifiable source and binary artifacts. The process reduces ambiguity: users can name a version, reviewers can inspect a fixed tree, builders can reproduce outputs, and maintainers can issue targeted updates for supported release lines.</p>
+<p>It does not eliminate trust or risk. A signed Git tag attests that a particular key signed a tag object pointing to a source commit. A checksum commits to file bytes through a digest. A signature over a checksum file attests that a key signed that checksum statement. Reproducible builds can show that multiple builders obtained matching output from specified source and build inputs. None of those alone proves the source is correct, the build environment is harmless, a signer is trustworthy, or a user’s machine is secure.</p>
+<p>This guide was reviewed July 24, 2026 against the live lifecycle and download documentation, the <code>v31.1</code> release process, and Bitcoin Core 31.1 commit <code>9be056a8a72b624dae9623b2f7bded92c2a21c91</code>.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Development on the integration branch</h2>
+<p>Bitcoin Core development takes place through proposed patches, review, testing, and merges on the main integration branch. The README warns that this branch is not guaranteed to be completely stable.</p>
+<p>A merged change is therefore not automatically a release. It may be revised before branch-off, excluded from a backport, disabled by configuration, or remain dormant pending a separate activation condition.</p>
+<p>Release work creates a fixed boundary around selected commits. Reviewers should compare the release branch and tag rather than treating the current default branch as the software users downloaded.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Proposed schedules and freezes</h2>
+<p>Major-release planning is commonly tracked in a public issue with target dates for branch-off and release candidates. Schedules can include a feature freeze, translation milestones, or other coordination points.</p>
+<p>These are proposed project-management dates. They can move as bugs, review capacity, translations, build issues, or test results change. A schedule issue is not a protocol commitment.</p>
+<p>Feature freeze limits the kinds of new changes accepted while stabilization is underway. Translation freeze gives translators a stable text set. Neither means testing stops; release-candidate work is specifically for finding and correcting release blockers.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Release branches</h2>
+<p>Before a major release, the project creates a release branch. The integration branch can continue toward future development while the release branch receives selected stabilization, documentation, translation, and fix commits.</p>
+<p>A maintenance release is normally made from the relevant supported release line. Backports should be narrower than importing the entire current development branch. The older the supported line, the higher the threshold for accepting changes because every backport introduces review and regression risk.</p>
+<p>The lifecycle page reviewed July 24, 2026 says the latest three major versions are maintained. It lists 31.x, 30.x, and 29.x in the maintenance window and 28.x as end of life after the 31.0 release.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Release candidates</h2>
+<p>A release candidate, marked <code>rc1</code>, <code>rc2</code>, and so on, is a build proposed for wider testing before final release. A later candidate can include fixes discovered while testing an earlier candidate.</p>
+<p>Release candidates should not be described as final merely because binaries exist. Their purpose is to test the near-final source, packaging, migration, wallet behavior, platform support, interfaces, and operational edge cases.</p>
+<p>Testing includes automated suites, continuous integration, manual quality assurance, platform-specific checks, upgrade scenarios, and review of release notes. The amount and type of evidence varies by change.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Tagging and release notes</h2>
+<p>The release process uses tooling to perform consistency checks and create a signed Git tag for a release candidate or final release. The tag fixes the source tree at a named version.</p>
+<p>A signed tag provides evidence that the holder of a particular key signed that Git object. A verifier still needs an independently obtained expectation for the key and must inspect what the tag points to. The signature does not prove that every line was reviewed or that the source has no vulnerability.</p>
+<p>Release notes describe user-visible changes, compatibility, upgrade steps, known issues, and credits. They are an important map, not a substitute for source and tests. A missing note can hide a meaningful change; an imprecise note can overstate compatibility. Critical operators may need to inspect the diff and linked pull requests.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Major and maintenance releases</h2>
+<p>Bitcoin Core uses major versions such as 31.0 and maintenance versions such as 31.1. The lifecycle page says the project aims for a major release about every six to seven months and provides maintenance releases for bug and security fixes.</p>
+<p>The word “major” is a project version category, not a claim that consensus changed. A major release can contain no consensus activation. The lifecycle document also explains that consensus-rule proposals are handled differently from ordinary semantic versioning and may be shipped in maintenance releases to produce smaller reviewable changesets.</p>
+<p>Installing software that contains code for a consensus proposal does not necessarily activate it. Activation can depend on deployment parameters, network signaling, heights, times, or other separately specified conditions. A release note and deployment state must both be checked.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Supported branches and end of life</h2>
+<p>The maintenance window tells users which release lines generally receive fixes. End of life means a branch does not generally receive security fixes; it does not make the software stop running at a particular block.</p>
+<p>Operators should compare their exact version with advisories and supported branches. “I run version 30” is incomplete because a later 30.x maintenance release may contain fixes absent from 30.0.</p>
+<p>Upgrade urgency is risk-specific. A remotely exploitable validation defect differs from a wallet migration issue or an interface bug that affects only a disabled option. The advisory, release notes, configuration, and operating environment should determine the response.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Guix and reproducible builds</h2>
+<p>Bitcoin Core’s release process uses Guix-based tooling for reproducible builds. Builders check out the tagged source, use specified inputs, build outputs, and publish signed attestations of the checksums they obtained.</p>
+<p>A reproducible build means independent builders using the specified process can produce byte-identical outputs for the covered artifact. Matching output reduces the risk that a distributor quietly substituted different code after source review.</p>
+<p>It does not prove the source is secure or correct. Multiple builders can reproducibly build the same bug. They can also share a compromised dependency definition or overlooked toolchain weakness. Reproducibility supplies provenance evidence, not a formal proof of safety.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Checksums and multiple signatures</h2>
+<p>The official download page provides a <code>SHA256SUMS</code> file and a <code>SHA256SUMS.asc</code> collection of signatures.</p>
+<p>A locally calculated checksum matching <code>SHA256SUMS</code> shows that the downloaded bytes match a listed digest. It does not identify who created the digest.</p>
+<p>A valid signature on the checksum file shows that a particular key attested to those digests. Trust then depends on whether the verifier expected and trusts that key. Multiple independent signatures let a user compare attestations instead of relying on one key.</p>
+<p>The release process describes combining attestations after multiple builders obtain matching results. This distributes evidence, but users still need to verify fingerprints through channels they consider independent.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Code signing is different</h2>
+<p>Windows and macOS platforms can use operating-system code signatures. Bitcoin Core’s release process handles detached platform signatures and combines them with reproducibly built unsigned artifacts.</p>
+<p>Platform code signing can help an operating system identify the publisher key and detect changes to a signed package. It is not the same as a Git tag signature, a PGP signature over checksums, or a Guix build attestation.</p>
+<p>A code-signed binary can still contain a bug. A valid signature can be created by a compromised key. A platform trust store can make a decision the user has not independently reviewed. Each signature should be described by what object was signed and which trust path is used.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Official distribution locations</h2>
+<p>The Bitcoin Core download page and versioned directory on <code>bitcoincore.org</code> are the project’s stated binary distribution locations. GitHub is used for source, tags, issues, and release metadata, but project release pages direct binary users to the official deterministic, signed downloads.</p>
+<p>A file attached to a GitHub release is not automatically preferred or verified. Users should follow the current official verification instructions, not download a similarly named binary from an issue, fork, search result, or third-party mirror.</p>
+<p>A torrent can distribute the same bytes, but the transport source does not replace checksum and signature verification.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Security fixes and disclosure timing</h2>
+<p>Security vulnerabilities can require coordinated fixes and delayed disclosure. The security policy defines private reporting paths, while public advisories identify affected versions, severity context, and fixed releases after disclosure.</p>
+<p>Delay can reduce the time attackers have to exploit a flaw before users can upgrade. It also means public issue history is not always complete at release time.</p>
+<p>A release containing a security fix may initially use limited language. Later disclosure can provide more detail. Researchers should date the evidence and avoid concluding that absence of a public issue means no security work occurred.</p>
+</section>
+<section class="msc-learn-article__section"><h2>Upgrade and downgrade considerations</h2>
+<p>Release notes provide version-specific upgrade instructions and compatibility warnings. A typical upgrade requires shutting the old process down cleanly before starting the new binary.</p>
+<p>Databases, chainstate formats, indexes, and wallets may be migrated. A successful upgrade does not guarantee that an immediate downgrade is safe. Older software may not understand newer data, and a rollback can require reindexing, restoring a backup, or recreating an index.</p>
+<p>Wallet migration deserves additional caution because key and descriptor data may be changed. Operators should read the release notes for both directions, back up using documented procedures, and test operational runbooks before a high-value deployment.</p>
+<p>Pruning and optional indexes can affect recovery time. Rebuilding from retained local data may not be possible if the needed block files were pruned.</p>
+</section>
+<section class="msc-learn-article__section"><h2>A release is not consensus activation</h2>
+<p>A software release and a Bitcoin consensus activation are different events.</p>
+<p>A release publishes code. Activation determines when a rule is enforced on a network. A release may contain no consensus changes. It may contain inactive code for a proposal. Multiple maintained branches may receive the same consensus-related patch. Alternative implementations may deploy compatible rules through different code.</p>
+<p>Node operators are not automatically updated by the project. They choose whether and when to install. Miners and businesses make their own decisions. A maintainer cannot create network consensus by tagging a release.</p>
+<p>For every claim that a release “changes Bitcoin,” identify the exact rule, deployment method, activation state, implementation versions, and observed network behavior.</p>
+</section>
+<section class="msc-learn-article__section"><h2>A release-evidence ladder</h2>
+<p>Evaluate artifacts from narrowest to broadest:</p>
+<ol><li><strong>Release schedule:</strong> intended timing; not final code.</li><li><strong>Release branch:</strong> stabilization target; can still change.</li><li><strong>Release candidate:</strong> testable near-final artifact; not final.</li><li><strong>Signed tag:</strong> key attestation to a source reference.</li><li><strong>Release notes:</strong> human-readable change map.</li><li><strong>Reproducible-build attestations:</strong> evidence of matching outputs from specified source and inputs.</li><li><strong>Checksums:</strong> identity of downloaded bytes.</li><li><strong>Checksum signatures:</strong> signer attestations to those identities.</li><li><strong>Platform code signatures:</strong> operating-system publisher and integrity evidence.</li><li><strong>Independent testing and review:</strong> behavioral evidence for selected risks.</li><li><strong>Deployment observation:</strong> evidence of what users and the network actually run.</li></ol>
+<p>No single rung proves the whole system safe. Together they make the release more inspectable.</p>
+</section>
+    </article>
+    <section class="msc-learn-key-terms" aria-labelledby="MscGuide052Terms"><h2 id="MscGuide052Terms">Key Terms</h2><dl><div class="msc-learn-term"><dt>Integration branch</dt><dd>The main branch where reviewed development changes are combined.</dd></div>
+<div class="msc-learn-term"><dt>Feature freeze</dt><dd>A stabilization period limiting new feature changes.</dd></div>
+<div class="msc-learn-term"><dt>Release branch</dt><dd>A branch maintained for one software release line.</dd></div>
+<div class="msc-learn-term"><dt>Release candidate</dt><dd>A near-final build published for testing.</dd></div>
+<div class="msc-learn-term"><dt>Stable tag</dt><dd>A fixed Git reference identifying final release source.</dd></div>
+<div class="msc-learn-term"><dt>Maintenance release</dt><dd>A release carrying selected fixes for a supported major line.</dd></div>
+<div class="msc-learn-term"><dt>End of life</dt><dd>A release line no longer generally maintained.</dd></div>
+<div class="msc-learn-term"><dt>Reproducible build</dt><dd>A process intended to produce byte-identical outputs from specified source and inputs.</dd></div>
+<div class="msc-learn-term"><dt>Build attestation</dt><dd>A signed statement about output checksums produced by a builder.</dd></div>
+<div class="msc-learn-term"><dt>Checksum</dt><dd>A digest used to identify file bytes.</dd></div>
+<div class="msc-learn-term"><dt>Code signature</dt><dd>A platform or cryptographic signature over a software object.</dd></div>
+<div class="msc-learn-term"><dt>Consensus activation</dt><dd>The point at which a network begins enforcing a new consensus rule.</dd></div></dl></section>
+    <section class="msc-learn-sources" aria-labelledby="MscGuide052Sources"><h2 id="MscGuide052Sources">Sources</h2><article class="msc-learn-source"><h3>Bitcoin Core Release Process at v31.1</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/doc/release-process.md</li><li><strong>supports:</strong> Branch preparation, release candidates, signed tags, release notes, Guix builds, attestations, detached code signatures, and final publication.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Software Life Cycle</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core project</li><li><strong>url:</strong> https://bitcoincore.org/en/lifecycle/</li><li><strong>supports:</strong> Major and maintenance versioning, six-to-seven-month aim, latest-three-major maintenance window, EOL table, protocol-version distinctions, and consensus release treatment.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Download and Verification Page</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core project</li><li><strong>url:</strong> https://bitcoincore.org/en/download/</li><li><strong>supports:</strong> Current version, official downloads, checksums, multiple signatures, key trust, and reproducible-build explanation.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core 31.1 Release Directory</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core project</li><li><strong>url:</strong> https://bitcoincore.org/bin/bitcoin-core-31.1/</li><li><strong>supports:</strong> Versioned release artifacts, `SHA256SUMS`, `SHA256SUMS.asc`, binaries, and release-candidate directory.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core v31.1 Tag Commit</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/commit/9be056a8a72b624dae9623b2f7bded92c2a21c91</li><li><strong>supports:</strong> Exact final 31.1 source commit reviewed.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core v31.1 Release Notes</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/doc/release-notes.md</li><li><strong>supports:</strong> Version-specific changes, compatibility, upgrade guidance, and release identity.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core v31.1 README</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/README.md</li><li><strong>supports:</strong> Development-branch instability warning, stable tags, tests, and release-source boundaries.</li></ul></article>
+<article class="msc-learn-source"><h3>Contributing to Bitcoin Core at v31.1</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/CONTRIBUTING.md</li><li><strong>supports:</strong> Pull-request review, test expectations, merge workflow, and signed deterministic merge history.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Security Policy</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/SECURITY.md</li><li><strong>supports:</strong> Supported versions and private vulnerability reporting.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Security Advisories</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core project</li><li><strong>url:</strong> https://bitcoincore.org/en/security-advisories/</li><li><strong>supports:</strong> Public disclosure and affected-version evidence.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Guix Build Documentation</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/contrib/guix/README.md</li><li><strong>supports:</strong> Reproducible build and attestation workflow.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Guix Signatures Repository</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core builders</li><li><strong>url:</strong> https://github.com/bitcoin-core/guix.sigs</li><li><strong>supports:</strong> Independently published build-output attestations.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Detached Signatures Repository</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core release contributors</li><li><strong>url:</strong> https://github.com/bitcoin-core/bitcoin-detached-sigs</li><li><strong>supports:</strong> Detached platform code-signing material.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Maintainer Tools</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core maintainers</li><li><strong>url:</strong> https://github.com/bitcoin-core/bitcoin-maintainer-tools</li><li><strong>supports:</strong> Release tagging and consistency tooling referenced by the release process.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core 31.0 Release Schedule Issue</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/issues/33607</li><li><strong>supports:</strong> A concrete example of proposed translation milestones, feature freeze, branch-off, release-candidate, and final timing.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core Releases Index</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core project</li><li><strong>url:</strong> https://bitcoincore.org/en/releases/</li><li><strong>supports:</strong> Major and maintenance release history.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core 31.0 Release Notes</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core project</li><li><strong>url:</strong> https://bitcoincore.org/en/releases/31.0/</li><li><strong>supports:</strong> Upgrade and data-migration cautions for a major release.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core 31.1 Release Announcement</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core project</li><li><strong>url:</strong> https://bitcoincore.org/en/2026/07/08/release-31.1/</li><li><strong>supports:</strong> Dated final release announcement.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core JSON-RPC Interface</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/doc/JSON-RPC-interface.md</li><li><strong>supports:</strong> Example of software interface behavior versioned separately from consensus.</li></ul></article>
+<article class="msc-learn-source"><h3>Bitcoin Core BIP Status Documentation</h3><ul><li><strong>author or publisher:</strong> Bitcoin Core contributors</li><li><strong>url:</strong> https://github.com/bitcoin/bitcoin/blob/v31.1/doc/bips.md</li><li><strong>supports:</strong> Release-specific documentation of implemented and deployed BIP behavior.</li></ul></article></section>
+    <nav class="msc-learn-prev-next" aria-label="Guide navigation preview"><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Previous</span><strong>How to Read the Bitcoin Source Code</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Category</span><strong>Bitcoin Development</strong><small>Link inactive</small></span><span class="msc-learn-prev-next__item" aria-disabled="true"><span>Next</span><strong>How Bitcoin Improvement Proposals Work</strong><small>Link inactive</small></span></nav>
+  </div>
+</section>
