@@ -1,0 +1,65 @@
+name: Explore validation
+
+on:
+  push:
+    branches:
+      - explore/atlas-ecosystem-foundation
+    paths:
+      - 'docs/explore/**'
+      - 'config/explore/**'
+      - 'scripts/explore-runtime/**'
+      - 'assets/msc-explore-runtime.json'
+      - 'package.json'
+      - '.github/workflows/explore-validation.yml'
+  pull_request:
+    paths:
+      - 'docs/explore/**'
+      - 'config/explore/**'
+      - 'scripts/explore-runtime/**'
+      - 'assets/msc-explore-runtime.json'
+      - 'package.json'
+      - '.github/workflows/explore-validation.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check generator syntax
+        run: node --check scripts/explore-runtime/build.mjs
+
+      - name: Build Explore runtime
+        run: npm run build:explore-runtime
+
+      - name: Validate generated contract
+        run: npm run validate:explore-runtime
+
+      - name: Upload generated contract
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: msc-explore-runtime
+          if-no-files-found: error
+          path: |
+            assets/msc-explore-runtime.json
+            docs/explore/integration/MSC_Explore_Route_Manifest.json
+            docs/explore/integration/MSC_Explore_Validation_Report.json
+
+      - name: Require committed deterministic outputs
+        run: |
+          git status --porcelain --untracked-files=all -- \
+            assets/msc-explore-runtime.json \
+            docs/explore/integration/MSC_Explore_Route_Manifest.json \
+            docs/explore/integration/MSC_Explore_Validation_Report.json > /tmp/explore-generated-status.txt
+          cat /tmp/explore-generated-status.txt
+          test ! -s /tmp/explore-generated-status.txt
