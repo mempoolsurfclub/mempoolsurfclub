@@ -1,0 +1,275 @@
+{
+  "registry": "Mempool Surf Club Explore — Ordinals Research Registry",
+  "primary_explore_category": "ORDINALS",
+  "status": "COMMAND_CENTER_REVIEW",
+  "last_verified_date": "2026-08-14",
+  "record_range": "001-004",
+  "record_count": 4,
+  "records": [
+    {
+      "Registry ID": "MSC-EXP-ORD-001",
+      "Canonical name": "Ordinal Theory & Inscriptions",
+      "Recommended slug": "ordinal-theory-inscriptions",
+      "Primary Explore category": "ORDINALS",
+      "Ordinals topic": "Protocols & Metaprotocols",
+      "Ordinals subtopic": "Core Ordinals",
+      "Entity / project type": "protocol / numbering scheme",
+      "Status": "ACTIVE",
+      "Source confidence": "HIGH",
+      "Concise description": "Casey Rodarmor’s ordinal theory and inscription system for tracking individual satoshis and attaching digital artifacts to Bitcoin transactions.",
+      "Deeper researched summary": "Ordinal theory assigns ordinal numbers to satoshis and the Ord reference implementation/indexer tracks their movement. Inscriptions place content in Taproot script-path witness data, creating digital artifacts whose content and provenance can be followed without changing Bitcoin consensus rules. The ecosystem later added concepts such as parent/child provenance, recursion, reinscription, cursed/vindicated inscriptions, and rare-sat collecting. Ordinals is an application-layer convention and indexing system, not a new Bitcoin consensus layer.",
+      "Creators / founders": [
+        "Casey Rodarmor — creator of ordinal theory / original Ord implementation",
+        "Raph Japh — contributor and Handbook co-author/editor"
+      ],
+      "Launch / history": "Ordinal theory and the Ord software emerged publicly in 2022–2023; inscription activity accelerated after the first mainnet inscriptions in January 2023.",
+      "Why it matters in the Ordinals ecosystem": "This is the technical substrate for the entire Ordinals category. It defines inscription IDs/numbers, sat tracking, provenance conventions, and the terminology used by collections, marketplaces, wallets, and metaprotocols.",
+      "Important technical or cultural characteristics": [
+        "Satoshi ordinal numbering and tracking",
+        "Taproot script-path inscription envelopes",
+        "Content stored in Bitcoin transaction witness data",
+        "Parent/child provenance",
+        "Recursive inscription references",
+        "Application/indexer convention rather than Bitcoin consensus change"
+      ],
+      "Related projects / entities": [
+        "BRC-20",
+        "Bitmap",
+        "Digital Matter Theory (DMT)",
+        "Sub-1k Inscriptions",
+        "Sub-10k Inscriptions"
+      ],
+      "Related Explore categories": [
+        "WALLETS",
+        "MARKETPLACES",
+        "NETWORK"
+      ],
+      "Supporting tags": [
+        "ordinals",
+        "inscriptions",
+        "ordinal-theory",
+        "taproot",
+        "recursion",
+        "provenance"
+      ],
+      "Official website": "https://ordinals.com/",
+      "Official sources": [
+        {
+          "label": "Ordinals Handbook — Introduction",
+          "url": "https://docs.ordinals.com/",
+          "source_type": "official"
+        },
+        {
+          "label": "Ordinals Handbook — Inscriptions",
+          "url": "https://docs.ordinals.com/inscriptions.html",
+          "source_type": "official"
+        },
+        {
+          "label": "Ordinals Handbook — Provenance",
+          "url": "https://docs.ordinals.com/inscriptions/provenance.html",
+          "source_type": "official"
+        },
+        {
+          "label": "Ordinals Handbook — Recursion",
+          "url": "https://docs.ordinals.com/inscriptions/recursion.html",
+          "source_type": "official"
+        },
+        {
+          "label": "ord repository",
+          "url": "https://github.com/ordinals/ord",
+          "source_type": "official-github"
+        }
+      ],
+      "Corroborating sources": [],
+      "Last verified date": "2026-08-14",
+      "Verification basis": "Current official Ordinals Handbook and Ord GitHub repository.",
+      "Research notes / uncertainties": [
+        "MSC copy must distinguish Ordinals conventions/indexing from Bitcoin consensus rules.",
+        "Do not describe inscription numbers as a consensus-enforced global property."
+      ]
+    },
+    {
+      "Registry ID": "MSC-EXP-ORD-002",
+      "Canonical name": "BRC-20",
+      "Recommended slug": "brc-20",
+      "Primary Explore category": "ORDINALS",
+      "Ordinals topic": "Protocols & Metaprotocols",
+      "Ordinals subtopic": "Fungible-token experiments",
+      "Entity / project type": "fungible-token metaprotocol",
+      "Status": "ACTIVE",
+      "Source confidence": "HIGH",
+      "Concise description": "An experimental fungible-token convention introduced by the pseudonymous domo using Ordinals inscriptions for deploy, mint, and transfer operations.",
+      "Deeper researched summary": "BRC-20 began as a deliberately experimental token standard that encodes JSON operations in inscriptions. Token state is derived by indexers from an agreed ordering and interpretation of valid operations rather than enforced by Bitcoin consensus. The ecosystem matured from an experiment into a governed standard with indexers, exchanges, wallets, and the Layer 1 Foundation coordinating specification work, including later protocol evolution. ORDI, the first widely recognized BRC-20 deployment, remains an important related asset but is not given a duplicate canonical profile in this Ordinals registry.",
+      "Creators / founders": [
+        "domo — pseudonymous creator of the original BRC-20 experiment"
+      ],
+      "Launch / history": "Introduced in March 2023. The original experiment used deploy/mint/transfer JSON inscriptions; subsequent community governance and implementation work expanded the ecosystem.",
+      "Why it matters in the Ordinals ecosystem": "BRC-20 demonstrated that fungible-token state could be socially/indexer coordinated on top of Ordinals, driving major inscription demand and catalyzing token infrastructure on Bitcoin.",
+      "Important technical or cultural characteristics": [
+        "JSON inscription operations",
+        "Off-chain/indexer-derived balances and validity",
+        "Social/specification consensus distinct from Bitcoin consensus",
+        "Strong wallet, marketplace, and exchange infrastructure",
+        "Pre-dates the Runes protocol"
+      ],
+      "Related projects / entities": [
+        "Ordinal Theory & Inscriptions",
+        "ORDI",
+        "Layer 1 Foundation",
+        "TAP Protocol"
+      ],
+      "Related Explore categories": [
+        "EXCHANGES",
+        "WALLETS",
+        "MARKETPLACES",
+        "RUNES"
+      ],
+      "Supporting tags": [
+        "brc-20",
+        "fungible-tokens",
+        "indexers",
+        "metaprotocol"
+      ],
+      "Official website": "https://layer1.foundation/",
+      "Official sources": [
+        {
+          "label": "Original BRC-20 experiment documentation",
+          "url": "https://domo-2.gitbook.io/brc-20-experiment",
+          "source_type": "official"
+        },
+        {
+          "label": "Layer 1 Foundation",
+          "url": "https://layer1.foundation/",
+          "source_type": "official"
+        }
+      ],
+      "Corroborating sources": [],
+      "Last verified date": "2026-08-14",
+      "Verification basis": "Original domo documentation plus current Layer 1 Foundation governance/infrastructure material.",
+      "Research notes / uncertainties": [
+        "Balances are not Bitcoin-consensus state; MSC should explain indexer agreement explicitly.",
+        "ORDI should remain a related token unless the Master Explore Registry later introduces a token-level entity layer."
+      ]
+    },
+    {
+      "Registry ID": "MSC-EXP-ORD-003",
+      "Canonical name": "Bitmap",
+      "Recommended slug": "bitmap",
+      "Primary Explore category": "ORDINALS",
+      "Ordinals topic": "Protocols & Metaprotocols",
+      "Ordinals subtopic": "Block-data / spatial standards",
+      "Entity / project type": "metaprotocol / block-claim convention",
+      "Status": "ACTIVE",
+      "Source confidence": "HIGH",
+      "Concise description": "A metaprotocol that lets users inscribe Bitcoin block-height identifiers such as `840000.bitmap` to claim abstract digital districts based on Bitcoin blocks.",
+      "Deeper researched summary": "Bitmap treats Bitcoin block data as a coordinate system for a digital land/metaverse experiment. Its rules are social and indexer interpreted: valid inscriptions follow a block-height naming convention, and the project’s theory maps transactions and other block structure into conceptual parcels. The project has continued to publish theory and a living whitepaper rather than presenting Bitmap as a Bitcoin consensus feature.",
+      "Creators / founders": [
+        "Bitoshi Blockamoto — pseudonymous creator credited by official Bitmap documentation"
+      ],
+      "Launch / history": "Launched in 2023 as a block-based naming/claim system built with Ordinals inscriptions.",
+      "Why it matters in the Ordinals ecosystem": "Bitmap was one of the earliest high-profile attempts to turn Bitcoin’s native block structure into a composable spatial primitive, influencing metaverse and block-data experiments.",
+      "Important technical or cultural characteristics": [
+        "`<block-height>.bitmap` inscription convention",
+        "Block-derived districts/parcels",
+        "Social/indexer-defined ownership interpretation",
+        "Open-ended metaverse/spatial experimentation"
+      ],
+      "Related projects / entities": [
+        "Ordinal Theory & Inscriptions",
+        "Digital Matter Theory (DMT)",
+        "TAP Protocol"
+      ],
+      "Related Explore categories": [
+        "MARKETPLACES"
+      ],
+      "Supporting tags": [
+        "bitmap",
+        "block-data",
+        "metaprotocol",
+        "digital-land"
+      ],
+      "Official website": "https://bitmap.land/",
+      "Official sources": [
+        {
+          "label": "Bitmap GitBook — Bitmap 101",
+          "url": "https://gitbook.bitmap.land/",
+          "source_type": "official"
+        },
+        {
+          "label": "Bitmap theory",
+          "url": "https://gitbook.bitmap.land/theory",
+          "source_type": "official"
+        }
+      ],
+      "Corroborating sources": [],
+      "Last verified date": "2026-08-14",
+      "Verification basis": "Current official Bitmap documentation and theory pages.",
+      "Research notes / uncertainties": [
+        "Do not imply `.bitmap` ownership is recognized by Bitcoin consensus.",
+        "Specific parcel rendering rules depend on Bitmap ecosystem software/indexers."
+      ]
+    },
+    {
+      "Registry ID": "MSC-EXP-ORD-004",
+      "Canonical name": "Digital Matter Theory (DMT)",
+      "Recommended slug": "digital-matter-theory",
+      "Primary Explore category": "ORDINALS",
+      "Ordinals topic": "Protocols & Metaprotocols",
+      "Ordinals subtopic": "Block-data / non-arbitrary assets",
+      "Entity / project type": "protocol framework / theory",
+      "Status": "ACTIVE",
+      "Source confidence": "HIGH",
+      "Concise description": "A framework for deriving digital assets and traits from patterns already present in Bitcoin block data rather than assigning arbitrary off-chain rarity.",
+      "Deeper researched summary": "Digital Matter Theory (DMT) proposes that deterministic patterns in Bitcoin’s block data can be discovered, named, and used to generate digital assets. Its ecosystem introduced Non-Arbitrary Tokens (NATs) and later hybrid/UNAT concepts. DMT is an application-layer framework with its own indexing and tooling, not a Bitcoin consensus rule. Current DMT-branded activity also extends beyond Bitcoin interfaces, so the registry keeps the core DMT framework distinct from any cross-chain token or product carrying the DMT name.",
+      "Creators / founders": [
+        "The Block Runner — credited by DMT ecosystem sources as the originator of DMT"
+      ],
+      "Launch / history": "DMT emerged in 2023 and developed through 2024–2026 around deterministic Bitcoin block-data patterns, NATs, and related standards.",
+      "Why it matters in the Ordinals ecosystem": "DMT shifted part of the Ordinals conversation from arbitrary inscription content toward assets derived from Bitcoin’s existing data, creating a distinctive technical/cultural branch of the ecosystem.",
+      "Important technical or cultural characteristics": [
+        "Deterministic use of Bitcoin block data",
+        "Pattern/element discovery",
+        "NAT and UNAT concepts",
+        "Indexer/tooling dependent",
+        "Application-layer framework, not Bitcoin consensus"
+      ],
+      "Related projects / entities": [
+        "Non-Arbitrary Tokens (NAT)",
+        "Natcats",
+        "The Royals",
+        "TAP Protocol",
+        "Bitmap"
+      ],
+      "Related Explore categories": [
+        "NETWORK",
+        "MARKETPLACES"
+      ],
+      "Supporting tags": [
+        "dmt",
+        "block-data",
+        "non-arbitrary",
+        "metaprotocol"
+      ],
+      "Official website": "https://digital-matter-theory.gitbook.io/digital-matter-theory",
+      "Official sources": [
+        {
+          "label": "Digital Matter Theory documentation",
+          "url": "https://digital-matter-theory.gitbook.io/digital-matter-theory",
+          "source_type": "official"
+        },
+        {
+          "label": "DMT current ecosystem site",
+          "url": "https://takedmt.com/",
+          "source_type": "official"
+        }
+      ],
+      "Corroborating sources": [],
+      "Last verified date": "2026-08-14",
+      "Verification basis": "Current DMT documentation plus current ecosystem site.",
+      "Research notes / uncertainties": [
+        "Keep the Bitcoin DMT framework separate from later cross-chain products/tokens using DMT branding.",
+        "Terminology and tooling are implementation-level conventions."
+      ]
+    }
+  ]
+}

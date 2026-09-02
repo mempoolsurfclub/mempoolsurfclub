@@ -1,0 +1,73 @@
+{
+  "title": "Mempool Surf Club Explore — Master Registry",
+  "status": "COMMAND_CENTER_RECONCILED",
+  "registry_date": "2026-08-15",
+  "last_verified_date": "2026-08-15",
+  "scope": "Research-only federated master registry. No merge, publication, Atlas/Shopify wiring, routes, or production changes are authorized.",
+  "source_model": {
+    "type": "federated",
+    "rule": "The master registry indexes eight byte-preserved approved category registries. Category manifests and shards retain canonical research payloads; this layer owns cross-category identity, canonical-home decisions, aggregate counts, and integration provenance.",
+    "record_identity": "Preserve category Registry IDs; do not renumber into a second master ID system.",
+    "canonical_profile_rule": "One canonical profile per materially distinct entity, protocol, product, or system. Same-brand products may remain separate only when function, lifecycle, custody/trust model, protocol role, or user-facing system is materially distinct.",
+    "relationships_rule": "Cross-category relevance is represented by relationships rather than duplicate canonical profiles."
+  },
+  "approved_sources": [
+    ["ORDINALS", "explore/ordinals-registry-research", "1f4368bdebc572de5aaed6df221460516295c54a", "docs/explore/ordinals/", "1cc1a5dd37aab47b4650fadbb65b4c4569b62995", 47],
+    ["RUNES", "explore/runes-registry-research", "a9161640d19346fef8e44056604774ec294c81d0", "docs/explore/runes/", "e8ad1c9b9b0a5f251339732f9d5102de03ea2471", 18],
+    ["WALLETS", "explore/wallets-registry-research", "c3ab81de2c309503855a00eb2380873ec5bcd401", "docs/explore/wallets/", "2615a3c95ac1459d7e1dbbc647c3874d46178d6c", 40],
+    ["MARKETPLACES", "explore/marketplaces-registry-research", "30704f96d21f6ff6dd2c34ba7fe27212f8bd0c50", "docs/explore/marketplaces/", "59c7be979b2265dd1f68b71cfe946b5c1778dce9", 18],
+    ["MINING", "explore/mining-registry-research", "9805a04fd5c9333f40433ff868f4e6a06301bd4a", "docs/explore/mining/", "54fba97422403f68328df92d4fceacbe9832b965", 37],
+    ["PAYMENTS", "explore/payments-registry-research", "792b3009ee9b31f3d41664a237623556b3db1c15", "docs/explore/payments/", "7deac35ac79d3e4911eb3c4f88f82f37e94abb93", 27],
+    ["EXCHANGES", "explore/exchanges-registry-research", "de1db5785795eaffe8a7649387d4ec8af83068b3", "docs/explore/exchanges/", "a8b062898bfdbb3dd5e7c60fbd7bd24367f18422", 35],
+    ["NETWORK", "explore/network-registry-research", "53c65965cf9305cf1343dcdd51f903f3a9ede5e2", "docs/explore/network/", "ca3bac1a01f519cefd9a0868eee194660b6bf5e6", 35]
+  ],
+  "approved_sources_columns": ["category", "branch", "approved_head", "imported_path", "imported_tree_sha", "record_count"],
+  "counts": {
+    "total_records": 257,
+    "by_category": {"ORDINALS": 47, "RUNES": 18, "WALLETS": 40, "MARKETPLACES": 18, "MINING": 37, "PAYMENTS": 27, "EXCHANGES": 35, "NETWORK": 35},
+    "by_status": {"ACTIVE": 201, "HISTORICAL": 35, "INACTIVE": 14, "UNCERTAIN": 7},
+    "by_source_confidence": {"HIGH": 209, "MEDIUM": 46, "LOW": 2}
+  },
+  "reconciliation": {
+    "exact_canonical_name_duplicates_after_reconciliation": 0,
+    "canonical_home_overrides": [
+      {"entity": "Strike", "canonical_home": "PAYMENTS", "source_record": "MSC-EXP-PAY-003", "relationships": ["EXCHANGES", "WALLETS", "NETWORK"], "note": "MSC-EXP-EXC-003 is intentionally unused."}
+    ],
+    "same_brand_distinct_systems": [
+      ["Bitcoin Core", "Bitcoin Core wallet", "NETWORK node/reference implementation vs WALLETS optional wallet subsystem"],
+      ["Bull Bitcoin", "Bull Bitcoin Wallet", "EXCHANGES broker/dealer vs WALLETS self-custody wallet"],
+      ["UniSat Wallet", "UniSat Marketplace", "WALLETS wallet vs MARKETPLACES venue"],
+      ["Magic Eden Wallet", "Magic Eden Bitcoin Marketplace", "WALLETS wallet vs MARKETPLACES venue"],
+      ["Coinbase", "Coinbase Commerce", "EXCHANGES platform vs PAYMENTS retired merchant product"],
+      ["Binance", "Binance Bitcoin marketplace support", "EXCHANGES venue vs MARKETPLACES historical marketplace product"],
+      ["OKX", "OKX Web3 Marketplace — Bitcoin assets", "EXCHANGES venue vs MARKETPLACES Web3 marketplace product"],
+      ["CoinCorner", "Bolt Card", "EXCHANGES platform vs PAYMENTS NFC Lightning payment system"],
+      ["Blockstream App", "Esplora / Blockstream Explorer", "WALLETS wallet vs NETWORK explorer/indexing infrastructure"],
+      ["Electrum", "ElectrumX", "WALLETS client wallet vs NETWORK server/backend"]
+    ],
+    "boundary_rules": [
+      "Ordinals-linked Runes assets are relationships across ORDINALS/RUNES rather than duplicates.",
+      "Approved mining/template protocols remain canonical in MINING and relationship-only from NETWORK.",
+      "Lightning protocol/implementations remain NETWORK; merchant/payment application systems remain PAYMENTS.",
+      "Wallet products remain WALLETS even when they expose payment, marketplace, or node integrations.",
+      "Same-brand products clear the master canon only when they are materially distinct systems."
+    ]
+  },
+  "publication_gates": {
+    "rule": "Master inclusion is not public-copy approval. Consult each category review queue and reverify time-sensitive claims before publication.",
+    "near_term": [
+      ["Voltage", "2026-08-31", "Reverify product boundaries after scheduled self-serve infrastructure deprovisioning."],
+      ["BitMEX", "2026-09-23T04:00:00Z", "Reverify lifecycle after announced exchange closure."]
+    ],
+    "always_reverify": ["fees/spreads/withdrawal rules/geography", "regulatory and licensing claims", "protocol/software support and deployment maturity", "Lightning/network statistics", "pool shares/hashrate/commercial terms", "flagged custody/PSBT/escrow mechanics"]
+  },
+  "integration_state": {
+    "base_main_sha": "98e3e722bff75922cae7f22f2925c411b8a5d620",
+    "branch": "explore/master-registry-reconciliation",
+    "category_snapshots_imported": true,
+    "category_snapshots_modified": false,
+    "research_branches_merged": false,
+    "production_files_modified": false,
+    "public_explore_connected": false
+  }
+}

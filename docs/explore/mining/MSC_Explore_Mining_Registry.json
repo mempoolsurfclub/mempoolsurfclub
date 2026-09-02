@@ -1,0 +1,134 @@
+{
+  "title": "Mempool Surf Club Explore — Mining Research Registry",
+  "status": "COMMAND_CENTER_REVIEW",
+  "registry_date": "2026-08-15",
+  "last_verified_date": "2026-08-15",
+  "primary_explore_category": "MINING",
+  "parent_explore_categories": ["ORDINALS","RUNES","WALLETS","MARKETPLACES","MINING","PAYMENTS","EXCHANGES","NETWORK"],
+  "scope": "Research-only registry section for the MINING category. This file does not publish or activate Explore content.",
+  "source_of_truth": {
+    "canonical_manifest": "docs/explore/mining/MSC_Explore_Mining_Registry.json",
+    "record_shards": [
+      "docs/explore/mining/records/MSC_Explore_Mining_Records_001_004.json",
+      "docs/explore/mining/records/MSC_Explore_Mining_Records_005_008.json",
+      "docs/explore/mining/records/MSC_Explore_Mining_Records_009_012.json",
+      "docs/explore/mining/records/MSC_Explore_Mining_Records_013_016.json",
+      "docs/explore/mining/records/MSC_Explore_Mining_Records_017_020.json",
+      "docs/explore/mining/records/MSC_Explore_Mining_Records_021_024.json",
+      "docs/explore/mining/records/MSC_Explore_Mining_Records_025_028.json",
+      "docs/explore/mining/records/MSC_Explore_Mining_Records_029_032.json",
+      "docs/explore/mining/records/MSC_Explore_Mining_Records_033_037.json"
+    ],
+    "human_companion": "docs/explore/mining/MSC_Explore_Mining_Registry.md",
+    "validation_report": "docs/explore/mining/MSC_Explore_Mining_Validation.txt",
+    "rule": "The manifest plus all listed record shards together are the canonical machine-readable source. Command Center review is required before promotion to a Master Explore Registry."
+  },
+  "registry_wide_rules": {
+    "one_entity_one_profile": "One canonical profile per mining entity/system. ASIC model SKUs, child firmware releases, pool product variants, and closely integrated company/product lineages are relationships unless they are materially distinct canonical systems.",
+    "status_rule": "Lifecycle status is independent from hashrate, payout-model, ownership, deployment-maturity, or software-support uncertainty. ACTIVE requires verified current project, service, operator, manufacturer, software, or development activity. HISTORICAL means the relevant system/service is legacy, closed, or superseded while retaining durable historical importance. INACTIVE means operation ceased or was abandoned without a historical-canon framing. UNCERTAIN means lifecycle itself cannot be determined reliably. A reachable website, old repository, or secondary block tracker alone does not establish ACTIVE.",
+    "protocol_rule": "Distinguish Bitcoin consensus rules from miner policy, pool policy, node mempool/relay policy, block-template construction, payout accounting, Stratum behavior, and market-data estimates. Miner-selected templates must still satisfy Bitcoin consensus.",
+    "pool_rule": "A pool coordinates work and/or payouts for hashers; it does not automatically own all hashrate pointed at it. Observed block share over a window is an estimate, not permanent network share.",
+    "payout_rule": "PPS, PPS+, FPPS, PPLNS, score, solo, TIDES, SLICE, and other schemes change accounting, risk allocation, transaction-fee distribution, and miner variance; they do not change proof-of-work consensus.",
+    "hardware_rule": "Distinguish ASIC manufacturer, chip, complete mining machine, control board, cooling format, firmware, and pool service. Model manufacturers/families canonically instead of one record per miner SKU.",
+    "energy_rule": "Distinguish electricity use, power capacity, curtailment, demand response, stranded/curtailed energy, flare/vent baselines, and company sustainability claims. Do not generalize company ESG claims into universal Bitcoin-mining claims.",
+    "publication_rule": "Recommended slugs and descriptions are planning data only. No Shopify page, Atlas widget, template, runtime file, public card, route, or production state is created by this registry.",
+    "source_rule": "Source hierarchy: official pool/project/company/manufacturer website/docs; official GitHub/support/release notes/filings/operator communication; primary Bitcoin/BIP/protocol evidence; primary block/template evidence; reputable independent reporting/research; explorers/trackers/hashrate dashboards/market data only as support.",
+    "cross_category_rule": "Entities canonically owned by another Explore category are relationships rather than duplicates. Exchange-operated pools may link EXCHANGES; Lightning mining payouts may link PAYMENTS; mining/template protocols may link NETWORK; Parasite Pool may link ORDINALS without duplicating Ordinals entities.",
+    "source_confidence_rule": "HIGH means first-party or primary evidence supports identity and core claims, including lifecycle where applicable. MEDIUM means credible evidence exists but one or more core fields depend on archival, independent, or incomplete first-party evidence. LOW means core attribution, scope, or lifecycle evidence is materially indirect. Confidence is independent from lifecycle status.",
+    "source_type_rule": "Controlled source_type values: official, official-github, primary, on-chain, independent, indexer, marketplace, market-data.",
+    "uncertainty_rule": "Unresolved operator attribution, payout formulas, fees, hashrate estimates, deployment maturity, software support, or energy-impact claims belong in Verification basis and Research notes / uncertainties. Non-lifecycle uncertainty does not imply UNCERTAIN lifecycle."
+  },
+  "topic_architecture": [
+    {"topic":"Pools & Coordinators","slug":"pools-coordinators","purpose":"Shared pools, solo coordinators, proprietary pools, alternative reward systems, and historically important pool operators.","subtopics":["Large shared pools","Alternative & miner-choice pools","Solo mining coordinators","Proprietary operator pools","Historical shared pools"]},
+    {"topic":"Protocols & Template Coordination","slug":"protocols-template-coordination","purpose":"Mining protocols and node/template interfaces coordinating jobs, shares, transport, transaction selection, template construction, or decentralized pool accounting.","subtopics":["Pool transport & share protocols","Block-template interfaces","Miner template negotiation","Decentralized pool protocols"]},
+    {"topic":"ASIC Hardware & Manufacturers","slug":"asic-hardware-manufacturers","purpose":"Canonical manufacturer and integrated hardware-platform profiles for Bitcoin SHA-256 ASIC systems, without one profile per model.","subtopics":["ASIC manufacturers & product families","Integrated mining hardware platforms"]},
+    {"topic":"Firmware & Mining Software","slug":"firmware-mining-software","purpose":"Firmware and historically significant software controlling ASIC behavior, pool connections, tuning, monitoring, or work submission.","subtopics":["ASIC firmware","Mining software infrastructure"]},
+    {"topic":"Home & Open-Source Mining","slug":"home-open-source-mining","purpose":"Durable home-mining and open-source hardware ecosystems that materially improve education, self-hosted mining access, or miner sovereignty.","subtopics":["Open-source home mining","Home miner & node systems"]},
+    {"topic":"Industrial & Energy Infrastructure","slug":"industrial-energy-infrastructure","purpose":"Selected industrial operators and mining-specific energy infrastructure whose operating model adds durable educational value beyond company size.","subtopics":["Grid-interactive industrial mining","Distributed renewable / mini-grid mining","Off-grid natural-gas mining infrastructure"]}
+  ],
+  "record_schema_contract": {
+    "required_record_fields": ["Registry ID","Canonical name","Recommended slug","Primary Explore category","Mining topic","Mining subtopic","Entity / project type","Status","Source confidence","Concise description","Deeper researched summary","Creators / founders","Launch / history","Why it matters in the Bitcoin mining ecosystem","Important technical or cultural characteristics","Related projects / entities","Related Explore categories","Supporting tags","Official website","Official sources","Corroborating sources","Last verified date","Verification basis","Research notes / uncertainties"],
+    "controlled_values": {
+      "Status": ["ACTIVE","HISTORICAL","INACTIVE","UNCERTAIN"],
+      "Source confidence": ["HIGH","MEDIUM","LOW"],
+      "Primary Explore category": ["MINING"],
+      "Related Explore categories": ["ORDINALS","RUNES","WALLETS","MARKETPLACES","MINING","PAYMENTS","EXCHANGES","NETWORK"],
+      "source_type": ["official","official-github","primary","on-chain","independent","indexer","marketplace","market-data"]
+    },
+    "field_rules": {
+      "Official website": "Canonical entity-controlled website when verified; null is allowed for historical entities and must not be replaced with a tracker URL.",
+      "Official sources": "First-party or authoritative primary sources supporting identity, history, technical claims, or lifecycle. May be empty when no surviving first-party source can be verified.",
+      "Corroborating sources": "Independent, on-chain, indexer, marketplace, or market-data evidence used to corroborate rather than manufacture project claims.",
+      "Last verified date": "ISO YYYY-MM-DD date of substantive verification; must not be future-dated.",
+      "Verification basis": "Concise statement of evidence supporting identity, technical role, and lifecycle classification.",
+      "Research notes / uncertainties": "Explicit unresolved facts or publication cautions; uncertainty here does not automatically require UNCERTAIN lifecycle status.",
+      "Related projects / entities": "Canonical entity names or clearly named external/child entities; relationships replace duplicate profiles.",
+      "Related Explore categories": "Cross-category destinations only; do not duplicate the same canonical entity in multiple category registries."
+    }
+  },
+  "counts": {
+    "total_records": 37,
+    "by_status": {"ACTIVE":31,"HISTORICAL":6,"INACTIVE":0,"UNCERTAIN":0},
+    "by_topic": {"ASIC Hardware & Manufacturers":6,"Firmware & Mining Software":3,"Home & Open-Source Mining":2,"Industrial & Energy Infrastructure":3,"Pools & Coordinators":16,"Protocols & Template Coordination":7},
+    "by_source_confidence": {"HIGH":34,"MEDIUM":3,"LOW":0}
+  },
+  "seed_coverage": {
+    "required_seed_count": 1,
+    "represented_seed_count": 1,
+    "missing": [],
+    "normalizations": ["Parasite Pool is included as MSC-EXP-MIN-009. The active service and current coinbase structure are first-party verified; founder attribution and exact shared-remainder accounting remain qualified MEDIUM-confidence research issues."]
+  },
+  "command_center_review_queue": [
+    {"entity":"Parasite Pool","priority":"HIGH","issue":"ACTIVE service and hybrid 1-BTC-finder coinbase structure are first-party verified, but founder/operator attribution and exact shared-remainder accounting are less explicit first-party claims. Keep MEDIUM confidence and avoid timeless zero-fee copy."},
+    {"entity":"GridPool","priority":"HIGH","issue":"ACTIVE means current public beta/mainnet soft launch. Do not present beta protocol claims or modeled security/variance properties as mature, widely deployed facts."},
+    {"entity":"Braidpool","priority":"HIGH","issue":"ACTIVE development is verified, but broad production deployment is not. Separate project activity from deployment maturity."},
+    {"entity":"Stratum V2","priority":"HIGH","issue":"Active and deployed in some contexts, but Job Declaration and Template Distribution are not universal. SV2 transport alone does not imply miner transaction selection."},
+    {"entity":"P2Pool (Bitcoin)","priority":"MEDIUM","issue":"Keep the original Bitcoin lineage distinct from modern Monero P2Pool; historical first-party source continuity is fragmented."},
+    {"entity":"Riot Platforms","priority":"MEDIUM","issue":"Use to explain documented curtailment/demand-response mechanisms; do not turn company grid-benefit claims into universal mining claims."},
+    {"entity":"Gridless","priority":"MEDIUM","issue":"Operating model is verified; community/economic/renewable impact claims require dated site-specific sourcing."},
+    {"entity":"Upstream Data","priority":"MEDIUM","issue":"Off-grid natural-gas mining infrastructure is verified; do not assume every deployment uses otherwise-flared/vented gas or repeat vendor emissions claims without site-specific corroboration."}
+  ],
+  "omission_decisions": [
+    {"entity":"SpiderPool","decision":"EXCLUDE_FOR_NOW","reason":"Current operation is verifiable, but it adds little unique technical or historical coverage beyond included large shared pools and would push the canon toward a pool directory."},
+    {"entity":"Binance Pool","decision":"EXCLUDE_FOR_NOW","reason":"Bitcoin-mining activity exists, but the entity is primarily exchange-owned and does not add a sufficiently distinctive mining mechanism to justify cross-category duplication."},
+    {"entity":"BTC.com Pool","decision":"EXCLUDE_FOR_NOW","reason":"Historically significant, but current 2026 lifecycle/operator continuity is not sufficiently clear and stronger historical/current profiles already cover its role."},
+    {"entity":"VNish","decision":"EXCLUDE_FOR_NOW","reason":"Current firmware is visible, but operator/provenance transparency and unique educational value are weaker than Braiins OS and LuxOS."},
+    {"entity":"BFGMiner","decision":"EXCLUDE_FOR_NOW","reason":"Historically important, but its lineage overlaps substantially with included CGMiner and current maintenance is limited."},
+    {"entity":"NerdMiner","decision":"EXCLUDE_FOR_NOW","reason":"Useful educational project, but it adds insufficient mining-system significance beyond Bitaxe and FutureBit for the initial canon."},
+    {"entity":"CleanSpark","decision":"EXCLUDE_FOR_NOW","reason":"Active 2026 industrial mining is verified, but public-company scale alone is not an inclusion criterion and no uniquely necessary protocol/product archetype was identified."},
+    {"entity":"Core Scientific","decision":"EXCLUDE_FOR_NOW","reason":"Significant active mining/hosting history, but its distinct role is represented relationally through Proto deployment and broader industrial context."},
+    {"entity":"IREN","decision":"EXCLUDE_FOR_NOW","reason":"Active but transitioning substantial capacity toward AI/data-center workloads in 2026; scale/public listing alone does not justify a Mining profile."},
+    {"entity":"TeraWulf","decision":"EXCLUDE_FOR_NOW","reason":"Retains mining exposure but increasingly emphasizes HPC/AI; no uniquely necessary mining archetype was identified beyond included energy models."},
+    {"entity":"Hut 8","decision":"EXCLUDE_FOR_NOW","reason":"The company is increasingly a power/data-center platform and separated American Bitcoin as a mining vehicle; including scale alone would create company-directory sprawl."},
+    {"entity":"Crusoe Digital Flare Mitigation / Bitcoin mining","decision":"EXCLUDE_FOR_NOW","reason":"Historically important, but Crusoe divested its Bitcoin-mining/DFM business to NYDIG in 2025 and now focuses on AI infrastructure. Upstream Data supplies a current mining-specific off-grid natural-gas profile."},
+    {"entity":"MARA Holdings corporate profile","decision":"CONSOLIDATE","reason":"The technically distinctive canonical entity is MARA Pool/Slipstream; the broader public company remains a related operator."},
+    {"entity":"Slush Pool","decision":"CONSOLIDATE","reason":"Represented as the 2010 historical lineage inside current Braiins Pool."},
+    {"entity":"Job Declaration Protocol","decision":"CONSOLIDATE","reason":"Represented as a Stratum V2 component rather than a duplicate standalone protocol profile."},
+    {"entity":"AxeOS / ESP-Miner / Open Source Miners United","decision":"CONSOLIDATE","reason":"Represented as closely integrated relationships within the Bitaxe ecosystem."},
+    {"entity":"ckpool software","decision":"EXCLUDE_FOR_NOW","reason":"Important software related to solo.ckpool and Parasite Pool, but a separate profile would overlap the Con Kolivas service/software lineage without enough unique initial-canon coverage."}
+  ],
+  "consolidation_decisions": [
+    "Slush Pool is historical lineage under Braiins Pool, not a second record.",
+    "BITMAIN is one manufacturer/Antminer-family profile; individual models are child products. AntPool remains separate because it is a distinct active pool and BITMAIN states it was spun off in 2021.",
+    "MicroBT/WhatsMiner, Canaan/Avalon, and Auradine/Teraflux are each one manufacturer/family profile rather than per-model records.",
+    "Proto is one integrated Block mining-hardware ecosystem profile covering silicon, Rig, Fleet, and the Mining Development Kit.",
+    "Bitdeer and SEALMINER are one integrated mining-technology/hardware profile rather than a separate stock/operator profile.",
+    "Braiins Pool and Braiins OS remain separate because pool coordination/payouts and device firmware are materially different canonical products.",
+    "Luxor Mining Pool and LuxOS remain separate for the same pool-versus-firmware reason.",
+    "OCEAN and DATUM remain separate because OCEAN is a pool/operator with TIDES payout policy while DATUM is template/share coordination infrastructure.",
+    "MARA Pool is canonical; MARA Holdings is its operator/related entity rather than a duplicate corporate record.",
+    "Bitaxe is an ecosystem-level profile; closely integrated OSMU and board/firmware generations remain relationships.",
+    "FutureBit Apollo is one integrated home miner/node ecosystem profile rather than one record per generation."
+  ],
+  "record_files": [
+    {"path":"records/MSC_Explore_Mining_Records_001_004.json","range":"001-004","count":4},
+    {"path":"records/MSC_Explore_Mining_Records_005_008.json","range":"005-008","count":4},
+    {"path":"records/MSC_Explore_Mining_Records_009_012.json","range":"009-012","count":4},
+    {"path":"records/MSC_Explore_Mining_Records_013_016.json","range":"013-016","count":4},
+    {"path":"records/MSC_Explore_Mining_Records_017_020.json","range":"017-020","count":4},
+    {"path":"records/MSC_Explore_Mining_Records_021_024.json","range":"021-024","count":4},
+    {"path":"records/MSC_Explore_Mining_Records_025_028.json","range":"025-028","count":4},
+    {"path":"records/MSC_Explore_Mining_Records_029_032.json","range":"029-032","count":4},
+    {"path":"records/MSC_Explore_Mining_Records_033_037.json","range":"033-037","count":5}
+  ]
+}

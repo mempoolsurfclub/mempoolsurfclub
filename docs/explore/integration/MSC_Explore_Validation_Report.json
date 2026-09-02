@@ -1,0 +1,1248 @@
+{
+  "status": "PASS",
+  "generated_at": "DETERMINISTIC_NO_TIMESTAMP",
+  "source": {
+    "main_base_expected_for_stage_1": "2d4f6f5858ca9eb8c3229c8b03e69e4695bce252",
+    "reconciled_registry_head": "0660722076f654dd0cf88b074285c3a47900bb95",
+    "approved_category_sources": {
+      "ORDINALS": {
+        "category": "ORDINALS",
+        "branch": "explore/ordinals-registry-research",
+        "approved_head": "1f4368bdebc572de5aaed6df221460516295c54a",
+        "imported_path": "docs/explore/ordinals/",
+        "imported_tree_sha": "1cc1a5dd37aab47b4650fadbb65b4c4569b62995",
+        "record_count": 47
+      },
+      "RUNES": {
+        "category": "RUNES",
+        "branch": "explore/runes-registry-research",
+        "approved_head": "a9161640d19346fef8e44056604774ec294c81d0",
+        "imported_path": "docs/explore/runes/",
+        "imported_tree_sha": "e8ad1c9b9b0a5f251339732f9d5102de03ea2471",
+        "record_count": 18
+      },
+      "WALLETS": {
+        "category": "WALLETS",
+        "branch": "explore/wallets-registry-research",
+        "approved_head": "c3ab81de2c309503855a00eb2380873ec5bcd401",
+        "imported_path": "docs/explore/wallets/",
+        "imported_tree_sha": "2615a3c95ac1459d7e1dbbc647c3874d46178d6c",
+        "record_count": 40
+      },
+      "MARKETPLACES": {
+        "category": "MARKETPLACES",
+        "branch": "explore/marketplaces-registry-research",
+        "approved_head": "30704f96d21f6ff6dd2c34ba7fe27212f8bd0c50",
+        "imported_path": "docs/explore/marketplaces/",
+        "imported_tree_sha": "59c7be979b2265dd1f68b71cfe946b5c1778dce9",
+        "record_count": 18
+      },
+      "MINING": {
+        "category": "MINING",
+        "branch": "explore/mining-registry-research",
+        "approved_head": "9805a04fd5c9333f40433ff868f4e6a06301bd4a",
+        "imported_path": "docs/explore/mining/",
+        "imported_tree_sha": "54fba97422403f68328df92d4fceacbe9832b965",
+        "record_count": 37
+      },
+      "PAYMENTS": {
+        "category": "PAYMENTS",
+        "branch": "explore/payments-registry-research",
+        "approved_head": "792b3009ee9b31f3d41664a237623556b3db1c15",
+        "imported_path": "docs/explore/payments/",
+        "imported_tree_sha": "7deac35ac79d3e4911eb3c4f88f82f37e94abb93",
+        "record_count": 27
+      },
+      "EXCHANGES": {
+        "category": "EXCHANGES",
+        "branch": "explore/exchanges-registry-research",
+        "approved_head": "de1db5785795eaffe8a7649387d4ec8af83068b3",
+        "imported_path": "docs/explore/exchanges/",
+        "imported_tree_sha": "a8b062898bfdbb3dd5e7c60fbd7bd24367f18422",
+        "record_count": 35
+      },
+      "NETWORK": {
+        "category": "NETWORK",
+        "branch": "explore/network-registry-research",
+        "approved_head": "53c65965cf9305cf1343dcdd51f903f3a9ede5e2",
+        "imported_path": "docs/explore/network/",
+        "imported_tree_sha": "ca3bac1a01f519cefd9a0868eee194660b6bf5e6",
+        "record_count": 35
+      }
+    }
+  },
+  "checks": {
+    "canonical_record_count": 257,
+    "expected_canonical_record_count": 257,
+    "unique_registry_ids": true,
+    "unique_canonical_names": true,
+    "unique_recommended_slugs": true,
+    "route_handle_count": 265,
+    "route_collisions": 0,
+    "lifecycle_counts": {
+      "ACTIVE": 201,
+      "HISTORICAL": 35,
+      "INACTIVE": 14,
+      "UNCERTAIN": 7
+    },
+    "source_confidence_counts": {
+      "HIGH": 209,
+      "MEDIUM": 46,
+      "LOW": 2
+    },
+    "category_counts": {
+      "ORDINALS": 47,
+      "RUNES": 18,
+      "WALLETS": 40,
+      "MARKETPLACES": 18,
+      "MINING": 37,
+      "PAYMENTS": 27,
+      "EXCHANGES": 35,
+      "NETWORK": 35
+    },
+    "relationship_source_labels": 704,
+    "relationship_targets_resolved": 428,
+    "relationship_labels_preserved_unresolved": 276,
+    "favorite_targets_expected": 6,
+    "favorite_targets_resolved": 6,
+    "charted_destination_targets": 0,
+    "charted_destination_targets_resolved": 0,
+    "strike_canonical_home_locked": true,
+    "all_profiles_public_ready": false,
+    "category_snapshot_tree_validation": "enforced in committed Git checkout via approved imported_tree_sha values"
+  },
+  "unresolved_relationships": [
+    {
+      "source_registry_id": "MSC-EXP-EXC-002",
+      "label": "BitcoinIRA-style retirement infrastructure"
+    },
+    {
+      "source_registry_id": "MSC-EXP-EXC-004",
+      "label": "BULL wallet"
+    },
+    {
+      "source_registry_id": "MSC-EXP-EXC-005",
+      "label": "Bitcoin ATMs"
+    },
+    {
+      "source_registry_id": "MSC-EXP-EXC-006",
+      "label": "Hardware wallets"
+    },
+    {
+      "source_registry_id": "MSC-EXP-EXC-007",
+      "label": "Lightning Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-EXC-008",
+      "label": "Coinfloor"
+    },
+    {
+      "source_registry_id": "MSC-EXP-EXC-009",
+      "label": "Coinbase Advanced"
+    },
+    {
+      "source_registry_id": "MSC-EXP-EXC-009",
+      "label": "Coinbase Wallet"
+    },
+    {
+      "source_registry_id": "MSC-EXP-EXC-009",
+      "label": "GDAX / Coinbase Pro"
+    },
+    {
+      "source_registry_id": "MSC-EXP-EXC-010",
+      "label": "Kraken Pro"
+    },
+    {
+      "source_registry_id": "MSC-EXP-EXC-011",
+      "label": "Binance.US"
+    },
+    {
+      "source_registry_id": "MSC-EXP-EXC-012",
+      "label": "OKX Wallet"
+    },
+    {
+      "source_registry_id": "MSC-EXP-EXC-014",
+      "label": "Robinhood"
+    },
+    {
+      "source_registry_id": "MSC-EXP-EXC-015",
+      "label": "Tether / iFinex"
+    },
+    {
+      "source_registry_id": "MSC-EXP-EXC-016",
+      "label": "Gemini Earn"
+    },
+    {
+      "source_registry_id": "MSC-EXP-EXC-016",
+      "label": "Genesis Global Capital"
+    },
+    {
+      "source_registry_id": "MSC-EXP-EXC-017",
+      "label": "BTC China"
+    },
+    {
+      "source_registry_id": "MSC-EXP-EXC-020",
+      "label": "bitFlyer Lightning trading interface"
+    },
+    {
+      "source_registry_id": "MSC-EXP-EXC-021",
+      "label": "Bisq 2"
+    },
+    {
+      "source_registry_id": "MSC-EXP-EXC-022",
+      "label": "Lightning Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-EXC-027",
+      "label": "Paxos"
+    },
+    {
+      "source_registry_id": "MSC-EXP-EXC-028",
+      "label": "CME CF Bitcoin Reference Rate"
+    },
+    {
+      "source_registry_id": "MSC-EXP-EXC-036",
+      "label": "Digital Currency Group"
+    },
+    {
+      "source_registry_id": "MSC-EXP-EXC-036",
+      "label": "Genesis Global Capital"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MIN-001",
+      "label": "Foundry Digital"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MIN-002",
+      "label": "BITMAIN"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MIN-003",
+      "label": "Namecoin"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MIN-003",
+      "label": "Syscoin"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MIN-004",
+      "label": "Namecoin"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MIN-005",
+      "label": "Slush Pool"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MIN-006",
+      "label": "Luxor Technology"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MIN-008",
+      "label": "Job Declaration Protocol"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MIN-009",
+      "label": "ckpool"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MIN-010",
+      "label": "Open Source Miners United"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MIN-011",
+      "label": "ckpool"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MIN-012",
+      "label": "MARA Holdings"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MIN-012",
+      "label": "Slipstream"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MIN-013",
+      "label": "P2Pool"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MIN-014",
+      "label": "CEX.IO"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MIN-016",
+      "label": "Eloipool"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MIN-019",
+      "label": "P2Pool"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MIN-024",
+      "label": "VNish"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MIN-028",
+      "label": "Core Scientific"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MIN-032",
+      "label": "ckpool"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MIN-033",
+      "label": "Open Source Miners United"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MIN-035",
+      "label": "ERCOT"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MIN-037",
+      "label": "Crusoe Digital Flare Mitigation"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-001",
+      "label": "OKX Wallet"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-001",
+      "label": "Ordinals protocol"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-001",
+      "label": "UniSat"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-002",
+      "label": "Swap Labs"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-003",
+      "label": "Ordinals protocol"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-003",
+      "label": "UniHexa"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-003",
+      "label": "UniSat Indexer"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-004",
+      "label": "Ordinals protocol"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-004",
+      "label": "Twetch Inc."
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-005",
+      "label": "Ordinals protocol"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-005",
+      "label": "Sparrow"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-005",
+      "label": "Stacks"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-006",
+      "label": "OKX Exchange"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-006",
+      "label": "OKX Wallet"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-006",
+      "label": "Ordinals protocol"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-007",
+      "label": "Ordinals protocol"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-007",
+      "label": "Rare Sats Market (derivative frontend powered by Magisat API)"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-008",
+      "label": "Ordinals protocol"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-009",
+      "label": "Bitcoin art ecosystem"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-009",
+      "label": "Lightning Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-009",
+      "label": "Ordinals creators"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-010",
+      "label": "Counterparty"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-010",
+      "label": "Horizon Wallet"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-010",
+      "label": "Ordinals protocol"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-010",
+      "label": "Unspendable Labs"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-011",
+      "label": "Magic Eden"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-011",
+      "label": "Ordinals protocol"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-012",
+      "label": "Binance Exchange"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-012",
+      "label": "Binance NFT"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-012",
+      "label": "Binance Web3 Wallet"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-012",
+      "label": "Ordinals protocol"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-013",
+      "label": "Emblem Vault"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-013",
+      "label": "OpenSea"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-013",
+      "label": "Ordinals protocol"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-014",
+      "label": "Ordinals protocol"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-015",
+      "label": "Ordinals protocol"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-015",
+      "label": "ordinals-wallet/ordinals-collections repo"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-018",
+      "label": "Ordinals protocol"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-018",
+      "label": "OrdinalsBot"
+    },
+    {
+      "source_registry_id": "MSC-EXP-MKT-018",
+      "label": "TRIO token"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-001",
+      "label": "AssumeUTXO"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-001",
+      "label": "BIP 324"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-001",
+      "label": "Compact Block Relay (BIP 152)"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-002",
+      "label": "BIP 324"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-002",
+      "label": "Bitcoin Knots wallet"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-002",
+      "label": "Compact Block Relay (BIP 152)"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-003",
+      "label": "btcwallet"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-003",
+      "label": "Compact Block Filters (BIP 157/158)"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-004",
+      "label": "Electrum protocol"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-004",
+      "label": "rust-bitcoinkernel"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-004",
+      "label": "Utreexo"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-005",
+      "label": "Purse.io"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-006",
+      "label": "BOLT specifications"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-006",
+      "label": "Lightning Dev Kit"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-007",
+      "label": "Lightning Terminal"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-007",
+      "label": "Ride The Lightning"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-007",
+      "label": "Taproot Assets"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-008",
+      "label": "Ride The Lightning"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-009",
+      "label": "ACINQ"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-009",
+      "label": "Ride The Lightning"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-010",
+      "label": "BDK"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-010",
+      "label": "LDK Node"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-010",
+      "label": "LDK Server"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-011",
+      "label": "Blockstream"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-013",
+      "label": "Blockstream"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-016",
+      "label": "Magma"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-022",
+      "label": "Compact Block Filters (BIP 157/158)"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-023",
+      "label": "Ride The Lightning"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-024",
+      "label": "Ride The Lightning"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-025",
+      "label": "Ride The Lightning"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-026",
+      "label": "Ride The Lightning"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-029",
+      "label": "Bitcoin Dev Kit (BDK)"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-029",
+      "label": "rust-miniscript"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-031",
+      "label": "libbitcoin-explorer"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-031",
+      "label": "libbitcoin-server"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-031",
+      "label": "libbitcoin-system"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-033",
+      "label": "Bitcoin P2P network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-034",
+      "label": "Compact Block Relay (BIP 152)"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-034",
+      "label": "Mining pools"
+    },
+    {
+      "source_registry_id": "MSC-EXP-NET-035",
+      "label": "Compact Block Relay (BIP 152)"
+    },
+    {
+      "source_registry_id": "MSC-EXP-ORD-002",
+      "label": "Layer 1 Foundation"
+    },
+    {
+      "source_registry_id": "MSC-EXP-ORD-002",
+      "label": "ORDI"
+    },
+    {
+      "source_registry_id": "MSC-EXP-ORD-014",
+      "label": "Nakamoto Archives"
+    },
+    {
+      "source_registry_id": "MSC-EXP-ORD-014",
+      "label": "OrdRain"
+    },
+    {
+      "source_registry_id": "MSC-EXP-ORD-014",
+      "label": "VOID Cenotaph"
+    },
+    {
+      "source_registry_id": "MSC-EXP-ORD-016",
+      "label": "OP_CAT"
+    },
+    {
+      "source_registry_id": "MSC-EXP-ORD-019",
+      "label": "OP_CAT"
+    },
+    {
+      "source_registry_id": "MSC-EXP-ORD-020",
+      "label": "Magic Internet Money"
+    },
+    {
+      "source_registry_id": "MSC-EXP-ORD-022",
+      "label": "FTW collective"
+    },
+    {
+      "source_registry_id": "MSC-EXP-ORD-029",
+      "label": "Dmitri Cherniak / The Goose"
+    },
+    {
+      "source_registry_id": "MSC-EXP-ORD-031",
+      "label": "OCM Dimensions"
+    },
+    {
+      "source_registry_id": "MSC-EXP-ORD-031",
+      "label": "OCM Genesis"
+    },
+    {
+      "source_registry_id": "MSC-EXP-ORD-033",
+      "label": "Satoria"
+    },
+    {
+      "source_registry_id": "MSC-EXP-ORD-033",
+      "label": "ZBIT"
+    },
+    {
+      "source_registry_id": "MSC-EXP-ORD-040",
+      "label": "Rare Pepes"
+    },
+    {
+      "source_registry_id": "MSC-EXP-ORD-045",
+      "label": "DeGods"
+    },
+    {
+      "source_registry_id": "MSC-EXP-ORD-045",
+      "label": "Frank / Rohun Vora"
+    },
+    {
+      "source_registry_id": "MSC-EXP-ORD-046",
+      "label": "Based Angels Honoraries"
+    },
+    {
+      "source_registry_id": "MSC-EXP-ORD-046",
+      "label": "Redacted Remilio Babies"
+    },
+    {
+      "source_registry_id": "MSC-EXP-ORD-047",
+      "label": "King / kingpunkape"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-002",
+      "label": "BOLT11"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-002",
+      "label": "Lightning Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-003",
+      "label": "BOLT11"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-003",
+      "label": "Lightning Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-004",
+      "label": "Block"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-004",
+      "label": "Lightning Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-004",
+      "label": "Square"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-005",
+      "label": "Lightning Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-006",
+      "label": "Lightning Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-008",
+      "label": "BOLT11"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-008",
+      "label": "Lightning Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-009",
+      "label": "Lightning Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-009",
+      "label": "Speed Wallet"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-010",
+      "label": "Coinbase Business"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-011",
+      "label": "Bitcoin"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-011",
+      "label": "Lightning Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-013",
+      "label": "Lightning Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-014",
+      "label": "Lightning Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-014",
+      "label": "Spark"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-016",
+      "label": "Lightning Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-016",
+      "label": "Liquid"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-017",
+      "label": "Lightning Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-018",
+      "label": "Lightning Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-019",
+      "label": "Lightning Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-020",
+      "label": "Lightning Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-021",
+      "label": "BOLT11"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-021",
+      "label": "BOLT12"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-024",
+      "label": "BOLT11"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-024",
+      "label": "BOLT12"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-025",
+      "label": "BOLT12"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-027",
+      "label": "Fedimint"
+    },
+    {
+      "source_registry_id": "MSC-EXP-PAY-027",
+      "label": "Lightning Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-RUNE-004",
+      "label": "CyberKongz"
+    },
+    {
+      "source_registry_id": "MSC-EXP-RUNE-004",
+      "label": "Prometheans"
+    },
+    {
+      "source_registry_id": "MSC-EXP-RUNE-005",
+      "label": "BVM"
+    },
+    {
+      "source_registry_id": "MSC-EXP-RUNE-005",
+      "label": "RuneChain"
+    },
+    {
+      "source_registry_id": "MSC-EXP-RUNE-007",
+      "label": "Buoyant Capital"
+    },
+    {
+      "source_registry_id": "MSC-EXP-RUNE-007",
+      "label": "LOBOVERSE"
+    },
+    {
+      "source_registry_id": "MSC-EXP-RUNE-007",
+      "label": "Rune Doors"
+    },
+    {
+      "source_registry_id": "MSC-EXP-RUNE-007",
+      "label": "Solgun"
+    },
+    {
+      "source_registry_id": "MSC-EXP-RUNE-008",
+      "label": "Leonidas"
+    },
+    {
+      "source_registry_id": "MSC-EXP-RUNE-010",
+      "label": "13"
+    },
+    {
+      "source_registry_id": "MSC-EXP-RUNE-010",
+      "label": "Spiralgaze"
+    },
+    {
+      "source_registry_id": "MSC-EXP-RUNE-011",
+      "label": "OrdKit"
+    },
+    {
+      "source_registry_id": "MSC-EXP-RUNE-011",
+      "label": "PUPS BRC-20 predecessor"
+    },
+    {
+      "source_registry_id": "MSC-EXP-RUNE-011",
+      "label": "RuneMine"
+    },
+    {
+      "source_registry_id": "MSC-EXP-RUNE-012",
+      "label": "Mavensbot"
+    },
+    {
+      "source_registry_id": "MSC-EXP-RUNE-012",
+      "label": "WZRD BRC-20 predecessor"
+    },
+    {
+      "source_registry_id": "MSC-EXP-RUNE-013",
+      "label": "Casey Rodarmor"
+    },
+    {
+      "source_registry_id": "MSC-EXP-RUNE-014",
+      "label": "BillyBot"
+    },
+    {
+      "source_registry_id": "MSC-EXP-RUNE-015",
+      "label": "Zach (@Zachkag)"
+    },
+    {
+      "source_registry_id": "MSC-EXP-RUNE-018",
+      "label": "Liquidium"
+    },
+    {
+      "source_registry_id": "MSC-EXP-RUNE-018",
+      "label": "Liquidium Foundation"
+    },
+    {
+      "source_registry_id": "MSC-EXP-RUNE-018",
+      "label": "STAKED•LIQUIDIUM"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-001",
+      "label": "Hardware signers"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-001",
+      "label": "Output descriptors"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-001",
+      "label": "PSBT"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-002",
+      "label": "Electrum server protocol"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-002",
+      "label": "Hardware signers"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-004",
+      "label": "Specter DIY"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-005",
+      "label": "Hardware signers"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-005",
+      "label": "LNDHub"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-006",
+      "label": "Blockstream Green"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-006",
+      "label": "GreenAddress"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-006",
+      "label": "Liquid Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-007",
+      "label": "Bitcoin Wallet project"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-008",
+      "label": "WabiSabi"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-008",
+      "label": "zkSNACKs"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-009",
+      "label": "WabiSabi"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-010",
+      "label": "Dojo"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-010",
+      "label": "Keonne Rodriguez"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-010",
+      "label": "Whirlpool"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-010",
+      "label": "William Lonergan Hill"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-012",
+      "label": "Proton Foundation"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-012",
+      "label": "Proton Mail"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-014",
+      "label": "Asigna"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-014",
+      "label": "Keystone"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-014",
+      "label": "Ordinals"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-014",
+      "label": "Runes"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-015",
+      "label": "Alkanes"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-015",
+      "label": "Ordinals"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-015",
+      "label": "Runes"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-016",
+      "label": "Hiro Wallet"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-016",
+      "label": "Ordinals"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-016",
+      "label": "Runes"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-016",
+      "label": "Stacks"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-017",
+      "label": "JAN3"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-017",
+      "label": "Lightning Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-017",
+      "label": "Liquid Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-018",
+      "label": "Magic Eden"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-018",
+      "label": "Ordinals"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-018",
+      "label": "Runes"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-019",
+      "label": "ACINQ"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-019",
+      "label": "Lightning Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-020",
+      "label": "LDK Node"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-020",
+      "label": "Nostr"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-021",
+      "label": "Breez SDK"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-021",
+      "label": "Lightning Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-021",
+      "label": "Liquid Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-021",
+      "label": "Spark"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-022",
+      "label": "Lightning Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-023",
+      "label": "Emergency Kit"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-023",
+      "label": "Lightning Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-024",
+      "label": "Alby Go"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-024",
+      "label": "Alby Hub"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-024",
+      "label": "Nostr"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-024",
+      "label": "Nostr Wallet Connect"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-025",
+      "label": "Lightning Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-025",
+      "label": "Spark"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-026",
+      "label": "Bitcoin Beach"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-026",
+      "label": "Galoy"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-026",
+      "label": "Lightning Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-026",
+      "label": "Spark"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-027",
+      "label": "Lightning Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-027",
+      "label": "Liquid Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-029",
+      "label": "Hardware signers"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-029",
+      "label": "Miniscript"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-030",
+      "label": "Hardware signers"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-030",
+      "label": "Inheritance planning"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-031",
+      "label": "Hardware signers"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-031",
+      "label": "Inheritance planning"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-033",
+      "label": "SatoshiLabs"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-035",
+      "label": "Envoy"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-036",
+      "label": "BitBoxApp"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-037",
+      "label": "Liquid Network"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-039",
+      "label": "Liana"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-040",
+      "label": "Bitkey hardware device"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-040",
+      "label": "Bitkey mobile app"
+    },
+    {
+      "source_registry_id": "MSC-EXP-WAL-040",
+      "label": "Block, Inc."
+    }
+  ],
+  "publication_gates": {
+    "master": {
+      "rule": "Master inclusion is not public-copy approval. Consult each category review queue and reverify time-sensitive claims before publication.",
+      "near_term": [
+        [
+          "Voltage",
+          "2026-08-31",
+          "Reverify product boundaries after scheduled self-serve infrastructure deprovisioning."
+        ],
+        [
+          "BitMEX",
+          "2026-09-23T04:00:00Z",
+          "Reverify lifecycle after announced exchange closure."
+        ]
+      ],
+      "always_reverify": [
+        "fees/spreads/withdrawal rules/geography",
+        "regulatory and licensing claims",
+        "protocol/software support and deployment maturity",
+        "Lightning/network statistics",
+        "pool shares/hashrate/commercial terms",
+        "flagged custody/PSBT/escrow mechanics"
+      ]
+    },
+    "stage_1_rule": "All generated profiles remain public_ready=false. Current-claim re-verification and public copy approval are deferred to later stages."
+  },
+  "warnings": [],
+  "failures": []
+}

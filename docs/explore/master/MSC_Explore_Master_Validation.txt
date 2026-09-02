@@ -1,0 +1,84 @@
+MSC Explore — Master Registry Validation / Command Center Reconciliation QA
+Verified date: 2026-08-15
+
+REPOSITORY / INTEGRATION SCOPE
+PASS: Integration branch = explore/master-registry-reconciliation.
+PASS: Base main SHA = 98e3e722bff75922cae7f22f2925c411b8a5d620.
+PASS: Eight approved research registries were assembled onto a fresh branch rather than merging their divergent/stale research histories.
+PASS: Imported category directories are exact Git tree snapshots from the approved source heads.
+PASS: No category snapshot content was rewritten during assembly.
+PASS: No Shopify, Atlas, runtime Explore, Learn, Home, Tools, production route, deployment, or publication change is authorized by this package.
+
+APPROVED CATEGORY SOURCES
+PASS: ORDINALS @ 1f4368bdebc572de5aaed6df221460516295c54a — 47 records.
+PASS: RUNES @ a9161640d19346fef8e44056604774ec294c81d0 — 18 records.
+PASS: WALLETS @ c3ab81de2c309503855a00eb2380873ec5bcd401 — 40 records.
+PASS: MARKETPLACES @ 30704f96d21f6ff6dd2c34ba7fe27212f8bd0c50 — 18 records.
+PASS: MINING @ 9805a04fd5c9333f40433ff868f4e6a06301bd4a — 37 records.
+PASS: PAYMENTS @ 792b3009ee9b31f3d41664a237623556b3db1c15 — 27 records.
+PASS: EXCHANGES @ de1db5785795eaffe8a7649387d4ec8af83068b3 — 35 records.
+PASS: NETWORK @ 53c65965cf9305cf1343dcdd51f903f3a9ede5e2 — 35 records.
+
+FEDERATED SOURCE MODEL
+PASS: Category manifests and record shards remain the canonical 24-field research payloads.
+PASS: Master registry owns source provenance, aggregate counts, cross-category identity and canonical-home decisions.
+PASS: No second flattened copy of all 257 record payloads was created, avoiding dual-source drift.
+PASS: Existing category Registry IDs remain authoritative; no unnecessary master renumbering was introduced.
+
+AGGREGATE COUNTS
+PASS: Category totals reconcile: 47 + 18 + 40 + 18 + 37 + 27 + 35 + 35 = 257.
+PASS: Lifecycle totals reconcile to 257:
+- ACTIVE: 201
+- HISTORICAL: 35
+- INACTIVE: 14
+- UNCERTAIN: 7
+PASS: Source-confidence totals reconcile to 257:
+- HIGH: 209
+- MEDIUM: 46
+- LOW: 2
+PASS: Full controlled lifecycle vocabulary remains represented in aggregate counts.
+PASS: Full controlled confidence vocabulary remains represented in aggregate counts.
+
+CROSS-CATEGORY IDENTITY QA
+PASS: One canonical profile per materially distinct entity/protocol/product/system remains the governing rule.
+PASS: Cross-category relevance is represented as relationships rather than duplicate profiles.
+PASS: Strike collision is resolved: PAYMENTS / MSC-EXP-PAY-003 is canonical.
+PASS: EXCHANGES / MSC-EXP-EXC-003 remains intentionally unused after Strike removal.
+PASS: Cross-category exact canonical-name audit across the eight approved inventories finds 0 duplicates after Strike normalization.
+
+SAME-BRAND DISTINCT-SYSTEM QA
+PASS: Bitcoin Core vs Bitcoin Core wallet remains a deliberate NETWORK-node vs WALLETS-wallet distinction.
+PASS: Bull Bitcoin vs Bull Bitcoin Wallet remains EXCHANGES broker/dealer vs WALLETS wallet.
+PASS: UniSat Wallet vs UniSat Marketplace remains WALLETS vs MARKETPLACES.
+PASS: Magic Eden Wallet vs Magic Eden Bitcoin Marketplace remains WALLETS vs MARKETPLACES.
+PASS: Coinbase vs Coinbase Commerce remains EXCHANGES platform vs PAYMENTS retired merchant product.
+PASS: Binance vs Binance Bitcoin marketplace support remains EXCHANGES venue vs MARKETPLACES historical product surface.
+PASS: OKX vs OKX Web3 Marketplace — Bitcoin assets remains EXCHANGES venue vs MARKETPLACES product surface.
+PASS: CoinCorner vs Bolt Card remains EXCHANGES platform vs PAYMENTS NFC payment system.
+PASS: Blockstream App vs Esplora / Blockstream Explorer remains WALLETS wallet vs NETWORK explorer/indexing infrastructure.
+PASS: Electrum vs ElectrumX remains WALLETS client vs NETWORK server/backend.
+
+CATEGORY-BOUNDARY QA
+PASS: ORDINALS/RUNES linked assets remain relationships rather than duplicates.
+PASS: MINING retains Stratum V1, Stratum V2, getblocktemplate, BetterHash, DATUM, P2Pool (Bitcoin), and Braidpool; NETWORK does not duplicate them.
+PASS: NETWORK retains Lightning protocol/implementations while PAYMENTS retains merchant/payment application systems.
+PASS: WALLETS retains wallet products even when they expose payment, marketplace, Lightning, or node integrations.
+PASS: Same-brand child products only remain canonical when materially distinct at the system/product layer.
+
+PUBLICATION / FRESHNESS QA
+PASS: Master inclusion is explicitly separated from public-copy approval.
+PASS: Category review queues remain authoritative for publication-sensitive records.
+PASS: Volatile claims are required to be reverified at publication time.
+PASS: Voltage has a hard recheck after 2026-08-31 self-serve infrastructure deprovisioning.
+PASS: BitMEX has a hard lifecycle recheck after announced 2026-09-23 04:00 UTC closure.
+
+STRUCTURAL RESULT
+PASS: Eight approved category registry trees are present in the integration branch.
+PASS: Master manifest, human companion, README, and validation report are present under docs/explore/master/.
+PASS: Master total = 257 canonical records represented through the federated category sources.
+PASS: No merge or production action is part of this reconciliation.
+
+FINAL RESULT
+PASS — MSC Explore Master Registry reconciliation is complete and ready for implementation planning.
+STATE — RESEARCH/IDENTITY LAYER COMPLETE; IMPLEMENTATION NOT AUTHORIZED BY THIS VALIDATION.
+MUST NOT HAPPEN YET — merge to main, publish entity/category pages, connect Atlas, add production routes, alter Shopify, or convert time-sensitive research into unverified public copy without separate instruction.

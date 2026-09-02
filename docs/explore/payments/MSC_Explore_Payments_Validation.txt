@@ -1,0 +1,162 @@
+MSC Explore — Payments Registry Validation / Final QA
+Verified date: 2026-08-15
+
+REPOSITORY SCOPE
+PASS: QA target is docs/explore/payments/ only.
+PASS: Research branch was created from verified current main base 98e3e722bff75922cae7f22f2925c411b8a5d620.
+PASS: No Shopify, Atlas, Learn, Home, Tools, production routing, public Payments page, merge, rebase, deployment or publication action is authorized by this package.
+
+REFERENCE SCHEMA
+PASS: Approved Ordinals QA reference inspected at 1f4368bdebc572de5aaed6df221460516295c54a.
+PASS: Payments uses the approved 24-field record contract.
+PASS: Lifecycle vocabulary exactly ACTIVE / HISTORICAL / INACTIVE / UNCERTAIN.
+PASS: Source-confidence vocabulary exactly HIGH / MEDIUM / LOW.
+PASS: Controlled source_type vocabulary exactly official / official-github / primary / on-chain / independent / indexer / marketplace / market-data.
+PASS: Lifecycle, source confidence and non-lifecycle uncertainty remain separate.
+PASS: Manifest counts use counts.total_records, counts.by_status, counts.by_topic and counts.by_source_confidence.
+PASS: Manifest exposes every controlled status and source-confidence value including zero counts.
+
+STRUCTURE
+PASS: Canonical manifest parsed.
+PASS: Seven record shards parsed.
+PASS: Combined record count = 27.
+PASS: Unique Registry IDs = 27/27.
+PASS: Unique canonical names = 27/27.
+PASS: Unique recommended slugs = 27/27.
+PASS: Every record contains exactly the same 24 required fields.
+PASS: Every primary category is PAYMENTS.
+PASS: Every Payments topic/subtopic pair exists in the manifest topic architecture.
+PASS: Every source object uses a controlled source_type.
+PASS: Every Last verified date is a valid ISO 2026-08-15 date.
+PASS: Counts reconcile across manifest and shards.
+
+FINAL COUNTS
+Status counts:
+- ACTIVE: 25
+- HISTORICAL: 1
+- INACTIVE: 1
+- UNCERTAIN: 0
+
+Topic counts:
+- Merchant Acceptance & Processing: 11
+- Payment Infrastructure & APIs: 5
+- Cross-Border & Access: 3
+- Commerce & Spend: 1
+- Payment Standards & Addressing: 6
+- Alternative Bitcoin-backed Payment Systems: 1
+
+Source confidence counts:
+- HIGH: 25
+- MEDIUM: 2
+- LOW: 0
+
+PAYMENTS BOUNDARY / DEDUPLICATION
+PASS: Registry is not a directory of merchants or every wallet that can pay Lightning invoices.
+PASS: Breez/Breez SDK remains WALLETS; no duplicate PAYMENTS profile.
+PASS: Blink remains WALLETS; no duplicate PAYMENTS profile.
+PASS: Alby remains WALLETS; no duplicate PAYMENTS profile.
+PASS: Wallet of Satoshi, Phoenix and ZEUS remain WALLETS.
+PASS: LND, Core Lightning, LDK and Greenlight are NETWORK relationships rather than PAYMENTS duplicates.
+PASS: Lightning Network, BOLT11 and BOLT12 remain NETWORK-level protocol concepts rather than PAYMENTS canonical records.
+PASS: Nostr Wallet Connect and WebLN remain wallet/application connectivity relationships.
+PASS: Fedimint is reserved for NETWORK if canonized; Fedi remains WALLETS; Cashu is the PAYMENTS ecash profile.
+PASS: Coinos is excluded from PAYMENTS because its current canonical identity is principally wallet/client software despite POS capability.
+PASS: River Lightning Services is excluded for now because distinct current standalone product lifecycle evidence is insufficient.
+PASS: Ordinary gift-card merchants are excluded; Bitrefill is retained only because Bitcoin-spend bridging is its durable category-defining role.
+PASS: Coinbase Business is not treated as a direct Bitcoin-payments continuation of Coinbase Commerce.
+
+COMPANY / PRODUCT / PROTOCOL CONSOLIDATION
+PASS: BTCPay Server server/POS/payment requests/plugins = one profile.
+PASS: Strike consumer/business/API/cross-border roles = one company profile with WALLETS/EXCHANGES relationships.
+PASS: Square POS and invoice Bitcoin acceptance = one Square Bitcoin Payments profile.
+PASS: Speed Merchant/API/Wallet = one Speed profile.
+PASS: Voltage node-hosting history/liquidity/current Payments = one Voltage profile with 2026 product transition explicit.
+PASS: Lightspark Connect/Grid = one Lightspark profile; Spark remains relational.
+PASS: LNbits POS/LNURL extensions remain features of LNbits.
+PASS: Bolt Card commercial/open-source modes = one ecosystem profile with backend-dependent custody.
+PASS: BIP 321 + superseded BIP 21 = one URI lineage profile.
+PASS: Payjoin BIP 78 + draft BIP 77/v2 = one Payjoin profile with maturity distinction.
+PASS: LNURL + Lightning Address = one profile; Lightning Address is not duplicated.
+PASS: Coinbase Commerce remains one historical product record; materially different Coinbase Business is not folded into its technical model.
+
+CUSTODY / SETTLEMENT QA
+PASS: BTCPay Server is described as non-custodial only for merchant-controlled deployments; third-party integrations can add trust.
+PASS: OpenNode, BitPay and CoinGate are described as hosted processor/account models, not direct merchant self-custody.
+PASS: Strike account balances and quote/conversion layer are explicit.
+PASS: Square's hosted merchant Bitcoin balance/settlement flow is distinguished from external self-custody.
+PASS: Swiss Bitcoin Pay direct BTC-to-private-wallet mode is separated from optional conversion.
+PASS: Zaprite is correctly described as orchestration that does not itself hold/process funds; connected destinations can still be custodial.
+PASS: IBEX Pay and Pouch.ph retain custody/settlement caveats rather than unsupported certainty.
+PASS: Speed Wallet custody is not incorrectly generalized to every merchant deployment.
+PASS: Voltage, Lightspark and LNbits are explicitly mode/deployment dependent.
+PASS: Boltz non-custodial claims are tied to client/user control of swap keys/secrets.
+PASS: Machankura is explicitly custodial from first-party documentation.
+PASS: Bolt Card custody is backend-dependent.
+PASS: Cashu mint custody and bearer-token model are explicit; Cashu ecash is not described as on-chain bitcoin.
+
+LIGHTNING / STANDARD QA
+PASS: Lightning is not described as an independent blockchain.
+PASS: Routing/liquidity and custody are not collapsed into one trust model.
+PASS: LNURL is explicitly distinguished from the core BOLT specification.
+PASS: Lightning Address is explicitly naming/discovery rather than custody/payment transport itself.
+PASS: BOLT11/BOLT12 are relational NETWORK concepts; no claim of universal BOLT12 support is made.
+PASS: BIP 321/BIP 21 are correctly consolidated as a supersession lineage.
+PASS: Payjoin distinguishes deployed BIP 78 from draft BIP 77 / v2.
+PASS: Silent Payments BIP 352 specification status is not equated with universal implementation support.
+PASS: BIP 353 DNSSEC validation requirement is explicit.
+PASS: BIP70 is classified HISTORICAL and not used to describe current BitPay behavior.
+
+CURRENT COMMERCIAL DATA
+PASS: Time-sensitive fees, transaction volumes, user counts, merchant counts and broad country lists are excluded from canonical descriptions unless needed as dated research context.
+PASS: Square eligibility/pricing, IBEX geography, Pouch corridors, Machankura country lists, CoinGate H1 2026 metrics, Voltage migration timing and other volatile commercial facts are flagged for re-verification where material.
+
+SOURCE-QUALITY SPOT CHECK
+PASS: BTCPay Server — current official docs verify self-hosted/non-custodial architecture, on-chain/Lightning support and POS/payment tooling.
+PASS: OpenNode — current official product/developer materials verify hosted Bitcoin/Lightning processing and settlement/conversion.
+PASS: Strike — current official API docs verify on-chain/Lightning payment quotes and account-balance sourcing.
+PASS: Square Bitcoin Payments — current official Square support verifies deployed Lightning merchant acceptance and BTC/USD settlement.
+PASS: Swiss Bitcoin Pay — current first-party merchant API verifies Lightning/on-chain invoices and webhook/status flow.
+PASS: Voltage — current first-party Payments and 2026 migration docs verify active enterprise Payments plus self-serve transition.
+PASS: Lightspark — current first-party site/docs verify enterprise payment infrastructure.
+PASS: Bitnob — April 2026 first-party help and current developer docs verify cross-border infrastructure plus Bitcoin/Lightning APIs.
+PASS: Machankura — current first-party FAQ verifies fully custodial USSD/Lightning model.
+PASS: LNURL / BIP 321 / Payjoin / BIP 352 / BIP 353 / BIP70 — primary specifications used for protocol claims.
+PASS: Cashu — current official protocol docs verify mint custody, bearer ecash model and Lightning relationship.
+PASS: MEDIUM-confidence IBEX Pay and Pouch.ph remain caveated instead of being upgraded from incomplete public evidence.
+
+LIFECYCLE QA
+PASS: ACTIVE entities were checked against current first-party product, docs, repository or maintained primary specification evidence.
+PASS: Coinbase Commerce is INACTIVE based on Coinbase's explicit March 31, 2026 retirement/transition notice despite contradictory legacy status telemetry.
+PASS: BIP70 is HISTORICAL based on deprecated/removed implementation status rather than mere age.
+PASS: No lifecycle is UNCERTAIN after final research; field-level uncertainty remains preserved independently.
+
+IMPORTANT PUBLICATION CAUTIONS
+- Coinbase Commerce: explicit retirement notice conflicts with legacy status telemetry; keep INACTIVE and explain.
+- Voltage: self-serve infrastructure deprovisioning is scheduled for 2026-08-31; reverify after cutoff.
+- IBEX Pay: reverify jurisdiction, fiat settlement, thresholds and detailed custody immediately before publication.
+- Pouch.ph: reverify current custody, regulatory/corridor and settlement details before unqualified public copy.
+- Speed: merchant deployment custody is not established by the custodial Speed Wallet label alone.
+- Lightspark: custody differs across Connect/Grid/account/self-custody integrations.
+- Square Bitcoin Payments: eligibility, limits and pricing are time-sensitive.
+- Bolt Card: CoinCorner and self-hosted modes have different custody; current UK restrictions are CoinCorner-specific.
+- Payjoin: BIP 77 / Payjoin v2 remains draft.
+- LNURL & Lightning Address: optional application-layer protocols; not a core BOLT or custody system.
+- Cashu: mint custody is fundamental; ecash tokens are not on-chain BTC.
+
+MAJOR OMISSION REVIEW
+PASS: Seed candidates and adjacent payment systems were researched beyond obvious Lightning companies.
+PASS: On-chain payment systems are represented; registry is not Lightning-only.
+PASS: Major historical/current processors are represented without adding every broad crypto processor.
+PASS: Regional/cross-border coverage is represented without country-by-country app padding.
+PASS: Commerce is represented without merchant-directory padding.
+PASS: Alternative payment systems are represented without duplicating broader NETWORK federated-protocol entities.
+PASS: No major omission identified that is better added now than handled through the explicit relationship/exclusion decisions.
+
+STRUCTURAL ISSUES
+- NONE.
+
+VALIDATION RESULT
+PASS — PAYMENTS registry is structurally valid, internally reconciled, bounded to its category, and ready for Command Center review.
+
+Publication state:
+- COMMAND CENTER REVIEW ONLY. No public Explore implementation, Shopify content, Atlas change, runtime generation, merge, rebase or deployment is authorized by this registry.

@@ -1,0 +1,132 @@
+MSC Explore — Wallets Research Registry Validation
+=================================================
+Date: 2026-08-15
+Status: COMMAND CENTER REVIEW
+Canonical records: 40
+Reference schema: explore/ordinals-registry-research @ 1f4368bdebc572de5aaed6df221460516295c54a
+
+STRUCTURE
+PASS — Manifest JSON parses.
+PASS — All record-shard JSON files parse.
+PASS — Every canonical record has exactly 24 required fields.
+PASS — Record IDs are unique.
+PASS — Canonical names are unique.
+PASS — Recommended slugs are unique.
+PASS — Primary Explore category is WALLETS for every record.
+PASS — Record counts reconcile across manifest and shards.
+PASS — Manifest uses one authoritative count location under counts; counts.total_records = 40 and redundant canonical_record_count is absent.
+PASS — Manifest counts.by_status explicitly contains all controlled status values: ACTIVE / HISTORICAL / INACTIVE / UNCERTAIN.
+PASS — Manifest counts.by_source_confidence explicitly contains all controlled confidence values: HIGH / MEDIUM / LOW, including LOW: 0.
+PASS — 10 record shards cover MSC-EXP-WAL-001 through MSC-EXP-WAL-040.
+
+CONTROLLED VALUES
+PASS — Lifecycle status values are limited to ACTIVE / HISTORICAL / INACTIVE / UNCERTAIN.
+PASS — Source-confidence values are limited to HIGH / MEDIUM / LOW.
+PASS — Source provenance is limited to official / official-github / primary / on-chain / independent / indexer / marketplace / market-data.
+PASS — All Last verified date values are valid ISO dates.
+
+TAXONOMY
+PASS — Every record's Wallets topic exists in the manifest taxonomy.
+PASS — Every record's Wallets subtopic exists under its declared topic.
+PASS — One primary topic/subtopic is assigned per canonical entity; overlapping features are represented through characteristics/tags/relationships.
+
+INVENTORY / DUPLICATION
+PASS — Xverse is present exactly once and researched as a broad Bitcoin wallet entity.
+PASS — Every included record has a stated Bitcoin-wallet ecosystem significance / inclusion reason.
+PASS — No duplicate canonical wallet entities were found.
+PASS — Product families are consolidated consistently (Ledger, Trezor, COLDCARD, Foundation Passport, BitBox, Blockstream Jade, Alby, Breez, Bitkey and service-plan families).
+PASS — GreenAddress / Blockstream Green history is consolidated into Blockstream App rather than duplicated.
+PASS — Specter DIY is a relationship, not a duplicate canonical wallet profile.
+PASS — App-directory padding was removed; newer overlapping products such as Bitcoin Safe and Cove are documented as EXCLUDE_FOR_NOW rather than automatically included.
+
+CUSTODY / SECURITY QA
+PASS — Hardware records describe devices as protecting/using private keys and signing transactions, not as storing bitcoin.
+PASS — Wallet of Satoshi and Blink are explicitly modeled as hybrid custody products with mode/region caveats.
+PASS — ZEUS preserves the distinction between Cashu ecash onboarding and embedded/remote Lightning-node configurations.
+PASS — Unchained, Casa, Nunchuk and Bitcoin Keeper are described by signing quorum/service-key role rather than blanket custody labels.
+PASS — Open-source and Secure Element usage are recorded as characteristics, not treated as security ratings.
+PASS — Samourai code availability is separated from active service/product operation.
+
+CURRENT-STATUS / FEATURE QA
+PASS — Magic Eden Wallet is INACTIVE and its 2026 deprecation is explicit.
+PASS — Samourai Wallet is INACTIVE and legal/service status is dated.
+PASS — Armory is HISTORICAL; latest verified release/current-operation evidence does not support ACTIVE.
+PASS — Bitcoin Wallet for Android remains UNCERTAIN because downloadability/current listings do not prove active 2026 maintenance.
+PASS — Leather's direct Runes support ending April 16, 2026 is explicit.
+PASS — Mycelium's active Android maintenance is separated from its archived iOS source repository.
+PASS — Blockstream App Lightning wording distinguishes current swap-based interoperability from evolving native Lightning work.
+PASS — Nunchuk Taproot/MuSig2 is flagged for publication re-verification rather than treated as an unqualified default feature.
+PASS — Foundation Passport Miniscript roadmap text is not promoted to a verified current feature.
+
+CROSS-CATEGORY RELATIONSHIPS
+PASS — Every canonical record has at least one related Explore category.
+PASS — Ordinals/Runes/Marketplace capabilities remain relationships for Wallet canonical entities rather than duplicate profiles.
+PASS — Lightning/payment wallets relate to PAYMENTS and NETWORK without creating duplicate canonical entities.
+PASS — Hardware signers are not duplicated under EXCHANGES merely because integrations exist.
+
+SOURCE QA
+PASS — Core identity/status claims use first-party, official-GitHub or primary sources wherever available.
+PASS — Independent/catalog sources are supporting evidence only and do not establish ACTIVE status.
+PASS — Spot checks covered HIGH-confidence current software, privacy, payment, collaborative-custody and hardware records against first-party 2026 material.
+PASS — MEDIUM-confidence records preserve lifecycle/compatibility uncertainty rather than overstating current status.
+
+COUNTS BY STATUS
+ACTIVE: 36
+HISTORICAL: 1
+INACTIVE: 2
+UNCERTAIN: 1
+
+COUNTS BY TOPIC
+Software Wallets: 13
+Bitcoin Asset Wallets: 5
+Lightning & Payment Wallets: 9
+Multisig & Collaborative Custody: 4
+Hardware & Signing Devices: 9
+
+COUNTS BY SOURCE CONFIDENCE
+HIGH: 38
+MEDIUM: 2
+LOW: 0
+
+DELIBERATE EXCLUSIONS / MONITOR
+ND Wallet / ND Labs: EXCLUDE — Current first-party material positions ND Wallet as white-label multi-chain wallet infrastructure for businesses, supporting Bitcoin among many networks. It is not a sufficiently Bitcoin-specific canonical wallet entity for the initial MSC Wallets canon.
+OKX Wallet: EXCLUDE — OKX Wallet is a broad multi-chain wallet tied to the OKX ecosystem. Bitcoin/Ordinals support is real, but Bitcoin is not central enough to justify a WALLETS canonical profile; OKX itself belongs more naturally under EXCHANGES if canonized.
+LNDg: EXCLUDE — LNDg is an LND analytics/automation and node-management interface rather than an independent wallet/key-custody entity. Canonical home, if needed, is NETWORK tooling.
+Ride The Lightning (RTL): EXCLUDE — RTL can send/receive through the attached Lightning node, but its canonical identity is a web node/channel-management interface that requires an existing node. It belongs under NETWORK tooling rather than as a duplicate wallet.
+Bitcoin Safe: EXCLUDE_FOR_NOW — Active and technically credible Bitcoin-only desktop wallet with hardware-wallet, single-sig/multisig and PSBT support, but it is a newer entrant whose current role overlaps Sparrow/Specter/Bitcoin Keeper. Monitor for greater ecosystem significance rather than pad the initial canon.
+Cove: EXCLUDE_FOR_NOW — Promising current Bitcoin-only iPhone wallet with BDK, PSBT, hardware-wallet, QR/NFC and UTXO-management support, but still a newer entrant. Monitor for adoption and cross-platform maturity before adding to the canonical registry.
+Keystone: EXCLUDE — Keystone supports Bitcoin-only firmware, PSBT/multisig and strong Bitcoin wallet integrations, but its canonical commercial identity remains a very broad multi-chain hardware-wallet family. The initial Bitcoin canon already covers the most historically/technically distinctive signer architectures; retain Keystone as a relationship where integrations matter.
+Bitcoin Knots wallet: EXCLUDE — Wallet functionality is part of the Bitcoin Knots node implementation rather than a separate canonical wallet product; if MSC profiles Bitcoin Knots, NETWORK is the more natural canonical category.
+
+PUBLICATION CAUTIONS
+Bitcoin Wallet for Android: Lifecycle is UNCERTAIN; current downloadability exists but meaningful 2026 maintainer/release activity was not verified.
+Blockstream App: Lightning claims require implementation-specific wording; current flows include swap-based interoperability while native Lightning work has been evolving.
+Wasabi Wallet: Do not imply zkSNACKs still runs the default CoinJoin coordinator after June 2024.
+Ginger Wallet: Privacy/CoinJoin copy must avoid promising anonymity and should distinguish its coordinator/operator from Wasabi.
+Samourai Wallet: INACTIVE. Legal history and software/service status require dated, neutral wording; code availability is not active service availability.
+Mycelium: Android is clearly active; iOS source repository was archived in May 2026, so platform claims must be qualified.
+Leather: Direct Runes support ended April 16, 2026; do not publish current Runes-management claims.
+Magic Eden Wallet: INACTIVE/deprecated. Do not present as currently supported even if an old local installation can still expose migration/export functions.
+ZEUS: Cashu onboarding and embedded/remote Lightning-node paths have different custody/trust models.
+Breez: Trust/custody assumptions vary across Spark, Liquid and other SDK deployments; no single backend description covers every integration.
+Wallet of Satoshi: Custodial and self-custodial modes coexist; jurisdiction and user mode must be specified.
+Blink: Custodial and Spark-based non-custodial modes coexist; regional hosted-service wind-downs are time-sensitive.
+Nunchuk: Taproot/MuSig2 multisig has been described as beta/experimental; reverify before unqualified public feature claims.
+Foundation Passport: Do not publish Miniscript support from stale roadmap text without fresh verification.
+
+REMAINING RESEARCH UNCERTAINTIES
+- Bitcoin Wallet for Android: meaningful current 2026 maintainer activity remains unverified.
+- Blockstream App: Lightning implementation is evolving; re-check exact native-vs-swap behavior before public feature copy.
+- Mycelium: current iOS product/support status should be rechecked separately from the archived iOS source repository before listing platforms publicly.
+- Wallet of Satoshi and Blink: mode/jurisdiction availability is time-sensitive and must be checked at publication time.
+- ZEUS: custody statements must stay configuration-specific because Cashu and node-based paths differ.
+- Nunchuk Taproot/MuSig2 and Foundation Passport Miniscript claims require fresh publication-time feature verification.
+- Newer entrants Bitcoin Safe and Cove should be reconsidered if adoption or ecosystem role materially changes.
+
+FINAL RESULT
+PASS — Registry is structurally valid and internally reconciled.
+PASS — Xverse requirement is satisfied.
+PASS — Normalized manifest count structure matches the cross-category convention: counts.total_records, counts.by_status, counts.by_topic, counts.by_source_confidence, with full controlled vocabularies represented even when zero.
+PASS — No production/UI/Shopify/Atlas/Learn/Home/Tools/Ordinals/Runes files are part of this research package.
+RECOMMENDATION — Submit WALLETS registry to Explore Command Center for approval, with the publication-caution queue preserved.
+DO NOT MERGE OR PUBLISH FROM THIS RESEARCH PACKAGE WITHOUT COMMAND CENTER APPROVAL.
