@@ -23,10 +23,10 @@
       .msc-learn .msc-learn-index-block {
         margin-top: 0 !important;
         padding-top: clamp(3rem, 4vw, 4.25rem) !important;
-        padding-bottom: clamp(2.2rem, 3vw, 3rem) !important;
+        padding-bottom: clamp(1.1rem, 1.5vw, 1.5rem) !important;
       }
       .msc-learn .msc-learn-glossary-block {
-        padding-top: clamp(2rem, 3vw, 2.75rem) !important;
+        padding-top: clamp(1rem, 1.5vw, 1.35rem) !important;
         padding-bottom: clamp(3.5rem, 5vw, 4.75rem) !important;
       }
       .msc-learn-topic__column li {
@@ -117,10 +117,10 @@
       @media screen and (max-width: 640px) {
         .msc-learn .msc-learn-index-block {
           padding-top: 2.5rem !important;
-          padding-bottom: 1.8rem !important;
+          padding-bottom: .9rem !important;
         }
         .msc-learn .msc-learn-glossary-block {
-          padding-top: 1.8rem !important;
+          padding-top: .9rem !important;
           padding-bottom: 3rem !important;
         }
       }
