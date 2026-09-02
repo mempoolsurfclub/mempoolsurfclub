@@ -50,6 +50,27 @@
         transform: none !important;
       }
 
+      .msc-learn .msc-depth-map__region:focus-visible,
+      .msc-learn .msc-learn-topic summary:focus-visible,
+      .msc-learn .msc-learn-topic__item-link:focus-visible,
+      .msc-learn .msc-learn-topic__guide-link:focus-visible,
+      .msc-learn .msc-learn-glossary-more:focus-visible {
+        outline: 2px solid var(--msc-sand) !important;
+        outline-offset: 3px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .msc-learn *,
+        .msc-learn *::before,
+        .msc-learn *::after {
+          animation-duration: .01ms !important;
+          animation-iteration-count: 1 !important;
+          scroll-behavior: auto !important;
+          transition-duration: .01ms !important;
+          transition-delay: 0s !important;
+        }
+      }
+
       @media screen and (max-width: 640px) {
         .msc-learn .msc-learn-index-block .msc-section-header {
           margin-bottom: .55rem !important;

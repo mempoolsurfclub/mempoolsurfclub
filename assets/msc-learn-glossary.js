@@ -35,7 +35,10 @@
         color: var(--msc-paper-soft);
         border-color: rgba(212,190,153,.55);
         background: rgba(212,190,153,.1);
-        outline: none;
+      }
+      .msc-learn-page[data-msc-registry-id='MSC-GLOSSARY-001'] .msc-learn-glossary-letter:focus-visible {
+        outline: 2px solid var(--msc-sand);
+        outline-offset: 2px;
       }
       .msc-learn-page[data-msc-registry-id='MSC-GLOSSARY-001'] .msc-learn-glossary-group {
         scroll-margin-top: 8rem;
@@ -66,8 +69,23 @@
         text-decoration: underline;
         text-underline-offset: .2em;
       }
+      .msc-learn-page[data-msc-registry-id='MSC-GLOSSARY-001'] .msc-learn-breadcrumbs a:focus-visible {
+        outline: 2px solid var(--msc-sand);
+        outline-offset: 3px;
+      }
       .msc-learn-page[data-msc-registry-id='MSC-GLOSSARY-001'] .msc-learn-prev-next {
         display: none;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .msc-learn-page[data-msc-registry-id='MSC-GLOSSARY-001'] *,
+        .msc-learn-page[data-msc-registry-id='MSC-GLOSSARY-001'] *::before,
+        .msc-learn-page[data-msc-registry-id='MSC-GLOSSARY-001'] *::after {
+          animation-duration: .01ms !important;
+          animation-iteration-count: 1 !important;
+          scroll-behavior: auto !important;
+          transition-duration: .01ms !important;
+          transition-delay: 0s !important;
+        }
       }
       @media screen and (max-width: 640px) {
         .msc-learn-page[data-msc-registry-id='MSC-GLOSSARY-001'] .msc-learn-glossary-letters {
