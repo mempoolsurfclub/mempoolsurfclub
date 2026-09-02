@@ -5,6 +5,10 @@
 {%- liquid
   assign header_align = align | default: 'left'
   assign header_id = heading_id | default: nil
+  assign header_copy = copy
+  if header_id contains 'MscLearnIndex-'
+    assign header_copy = blank
+  endif
 -%}
 {%- if header_id contains 'MscLearnIndex-' -%}
   {{ 'msc-learn-accessibility.css' | asset_url | stylesheet_tag }}
@@ -18,7 +22,7 @@
   {%- if heading != blank -%}
     <h2 class="msc-section-title"{% if header_id %} id="{{ header_id }}"{% endif %}>{{ heading | escape }}</h2>
   {%- endif -%}
-  {%- if copy != blank -%}
-    <div class="msc-section-header__copy rte">{{ copy }}</div>
+  {%- if header_copy != blank -%}
+    <div class="msc-section-header__copy rte">{{ header_copy }}</div>
   {%- endif -%}
 </header>
