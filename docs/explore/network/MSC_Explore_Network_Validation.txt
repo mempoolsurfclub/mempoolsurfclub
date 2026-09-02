@@ -1,0 +1,169 @@
+MSC Explore — Network Registry Validation / Final QA
+Verified date: 2026-08-15
+
+REPOSITORY / REFERENCE
+PASS: Research target is docs/explore/network/ only.
+PASS: Branch was created from current main SHA 98e3e722bff75922cae7f22f2925c411b8a5d620.
+PASS: Approved Ordinals reference was verified before substantive NETWORK work: explore/ordinals-registry-research @ 1f4368bdebc572de5aaed6df221460516295c54a.
+PASS: No merge, publication, Atlas, Shopify, runtime, route, or other category modification is authorized.
+
+STRUCTURE
+PASS: Manifest parses as JSON.
+PASS: Nine record shards parse as JSON.
+PASS: 35 combined canonical records.
+PASS: Every record has the exact approved 24 fields.
+PASS: 35/35 unique Registry IDs.
+PASS: 35/35 unique canonical names.
+PASS: 35/35 unique recommended slugs.
+PASS: Every Primary Explore category = NETWORK.
+PASS: Every topic/subtopic exists in manifest taxonomy.
+PASS: Every lifecycle status is ACTIVE / HISTORICAL / INACTIVE / UNCERTAIN.
+PASS: Every source confidence is HIGH / MEDIUM / LOW.
+PASS: Every source_type is official / official-github / primary / on-chain / independent / indexer / marketplace / market-data.
+PASS: Every Last verified date is ISO YYYY-MM-DD and not future-dated.
+PASS: Manifest count vocabulary includes INACTIVE: 0, UNCERTAIN: 0 and LOW: 0.
+PASS: No redundant count field is present.
+
+COUNTS
+total_records: 35
+
+by_status:
+ACTIVE: 33
+HISTORICAL: 2
+INACTIVE: 0
+UNCERTAIN: 0
+
+by_topic:
+Bitcoin Node Implementations: 5
+Lightning Network & Implementations: 6
+Explorers & Network Observability: 7
+Indexing & Backend Infrastructure: 4
+Node Management & Self-Hosted Infrastructure: 6
+Protocol Libraries & Developer Infrastructure: 4
+Relay & Transport Infrastructure: 3
+
+by_source_confidence:
+HIGH: 32
+MEDIUM: 3
+LOW: 0
+
+RESEARCH / TAXONOMY QA
+PASS: Every included entity has a defensible Bitcoin-network inclusion reason.
+PASS: Inventory is selective; it is not a generic software, library, explorer, node-appliance, dashboard, or BIP directory.
+PASS: One canonical entity = one canonical profile discipline is preserved.
+PASS: Lifecycle remains separate from deployment maturity, adoption, compatibility, feature support, and source confidence.
+PASS: ACTIVE is not inferred from a reachable website or old repository alone.
+PASS: Historical entities explain meaningful network-infrastructure shifts rather than padding.
+
+BITCOIN CORE / NODE QA
+PASS: Bitcoin Core is explicitly an implementation/reference implementation, not “Bitcoin” itself.
+PASS: Consensus validation is distinguished from standardness, mempool policy, relay policy, wallet behavior, RPC, and mining/template interfaces.
+PASS: Bitcoin Knots policy/default differences are not described as a different Bitcoin consensus protocol.
+PASS: Full validating nodes are described as independently verifying data against their software rules; no simplistic node/miner voting metaphor is used.
+PASS: Floresta active software is separated from Utreexo proposal/deployment maturity.
+PASS: bcoin is HISTORICAL/MEDIUM because current canonical maintenance is not verified strongly enough for ACTIVE.
+
+LIGHTNING QA
+PASS: Lightning Network & BOLT Specifications is canonical NETWORK and distinct from implementations.
+PASS: Lightning is not described as a blockchain.
+PASS: LND, Core Lightning, Eclair, and LDK are distinct implementations/libraries.
+PASS: LDK is treated as modular SDK/library infrastructure, not automatically a monolithic node daemon.
+PASS: Greenlight is separate because hosted operation is materially distinct from Core Lightning self-hosting.
+PASS: Rapidly changing Lightning feature support is qualified for re-verification.
+PASS: Wallets and payment processors remain relationships to WALLETS/PAYMENTS.
+
+EXPLORER / OBSERVABILITY QA
+PASS: Explorer/indexer labels, fee estimates, mempool projections, rankings, address views, and transaction classifications do not masquerade as consensus state.
+PASS: Bitnodes reachable-node counts are measurement outputs, not exact total Bitcoin-node counts.
+PASS: Lightning public graph/channel/capacity data is not treated as total liquidity or economic activity.
+PASS: Amboss Space/Magma/analytics are consolidated.
+PASS: 1ML and Clark Moody remain MEDIUM confidence because first-party current implementation/operator provenance is sparse.
+PASS: Time-sensitive network statistics are omitted from evergreen profile copy unless needed to explain methodology.
+
+INDEXING / BACKEND QA
+PASS: electrs, ElectrumX, and Fulcrum are distinguished from Electrum wallet software.
+PASS: Esplora + Blockstream Explorer + blockstream.info are consolidated.
+PASS: Neutrino represents compact-filter light-client infrastructure; BIP157/158 remain technical relationships.
+PASS: ord remains ORDINALS/RUNES relation-only.
+
+NODE MANAGEMENT QA
+PASS: Umbrel, Start9/StartOS, RaspiBlitz, and myNode are platforms/stacks that package upstream implementations rather than implementations defining consensus.
+PASS: RTL and LNDg were re-evaluated after deliberate WALLETS exclusion and are included as active NETWORK node-management systems.
+PASS: ThunderHub and weaker/redundant node-stack candidates are excluded to avoid directory padding.
+
+PROTOCOL LIBRARY QA
+PASS: rust-bitcoin, libsecp256k1, Libbitcoin, and bitcoinj clear the canon threshold due durable/foundational Bitcoin-specific roles.
+PASS: rust-miniscript remains relation-only to avoid dependency-directory padding.
+PASS: BDK remains WALLETS/developer relationship context.
+PASS: Bitcoin Optech is excluded because education/development coordination is not itself Network software/infrastructure.
+
+RELAY / TRANSPORT QA
+PASS: BIP324 wording distinguishes specification status, implementation support, adoption, and privacy/security properties.
+PASS: BIP324 is not described as authenticated peer identity or complete anonymity.
+PASS: FIBRE is distinguished from ordinary Bitcoin P2P and its specialized relay/trust tradeoffs are preserved.
+PASS: Bitcoin Relay Network is HISTORICAL and retained as the finite predecessor to FIBRE.
+PASS: BIP152 is consolidated relationally.
+PASS: Erlay/BIP330 is not elevated to standalone canon without broad-deployment evidence.
+
+CROSS-CATEGORY QA
+PASS: Bitcoin Core node implementation = NETWORK; Bitcoin Core wallet = WALLETS relation-only.
+PASS: Bitcoin Knots wallet capability does not create a duplicate profile.
+PASS: ZEUS, Phoenix, Blixt remain WALLETS.
+PASS: BTCPay Server remains PAYMENTS.
+PASS: Stratum V1, Stratum V2, getblocktemplate, BetterHash, DATUM, P2Pool (Bitcoin), and Braidpool remain MINING.
+PASS: ord / asset indexers remain ORDINALS/RUNES.
+
+CONSOLIDATION QA
+PASS: Esplora + Blockstream Explorer + blockstream.info -> one profile.
+PASS: Amboss Space + Magma + analytics -> one profile.
+PASS: LDK Node/Server/bindings -> one LDK profile.
+PASS: Umbrel and Start9/StartOS remain one profile per platform.
+PASS: Libbitcoin toolkit/server lineage -> one Libbitcoin profile.
+PASS: Floresta + Utreexo relationship -> one Floresta profile plus relation.
+PASS: Greenlight remains separate from Core Lightning due distinct hosted operational model.
+PASS: FIBRE and Bitcoin Relay Network remain separate due distinct technology/lifecycle.
+
+IMPORTANT EXCLUSIONS
+PASS: Bitcoin ABC excluded from current Bitcoin node canon.
+PASS: Bitcoin Unlimited excluded for now rather than blurring fork-chain scope.
+PASS: Blockchain.com Explorer and Blockchair excluded to avoid hosted-explorer padding.
+PASS: Citadel / RoninDojo / Nodl excluded for now because selected self-hosted platforms have stronger current/unique evidence.
+PASS: Lightning Terminal / ThunderHub excluded for now to avoid node-management tool-directory expansion.
+PASS: Tor / I2P remain external-network relationships.
+PASS: AssumeUTXO is a Bitcoin Core feature, not a standalone entity.
+PASS: Utreexo and Erlay remain proposal/research relationships rather than implied broadly deployed standalone infrastructure.
+
+SOURCE QUALITY SPOT CHECK
+PASS: HIGH-confidence sample checked against first-party/primary evidence: Bitcoin Core, Bitcoin Knots, LND, Core Lightning, Eclair, LDK, mempool.space, electrs, libsecp256k1, BIP324.
+PASS: Current development evidence checked in the August 2026 research window for Core Lightning, Eclair, myNode, RTL, LNDg, Libbitcoin, Floresta, and Neutrino.
+PASS: MEDIUM-confidence records preserve explicit evidence limitations: bcoin, 1ML, Clark Moody Bitcoin Dashboard.
+PASS: No LOW-confidence record was added merely to widen inventory.
+
+QUALIFIED PUBLIC-COPY QUEUE
+Bitcoin Core: preserve protocol/implementation and consensus/policy distinctions.
+Bitcoin Knots: reverify current release/policy details.
+Floresta: Utreexo-related maturity remains qualified.
+Lightning implementations: reverify version-specific feature support.
+Greenlight: preserve hosted-service trust/availability/custody boundaries.
+Bitnodes: date and caveat all node counts/geography/version shares.
+Amboss / 1ML: public graph data is incomplete; date all statistics.
+Clark Moody Bitcoin Dashboard: metric sources/methodologies vary.
+BIP324: deployment/adoption and privacy properties remain qualified.
+FIBRE: current operator/maintenance and specialized relay claims remain dated.
+
+REMAINING UNCERTAINTIES
+bcoin: exact current canonical maintenance posture remains insufficient for ACTIVE; HISTORICAL/MEDIUM retained.
+1ML: current operator/development provenance is sparse despite live service.
+Clark Moody Bitcoin Dashboard: current implementation/operator documentation is sparse relative to open-source software projects.
+Fast-moving Lightning feature support, node-policy changes, and protocol deployment require fresh checks before publication.
+Node/Lightning numerical metrics are intentionally not frozen into evergreen copy.
+
+PROGRAMMATIC RESULT
+PASS: Zero structural validation errors.
+PASS: Counts reconcile across manifest and nine shards.
+PASS: Complete controlled count vocabularies are present.
+
+FINAL RESULT
+PASS — approval-ready NETWORK research registry.
+STATE — COMMAND CENTER REVIEW ONLY.
+MUST NOT HAPPEN YET — merge, publish, route, build public Network profiles/pages, alter Shopify/Atlas/runtime, or connect records to the live Explore interface.

@@ -1,0 +1,287 @@
+{
+  "registry": "Mempool Surf Club Explore — Network Research Registry",
+  "primary_explore_category": "NETWORK",
+  "status": "COMMAND_CENTER_REVIEW",
+  "last_verified_date": "2026-08-15",
+  "record_range": "001-004",
+  "record_count": 4,
+  "records": [
+    {
+      "Registry ID": "MSC-EXP-NET-001",
+      "Canonical name": "Bitcoin Core",
+      "Recommended slug": "bitcoin-core",
+      "Primary Explore category": "NETWORK",
+      "Network topic": "Bitcoin Node Implementations",
+      "Network subtopic": "Full-node implementations",
+      "Entity / project type": "full validating node / reference implementation",
+      "Status": "ACTIVE",
+      "Source confidence": "HIGH",
+      "Concise description": "The dominant open-source Bitcoin full-node implementation, providing independent block and transaction validation, P2P relay, mempool policy, RPC, and optional wallet functionality.",
+      "Deeper researched summary": "Bitcoin Core is a software implementation of the Bitcoin protocol, not the protocol itself. Its node validates blocks and transactions against the consensus rules implemented in the software, maintains a mempool under implementation-specific policy, participates in Bitcoin's peer-to-peer relay network, and exposes RPC interfaces used by wallets, explorers, mining software, and infrastructure. The project also ships an optional wallet and GUI, but MSC keeps the node implementation canonical in NETWORK while relating the wallet to WALLETS. Consensus validity, standardness, mempool admission, relay behavior, wallet behavior, and miner block-template choices are separate layers and must not be collapsed into one claim.",
+      "Creators / founders": [
+        "Satoshi Nakamoto — author of the original Bitcoin software lineage",
+        "Bitcoin Core open-source contributor community — current implementation stewardship"
+      ],
+      "Launch / history": "The original Bitcoin software was released in January 2009 and evolved through the Bitcoin-Qt/Bitcoin Core lineage. Bitcoin Core 31.0 was released April 20, 2026, and the 32.0 release schedule was actively in progress during August 2026.",
+      "Why it matters in the Bitcoin network ecosystem": "Bitcoin Core is the most widely referenced implementation for Bitcoin validation and P2P behavior and is a foundational dependency for many Network, Wallets, Payments, Mining, and explorer systems.",
+      "Important technical or cultural characteristics": [
+        "Independent block and transaction validation",
+        "Bitcoin P2P networking and relay",
+        "Mempool, standardness and relay policy distinct from consensus",
+        "JSON-RPC and ZMQ interfaces",
+        "Optional wallet/GUI is subordinate to the node profile",
+        "Release engineering and multi-platform reproducible-build practices"
+      ],
+      "Related projects / entities": [
+        "Bitcoin Core wallet",
+        "Bitcoin Knots",
+        "getblocktemplate (BIP 22/23)",
+        "BIP 324",
+        "Compact Block Relay (BIP 152)",
+        "AssumeUTXO"
+      ],
+      "Related Explore categories": [
+        "WALLETS",
+        "MINING"
+      ],
+      "Supporting tags": [
+        "full-node",
+        "validation",
+        "p2p",
+        "mempool",
+        "rpc",
+        "consensus-policy"
+      ],
+      "Official website": "https://bitcoincore.org/",
+      "Official sources": [
+        {
+          "label": "Bitcoin Core official website",
+          "url": "https://bitcoincore.org/",
+          "source_type": "official"
+        },
+        {
+          "label": "Bitcoin Core GitHub repository",
+          "url": "https://github.com/bitcoin/bitcoin",
+          "source_type": "official-github"
+        },
+        {
+          "label": "Bitcoin Core 32.0 release schedule",
+          "url": "https://github.com/bitcoin/bitcoin/issues/35122",
+          "source_type": "official-github"
+        }
+      ],
+      "Corroborating sources": [],
+      "Last verified date": "2026-08-15",
+      "Verification basis": "Official Bitcoin Core website, repository, 31.0 release history, and active 32.0 release scheduling were checked on 2026-08-15.",
+      "Research notes / uncertainties": [
+        "Do not say Bitcoin Core 'is Bitcoin' or that it alone defines Bitcoin consensus.",
+        "Full validating nodes independently verify data against the consensus rules in the software they run; avoid node-voting or miner-voting governance metaphors.",
+        "Bitcoin Core wallet is a WALLETS relationship, not a duplicate NETWORK record.",
+        "getblocktemplate is canonical in MINING and remains relationship-only here."
+      ]
+    },
+    {
+      "Registry ID": "MSC-EXP-NET-002",
+      "Canonical name": "Bitcoin Knots",
+      "Recommended slug": "bitcoin-knots",
+      "Primary Explore category": "NETWORK",
+      "Network topic": "Bitcoin Node Implementations",
+      "Network subtopic": "Full-node implementations",
+      "Entity / project type": "Bitcoin Core derivative full node",
+      "Status": "ACTIVE",
+      "Source confidence": "HIGH",
+      "Concise description": "A maintained Bitcoin Core derivative that carries additional patches, configuration choices, and policy options while remaining a Bitcoin node implementation.",
+      "Deeper researched summary": "Bitcoin Knots is explicitly described by its project as a derivative of Bitcoin Core containing improvements backported from, proposed for, or maintained outside Bitcoin Core's master tree. It participates in the same Bitcoin network when configured with consensus-compatible rules, while exposing policy and configuration differences that can affect mempool admission, relay, or local behavior. Those policy differences must not be described as a separate Bitcoin consensus protocol without specific evidence of a consensus-rule divergence.",
+      "Creators / founders": [
+        "Luke Dashjr — long-time Bitcoin Knots maintainer",
+        "Bitcoin Knots contributors"
+      ],
+      "Launch / history": "Bitcoin Knots has a long-running Core-derived lineage. The official site listed 29.3.knots20260508 as the latest release during verification, with multiple 29.x builds published through May 2026 and current repository activity in 2026.",
+      "Why it matters in the Bitcoin network ecosystem": "It is the most prominent maintained Core-derived alternative in the current Bitcoin node ecosystem and is useful for explaining the boundary between consensus compatibility and node/mempool/relay policy choices.",
+      "Important technical or cultural characteristics": [
+        "Derived from Bitcoin Core",
+        "Additional or backported patches",
+        "Policy/configuration differences can be material without changing consensus",
+        "Ships node and wallet functionality",
+        "Current signed release distribution"
+      ],
+      "Related projects / entities": [
+        "Bitcoin Core",
+        "Bitcoin Knots wallet",
+        "BIP 324",
+        "Compact Block Relay (BIP 152)"
+      ],
+      "Related Explore categories": [
+        "WALLETS",
+        "MINING"
+      ],
+      "Supporting tags": [
+        "full-node",
+        "bitcoin-knots",
+        "policy",
+        "mempool",
+        "p2p"
+      ],
+      "Official website": "https://bitcoinknots.org/",
+      "Official sources": [
+        {
+          "label": "Bitcoin Knots official website",
+          "url": "https://bitcoinknots.org/",
+          "source_type": "official"
+        },
+        {
+          "label": "Bitcoin Knots release description",
+          "url": "https://bitcoinknots.org/files/29.x/29.3.knots20260210/bitcoin-29.3.knots20260210.desc.html",
+          "source_type": "official"
+        },
+        {
+          "label": "Bitcoin Knots GitHub repository",
+          "url": "https://github.com/bitcoinknots/bitcoin",
+          "source_type": "official-github"
+        }
+      ],
+      "Corroborating sources": [],
+      "Last verified date": "2026-08-15",
+      "Verification basis": "Current official release site and project-controlled repository evidence establish active maintenance and the project's stated Core-derivative relationship.",
+      "Research notes / uncertainties": [
+        "Do not infer a Bitcoin consensus split from mempool or relay-policy differences.",
+        "Wallet functionality remains subordinate to this node profile; do not create a separate NETWORK wallet record.",
+        "Reverify specific policy differences before public copy because Knots and Core policy both evolve."
+      ]
+    },
+    {
+      "Registry ID": "MSC-EXP-NET-003",
+      "Canonical name": "btcd",
+      "Recommended slug": "btcd",
+      "Primary Explore category": "NETWORK",
+      "Network topic": "Bitcoin Node Implementations",
+      "Network subtopic": "Full-node implementations",
+      "Entity / project type": "alternative full validating node",
+      "Status": "ACTIVE",
+      "Source confidence": "HIGH",
+      "Concise description": "An alternative Bitcoin full-node implementation written in Go, intentionally separated from wallet functionality.",
+      "Deeper researched summary": "btcd downloads, validates, serves, and relays Bitcoin blocks and transactions while maintaining its own transaction pool. Its README emphasizes compatibility with Bitcoin consensus behavior and intentionally excludes a built-in wallet, with wallet functionality handled by separate btcsuite projects. This separation makes btcd especially useful for explaining that a node, wallet, and library can be distinct software components even when they share a protocol stack.",
+      "Creators / founders": [
+        "btcsuite contributors",
+        "Conformal Systems — original development organization"
+      ],
+      "Launch / history": "btcd entered production use in 2013 and remains under active development. Current project documentation still labels it beta while also describing long production use.",
+      "Why it matters in the Bitcoin network ecosystem": "It is one of the longest-lived independent Bitcoin full-node codebases and provides implementation diversity outside the Bitcoin Core codebase.",
+      "Important technical or cultural characteristics": [
+        "Go implementation",
+        "Full block validation",
+        "P2P block and transaction relay",
+        "Separate wallet architecture",
+        "BIP 157/158 server-side compact-filter lineage",
+        "RPC interfaces"
+      ],
+      "Related projects / entities": [
+        "btcwallet",
+        "Neutrino",
+        "Compact Block Filters (BIP 157/158)",
+        "LND"
+      ],
+      "Related Explore categories": [
+        "WALLETS",
+        "MINING"
+      ],
+      "Supporting tags": [
+        "btcd",
+        "golang",
+        "full-node",
+        "implementation-diversity",
+        "compact-filters"
+      ],
+      "Official website": "https://github.com/btcsuite/btcd",
+      "Official sources": [
+        {
+          "label": "btcd official repository and README",
+          "url": "https://github.com/btcsuite/btcd",
+          "source_type": "official-github"
+        },
+        {
+          "label": "btcd releases",
+          "url": "https://github.com/btcsuite/btcd/releases",
+          "source_type": "official-github"
+        }
+      ],
+      "Corroborating sources": [],
+      "Last verified date": "2026-08-15",
+      "Verification basis": "Current btcsuite README and repository activity were checked; the project explicitly documents full-node scope, consensus-compatibility intent, and no integrated wallet.",
+      "Research notes / uncertainties": [
+        "Project documentation uses 'exact rules' language about consensus compatibility; MSC should still describe this as an implementation claim backed by tests, not a guarantee of bug-for-bug equivalence forever.",
+        "Wallet functionality belongs to btcwallet and should not be implied to be built into btcd."
+      ]
+    },
+    {
+      "Registry ID": "MSC-EXP-NET-004",
+      "Canonical name": "Floresta",
+      "Recommended slug": "floresta",
+      "Primary Explore category": "NETWORK",
+      "Network topic": "Bitcoin Node Implementations",
+      "Network subtopic": "Lightweight validating clients",
+      "Entity / project type": "lightweight validating node / embeddable client",
+      "Status": "ACTIVE",
+      "Source confidence": "HIGH",
+      "Concise description": "A Rust Bitcoin client designed for strong validation with reduced resource requirements, using Utreexo-related techniques and Bitcoin Core validation components.",
+      "Deeper researched summary": "Floresta can run as a standalone validating node or be embedded as a library. Its current architecture combines pruning and Utreexo-related accumulator work with rust-bitcoinkernel/libbitcoinkernel integration so applications can reuse Bitcoin Core-derived validation logic while reducing local state requirements. The project also includes a daemon, watch-only wallet capabilities, and an Electrum server. Its Utreexo-related BIPs remain work in progress, so active software development must not be confused with broad network standardization of the proposed accumulator protocol.",
+      "Creators / founders": [
+        "Floresta contributor community",
+        "Vinteum-origin project contributors"
+      ],
+      "Launch / history": "Development began in 2022. Floresta v0.9.1 was released April 27, 2026, and the official repository had same-day August 2026 development activity during verification.",
+      "Why it matters in the Bitcoin network ecosystem": "It represents a modern attempt to make independently validating Bitcoin clients more practical on constrained or embedded systems without reducing the project to a conventional SPV wallet.",
+      "Important technical or cultural characteristics": [
+        "Rust implementation",
+        "Standalone node or embeddable library",
+        "Utreexo-related accumulator architecture",
+        "Pruning",
+        "Uses rust-bitcoinkernel/libbitcoinkernel validation components",
+        "Integrated Electrum-server capability"
+      ],
+      "Related projects / entities": [
+        "Utreexo",
+        "Bitcoin Core",
+        "rust-bitcoin",
+        "rust-bitcoinkernel",
+        "Electrum protocol"
+      ],
+      "Related Explore categories": [
+        "WALLETS"
+      ],
+      "Supporting tags": [
+        "floresta",
+        "utreexo",
+        "lightweight-node",
+        "rust",
+        "validation",
+        "embedded"
+      ],
+      "Official website": "https://getfloresta.org/",
+      "Official sources": [
+        {
+          "label": "Floresta official repository",
+          "url": "https://github.com/getfloresta/Floresta",
+          "source_type": "official-github"
+        },
+        {
+          "label": "Floresta official website",
+          "url": "https://getfloresta.org/",
+          "source_type": "official"
+        },
+        {
+          "label": "Floresta 2026 roadmap",
+          "url": "https://github.com/getfloresta/Floresta/blob/master/doc/roadmap-2026.md",
+          "source_type": "official-github"
+        }
+      ],
+      "Corroborating sources": [],
+      "Last verified date": "2026-08-15",
+      "Verification basis": "Official repository, 2026 roadmap, release history, and current August 2026 activity establish an active project and document its architecture.",
+      "Research notes / uncertainties": [
+        "Utreexo BIPs referenced by Floresta are draft/work-in-progress; do not describe them as universally deployed Bitcoin protocol rules.",
+        "Do not use 'lightweight' as shorthand for 'not validating'; Floresta's design goal is validation with different storage/state tradeoffs."
+      ]
+    }
+  ]
+}
