@@ -16,6 +16,7 @@ on:
       - 'assets/msc-explore-category.js'
       - 'assets/msc-explore-category.css'
       - 'assets/msc-explore-atlas-callouts.js'
+      - 'assets/msc-explore-atlas-callouts-v2.js'
       - 'assets/msc-explore-atlas-callouts.css'
       - 'sections/msc-explore-category.liquid'
       - 'sections/msc-explore-atlas-region-callouts.liquid'
@@ -33,6 +34,7 @@ on:
       - 'assets/msc-explore-category.js'
       - 'assets/msc-explore-category.css'
       - 'assets/msc-explore-atlas-callouts.js'
+      - 'assets/msc-explore-atlas-callouts-v2.js'
       - 'assets/msc-explore-atlas-callouts.css'
       - 'sections/msc-explore-category.liquid'
       - 'sections/msc-explore-atlas-region-callouts.liquid'
@@ -62,6 +64,7 @@ jobs:
           node --check scripts/explore-atlas/check-region-callouts.mjs
           node --check assets/msc-explore-category.js
           node --check assets/msc-explore-atlas-callouts.js
+          node --check assets/msc-explore-atlas-callouts-v2.js
 
       - name: Build Explore runtime
         run: node scripts/explore-runtime/build.mjs
