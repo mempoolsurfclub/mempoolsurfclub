@@ -4,24 +4,24 @@
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /*
-   * Five regions were visually re-reviewed against the current zoomed Atlas.
-   * Their title anchors are explicit in both axes so the callout cannot drift
-   * to a generic far-edge position when focused geometry or label transforms
-   * change. Collision handling may move a reviewed title vertically, but it
-   * does not change its reviewed side or horizontal anchor.
+   * Five regions are now pinned directly to the user's final marked screenshots.
+   * Their X/Y title anchors are fixed visual coordinates within each focused
+   * view. Reviewed anchors do not drift vertically through a generic candidate
+   * search; the marked lane is used exactly and is shown only when its leader
+   * can reach the region without crossing another visible map label.
    *
    * The remaining three regions keep the previously approved automatic side
    * resolution and small center bias.
    */
   const REGION_LAYOUT = Object.freeze({
     mining: { fallbackSide: 'right', yBias: 0.04 },
-    ordinals: { reviewedSide: 'right', reviewedX: 0.82, reviewedY: 0.45 },
+    ordinals: { reviewedSide: 'right', reviewedX: 0.82, reviewedY: 0.44 },
     runes: { fallbackSide: 'right', yBias: -0.03 },
-    wallets: { reviewedSide: 'left', reviewedX: 0.09, reviewedY: 0.35 },
-    marketplaces: { reviewedSide: 'right', reviewedX: 0.82, reviewedY: 0.47 },
+    wallets: { reviewedSide: 'left', reviewedX: 0.13, reviewedY: 0.51 },
+    marketplaces: { reviewedSide: 'right', reviewedX: 1.08, reviewedY: 0.50 },
     payments: { fallbackSide: 'left', yBias: -0.02 },
-    exchanges: { reviewedSide: 'right', reviewedX: 0.82, reviewedY: 0.47 },
-    network: { reviewedSide: 'left', reviewedX: 0.09, reviewedY: 0.37 },
+    exchanges: { reviewedSide: 'right', reviewedX: 1.03, reviewedY: 0.58 },
+    network: { reviewedSide: 'left', reviewedX: -0.08, reviewedY: 0.57 },
   });
 
   const ACTIVE_MODES = new Set(['preview', 'locked']);
@@ -277,9 +277,9 @@
   });
 
   const candidateRatios = (preferred, reviewed) => {
-    const offsets = reviewed
-      ? [0, -0.04, 0.04, -0.08, 0.08, -0.12, 0.12, -0.16, 0.16, -0.20, 0.20]
-      : [0, -0.06, 0.06, -0.12, 0.12, -0.18, 0.18, -0.24, 0.24, -0.30, 0.30, -0.36, 0.36];
+    if (reviewed) return [Number(preferred.toFixed(3))];
+
+    const offsets = [0, -0.06, 0.06, -0.12, 0.12, -0.18, 0.18, -0.24, 0.24, -0.30, 0.30, -0.36, 0.36];
     const values = offsets.map((offset) => clamp(preferred + offset, 0.12, 0.88));
     return [...new Set(values.map((value) => Number(value.toFixed(3))))];
   };
