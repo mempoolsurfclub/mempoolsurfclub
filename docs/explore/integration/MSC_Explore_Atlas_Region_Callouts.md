@@ -10,21 +10,29 @@ This implementation adds the focused Atlas region title treatment requested duri
 - As soon as a region is the active zoomed view, its large category name appears; a click is not required first.
 - Clicking the region or bottom control still locks the zoom, and the same category callout remains visible in the locked state.
 - The category name remains at 3× the destination-label type scale.
-- The leader runs horizontally from the end of the category name and terminates just inside the selected region.
-- Before display, the title and leader are tested against visible SVG text. Alternate vertical lanes are tried when a destination or chart label would be crossed.
+- The leader runs horizontally from the category title toward the selected region and terminates just inside the region hit geometry.
+- Before display, the title and leader are tested against visible SVG text. A lane is rejected if it would cross another destination or chart label.
 - Returning to the full overview removes the large category callout.
 
-## Region alignment
+## Screenshot-reviewed title placement
 
-Callout placement is checked against the actual focused composition rather than using one fixed side for every view:
+The latest live screenshots showed five titles drifting away from their intended chart composition. Those five placements are now explicit instead of being allowed to change sides or start from a generic region-center bias:
 
-- if the selected region occupies the right side of the focused view, the category title is placed on the left;
-- if the selected region occupies the left side, the category title is placed on the right;
-- centered regions use a reviewed per-region fallback side;
-- the preferred vertical lane starts from the selected region's actual focused center, then moves only when needed to avoid map text;
-- the leader is kept horizontal so the title and selected territory read as one aligned chart annotation.
+- **Ordinals** — right side, vertically centered in the focused view.
+- **Wallets** — left side, vertically centered in the focused view.
+- **Marketplaces** — right side, slightly above center to keep the leader clear of the marketplace labels.
+- **Exchanges** — right side, slightly above center to align with the open water beside the region.
+- **Network** — left side, just below center to align with the broad central Network territory.
 
-Reviewed fallback composition remains explicit for all eight regions: Mining right, Ordinals right, Runes right, Wallets left, Marketplaces left, Payments left, Exchanges left, and Network left. These are fallbacks only; actual focused geography can select the opposite side where the current zoom composition requires it.
+These are treated as reviewed visual placements. Collision handling can make a small vertical adjustment if necessary, but it no longer lets these five titles migrate to the opposite side or drift far from the reviewed lane.
+
+## Preserved automatic placement
+
+Mining, Runes, and Payments were not part of this correction. Their existing automatic focused-composition behavior remains unchanged:
+
+- Mining — reviewed fallback right.
+- Runes — reviewed fallback right.
+- Payments — reviewed fallback left.
 
 ## Publication boundary
 
@@ -35,10 +43,7 @@ The remaining seven callouts render visually but remain non-navigable until thei
 ## Files
 
 - `assets/msc-explore-atlas-callouts.js`
-- `assets/msc-explore-atlas-callouts.css`
-- `sections/msc-explore-atlas-region-callouts.liquid`
-- `templates/page.explore.json`
 - `scripts/explore-atlas/check-region-callouts.mjs`
-- `.github/workflows/explore-validation.yml`
+- `docs/explore/integration/MSC_Explore_Atlas_Region_Callouts.md`
 
-No Atlas geography, focus-perimeter, Field Journal, Explore registry, or Learn files are changed by this implementation.
+No Atlas geography, focus-perimeter, template routing, Field Journal, Explore registry, or Learn files are changed by this correction.

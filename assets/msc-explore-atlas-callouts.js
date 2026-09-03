@@ -4,21 +4,22 @@
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /*
-   * Every region keeps an explicit fallback side, but final placement is based
-   * on the actual focused composition: if the region occupies the right side
-   * of the current view the title sits left, and vice versa. Centered regions
-   * use the reviewed fallback. yBias only fine-tunes vertical alignment from
-   * the region's real focused center; collision checks still choose the lane.
+   * Five regions were visually re-reviewed against the current zoomed Atlas.
+   * Their side and vertical lane are now explicit so the title cannot drift to
+   * an awkward location when hit-geometry or label transforms change.
+   *
+   * The remaining three regions keep the previously approved automatic side
+   * resolution and small center bias.
    */
   const REGION_LAYOUT = Object.freeze({
     mining: { fallbackSide: 'right', yBias: 0.04 },
-    ordinals: { fallbackSide: 'right', yBias: 0.04 },
+    ordinals: { reviewedSide: 'right', reviewedY: 0.50 },
     runes: { fallbackSide: 'right', yBias: -0.03 },
-    wallets: { fallbackSide: 'left', yBias: 0.04 },
-    marketplaces: { fallbackSide: 'left', yBias: -0.03 },
+    wallets: { reviewedSide: 'left', reviewedY: 0.50 },
+    marketplaces: { reviewedSide: 'right', reviewedY: 0.47 },
     payments: { fallbackSide: 'left', yBias: -0.02 },
-    exchanges: { fallbackSide: 'left', yBias: -0.02 },
-    network: { fallbackSide: 'left', yBias: -0.04 },
+    exchanges: { reviewedSide: 'right', reviewedY: 0.47 },
+    network: { reviewedSide: 'left', reviewedY: 0.51 },
   });
 
   const ACTIVE_MODES = new Set(['preview', 'locked']);
@@ -39,7 +40,7 @@
       const match = cssPath.match(/^path\((['"]?)(.*)\1\)$/);
       if (match?.[2]) return match[2];
     } catch (error) {
-      /* The source d remains a safe fallback. */
+      /* Source d remains a safe fallback. */
     }
 
     return path.getAttribute('d') || '';
@@ -213,18 +214,28 @@
     };
   };
 
-  const resolveSide = (geometry, viewBox, fallbackSide) => {
+  const resolveSide = (geometry, viewBox, layout) => {
+    if (layout.reviewedSide) return layout.reviewedSide;
+
     const viewCenterX = viewBox[0] + (viewBox[2] / 2);
     const deadband = viewBox[2] * 0.06;
 
     if (geometry.center.x > viewCenterX + deadband) return 'left';
     if (geometry.center.x < viewCenterX - deadband) return 'right';
-    return fallbackSide;
+    return layout.fallbackSide;
   };
 
-  /* Find the exact horizontal lane where the title leader reaches the region.
-   * If that lane does not actually intersect the region, reject it and try a
-   * different vertical lane rather than drawing a detached or diagonal leader.
+  const resolvePreferredRatio = (geometry, viewBox, layout) => {
+    if (Number.isFinite(layout.reviewedY)) return layout.reviewedY;
+
+    const regionRatio = (geometry.center.y - viewBox[1]) / viewBox[3];
+    return clamp(regionRatio + (layout.yBias || 0), 0.20, 0.80);
+  };
+
+  /*
+   * Find the horizontal lane where the leader reaches the region hit geometry.
+   * If the lane does not actually intersect the region it is rejected instead
+   * of producing a detached line.
    */
   const findHorizontalRegionEdge = (geometry, side, targetY) => {
     const intersections = [];
@@ -258,8 +269,10 @@
     y: edge.y,
   });
 
-  const candidateRatios = (preferred) => {
-    const offsets = [0, -0.06, 0.06, -0.12, 0.12, -0.18, 0.18, -0.24, 0.24, -0.30, 0.30, -0.36, 0.36];
+  const candidateRatios = (preferred, reviewed) => {
+    const offsets = reviewed
+      ? [0, -0.04, 0.04, -0.08, 0.08, -0.12, 0.12, -0.16, 0.16]
+      : [0, -0.06, 0.06, -0.12, 0.12, -0.18, 0.18, -0.24, 0.24, -0.30, 0.30, -0.36, 0.36];
     const values = offsets.map((offset) => clamp(preferred + offset, 0.12, 0.88));
     return [...new Set(values.map((value) => Number(value.toFixed(3))))];
   };
@@ -374,17 +387,17 @@
       title.textContent = label;
       setRoute(slug, label);
 
-      const side = resolveSide(geometry, viewBox, layout.fallbackSide);
+      const side = resolveSide(geometry, viewBox, layout);
+      const reviewed = Boolean(layout.reviewedSide);
+      const preferredRatio = resolvePreferredRatio(geometry, viewBox, layout);
       const textX = side === 'left'
         ? viewBox[0] + (viewBox[2] * 0.055)
         : viewBox[0] + (viewBox[2] * 0.945);
       const textAnchor = side === 'left' ? 'start' : 'end';
-      const regionRatio = (geometry.center.y - viewBox[1]) / viewBox[3];
-      const preferredRatio = clamp(regionRatio + layout.yBias, 0.20, 0.80);
       const obstacles = collectTextObstacles(svg, viewBox);
       let best = null;
 
-      candidateRatios(preferredRatio).forEach((ratio) => {
+      candidateRatios(preferredRatio, reviewed).forEach((ratio) => {
         const textY = viewBox[1] + (viewBox[3] * ratio);
         title.setAttribute('x', String(textX));
         title.setAttribute('y', String(textY));
@@ -426,8 +439,7 @@
         const lineLength = Math.abs(lineEnd.x - lineStart.x);
         const tooShort = lineLength < (viewBox[2] * 0.07);
 
-        /* The user's rule is strict: never knowingly run the title or leader
-         * through another map label. Reject any obstructed lane completely. */
+        /* Never knowingly run the title or leader through another map label. */
         if (textCollisions || lineCollisions || tooShort) return;
 
         const candidate = {
@@ -451,6 +463,7 @@
       applyCandidate(best);
       callout.dataset.atlasCalloutRegion = slug;
       callout.dataset.atlasCalloutSide = side;
+      callout.dataset.atlasCalloutPlacement = reviewed ? 'reviewed' : 'automatic';
       callout.classList.add('is-visible');
       callout.setAttribute('aria-hidden', 'false');
     };
