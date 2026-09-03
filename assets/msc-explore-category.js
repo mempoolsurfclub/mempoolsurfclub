@@ -109,15 +109,6 @@
         statusCounts.set(record.lifecycle_status, (statusCounts.get(record.lifecycle_status) || 0) + 1);
       });
 
-      root.querySelectorAll('[data-wallet-count], [data-metric-total]').forEach((node) => {
-        node.textContent = String(records.length);
-      });
-      root.querySelector('[data-topic-count]').textContent = String(topicCounts.size);
-      root.querySelector('[data-metric-active]').textContent = String(statusCounts.get('ACTIVE') || 0);
-      root.querySelector('[data-metric-historical]').textContent = String(statusCounts.get('HISTORICAL') || 0);
-      root.querySelector('[data-metric-inactive]').textContent = String(statusCounts.get('INACTIVE') || 0);
-      root.querySelector('[data-metric-uncertain]').textContent = String(statusCounts.get('UNCERTAIN') || 0);
-
       WALLET_TOPIC_ORDER.forEach((topic) => {
         if (!topicCounts.has(topic)) return;
         const option = document.createElement('option');
