@@ -1,0 +1,69 @@
+/* MSC Explore Atlas — focused region title + directory leader navigation. */
+
+.msc-explore-atlas-shell .msc-atlas-map__region-callout {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .16s ease;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__region-callout.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__region-callout-line {
+  stroke: rgba(212, 190, 153, .82);
+  stroke-width: 1.35;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__region-callout-link {
+  pointer-events: auto;
+  cursor: pointer;
+  outline: none;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__region-callout-link.is-disabled {
+  pointer-events: none;
+  cursor: default;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__region-callout-hit {
+  pointer-events: all;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__region-callout-link.is-disabled .msc-atlas-map__region-callout-hit {
+  pointer-events: none;
+}
+
+/* Destination labels are 12px in the selected region. This 36px title is the
+ * locked 3x hierarchy requested for region navigation; both counter-scale with
+ * the focused SVG viewBox so the ratio remains stable on screen. */
+.msc-explore-atlas-shell .msc-atlas-map__region-callout-title {
+  fill: rgba(251, 248, 239, .98) !important;
+  font-size: calc(36px * var(--atlas-counter-scale, 1)) !important;
+  font-weight: 780 !important;
+  line-height: 1;
+  letter-spacing: .075em !important;
+  text-transform: uppercase;
+  stroke: none !important;
+  paint-order: normal !important;
+  user-select: none;
+}
+
+.msc-explore-atlas-shell .msc-atlas-map__region-callout-link:not(.is-disabled):hover .msc-atlas-map__region-callout-title,
+.msc-explore-atlas-shell .msc-atlas-map__region-callout-link:not(.is-disabled):focus-visible .msc-atlas-map__region-callout-title {
+  fill: var(--msc-sand) !important;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .16em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .msc-explore-atlas-shell .msc-atlas-map__region-callout {
+    transition: none;
+  }
+}
