@@ -14,17 +14,21 @@ const template = read('templates/page.explore.json');
 const slugs = ['ordinals', 'runes', 'wallets', 'marketplaces', 'mining', 'payments', 'exchanges', 'network'];
 
 slugs.forEach((slug) => {
-  if (!new RegExp(`\\b${slug}: \\{ side: '(?:left|right)', y: 0\\.\\d+ \\}`).test(js)) {
-    fail(`missing explicit placement for ${slug}`);
+  if (!new RegExp(`\\b${slug}: \\{ fallbackSide: '(?:left|right)', yBias: -?0\\.\\d+ \\}`).test(js)) {
+    fail(`missing reviewed alignment fallback for ${slug}`);
   }
   if (!loader.includes(`data-atlas-route-${slug}="{{ section.settings.${slug}_link }}"`)) {
     fail(`missing route registry field for ${slug}`);
   }
 });
 
+if (!js.includes("new Set(['preview', 'locked'])")) fail('callouts must support both preview and locked zoom states');
+if (!js.includes('resolveSide')) fail('focused-view side resolution is missing');
+if (!js.includes('geometry.center.x > viewCenterX')) fail('region side must be determined from focused composition');
+if (!js.includes('findHorizontalRegionEdge')) fail('horizontal title-to-region leader alignment is missing');
 if (!js.includes('segmentIntersectsBox')) fail('leader collision detection is missing');
 if (!js.includes('collectTextObstacles')) fail('text obstacle collection is missing');
-if (!js.includes("mode !== 'locked'")) fail('callouts must remain locked-state only');
+if (!js.includes('preferredRatio = clamp(regionRatio + layout.yBias')) fail('title lane must align from the region focused center');
 if (!css.includes('calc(36px * var(--atlas-counter-scale, 1))')) fail('region title must preserve the 3x 36px hierarchy');
 if (!loader.includes("{{ 'msc-explore-atlas-callouts.css' | asset_url | stylesheet_tag }}")) fail('callout stylesheet is not loaded');
 if (!loader.includes("{{ 'msc-explore-atlas-callouts.js' | asset_url }}")) fail('callout script is not loaded');
@@ -54,5 +58,5 @@ if (atlasIndex < 0 || calloutIndex !== atlasIndex + 1) {
 
 if (!process.exitCode) {
   console.log('Explore Atlas callout validation passed.');
-  console.log('8 explicit region placements; locked-state collision-aware leaders; Wallets route enabled only.');
+  console.log('8 reviewed alignment fallbacks; preview + locked callouts; collision-aware horizontal leaders; Wallets route enabled only.');
 }
