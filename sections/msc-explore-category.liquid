@@ -1,0 +1,163 @@
+{{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
+{{ 'msc-explore-category.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'msc-explore-category.js' | asset_url }}" defer></script>
+
+<section
+  class="msc-shell msc-explore-category"
+  id="MscExploreCategory-{{ section.id }}"
+  data-explore-category
+  data-category="WALLETS"
+  data-runtime-url="{{ 'msc-explore-runtime.json' | asset_url }}"
+>
+  <div class="msc-container msc-explore-category__container">
+    <nav class="msc-explore-category__breadcrumb" aria-label="Explore breadcrumb">
+      <a href="{{ routes.root_url }}pages/explore-the-bitcoin-ecosystem">{{ section.settings.atlas_return_label | escape }}</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">WALLETS</span>
+    </nav>
+
+    <header class="msc-explore-category__hero">
+      <div class="msc-explore-category__hero-copy">
+        <div class="msc-eyebrow">MSC ATLAS / REGION 03</div>
+        <p class="msc-explore-category__coordinate">N 03 / WALLETS / CANONICAL INVENTORY</p>
+        <h1 class="msc-explore-category__title">{{ section.settings.heading | escape }}</h1>
+        <div class="msc-explore-category__intro rte">{{ section.settings.supporting_copy }}</div>
+      </div>
+
+      <aside class="msc-explore-category__chart-card" aria-label="Wallets region summary">
+        <div class="msc-explore-category__chart-grid" aria-hidden="true"></div>
+        <p class="msc-explore-category__chart-label">CHART STATUS</p>
+        <strong data-wallet-count>40</strong>
+        <span>canonical wallet records</span>
+        <dl class="msc-explore-category__chart-readout">
+          <div><dt>Region</dt><dd>WALLETS</dd></div>
+          <div><dt>Topics</dt><dd data-topic-count>5</dd></div>
+          <div><dt>Source</dt><dd>MSC REGISTRY</dd></div>
+          <div><dt>Profile routes</dt><dd>PLANNED</dd></div>
+        </dl>
+      </aside>
+    </header>
+
+    <div class="msc-explore-category__metrics" aria-label="Wallet registry status summary">
+      <div class="msc-explore-category__metric">
+        <span>TOTAL</span>
+        <strong data-metric-total>40</strong>
+        <small>canonical records</small>
+      </div>
+      <div class="msc-explore-category__metric">
+        <span>ACTIVE</span>
+        <strong data-metric-active>36</strong>
+        <small>verified active</small>
+      </div>
+      <div class="msc-explore-category__metric">
+        <span>HISTORICAL</span>
+        <strong data-metric-historical>1</strong>
+        <small>preserved context</small>
+      </div>
+      <div class="msc-explore-category__metric">
+        <span>INACTIVE</span>
+        <strong data-metric-inactive>2</strong>
+        <small>not current products</small>
+      </div>
+      <div class="msc-explore-category__metric">
+        <span>UNCERTAIN</span>
+        <strong data-metric-uncertain>1</strong>
+        <small>requires re-verification</small>
+      </div>
+    </div>
+
+    <section class="msc-explore-category__directory" aria-labelledby="WalletDirectoryHeading-{{ section.id }}">
+      <div class="msc-explore-category__directory-head">
+        <div>
+          <p class="msc-section-kicker">CHARTED DIRECTORY</p>
+          <h2 class="msc-section-title" id="WalletDirectoryHeading-{{ section.id }}">Wallets in the registry</h2>
+        </div>
+        <p class="msc-explore-category__directory-note">
+          Registry inclusion is not a recommendation. Lifecycle and evidence labels are shown separately.
+        </p>
+      </div>
+
+      <form class="msc-explore-category__filters" data-filter-form role="search" aria-label="Filter wallet records">
+        <label class="msc-explore-category__search">
+          <span>Search wallets</span>
+          <input
+            type="search"
+            inputmode="search"
+            autocomplete="off"
+            placeholder="Search name, topic, tag…"
+            data-filter-search
+          >
+        </label>
+
+        <label>
+          <span>Topic</span>
+          <select data-filter-topic>
+            <option value="">All topics</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Lifecycle</span>
+          <select data-filter-status>
+            <option value="">All statuses</option>
+          </select>
+        </label>
+
+        <button type="reset" class="msc-explore-category__reset" data-filter-reset>Reset</button>
+      </form>
+
+      <div class="msc-explore-category__topic-strip" data-topic-strip aria-label="Wallet topics"></div>
+
+      <div class="msc-explore-category__results-line">
+        <p data-results-summary aria-live="polite">Loading Wallets registry…</p>
+        <p class="msc-explore-category__route-note">Profile destinations remain unpublished until the profile stage.</p>
+      </div>
+
+      <div class="msc-explore-category__grid" data-record-grid aria-busy="true">
+        <div class="msc-explore-category__loading" role="status">Loading charted wallet records…</div>
+      </div>
+
+      <div class="msc-explore-category__empty" data-empty-state hidden>
+        <strong>No charted wallets match these filters.</strong>
+        <span>Reset the directory or try a broader search.</span>
+      </div>
+
+      <noscript>
+        <p class="msc-explore-category__noscript">JavaScript is required to load the generated Explore registry.</p>
+      </noscript>
+    </section>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "MSC Explore category",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "WALLETS"
+    },
+    {
+      "type": "richtext",
+      "id": "supporting_copy",
+      "label": "Supporting copy",
+      "default": "<p>Explore Bitcoin wallet software, asset-focused wallets, Lightning and payment wallets, multisig and collaborative custody systems, and hardware signing devices.</p>"
+    },
+    {
+      "type": "text",
+      "id": "atlas_return_label",
+      "label": "Atlas return label",
+      "default": "Return to Atlas"
+    }
+  ],
+  "presets": [
+    {
+      "name": "MSC Explore category"
+    }
+  ]
+}
+{% endschema %}
