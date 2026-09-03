@@ -5,16 +5,22 @@ on:
     branches:
       - explore/atlas-ecosystem-foundation
       - explore/wallets-category-reference
+      - explore/atlas-region-callout-navigation
     paths:
       - 'docs/explore/**'
       - 'config/explore/**'
       - 'scripts/explore-runtime/**'
       - 'scripts/explore-category/**'
+      - 'scripts/explore-atlas/**'
       - 'assets/msc-explore-runtime.json'
       - 'assets/msc-explore-category.js'
       - 'assets/msc-explore-category.css'
+      - 'assets/msc-explore-atlas-callouts.js'
+      - 'assets/msc-explore-atlas-callouts.css'
       - 'sections/msc-explore-category.liquid'
+      - 'sections/msc-explore-atlas-region-callouts.liquid'
       - 'templates/page.explore-category.json'
+      - 'templates/page.explore.json'
       - '.github/workflows/explore-validation.yml'
   pull_request:
     paths:
@@ -22,11 +28,16 @@ on:
       - 'config/explore/**'
       - 'scripts/explore-runtime/**'
       - 'scripts/explore-category/**'
+      - 'scripts/explore-atlas/**'
       - 'assets/msc-explore-runtime.json'
       - 'assets/msc-explore-category.js'
       - 'assets/msc-explore-category.css'
+      - 'assets/msc-explore-atlas-callouts.js'
+      - 'assets/msc-explore-atlas-callouts.css'
       - 'sections/msc-explore-category.liquid'
+      - 'sections/msc-explore-atlas-region-callouts.liquid'
       - 'templates/page.explore-category.json'
+      - 'templates/page.explore.json'
       - '.github/workflows/explore-validation.yml'
 
 permissions:
@@ -48,7 +59,9 @@ jobs:
         run: |
           node --check scripts/explore-runtime/build.mjs
           node --check scripts/explore-category/check-wallets-reference.mjs
+          node --check scripts/explore-atlas/check-region-callouts.mjs
           node --check assets/msc-explore-category.js
+          node --check assets/msc-explore-atlas-callouts.js
 
       - name: Build Explore runtime
         run: node scripts/explore-runtime/build.mjs
@@ -58,6 +71,9 @@ jobs:
 
       - name: Validate Wallets category reference
         run: node scripts/explore-category/check-wallets-reference.mjs
+
+      - name: Validate Atlas region callouts
+        run: node scripts/explore-atlas/check-region-callouts.mjs
 
       - name: Upload generated contract
         if: always()
