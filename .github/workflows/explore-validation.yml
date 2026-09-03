@@ -4,18 +4,29 @@ on:
   push:
     branches:
       - explore/atlas-ecosystem-foundation
+      - explore/wallets-category-reference
     paths:
       - 'docs/explore/**'
       - 'config/explore/**'
       - 'scripts/explore-runtime/**'
+      - 'scripts/explore-category/**'
       - 'assets/msc-explore-runtime.json'
+      - 'assets/msc-explore-category.js'
+      - 'assets/msc-explore-category.css'
+      - 'sections/msc-explore-category.liquid'
+      - 'templates/page.explore-category.json'
       - '.github/workflows/explore-validation.yml'
   pull_request:
     paths:
       - 'docs/explore/**'
       - 'config/explore/**'
       - 'scripts/explore-runtime/**'
+      - 'scripts/explore-category/**'
       - 'assets/msc-explore-runtime.json'
+      - 'assets/msc-explore-category.js'
+      - 'assets/msc-explore-category.css'
+      - 'sections/msc-explore-category.liquid'
+      - 'templates/page.explore-category.json'
       - '.github/workflows/explore-validation.yml'
 
 permissions:
@@ -33,14 +44,20 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Check generator syntax
-        run: node --check scripts/explore-runtime/build.mjs
+      - name: Check Explore script syntax
+        run: |
+          node --check scripts/explore-runtime/build.mjs
+          node --check scripts/explore-category/check-wallets-reference.mjs
+          node --check assets/msc-explore-category.js
 
       - name: Build Explore runtime
         run: node scripts/explore-runtime/build.mjs
 
       - name: Validate generated contract
         run: node scripts/explore-runtime/build.mjs --check
+
+      - name: Validate Wallets category reference
+        run: node scripts/explore-category/check-wallets-reference.mjs
 
       - name: Upload generated contract
         if: always()
