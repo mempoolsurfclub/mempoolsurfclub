@@ -6,23 +6,25 @@ This implementation adds the focused Atlas region title treatment requested duri
 
 ## Interaction
 
-- Selecting either an Atlas region or its bottom navigation control keeps the existing locked zoom behavior.
-- In the locked state, the selected category name appears inside the map at 3× the destination-label type scale.
-- Western regions place the category title on the right; eastern regions place it on the left.
-- The leader terminates just inside the selected region.
-- Before display, the title and leader are tested against visible SVG text. Alternate vertical lanes are tried when a destination label would be crossed.
-- Hover-only preview does not show the large category callout.
+- Hovering/focusing a bottom region control or moving onto a map region keeps the existing preview zoom behavior.
+- As soon as a region is the active zoomed view, its large category name appears; a click is not required first.
+- Clicking the region or bottom control still locks the zoom, and the same category callout remains visible in the locked state.
+- The category name remains at 3× the destination-label type scale.
+- The leader runs horizontally from the end of the category name and terminates just inside the selected region.
+- Before display, the title and leader are tested against visible SVG text. Alternate vertical lanes are tried when a destination or chart label would be crossed.
+- Returning to the full overview removes the large category callout.
 
-## Region composition
+## Region alignment
 
-- Mining — right
-- Ordinals — right
-- Runes — right
-- Wallets — left
-- Marketplaces — left
-- Payments — left
-- Exchanges — left
-- Network — left
+Callout placement is checked against the actual focused composition rather than using one fixed side for every view:
+
+- if the selected region occupies the right side of the focused view, the category title is placed on the left;
+- if the selected region occupies the left side, the category title is placed on the right;
+- centered regions use a reviewed per-region fallback side;
+- the preferred vertical lane starts from the selected region's actual focused center, then moves only when needed to avoid map text;
+- the leader is kept horizontal so the title and selected territory read as one aligned chart annotation.
+
+Reviewed fallback composition remains explicit for all eight regions: Mining right, Ordinals right, Runes right, Wallets left, Marketplaces left, Payments left, Exchanges left, and Network left. These are fallbacks only; actual focused geography can select the opposite side where the current zoom composition requires it.
 
 ## Publication boundary
 
