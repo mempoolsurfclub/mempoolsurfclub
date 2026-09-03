@@ -1,0 +1,37 @@
+{{ 'msc-explore-atlas-region-card.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'msc-explore-atlas-region-card.js' | asset_url }}" defer></script>
+
+<span
+  hidden
+  aria-hidden="true"
+  data-atlas-region-card-routes
+  data-atlas-region-card-route-ordinals="{{ section.settings.ordinals_link }}"
+  data-atlas-region-card-route-runes="{{ section.settings.runes_link }}"
+  data-atlas-region-card-route-wallets="{{ section.settings.wallets_link }}"
+  data-atlas-region-card-route-marketplaces="{{ section.settings.marketplaces_link }}"
+  data-atlas-region-card-route-mining="{{ section.settings.mining_link }}"
+  data-atlas-region-card-route-payments="{{ section.settings.payments_link }}"
+  data-atlas-region-card-route-exchanges="{{ section.settings.exchanges_link }}"
+  data-atlas-region-card-route-network="{{ section.settings.network_link }}"
+></span>
+
+{% schema %}
+{
+  "name": "MSC Atlas Region Card",
+  "tag": "div",
+  "class": "msc-atlas-region-card-loader",
+  "settings": [
+    { "type": "url", "id": "ordinals_link", "label": "Ordinals page" },
+    { "type": "url", "id": "runes_link", "label": "Runes page" },
+    { "type": "url", "id": "wallets_link", "label": "Wallets page" },
+    { "type": "url", "id": "marketplaces_link", "label": "Marketplaces page" },
+    { "type": "url", "id": "mining_link", "label": "Mining page" },
+    { "type": "url", "id": "payments_link", "label": "Payments page" },
+    { "type": "url", "id": "exchanges_link", "label": "Exchanges page" },
+    { "type": "url", "id": "network_link", "label": "Network page" }
+  ],
+  "presets": [
+    { "name": "MSC Atlas Region Card" }
+  ]
+}
+{% endschema %}
