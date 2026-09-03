@@ -12,25 +12,44 @@ const loader = read('sections/msc-explore-atlas-region-callouts.liquid');
 const template = read('templates/page.explore.json');
 
 const slugs = ['ordinals', 'runes', 'wallets', 'marketplaces', 'mining', 'payments', 'exchanges', 'network'];
+const reviewed = {
+  ordinals: { side: 'right', y: '0.50' },
+  wallets: { side: 'left', y: '0.50' },
+  marketplaces: { side: 'right', y: '0.47' },
+  exchanges: { side: 'right', y: '0.47' },
+  network: { side: 'left', y: '0.51' },
+};
+const automatic = {
+  mining: { side: 'right', bias: '0.04' },
+  runes: { side: 'right', bias: '-0.03' },
+  payments: { side: 'left', bias: '-0.02' },
+};
 
 slugs.forEach((slug) => {
-  if (!new RegExp(`\\b${slug}: \\{ fallbackSide: '(?:left|right)', yBias: -?0\\.\\d+ \\}`).test(js)) {
-    fail(`missing reviewed alignment fallback for ${slug}`);
-  }
   if (!loader.includes(`data-atlas-route-${slug}="{{ section.settings.${slug}_link }}"`)) {
     fail(`missing route registry field for ${slug}`);
   }
 });
 
+Object.entries(reviewed).forEach(([slug, config]) => {
+  const expected = `${slug}: { reviewedSide: '${config.side}', reviewedY: ${config.y} }`;
+  if (!js.includes(expected)) fail(`missing screenshot-reviewed placement for ${slug}`);
+});
+
+Object.entries(automatic).forEach(([slug, config]) => {
+  const expected = `${slug}: { fallbackSide: '${config.side}', yBias: ${config.bias} }`;
+  if (!js.includes(expected)) fail(`unexpected change to approved automatic placement for ${slug}`);
+});
+
 if (!js.includes("new Set(['preview', 'locked'])")) fail('callouts must support both preview and locked zoom states');
-if (!js.includes('resolveSide')) fail('focused-view side resolution is missing');
-if (!js.includes('geometry.center.x > viewCenterX')) fail('region side must be determined from focused composition');
+if (!js.includes('if (layout.reviewedSide) return layout.reviewedSide;')) fail('reviewed title sides must override automatic drift');
+if (!js.includes('if (Number.isFinite(layout.reviewedY)) return layout.reviewedY;')) fail('reviewed title lanes must override automatic vertical drift');
 if (!js.includes('findHorizontalRegionEdge')) fail('horizontal title-to-region leader alignment is missing');
 if (!js.includes('if (!intersections.length) return null;')) fail('leader lanes must intersect the selected region horizontally');
 if (!js.includes('segmentIntersectsBox')) fail('leader collision detection is missing');
 if (!js.includes('collectTextObstacles')) fail('text obstacle collection is missing');
 if (!js.includes('if (textCollisions || lineCollisions || tooShort) return;')) fail('obstructed callout lanes must be rejected rather than scored');
-if (!js.includes('preferredRatio = clamp(regionRatio + layout.yBias')) fail('title lane must align from the region focused center');
+if (!js.includes("callout.dataset.atlasCalloutPlacement = reviewed ? 'reviewed' : 'automatic';")) fail('reviewed/automatic placement state is not exposed');
 if (!css.includes('calc(36px * var(--atlas-counter-scale, 1))')) fail('region title must preserve the 3x 36px hierarchy');
 if (!loader.includes("{{ 'msc-explore-atlas-callouts.css' | asset_url | stylesheet_tag }}")) fail('callout stylesheet is not loaded');
 if (!loader.includes("{{ 'msc-explore-atlas-callouts.js' | asset_url }}")) fail('callout script is not loaded');
@@ -60,5 +79,5 @@ if (atlasIndex < 0 || calloutIndex !== atlasIndex + 1) {
 
 if (!process.exitCode) {
   console.log('Explore Atlas callout validation passed.');
-  console.log('8 reviewed alignment fallbacks; preview + locked callouts; zero-crossing horizontal leaders; Wallets route enabled only.');
+  console.log('5 screenshot-reviewed title positions; 3 preserved automatic placements; preview + locked callouts; zero-crossing horizontal leaders; Wallets route enabled only.');
 }
