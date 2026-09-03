@@ -2,57 +2,65 @@
 
 ## Scope
 
-This implementation adds the focused Atlas region title treatment requested during visual review without rewriting the approved Atlas geography or focus behavior.
+This implementation preserves the approved Atlas geography and focus behavior while replacing the fragile reviewed-callout placement logic with a viewport-safe renderer.
 
 ## Interaction
 
 - Hovering/focusing a bottom region control or moving onto a map region keeps the existing preview zoom behavior.
-- The large category name begins rendering during the zoom animation instead of waiting until the 420 ms camera move has finished.
-- The callout is positioned during the zoom and settled again against the final focused viewBox so preview and locked states use the same composition.
-- Clicking the region or bottom control still locks the zoom, and the same category callout remains visible in the locked state.
+- The large category name renders during the zoom and settles again against the final focused viewBox.
+- Preview and locked states use the same placement.
 - The category name remains at 3× the destination-label type scale.
-- The leader runs horizontally from the category title toward the selected region and terminates just inside the region hit geometry.
-- Before display, the title and leader are tested against visible SVG text. The marked lane is rejected rather than rerouted if it would cross another destination or chart label.
+- A reviewed title is never hidden merely because its leader cannot be routed.
+- Every reviewed title is clamped inside the visible SVG viewport so it cannot be clipped off-screen.
+- Leader routing is independent from title placement. It first tries a direct horizontal connection, then searches nearby clean lanes without moving the title.
+- The leader must enter the selected region and cannot knowingly cross another visible map-text label. If no clean leader route exists, the leader is suppressed while the title remains visible.
 - Returning to the full overview removes the large category callout.
 
-## Final screenshot-pinned title placement
+## Final reviewed placements
 
-The user supplied a final marked screenshot set for Network, Exchanges, Marketplaces, Wallets, and Ordinals. Those marks are now the placement source of truth. The five reviewed regions use explicit focused-view **X and Y anchors** and are no longer allowed to drift vertically through the generic candidate search.
+The latest hover screenshots showed the previous implementation failing in two ways: Network could be clipped outside the viewport, while Exchanges, Marketplaces, and Wallets could disappear entirely when the strict leader collision test rejected their single fixed lane. The corrected renderer keeps all five reviewed titles inside the visible map and decouples title visibility from leader success.
 
-- **Network** — title moved down and far left into the marked open-water box; leader exits the right side of the word and runs into the Network region.
-- **Exchanges** — title moved farther right and slightly down into the marked box; leader approaches from the left and enters the Exchanges region.
-- **Marketplaces** — title moved farther right and lower into the marked box; leader approaches from the left and enters the Marketplace region.
-- **Wallets** — title moved down and slightly inward into the marked left-side box; leader exits the right side and enters the Wallets region.
-- **Ordinals** — title remains on the right at the marked vertical level; the horizontal leader occupies the marked lane to the left of the title and enters the Ordinals region.
+Viewport-safe reviewed anchors:
 
-The explicit reviewed anchors are:
+- **Ordinals** — right side, X `0.80`, Y `0.44`
+- **Wallets** — left side, X `0.18`, Y `0.46`
+- **Marketplaces** — right side, X `0.94`, Y `0.46`
+- **Exchanges** — right side, X `0.94`, Y `0.54`
+- **Network** — left side, X `0.08`, Y `0.52`
 
-- Ordinals: side `right`, X `0.82`, Y `0.44`
-- Wallets: side `left`, X `0.13`, Y `0.51`
-- Marketplaces: side `right`, X `1.08`, Y `0.50`
-- Exchanges: side `right`, X `1.03`, Y `0.58`
-- Network: side `left`, X `-0.08`, Y `0.57`
+These values are intentionally inside the visible 0–1 focused-view interval. The renderer also clamps the actual rendered title bounding box to a viewport margin, which protects longer labels such as MARKETPLACES from clipping.
 
-Values outside the 0–1 horizontal viewBox interval intentionally use the available horizontal SVG viewport margin created by `preserveAspectRatio="xMidYMid meet"`; this matches the marked open-water placements rather than forcing titles back toward the generic focused-map edge.
+## Leader behavior
+
+The leader remains visually subordinate to the title and region geometry:
+
+1. Try a horizontal line from the title toward the selected region.
+2. If that line intersects visible text, search small vertical offsets while leaving the title fixed.
+3. When an offset is needed, use a short technical-chart elbow before continuing horizontally into the region.
+4. If no collision-free region connection is available, hide only the leader; never hide the title.
 
 ## Preserved automatic placement
 
-Mining, Runes, and Payments were not part of this correction. Their existing automatic focused-composition behavior remains unchanged:
+Mining, Runes, and Payments were not part of the screenshot correction. Their existing automatic focused-composition behavior remains:
 
-- Mining — reviewed fallback right.
-- Runes — reviewed fallback right.
-- Payments — reviewed fallback left.
+- Mining — fallback right
+- Runes — fallback right
+- Payments — fallback left
 
 ## Publication boundary
 
 Only the Wallets category route is enabled because `/pages/explore-wallets` is the only category Page object confirmed created at this stage.
 
-The remaining seven callouts render visually but remain non-navigable until their corresponding Shopify Page objects are created and their URL settings are explicitly configured. This prevents dead Atlas links.
+The remaining seven titles render visually but remain non-navigable until their corresponding Shopify Page objects are created and their URL settings are explicitly configured.
 
-## Files
+## Active files
 
-- `assets/msc-explore-atlas-callouts.js`
+- `assets/msc-explore-atlas-callouts-v2.js`
+- `assets/msc-explore-atlas-callouts.css`
+- `sections/msc-explore-atlas-region-callouts.liquid`
 - `scripts/explore-atlas/check-region-callouts.mjs`
 - `docs/explore/integration/MSC_Explore_Atlas_Region_Callouts.md`
 
-No Atlas geography, focus-perimeter, template routing, Field Journal, Explore registry, or Learn files are changed by this correction.
+The previous `assets/msc-explore-atlas-callouts.js` asset is retained for history but is no longer loaded by the Atlas callout section.
+
+No Atlas geography, focus perimeter, category routing, Field Journal, Explore registry, or Learn content is changed by this correction.
