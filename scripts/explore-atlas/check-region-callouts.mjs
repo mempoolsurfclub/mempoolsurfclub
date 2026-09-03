@@ -26,8 +26,10 @@ if (!js.includes("new Set(['preview', 'locked'])")) fail('callouts must support 
 if (!js.includes('resolveSide')) fail('focused-view side resolution is missing');
 if (!js.includes('geometry.center.x > viewCenterX')) fail('region side must be determined from focused composition');
 if (!js.includes('findHorizontalRegionEdge')) fail('horizontal title-to-region leader alignment is missing');
+if (!js.includes('if (!intersections.length) return null;')) fail('leader lanes must intersect the selected region horizontally');
 if (!js.includes('segmentIntersectsBox')) fail('leader collision detection is missing');
 if (!js.includes('collectTextObstacles')) fail('text obstacle collection is missing');
+if (!js.includes('if (textCollisions || lineCollisions || tooShort) return;')) fail('obstructed callout lanes must be rejected rather than scored');
 if (!js.includes('preferredRatio = clamp(regionRatio + layout.yBias')) fail('title lane must align from the region focused center');
 if (!css.includes('calc(36px * var(--atlas-counter-scale, 1))')) fail('region title must preserve the 3x 36px hierarchy');
 if (!loader.includes("{{ 'msc-explore-atlas-callouts.css' | asset_url | stylesheet_tag }}")) fail('callout stylesheet is not loaded');
@@ -58,5 +60,5 @@ if (atlasIndex < 0 || calloutIndex !== atlasIndex + 1) {
 
 if (!process.exitCode) {
   console.log('Explore Atlas callout validation passed.');
-  console.log('8 reviewed alignment fallbacks; preview + locked callouts; collision-aware horizontal leaders; Wallets route enabled only.');
+  console.log('8 reviewed alignment fallbacks; preview + locked callouts; zero-crossing horizontal leaders; Wallets route enabled only.');
 }
