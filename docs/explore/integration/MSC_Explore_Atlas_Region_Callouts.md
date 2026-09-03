@@ -7,25 +7,33 @@ This implementation adds the focused Atlas region title treatment requested duri
 ## Interaction
 
 - Hovering/focusing a bottom region control or moving onto a map region keeps the existing preview zoom behavior.
-- The large category name now begins rendering during the zoom animation instead of waiting until the 420 ms camera move has finished.
-- The callout is positioned once during the zoom and then settled again against the final focused viewBox so preview and locked states use the same reviewed composition.
+- The large category name begins rendering during the zoom animation instead of waiting until the 420 ms camera move has finished.
+- The callout is positioned during the zoom and settled again against the final focused viewBox so preview and locked states use the same composition.
 - Clicking the region or bottom control still locks the zoom, and the same category callout remains visible in the locked state.
 - The category name remains at 3× the destination-label type scale.
 - The leader runs horizontally from the category title toward the selected region and terminates just inside the region hit geometry.
-- Before display, the title and leader are tested against visible SVG text. A lane is rejected if it would cross another destination or chart label.
+- Before display, the title and leader are tested against visible SVG text. The marked lane is rejected rather than rerouted if it would cross another destination or chart label.
 - Returning to the full overview removes the large category callout.
 
-## Screenshot-reviewed title placement
+## Final screenshot-pinned title placement
 
-The live screenshots showed that locking only a title side and vertical lane was not enough: reviewed titles could still sit too far toward the generic viewport edge. Five regions therefore use explicit focused-view **X and Y anchors**.
+The user supplied a final marked screenshot set for Network, Exchanges, Marketplaces, Wallets, and Ordinals. Those marks are now the placement source of truth. The five reviewed regions use explicit focused-view **X and Y anchors** and are no longer allowed to drift vertically through the generic candidate search.
 
-- **Ordinals** — right-side anchor pulled inward and slightly upward from the previous detached placement.
-- **Wallets** — left-side anchor moved upward so the title aligns with the Wallets territory rather than the lower ocean area.
-- **Marketplaces** — right-side anchor kept slightly above center and pulled inward toward the region.
-- **Exchanges** — right-side anchor kept slightly above center and pulled inward toward the region.
-- **Network** — left-side anchor moved upward so the title aligns with the broad central Network territory.
+- **Network** — title moved down and far left into the marked open-water box; leader exits the right side of the word and runs into the Network region.
+- **Exchanges** — title moved farther right and slightly down into the marked box; leader approaches from the left and enters the Exchanges region.
+- **Marketplaces** — title moved farther right and lower into the marked box; leader approaches from the left and enters the Marketplace region.
+- **Wallets** — title moved down and slightly inward into the marked left-side box; leader exits the right side and enters the Wallets region.
+- **Ordinals** — title remains on the right at the marked vertical level; the horizontal leader occupies the marked lane to the left of the title and enters the Ordinals region.
 
-Collision handling may still make a vertical adjustment when required to preserve the strict no-text-crossing rule, but it no longer changes the reviewed side or horizontal anchor for these five regions. Reviewed callouts may use a shorter restrained leader when the explicit title anchor is already close to the region.
+The explicit reviewed anchors are:
+
+- Ordinals: side `right`, X `0.82`, Y `0.44`
+- Wallets: side `left`, X `0.13`, Y `0.51`
+- Marketplaces: side `right`, X `1.08`, Y `0.50`
+- Exchanges: side `right`, X `1.03`, Y `0.58`
+- Network: side `left`, X `-0.08`, Y `0.57`
+
+Values outside the 0–1 horizontal viewBox interval intentionally use the available horizontal SVG viewport margin created by `preserveAspectRatio="xMidYMid meet"`; this matches the marked open-water placements rather than forcing titles back toward the generic focused-map edge.
 
 ## Preserved automatic placement
 
