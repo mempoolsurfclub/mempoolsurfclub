@@ -13,11 +13,11 @@ const template = read('templates/page.explore.json');
 
 const slugs = ['ordinals', 'runes', 'wallets', 'marketplaces', 'mining', 'payments', 'exchanges', 'network'];
 const reviewed = {
-  ordinals: { side: 'right', x: '0.82', y: '0.45' },
-  wallets: { side: 'left', x: '0.09', y: '0.35' },
-  marketplaces: { side: 'right', x: '0.82', y: '0.47' },
-  exchanges: { side: 'right', x: '0.82', y: '0.47' },
-  network: { side: 'left', x: '0.09', y: '0.37' },
+  ordinals: { side: 'right', x: '0.82', y: '0.44' },
+  wallets: { side: 'left', x: '0.13', y: '0.51' },
+  marketplaces: { side: 'right', x: '1.08', y: '0.50' },
+  exchanges: { side: 'right', x: '1.03', y: '0.58' },
+  network: { side: 'left', x: '-0.08', y: '0.57' },
 };
 const automatic = {
   mining: { side: 'right', bias: '0.04' },
@@ -33,7 +33,7 @@ slugs.forEach((slug) => {
 
 Object.entries(reviewed).forEach(([slug, config]) => {
   const expected = `${slug}: { reviewedSide: '${config.side}', reviewedX: ${config.x}, reviewedY: ${config.y} }`;
-  if (!js.includes(expected)) fail(`missing screenshot-reviewed X/Y anchor for ${slug}`);
+  if (!js.includes(expected)) fail(`missing final screenshot-pinned X/Y anchor for ${slug}`);
 });
 
 Object.entries(automatic).forEach(([slug, config]) => {
@@ -45,6 +45,7 @@ if (!js.includes("new Set(['preview', 'locked'])")) fail('callouts must support 
 if (!js.includes('if (layout.reviewedSide) return layout.reviewedSide;')) fail('reviewed title sides must override automatic drift');
 if (!js.includes('if (Number.isFinite(layout.reviewedY)) return layout.reviewedY;')) fail('reviewed title lanes must override automatic vertical drift');
 if (!js.includes('if (Number.isFinite(layout.reviewedX)) return layout.reviewedX;')) fail('reviewed title X anchors must override generic edge placement');
+if (!js.includes('if (reviewed) return [Number(preferred.toFixed(3))];')) fail('final screenshot-pinned reviewed anchors must not drift vertically');
 if (!js.includes('resolveTextRatio')) fail('explicit reviewed horizontal anchor resolver is missing');
 if (!js.includes('findHorizontalRegionEdge')) fail('horizontal title-to-region leader alignment is missing');
 if (!js.includes('if (!intersections.length) return null;')) fail('leader lanes must intersect the selected region horizontally');
@@ -84,5 +85,5 @@ if (atlasIndex < 0 || calloutIndex !== atlasIndex + 1) {
 
 if (!process.exitCode) {
   console.log('Explore Atlas callout validation passed.');
-  console.log('5 screenshot-reviewed X/Y anchors; 3 preserved automatic placements; preview + locked callouts; zero-crossing horizontal leaders; Wallets route enabled only.');
+  console.log('5 final screenshot-pinned X/Y anchors with no reviewed drift; 3 preserved automatic placements; preview + locked callouts; zero-crossing horizontal leaders; Wallets route enabled only.');
 }
