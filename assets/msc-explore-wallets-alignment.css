@@ -2,22 +2,9 @@
  * This layer intentionally changes presentation only. Content and behavior stay untouched.
  */
 
-/* Match the Explore page's visual start while accounting for the Wallets breadcrumb. */
+/* With the breadcrumb removed, use the Explore page's actual vertical start. */
 .msc-explore-category {
-  padding-top: 2.4rem !important;
-}
-
-.msc-explore-category__breadcrumb {
-  margin: 0 0 2.1rem !important;
-  color: rgba(251, 248, 239, .58) !important;
-  font-size: .92rem !important;
-  line-height: 1.2 !important;
-  font-weight: 700 !important;
-  letter-spacing: .14em !important;
-}
-
-.msc-explore-category__breadcrumb a {
-  color: rgba(212, 190, 153, .72) !important;
+  padding-top: 5.5rem !important;
 }
 
 /* Mirror the Explore Atlas intro grid exactly: kicker spans, then 40/60 title + copy. */
@@ -76,9 +63,42 @@
   margin: 0 !important;
 }
 
-/* Match Explore's intro-to-first-widget spacing. */
+/* Match Explore's intro-to-first-widget spacing with no intermediate heading block. */
 .msc-explore-category__editorial {
   margin-top: clamp(2.4rem, 3vw, 3.2rem) !important;
+}
+
+/* The article area now behaves as one Atlas-style widget. */
+.msc-explore-category__editorial-console {
+  overflow: hidden;
+  border: 1px solid rgba(212, 190, 153, .28);
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(34, 71, 78, .70), rgba(24, 57, 64, .78));
+  box-shadow:
+    0 24px 70px rgba(8, 25, 33, .16),
+    inset 0 1px 0 rgba(251, 248, 239, .025);
+  backdrop-filter: blur(18px);
+}
+
+.msc-explore-category__editorial-bar {
+  min-height: 5.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 1rem 1.6rem;
+  border-bottom: 1px solid rgba(212, 190, 153, .18);
+  background: rgba(16, 40, 45, .30);
+}
+
+.msc-explore-category__editorial-bar .msc-explore-category__section-link {
+  margin: 0;
+}
+
+.msc-explore-category__editorial-console .msc-explore-category__editorial-rail {
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
 }
 
 /* Keep the rest of the page on the same Explore color hierarchy. */
@@ -115,9 +135,15 @@
   color: rgba(251, 248, 239, .52) !important;
 }
 
+@media screen and (min-width: 761px) and (max-width: 990px) {
+  .msc-explore-category {
+    padding-top: 3.5rem !important;
+  }
+}
+
 @media screen and (min-width: 991px) {
   .msc-explore-category {
-    padding-top: 2.4rem !important;
+    padding-top: 5.5rem !important;
   }
 }
 
@@ -129,11 +155,7 @@
 
 @media screen and (max-width: 760px) {
   .msc-explore-category {
-    padding-top: 2rem !important;
-  }
-
-  .msc-explore-category__breadcrumb {
-    margin-bottom: 2rem !important;
+    padding-top: 5.5rem !important;
   }
 
   .msc-explore-category__hero--split {
@@ -150,6 +172,11 @@
   }
 
   .msc-explore-category__editorial {
-    margin-top: 2.6rem !important;
+    margin-top: 2.8rem !important;
+  }
+
+  .msc-explore-category__editorial-bar {
+    min-height: 5.2rem;
+    padding: .9rem 1.2rem;
   }
 }
