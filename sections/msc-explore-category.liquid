@@ -1,6 +1,13 @@
 {{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
 {{ 'msc-explore-category.css' | asset_url | stylesheet_tag }}
+{{ 'msc-explore-wallets-reference.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'msc-explore-category.js' | asset_url }}" defer></script>
+
+{%- assign editorial_blog = section.settings.content_blog -%}
+{%- assign editorial_tag_handle = section.settings.editorial_category_tag | handleize -%}
+{%- if editorial_blog != blank -%}
+  {%- assign editorial_archive_url = editorial_blog.url | append: '/tagged/' | append: editorial_tag_handle -%}
+{%- endif -%}
 
 <section
   class="msc-shell msc-explore-category"
@@ -16,27 +23,89 @@
       <span aria-current="page">WALLETS</span>
     </nav>
 
-    <header class="msc-explore-category__hero">
-      <div class="msc-explore-category__hero-copy">
+    <header class="msc-explore-category__hero msc-explore-category__hero--split">
+      <div class="msc-explore-category__hero-title">
         <div class="msc-eyebrow">MSC ATLAS / REGION 03</div>
-        <p class="msc-explore-category__coordinate">N 03 / WALLETS / CANONICAL INVENTORY</p>
         <h1 class="msc-explore-category__title">{{ section.settings.heading | escape }}</h1>
+      </div>
+      <div class="msc-explore-category__hero-support">
         <div class="msc-explore-category__intro rte">{{ section.settings.supporting_copy }}</div>
       </div>
-
-      <aside class="msc-explore-category__chart-card" aria-label="Wallets region summary">
-        <div class="msc-explore-category__chart-grid" aria-hidden="true"></div>
-        <p class="msc-explore-category__chart-label">CHART STATUS</p>
-        <strong data-wallet-count>40</strong>
-        <span>canonical wallet records</span>
-        <dl class="msc-explore-category__chart-readout">
-          <div><dt>Region</dt><dd>WALLETS</dd></div>
-          <div><dt>Topics</dt><dd data-topic-count>5</dd></div>
-          <div><dt>Source</dt><dd>MSC REGISTRY</dd></div>
-          <div><dt>Profile routes</dt><dd>PLANNED</dd></div>
-        </dl>
-      </aside>
     </header>
+
+    <section class="msc-explore-category__editorial" aria-labelledby="WalletEditorialHeading-{{ section.id }}">
+      <div class="msc-explore-category__section-head">
+        <div>
+          <p class="msc-section-kicker">FIELD JOURNAL / WALLETS</p>
+          <h2 class="msc-section-title" id="WalletEditorialHeading-{{ section.id }}">Latest from Wallets</h2>
+        </div>
+        {%- if editorial_blog != blank -%}
+          <a class="msc-explore-category__section-link" href="{{ editorial_archive_url }}">View all Wallet articles →</a>
+        {%- endif -%}
+      </div>
+
+      <div class="msc-explore-category__editorial-rail" aria-label="Latest Wallets articles">
+        {%- assign editorial_count = 0 -%}
+        {%- if editorial_blog != blank and editorial_blog.articles_count > 0 -%}
+          {%- for article in editorial_blog.articles -%}
+            {%- assign article_matches_category = false -%}
+            {%- for tag in article.tags -%}
+              {%- assign article_tag_handle = tag | handleize -%}
+              {%- if article_tag_handle == editorial_tag_handle -%}
+                {%- assign article_matches_category = true -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+
+            {%- if article_matches_category -%}
+              {%- assign editorial_count = editorial_count | plus: 1 -%}
+              <article class="msc-explore-category__article-card">
+                <a class="msc-explore-category__article-link" href="{{ article.url }}" aria-label="Read {{ article.title | escape }}">
+                  <div class="msc-explore-category__article-media">
+                    {%- if article.image -%}
+                      {{ article.image | image_url: width: 1000 | image_tag: loading: 'lazy', widths: '420,700,1000', sizes: '(min-width: 990px) 32vw, 82vw', alt: article.image.alt | default: article.title }}
+                    {%- else -%}
+                      <div class="msc-explore-category__article-placeholder" aria-hidden="true"></div>
+                    {%- endif -%}
+                  </div>
+                  <div class="msc-explore-category__article-body">
+                    <div class="msc-explore-category__article-meta">
+                      <span>WALLETS</span>
+                      <span>{{ article.published_at | date: '%b %d, %Y' }}</span>
+                    </div>
+                    <h3>{{ article.title | escape }}</h3>
+                    <p>{{ article.excerpt_or_content | strip_html | truncate: 150 }}</p>
+                    <span class="msc-explore-category__article-action">Read article →</span>
+                  </div>
+                </a>
+              </article>
+              {%- if editorial_count >= 3 -%}{%- break -%}{%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+
+        {%- if editorial_count == 0 -%}
+          <div class="msc-explore-category__editorial-empty">
+            <span>FIELD JOURNAL / READY</span>
+            <strong>No Wallets articles have been published yet.</strong>
+            <p>New entries tagged Wallets will appear here automatically, newest first.</p>
+          </div>
+        {%- endif -%}
+      </div>
+    </section>
+
+    <aside class="msc-explore-category__chart-card msc-explore-category__chart-card--directory" aria-label="Wallets region summary">
+      <div class="msc-explore-category__chart-grid" aria-hidden="true"></div>
+      <p class="msc-explore-category__chart-label">CHART STATUS</p>
+      <strong data-wallet-count>40</strong>
+      <span>canonical wallet records</span>
+      <dl class="msc-explore-category__chart-readout">
+        <div><dt>Region</dt><dd>WALLETS</dd></div>
+        <div><dt>Topics</dt><dd data-topic-count>5</dd></div>
+        <div><dt>Source</dt><dd>MSC REGISTRY</dd></div>
+        <div><dt>Profile routes</dt><dd>PLANNED</dd></div>
+      </dl>
+    </aside>
 
     <div class="msc-explore-category__metrics" aria-label="Wallet registry status summary">
       <div class="msc-explore-category__metric">
@@ -126,6 +195,39 @@
         <p class="msc-explore-category__noscript">JavaScript is required to load the generated Explore registry.</p>
       </noscript>
     </section>
+
+    <section class="msc-explore-category__guides" aria-labelledby="WalletGuidesHeading-{{ section.id }}">
+      <div class="msc-explore-category__section-head">
+        <div>
+          <p class="msc-section-kicker">LEARN / RELATED GUIDES</p>
+          <h2 class="msc-section-title" id="WalletGuidesHeading-{{ section.id }}">Learn more about Wallets</h2>
+        </div>
+        <a class="msc-explore-category__section-link" href="{{ routes.root_url }}pages/learn-bitcoin">Explore all learning →</a>
+      </div>
+
+      <div class="msc-explore-category__guide-grid">
+        <a class="msc-explore-category__guide-card" href="{{ routes.root_url }}pages/learn-bitcoin-basics?view=msc-learn-guide-005">
+          <span>MSC-GUIDE-005 / BITCOIN BASICS</span>
+          <strong>What Is a Bitcoin Wallet?</strong>
+          <em>Read guide →</em>
+        </a>
+        <a class="msc-explore-category__guide-card" href="{{ routes.root_url }}pages/learn-bitcoin-basics?view=msc-learn-guide-006">
+          <span>MSC-GUIDE-006 / BITCOIN BASICS</span>
+          <strong>What Is Bitcoin Self-Custody?</strong>
+          <em>Read guide →</em>
+        </a>
+        <a class="msc-explore-category__guide-card" href="{{ routes.root_url }}pages/learn-bitcoin-basics?view=msc-learn-guide-009">
+          <span>MSC-GUIDE-009 / BITCOIN BASICS</span>
+          <strong>What Is a Bitcoin Seed Phrase?</strong>
+          <em>Read guide →</em>
+        </a>
+        <a class="msc-explore-category__guide-card" href="{{ routes.root_url }}pages/learn-bitcoin-ecosystem?view=msc-learn-guide-074">
+          <span>MSC-GUIDE-074 / BITCOIN ECOSYSTEM</span>
+          <strong>How Bitcoin Wallet Providers Operate</strong>
+          <em>Read guide →</em>
+        </a>
+      </div>
+    </section>
   </div>
 </section>
 
@@ -146,6 +248,17 @@
       "id": "supporting_copy",
       "label": "Supporting copy",
       "default": "<p>Explore Bitcoin wallet software, asset-focused wallets, Lightning and payment wallets, multisig and collaborative custody systems, and hardware signing devices.</p>"
+    },
+    {
+      "type": "blog",
+      "id": "content_blog",
+      "label": "Editorial source"
+    },
+    {
+      "type": "text",
+      "id": "editorial_category_tag",
+      "label": "Editorial category tag",
+      "default": "Wallets"
     },
     {
       "type": "text",
