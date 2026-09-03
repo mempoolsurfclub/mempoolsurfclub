@@ -4,22 +4,24 @@
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /*
-   * Region title composition is intentionally per-region. Regions on the
-   * western half of the chart read from the right; eastern regions read from
-   * the left. The preferred vertical position is only a starting point: the
-   * collision pass moves the title/leader when destination typography occupies
-   * that lane so the leader never intentionally crosses Atlas text.
+   * Every region keeps an explicit fallback side, but final placement is based
+   * on the actual focused composition: if the region occupies the right side
+   * of the current view the title sits left, and vice versa. Centered regions
+   * use the reviewed fallback. yBias only fine-tunes vertical alignment from
+   * the region's real focused center; collision checks still choose the lane.
    */
-  const PLACEMENT = Object.freeze({
-    mining: { side: 'right', y: 0.78 },
-    ordinals: { side: 'right', y: 0.78 },
-    runes: { side: 'right', y: 0.24 },
-    wallets: { side: 'left', y: 0.68 },
-    marketplaces: { side: 'left', y: 0.30 },
-    payments: { side: 'left', y: 0.24 },
-    exchanges: { side: 'left', y: 0.24 },
-    network: { side: 'left', y: 0.24 },
+  const REGION_LAYOUT = Object.freeze({
+    mining: { fallbackSide: 'right', yBias: 0.04 },
+    ordinals: { fallbackSide: 'right', yBias: 0.04 },
+    runes: { fallbackSide: 'right', yBias: -0.03 },
+    wallets: { fallbackSide: 'left', yBias: 0.04 },
+    marketplaces: { fallbackSide: 'left', yBias: -0.03 },
+    payments: { fallbackSide: 'left', yBias: -0.02 },
+    exchanges: { fallbackSide: 'left', yBias: -0.02 },
+    network: { fallbackSide: 'left', yBias: -0.04 },
   });
+
+  const ACTIVE_MODES = new Set(['preview', 'locked']);
 
   const parseBox = (value) => String(value || '')
     .trim()
@@ -180,7 +182,7 @@
 
     try {
       const length = probe.getTotalLength();
-      const samples = 220;
+      const samples = 260;
       points = Array.from({ length: samples + 1 }, (_, index) => {
         const point = probe.getPointAtLength((length * index) / samples);
         return { x: point.x, y: point.y };
@@ -211,40 +213,54 @@
     };
   };
 
-  const findRegionEdge = (geometry, side, targetY, viewBox) => {
-    const verticalTolerance = Math.max(22, viewBox[3] * 0.11);
-    let candidates = geometry.points.filter(
-      (point) => Math.abs(point.y - targetY) <= verticalTolerance
-    );
+  const resolveSide = (geometry, viewBox, fallbackSide) => {
+    const viewCenterX = viewBox[0] + (viewBox[2] / 2);
+    const deadband = viewBox[2] * 0.06;
 
-    if (!candidates.length) candidates = geometry.points;
-
-    const edgeX = side === 'left'
-      ? geometry.bounds.x
-      : geometry.bounds.x + geometry.bounds.width;
-
-    return candidates.reduce((best, point) => {
-      const verticalPenalty = Math.abs(point.y - targetY) * 2.4;
-      const edgePenalty = Math.abs(point.x - edgeX) * 0.75;
-      const score = verticalPenalty + edgePenalty;
-      return !best || score < best.score ? { point, score } : best;
-    }, null)?.point || null;
+    if (geometry.center.x > viewCenterX + deadband) return 'left';
+    if (geometry.center.x < viewCenterX - deadband) return 'right';
+    return fallbackSide;
   };
 
-  const insetPoint = (edge, center, amount) => {
-    const dx = center.x - edge.x;
-    const dy = center.y - edge.y;
-    const length = Math.hypot(dx, dy) || 1;
+  /* Find the exact horizontal lane where the title leader reaches the region.
+   * If that lane does not actually intersect the region, reject it and try a
+   * different vertical lane rather than drawing a detached or diagonal leader.
+   */
+  const findHorizontalRegionEdge = (geometry, side, targetY) => {
+    const intersections = [];
+    const maxSegment = Math.max(geometry.bounds.width, geometry.bounds.height) * 0.34;
+
+    for (let index = 1; index < geometry.points.length; index += 1) {
+      const a = geometry.points[index - 1];
+      const b = geometry.points[index];
+      if (Math.hypot(b.x - a.x, b.y - a.y) > maxSegment) continue;
+      if (a.y === b.y) continue;
+
+      const minY = Math.min(a.y, b.y);
+      const maxY = Math.max(a.y, b.y);
+      if (targetY < minY || targetY > maxY) continue;
+
+      const amount = (targetY - a.y) / (b.y - a.y);
+      if (amount < 0 || amount > 1) continue;
+      intersections.push(a.x + ((b.x - a.x) * amount));
+    }
+
+    if (!intersections.length) return null;
 
     return {
-      x: edge.x + ((dx / length) * amount),
-      y: edge.y + ((dy / length) * amount),
+      x: side === 'left' ? Math.min(...intersections) : Math.max(...intersections),
+      y: targetY,
     };
   };
 
+  const insetHorizontalPoint = (edge, side, amount) => ({
+    x: edge.x + (side === 'left' ? amount : -amount),
+    y: edge.y,
+  });
+
   const candidateRatios = (preferred) => {
-    const offsets = [0, -0.12, 0.12, -0.22, 0.22, -0.31, 0.31];
-    const values = offsets.map((offset) => clamp(preferred + offset, 0.16, 0.84));
+    const offsets = [0, -0.06, 0.06, -0.12, 0.12, -0.18, 0.18, -0.24, 0.24, -0.30, 0.30, -0.36, 0.36];
+    const values = offsets.map((offset) => clamp(preferred + offset, 0.12, 0.88));
     return [...new Set(values.map((value) => Number(value.toFixed(3))))];
   };
 
@@ -255,7 +271,7 @@
     if (!svg || !navTargets.length || !routeRegistry) return;
 
     const routeBySlug = new Map(
-      Object.keys(PLACEMENT).map((slug) => [
+      Object.keys(REGION_LAYOUT).map((slug) => [
         slug,
         routeRegistry.getAttribute(`data-atlas-route-${slug}`) || '',
       ])
@@ -336,7 +352,7 @@
     };
 
     const positionCallout = (slug) => {
-      const placement = PLACEMENT[slug];
+      const layout = REGION_LAYOUT[slug];
       const region = atlas.querySelector(`[data-atlas-region-shape="${slug}"]`);
       const shape = region?.querySelector(
         '.msc-atlas-map__region-shape:not(.msc-atlas-map__region-shape--inner)'
@@ -344,7 +360,7 @@
       const viewBox = parseBox(svg.getAttribute('viewBox'));
       const label = labelBySlug.get(slug) || region?.dataset.atlasRegionLabel || slug.toUpperCase();
 
-      if (!placement || !shape || viewBox.length !== 4) {
+      if (!layout || !shape || viewBox.length !== 4) {
         hideCallout();
         return;
       }
@@ -358,14 +374,17 @@
       title.textContent = label;
       setRoute(slug, label);
 
-      const textX = placement.side === 'left'
+      const side = resolveSide(geometry, viewBox, layout.fallbackSide);
+      const textX = side === 'left'
         ? viewBox[0] + (viewBox[2] * 0.055)
         : viewBox[0] + (viewBox[2] * 0.945);
-      const textAnchor = placement.side === 'left' ? 'start' : 'end';
+      const textAnchor = side === 'left' ? 'start' : 'end';
+      const regionRatio = (geometry.center.y - viewBox[1]) / viewBox[3];
+      const preferredRatio = clamp(regionRatio + layout.yBias, 0.20, 0.80);
       const obstacles = collectTextObstacles(svg, viewBox);
       let best = null;
 
-      candidateRatios(placement.y).forEach((ratio, index) => {
+      candidateRatios(preferredRatio).forEach((ratio) => {
         const textY = viewBox[1] + (viewBox[3] * ratio);
         title.setAttribute('x', String(textX));
         title.setAttribute('y', String(textY));
@@ -374,20 +393,27 @@
         const titleBox = getRootBBox(title, svg);
         if (!titleBox) return;
 
-        const edge = findRegionEdge(geometry, placement.side, titleBox.y + (titleBox.height / 2), viewBox);
+        const leaderY = titleBox.y + (titleBox.height * 0.54);
+        const edge = findHorizontalRegionEdge(geometry, side, leaderY);
         if (!edge) return;
 
-        const lineEnd = insetPoint(edge, geometry.center, Math.max(12, viewBox[2] * 0.018));
+        const lineEnd = insetHorizontalPoint(
+          edge,
+          side,
+          Math.max(12, viewBox[2] * 0.018)
+        );
         const lineStart = {
-          x: placement.side === 'left'
+          x: side === 'left'
             ? titleBox.x + titleBox.width + (viewBox[2] * 0.018)
             : titleBox.x - (viewBox[2] * 0.018),
-          y: titleBox.y + (titleBox.height * 0.54),
+          y: lineEnd.y,
         };
 
         const paddedTitle = expandBox(titleBox, Math.max(8, viewBox[2] * 0.012));
         const hitBox = expandBox(titleBox, Math.max(6, viewBox[2] * 0.010));
-        const textCollisions = obstacles.filter((box) => boxesIntersect(paddedTitle, expandBox(box, 5))).length;
+        const textCollisions = obstacles.filter((box) => (
+          boxesIntersect(paddedTitle, expandBox(box, 5))
+        )).length;
         const lineCollisions = obstacles.filter((box) => (
           segmentIntersectsBox(
             lineStart.x,
@@ -397,12 +423,15 @@
             expandBox(box, Math.max(6, viewBox[2] * 0.009))
           )
         )).length;
-        const lineLength = Math.hypot(lineEnd.x - lineStart.x, lineEnd.y - lineStart.y);
-        const tooShort = lineLength < (viewBox[2] * 0.07) ? 1 : 0;
-        const score = (textCollisions * 100) + (lineCollisions * 40) + (tooShort * 20) + index;
+        const lineLength = Math.abs(lineEnd.x - lineStart.x);
+        const tooShort = lineLength < (viewBox[2] * 0.07);
+
+        /* The user's rule is strict: never knowingly run the title or leader
+         * through another map label. Reject any obstructed lane completely. */
+        if (textCollisions || lineCollisions || tooShort) return;
 
         const candidate = {
-          score,
+          score: Math.abs(ratio - preferredRatio),
           textX,
           textY,
           textAnchor,
@@ -421,7 +450,7 @@
 
       applyCandidate(best);
       callout.dataset.atlasCalloutRegion = slug;
-      callout.dataset.atlasCalloutSide = placement.side;
+      callout.dataset.atlasCalloutSide = side;
       callout.classList.add('is-visible');
       callout.setAttribute('aria-hidden', 'false');
     };
@@ -434,11 +463,12 @@
 
       const slug = atlas.dataset.atlasActive || '';
       const mode = atlas.dataset.atlasMode || '';
-      if (!slug || mode !== 'locked' || !PLACEMENT[slug]) return;
+      if (!slug || !ACTIVE_MODES.has(mode) || !REGION_LAYOUT[slug]) return;
 
       renderTimer = window.setTimeout(() => {
         if (version !== renderVersion) return;
-        if (atlas.dataset.atlasActive !== slug || atlas.dataset.atlasMode !== 'locked') return;
+        if (atlas.dataset.atlasActive !== slug) return;
+        if (!ACTIVE_MODES.has(atlas.dataset.atlasMode || '')) return;
         positionCallout(slug);
       }, reduceMotion ? 0 : 455);
     };
@@ -458,7 +488,7 @@
     });
 
     window.addEventListener('resize', () => {
-      if (atlas.dataset.atlasMode === 'locked') scheduleCallout();
+      if (ACTIVE_MODES.has(atlas.dataset.atlasMode || '')) scheduleCallout();
     }, { passive: true });
 
     scheduleCallout();
