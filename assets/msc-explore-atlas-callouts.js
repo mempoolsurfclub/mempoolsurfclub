@@ -222,9 +222,9 @@
     return fallbackSide;
   };
 
-  /* Find where a horizontal leader meets the reviewed region hit geometry.
-   * A horizontal leader preserves the user's annotated title-to-region read and
-   * prevents the callout from looking diagonally detached from its category.
+  /* Find the exact horizontal lane where the title leader reaches the region.
+   * If that lane does not actually intersect the region, reject it and try a
+   * different vertical lane rather than drawing a detached or diagonal leader.
    */
   const findHorizontalRegionEdge = (geometry, side, targetY) => {
     const intersections = [];
@@ -245,26 +245,12 @@
       intersections.push(a.x + ((b.x - a.x) * amount));
     }
 
-    if (intersections.length) {
-      return {
-        x: side === 'left' ? Math.min(...intersections) : Math.max(...intersections),
-        y: targetY,
-      };
-    }
+    if (!intersections.length) return null;
 
-    const nearest = [...geometry.points]
-      .sort((a, b) => Math.abs(a.y - targetY) - Math.abs(b.y - targetY))
-      .slice(0, 24);
-
-    if (!nearest.length) return null;
-    const point = nearest.reduce((best, current) => {
-      if (!best) return current;
-      return side === 'left'
-        ? (current.x < best.x ? current : best)
-        : (current.x > best.x ? current : best);
-    }, null);
-
-    return { x: point.x, y: point.y };
+    return {
+      x: side === 'left' ? Math.min(...intersections) : Math.max(...intersections),
+      y: targetY,
+    };
   };
 
   const insetHorizontalPoint = (edge, side, amount) => ({
@@ -273,8 +259,8 @@
   });
 
   const candidateRatios = (preferred) => {
-    const offsets = [0, -0.08, 0.08, -0.16, 0.16, -0.24, 0.24, -0.32, 0.32];
-    const values = offsets.map((offset) => clamp(preferred + offset, 0.16, 0.84));
+    const offsets = [0, -0.06, 0.06, -0.12, 0.12, -0.18, 0.18, -0.24, 0.24, -0.30, 0.30, -0.36, 0.36];
+    const values = offsets.map((offset) => clamp(preferred + offset, 0.12, 0.88));
     return [...new Set(values.map((value) => Number(value.toFixed(3))))];
   };
 
@@ -438,17 +424,14 @@
           )
         )).length;
         const lineLength = Math.abs(lineEnd.x - lineStart.x);
-        const tooShort = lineLength < (viewBox[2] * 0.07) ? 1 : 0;
-        const laneDistance = Math.abs(ratio - preferredRatio);
-        const score = (
-          (textCollisions * 1000)
-          + (lineCollisions * 250)
-          + (tooShort * 80)
-          + (laneDistance * 100)
-        );
+        const tooShort = lineLength < (viewBox[2] * 0.07);
+
+        /* The user's rule is strict: never knowingly run the title or leader
+         * through another map label. Reject any obstructed lane completely. */
+        if (textCollisions || lineCollisions || tooShort) return;
 
         const candidate = {
-          score,
+          score: Math.abs(ratio - preferredRatio),
           textX,
           textY,
           textAnchor,
