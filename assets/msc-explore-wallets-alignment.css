@@ -1,0 +1,155 @@
+/* Wallets category — precision alignment with the approved Explore intro system.
+ * This layer intentionally changes presentation only. Content and behavior stay untouched.
+ */
+
+/* Match the Explore page's visual start while accounting for the Wallets breadcrumb. */
+.msc-explore-category {
+  padding-top: 2.4rem !important;
+}
+
+.msc-explore-category__breadcrumb {
+  margin: 0 0 2.1rem !important;
+  color: rgba(251, 248, 239, .58) !important;
+  font-size: .92rem !important;
+  line-height: 1.2 !important;
+  font-weight: 700 !important;
+  letter-spacing: .14em !important;
+}
+
+.msc-explore-category__breadcrumb a {
+  color: rgba(212, 190, 153, .72) !important;
+}
+
+/* Mirror the Explore Atlas intro grid exactly: kicker spans, then 40/60 title + copy. */
+.msc-explore-category__hero--split {
+  display: grid !important;
+  grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr) !important;
+  grid-template-areas:
+    "kicker kicker"
+    "title copy" !important;
+  column-gap: clamp(3.2rem, 4vw, 4.8rem) !important;
+  row-gap: 1.35rem !important;
+  align-items: start !important;
+  padding: 0 !important;
+  border-bottom: 0 !important;
+}
+
+.msc-explore-category__hero-title {
+  display: contents !important;
+}
+
+.msc-explore-category__hero-title .msc-eyebrow {
+  grid-area: kicker;
+  justify-self: start;
+  margin: 0 0 .25rem !important;
+}
+
+.msc-explore-category__hero--split .msc-explore-category__title {
+  grid-area: title;
+  align-self: start;
+  max-width: none !important;
+  margin: 0 !important;
+  color: var(--msc-sand) !important;
+  font-size: clamp(4.6rem, 4.75vw, 5.8rem) !important;
+  line-height: .9 !important;
+  letter-spacing: -.06em !important;
+  text-wrap: balance;
+}
+
+.msc-explore-category__hero-support {
+  grid-area: copy;
+  align-self: end !important;
+  width: 100%;
+  padding: 0 !important;
+}
+
+.msc-explore-category__hero--split .msc-explore-category__intro {
+  width: 100%;
+  max-width: none !important;
+  margin: 0 !important;
+  color: rgba(251, 248, 239, .82) !important;
+  font-size: clamp(1.65rem, 2vw, 2.25rem) !important;
+  line-height: 1.45 !important;
+}
+
+.msc-explore-category__hero--split .msc-explore-category__intro p {
+  margin: 0 !important;
+}
+
+/* Match Explore's intro-to-first-widget spacing. */
+.msc-explore-category__editorial {
+  margin-top: clamp(2.4rem, 3vw, 3.2rem) !important;
+}
+
+/* Keep the rest of the page on the same Explore color hierarchy. */
+.msc-explore-category .msc-section-title,
+.msc-explore-category__article-body h3,
+.msc-explore-card h3,
+.msc-explore-category__guide-card > strong,
+.msc-explore-category__editorial-empty > strong {
+  color: rgba(251, 248, 239, .94) !important;
+}
+
+.msc-explore-category__directory-note,
+.msc-explore-category__article-body p,
+.msc-explore-card__description,
+.msc-explore-category__editorial-empty p {
+  color: rgba(251, 248, 239, .72) !important;
+}
+
+.msc-explore-category .msc-section-kicker,
+.msc-explore-category__section-link,
+.msc-explore-category__article-meta,
+.msc-explore-category__article-action,
+.msc-explore-category__guide-card > span,
+.msc-explore-category__guide-card > em {
+  color: rgba(212, 190, 153, .64) !important;
+}
+
+.msc-explore-category__results-line,
+.msc-explore-category__route-note,
+.msc-explore-card__id,
+.msc-explore-card__status,
+.msc-explore-card__footer span,
+.msc-explore-card__taxonomy dt {
+  color: rgba(251, 248, 239, .52) !important;
+}
+
+@media screen and (min-width: 991px) {
+  .msc-explore-category {
+    padding-top: 2.4rem !important;
+  }
+}
+
+@media screen and (min-width: 1180px) {
+  .msc-explore-category__hero--split .msc-explore-category__title {
+    font-size: clamp(5rem, 4.9vw, 6rem) !important;
+  }
+}
+
+@media screen and (max-width: 760px) {
+  .msc-explore-category {
+    padding-top: 2rem !important;
+  }
+
+  .msc-explore-category__breadcrumb {
+    margin-bottom: 2rem !important;
+  }
+
+  .msc-explore-category__hero--split {
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "kicker"
+      "title"
+      "copy" !important;
+    row-gap: 1.35rem !important;
+  }
+
+  .msc-explore-category__hero--split .msc-explore-category__title {
+    font-size: clamp(4rem, 14vw, 5.6rem) !important;
+  }
+
+  .msc-explore-category__editorial {
+    margin-top: 2.6rem !important;
+  }
+}
