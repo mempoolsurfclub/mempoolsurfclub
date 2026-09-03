@@ -5,21 +5,23 @@
 
   /*
    * Five regions were visually re-reviewed against the current zoomed Atlas.
-   * Their side and vertical lane are now explicit so the title cannot drift to
-   * an awkward location when hit-geometry or label transforms change.
+   * Their title anchors are explicit in both axes so the callout cannot drift
+   * to a generic far-edge position when focused geometry or label transforms
+   * change. Collision handling may move a reviewed title vertically, but it
+   * does not change its reviewed side or horizontal anchor.
    *
    * The remaining three regions keep the previously approved automatic side
    * resolution and small center bias.
    */
   const REGION_LAYOUT = Object.freeze({
     mining: { fallbackSide: 'right', yBias: 0.04 },
-    ordinals: { reviewedSide: 'right', reviewedY: 0.50 },
+    ordinals: { reviewedSide: 'right', reviewedX: 0.82, reviewedY: 0.45 },
     runes: { fallbackSide: 'right', yBias: -0.03 },
-    wallets: { reviewedSide: 'left', reviewedY: 0.50 },
-    marketplaces: { reviewedSide: 'right', reviewedY: 0.47 },
+    wallets: { reviewedSide: 'left', reviewedX: 0.09, reviewedY: 0.35 },
+    marketplaces: { reviewedSide: 'right', reviewedX: 0.82, reviewedY: 0.47 },
     payments: { fallbackSide: 'left', yBias: -0.02 },
-    exchanges: { reviewedSide: 'right', reviewedY: 0.47 },
-    network: { reviewedSide: 'left', reviewedY: 0.51 },
+    exchanges: { reviewedSide: 'right', reviewedX: 0.82, reviewedY: 0.47 },
+    network: { reviewedSide: 'left', reviewedX: 0.09, reviewedY: 0.37 },
   });
 
   const ACTIVE_MODES = new Set(['preview', 'locked']);
@@ -232,6 +234,11 @@
     return clamp(regionRatio + (layout.yBias || 0), 0.20, 0.80);
   };
 
+  const resolveTextRatio = (side, layout) => {
+    if (Number.isFinite(layout.reviewedX)) return layout.reviewedX;
+    return side === 'left' ? 0.055 : 0.945;
+  };
+
   /*
    * Find the horizontal lane where the leader reaches the region hit geometry.
    * If the lane does not actually intersect the region it is rejected instead
@@ -271,7 +278,7 @@
 
   const candidateRatios = (preferred, reviewed) => {
     const offsets = reviewed
-      ? [0, -0.04, 0.04, -0.08, 0.08, -0.12, 0.12, -0.16, 0.16]
+      ? [0, -0.04, 0.04, -0.08, 0.08, -0.12, 0.12, -0.16, 0.16, -0.20, 0.20]
       : [0, -0.06, 0.06, -0.12, 0.12, -0.18, 0.18, -0.24, 0.24, -0.30, 0.30, -0.36, 0.36];
     const values = offsets.map((offset) => clamp(preferred + offset, 0.12, 0.88));
     return [...new Set(values.map((value) => Number(value.toFixed(3))))];
@@ -323,6 +330,7 @@
 
     let renderVersion = 0;
     let renderTimer = null;
+    let settleTimer = null;
 
     const hideCallout = () => {
       callout.classList.remove('is-visible');
@@ -390,9 +398,8 @@
       const side = resolveSide(geometry, viewBox, layout);
       const reviewed = Boolean(layout.reviewedSide);
       const preferredRatio = resolvePreferredRatio(geometry, viewBox, layout);
-      const textX = side === 'left'
-        ? viewBox[0] + (viewBox[2] * 0.055)
-        : viewBox[0] + (viewBox[2] * 0.945);
+      const textRatio = resolveTextRatio(side, layout);
+      const textX = viewBox[0] + (viewBox[2] * textRatio);
       const textAnchor = side === 'left' ? 'start' : 'end';
       const obstacles = collectTextObstacles(svg, viewBox);
       let best = null;
@@ -437,7 +444,8 @@
           )
         )).length;
         const lineLength = Math.abs(lineEnd.x - lineStart.x);
-        const tooShort = lineLength < (viewBox[2] * 0.07);
+        const minLeaderRatio = reviewed ? 0.035 : 0.07;
+        const tooShort = lineLength < (viewBox[2] * minLeaderRatio);
 
         /* Never knowingly run the title or leader through another map label. */
         if (textCollisions || lineCollisions || tooShort) return;
@@ -472,18 +480,26 @@
       renderVersion += 1;
       const version = renderVersion;
       if (renderTimer) window.clearTimeout(renderTimer);
+      if (settleTimer) window.clearTimeout(settleTimer);
       hideCallout();
 
       const slug = atlas.dataset.atlasActive || '';
       const mode = atlas.dataset.atlasMode || '';
       if (!slug || !ACTIVE_MODES.has(mode) || !REGION_LAYOUT[slug]) return;
 
-      renderTimer = window.setTimeout(() => {
+      const renderIfCurrent = () => {
         if (version !== renderVersion) return;
         if (atlas.dataset.atlasActive !== slug) return;
         if (!ACTIVE_MODES.has(atlas.dataset.atlasMode || '')) return;
         positionCallout(slug);
-      }, reduceMotion ? 0 : 455);
+      };
+
+      /* Show the title during the zoom instead of waiting for the 420ms camera
+       * animation to finish, then settle it once more against the final viewBox. */
+      renderTimer = window.setTimeout(renderIfCurrent, reduceMotion ? 0 : 90);
+      if (!reduceMotion) {
+        settleTimer = window.setTimeout(renderIfCurrent, 455);
+      }
     };
 
     const observer = new MutationObserver(scheduleCallout);

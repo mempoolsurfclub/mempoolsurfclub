@@ -7,7 +7,8 @@ This implementation adds the focused Atlas region title treatment requested duri
 ## Interaction
 
 - Hovering/focusing a bottom region control or moving onto a map region keeps the existing preview zoom behavior.
-- As soon as a region is the active zoomed view, its large category name appears; a click is not required first.
+- The large category name now begins rendering during the zoom animation instead of waiting until the 420 ms camera move has finished.
+- The callout is positioned once during the zoom and then settled again against the final focused viewBox so preview and locked states use the same reviewed composition.
 - Clicking the region or bottom control still locks the zoom, and the same category callout remains visible in the locked state.
 - The category name remains at 3× the destination-label type scale.
 - The leader runs horizontally from the category title toward the selected region and terminates just inside the region hit geometry.
@@ -16,15 +17,15 @@ This implementation adds the focused Atlas region title treatment requested duri
 
 ## Screenshot-reviewed title placement
 
-The latest live screenshots showed five titles drifting away from their intended chart composition. Those five placements are now explicit instead of being allowed to change sides or start from a generic region-center bias:
+The live screenshots showed that locking only a title side and vertical lane was not enough: reviewed titles could still sit too far toward the generic viewport edge. Five regions therefore use explicit focused-view **X and Y anchors**.
 
-- **Ordinals** — right side, vertically centered in the focused view.
-- **Wallets** — left side, vertically centered in the focused view.
-- **Marketplaces** — right side, slightly above center to keep the leader clear of the marketplace labels.
-- **Exchanges** — right side, slightly above center to align with the open water beside the region.
-- **Network** — left side, just below center to align with the broad central Network territory.
+- **Ordinals** — right-side anchor pulled inward and slightly upward from the previous detached placement.
+- **Wallets** — left-side anchor moved upward so the title aligns with the Wallets territory rather than the lower ocean area.
+- **Marketplaces** — right-side anchor kept slightly above center and pulled inward toward the region.
+- **Exchanges** — right-side anchor kept slightly above center and pulled inward toward the region.
+- **Network** — left-side anchor moved upward so the title aligns with the broad central Network territory.
 
-These are treated as reviewed visual placements. Collision handling can make a small vertical adjustment if necessary, but it no longer lets these five titles migrate to the opposite side or drift far from the reviewed lane.
+Collision handling may still make a vertical adjustment when required to preserve the strict no-text-crossing rule, but it no longer changes the reviewed side or horizontal anchor for these five regions. Reviewed callouts may use a shorter restrained leader when the explicit title anchor is already close to the region.
 
 ## Preserved automatic placement
 
