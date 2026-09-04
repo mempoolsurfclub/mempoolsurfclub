@@ -3,7 +3,7 @@
 **Status:** UNPUBLISHED EDITORIAL DRAFT — DO NOT PUBLISH  
 **Series:** Wallets Article 1 of 3  
 **Article title:** Why Bitcoin Wallets Are Becoming More Specialized  
-**Approximate article word count:** 1,780  
+**Article body word count:** 1,537 words of prose; 1,598 including title and section headings  
 **SEO title:** Why Bitcoin Wallets Are Becoming More Specialized | MSC  
 **Meta description:** Bitcoin wallets are becoming more specialized for payments, hardware signing, multisig, and Bitcoin-native assets. Learn why the category is changing.  
 **Suggested URL slug:** `why-bitcoin-wallets-are-becoming-more-specialized`  
@@ -16,12 +16,13 @@ Assignment-requested metadata:
 - Category tag: `Wallets`
 - Editorial-type tag: `Research`
 
-Repository taxonomy check on 2026-09-04:
+Current system mismatch confirmed for this review:
 
-- `Wallets` is **not** a canonical primary editorial category in `docs/msc-content-taxonomy.md`.
-- `Research` is **not** a defined controlled editorial-type tag in that taxonomy.
-- `Wallet` (singular) **is** the canonical secondary subject/routing tag.
-- No primary publishing category is applied in this unpublished draft. A taxonomy decision is required before Shopify publication.
+- The Wallets category page currently filters for `Wallets` (plural).
+- The canonical MSC editorial taxonomy in `docs/msc-content-taxonomy.md` defines `Wallet` (singular) as the secondary subject/routing tag.
+- `Research` is not an approved primary editorial category in the canonical taxonomy.
+- No taxonomy or category-page code is changed in this article task.
+- No primary publishing category is applied in this unpublished draft. A taxonomy decision remains required before Shopify publication.
 
 ## Article
 
@@ -29,9 +30,9 @@ Repository taxonomy check on 2026-09-04:
 
 For a long time, “Bitcoin wallet” sounded like a single product category: install an app, receive bitcoin, send bitcoin, back up the keys.
 
-That description is still useful, but it no longer captures the range of jobs that Bitcoin wallets are being built to do.
+That description is still useful, but it no longer captures the range of jobs Bitcoin wallets are being built to do.
 
-A wallet used for small, frequent payments has different priorities from a setup protecting long-term savings. A signing device that keeps private keys away from an internet-connected computer solves a different problem from a mobile wallet optimized for quick payments. A multisig coordinator has to keep several signers and a spending policy organized. And a wallet that displays inscriptions or Runes needs information that an ordinary bitcoin balance does not provide.
+A wallet used for small, frequent payments has different priorities from a setup protecting long-term savings. A signing device that keeps private keys away from an internet-connected computer solves a different problem from a mobile wallet built for quick payments. A multisig coordinator has to keep several signers and a spending policy organized. And a wallet that displays inscriptions or Runes needs information that an ordinary bitcoin balance does not provide.
 
 None of these categories changes Bitcoin’s basic rules. They are different ways of building software and hardware around those rules.
 
@@ -39,13 +40,11 @@ That distinction matters because the word “wallet” increasingly describes an
 
 ## The wallet was never just a container
 
-The familiar wallet metaphor has always been imperfect. Bitcoin does not sit inside an app or a device. Wallet software manages the information needed to identify and spend transaction outputs: keys, scripts, addresses, transaction history, signing policies and, depending on the design, network access.
+The familiar wallet metaphor has always been imperfect. Bitcoin does not sit inside an app or a device. Wallet software manages the information needed to identify and spend transaction outputs: keys, addresses, transaction history, signing rules and, depending on the design, network access.
 
-Even Bitcoin developer documentation distinguishes between a wallet program and a wallet file. It also notes that receiving and spending do not have to happen in the same program. One tool can provide addresses while another signs transactions.
+Those jobs do not have to happen in one place. One tool can track balances and prepare transactions while another keeps the private keys and signs. A wallet can be watch-only, connect to a user’s own node, depend on a third-party server, manage Lightning channels, coordinate several cosigners, or index additional asset information.
 
-That separation has become more visible as Bitcoin software has matured.
-
-A modern wallet might hold private keys itself, use a separate signing device, operate as watch-only software, connect to a user’s own node, depend on a third-party server, manage Lightning channels, coordinate several cosigners, or index additional asset information. Two products can both be called Bitcoin wallets while having very different security boundaries and operational responsibilities.
+Two products can both be called Bitcoin wallets while having very different security boundaries and responsibilities.
 
 The reason specialization is growing is straightforward: the jobs are diverging.
 
@@ -53,89 +52,83 @@ The reason specialization is growing is straightforward: the jobs are diverging.
 
 A conventional software wallet is still the most recognizable form of Bitcoin wallet. It runs on a phone or computer and gives the user an interface for receiving bitcoin, viewing transactions and creating payments.
 
-But even this apparently simple category contains important architectural choices.
+But even this familiar category involves choices.
 
-Some software wallets control the private keys needed to sign transactions. Others can operate without private keys and hand signing off to another device. Some query a wallet provider’s infrastructure for blockchain data, while others can connect to a Bitcoin node controlled by the user. Some emphasize coin control, fee selection or privacy tools; others deliberately hide complexity.
+Some software wallets hold the private keys needed to sign transactions. Others can work without private keys and hand signing off to another device. Some use a provider’s infrastructure to learn what is happening on the blockchain, while others can connect to a Bitcoin node controlled by the user. Some expose coin control, fee selection or privacy tools; others deliberately hide complexity.
 
-Bitcoin Core is a useful example of how modular the concept has become. Its wallet software supports wallets without private keys and can be configured to use an external signer. In other words, the software that tracks funds and builds a transaction does not have to be the component that holds the signing keys.
+Bitcoin Core illustrates how modular a wallet can be: its wallet software can operate without private keys and use an external signer. The application that tracks funds and builds a transaction does not have to be the component that holds the signing keys.
 
-That flexibility is valuable because “easy to spend from a phone” and “keep signing keys away from a networked computer” are different design goals.
+That matters because “easy to use on a phone” and “keep signing keys away from a networked computer” are different design goals.
 
 ## Payments create a different operating model
 
-The difference becomes clearer with Lightning.
+Consider a wallet used for small, frequent payments. The user cares about paying quickly, receiving reliably and knowing whether a payment worked without thinking about every underlying step.
 
-An ordinary on-chain wallet primarily needs to understand Bitcoin transaction outputs, fees, signatures and confirmation state. Lightning adds another system on top: payment channels whose balances can change without every payment becoming an on-chain transaction.
+Lightning is built around payment channels, so the wallet has more to manage than a normal on-chain transaction. Payments move through channels whose balances change over time, and the ability to send or receive depends partly on where liquidity is available.
 
-At the protocol level, Lightning peers establish channels, maintain changing commitment states and route payments across channels. Liquidity also has direction. A channel can have capacity to send, capacity to receive, or both in different proportions.
+That creates a specialized wallet job.
 
-That creates wallet problems that do not exist in the same form for a simple on-chain savings wallet.
+A Lightning-focused wallet may need to handle invoices, find payment routes, keep track of channel state and make sure enough usable liquidity exists for the intended payment. Depending on the design, the wallet may automate much of this or rely on an external service instead of exposing it directly to the user.
 
-A Lightning-focused wallet may need to handle invoices, route payments, monitor channel state and help ensure that enough usable liquidity exists for the user’s intended payments. Depending on the wallet architecture, some of those responsibilities may be automated or provided by an external service rather than exposed directly to the user.
+So “Lightning wallet” does not, by itself, tell you who controls the keys, who runs the node, who manages channels or what outside services are involved. Different implementations make different tradeoffs.
 
-This is an important implementation distinction. “Lightning wallet” does not automatically tell you who controls the keys, who operates the node, who manages channels, or what service dependencies exist. Different wallets make different tradeoffs.
-
-The reason payment wallets specialize is not that bitcoin used for payments is a different asset. It is that frequent payments reward different qualities: speed, low interaction cost, predictable receiving, clear payment status and minimal operational friction.
-
-Those priorities are not identical to the priorities of long-term storage.
+The bitcoin is not a different asset. The workflow is different. Frequent payments reward speed, low interaction cost, clear payment status and minimal operational friction—priorities that are not identical to long-term storage.
 
 ## Hardware signing separates keys from connected software
 
-Long-term savings pushes wallet architecture in another direction.
+Now consider long-term savings.
 
-A hardware signing device is designed around a security boundary: private keys remain on a dedicated device, while a separate computer or phone can handle network access and transaction coordination. Transaction information is passed to the signer, the device authorizes and signs, and the signed transaction can then return to connected software for broadcast.
+Here, the goal may be to keep signing keys away from the phone or computer that is connected to the internet. A dedicated signing device can hold the private keys while separate software handles blockchain data, fee estimates and transaction construction.
+
+When the user wants to spend, transaction information moves to the signer for review and authorization. The signed transaction can then return to connected software for broadcast.
 
 This is why “hardware wallet” can be a misleadingly compact term. The device may be only one part of the wallet system.
 
-Standards such as Partially Signed Bitcoin Transactions, or PSBTs, make this separation more interoperable. BIP 174 was designed so transaction information and partial signatures could be passed between different software and signers, including offline and hardware signers.
+PSBTs—Partially Signed Bitcoin Transactions—help different pieces of that system pass transaction information and signatures between one another. The standard matters because it lets connected software, offline signers and hardware devices specialize in different roles without each needing to do everything.
 
-The practical benefit is specialization by security role. A network-connected application can be good at finding transaction history, estimating fees and constructing transactions without also being trusted to hold the private keys.
-
-That does not make every hardware setup automatically secure. Users still have to verify transaction details, protect backups and understand the recovery model. It simply moves key storage and signing into a component designed specifically for that job.
+That separation does not make every hardware setup automatically secure. Backups still matter, transaction details still need to be checked, and the recovery model still needs to be understood. But the architecture is optimized around one specific job: keeping key storage and signing separate from everyday networked software.
 
 ## Multisig makes coordination part of the wallet
 
-Multisignature setups add another kind of specialization.
+A multisig setup creates another practical problem: more than one key may be required before bitcoin can move.
 
-Bitcoin can enforce spending conditions that require a threshold of multiple keys. In a two-of-three setup, for example, any two of three designated keys may be required to authorize a spend.
+In a two-of-three setup, for example, two of three designated keys must authorize the spend. Those keys might be kept on different devices, in different places, or controlled by different people.
 
-The Bitcoin script condition is only part of the user experience. A practical multisig wallet also has to keep the wallet policy, public-key information and derivation details consistent; construct transactions; move them between signers; collect enough valid signatures; and preserve the information needed to recover the wallet later.
+Bitcoin can enforce that spending condition, but a usable wallet still has to coordinate it. The software needs to know the wallet policy, construct the transaction, move it between signers, collect enough valid signatures and preserve the information needed to recover the setup later.
 
-That turns coordination into a first-class wallet function.
+That makes coordination part of the wallet itself.
 
-PSBT helps with transaction exchange, while output script descriptors provide a standardized way to describe the scripts a wallet is watching. Bitcoin standards also define multisig descriptor expressions and secure setup approaches. These are application-layer tools built around Bitcoin’s underlying spending rules.
+PSBTs help move transactions between signers, while descriptors and related policy information help software consistently identify the scripts and keys that belong to the wallet. The reader does not need to manage those standards directly to understand their purpose: they let multiple tools agree on what is being signed.
 
-Collaborative custody adds another layer because one or more signers may be operated by a service. The exact security model depends on the configuration: which parties hold keys, how many signatures are required, what recovery paths exist, and whether any single party can authorize a spend.
+Collaborative custody adds another variation because a service may operate one or more signers. The important questions are then practical ones: who holds each key, how many signatures are required, what happens during recovery and whether any single party can spend alone.
 
-So a multisig or collaborative-custody wallet is specialized not because multisig is new, but because safely operating a multi-party signing policy requires much more coordination than managing one signing key on one device.
+A multisig wallet is therefore specialized not because multisig is new, but because a multi-key spending policy creates a coordination problem that a single-key wallet does not have.
 
 ## Bitcoin-native assets need asset-aware interfaces
 
-Ordinals, inscriptions and Runes have created a different pressure on wallet design: the wallet may need to understand more than a bitcoin amount assigned to a UTXO.
+Specialization also appears when the user cares about what a particular output contains, not just how many sats it holds.
 
-Ordinal theory tracks individual satoshis, and inscriptions associate content with sats through Bitcoin transaction data. The Ordinals documentation is explicit about the wallet consequence: safely sending inscriptions requires sat control so the wallet does not accidentally select an inscription-bearing output as ordinary bitcoin.
+With inscriptions, that distinction is critical. A technically valid Bitcoin transaction could still create an unwanted result if wallet software treats an inscription-bearing output like ordinary spendable bitcoin.
 
-A wallet that only sees “this output contains X sats” may be perfectly capable of constructing a valid Bitcoin transaction while still producing an unwanted result for someone who is tracking a particular inscription.
+That is why Ordinals-aware wallets need sat control: they must recognize and protect the specific sats associated with inscriptions when selecting transaction inputs and outputs.
 
-Runes create a related but different requirement. The Runes protocol interprets runestone data in Bitcoin transactions to allocate rune units among outputs. An asset-aware wallet therefore needs the additional indexing and transaction-construction logic required to display those balances and preserve the intended allocation when spending.
+Runes create a related need. Rune balances are interpreted from additional data in Bitcoin transactions, so a wallet that supports them needs extra indexing and transaction-construction logic to display those balances and preserve the intended allocation when spending.
 
-This is a useful place to separate protocol layers. Bitcoin nodes validate the underlying Bitcoin transactions and scripts. Ordinal and Runes-aware software applies additional rules and indexing to interpret particular sats or transaction data as assets. The specialized wallet interface makes those interpretations usable.
+This does not change Bitcoin consensus. Bitcoin nodes still validate the underlying transactions and scripts. Ordinals- and Runes-aware software adds another layer of interpretation so the wallet can show and safely manage information that a general-purpose bitcoin wallet may ignore.
 
-That can mean galleries, asset-specific balances, safer output selection, transfer workflows and warnings that would be unnecessary in a wallet built only for ordinary bitcoin payments.
-
-The result is another distinct wallet job: not merely signing a valid transaction, but helping the user preserve the meaning attached to particular outputs.
+The specialized job is therefore not simply “sign a valid transaction.” It is “sign a valid transaction without accidentally losing the asset meaning attached to particular outputs.”
 
 ## Specialization solves problems — and creates new ones
 
-There is a strong argument for specialization. A focused wallet can make a difficult workflow safer or easier because it can optimize around a narrower set of assumptions.
+The benefit of specialization is easy to see. A focused wallet can make a difficult workflow safer or easier because it is designed around a narrower job.
 
-A payment wallet can reduce the friction of paying an invoice. A hardware signer can minimize key exposure. A multisig coordinator can make a threshold policy understandable. An asset-aware wallet can prevent an inscription-bearing output from being treated like ordinary spendable sats.
+A payment wallet can reduce friction around frequent payments. A hardware signer can reduce key exposure. A multisig coordinator can make a threshold policy manageable. An asset-aware wallet can keep an inscription-bearing output from being spent as if it were ordinary bitcoin.
 
 But specialization also fragments the user experience.
 
-A person may encounter different backup procedures, recovery data, address types, signing flows, service dependencies and terminology across tools that all use the word “wallet.” Compatibility matters more when one application constructs a transaction and another signs it. Recovery becomes more than remembering a seed phrase if a setup also depends on a multisig policy or descriptor information. Lightning introduces state and liquidity questions that do not map cleanly to an on-chain balance. Asset-aware wallets introduce indexing assumptions that a general-purpose wallet may not share.
+Different wallets may come with different backup procedures, recovery information, signing flows, service dependencies and terminology. Compatibility matters more when one application constructs a transaction and another signs it. A multisig recovery may require more than a seed phrase. Lightning introduces channel state and liquidity. Asset-aware wallets depend on indexing rules that a general-purpose wallet may not share.
 
-More specialization can therefore make individual tools simpler while making the overall ecosystem harder to understand.
+More specialization can therefore make individual tools simpler while making the ecosystem as a whole harder to understand.
 
 That is not necessarily a failure. It is what often happens when one broad category develops into a set of more mature tools. The important part is making the boundaries visible.
 
@@ -143,9 +136,9 @@ That is not necessarily a failure. It is what often happens when one broad categ
 
 There is no protocol rule saying a Bitcoin user needs one wallet, several wallets, a hardware signer, Lightning, multisig or asset support. The right architecture depends on what the user is trying to accomplish and what risks they are trying to manage.
 
-That is why the wallet category is becoming more useful when described by function.
+That is why the wallet category becomes more useful when described by function.
 
-Is the job convenient on-chain spending? Frequent Lightning payments? Isolating signing keys? Coordinating a multi-key recovery policy? Managing inscriptions or Runes? Each question points toward different software responsibilities and different tradeoffs.
+Is the job convenient on-chain spending? Frequent Lightning payments? Isolating signing keys? Coordinating a multi-key recovery policy? Managing inscriptions or Runes? Each question points toward different responsibilities and tradeoffs.
 
 The word “wallet” will probably continue to cover all of them. But treating every Bitcoin wallet as interchangeable hides the most important differences.
 
@@ -211,7 +204,7 @@ Verified 2026-09-04. Article body intentionally avoids inline citations for read
 
 8. **Lightning Labs Builder’s Guide — Lightning Network Overview / Liquidity**  
    https://docs.lightning.engineering/the-lightning-network/overview  
-   https://docs.lightning.engineering/the-lightning-network/liquidity/manage-liquidity  
+   https://docs.lightning.engineering/lightning-network-tools/lightning-terminal/channel-liquidity  
    Authoritative implementation documentation used for payment routing, channels, invoices, and directional liquidity. The article distinguishes these operational concerns from features every Lightning wallet necessarily exposes to users.
 
 9. **Ordinal Theory Handbook — Wallet / Collecting**  
@@ -219,12 +212,14 @@ Verified 2026-09-04. Article body intentionally avoids inline citations for read
    https://docs.ordinals.com/guides/collecting.html  
    Primary project documentation supporting the need for sat control/sat selection when safely managing inscriptions and the risk of spending inscription-bearing outputs with unaware wallet logic.
 
-10. **Ordinal Theory Handbook — Runes Specification**  
+10. **Ordinal Theory Handbook — Runes behavior guide**  
     https://docs.ordinals.com/runes/specification.html  
-    Primary project specification for runestones, edicts, rune IDs and output allocation semantics.
+    Primary project documentation describing Runes behavior. The page explicitly states that the `ord` reference implementation is the normative specification and that the prose page is a guide to `ord` behavior.
 
 ## Editorial QA notes
 
+- Focused refinement only; the article argument, title, structure, SEO fundamentals and concluding idea are preserved.
+- Article body is 1,537 words of prose; 1,598 including title and section headings.
 - No wallet ranking or “best wallet” recommendations.
 - No claim that every Bitcoin user needs multiple wallets.
 - No Xverse focus; Xverse is not used as an example in Article 1.
@@ -233,4 +228,4 @@ Verified 2026-09-04. Article body intentionally avoids inline citations for read
 - Hardware signing is described as a system architecture; bitcoin is not described as being stored physically on a device.
 - Ordinals/Runes behavior is described as additional interpretation/indexing layered on valid Bitcoin transactions, not as new Bitcoin consensus wallet primitives.
 - No market-share, popularity, adoption, or maturity statistics are used.
-- No production article, Shopify object, route, theme file, Explore registry file, Learn file, Atlas file, or category-page file is changed by this draft.
+- No production article, Shopify object, route, theme file, Explore registry file, Learn file, Atlas file, category-page file, or taxonomy file is changed by this draft.
