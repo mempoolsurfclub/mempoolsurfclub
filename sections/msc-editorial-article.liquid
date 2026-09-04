@@ -1,17 +1,22 @@
 {{ 'msc-editorial-article.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
-  assign primary_categories = 'Interviews|Highlights|Research|Weekly Recaps|Community|Breaking News' | split: '|'
+  assign primary_precedence = 'Breaking News|Weekly Recaps|Interviews|Highlights|Research|Community' | split: '|'
+  assign secondary_tags = 'Ordinals|Runes|Artist|Founder|Builder|Miner|Mining|Content Creator|Company|Project|Collection|Protocol|Marketplace|Wallet|Developer|Collector|Podcast|YouTube' | split: '|'
   assign primary_category = ''
-  assign subject_tag = ''
+  assign has_secondary_tags = false
 
-  for tag in article.tags
-    if primary_categories contains tag
-      if primary_category == blank
-        assign primary_category = tag
-      endif
-    elsif subject_tag == blank
-      assign subject_tag = tag
+  for category in primary_precedence
+    if article.tags contains category
+      assign primary_category = category
+      break
+    endif
+  endfor
+
+  for subject in secondary_tags
+    if article.tags contains subject
+      assign has_secondary_tags = true
+      break
     endif
   endfor
 -%}
@@ -28,9 +33,11 @@
         {%- if primary_category != blank -%}
           <span>{{ primary_category | escape }}</span>
         {%- endif -%}
-        {%- if subject_tag != blank -%}
-          <span>{{ subject_tag | escape }}</span>
-        {%- endif -%}
+        {%- for subject in secondary_tags -%}
+          {%- if article.tags contains subject -%}
+            <span>{{ subject | escape }}</span>
+          {%- endif -%}
+        {%- endfor -%}
       </div>
 
       <h1 class="msc-editorial-article__title">{{ article.title | escape }}</h1>
@@ -41,9 +48,6 @@
 
       <div class="msc-editorial-article__dateline">
         <span>{{ article.published_at | time_tag: format: 'date' }}</span>
-        {%- if article.author != blank -%}
-          <span>Filed by {{ article.author | escape }}</span>
-        {%- endif -%}
       </div>
     </div>
   </header>
@@ -79,10 +83,18 @@
         </div>
       {%- endif -%}
 
-      {%- if subject_tag != blank -%}
+      {%- if has_secondary_tags -%}
         <div class="msc-editorial-article__rail-block">
-          <span class="msc-editorial-article__rail-label">CHARTED SUBJECT</span>
-          <strong>{{ subject_tag | escape }}</strong>
+          <span class="msc-editorial-article__rail-label">CHARTED SUBJECTS</span>
+          <strong>
+            {%- assign secondary_count = 0 -%}
+            {%- for subject in secondary_tags -%}
+              {%- if article.tags contains subject -%}
+                {%- if secondary_count > 0 -%}, {% endif -%}{{ subject | escape }}
+                {%- assign secondary_count = secondary_count | plus: 1 -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </strong>
         </div>
       {%- endif -%}
 
