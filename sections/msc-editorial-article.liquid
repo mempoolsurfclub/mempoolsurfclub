@@ -1,0 +1,123 @@
+{{ 'msc-editorial-article.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign primary_categories = 'Interviews|Highlights|Research|Weekly Recaps|Community|Breaking News' | split: '|'
+  assign primary_category = ''
+  assign subject_tag = ''
+
+  for tag in article.tags
+    if primary_categories contains tag
+      if primary_category == blank
+        assign primary_category = tag
+      endif
+    elsif subject_tag == blank
+      assign subject_tag = tag
+    endif
+  endfor
+-%}
+
+<article class="msc-editorial-article">
+  <header class="msc-editorial-article__mast">
+    <div class="msc-container msc-editorial-article__mast-inner">
+      <a class="msc-editorial-article__back" href="{{ routes.root_url }}pages/explore-the-bitcoin-ecosystem">
+        ← Explore / Field Journal
+      </a>
+
+      <div class="msc-editorial-article__meta" aria-label="Article classification">
+        <span>FIELD JOURNAL</span>
+        {%- if primary_category != blank -%}
+          <span>{{ primary_category | escape }}</span>
+        {%- endif -%}
+        {%- if subject_tag != blank -%}
+          <span>{{ subject_tag | escape }}</span>
+        {%- endif -%}
+      </div>
+
+      <h1 class="msc-editorial-article__title">{{ article.title | escape }}</h1>
+
+      {%- if article.excerpt != blank -%}
+        <p class="msc-editorial-article__dek">{{ article.excerpt | strip_html }}</p>
+      {%- endif -%}
+
+      <div class="msc-editorial-article__dateline">
+        <span>{{ article.published_at | time_tag: format: 'date' }}</span>
+        {%- if article.author != blank -%}
+          <span>Filed by {{ article.author | escape }}</span>
+        {%- endif -%}
+      </div>
+    </div>
+  </header>
+
+  {%- if article.image -%}
+    <div class="msc-container msc-editorial-article__hero-wrap">
+      <div class="msc-editorial-article__hero">
+        {{
+          article.image
+          | image_url: width: 2400
+          | image_tag:
+            loading: 'eager',
+            fetchpriority: 'high',
+            widths: '750,1100,1500,1800,2200,2400',
+            sizes: '(min-width: 1200px) 1180px, calc(100vw - 32px)',
+            alt: article.image.alt | default: article.title
+        }}
+      </div>
+    </div>
+  {%- endif -%}
+
+  <div class="msc-container msc-editorial-article__reading-grid">
+    <aside class="msc-editorial-article__rail" aria-label="Article details">
+      <div class="msc-editorial-article__rail-block">
+        <span class="msc-editorial-article__rail-label">ENTRY</span>
+        <strong>MSC FIELD JOURNAL</strong>
+      </div>
+
+      {%- if primary_category != blank -%}
+        <div class="msc-editorial-article__rail-block">
+          <span class="msc-editorial-article__rail-label">PRIMARY</span>
+          <strong>{{ primary_category | escape }}</strong>
+        </div>
+      {%- endif -%}
+
+      {%- if subject_tag != blank -%}
+        <div class="msc-editorial-article__rail-block">
+          <span class="msc-editorial-article__rail-label">CHARTED SUBJECT</span>
+          <strong>{{ subject_tag | escape }}</strong>
+        </div>
+      {%- endif -%}
+
+      <div class="msc-editorial-article__rail-block">
+        <span class="msc-editorial-article__rail-label">PUBLISHED</span>
+        <strong>{{ article.published_at | date: '%b %d, %Y' }}</strong>
+      </div>
+    </aside>
+
+    <div class="msc-editorial-article__content rte">
+      {{ article.content }}
+    </div>
+  </div>
+
+  <footer class="msc-container msc-editorial-article__footer">
+    <div>
+      <span>FIELD JOURNAL / CONTINUE</span>
+      <strong>Keep reading the Bitcoin ocean.</strong>
+    </div>
+    <div class="msc-editorial-article__footer-links">
+      <a href="{{ blog.url }}">View full archive →</a>
+      <a href="{{ routes.root_url }}pages/explore-the-bitcoin-ecosystem">Return to Explore →</a>
+    </div>
+  </footer>
+</article>
+
+<script type="application/ld+json">
+  {{ article | structured_data }}
+</script>
+
+{% schema %}
+{
+  "name": "MSC editorial article",
+  "tag": "section",
+  "class": "section",
+  "settings": []
+}
+{% endschema %}
