@@ -8,11 +8,12 @@ Every editorial article should usually have exactly one primary category tag. Us
 
 1. **Interviews** — direct conversations with artists, founders, builders, miners, content creators, and other ecosystem participants.
 2. **Highlights** — focused coverage of businesses, projects, collections, launches, products, protocols, and notable work.
-3. **Weekly Recaps** — Friday coverage of weekly volume, new releases, important updates, and major ecosystem developments.
-4. **Community** — coverage of content creators, YouTube videos, podcasts, collectors, educators, and other people contributing valuable work to the ecosystem.
-5. **Breaking News** — time-sensitive developments that should appear immediately in front-facing feeds but stop being treated as breaking after 48 hours by default.
+3. **Research** — evergreen analytical coverage that explains patterns, tradeoffs, system behavior, or ecosystem structure without being primarily a news update or project highlight.
+4. **Weekly Recaps** — Friday coverage of weekly volume, new releases, important updates, and major ecosystem developments.
+5. **Community** — coverage of content creators, YouTube videos, podcasts, collectors, educators, and other people contributing valuable work to the ecosystem.
+6. **Breaking News** — time-sensitive developments that should appear immediately in front-facing feeds but stop being treated as breaking after 48 hours by default.
 
-If an article accidentally has multiple primary tags, Explore uses this deterministic visible-label precedence: Breaking News, Weekly Recaps, Interviews, Highlights, Community. This precedence does not change chronological sorting.
+If an article accidentally has multiple primary tags, Explore uses this deterministic visible-label precedence: Breaking News, Weekly Recaps, Interviews, Highlights, Research, Community. This precedence does not change chronological sorting.
 
 ## Secondary subject and routing tags
 
@@ -66,6 +67,7 @@ Use singular canonical routing tags such as Artist, Founder, Company, Project, a
 - Artist interview: Interviews, Artist, Ordinals.
 - YouTube creator feature: Community, Content Creator, YouTube, Runes.
 - Mining-company coverage: Highlights, Company, Mining.
+- Wallet ecosystem analysis: Research, Wallet.
 - Urgent protocol development: Breaking News, Protocol, Ordinals.
 - Friday ecosystem report: Weekly Recaps, Ordinals, Runes, Mining.
 - Highlights project coverage: Highlights, Project, Ordinals.

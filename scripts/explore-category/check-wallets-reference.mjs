@@ -60,7 +60,7 @@ if (routes.category_handles?.WALLETS !== 'explore-wallets') fail('Wallets route 
 const categorySection = template.sections?.msc_explore_category;
 if (categorySection?.type !== 'msc-explore-category') fail('page.explore-category.json must render the MSC Explore category section');
 if (categorySection?.settings?.content_blog !== 'msc-editorial') fail('Wallets reference must use the msc-editorial blog');
-if (categorySection?.settings?.editorial_category_tag !== 'Wallets') fail('Wallets reference must use the controlled Wallets editorial category tag');
+if (categorySection?.settings?.editorial_category_tag !== 'Wallet') fail('Wallets reference must use the canonical Wallet editorial routing tag');
 
 if (!section.includes('data-category="WALLETS"')) fail('reference section must remain explicitly scoped to WALLETS in Stage 2');
 if (!section.includes("'msc-explore-runtime.json' | asset_url")) fail('section must load the generated Explore runtime asset');
