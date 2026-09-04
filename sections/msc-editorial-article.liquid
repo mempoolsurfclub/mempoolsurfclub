@@ -1,3 +1,4 @@
+{{ 'mempool-ui.css' | asset_url | stylesheet_tag }}
 {{ 'msc-editorial-article.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
@@ -19,16 +20,19 @@
       break
     endif
   endfor
+
+  assign word_count = article.content | strip_html | split: ' ' | size
+  assign read_minutes = word_count | divided_by: 220 | plus: 1
 -%}
 
-<article class="msc-editorial-article">
-  <header class="msc-editorial-article__mast">
-    <div class="msc-container msc-editorial-article__mast-inner">
+<article class="msc-shell msc-editorial-article">
+  <div class="msc-container msc-editorial-article__container">
+    <header class="msc-editorial-article__mast">
       <a class="msc-editorial-article__back" href="{{ routes.root_url }}pages/explore-the-bitcoin-ecosystem">
-        ← Explore / Field Journal
+        ← MSC Atlas / Field Journal
       </a>
 
-      <div class="msc-editorial-article__meta" aria-label="Article classification">
+      <div class="msc-editorial-article__classification" aria-label="Article classification">
         <span>FIELD JOURNAL</span>
         {%- if primary_category != blank -%}
           <span>{{ primary_category | escape }}</span>
@@ -45,80 +49,98 @@
       {%- if article.excerpt != blank -%}
         <p class="msc-editorial-article__dek">{{ article.excerpt | strip_html }}</p>
       {%- endif -%}
+    </header>
 
-      <div class="msc-editorial-article__dateline">
-        <span>{{ article.published_at | time_tag: format: 'date' }}</span>
-      </div>
-    </div>
-  </header>
-
-  {%- if article.image -%}
-    <div class="msc-container msc-editorial-article__hero-wrap">
-      <div class="msc-editorial-article__hero">
-        {{
-          article.image
-          | image_url: width: 2400
-          | image_tag:
-            loading: 'eager',
-            fetchpriority: 'high',
-            widths: '750,1100,1500,1800,2200,2400',
-            sizes: '(min-width: 1200px) 1180px, calc(100vw - 32px)',
-            alt: article.image.alt | default: article.title
-        }}
-      </div>
-    </div>
-  {%- endif -%}
-
-  <div class="msc-container msc-editorial-article__reading-grid">
-    <aside class="msc-editorial-article__rail" aria-label="Article details">
-      <div class="msc-editorial-article__rail-block">
-        <span class="msc-editorial-article__rail-label">ENTRY</span>
-        <strong>MSC FIELD JOURNAL</strong>
+    <section class="msc-editorial-article__console" aria-label="Field Journal article viewer">
+      <div class="msc-editorial-article__console-bar">
+        <span>FIELD JOURNAL / ARTICLE VIEW</span>
+        <span class="msc-editorial-article__console-status">
+          <i aria-hidden="true"></i>
+          ENTRY OPEN
+        </span>
       </div>
 
-      {%- if primary_category != blank -%}
-        <div class="msc-editorial-article__rail-block">
-          <span class="msc-editorial-article__rail-label">PRIMARY</span>
-          <strong>{{ primary_category | escape }}</strong>
+      {%- if article.image -%}
+        <div class="msc-editorial-article__media">
+          {{
+            article.image
+            | image_url: width: 2400
+            | image_tag:
+              loading: 'eager',
+              fetchpriority: 'high',
+              widths: '750,1100,1500,1800,2200,2400',
+              sizes: '(min-width: 1200px) 1180px, calc(100vw - 32px)',
+              alt: article.image.alt | default: article.title
+          }}
+        </div>
+      {%- else -%}
+        <div class="msc-editorial-article__media msc-editorial-article__media--placeholder" aria-hidden="true">
+          <span>MSC / FIELD SIGNAL</span>
         </div>
       {%- endif -%}
 
-      {%- if has_secondary_tags -%}
-        <div class="msc-editorial-article__rail-block">
-          <span class="msc-editorial-article__rail-label">CHARTED SUBJECTS</span>
-          <strong>
-            {%- assign secondary_count = 0 -%}
-            {%- for subject in secondary_tags -%}
-              {%- if article.tags contains subject -%}
-                {%- if secondary_count > 0 -%}, {% endif -%}{{ subject | escape }}
-                {%- assign secondary_count = secondary_count | plus: 1 -%}
-              {%- endif -%}
-            {%- endfor -%}
-          </strong>
+      <dl class="msc-editorial-article__readout">
+        <div>
+          <dt>ENTRY</dt>
+          <dd>MSC FIELD JOURNAL</dd>
         </div>
-      {%- endif -%}
 
-      <div class="msc-editorial-article__rail-block">
-        <span class="msc-editorial-article__rail-label">PUBLISHED</span>
-        <strong>{{ article.published_at | date: '%b %d, %Y' }}</strong>
+        <div>
+          <dt>CATEGORY</dt>
+          <dd>{%- if primary_category != blank -%}{{ primary_category | escape }}{%- else -%}Journal{%- endif -%}</dd>
+        </div>
+
+        <div>
+          <dt>SUBJECT</dt>
+          <dd>
+            {%- if has_secondary_tags -%}
+              {%- assign secondary_count = 0 -%}
+              {%- for subject in secondary_tags -%}
+                {%- if article.tags contains subject -%}
+                  {%- if secondary_count > 0 -%}, {% endif -%}{{ subject | escape }}
+                  {%- assign secondary_count = secondary_count | plus: 1 -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- else -%}
+              General
+            {%- endif -%}
+          </dd>
+        </div>
+
+        <div>
+          <dt>PUBLISHED</dt>
+          <dd>{{ article.published_at | date: '%b %d, %Y' }}</dd>
+        </div>
+
+        <div>
+          <dt>READ TIME</dt>
+          <dd>~{{ read_minutes }} MIN</dd>
+        </div>
+      </dl>
+    </section>
+
+    <div class="msc-editorial-article__reading-shell">
+      <div class="msc-editorial-article__reading-head" aria-hidden="true">
+        <span>FIELD NOTES / LONGFORM</span>
+        <span>MSC EDITORIAL</span>
       </div>
-    </aside>
 
-    <div class="msc-editorial-article__content rte">
-      {{ article.content }}
+      <div class="msc-editorial-article__content rte">
+        {{ article.content }}
+      </div>
     </div>
+
+    <footer class="msc-editorial-article__footer">
+      <div class="msc-editorial-article__footer-copy">
+        <span>FIELD JOURNAL / CONTINUE</span>
+        <strong>Keep reading the Bitcoin ocean.</strong>
+      </div>
+      <div class="msc-editorial-article__footer-links">
+        <a href="{{ blog.url }}">View full archive →</a>
+        <a href="{{ routes.root_url }}pages/explore-the-bitcoin-ecosystem">Return to Explore →</a>
+      </div>
+    </footer>
   </div>
-
-  <footer class="msc-container msc-editorial-article__footer">
-    <div>
-      <span>FIELD JOURNAL / CONTINUE</span>
-      <strong>Keep reading the Bitcoin ocean.</strong>
-    </div>
-    <div class="msc-editorial-article__footer-links">
-      <a href="{{ blog.url }}">View full archive →</a>
-      <a href="{{ routes.root_url }}pages/explore-the-bitcoin-ecosystem">Return to Explore →</a>
-    </div>
-  </footer>
 </article>
 
 <script type="application/ld+json">
