@@ -3,7 +3,7 @@
 **Status:** UNPUBLISHED EDITORIAL DRAFT — DO NOT PUBLISH  
 **Series:** Wallets Article 3 of 3  
 **Article title:** Xverse and the Rise of Bitcoin Asset Wallets  
-**Article body word count:** 1,732 words of prose; 1,783 including title and section headings  
+**Article body word count:** 1,740 words of prose; 1,791 including title and section headings  
 **SEO title:** Xverse and the Rise of Bitcoin Asset Wallets | MSC  
 **Meta description:** Xverse shows how Bitcoin wallets are evolving to understand Ordinals, Runes, rare sats, applications, and the data layers built around them.  
 **Suggested URL slug:** `xverse-and-the-rise-of-bitcoin-asset-wallets`  
