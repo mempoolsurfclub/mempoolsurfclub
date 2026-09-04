@@ -1,0 +1,135 @@
+{{ 'msc-editorial-article.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign primary_precedence = 'Breaking News|Weekly Recaps|Interviews|Highlights|Research|Community' | split: '|'
+  assign secondary_tags = 'Ordinals|Runes|Artist|Founder|Builder|Miner|Mining|Content Creator|Company|Project|Collection|Protocol|Marketplace|Wallet|Developer|Collector|Podcast|YouTube' | split: '|'
+  assign primary_category = ''
+  assign has_secondary_tags = false
+
+  for category in primary_precedence
+    if article.tags contains category
+      assign primary_category = category
+      break
+    endif
+  endfor
+
+  for subject in secondary_tags
+    if article.tags contains subject
+      assign has_secondary_tags = true
+      break
+    endif
+  endfor
+-%}
+
+<article class="msc-editorial-article">
+  <header class="msc-editorial-article__mast">
+    <div class="msc-container msc-editorial-article__mast-inner">
+      <a class="msc-editorial-article__back" href="{{ routes.root_url }}pages/explore-the-bitcoin-ecosystem">
+        ← Explore / Field Journal
+      </a>
+
+      <div class="msc-editorial-article__meta" aria-label="Article classification">
+        <span>FIELD JOURNAL</span>
+        {%- if primary_category != blank -%}
+          <span>{{ primary_category | escape }}</span>
+        {%- endif -%}
+        {%- for subject in secondary_tags -%}
+          {%- if article.tags contains subject -%}
+            <span>{{ subject | escape }}</span>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      <h1 class="msc-editorial-article__title">{{ article.title | escape }}</h1>
+
+      {%- if article.excerpt != blank -%}
+        <p class="msc-editorial-article__dek">{{ article.excerpt | strip_html }}</p>
+      {%- endif -%}
+
+      <div class="msc-editorial-article__dateline">
+        <span>{{ article.published_at | time_tag: format: 'date' }}</span>
+      </div>
+    </div>
+  </header>
+
+  {%- if article.image -%}
+    <div class="msc-container msc-editorial-article__hero-wrap">
+      <div class="msc-editorial-article__hero">
+        {{
+          article.image
+          | image_url: width: 2400
+          | image_tag:
+            loading: 'eager',
+            fetchpriority: 'high',
+            widths: '750,1100,1500,1800,2200,2400',
+            sizes: '(min-width: 1200px) 1180px, calc(100vw - 32px)',
+            alt: article.image.alt | default: article.title
+        }}
+      </div>
+    </div>
+  {%- endif -%}
+
+  <div class="msc-container msc-editorial-article__reading-grid">
+    <aside class="msc-editorial-article__rail" aria-label="Article details">
+      <div class="msc-editorial-article__rail-block">
+        <span class="msc-editorial-article__rail-label">ENTRY</span>
+        <strong>MSC FIELD JOURNAL</strong>
+      </div>
+
+      {%- if primary_category != blank -%}
+        <div class="msc-editorial-article__rail-block">
+          <span class="msc-editorial-article__rail-label">PRIMARY</span>
+          <strong>{{ primary_category | escape }}</strong>
+        </div>
+      {%- endif -%}
+
+      {%- if has_secondary_tags -%}
+        <div class="msc-editorial-article__rail-block">
+          <span class="msc-editorial-article__rail-label">CHARTED SUBJECTS</span>
+          <strong>
+            {%- assign secondary_count = 0 -%}
+            {%- for subject in secondary_tags -%}
+              {%- if article.tags contains subject -%}
+                {%- if secondary_count > 0 -%}, {% endif -%}{{ subject | escape }}
+                {%- assign secondary_count = secondary_count | plus: 1 -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </strong>
+        </div>
+      {%- endif -%}
+
+      <div class="msc-editorial-article__rail-block">
+        <span class="msc-editorial-article__rail-label">PUBLISHED</span>
+        <strong>{{ article.published_at | date: '%b %d, %Y' }}</strong>
+      </div>
+    </aside>
+
+    <div class="msc-editorial-article__content rte">
+      {{ article.content }}
+    </div>
+  </div>
+
+  <footer class="msc-container msc-editorial-article__footer">
+    <div>
+      <span>FIELD JOURNAL / CONTINUE</span>
+      <strong>Keep reading the Bitcoin ocean.</strong>
+    </div>
+    <div class="msc-editorial-article__footer-links">
+      <a href="{{ blog.url }}">View full archive →</a>
+      <a href="{{ routes.root_url }}pages/explore-the-bitcoin-ecosystem">Return to Explore →</a>
+    </div>
+  </footer>
+</article>
+
+<script type="application/ld+json">
+  {{ article | structured_data }}
+</script>
+
+{% schema %}
+{
+  "name": "MSC editorial article",
+  "tag": "section",
+  "class": "section",
+  "settings": []
+}
+{% endschema %}
