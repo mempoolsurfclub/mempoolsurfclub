@@ -71,7 +71,19 @@
   }
 
   body:has(.section--msc-home-background-normalize) .msc-home-sample--learn .msc-home-sample__heading {
+    align-items: center;
     margin-bottom: .9rem;
+  }
+
+  /* The featured-route widget already carries the section title and supporting
+   * explanation. Keep the outer Learn header as a compact destination label. */
+  body:has(.section--msc-home-background-normalize) .msc-home-sample--learn .msc-home-sample__title,
+  body:has(.section--msc-home-background-normalize) .msc-home-sample--learn .msc-home-sample__intro {
+    display: none;
+  }
+
+  body:has(.section--msc-home-background-normalize) .msc-home-sample--learn .msc-home-sample__kicker {
+    margin-bottom: 0;
   }
 
   /* Keep the homepage route path and CTA together in the right-hand side of
@@ -96,8 +108,13 @@
       line-height: 1.5;
     }
 
-    /* Give the Learn heading the full available desktop span so it reads as
-     * one continuous title line, matching the Field Journal title treatment. */
+    body:has(.section--msc-home-background-normalize) .msc-home-sample--learn .msc-home-sample__destination {
+      align-self: center;
+      margin-bottom: 0;
+    }
+
+    /* Preserve the Learn header's full available desktop span for the compact
+     * kicker + destination treatment. */
     body:has(.section--msc-home-background-normalize) .msc-home-sample--learn .msc-home-sample__heading-copy {
       flex: 1 1 auto;
       min-width: 0;
