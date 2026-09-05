@@ -75,6 +75,14 @@
       margin-bottom: .2rem;
       line-height: 1.5;
     }
+
+    /* Give the Learn heading the full available desktop span so it reads as
+     * one continuous title line, matching the Field Journal title treatment. */
+    body:has(.section--msc-home-background-normalize) .msc-home-sample--learn .msc-home-sample__heading-copy {
+      flex: 1 1 auto;
+      min-width: 0;
+      max-width: none;
+    }
   }
 
   /* Keep the homepage samples visually continuous: no decorative chapter rules
