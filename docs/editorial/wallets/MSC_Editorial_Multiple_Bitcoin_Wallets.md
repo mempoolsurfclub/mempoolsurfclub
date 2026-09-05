@@ -1,6 +1,6 @@
 # MSC Editorial — Why One Bitcoin Wallet Probably Isn’t Enough
 
-**Status:** SHOPIFY DRAFT CREATED — NOT PUBLISHED  
+**Status:** PUBLISHED — MSC PLACEHOLDER ACTIVE  
 **Series:** Wallets Article 2 of 3  
 **Blog handle:** `msc-editorial`  
 **Shopify article ID:** `gid://shopify/Article/630393536799`  
@@ -234,8 +234,7 @@ Sometimes it means more than one.
 
 ## Publication notes
 
-- Featured artwork is intentionally not assigned yet; visual design is handled in a separate workflow.
-- The live article must remain unpublished until explicitly approved.
+- Published on 2026-09-04 with no featured image assigned, so the shared MSC `FIELD SIGNAL` placeholder renders until editorial artwork direction is approved.
 - Do not add wallet rankings, “best wallet” recommendations, affiliate framing, or an exact wallet-count prescription.
 - Preserve the statement that one wallet can be enough.
 - Do not imply wallet separation creates privacy.
