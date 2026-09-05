@@ -1,6 +1,6 @@
 # MSC Editorial — Xverse and the Rise of Bitcoin Asset Wallets
 
-**Status:** SHOPIFY DRAFT CREATED — NOT PUBLISHED  
+**Status:** PUBLISHED — MSC PLACEHOLDER ACTIVE  
 **Series:** Wallets Article 3 of 3  
 **Blog handle:** `msc-editorial`  
 **Shopify article ID:** `gid://shopify/Article/630393602335`  
@@ -211,8 +211,7 @@ Those questions are much broader than “What is my BTC balance?” They explain
 
 ## Publication notes
 
-- Featured artwork is intentionally not assigned yet; visual design is handled in a separate workflow.
-- The Shopify article must remain unpublished until explicitly approved.
+- Published on 2026-09-04 with no featured image assigned, so the shared MSC `FIELD SIGNAL` placeholder renders until editorial artwork direction is approved.
 - `MSC Favorite` is editorial preference only. Do not turn it into a ranking, security endorsement, source-confidence claim, affiliate recommendation, or “best wallet” designation.
 - Do not imply Ordinals, Runes, Stacks, sBTC, Spark, Starknet, or Lightning are all the same technical layer.
 - Do not imply asset indexes or external services are part of Bitcoin consensus.
