@@ -58,32 +58,19 @@
     margin-bottom: .9rem;
   }
 
-  /* Match the Learn handoff and internal heading rhythm to the tightened
-   * Field Journal section directly above it, then carry that same spacing
-   * into the Shop handoff below. */
+  /* The Learn widget now carries the full section hierarchy on its own. Remove
+   * the redundant outer Learn label/action row and reclaim that vertical space. */
   body:has(.section--msc-home-background-normalize) .msc-home-sample--learn {
-    padding-top: clamp(2.4rem, 3vw, 3.2rem) !important;
+    padding-top: clamp(1.4rem, 2vw, 2rem) !important;
     padding-bottom: clamp(2.4rem, 3vw, 3.2rem) !important;
+  }
+
+  body:has(.section--msc-home-background-normalize) .msc-home-sample--learn .msc-home-sample__heading {
+    display: none !important;
   }
 
   body:has(.section--msc-home-background-normalize) .msc-home-sample--shop {
     padding-top: clamp(2.4rem, 3vw, 3.2rem) !important;
-  }
-
-  body:has(.section--msc-home-background-normalize) .msc-home-sample--learn .msc-home-sample__heading {
-    align-items: center;
-    margin-bottom: .9rem;
-  }
-
-  /* The featured-route widget already carries the section title and supporting
-   * explanation. Keep the outer Learn header as a compact destination label. */
-  body:has(.section--msc-home-background-normalize) .msc-home-sample--learn .msc-home-sample__title,
-  body:has(.section--msc-home-background-normalize) .msc-home-sample--learn .msc-home-sample__intro {
-    display: none;
-  }
-
-  body:has(.section--msc-home-background-normalize) .msc-home-sample--learn .msc-home-sample__kicker {
-    margin-bottom: 0;
   }
 
   /* Frame the homepage transaction path as its own balanced sub-panel. Keep
@@ -93,40 +80,79 @@
     display: grid;
     align-self: center;
     align-content: center;
-    gap: 1.1rem;
+    gap: 1.3rem;
     width: 100%;
     min-width: 0;
     box-sizing: border-box;
-    padding: clamp(1.5rem, 2vw, 2.1rem);
+    padding: clamp(1.7rem, 2.3vw, 2.4rem);
     border: 1px solid rgba(212,190,153,.34);
     border-radius: 16px;
     background: rgba(7,31,36,.14);
   }
 
+  /* Give the static transaction rail a clearer systems-diagram hierarchy now,
+   * before any motion is added in a later pass. */
+  body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path .msc-learn-route__steps span {
+    width: 4.75rem;
+    height: 4.75rem;
+    border-color: rgba(212,190,153,.62);
+    background:
+      radial-gradient(circle at 50% 42%, rgba(212,190,153,.08), rgba(16,40,45,.97) 68%);
+    box-shadow:
+      inset 0 0 0 3px rgba(212,190,153,.035),
+      0 0 0 3px rgba(7,31,36,.18);
+  }
+
+  body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path .msc-learn-route__steps strong {
+    font-weight: 740;
+    letter-spacing: .01em;
+  }
+
   body:has(.section--msc-home-background-normalize) .msc-home-learn-route__cta {
     justify-self: center;
-    margin-top: 0;
+    margin-top: .15rem;
+  }
+
+  @media screen and (min-width: 641px) {
+    body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path .msc-learn-route__steps {
+      padding: .8rem 0 .35rem;
+    }
+
+    body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path .msc-learn-route__steps::before {
+      left: 6%;
+      right: 6%;
+      top: calc(.8rem + 2.375rem);
+      height: 2px;
+      background: linear-gradient(90deg,
+        rgba(212,190,153,.22),
+        rgba(212,190,153,.52) 18%,
+        rgba(212,190,153,.68) 50%,
+        rgba(212,190,153,.52) 82%,
+        rgba(212,190,153,.22));
+      box-shadow: 0 0 8px rgba(212,190,153,.08);
+    }
+
+    body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path .msc-learn-route__steps li {
+      gap: 1rem;
+    }
+
+    body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path .msc-learn-route__steps li::after {
+      content: "";
+      position: absolute;
+      top: 4.75rem;
+      left: 50%;
+      width: 1px;
+      height: .6rem;
+      background: rgba(212,190,153,.36);
+      transform: translateX(-50%);
+    }
   }
 
   @media screen and (min-width: 901px) {
-    body:has(.section--msc-home-background-normalize) .msc-home-sample--journal .msc-home-sample__destination,
-    body:has(.section--msc-home-background-normalize) .msc-home-sample--learn .msc-home-sample__destination {
+    body:has(.section--msc-home-background-normalize) .msc-home-sample--journal .msc-home-sample__destination {
       align-self: flex-end;
       margin-bottom: .2rem;
       line-height: 1.5;
-    }
-
-    body:has(.section--msc-home-background-normalize) .msc-home-sample--learn .msc-home-sample__destination {
-      align-self: center;
-      margin-bottom: 0;
-    }
-
-    /* Preserve the Learn header's full available desktop span for the compact
-     * kicker + destination treatment. */
-    body:has(.section--msc-home-background-normalize) .msc-home-sample--learn .msc-home-sample__heading-copy {
-      flex: 1 1 auto;
-      min-width: 0;
-      max-width: none;
     }
   }
 
