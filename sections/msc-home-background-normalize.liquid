@@ -59,13 +59,25 @@
   }
 
   /* Match the Learn handoff and internal heading rhythm to the tightened
-   * Field Journal section directly above it. */
+   * Field Journal section directly above it, then carry that same spacing
+   * into the Shop handoff below. */
   body:has(.section--msc-home-background-normalize) .msc-home-sample--learn {
+    padding-top: clamp(2.4rem, 3vw, 3.2rem) !important;
+    padding-bottom: clamp(2.4rem, 3vw, 3.2rem) !important;
+  }
+
+  body:has(.section--msc-home-background-normalize) .msc-home-sample--shop {
     padding-top: clamp(2.4rem, 3vw, 3.2rem) !important;
   }
 
   body:has(.section--msc-home-background-normalize) .msc-home-sample--learn .msc-home-sample__heading {
     margin-bottom: .9rem;
+  }
+
+  /* Keep the homepage-only route controls compact without changing the shared
+   * Learn route component elsewhere on the site. */
+  body:has(.section--msc-home-background-normalize) .msc-home-learn-route .msc-learn-route__cta {
+    margin-top: .8rem;
   }
 
   @media screen and (min-width: 901px) {
@@ -82,6 +94,15 @@
       flex: 1 1 auto;
       min-width: 0;
       max-width: none;
+    }
+  }
+
+  @media screen and (min-width: 991px) {
+    /* The shared route component centers the transaction steps in the full
+     * widget height. On the homepage, raise that path so it aligns with the
+     * visual center of the route title rather than the title+copy+CTA stack. */
+    body:has(.section--msc-home-background-normalize) .msc-home-learn-route .msc-learn-route__steps {
+      transform: translateY(-2rem);
     }
   }
 
