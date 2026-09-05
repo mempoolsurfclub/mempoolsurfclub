@@ -73,11 +73,19 @@
     padding-top: clamp(2.4rem, 3vw, 3.2rem) !important;
   }
 
-  /* Frame the homepage transaction path as its own balanced sub-panel. With
-   * the CTA removed, let the five-stage route itself fill the panel cleanly. */
+  /* Treat the right side as one route unit: the animated flow panel first,
+   * then its supporting explanation at exactly the same available width. */
+  body:has(.section--msc-home-background-normalize) .msc-home-learn-route__right {
+    display: grid;
+    align-self: start;
+    gap: 1.1rem;
+    min-width: 0;
+    width: 100%;
+  }
+
   body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path {
     display: grid;
-    align-self: center;
+    align-self: start;
     align-content: center;
     gap: 0;
     width: 100%;
@@ -87,6 +95,48 @@
     border: 1px solid rgba(212,190,153,.34);
     border-radius: 16px;
     background: rgba(7,31,36,.14);
+  }
+
+  body:has(.section--msc-home-background-normalize) .msc-home-learn-route__copy {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    color: rgba(251,248,239,.76);
+    font-size: 1.3rem;
+    line-height: 1.5;
+  }
+
+  body:has(.section--msc-home-background-normalize) .msc-home-learn-route__copy p {
+    margin: 0;
+  }
+
+  /* The left column now ends with one simple Learn destination control in the
+   * space previously occupied by the route explanation. */
+  body:has(.section--msc-home-background-normalize) .msc-home-learn-route__guide-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    min-height: 3.8rem;
+    margin-top: 0;
+    padding: .9rem 1.45rem;
+    border: 1px solid rgba(212,190,153,.52);
+    border-radius: 12px;
+    color: var(--msc-sand, #d4be99) !important;
+    background: rgba(10,43,48,.82);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.02);
+    font-size: 1.05rem;
+    font-weight: 760;
+    letter-spacing: .04em;
+    transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
+  }
+
+  body:has(.section--msc-home-background-normalize) .msc-home-learn-route__guide-cta:hover,
+  body:has(.section--msc-home-background-normalize) .msc-home-learn-route__guide-cta:focus-visible {
+    transform: translateY(-1px);
+    border-color: rgba(212,190,153,.78);
+    background: rgba(12,50,56,.96);
+    box-shadow: 0 0 18px rgba(212,190,153,.10), inset 0 0 0 1px rgba(212,190,153,.05);
   }
 
   /* Keep the nodes visually distinct from the rail so each transaction stage
@@ -168,12 +218,6 @@
     }
   }
 
-  /* Remove the homepage route CTA from layout; the animated route is the sole
-   * focus of the right-hand panel. */
-  body:has(.section--msc-home-background-normalize) .msc-home-learn-route__cta {
-    display: none !important;
-  }
-
   @media screen and (min-width: 641px) {
     body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path .msc-learn-route__steps {
       padding: .8rem 0 .35rem;
@@ -248,6 +292,19 @@
       height: .6rem;
       background: rgba(212,190,153,.36);
       transform: translateX(-50%);
+    }
+  }
+
+  /* On the two-column desktop layout, offset the route stack only by the
+   * kicker height so the top of the bordered flow panel aligns with the top
+   * of START HERE rather than sitting lower in the card. */
+  @media screen and (min-width: 991px) {
+    body:has(.section--msc-home-background-normalize) .msc-home-learn-route .msc-learn-route {
+      align-items: start;
+    }
+
+    body:has(.section--msc-home-background-normalize) .msc-home-learn-route__right {
+      padding-top: 2.05rem;
     }
   }
 
