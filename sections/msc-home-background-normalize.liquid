@@ -51,14 +51,26 @@
    * controlled spacing rhythm used inside its heading block. */
   body:has(.section--msc-home-background-normalize) .msc-home-sample--journal {
     padding-top: clamp(2.4rem, 3vw, 3.2rem) !important;
+    padding-bottom: clamp(2.4rem, 3vw, 3.2rem) !important;
   }
 
   body:has(.section--msc-home-background-normalize) .msc-home-sample--journal .msc-home-sample__heading {
     margin-bottom: .9rem;
   }
 
+  /* Match the Learn handoff and internal heading rhythm to the tightened
+   * Field Journal section directly above it. */
+  body:has(.section--msc-home-background-normalize) .msc-home-sample--learn {
+    padding-top: clamp(2.4rem, 3vw, 3.2rem) !important;
+  }
+
+  body:has(.section--msc-home-background-normalize) .msc-home-sample--learn .msc-home-sample__heading {
+    margin-bottom: .9rem;
+  }
+
   @media screen and (min-width: 901px) {
-    body:has(.section--msc-home-background-normalize) .msc-home-sample--journal .msc-home-sample__destination {
+    body:has(.section--msc-home-background-normalize) .msc-home-sample--journal .msc-home-sample__destination,
+    body:has(.section--msc-home-background-normalize) .msc-home-sample--learn .msc-home-sample__destination {
       align-self: flex-end;
       margin-bottom: .2rem;
       line-height: 1.5;
