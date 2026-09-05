@@ -103,11 +103,70 @@
     box-shadow:
       inset 0 0 0 3px rgba(212,190,153,.035),
       0 0 0 3px rgba(7,31,36,.18);
+    animation: mscHomeRouteNode 11s ease-in-out infinite;
   }
 
   body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path .msc-learn-route__steps strong {
+    color: rgba(251,248,239,.88);
     font-weight: 740;
     letter-spacing: .01em;
+    animation: mscHomeRouteLabel 11s ease-in-out infinite;
+  }
+
+  body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path .msc-learn-route__steps li:nth-child(1) span,
+  body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path .msc-learn-route__steps li:nth-child(1) strong {
+    animation-delay: 0s;
+  }
+
+  body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path .msc-learn-route__steps li:nth-child(2) span,
+  body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path .msc-learn-route__steps li:nth-child(2) strong {
+    animation-delay: 2s;
+  }
+
+  body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path .msc-learn-route__steps li:nth-child(3) span,
+  body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path .msc-learn-route__steps li:nth-child(3) strong {
+    animation-delay: 4s;
+  }
+
+  body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path .msc-learn-route__steps li:nth-child(4) span,
+  body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path .msc-learn-route__steps li:nth-child(4) strong {
+    animation-delay: 6s;
+  }
+
+  body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path .msc-learn-route__steps li:nth-child(5) span,
+  body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path .msc-learn-route__steps li:nth-child(5) strong {
+    animation-delay: 8s;
+  }
+
+  @keyframes mscHomeRouteNode {
+    0%, 20%, 100% {
+      border-color: rgba(212,190,153,.62);
+      box-shadow:
+        inset 0 0 0 3px rgba(212,190,153,.035),
+        0 0 0 3px rgba(7,31,36,.18);
+      transform: scale(1);
+    }
+    7%, 13% {
+      border-color: rgba(232,211,173,.96);
+      box-shadow:
+        inset 0 0 0 3px rgba(212,190,153,.08),
+        0 0 0 3px rgba(212,190,153,.08),
+        0 0 22px rgba(232,211,173,.28);
+      transform: scale(1.035);
+    }
+  }
+
+  @keyframes mscHomeRouteLabel {
+    0%, 20%, 100% {
+      color: rgba(251,248,239,.88);
+      text-shadow: none;
+      opacity: .9;
+    }
+    7%, 13% {
+      color: var(--msc-paper-soft, #fbf8ef);
+      text-shadow: 0 0 12px rgba(212,190,153,.18);
+      opacity: 1;
+    }
   }
 
   /* Make the route action feel like a technical control rather than a shop CTA. */
@@ -167,6 +226,24 @@
         rgba(212,190,153,.64),
         rgba(212,190,153,.34));
       box-shadow: 0 0 8px rgba(212,190,153,.06);
+      opacity: .58;
+      animation: mscHomeRouteRail 11s ease-in-out infinite;
+    }
+
+    body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path .msc-learn-route__steps li:nth-child(1)::before {
+      animation-delay: 1s;
+    }
+
+    body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path .msc-learn-route__steps li:nth-child(2)::before {
+      animation-delay: 3s;
+    }
+
+    body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path .msc-learn-route__steps li:nth-child(3)::before {
+      animation-delay: 5s;
+    }
+
+    body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path .msc-learn-route__steps li:nth-child(4)::before {
+      animation-delay: 7s;
     }
 
     body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path .msc-learn-route__steps li::after {
@@ -178,6 +255,25 @@
       height: .6rem;
       background: rgba(212,190,153,.36);
       transform: translateX(-50%);
+    }
+  }
+
+  @keyframes mscHomeRouteRail {
+    0%, 20%, 100% {
+      opacity: .46;
+      box-shadow: 0 0 8px rgba(212,190,153,.04);
+    }
+    7%, 13% {
+      opacity: 1;
+      box-shadow: 0 0 14px rgba(232,211,173,.22);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path .msc-learn-route__steps span,
+    body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path .msc-learn-route__steps strong,
+    body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path .msc-learn-route__steps li:not(:last-child)::before {
+      animation: none !important;
     }
   }
 
