@@ -86,13 +86,21 @@
     margin-bottom: 0;
   }
 
-  /* Keep the homepage route path and CTA together in the right-hand side of
-   * the widget. The CTA belongs directly beneath steps 1–5, centered. */
+  /* Frame the homepage transaction path as its own balanced sub-panel. Keep
+   * equal inset spacing around steps 1–5 and the centered CTA, and let the
+   * panel sit vertically centered within the larger Learn widget. */
   body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path {
     display: grid;
+    align-self: center;
     align-content: center;
-    gap: .55rem;
+    gap: 1.1rem;
+    width: 100%;
     min-width: 0;
+    box-sizing: border-box;
+    padding: clamp(1.5rem, 2vw, 2.1rem);
+    border: 1px solid rgba(212,190,153,.34);
+    border-radius: 16px;
+    background: rgba(7,31,36,.14);
   }
 
   body:has(.section--msc-home-background-normalize) .msc-home-learn-route__cta {
@@ -119,14 +127,6 @@
       flex: 1 1 auto;
       min-width: 0;
       max-width: none;
-    }
-  }
-
-  @media screen and (min-width: 991px) {
-    /* Raise the complete right-side path group so the steps align with the
-     * visual center of the route title while the CTA remains beneath them. */
-    body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path {
-      transform: translateY(-1.2rem);
     }
   }
 
