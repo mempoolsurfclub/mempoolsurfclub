@@ -38,12 +38,31 @@
 
   body:has(.section--msc-home-background-normalize) .msc-home-hero {
     border-bottom: 0 !important;
+    padding-bottom: clamp(2.4rem, 3vw, 3.2rem) !important;
   }
 
   body:has(.section--msc-home-background-normalize) .msc-home-hero::before,
   body:has(.section--msc-home-background-normalize) .msc-home-samples::before {
     content: none !important;
     display: none !important;
+  }
+
+  /* Tighten the first homepage handoff so the Journal starts on the same
+   * controlled spacing rhythm used inside its heading block. */
+  body:has(.section--msc-home-background-normalize) .msc-home-sample--journal {
+    padding-top: clamp(2.4rem, 3vw, 3.2rem) !important;
+  }
+
+  body:has(.section--msc-home-background-normalize) .msc-home-sample--journal .msc-home-sample__heading {
+    margin-bottom: .9rem;
+  }
+
+  @media screen and (min-width: 901px) {
+    body:has(.section--msc-home-background-normalize) .msc-home-sample--journal .msc-home-sample__destination {
+      align-self: flex-end;
+      margin-bottom: .2rem;
+      line-height: 1.5;
+    }
   }
 
   /* Keep the homepage samples visually continuous: no decorative chapter rules
