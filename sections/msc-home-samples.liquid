@@ -93,15 +93,17 @@
             <p class="msc-section-kicker">{{ section.settings.route_kicker | escape }}</p>
             <h3 class="msc-section-title">{{ section.settings.route_heading | escape }}</h3>
             <div class="msc-section-header__copy rte">{{ section.settings.route_copy }}</div>
-            <a class="msc-button msc-learn-route__cta" href="{{ route_link }}">{{ section.settings.route_action | escape }}</a>
           </div>
-          <ol class="msc-learn-route__steps" aria-label="Bitcoin transaction learning route preview">
-            <li><span>1</span><strong>Create</strong></li>
-            <li><span>2</span><strong>Sign</strong></li>
-            <li><span>3</span><strong>Broadcast</strong></li>
-            <li><span>4</span><strong>Mempool</strong></li>
-            <li><span>5</span><strong>Confirm</strong></li>
-          </ol>
+          <div class="msc-home-learn-route__path">
+            <ol class="msc-learn-route__steps" aria-label="Bitcoin transaction learning route preview">
+              <li><span>1</span><strong>Create</strong></li>
+              <li><span>2</span><strong>Sign</strong></li>
+              <li><span>3</span><strong>Broadcast</strong></li>
+              <li><span>4</span><strong>Mempool</strong></li>
+              <li><span>5</span><strong>Confirm</strong></li>
+            </ol>
+            <a class="msc-button msc-learn-route__cta msc-home-learn-route__cta" href="{{ route_link }}">{{ section.settings.route_action | escape }}</a>
+          </div>
         </article>
       </div>
     </section>
