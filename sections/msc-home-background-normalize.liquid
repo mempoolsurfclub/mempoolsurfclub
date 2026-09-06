@@ -295,16 +295,65 @@
     }
   }
 
-  /* On the two-column desktop layout, offset the route stack only by the
-   * kicker height so the top of the bordered flow panel aligns with the top
-   * of START HERE rather than sitting lower in the card. */
+  /* On desktop, use the title and route panel as peers in the same grid row.
+   * The route panel stretches to the title row's exact height, keeping its top
+   * and bottom edges aligned while the five checkpoints stay vertically centered. */
   @media screen and (min-width: 991px) {
     body:has(.section--msc-home-background-normalize) .msc-home-learn-route .msc-learn-route {
+      grid-template-columns: .72fr 1.28fr;
+      grid-template-areas:
+        "kicker ."
+        "title path"
+        "cta copy";
+      column-gap: clamp(2rem, 4vw, 3.2rem);
+      row-gap: 0;
       align-items: start;
     }
 
+    body:has(.section--msc-home-background-normalize) .msc-home-learn-route__intro,
     body:has(.section--msc-home-background-normalize) .msc-home-learn-route__right {
-      padding-top: 2.05rem;
+      display: contents;
+    }
+
+    body:has(.section--msc-home-background-normalize) .msc-home-learn-route__intro > *,
+    body:has(.section--msc-home-background-normalize) .msc-home-learn-route__right > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    body:has(.section--msc-home-background-normalize) .msc-home-learn-route__intro .msc-section-kicker {
+      grid-area: kicker;
+    }
+
+    body:has(.section--msc-home-background-normalize) .msc-home-learn-route__intro .msc-section-title {
+      grid-area: title;
+      align-self: stretch;
+      margin-bottom: 0;
+    }
+
+    body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path {
+      grid-area: path;
+      align-self: stretch;
+      height: 100%;
+      min-height: 0;
+      padding: .55rem clamp(1.7rem, 2.3vw, 2.4rem);
+    }
+
+    body:has(.section--msc-home-background-normalize) .msc-home-learn-route__path .msc-learn-route__steps {
+      padding: 0;
+    }
+
+    body:has(.section--msc-home-background-normalize) .msc-home-learn-route__guide-cta {
+      grid-area: cta;
+      width: min(100%, 27rem);
+      margin-top: .6rem;
+      white-space: nowrap;
+    }
+
+    body:has(.section--msc-home-background-normalize) .msc-home-learn-route__copy {
+      grid-area: copy;
+      align-self: start;
+      margin-top: .55rem;
     }
   }
 
