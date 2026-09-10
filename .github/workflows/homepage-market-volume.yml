@@ -42,6 +42,12 @@ jobs:
         with:
           node-version: '24'
 
+      - name: Reconcile Satflow sales contract
+        if: github.event_name == 'pull_request'
+        env:
+          SATFLOW_API_KEY: ${{ secrets.SATFLOW_API_KEY }}
+        run: node scripts/msc-api/reconcile-satflow.mjs
+
       - name: Build MSC API market snapshots
         env:
           SATFLOW_API_KEY: ${{ secrets.SATFLOW_API_KEY }}
