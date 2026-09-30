@@ -34,8 +34,17 @@ function recompute(){
   state.metrics.rewardToday=todays.filter(x=>x.launchType==='reward').length;
 }
 async function rpc(method,params){
-  const r=await fetch(RPC_HTTP_URL,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:1,method,params})});
-  const j=await r.json(); if(j.error) throw new Error(j.error.message); return j.result;
+  for(let attempt=0;attempt<6;attempt++){
+    const r=await fetch(RPC_HTTP_URL,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:1,method,params})});
+    const j=await r.json();
+    if(!j.error) return j.result;
+    const msg=String(j.error?.message||'RPC error');
+    if((r.status===429 || /too many requests/i.test(msg)) && attempt<5){
+      await new Promise(resolve=>setTimeout(resolve,500*Math.pow(2,attempt)));
+      continue;
+    }
+    throw new Error(msg);
+  }
 }
 async function inspect(signature,slot){
   for(let i=0;i<8;i++){
@@ -59,17 +68,45 @@ async function inspect(signature,slot){
 function connect(){
   if(!RPC_HTTP_URL||!RPC_WS_URL){state.status='config-needed';console.error('RPC URLs missing');return;}
   const ws=new WebSocket(RPC_WS_URL);
+  const queue=[];
+  let draining=false;
+
+  async function drain(){
+    if(draining) return;
+    draining=true;
+    while(queue.length){
+      const item=queue.shift();
+      if(!item || state.seen.has(item.signature)) continue;
+      try{
+        const launch=await inspect(item.signature,item.slot);
+        state.seen.add(item.signature);
+        if(launch){
+          state.launches.unshift(launch);
+          state.launches=state.launches.slice(0,500);
+          recompute();
+        }
+      }catch(e){
+        console.error('inspect',item.signature,e.message||e);
+        await new Promise(resolve=>setTimeout(resolve,1000));
+      }
+      await new Promise(resolve=>setTimeout(resolve,120));
+    }
+    draining=false;
+  }
+
   ws.on('open',()=>{
     state.status='online';
-    ws.send(JSON.stringify({jsonrpc:'2.0',id:1,method:'logsSubscribe',params:[{mentions:[LAUNCHLAB_PROGRAM]},{commitment:'confirmed'}]}));
+    // Subscribe only to StonkFun platform configs instead of the entire
+    // Raydium LaunchLab program. This dramatically cuts RPC traffic.
+    ws.send(JSON.stringify({jsonrpc:'2.0',id:101,method:'logsSubscribe',params:[{mentions:[STANDARD]},{commitment:'confirmed'}]}));
+    ws.send(JSON.stringify({jsonrpc:'2.0',id:102,method:'logsSubscribe',params:[{mentions:[REWARD]},{commitment:'confirmed'}]}));
   });
-  ws.on('message',async raw=>{
+  ws.on('message',raw=>{
     try{
-      const m=JSON.parse(raw.toString()),v=m?.params?.result?.value,c=m?.params?.result?.context;
+      const m=JSON.parse(raw.toString()),v=m?.params?.result?.value,ctx=m?.params?.result?.context;
       if(!v?.signature||v.err||state.seen.has(v.signature)) return;
-      state.seen.add(v.signature);
-      const launch=await inspect(v.signature,c?.slot||0);
-      if(launch){state.launches.unshift(launch);state.launches=state.launches.slice(0,500);recompute();}
+      if(!queue.some(x=>x.signature===v.signature)) queue.push({signature:v.signature,slot:ctx?.slot||0});
+      void drain();
     }catch(e){console.error(e);}
   });
   ws.on('close',()=>{state.status='reconnecting';setTimeout(connect,2000)});
