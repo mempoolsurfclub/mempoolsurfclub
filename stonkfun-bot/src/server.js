@@ -39,7 +39,7 @@ async function rpc(method,params){
 }
 async function inspect(signature,slot){
   for(let i=0;i<8;i++){
-    const tx=await rpc('getTransaction',[signature,{encoding:'jsonParsed',commitment:'confirmed',maxSupportedTransactionVersion:0}]);
+    const tx=await rpc('getTransaction',[signature,{encoding:'jsonParsed',commitment:'confirmed',maxSupportedTransactionVersion:1}]);
     if(!tx){await new Promise(r=>setTimeout(r,500+i*200));continue;}
     for(const ix of tx?.transaction?.message?.instructions||[]){
       if(ix?.programId!==LAUNCHLAB_PROGRAM || !Array.isArray(ix.accounts)) continue;
