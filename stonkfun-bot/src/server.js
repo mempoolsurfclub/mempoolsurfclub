@@ -16,6 +16,24 @@ const LAUNCHLAB_PROGRAM='LanMV9sAd7wArD4vJFi2qDdfnVhFxYSUg6eADduJ3uj';
 const STANDARD='4E876qZTE9FJMrBzgVtBrSrzz2TLivB5Y5QXPjB4gZL7';
 const REWARD='6BwHHDg3u1854jC8PDLXvR4spTcLNaoBxLJNGC4nTESt';
 const SNAPSHOT_AGES=[10,30,60,120,300,900,3600];
+const PAPER={
+  STARTING_BANKROLL_SOL:1,
+  POSITION_SOL:0.10,
+  MAX_OPEN:2,
+  STOP_LOSS_PCT:-20,
+  TAKE_PROFIT_PCT:40,
+  MAX_HOLD_SEC:900,
+  ENTRY_MIN_LIQUIDITY_USD:5000,
+  ENTRY_MIN_MARKET_CAP_USD:10000,
+  ENTRY_MAX_MARKET_CAP_USD:2000000,
+  ENTRY_MIN_VOLUME_M5_USD:500,
+  ENTRY_MIN_BUYS_M5:5,
+  ENTRY_MIN_BUY_RATIO:0.65,
+  ENTRY_MIN_PRICE_CHANGE_M5:2,
+  ENTRY_MAX_PRICE_CHANGE_M5:40,
+  ENTRY_SLIPPAGE_PCT:1,
+  EXIT_SLIPPAGE_PCT:1
+};
 
 app.use(cors({ origin: ALLOWED_ORIGIN }));
 app.use(express.json());
@@ -110,6 +128,40 @@ async function initDb(){
       UNIQUE(launch_signature,target_age_sec)
     );
     CREATE INDEX IF NOT EXISTS snapshots_mint_idx ON snapshots(mint, observed_at DESC);
+
+    CREATE TABLE IF NOT EXISTS paper_positions (
+      id BIGSERIAL PRIMARY KEY,
+      launch_signature TEXT NOT NULL,
+      mint TEXT NOT NULL,
+      symbol TEXT,
+      status TEXT NOT NULL DEFAULT 'open',
+      opened_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      closed_at TIMESTAMPTZ,
+      entry_price_usd DOUBLE PRECISION NOT NULL,
+      exit_price_usd DOUBLE PRECISION,
+      size_sol DOUBLE PRECISION NOT NULL,
+      pnl_sol DOUBLE PRECISION,
+      pnl_pct DOUBLE PRECISION,
+      exit_reason TEXT,
+      UNIQUE(launch_signature)
+    );
+    CREATE INDEX IF NOT EXISTS paper_positions_status_idx ON paper_positions(status, opened_at DESC);
+
+    CREATE TABLE IF NOT EXISTS paper_trades (
+      id BIGSERIAL PRIMARY KEY,
+      position_id BIGINT,
+      launch_signature TEXT NOT NULL,
+      mint TEXT NOT NULL,
+      symbol TEXT,
+      side TEXT NOT NULL,
+      simulated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      price_usd DOUBLE PRECISION NOT NULL,
+      size_sol DOUBLE PRECISION NOT NULL,
+      pnl_sol DOUBLE PRECISION,
+      pnl_pct DOUBLE PRECISION,
+      reason TEXT
+    );
+    CREATE INDEX IF NOT EXISTS paper_trades_time_idx ON paper_trades(simulated_at DESC);
   `);
   state.dbStatus='online';
 }
@@ -297,6 +349,134 @@ async function collectSnapshots(){
   }
 }
 
+
+async function paperStats(){
+  if(!db) return {startingBankrollSol:1,equitySol:1,realizedPnlSol:0,unrealizedPnlSol:0,openPositions:0,trades:[]};
+  const {rows:closed}=await db.query("SELECT COALESCE(SUM(pnl_sol),0) AS pnl FROM paper_positions WHERE status='closed'");
+  const realized=Number(closed[0]?.pnl||0);
+  const {rows:open}=await db.query("SELECT * FROM paper_positions WHERE status='open' ORDER BY opened_at ASC");
+  let unrealized=0;
+  if(open.length){
+    const pairMap=await fetchDexPairs([...new Set(open.map(x=>x.mint))]);
+    for(const p of open){
+      const pair=pairMap.get(p.mint);
+      const raw=n(pair?.priceUsd);
+      if(!raw) continue;
+      const mark=raw*(1-PAPER.EXIT_SLIPPAGE_PCT/100);
+      unrealized += Number(p.size_sol)*(mark/Number(p.entry_price_usd)-1);
+    }
+  }
+  const equity=PAPER.STARTING_BANKROLL_SOL+realized+unrealized;
+  const {rows:trades}=await db.query("SELECT side,symbol,mint,simulated_at,price_usd,size_sol,pnl_sol,pnl_pct,reason FROM paper_trades ORDER BY simulated_at DESC LIMIT 20");
+  return {startingBankrollSol:PAPER.STARTING_BANKROLL_SOL,equitySol:equity,realizedPnlSol:realized,unrealizedPnlSol:unrealized,openPositions:open.length,trades};
+}
+
+async function evaluatePaperTrading(){
+  if(!db || state.dbStatus!=='online') return;
+  try{
+    const {rows:open}=await db.query("SELECT * FROM paper_positions WHERE status='open' ORDER BY opened_at ASC");
+    const openMints=[...new Set(open.map(x=>x.mint))];
+    const openPairs=openMints.length?await fetchDexPairs(openMints):new Map();
+
+    for(const p of open){
+      const pair=openPairs.get(p.mint);
+      const raw=n(pair?.priceUsd);
+      if(!raw) continue;
+      const exitPrice=raw*(1-PAPER.EXIT_SLIPPAGE_PCT/100);
+      const pnlPct=(exitPrice/Number(p.entry_price_usd)-1)*100;
+      const ageSec=(Date.now()-new Date(p.opened_at).getTime())/1000;
+      let reason=null;
+      if(pnlPct<=PAPER.STOP_LOSS_PCT) reason='stop_loss';
+      else if(pnlPct>=PAPER.TAKE_PROFIT_PCT) reason='take_profit';
+      else if(ageSec>=PAPER.MAX_HOLD_SEC) reason='max_hold';
+      if(!reason) continue;
+
+      const pnlSol=Number(p.size_sol)*(pnlPct/100);
+      await db.query(
+        "UPDATE paper_positions SET status='closed',closed_at=NOW(),exit_price_usd=$2,pnl_sol=$3,pnl_pct=$4,exit_reason=$5 WHERE id=$1",
+        [p.id,exitPrice,pnlSol,pnlPct,reason]
+      );
+      await db.query(
+        "INSERT INTO paper_trades(position_id,launch_signature,mint,symbol,side,price_usd,size_sol,pnl_sol,pnl_pct,reason) VALUES($1,$2,$3,$4,'sell',$5,$6,$7,$8,$9)",
+        [p.id,p.launch_signature,p.mint,p.symbol,exitPrice,p.size_sol,pnlSol,pnlPct,reason]
+      );
+    }
+
+    const {rows:stillOpen}=await db.query("SELECT * FROM paper_positions WHERE status='open'");
+    if(stillOpen.length>=PAPER.MAX_OPEN) {
+      const stats=await paperStats();
+      state.metrics.paperPnlSol=stats.realizedPnlSol+stats.unrealizedPnlSol;
+      return;
+    }
+
+    const {rows:closed}=await db.query("SELECT COALESCE(SUM(pnl_sol),0) AS pnl FROM paper_positions WHERE status='closed'");
+    const realized=Number(closed[0]?.pnl||0);
+    const allocated=stillOpen.reduce((s,x)=>s+Number(x.size_sol||0),0);
+    const available=PAPER.STARTING_BANKROLL_SOL+realized-allocated;
+    if(available<PAPER.POSITION_SOL) {
+      const stats=await paperStats();
+      state.metrics.paperPnlSol=stats.realizedPnlSol+stats.unrealizedPnlSol;
+      return;
+    }
+
+    const {rows:candidates}=await db.query(`
+      SELECT DISTINCT ON (s.launch_signature)
+        s.launch_signature,s.mint,s.price_usd,s.market_cap_usd,s.liquidity_usd,
+        s.volume_m5_usd,s.buys_m5,s.sells_m5,s.price_change_m5,l.symbol
+      FROM snapshots s
+      JOIN launches l ON l.signature=s.launch_signature
+      LEFT JOIN paper_positions p ON p.launch_signature=s.launch_signature
+      WHERE p.id IS NULL
+        AND s.target_age_sec BETWEEN 30 AND 300
+        AND s.price_usd IS NOT NULL
+        AND s.liquidity_usd >= $1
+        AND s.market_cap_usd BETWEEN $2 AND $3
+        AND s.volume_m5_usd >= $4
+        AND s.buys_m5 >= $5
+        AND s.price_change_m5 BETWEEN $6 AND $7
+      ORDER BY s.launch_signature,s.target_age_sec DESC
+      LIMIT 25
+    `,[
+      PAPER.ENTRY_MIN_LIQUIDITY_USD,
+      PAPER.ENTRY_MIN_MARKET_CAP_USD,
+      PAPER.ENTRY_MAX_MARKET_CAP_USD,
+      PAPER.ENTRY_MIN_VOLUME_M5_USD,
+      PAPER.ENTRY_MIN_BUYS_M5,
+      PAPER.ENTRY_MIN_PRICE_CHANGE_M5,
+      PAPER.ENTRY_MAX_PRICE_CHANGE_M5
+    ]);
+
+    let slots=PAPER.MAX_OPEN-stillOpen.length;
+    for(const x of candidates){
+      if(slots<=0) break;
+      const buys=Number(x.buys_m5||0), sells=Number(x.sells_m5||0);
+      const ratio=(buys+sells)>0?buys/(buys+sells):0;
+      if(ratio<PAPER.ENTRY_MIN_BUY_RATIO) continue;
+      const entry=Number(x.price_usd)*(1+PAPER.ENTRY_SLIPPAGE_PCT/100);
+      const ins=await db.query(
+        `INSERT INTO paper_positions(launch_signature,mint,symbol,entry_price_usd,size_sol)
+         VALUES($1,$2,$3,$4,$5)
+         ON CONFLICT(launch_signature) DO NOTHING
+         RETURNING id`,
+        [x.launch_signature,x.mint,x.symbol,entry,PAPER.POSITION_SOL]
+      );
+      if(!ins.rows.length) continue;
+      await db.query(
+        "INSERT INTO paper_trades(position_id,launch_signature,mint,symbol,side,price_usd,size_sol,reason) VALUES($1,$2,$3,$4,'buy',$5,$6,'entry_signal')",
+        [ins.rows[0].id,x.launch_signature,x.mint,x.symbol,entry,PAPER.POSITION_SOL]
+      );
+      const local=state.launches.find(y=>y.signature===x.launch_signature);
+      if(local) local.signal='momentum';
+      slots--;
+    }
+
+    const stats=await paperStats();
+    state.metrics.paperPnlSol=stats.realizedPnlSol+stats.unrealizedPnlSol;
+  }catch(e){
+    console.error('paper trader',e.message||e);
+  }
+}
+
 function connect(){
   if(!RPC_HTTP_URL||!RPC_WS_URL){state.status='config-needed';console.error('RPC URLs missing');return;}
   const ws=new WebSocket(RPC_WS_URL);
@@ -378,10 +558,25 @@ app.get('/api/wallet/:address',async(req,res)=>{
 
 app.get('/api/paper/settings',(req,res)=>res.json({
   mode:'paper',
-  startingBankrollSol:1,
+  active:true,
+  startingBankrollSol:PAPER.STARTING_BANKROLL_SOL,
+  positionSizeSol:PAPER.POSITION_SOL,
+  maxOpenPositions:PAPER.MAX_OPEN,
+  stopLossPct:PAPER.STOP_LOSS_PCT,
+  takeProfitPct:PAPER.TAKE_PROFIT_PCT,
+  maxHoldSec:PAPER.MAX_HOLD_SEC,
   liveTradingEnabled:false,
   walletSigningEnabled:false
 }));
+
+app.get('/api/paper/status',async(req,res)=>{
+  try{
+    const stats=await paperStats();
+    res.json({mode:'paper',active:true,...stats});
+  }catch(e){
+    res.status(500).json({error:'paper status unavailable'});
+  }
+});
 
 app.get('/api/token/:mint/history',async(req,res)=>{
   if(!db) return res.status(503).json({error:'database unavailable'});
@@ -409,4 +604,6 @@ app.listen(PORT,async()=>{
   connect();
   setInterval(()=>void collectSnapshots(),10000);
   setTimeout(()=>void collectSnapshots(),3000);
+  setInterval(()=>void evaluatePaperTrading(),10000);
+  setTimeout(()=>void evaluatePaperTrading(),7000);
 });
