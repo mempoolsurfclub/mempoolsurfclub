@@ -101,7 +101,7 @@
 (() => {
   const root = document.getElementById('stonkfun-dashboard');
   if (!root) return;
-  const api = (root.dataset.api || '').replace(/\/$/, '');
+  const api = (root.dataset.api || 'https://stonkfun-bot-production.up.railway.app').replace(/\/$/, '');
   const $ = id => document.getElementById(id);
   const fmtUsd = n => Number.isFinite(Number(n)) ? new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',notation:Number(n)>=100000?'compact':'standard',maximumFractionDigits:1}).format(Number(n)) : '—';
   const short = s => s ? s.slice(0,4)+'…'+s.slice(-4) : '—';
