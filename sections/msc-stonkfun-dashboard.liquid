@@ -1,0 +1,183 @@
+{% liquid
+  assign has_access = false
+  if customer and customer.tags contains 'stonkfun-admin'
+    assign has_access = true
+  endif
+%}
+
+<style>
+  .msc-stonk-shell{min-height:76vh;background:#07110f;color:#e9fff8;padding:28px 18px 56px;font-family:var(--font-body-family,Arial,sans-serif)}
+  .msc-stonk-wrap{max-width:1380px;margin:0 auto}
+  .msc-stonk-top{display:flex;gap:20px;align-items:flex-start;justify-content:space-between;margin-bottom:24px}
+  .msc-stonk-kicker{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#79e8bb;margin:0 0 7px}
+  .msc-stonk-title{margin:0;font-size:clamp(30px,5vw,54px);line-height:1;color:#f5fffb}
+  .msc-stonk-sub{margin:10px 0 0;color:#9fbab0;max-width:760px}
+  .msc-stonk-status{display:flex;align-items:center;gap:8px;padding:9px 13px;border:1px solid #264b40;border-radius:999px;background:#0c1d18;font-size:12px;white-space:nowrap}
+  .msc-stonk-dot{width:8px;height:8px;border-radius:50%;background:#6d7d77}
+  .msc-stonk-dot.is-live{background:#5df0a8;box-shadow:0 0 14px rgba(93,240,168,.6)}
+  .msc-stonk-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+  .msc-stonk-card{background:#0c1a17;border:1px solid #19382f;border-radius:16px;padding:17px;min-width:0}
+  .msc-stonk-card h3{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:#759c8f;margin:0 0 9px}
+  .msc-stonk-metric{font-size:28px;font-weight:700;line-height:1;color:#f2fff9}
+  .msc-stonk-note{font-size:12px;color:#78998e;margin-top:7px}
+  .msc-stonk-span-3{grid-column:span 3}.msc-stonk-span-4{grid-column:span 4}.msc-stonk-span-8{grid-column:span 8}.msc-stonk-span-12{grid-column:span 12}
+  .msc-stonk-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .msc-stonk-chip{border:1px solid #245041;color:#bdebd8;background:#0b2019;border-radius:999px;padding:7px 10px;font-size:11px}
+  .msc-stonk-table-wrap{overflow:auto}
+  .msc-stonk-table{width:100%;border-collapse:collapse;min-width:980px}
+  .msc-stonk-table th,.msc-stonk-table td{text-align:left;padding:11px 10px;border-bottom:1px solid #173329;font-size:12px;white-space:nowrap}
+  .msc-stonk-table th{color:#73998c;text-transform:uppercase;letter-spacing:.08em;font-size:10px}
+  .msc-stonk-table td{color:#d8eee5}
+  .msc-stonk-token{font-weight:700;color:#fff}
+  .msc-stonk-muted{color:#6f8f84!important}
+  .msc-stonk-badge{display:inline-flex;border-radius:999px;padding:4px 7px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;border:1px solid #295145}
+  .msc-stonk-badge.watch{color:#ffd985;border-color:#725c2b;background:#211b0d}
+  .msc-stonk-badge.momentum{color:#80f7b7;border-color:#276a48;background:#0d281a}
+  .msc-stonk-badge.reject{color:#ff9f9f;border-color:#713737;background:#291111}
+  .msc-stonk-badge.reward{color:#d8b3ff;border-color:#5b3d78;background:#211329}
+  .msc-stonk-badge.standard{color:#9bdff8;border-color:#315d6f;background:#0d2027}
+  .msc-stonk-empty{padding:34px 8px;text-align:center;color:#78988d}
+  .msc-stonk-chart{height:245px;display:flex;align-items:flex-end;gap:5px;padding-top:20px}
+  .msc-stonk-bar{flex:1;min-width:5px;background:linear-gradient(180deg,#70f2b1,#1c7050);border-radius:4px 4px 1px 1px;opacity:.88}
+  .msc-stonk-mode{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .msc-stonk-mode div{border:1px solid #22463b;border-radius:10px;padding:11px;color:#78988d;font-size:12px}
+  .msc-stonk-mode .active{border-color:#4edb9a;background:#0d281d;color:#bdf7d8}
+  .msc-stonk-locked{max-width:560px;margin:80px auto;text-align:center;background:#0c1a17;border:1px solid #19382f;border-radius:18px;padding:30px}
+  .msc-stonk-locked a{display:inline-block;margin-top:12px;color:#07110f;background:#79e8bb;padding:10px 15px;border-radius:10px;text-decoration:none;font-weight:700}
+  @media(max-width:900px){.msc-stonk-span-3,.msc-stonk-span-4,.msc-stonk-span-8{grid-column:span 6}.msc-stonk-top{flex-direction:column}}
+  @media(max-width:620px){.msc-stonk-span-3,.msc-stonk-span-4,.msc-stonk-span-8{grid-column:span 12}.msc-stonk-shell{padding-left:12px;padding-right:12px}}
+</style>
+
+<section class="msc-stonk-shell">
+{% if has_access %}
+  <div class="msc-stonk-wrap" id="stonkfun-dashboard" data-api="{{ section.settings.api_url | escape }}">
+    <div class="msc-stonk-top">
+      <div>
+        <p class="msc-stonk-kicker">Mempool Surf Club · Private</p>
+        <h1 class="msc-stonk-title">StonkFun command center</h1>
+        <p class="msc-stonk-sub">Live view of the StonkFun ecosystem, launch flow, token quality signals, scanner health, and trading state.</p>
+      </div>
+      <div class="msc-stonk-status"><span class="msc-stonk-dot" id="bot-dot"></span><span id="bot-status">Connecting…</span></div>
+    </div>
+
+    <div class="msc-stonk-grid">
+      <div class="msc-stonk-card msc-stonk-span-3"><h3>Launches today</h3><div class="msc-stonk-metric" id="launches-today">—</div><div class="msc-stonk-note">StonkFun launches detected</div></div>
+      <div class="msc-stonk-card msc-stonk-span-3"><h3>Tracking now</h3><div class="msc-stonk-metric" id="tracking-now">—</div><div class="msc-stonk-note">Tokens under active observation</div></div>
+      <div class="msc-stonk-card msc-stonk-span-3"><h3>Graduated</h3><div class="msc-stonk-metric" id="graduated-today">—</div><div class="msc-stonk-note">Graduations today</div></div>
+      <div class="msc-stonk-card msc-stonk-span-3"><h3>Paper P/L</h3><div class="msc-stonk-metric" id="paper-pnl">—</div><div class="msc-stonk-note">Strategy remains paper-only</div></div>
+
+      <div class="msc-stonk-card msc-stonk-span-8">
+        <h3>Stonk ecosystem pulse</h3>
+        <div class="msc-stonk-toolbar">
+          <span class="msc-stonk-chip" id="standard-count">Standard —</span>
+          <span class="msc-stonk-chip" id="reward-count">Reward —</span>
+          <span class="msc-stonk-chip" id="buy-pressure">Buy pressure —</span>
+          <span class="msc-stonk-chip" id="median-liquidity">Median liquidity —</span>
+        </div>
+        <div class="msc-stonk-chart" id="launch-chart"><div class="msc-stonk-empty">Waiting for live scanner data…</div></div>
+      </div>
+
+      <div class="msc-stonk-card msc-stonk-span-4">
+        <h3>Trading mode</h3>
+        <div class="msc-stonk-mode">
+          <div>Scanner</div><div class="active">Paper</div><div>Live locked</div>
+        </div>
+        <div class="msc-stonk-note" style="margin-top:14px">Live trading stays disabled until a dedicated bot wallet and hard risk limits are configured.</div>
+      </div>
+
+      <div class="msc-stonk-card msc-stonk-span-12">
+        <h3>Newest StonkFun launches</h3>
+        <div class="msc-stonk-table-wrap">
+          <table class="msc-stonk-table">
+            <thead><tr><th>Token</th><th>Mode</th><th>Age</th><th>Market cap</th><th>Liquidity</th><th>Volume</th><th>Buys / sells</th><th>Graduation</th><th>Creator</th><th>Signal</th></tr></thead>
+            <tbody id="launch-table"><tr><td colspan="10" class="msc-stonk-empty">Waiting for backend connection…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const root = document.getElementById('stonkfun-dashboard');
+  if (!root) return;
+  const api = (root.dataset.api || '').replace(/\/$/, '');
+  const $ = id => document.getElementById(id);
+  const fmtUsd = n => Number.isFinite(Number(n)) ? new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',notation:Number(n)>=100000?'compact':'standard',maximumFractionDigits:1}).format(Number(n)) : '—';
+  const short = s => s ? s.slice(0,4)+'…'+s.slice(-4) : '—';
+  const age = iso => {
+    if (!iso) return '—';
+    const sec = Math.max(0,Math.floor((Date.now()-new Date(iso).getTime())/1000));
+    if(sec<60)return sec+'s'; if(sec<3600)return Math.floor(sec/60)+'m'; return Math.floor(sec/3600)+'h';
+  };
+  const badge = (value, cls) => '<span class="msc-stonk-badge '+cls+'">'+value+'</span>';
+  function render(data){
+    $('bot-status').textContent = data.status === 'online' ? 'Scanner online' : 'Scanner offline';
+    $('bot-dot').classList.toggle('is-live', data.status === 'online');
+    $('launches-today').textContent = data.metrics?.launchesToday ?? 0;
+    $('tracking-now').textContent = data.metrics?.trackingNow ?? 0;
+    $('graduated-today').textContent = data.metrics?.graduatedToday ?? 0;
+    const pnl=Number(data.metrics?.paperPnlSol ?? 0);
+    $('paper-pnl').textContent = (pnl>=0?'+':'')+pnl.toFixed(3)+' SOL';
+    $('standard-count').textContent='Standard '+(data.metrics?.standardToday ?? 0);
+    $('reward-count').textContent='Reward '+(data.metrics?.rewardToday ?? 0);
+    $('buy-pressure').textContent='Buy pressure '+(data.metrics?.buyPressurePct ?? 0)+'%';
+    $('median-liquidity').textContent='Median liquidity '+fmtUsd(data.metrics?.medianLiquidityUsd);
+
+    const buckets = data.launchesByInterval || [];
+    $('launch-chart').innerHTML = buckets.length ? buckets.map(x => {
+      const max=Math.max(...buckets.map(b=>Number(b.count)||0),1);
+      const h=Math.max(6,Math.round(((Number(x.count)||0)/max)*100));
+      return '<div class="msc-stonk-bar" title="'+x.label+': '+x.count+'" style="height:'+h+'%"></div>';
+    }).join('') : '<div class="msc-stonk-empty">No launch history yet.</div>';
+
+    const launches=data.launches || [];
+    $('launch-table').innerHTML = launches.length ? launches.map(t=>{
+      const mode=t.launchType==='reward'?badge('Reward','reward'):badge('Standard','standard');
+      const sig=t.signal||'watch';
+      const sigLabel=sig==='momentum'?badge('Momentum','momentum'):sig==='reject'?badge('Rejected','reject'):badge('Watch','watch');
+      return '<tr>'+
+        '<td><span class="msc-stonk-token">'+(t.symbol||short(t.mint))+'</span><div class="msc-stonk-muted">'+short(t.mint)+'</div></td>'+
+        '<td>'+mode+'</td><td>'+age(t.detectedAt)+'</td><td>'+fmtUsd(t.marketCapUsd)+'</td><td>'+fmtUsd(t.liquidityUsd)+'</td><td>'+fmtUsd(t.volumeUsd)+'</td>'+
+        '<td>'+Number(t.buys||0)+' / '+Number(t.sells||0)+'</td><td>'+Math.round(Number(t.graduationPct||0))+'%</td><td>'+short(t.creator)+'</td><td>'+sigLabel+'</td></tr>';
+    }).join('') : '<tr><td colspan="10" class="msc-stonk-empty">No StonkFun launches detected yet.</td></tr>';
+  }
+  async function refresh(){
+    if(!api){ $('bot-status').textContent='Backend not connected'; return; }
+    try{
+      const res=await fetch(api+'/api/dashboard',{headers:{'Accept':'application/json'},cache:'no-store'});
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      render(await res.json());
+    }catch(e){
+      $('bot-status').textContent='Backend unavailable';
+      $('bot-dot').classList.remove('is-live');
+    }
+  }
+  refresh();
+  setInterval(refresh,10000);
+})();
+</script>
+{% else %}
+  <div class="msc-stonk-locked">
+    <p class="msc-stonk-kicker">Private dashboard</p>
+    <h1 class="msc-stonk-title" style="font-size:34px">Restricted access</h1>
+    <p class="msc-stonk-sub">Sign in with the Shopify customer account authorized for this dashboard.</p>
+    <a href="{{ routes.account_login_url }}">Sign in</a>
+  </div>
+{% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "StonkFun dashboard",
+  "settings": [
+    {
+      "type": "text",
+      "id": "api_url",
+      "label": "Bot API URL",
+      "info": "Railway backend URL. Leave blank until the backend is deployed."
+    }
+  ],
+  "presets": [{"name": "StonkFun dashboard"}]
+}
+{% endschema %}
