@@ -360,6 +360,29 @@ app.get('/api/dashboard',(req,res)=>res.json({
   launchesByInterval:intervals(),
   launches:state.launches.slice(0,75)
 }));
+app.get('/api/wallet/:address',async(req,res)=>{
+  try{
+    const address=String(req.params.address||'').trim();
+    if(!/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address)) return res.status(400).json({error:'invalid Solana address'});
+    const lamports=await rpc('getBalance',[address,{commitment:'confirmed'}]);
+    res.json({
+      address,
+      lamports:Number(lamports?.value||0),
+      sol:Number(lamports?.value||0)/1000000000,
+      mode:'read-only'
+    });
+  }catch(e){
+    res.status(502).json({error:'wallet balance unavailable'});
+  }
+});
+
+app.get('/api/paper/settings',(req,res)=>res.json({
+  mode:'paper',
+  startingBankrollSol:1,
+  liveTradingEnabled:false,
+  walletSigningEnabled:false
+}));
+
 app.get('/api/token/:mint/history',async(req,res)=>{
   if(!db) return res.status(503).json({error:'database unavailable'});
   try{
