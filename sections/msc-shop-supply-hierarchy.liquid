@@ -201,7 +201,7 @@
                   <p class="msc-supply-product__price" data-product-price>{%- if product.price_varies -%}FROM {% endif -%}{{ product.price | money_with_currency }}</p>
 
                   <product-form class="msc-supply-product__form" data-section-id="{{ section.id }}" data-hide-errors="false">
-                    {%- form 'product', product, id: 'MscSupplyHierarchyQuickAdd-' | append: section.id | append: '-' | append: block.id | append: '-' | append: product.id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+                    {%- form product.id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
                       {%- if product.variants.size > 1 -%}
                         <label class="msc-supply-product__variant-label" for="MscSupplyHierarchyVariant-{{ section.id }}-{{ block.id }}-{{ product.id }}">SELECT VARIANT</label>
                         <select class="msc-supply-product__variant" id="MscSupplyHierarchyVariant-{{ section.id }}-{{ block.id }}-{{ product.id }}" name="id" data-variant-select>
@@ -546,3 +546,16 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- form 'product', product, id: 'MscSupplyHierarchyQuickAdd-' | append:
+    section.id | append: '-' | append: block.id | append: '-' | append: product.id,
+    class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}"
+  to: "{%- form product.id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form'
+    -%}"
+  position: 10535..10630
+{% endcomment %}

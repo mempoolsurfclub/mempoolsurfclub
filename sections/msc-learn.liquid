@@ -246,7 +246,7 @@
     </div>
 
     <div class="msc-block msc-learn-index-block" aria-labelledby="MscLearnIndex-{{ section.id }}">
-      {% render 'msc-section-header', kicker: section.settings.index_kicker, heading: section.settings.index_heading, copy: section.settings.index_copy, heading_id: 'MscLearnIndex-' | append: section.id %}
+      {% render 'msc-section-header', kicker: section.settings.index_kicker, heading: section.settings.index_heading, copy: section.settings.index_copy, heading_id: 'MscLearnIndex-', append: section.id %}
       <div class="msc-learn-index">
         {%- assign group_index = 0 -%}
         {%- for block in section.blocks -%}
@@ -292,7 +292,7 @@
     </div>
 
     <div class="msc-block msc-learn-glossary-block" aria-labelledby="MscLearnGlossary-{{ section.id }}">
-      {% render 'msc-section-header', kicker: section.settings.glossary_kicker, heading: section.settings.glossary_heading, copy: section.settings.glossary_copy, heading_id: 'MscLearnGlossary-' | append: section.id %}
+      {% render 'msc-section-header', kicker: section.settings.glossary_kicker, heading: section.settings.glossary_heading, copy: section.settings.glossary_copy, heading_id: 'MscLearnGlossary-', append: section.id %}
       <div class="msc-glossary-grid">
         {%- for block in section.blocks -%}{%- if block.type == 'glossary_term' -%}{% render 'msc-glossary-item', term: block.settings.term, definition: block.settings.definition, link: block.settings.link, planned_handle: block.settings.planned_handle %}{%- endif -%}{%- endfor -%}
       </div>
@@ -340,3 +340,24 @@
   "presets": [{"name":"MSC Learn"}]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% render 'msc-section-header', kicker: section.settings.index_kicker, heading:
+    section.settings.index_heading, copy: section.settings.index_copy, heading_id:
+    'MscLearnIndex-' | append: section.id %}"
+  to: "{% render 'msc-section-header', kicker: section.settings.index_kicker, heading:
+    section.settings.index_heading, copy: section.settings.index_copy, heading_id:
+    'MscLearnIndex-', append: section.id %}"
+  position: 11178..11376
+- from: "{% render 'msc-section-header', kicker: section.settings.glossary_kicker,
+    heading: section.settings.glossary_heading, copy: section.settings.glossary_copy,
+    heading_id: 'MscLearnGlossary-' | append: section.id %}"
+  to: "{% render 'msc-section-header', kicker: section.settings.glossary_kicker, heading:
+    section.settings.glossary_heading, copy: section.settings.glossary_copy, heading_id:
+    'MscLearnGlossary-', append: section.id %}"
+  position: 13988..14198
+{% endcomment %}

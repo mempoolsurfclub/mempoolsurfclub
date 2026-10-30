@@ -82,21 +82,21 @@
     </div>
 
     <div class="msc-block" aria-labelledby="MscAboutWhy-{{ section.id }}">
-      {% render 'msc-section-header', kicker: section.settings.why_kicker, heading: section.settings.why_heading, copy: section.settings.why_copy, heading_id: 'MscAboutWhy-' | append: section.id %}
+      {% render 'msc-section-header', kicker: section.settings.why_kicker, heading: section.settings.why_heading, copy: section.settings.why_copy, heading_id: 'MscAboutWhy-', append: section.id %}
       <div class="msc-principle-grid msc-principle-grid--why">
         {%- for block in section.blocks -%}{%- if block.type == 'why_principle' -%}{% render 'msc-principle-card', title: block.settings.title, description: block.settings.description, marker: block.settings.marker %}{%- endif -%}{%- endfor -%}
       </div>
     </div>
 
     <div class="msc-block" aria-labelledby="MscAboutInside-{{ section.id }}">
-      {% render 'msc-section-header', kicker: section.settings.platform_kicker, heading: section.settings.platform_heading, copy: section.settings.platform_copy, heading_id: 'MscAboutInside-' | append: section.id %}
+      {% render 'msc-section-header', kicker: section.settings.platform_kicker, heading: section.settings.platform_heading, copy: section.settings.platform_copy, heading_id: 'MscAboutInside-', append: section.id %}
       <div class="msc-platform-grid">
         {%- for block in section.blocks -%}{%- if block.type == 'platform_item' -%}{% render 'msc-platform-card', title: block.settings.title, description: block.settings.description, link: block.settings.link, entry: block.settings.entry, marker: block.settings.marker %}{%- endif -%}{%- endfor -%}
       </div>
     </div>
 
     <div class="msc-block msc-about-principles" aria-labelledby="MscAboutPrinciples-{{ section.id }}">
-      {% render 'msc-section-header', kicker: section.settings.principles_kicker, heading: section.settings.principles_heading, heading_id: 'MscAboutPrinciples-' | append: section.id %}
+      {% render 'msc-section-header', kicker: section.settings.principles_kicker, heading: section.settings.principles_heading, heading_id: 'MscAboutPrinciples-', append: section.id %}
       <div class="msc-principle-grid">
         {%- for block in section.blocks -%}{%- if block.type == 'club_principle' -%}{% render 'msc-principle-card', title: block.settings.title, description: block.settings.description, marker: block.settings.marker %}{%- endif -%}{%- endfor -%}
       </div>
@@ -138,7 +138,7 @@
 
     {%- if section.settings.show_log -%}
       <div class="msc-block" aria-labelledby="MscAboutLog-{{ section.id }}">
-        {% render 'msc-section-header', kicker: section.settings.log_kicker, heading: section.settings.log_heading, heading_id: 'MscAboutLog-' | append: section.id %}
+        {% render 'msc-section-header', kicker: section.settings.log_kicker, heading: section.settings.log_heading, heading_id: 'MscAboutLog-', append: section.id %}
         <div class="msc-archive-log">
           {%- for block in section.blocks -%}{%- if block.type == 'log_entry' -%}
             <article class="msc-archive-entry msc-glass-card"><span>{{ block.settings.entry | escape }}</span><div><h3>{{ block.settings.title | escape }}</h3>{%- if block.settings.note != blank -%}<p>{{ block.settings.note | escape }}</p>{%- endif -%}{%- if block.settings.date != blank -%}<small>{{ block.settings.date | escape }}</small>{%- endif -%}{%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}">Read entry →</a>{%- endif -%}</div></article>
@@ -191,4 +191,37 @@
     {"type":"log_entry","settings":{"entry":"ENTRY 001","title":"Brand system established","note":"The shared MSC visual language is in place for the first clubhouse foundation."}},{"type":"log_entry","settings":{"entry":"ENTRY 002","title":"Platform structure mapped","note":"Explore, Learn, Tools, Shop, and Community now sit inside one About framework."}},{"type":"log_entry","settings":{"entry":"ENTRY 003","title":"First field reports in development","note":"Space is reserved for future verified reports and observations."}},{"type":"log_entry","settings":{"entry":"ENTRY 004","title":"Core collection being assembled","note":"The archive can grow as real projects and releases are ready."}}
   ]}]
 }
-{% endschema %}
+{% endschema %}{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% render 'msc-section-header', kicker: section.settings.why_kicker, heading:
+    section.settings.why_heading, copy: section.settings.why_copy, heading_id: 'MscAboutWhy-'
+    | append: section.id %}"
+  to: "{% render 'msc-section-header', kicker: section.settings.why_kicker, heading:
+    section.settings.why_heading, copy: section.settings.why_copy, heading_id: 'MscAboutWhy-',
+    append: section.id %}"
+  position: 4735..4925
+- from: "{% render 'msc-section-header', kicker: section.settings.platform_kicker,
+    heading: section.settings.platform_heading, copy: section.settings.platform_copy,
+    heading_id: 'MscAboutInside-' | append: section.id %}"
+  to: "{% render 'msc-section-header', kicker: section.settings.platform_kicker, heading:
+    section.settings.platform_heading, copy: section.settings.platform_copy, heading_id:
+    'MscAboutInside-', append: section.id %}"
+  position: 5343..5551
+- from: "{% render 'msc-section-header', kicker: section.settings.principles_kicker,
+    heading: section.settings.principles_heading, heading_id: 'MscAboutPrinciples-'
+    | append: section.id %}"
+  to: "{% render 'msc-section-header', kicker: section.settings.principles_kicker,
+    heading: section.settings.principles_heading, heading_id: 'MscAboutPrinciples-',
+    append: section.id %}"
+  position: 6024..6202
+- from: "{% render 'msc-section-header', kicker: section.settings.log_kicker, heading:
+    section.settings.log_heading, heading_id: 'MscAboutLog-' | append: section.id
+    %}"
+  to: "{% render 'msc-section-header', kicker: section.settings.log_kicker, heading:
+    section.settings.log_heading, heading_id: 'MscAboutLog-', append: section.id %}"
+  position: 9830..9987
+{%- endcomment -%}

@@ -149,7 +149,7 @@
                         </p>
 
                         <product-form class="msc-supply-product__form" data-section-id="{{ section.id }}" data-hide-errors="false">
-                          {%- form 'product', product, id: 'MscSupplyQuickAdd-' | append: section.id | append: '-' | append: block.id | append: '-' | append: product.id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+                          {%- form product.id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
                             {%- if product.variants.size > 1 -%}
                               <label class="msc-supply-product__variant-label" for="MscSupplyVariant-{{ section.id }}-{{ block.id }}-{{ product.id }}">SELECT VARIANT</label>
                               <select
@@ -549,3 +549,16 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- form 'product', product, id: 'MscSupplyQuickAdd-' | append: section.id
+    | append: '-' | append: block.id | append: '-' | append: product.id, class: 'form',
+    novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}"
+  to: "{%- form product.id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form'
+    -%}"
+  position: 8122..8217
+{% endcomment %}

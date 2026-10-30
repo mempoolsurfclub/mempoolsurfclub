@@ -50,12 +50,12 @@
         {%- endif -%}
       {%- endcapture -%}
       {%- if stories_rendered > 0 -%}
-        {% render 'msc-section-header', kicker: section.settings.editorial_kicker, heading: section.settings.editorial_heading, copy: section.settings.editorial_copy, heading_id: 'MscExploreEditorials-' | append: section.id %}
+        {% render 'msc-section-header', kicker: section.settings.editorial_kicker, heading: section.settings.editorial_heading, copy: section.settings.editorial_copy, heading_id: 'MscExploreEditorials-', append: section.id %}
         <div class="msc-editorial-layout">{{ stories_cards }}</div>
       {%- else -%}
         <div class="msc-explore-chapter">
           <div class="msc-explore-chapter__intro">
-            {% render 'msc-section-header', kicker: section.settings.editorial_kicker, heading: section.settings.editorial_heading, copy: section.settings.editorial_copy, heading_id: 'MscExploreEditorials-' | append: section.id %}
+            {% render 'msc-section-header', kicker: section.settings.editorial_kicker, heading: section.settings.editorial_heading, copy: section.settings.editorial_copy, heading_id: 'MscExploreEditorials-', append: section.id %}
           </div>
           <div class="msc-explore-chapter__content">
             {% render 'msc-explore-empty-state', label: section.settings.editorial_empty_label, heading: section.settings.editorial_empty_heading, copy: section.settings.editorial_empty_copy %}
@@ -79,12 +79,12 @@
         {%- endif -%}
       {%- endcapture -%}
       {%- if culture_rendered > 0 -%}
-        {% render 'msc-section-header', kicker: section.settings.discovery_kicker, heading: section.settings.discovery_heading, copy: section.settings.discovery_copy, heading_id: 'MscExploreDiscovery-' | append: section.id %}
+        {% render 'msc-section-header', kicker: section.settings.discovery_kicker, heading: section.settings.discovery_heading, copy: section.settings.discovery_copy, heading_id: 'MscExploreDiscovery-', append: section.id %}
         <div class="msc-profile-grid">{{ culture_cards }}</div>
       {%- else -%}
         <div class="msc-explore-chapter">
           <div class="msc-explore-chapter__intro">
-            {% render 'msc-section-header', kicker: section.settings.discovery_kicker, heading: section.settings.discovery_heading, copy: section.settings.discovery_copy, heading_id: 'MscExploreDiscovery-' | append: section.id %}
+            {% render 'msc-section-header', kicker: section.settings.discovery_kicker, heading: section.settings.discovery_heading, copy: section.settings.discovery_copy, heading_id: 'MscExploreDiscovery-', append: section.id %}
           </div>
           <div class="msc-explore-chapter__content">
             {% render 'msc-explore-empty-state', label: section.settings.discovery_empty_label, heading: section.settings.discovery_empty_heading, copy: section.settings.discovery_empty_copy %}
@@ -103,13 +103,13 @@
       {%- endcapture -%}
       {%- if recaps_rendered > 0 -%}
         <div class="msc-report-panel msc-glass-card">
-          {% render 'msc-section-header', kicker: section.settings.reports_kicker, heading: section.settings.reports_heading, copy: section.settings.reports_copy, heading_id: 'MscExploreReports-' | append: section.id %}
+          {% render 'msc-section-header', kicker: section.settings.reports_kicker, heading: section.settings.reports_heading, copy: section.settings.reports_copy, heading_id: 'MscExploreReports-', append: section.id %}
           <div class="msc-report-panel__list">{{ recap_rows }}</div>
         </div>
       {%- else -%}
         <div class="msc-explore-chapter msc-explore-chapter--reports">
           <div class="msc-explore-chapter__intro">
-            {% render 'msc-section-header', kicker: section.settings.reports_kicker, heading: section.settings.reports_heading, copy: section.settings.reports_copy, heading_id: 'MscExploreReports-' | append: section.id %}
+            {% render 'msc-section-header', kicker: section.settings.reports_kicker, heading: section.settings.reports_heading, copy: section.settings.reports_copy, heading_id: 'MscExploreReports-', append: section.id %}
           </div>
           <div class="msc-explore-chapter__content">
             {% render 'msc-explore-empty-state', label: section.settings.reports_empty_label, heading: section.settings.reports_empty_heading, copy: section.settings.reports_empty_copy, modifier: 'report' %}
@@ -118,7 +118,7 @@
       {%- endif -%}
     </div>
 
-    {%- if section.settings.show_recent and recent_count > 0 -%}<div class="msc-block" aria-labelledby="MscExploreRecent-{{ section.id }}">{% render 'msc-section-header', kicker: section.settings.recent_kicker, heading: section.settings.recent_heading, heading_id: 'MscExploreRecent-' | append: section.id %}<div class="msc-update-list">{%- for block in section.blocks -%}{%- if block.type == 'recent' -%}<div class="msc-update-row msc-glass-card"><strong>{{ block.settings.title | escape }}</strong><span>{{ block.settings.note | escape }}</span></div>{%- endif -%}{%- endfor -%}</div></div>{%- endif -%}
+    {%- if section.settings.show_recent and recent_count > 0 -%}<div class="msc-block" aria-labelledby="MscExploreRecent-{{ section.id }}">{% render 'msc-section-header', kicker: section.settings.recent_kicker, heading: section.settings.recent_heading, heading_id: 'MscExploreRecent-', append: section.id %}<div class="msc-update-list">{%- for block in section.blocks -%}{%- if block.type == 'recent' -%}<div class="msc-update-row msc-glass-card"><strong>{{ block.settings.title | escape }}</strong><span>{{ block.settings.note | escape }}</span></div>{%- endif -%}{%- endfor -%}</div></div>{%- endif -%}
   </div>
 </section>
 
@@ -467,3 +467,59 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% render 'msc-section-header', kicker: section.settings.editorial_kicker,
+    heading: section.settings.editorial_heading, copy: section.settings.editorial_copy,
+    heading_id: 'MscExploreEditorials-' | append: section.id %}"
+  to: "{% render 'msc-section-header', kicker: section.settings.editorial_kicker,
+    heading: section.settings.editorial_heading, copy: section.settings.editorial_copy,
+    heading_id: 'MscExploreEditorials-', append: section.id %}"
+  position: 6945..7162
+- from: "{% render 'msc-section-header', kicker: section.settings.editorial_kicker,
+    heading: section.settings.editorial_heading, copy: section.settings.editorial_copy,
+    heading_id: 'MscExploreEditorials-' | append: section.id %}"
+  to: "{% render 'msc-section-header', kicker: section.settings.editorial_kicker,
+    heading: section.settings.editorial_heading, copy: section.settings.editorial_copy,
+    heading_id: 'MscExploreEditorials-', append: section.id %}"
+  position: 7355..7572
+- from: "{% render 'msc-section-header', kicker: section.settings.discovery_kicker,
+    heading: section.settings.discovery_heading, copy: section.settings.discovery_copy,
+    heading_id: 'MscExploreDiscovery-' | append: section.id %}"
+  to: "{% render 'msc-section-header', kicker: section.settings.discovery_kicker,
+    heading: section.settings.discovery_heading, copy: section.settings.discovery_copy,
+    heading_id: 'MscExploreDiscovery-', append: section.id %}"
+  position: 10998..11214
+- from: "{% render 'msc-section-header', kicker: section.settings.discovery_kicker,
+    heading: section.settings.discovery_heading, copy: section.settings.discovery_copy,
+    heading_id: 'MscExploreDiscovery-' | append: section.id %}"
+  to: "{% render 'msc-section-header', kicker: section.settings.discovery_kicker,
+    heading: section.settings.discovery_heading, copy: section.settings.discovery_copy,
+    heading_id: 'MscExploreDiscovery-', append: section.id %}"
+  position: 11403..11619
+- from: "{% render 'msc-section-header', kicker: section.settings.reports_kicker,
+    heading: section.settings.reports_heading, copy: section.settings.reports_copy,
+    heading_id: 'MscExploreReports-' | append: section.id %}"
+  to: "{% render 'msc-section-header', kicker: section.settings.reports_kicker, heading:
+    section.settings.reports_heading, copy: section.settings.reports_copy, heading_id:
+    'MscExploreReports-', append: section.id %}"
+  position: 13014..13222
+- from: "{% render 'msc-section-header', kicker: section.settings.reports_kicker,
+    heading: section.settings.reports_heading, copy: section.settings.reports_copy,
+    heading_id: 'MscExploreReports-' | append: section.id %}"
+  to: "{% render 'msc-section-header', kicker: section.settings.reports_kicker, heading:
+    section.settings.reports_heading, copy: section.settings.reports_copy, heading_id:
+    'MscExploreReports-', append: section.id %}"
+  position: 13460..13668
+- from: "{% render 'msc-section-header', kicker: section.settings.recent_kicker, heading:
+    section.settings.recent_heading, heading_id: 'MscExploreRecent-' | append: section.id
+    %}"
+  to: "{% render 'msc-section-header', kicker: section.settings.recent_kicker, heading:
+    section.settings.recent_heading, heading_id: 'MscExploreRecent-', append: section.id
+    %}"
+  position: 14150..14318
+{% endcomment %}
